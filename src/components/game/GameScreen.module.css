@@ -119,6 +119,17 @@
   margin-bottom: 4px;
 }
 
+.treasureLine {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.treasureLine .emoji {
+  font-size: 1.3rem;
+}
+
 .summaryActions {
   display: flex;
   flex-direction: column;

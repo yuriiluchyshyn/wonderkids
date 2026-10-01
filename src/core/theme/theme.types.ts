@@ -1,3 +1,10 @@
+/** A single distinct collectible the child can find hidden in path chests. */
+export interface Treasure {
+  id: string;
+  name: string;
+  emoji: string;
+}
+
 /** A deep skin of the whole app — not just a palette (per PRD §6). */
 export interface Theme {
   id: ThemeId;
@@ -15,6 +22,16 @@ export interface Theme {
   pathIcons: string[];
   /** The solo "Dream build" assembled from artifacts (ship / rocket / castle). */
   dreamBuild: { name: string; emoji: string };
+  /**
+   * The themed treasure chest that appears on path steps. `closed` is the
+   * hidden/locked look; `open` is the burst shown as it springs open.
+   */
+  chest: { closed: string; open: string };
+  /**
+   * The pool of distinct collectibles the child discovers in chests. Each is
+   * found at most once per theme (a sticker-album style collection).
+   */
+  treasures: Treasure[];
   /** CSS custom properties applied to :root when the theme is active. */
   palette: {
     bg1: string;

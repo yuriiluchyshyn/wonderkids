@@ -6,6 +6,7 @@ import { useGameStore } from '@/core/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
 import { subSteps, pathKey } from '@/core/progress/path';
+import { hasChest } from '@/core/progress/treasures';
 import type { CatalogEntry } from './catalog';
 import styles from './PathModal.module.css';
 
@@ -82,7 +83,8 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
       {entry && (
         <>
           <p className={styles.caption}>
-            Твій шлях — тисни на будь-яку пройдену сходинку, щоб повторити 😊
+            Твій шлях — тисни на пройдену сходинку, щоб повторити. {theme.chest.closed} ховають
+            скарби!
           </p>
 
           <div className={styles.path}>
@@ -92,8 +94,15 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
               const isSelected = n === selected;
               const offset = Math.sin(n * 0.6) * 32;
               const gift = giftTierFor(n, totalSteps);
+              const chest = hasChest(n, totalSteps);
               const fruit = theme.pathIcons[n % theme.pathIcons.length];
-              const content = isCurrent ? theme.mascot.emoji : gift ? GIFT_EMOJI[gift] : fruit;
+              const content = isCurrent
+                ? theme.mascot.emoji
+                : gift
+                  ? GIFT_EMOJI[gift]
+                  : chest
+                    ? theme.chest.closed
+                    : fruit;
 
               return (
                 <div
@@ -107,6 +116,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                       styles.node,
                       isCurrent ? styles.current : unlocked ? styles.done : styles.locked,
                       gift === 'biggest' ? styles.biggest : gift === 'big' ? styles.big : '',
+                      chest && !isCurrent ? styles.chest : '',
                       isSelected ? styles.selected : '',
                     ].join(' ')}
                     disabled={!unlocked}
@@ -114,7 +124,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                     transition={{ repeat: Infinity, duration: 1.4 }}
                     whileTap={unlocked ? { scale: 0.9 } : undefined}
                     onClick={() => selectStep(n)}
-                    aria-label={`Сходинка ${n}${isCurrent ? ' (поточна)' : unlocked ? '' : ' (закрито)'}`}
+                    aria-label={`Сходинка ${n}${isCurrent ? ' (поточна)' : chest ? ' (захований скарб)' : unlocked ? '' : ' (закрито)'}`}
                   >
                     <span className="emoji" aria-hidden>
                       {content}

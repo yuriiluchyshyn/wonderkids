@@ -6,11 +6,15 @@ import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { speechEngine } from '@/core/audio/SpeechEngine';
 import { useShowText } from '@/core/ui/useUiPrefs';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
+import { useGameStore } from '@/core/store/useGameStore';
+import type { Treasure } from '@/core/theme/theme.types';
+import { hasChest, pickChestTreasure, treasureKey } from '@/core/progress/treasures';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { VoiceToggle } from '@/components/ui/VoiceToggle';
 import { Companion } from './Companion';
 import { Celebration } from './Celebration';
+import { TreasureReveal } from './TreasureReveal';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
 import { useIdleRollback } from './useIdleRollback';
 import { subSteps } from '@/core/progress/path';
@@ -66,8 +70,16 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // A gift pops at every 5th / 10th / final step of the adventure.
   const maxSteps = sub ? subSteps(sub) : 0;
   const stepGift = giftForStep(config.step, maxSteps);
+  // Some steps hide a themed treasure chest the child opens on completion.
+  const stepHasChest = hasChest(config.step, maxSteps);
+  const collectTreasure = useGameStore((s) => s.collectTreasure);
 
   const [phase, setPhase] = useState<Phase>(introText ? 'intro' : 'play');
+  // The treasure revealed by this step's chest (null until the session ends on
+  // a chest step). `revealDone` gates the celebration + summary until the
+  // chest-opening animation has played out.
+  const [reveal, setReveal] = useState<{ treasure: Treasure; isNew: boolean } | null>(null);
+  const [revealDone, setRevealDone] = useState(false);
   const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none');
 
   const boardRef = useRef<HTMLDivElement>(null);
@@ -104,6 +116,29 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       const t = window.setTimeout(() => play('fanfare'), 650);
       return () => window.clearTimeout(t);
     }
+  }, [session.finished]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // On a chest step, pick a treasure to reveal and add it to the collection.
+  // The TreasureReveal overlay plays first; the celebration + summary wait for
+  // it to finish (revealDone). On non-chest steps the summary shows at once.
+  useEffect(() => {
+    if (!session.finished) {
+      setReveal(null);
+      setRevealDone(false);
+      return;
+    }
+    if (!stepHasChest) {
+      setRevealDone(true);
+      return;
+    }
+    const picked = pickChestTreasure(theme, useGameStore.getState().treasures);
+    if (!picked) {
+      setRevealDone(true);
+      return;
+    }
+    setReveal(picked);
+    setRevealDone(false);
+    if (picked.isNew) collectTreasure(treasureKey(theme.id, picked.treasure.id));
   }, [session.finished]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Stop any lingering speech when leaving the screen.
@@ -266,9 +301,21 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         )}
       </AnimatePresence>
 
-      <Celebration active={session.finished} />
+      <TreasureReveal
+        active={reveal !== null && !revealDone}
+        treasure={reveal?.treasure ?? null}
+        isNew={reveal?.isNew ?? false}
+        onDone={() => setRevealDone(true)}
+      />
 
-      <Modal open={session.finished} dismissible={false} title="Ти неймовірний!" icon="🏆">
+      <Celebration active={session.finished && revealDone} />
+
+      <Modal
+        open={session.finished && revealDone}
+        dismissible={false}
+        title="Ти неймовірний!"
+        icon="🏆"
+      >
         <div className={styles.summary}>
           {stepGift ? (
             <motion.div
@@ -288,6 +335,15 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
           <p className={styles.summaryBig}>
             Зібрано +{session.earned} {theme.artifact.emoji}
           </p>
+          {reveal && (
+            <p className={styles.treasureLine}>
+              {reveal.isNew ? 'Новий скарб у колекції: ' : 'Скарб: '}
+              <span className="emoji" aria-hidden>
+                {reveal.treasure.emoji}
+              </span>{' '}
+              {reveal.treasure.name}
+            </p>
+          )}
           <p className="muted">Усі {session.total} завдань виконано. Чудова робота!</p>
           <div className={styles.summaryActions}>
             {config.step < maxSteps && (

@@ -65,6 +65,8 @@ export interface PersistableState {
   hintsSurfaced: number;
   /** Current path step per `${moduleId}:${subId}` (1-based). */
   progress: Record<string, number>;
+  /** Collected treasure ids (`${themeId}:${treasureId}`) found in path chests. */
+  treasures: string[];
   milestones: Milestone[];
   settings: Settings;
 }
@@ -74,6 +76,8 @@ export interface GameState extends PersistableState {
   setProfile: (patch: Partial<ChildProfile>) => void;
   setTheme: (id: ThemeId) => void;
   awardArtifacts: (amount: number) => void;
+  /** Add a treasure (by fully-qualified id) to the collection, deduped. */
+  collectTreasure: (treasureKey: string) => void;
   recordTaskComplete: (opts: { hintUsed: boolean }) => void;
   /**
    * Advance the path frontier after completing a session at `playedStep`. Only
@@ -127,6 +131,7 @@ function createInitialState(): PersistableState {
     tasksCompleted: 0,
     hintsSurfaced: 0,
     progress: {},
+    treasures: [],
     milestones: DEFAULT_MILESTONES.map((m) => ({ ...m })),
     settings: { ...DEFAULT_SETTINGS, voice: { ...DEFAULT_SETTINGS.voice } },
   };
@@ -151,6 +156,10 @@ function fromPersisted(data: Partial<PersistableState> | null | undefined): Pers
     hintsSurfaced:
       typeof data.hintsSurfaced === 'number' ? data.hintsSurfaced : base.hintsSurfaced,
     progress: data.progress && typeof data.progress === 'object' ? data.progress : base.progress,
+    treasures:
+      Array.isArray(data.treasures) && data.treasures.every((t) => typeof t === 'string')
+        ? (data.treasures as string[])
+        : base.treasures,
     milestones:
       Array.isArray(data.milestones) &&
       data.milestones.every((m) => m && typeof (m as Milestone).amount === 'number')
@@ -173,6 +182,7 @@ export function selectPersistable(s: GameState): PersistableState {
     tasksCompleted: s.tasksCompleted,
     hintsSurfaced: s.hintsSurfaced,
     progress: s.progress,
+    treasures: s.treasures,
     milestones: s.milestones,
     settings: s.settings,
   };
@@ -199,6 +209,11 @@ export const useGameStore = create<GameState>()((set) => ({
 
   awardArtifacts: (amount) =>
     set((s) => ({ artifacts: s.artifacts + Math.max(0, amount) })),
+
+  collectTreasure: (treasureKey) =>
+    set((s) => (s.treasures.includes(treasureKey)
+      ? s
+      : { treasures: [...s.treasures, treasureKey] })),
 
   recordTaskComplete: ({ hintUsed }) =>
     set((s) => ({
@@ -244,6 +259,7 @@ export const useGameStore = create<GameState>()((set) => ({
       tasksCompleted: 0,
       hintsSurfaced: 0,
       progress: {},
+      treasures: [],
     }),
 
   hydrate: (data) => set(fromPersisted(data)),

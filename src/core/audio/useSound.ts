@@ -2,7 +2,17 @@ import { useCallback, useMemo } from 'react';
 import { useGameStore } from '@/core/store/useGameStore';
 import { audioEngine } from './AudioEngine';
 
-type SfxName = 'tap' | 'success' | 'gentle' | 'sad' | 'pop' | 'crunch' | 'fanfare' | 'win';
+type SfxName =
+  | 'tap'
+  | 'success'
+  | 'gentle'
+  | 'sad'
+  | 'pop'
+  | 'crunch'
+  | 'fanfare'
+  | 'win'
+  | 'chestOpen'
+  | 'treasure';
 
 /**
  * Returns sound-effect players that respect the `soundOn` setting. UI code calls

@@ -180,6 +180,47 @@ export class AudioEngine {
       });
     });
   }
+
+  /**
+   * A treasure chest springing open — a wooden "creak" (noise glide) that
+   * resolves into a bright rising "ta-da" lid pop. Warm and inviting, never
+   * startling (Zero-Aggression UX).
+   */
+  chestOpen(): void {
+    const ctx = this.ensureContext();
+    if (!this.master) return;
+    // Soft creak: short filtered noise sweeping upward (the lid lifting).
+    const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.28, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i += 1) {
+      data[i] = (Math.random() * 2 - 1) * (1 - i / data.length) * 0.5;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const band = ctx.createBiquadFilter();
+    band.type = 'bandpass';
+    band.frequency.setValueAtTime(500, ctx.currentTime);
+    band.frequency.exponentialRampToValueAtTime(1600, ctx.currentTime + 0.26);
+    const env = ctx.createGain();
+    env.gain.value = 0.35;
+    src.connect(band).connect(env).connect(this.master);
+    src.start();
+    // Lid pop + rising sparkle as it opens.
+    this.tone({ freq: 523.25, type: 'triangle', start: 0.22, duration: 0.18, gain: 0.32 });
+    this.tone({ freq: 783.99, type: 'triangle', start: 0.34, duration: 0.3, gain: 0.3 });
+  }
+
+  /**
+   * A magical "treasure found!" shimmer — a cascade of bright bell tones that
+   * reads as sparkly and precious when a new collectible is revealed.
+   */
+  treasure(): void {
+    const notes = [1046.5, 1318.51, 1567.98, 2093.0];
+    notes.forEach((freq, i) => {
+      this.tone({ freq, type: 'sine', start: i * 0.07, duration: 0.42, gain: 0.26 });
+      this.tone({ freq: freq * 1.5, type: 'triangle', start: i * 0.07 + 0.02, duration: 0.3, gain: 0.1 });
+    });
+  }
 }
 
 /** Shared singleton — a single AudioContext for the whole app. */
