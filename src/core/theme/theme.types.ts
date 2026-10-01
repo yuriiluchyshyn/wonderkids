@@ -37,4 +37,6 @@ export type ThemeId =
   | 'space'
   | 'dinos'
   | 'underwater'
-  | 'forest';
+  | 'forest'
+  | 'lego'
+  | 'frozen';

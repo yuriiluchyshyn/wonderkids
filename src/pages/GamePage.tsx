@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { GameScreen } from '@/components/game/GameScreen';
 import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
 import { useGameStore } from '@/core/store/useGameStore';
-import { clampStep, pathKey } from '@/core/progress/path';
+import { clampStep, pathKey, subSteps } from '@/core/progress/path';
 
 /** Hosts a learning session at the step chosen on the path (?step=). */
 export function GamePage() {
@@ -17,8 +17,9 @@ export function GamePage() {
   const liveStep = useGameStore((s) => s.progress[pathKey(moduleId, subId)] ?? 1);
 
   // The step chosen on the path (never above the frontier); falls back to it.
+  const maxSteps = sub ? subSteps(sub) : 30;
   const requested = Number(search.get('step'));
-  const chosenStep = requested ? Math.min(clampStep(requested), liveStep) : liveStep;
+  const chosenStep = requested ? Math.min(clampStep(requested, maxSteps), liveStep) : liveStep;
 
   // Freeze the step for the duration of a session so finishing (which advances
   // the stored frontier) doesn't remount mid-celebration. "Play again" replays

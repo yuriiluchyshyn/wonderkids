@@ -1,4 +1,4 @@
-export type MathOp = '+' | '-' | '×';
+export type MathOp = '+' | '-' | '×' | '÷';
 
 /** Payload for a mental-arithmetic task. */
 export interface MentalMathPayload {
@@ -29,9 +29,12 @@ export interface FractionPayload {
 
 export type MathPayload = MentalMathPayload | FractionPayload;
 
-/** Sub-category ids exposed by the Math module. */
+/** Sub-category ids exposed by the Math module (one adventure each). */
 export const MATH_SUB = {
-  mental: 'mental',
+  add: 'add',
+  sub: 'sub',
+  mul: 'mul',
+  div: 'div',
+  mixed: 'mixed',
   fractions: 'fractions',
-  multiply: 'multiply',
 } as const;

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
 import type { LearningModule, TaskInstance } from '@/core/kernel/types';
 import { useGameStore } from '@/core/store/useGameStore';
+import { subSteps } from '@/core/progress/path';
 
 /** Mistakes within a single task before the scaffolding helper appears (PRD §5). */
 const HINT_THRESHOLD = 2;
@@ -39,6 +40,8 @@ export interface GameSession {
 export function useGameSession(config: GameSessionConfig): GameSession {
   const { moduleId, subCategoryId, step } = config;
   const module = moduleRegistry.get(moduleId);
+  const sub = module?.subCategories.find((sc) => sc.id === subCategoryId);
+  const maxSteps = sub ? subSteps(sub) : 30;
 
   const total = useGameStore((s) => s.settings.sessionLength);
   const awardArtifacts = useGameStore((s) => s.awardArtifacts);
@@ -100,7 +103,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     window.setTimeout(() => {
       if (nextIndex >= total) {
         // Session complete → climb the learning path (frontier only).
-        advanceStep(moduleId, subCategoryId, step);
+        advanceStep(moduleId, subCategoryId, step, maxSteps);
         setFinished(true);
       } else {
         setIndex(nextIndex);
@@ -110,7 +113,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
         advancingRef.current = false;
       }
     }, ADVANCE_DELAY_MS);
-  }, [task, index, total, step, mistakes, awardArtifacts, recordTaskComplete, makeTask, advanceStep, moduleId, subCategoryId]);
+  }, [task, index, total, step, maxSteps, mistakes, awardArtifacts, recordTaskComplete, makeTask, advanceStep, moduleId, subCategoryId]);
 
   return {
     module,

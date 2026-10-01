@@ -14,6 +14,11 @@ export function mulFactorMax(step: number): number {
   return Math.min(30, 2 + Math.floor(step / 2));
 }
 
+/** Divisor/quotient ceiling for division at a given step (2 → ~12). */
+export function divFactorMax(step: number): number {
+  return Math.min(12, 2 + Math.floor(step / 3));
+}
+
 /** Denominator ceiling for fractions at a given step (2 → 12). */
 export function fractionDenomMax(step: number): number {
   return Math.min(12, 2 + Math.floor(step / 4));

@@ -41,7 +41,8 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain }: GameScreen
 
   const { module, task } = session;
   const sub = module?.subCategories.find((s) => s.id === config.subCategoryId);
-  const introText = sub?.intro;
+  // Prefer the module's themed, child-level intro; fall back to the static one.
+  const introText = module?.getIntro?.(config.subCategoryId, theme) ?? sub?.intro;
 
   const [phase, setPhase] = useState<Phase>(introText ? 'intro' : 'play');
   const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none');

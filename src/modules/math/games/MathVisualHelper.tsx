@@ -10,10 +10,13 @@ function renderHelper(payload: MathPayload) {
   if (payload.kind === 'fraction') {
     return <PieFood food={payload.food} denom={payload.denom} filled={payload.filled} />;
   }
-  // Multiplication: show the array/groups model (bounded, phone-friendly)
-  // instead of counting all the way to a potentially large product.
+  // Multiplication: a groups of b dots (bounded, phone-friendly).
   if (payload.op === '×') {
     return <GroupsHint rows={payload.a} cols={payload.b} />;
+  }
+  // Division a÷b=q: share a dots into b groups → each group holds q (the answer).
+  if (payload.op === '÷') {
+    return <GroupsHint rows={payload.b} cols={payload.answer} />;
   }
   return <CountingTowers count={payload.answer} />;
 }

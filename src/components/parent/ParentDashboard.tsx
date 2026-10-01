@@ -8,7 +8,7 @@ import {
   type StepMilestone,
 } from '@/core/store/useGameStore';
 import { computeAge } from '@/core/utils/age';
-import { TOTAL_STEPS, pathKey } from '@/core/progress/path';
+import { MAX_STEPS, subSteps, pathKey } from '@/core/progress/path';
 import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
 import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
@@ -66,7 +66,7 @@ export function ParentDashboard() {
   const removeMilestone = (id: string) =>
     setMilestones(milestones.filter((m) => m.id !== id));
   const addMilestone = () =>
-    setMilestones([...milestones, { id: uid('m'), step: Math.min(TOTAL_STEPS, (milestones.at(-1)?.step ?? 0) + 5), reward: '' }]);
+    setMilestones([...milestones, { id: uid('m'), step: Math.min(MAX_STEPS, (milestones.at(-1)?.step ?? 0) + 5), reward: '' }]);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 12 }, (_, i) => currentYear - 3 - i); // ages ~3–14
@@ -171,7 +171,7 @@ export function ParentDashboard() {
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>🎯 Цілі на шляху</h3>
         <p className={styles.hint}>
-          На якій сходинці ({'1'}–{TOTAL_STEPS}) дитина отримує яку нагороду. Вони показуються на мапі шляху.
+          На якій сходинці дитина отримує яку нагороду. Вони показуються на мапі шляху.
         </p>
         <div className="stack">
           {milestones.map((m) => (
@@ -183,7 +183,7 @@ export function ParentDashboard() {
                   type="number"
                   inputMode="numeric"
                   min={1}
-                  max={TOTAL_STEPS}
+                  max={MAX_STEPS}
                   value={m.step}
                   onChange={(e) => patchMilestone(m.id, { step: Number(e.target.value) })}
                   aria-label="Сходинка"
@@ -211,11 +211,12 @@ export function ParentDashboard() {
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>🪜 Сходинка завдання</h3>
         <p className={styles.hint}>
-          Познач, на якій сходинці ({'1'}–{TOTAL_STEPS}) зараз має бути дитина для кожного завдання.
+          Познач, на якій сходинці зараз має бути дитина для кожного завдання.
         </p>
         <div className="stack">
           {subPaths.map(({ moduleId, moduleIcon, sub }) => {
             const step = progress[pathKey(moduleId, sub.id)] ?? 1;
+            const maxSteps = subSteps(sub);
             return (
               <div key={`${moduleId}:${sub.id}`} className={styles.stepRow}>
                 <span className={styles.stepName}>
@@ -229,10 +230,10 @@ export function ParentDashboard() {
                   type="number"
                   inputMode="numeric"
                   min={1}
-                  max={TOTAL_STEPS}
+                  max={maxSteps}
                   value={step}
-                  onChange={(e) => setStep(moduleId, sub.id, Number(e.target.value))}
-                  aria-label={`Сходинка для ${sub.label}`}
+                  onChange={(e) => setStep(moduleId, sub.id, Number(e.target.value), maxSteps)}
+                  aria-label={`Сходинка для ${sub.label} (макс ${maxSteps})`}
                 />
               </div>
             );

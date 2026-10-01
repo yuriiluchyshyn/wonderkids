@@ -3,7 +3,7 @@ import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useShowText } from '@/core/ui/useUiPrefs';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { useGameStore } from '@/core/store/useGameStore';
-import { TOTAL_STEPS, pathKey } from '@/core/progress/path';
+import { subSteps, pathKey } from '@/core/progress/path';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { cn } from '@/core/utils/cn';
@@ -24,6 +24,7 @@ export function TaskCard({ entry, onStart }: TaskCardProps) {
   const { module, sub } = entry;
 
   const step = useGameStore((s) => s.progress[pathKey(module.id, sub.id)] ?? 1);
+  const totalSteps = subSteps(sub);
 
   const start = () => {
     announce(sub.label);
@@ -62,8 +63,8 @@ export function TaskCard({ entry, onStart }: TaskCardProps) {
         </span>
         <div className={styles.pathBar}>
           <ProgressBar
-            value={step / TOTAL_STEPS}
-            label={showText ? `Сходинка ${step} / ${TOTAL_STEPS}` : undefined}
+            value={step / totalSteps}
+            label={showText ? `Сходинка ${step} / ${totalSteps}` : undefined}
           />
         </div>
       </div>

@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
+import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { PieFood } from '../components/PieFood';
 import { FractionGlyph } from '../components/FractionGlyph';
 import { MATH_SUB } from '../math.types';
 import styles from './Intro.module.css';
 
-/** A dot group used by the multiplication demo. */
+/** A dot group used by the multiply/divide demos. */
 function DotGroup({ count, delay }: { count: number; delay: number }) {
   return (
     <motion.span
@@ -20,12 +21,33 @@ function DotGroup({ count, delay }: { count: number; delay: number }) {
   );
 }
 
+/** A row of themed collectibles with +/-/= signs, animated in. */
+function ItemRow({ items }: { items: string[] }) {
+  return (
+    <div className={styles.demo}>
+      {items.map((e, i) => (
+        <motion.span
+          key={i}
+          className={`${styles.item} emoji`}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.12 }}
+        >
+          {e}
+        </motion.span>
+      ))}
+    </div>
+  );
+}
+
 /**
- * Short, playful animated demo shown before a math game begins, matching the
- * sub-category: a splitting pie for fractions, repeated groups for
- * multiplication, and a combining set for mental arithmetic.
+ * Short, playful animated demo shown before a math game begins — themed to the
+ * active skin's collectible so the example matches the child's world.
  */
 export function MathIntroView({ subCategoryId }: { subCategoryId: string }) {
+  const theme = useActiveTheme();
+  const it = theme.artifact.emoji;
+
   if (subCategoryId === MATH_SUB.fractions) {
     return (
       <div className={styles.demo}>
@@ -42,40 +64,29 @@ export function MathIntroView({ subCategoryId }: { subCategoryId: string }) {
     );
   }
 
-  if (subCategoryId === MATH_SUB.multiply) {
+  if (subCategoryId === MATH_SUB.mul || subCategoryId === MATH_SUB.div) {
     return (
       <div className={styles.demoCol}>
         <div className={styles.groups}>
           <DotGroup count={2} delay={0.1} />
-          <DotGroup count={2} delay={0.35} />
-          <DotGroup count={2} delay={0.6} />
+          <DotGroup count={2} delay={0.4} />
         </div>
         <motion.p
           className={styles.caption}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
+          transition={{ delay: 0.8 }}
         >
-          3 рази по 2
+          {subCategoryId === MATH_SUB.mul ? '2 рази по 2' : '4 порівну на 2'}
         </motion.p>
       </div>
     );
   }
 
-  // Mental arithmetic: a small combining set.
-  return (
-    <div className={styles.demo}>
-      {['🍎', '🍎', '➕', '🍎', '🟰', '🍎', '🍎', '🍎'].map((e, i) => (
-        <motion.span
-          key={i}
-          className={`${styles.item} emoji`}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.12 }}
-        >
-          {e}
-        </motion.span>
-      ))}
-    </div>
-  );
+  if (subCategoryId === MATH_SUB.sub) {
+    return <ItemRow items={[it, it, it, '➖', it, '🟰', it, it]} />;
+  }
+
+  // Addition & mixed.
+  return <ItemRow items={[it, it, '➕', it, '🟰', it, it, it]} />;
 }

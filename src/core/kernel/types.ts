@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { Theme } from '@/core/theme/theme.types';
 
 /**
  * Core kernel contracts for the WonderKids micro-kernel plugin architecture.
@@ -79,6 +80,12 @@ export interface SubCategory {
    * — e.g. what fractions are and why they're written that way (PRD §4).
    */
   intro?: string;
+  /**
+   * How many difficulty steps this adventure's path has. Different adventures
+   * can be longer or shorter (e.g. mental arithmetic has many steps, fractions
+   * fewer). Defaults to DEFAULT_STEPS when omitted.
+   */
+  steps?: number;
 }
 
 /**
@@ -112,4 +119,9 @@ export interface LearningModule {
    * played when the scaffolding hint appears. Keep it short and encouraging.
    */
   getHintSpeech?: (task: TaskInstance) => string;
+  /**
+   * Optional child-level intro for an adventure, themed to the active skin
+   * (e.g. counts in apples / bricks / snowflakes). Overrides SubCategory.intro.
+   */
+  getIntro?: (subCategoryId: string, theme: Theme) => string;
 }

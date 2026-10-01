@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { useGameStore } from '@/core/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
-import { TOTAL_STEPS, pathKey } from '@/core/progress/path';
+import { subSteps, pathKey } from '@/core/progress/path';
 import type { CatalogEntry } from './catalog';
 import styles from './PathModal.module.css';
 
@@ -44,8 +44,13 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
     return map;
   }, [milestones]);
 
-  // Hardest (50) at top → easiest (1) at bottom, so the child climbs.
-  const steps = useMemo(() => Array.from({ length: TOTAL_STEPS }, (_, i) => TOTAL_STEPS - i), []);
+  // Hardest at top → easiest (1) at bottom, so the child climbs. Length is
+  // per-adventure.
+  const totalSteps = entry ? subSteps(entry.sub) : 0;
+  const steps = useMemo(
+    () => Array.from({ length: totalSteps }, (_, i) => totalSteps - i),
+    [totalSteps],
+  );
 
   useEffect(() => {
     if (!entry) return;

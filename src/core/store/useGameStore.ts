@@ -7,7 +7,7 @@ import {
   type VoiceChannel,
   type VoiceChannelState,
 } from '@/core/audio/voiceChannels';
-import { TOTAL_STEPS, clampStep, pathKey } from '@/core/progress/path';
+import { clampStep, pathKey } from '@/core/progress/path';
 import { uid } from '@/core/utils/random';
 
 /** Rate at which the companion rolls back during inactivity (PRD §4.1). */
@@ -72,9 +72,9 @@ export interface GameState {
    * moves forward when the frontier step was played — replaying an earlier step
    * never pushes progress beyond where the child actually is.
    */
-  advanceStep: (moduleId: string, subCategoryId: string, playedStep: number) => void;
+  advanceStep: (moduleId: string, subCategoryId: string, playedStep: number, maxSteps: number) => void;
   /** Parent control: set the current frontier step for a sub-category. */
-  setStep: (moduleId: string, subCategoryId: string, step: number) => void;
+  setStep: (moduleId: string, subCategoryId: string, step: number, maxSteps: number) => void;
   setMilestones: (milestones: StepMilestone[]) => void;
   updateSettings: (patch: Partial<Omit<Settings, 'voice'>>) => void;
   toggleVoice: (channel: VoiceChannel) => void;
@@ -143,18 +143,18 @@ export const useGameStore = create<GameState>()(
           hintsSurfaced: s.hintsSurfaced + (hintUsed ? 1 : 0),
         })),
 
-      advanceStep: (moduleId, subCategoryId, playedStep) =>
+      advanceStep: (moduleId, subCategoryId, playedStep, maxSteps) =>
         set((s) => {
           const key = pathKey(moduleId, subCategoryId);
           const current = s.progress[key] ?? 1;
           // Only the frontier advances; replaying an older step changes nothing.
-          const next = Math.max(current, Math.min(TOTAL_STEPS, playedStep + 1));
-          return { progress: { ...s.progress, [key]: clampStep(next) } };
+          const next = Math.max(current, Math.min(maxSteps, playedStep + 1));
+          return { progress: { ...s.progress, [key]: clampStep(next, maxSteps) } };
         }),
 
-      setStep: (moduleId, subCategoryId, step) =>
+      setStep: (moduleId, subCategoryId, step, maxSteps) =>
         set((s) => ({
-          progress: { ...s.progress, [pathKey(moduleId, subCategoryId)]: clampStep(step) },
+          progress: { ...s.progress, [pathKey(moduleId, subCategoryId)]: clampStep(step, maxSteps) },
         })),
 
       setMilestones: (milestones) =>
