@@ -1,0 +1,24 @@
+.tile {
+  display: grid;
+  place-items: center;
+  min-height: 92px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  font-size: 2.4rem;
+  font-weight: 800;
+  box-shadow: var(--shadow);
+  border: 3px solid transparent;
+}
+
+.correct {
+  background: #22c55e;
+  color: #fff;
+  border-color: #16a34a;
+}
+
+.wrong {
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  opacity: 0.85;
+}

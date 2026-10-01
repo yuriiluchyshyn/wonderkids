@@ -1,0 +1,46 @@
+.section {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  margin-bottom: 12px;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rowLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+}

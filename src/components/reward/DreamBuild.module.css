@@ -1,0 +1,61 @@
+.wrap {
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.head h3 {
+  font-size: 1.3rem;
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.slot {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  font-size: 1.6rem;
+  background: color-mix(in srgb, var(--ring) 18%, transparent);
+  border: 2px dashed color-mix(in srgb, var(--ring) 50%, transparent);
+}
+
+.filled {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  border-style: solid;
+  border-color: var(--accent);
+}
+
+.progress {
+  margin-top: 14px;
+  font-size: 1.1rem;
+}
+
+.progress strong {
+  font-size: 1.3rem;
+  color: var(--primary);
+}
+
+.finished {
+  text-align: center;
+  font-size: 5rem;
+}
+
+.doneLabel {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary);
+}

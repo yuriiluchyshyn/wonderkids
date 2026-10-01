@@ -1,0 +1,52 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(20, 8, 40, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  max-height: 90dvh;
+  overflow-y: auto;
+  background: var(--surface);
+  color: var(--surface-ink);
+  border-radius: var(--radius-xl);
+  /* Extra top padding reserves room for the corner close button. */
+  padding: 22px 22px 26px;
+  box-shadow: var(--shadow-lg);
+}
+
+.title {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  /* Keep long titles clear of the close button. */
+  padding-right: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.head {
+  display: block;
+}
+
+/* Anchored to the sheet's top-right corner. */
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  background: color-mix(in srgb, var(--ring) 22%, transparent);
+  color: var(--surface-ink);
+  z-index: 2;
+}

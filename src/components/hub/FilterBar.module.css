@@ -1,0 +1,25 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.head {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  padding-left: 4px;
+}
+
+.headRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Wrapping grid of chips — no horizontal scroll. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

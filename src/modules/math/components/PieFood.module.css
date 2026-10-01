@@ -1,0 +1,33 @@
+.wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 0 auto;
+}
+
+.pie {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.18));
+}
+
+.filled {
+  fill: var(--accent);
+  stroke: var(--surface);
+  stroke-width: 3;
+}
+
+.empty {
+  fill: color-mix(in srgb, var(--ring) 22%, var(--surface));
+  stroke: var(--surface);
+  stroke-width: 3;
+}
+
+.food {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.4rem;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
+}

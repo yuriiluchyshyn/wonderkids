@@ -1,0 +1,55 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 2px;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.avatar {
+  font-size: 1.8rem;
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vault {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  color: var(--surface-ink);
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+}
+
+.vault strong {
+  font-size: 1.15rem;
+}
+
+.art {
+  font-size: 1.2rem;
+}
+
+.gear {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}

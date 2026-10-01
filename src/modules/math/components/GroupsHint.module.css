@@ -1,0 +1,39 @@
+.caption {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  margin-bottom: 10px;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-height: 44dvh;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.row {
+  display: flex;
+  gap: clamp(5px, 1.6vw, 9px);
+  justify-content: center;
+  padding: 6px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--ring) 12%, transparent);
+}
+
+.dot {
+  width: clamp(18px, 5.2vw, 26px);
+  height: clamp(18px, 5.2vw, 26px);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ring) 32%, var(--surface));
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+  flex: 0 0 auto;
+}
+
+.on {
+  background: var(--accent);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--accent) 55%, transparent);
+}

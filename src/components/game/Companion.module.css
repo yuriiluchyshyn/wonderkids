@@ -1,0 +1,40 @@
+.track {
+  position: relative;
+  height: 72px;
+  margin: 4px 0 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ring) 20%, var(--surface));
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.ground {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 14px;
+  height: 4px;
+  border-radius: 999px;
+  border-bottom: 3px dashed color-mix(in srgb, var(--ring) 70%, transparent);
+}
+
+.mascot {
+  position: absolute;
+  bottom: 10px;
+  font-size: 2.6rem;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.18));
+  will-change: left;
+}
+
+/* Mirror the emoji so it faces the finish line on the right. */
+.sprite {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+.goal {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  font-size: 2.4rem;
+}

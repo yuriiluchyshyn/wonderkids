@@ -1,0 +1,30 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ring) 20%, transparent);
+  color: var(--surface-ink);
+  flex: 0 0 auto;
+}
+
+.sm {
+  min-height: 40px;
+  padding: 0 10px;
+  font-size: 1.1rem;
+}
+
+.md {
+  min-height: 48px;
+  padding: 0 14px;
+  font-size: 1.15rem;
+}
+
+.muted {
+  opacity: 0.55;
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 600;
+}

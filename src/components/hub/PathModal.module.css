@@ -1,0 +1,99 @@
+.caption {
+  text-align: center;
+  color: var(--text-soft);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.path {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-height: 56dvh;
+  overflow-y: auto;
+  padding: 10px 4px;
+  margin-bottom: 16px;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--ring) 45%, transparent) 2px,
+    transparent 2px
+  );
+  background-size: 2px 16px;
+  background-position: center;
+  background-repeat: repeat-y;
+}
+
+.nodeRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.node {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.7rem;
+  font-weight: 800;
+  flex: 0 0 auto;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Faint step number tucked at the node corner. */
+.badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  color: var(--text-soft);
+  box-shadow: var(--shadow-sm);
+}
+
+.done {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+}
+
+.current {
+  background: var(--primary);
+  color: var(--primary-ink);
+  box-shadow: var(--shadow), 0 0 0 5px color-mix(in srgb, var(--ring) 55%, transparent);
+}
+
+.locked {
+  background: color-mix(in srgb, var(--ring) 14%, var(--surface));
+  color: var(--text-soft);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* The chosen step to play. */
+.selected {
+  outline: 4px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.reward {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--surface-ink);
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  padding: 6px 12px;
+  border-radius: 999px;
+  max-width: 180px;
+}
+
+.rewardLocked {
+  opacity: 0.6;
+}

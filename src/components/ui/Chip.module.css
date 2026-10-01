@@ -1,0 +1,46 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 54px;
+  padding: 0 16px;
+  border-radius: 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  color: var(--surface-ink);
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.active {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
+/* Icon-only mode: a compact, tappable square for pre-readers. */
+.iconOnly {
+  width: 60px;
+  min-height: 60px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.iconOnly .icon {
+  font-size: 2rem;
+}
+
+.label {
+  white-space: nowrap;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}

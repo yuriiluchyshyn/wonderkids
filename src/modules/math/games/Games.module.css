@@ -1,0 +1,49 @@
+.prompt {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 18px 10px 10px;
+}
+
+.equation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(8px, 3vw, 14px);
+  /* Scales with the viewport so long sums never overflow a narrow phone. */
+  font-size: clamp(2.3rem, 11vw, 3.4rem);
+  font-weight: 800;
+  color: var(--surface-ink);
+}
+
+.op {
+  color: var(--primary);
+}
+
+.q {
+  color: var(--accent);
+}
+
+.speaker {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  background: color-mix(in srgb, var(--ring) 25%, transparent);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+@media (min-width: 560px) {
+  .tiles {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -1,0 +1,141 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-sm);
+  flex: 0 0 auto;
+}
+
+.title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.dots {
+  display: flex;
+  gap: 7px;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ring) 35%, var(--surface));
+}
+
+.dotDone {
+  background: var(--accent);
+}
+
+.board {
+  position: relative;
+  padding: 18px;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.boardTop {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+}
+
+.introCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 18px;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.introToggle {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.introText {
+  font-size: 1.2rem;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--surface-ink);
+}
+
+.hintBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.hintBarLabel {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--surface-ink);
+}
+
+.floatReward {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.summary {
+  text-align: center;
+}
+
+.summaryArt {
+  font-size: 4rem;
+  margin: 6px 0;
+}
+
+.summaryBig {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.summaryActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.jumpUp {
+  position: fixed;
+  right: calc(16px + env(safe-area-inset-right));
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 40;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  background: var(--primary);
+  color: var(--primary-ink);
+  box-shadow: var(--shadow-lg);
+}

@@ -1,0 +1,29 @@
+.towers {
+  display: flex;
+  gap: clamp(8px, 2.5vw, 14px);
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 8px 0;
+  max-height: 46dvh;
+  overflow-y: auto;
+}
+
+.tower {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 5px;
+}
+
+.cube {
+  width: clamp(22px, 6.5vw, 30px);
+  height: clamp(22px, 6.5vw, 30px);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ring) 30%, var(--surface));
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.12);
+  transition: background 0.15s ease;
+}
+
+.on {
+  background: var(--accent);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.18), 0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);
+}

@@ -1,0 +1,149 @@
+.section {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  margin: -4px 0 10px;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.inline {
+  display: flex;
+  gap: 10px;
+}
+
+.inline > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.milestoneRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.milestoneRow > input {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.stepField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 86px;
+  flex: 0 0 auto;
+}
+
+.stepLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  padding-left: 4px;
+}
+
+.stepField > input {
+  margin-bottom: 0;
+}
+
+.removeBtn {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 auto;
+  border-radius: var(--radius);
+  font-size: 1.2rem;
+  background: color-mix(in srgb, var(--ring) 16%, transparent);
+}
+
+.stepRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stepName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  font-weight: 600;
+}
+
+.stepRow > input {
+  width: 90px;
+  flex: 0 0 auto;
+  margin-bottom: 0;
+}
+
+.textInput {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 16px;
+  margin-bottom: 10px;
+  border-radius: var(--radius);
+  font-size: 1.15rem;
+  font-family: inherit;
+  color: var(--surface-ink);
+  background: color-mix(in srgb, var(--ring) 14%, var(--surface));
+  border: 2px solid color-mix(in srgb, var(--ring) 45%, transparent);
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  margin: 4px 0 6px 4px;
+}
+
+/* Parental gate */
+.challenge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.gateInput {
+  width: 110px;
+  min-height: 60px;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: inherit;
+  color: var(--surface-ink);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--ring) 14%, var(--surface));
+  border: 2px solid var(--ring);
+}
+
+.shake {
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}

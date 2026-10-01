@@ -1,0 +1,60 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.compact .top {
+  justify-content: center;
+}
+
+.icon {
+  font-size: 3.2rem;
+  line-height: 1;
+}
+
+.compact .icon {
+  font-size: 4.2rem;
+}
+
+.titleBlock {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.blurb {
+  font-size: 0.95rem;
+  color: var(--text-soft);
+}
+
+.pathRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pathMascot {
+  font-size: 1.6rem;
+}
+
+.pathBar {
+  flex: 1;
+  min-width: 0;
+}
