@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import type { ThemeId } from '@/core/theme/theme.types';
 import { DEFAULT_THEME_ID } from '@/core/theme/themes';
 import {
@@ -8,7 +7,6 @@ import {
   type VoiceChannelState,
 } from '@/core/audio/voiceChannels';
 import { clampStep, pathKey } from '@/core/progress/path';
-import { uid } from '@/core/utils/random';
 
 /** Rate at which the companion rolls back during inactivity (PRD §4.1). */
 export type CompanionSpeed = 'off' | 'slow' | 'medium' | 'fast';
@@ -51,7 +49,12 @@ export interface Settings {
   sessionLength: number;
 }
 
-export interface GameState {
+/**
+ * The fields that make up a save. This is exactly what gets persisted to the
+ * server (and, previously, to localStorage) — the actions below are not part
+ * of it.
+ */
+export interface PersistableState {
   profile: ChildProfile;
   themeId: ThemeId;
   artifacts: number;
@@ -61,7 +64,9 @@ export interface GameState {
   progress: Record<string, number>;
   milestones: StepMilestone[];
   settings: Settings;
+}
 
+export interface GameState extends PersistableState {
   // actions
   setProfile: (patch: Partial<ChildProfile>) => void;
   setTheme: (id: ThemeId) => void;
@@ -79,6 +84,10 @@ export interface GameState {
   updateSettings: (patch: Partial<Omit<Settings, 'voice'>>) => void;
   toggleVoice: (channel: VoiceChannel) => void;
   resetProgress: () => void;
+  /** Replace the save with server-loaded data layered over defaults. */
+  hydrate: (data: Partial<PersistableState>) => void;
+  /** Reset the entire save back to defaults (used on logout / fresh login). */
+  resetAll: () => void;
 }
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -106,133 +115,131 @@ const DEFAULT_MILESTONES: StepMilestone[] = [
   { id: 'm_trip', step: 30, reward: 'Велика сімейна пригода 🎉' },
 ];
 
-export const useGameStore = create<GameState>()(
-  persist(
-    (set) => ({
-      profile: DEFAULT_PROFILE,
-      themeId: DEFAULT_THEME_ID,
+/** A fresh save with all defaults — the starting point for a new user. */
+function createInitialState(): PersistableState {
+  return {
+    profile: { ...DEFAULT_PROFILE },
+    themeId: DEFAULT_THEME_ID,
+    artifacts: 0,
+    tasksCompleted: 0,
+    hintsSurfaced: 0,
+    progress: {},
+    milestones: DEFAULT_MILESTONES.map((m) => ({ ...m })),
+    settings: { ...DEFAULT_SETTINGS, voice: { ...DEFAULT_SETTINGS.voice } },
+  };
+}
+
+/**
+ * Merge a (possibly partial / legacy) server payload onto a fresh default
+ * save, so missing or newly-added fields always have sane values. Mirrors the
+ * old localStorage migration intent without being tied to a stored version.
+ */
+function fromPersisted(data: Partial<PersistableState> | null | undefined): PersistableState {
+  const base = createInitialState();
+  if (!data || typeof data !== 'object') return base;
+
+  const settings = (data.settings ?? {}) as Partial<Settings>;
+  return {
+    profile: { ...base.profile, ...(data.profile ?? {}) },
+    themeId: data.themeId ?? base.themeId,
+    artifacts: typeof data.artifacts === 'number' ? data.artifacts : base.artifacts,
+    tasksCompleted:
+      typeof data.tasksCompleted === 'number' ? data.tasksCompleted : base.tasksCompleted,
+    hintsSurfaced:
+      typeof data.hintsSurfaced === 'number' ? data.hintsSurfaced : base.hintsSurfaced,
+    progress: data.progress && typeof data.progress === 'object' ? data.progress : base.progress,
+    milestones: Array.isArray(data.milestones) ? data.milestones : base.milestones,
+    settings: {
+      ...base.settings,
+      ...settings,
+      voice: { ...base.settings.voice, ...(settings.voice ?? {}) },
+    },
+  };
+}
+
+/** Extract just the persistable save from the live store (for syncing). */
+export function selectPersistable(s: GameState): PersistableState {
+  return {
+    profile: s.profile,
+    themeId: s.themeId,
+    artifacts: s.artifacts,
+    tasksCompleted: s.tasksCompleted,
+    hintsSurfaced: s.hintsSurfaced,
+    progress: s.progress,
+    milestones: s.milestones,
+    settings: s.settings,
+  };
+}
+
+export const useGameStore = create<GameState>()((set) => ({
+  ...createInitialState(),
+
+  setProfile: (patch) =>
+    set((s) => {
+      const next = { ...s.profile, ...patch };
+      if (typeof next.name === 'string') {
+        next.name = next.name.trim() || 'Друже';
+      }
+      next.birthMonth = Math.min(12, Math.max(1, Math.round(next.birthMonth)));
+      next.birthYear = Math.min(
+        CURRENT_YEAR,
+        Math.max(CURRENT_YEAR - 14, Math.round(next.birthYear)),
+      );
+      return { profile: next };
+    }),
+
+  setTheme: (id) => set({ themeId: id }),
+
+  awardArtifacts: (amount) =>
+    set((s) => ({ artifacts: s.artifacts + Math.max(0, amount) })),
+
+  recordTaskComplete: ({ hintUsed }) =>
+    set((s) => ({
+      tasksCompleted: s.tasksCompleted + 1,
+      hintsSurfaced: s.hintsSurfaced + (hintUsed ? 1 : 0),
+    })),
+
+  advanceStep: (moduleId, subCategoryId, playedStep, maxSteps) =>
+    set((s) => {
+      const key = pathKey(moduleId, subCategoryId);
+      const current = s.progress[key] ?? 1;
+      // Only the frontier advances; replaying an older step changes nothing.
+      const next = Math.max(current, Math.min(maxSteps, playedStep + 1));
+      return { progress: { ...s.progress, [key]: clampStep(next, maxSteps) } };
+    }),
+
+  setStep: (moduleId, subCategoryId, step, maxSteps) =>
+    set((s) => ({
+      progress: { ...s.progress, [pathKey(moduleId, subCategoryId)]: clampStep(step, maxSteps) },
+    })),
+
+  setMilestones: (milestones) =>
+    set({
+      milestones: [...milestones]
+        .map((m) => ({ ...m, step: clampStep(m.step) }))
+        .sort((a, b) => a.step - b.step),
+    }),
+
+  updateSettings: (patch) =>
+    set((s) => ({ settings: { ...s.settings, ...patch } })),
+
+  toggleVoice: (channel) =>
+    set((s) => ({
+      settings: {
+        ...s.settings,
+        voice: { ...s.settings.voice, [channel]: !s.settings.voice[channel] },
+      },
+    })),
+
+  resetProgress: () =>
+    set({
       artifacts: 0,
       tasksCompleted: 0,
       hintsSurfaced: 0,
       progress: {},
-      milestones: DEFAULT_MILESTONES,
-      settings: DEFAULT_SETTINGS,
-
-      setProfile: (patch) =>
-        set((s) => {
-          const next = { ...s.profile, ...patch };
-          if (typeof next.name === 'string') {
-            next.name = next.name.trim() || 'Друже';
-          }
-          next.birthMonth = Math.min(12, Math.max(1, Math.round(next.birthMonth)));
-          next.birthYear = Math.min(
-            CURRENT_YEAR,
-            Math.max(CURRENT_YEAR - 14, Math.round(next.birthYear)),
-          );
-          return { profile: next };
-        }),
-
-      setTheme: (id) => set({ themeId: id }),
-
-      awardArtifacts: (amount) =>
-        set((s) => ({ artifacts: s.artifacts + Math.max(0, amount) })),
-
-      recordTaskComplete: ({ hintUsed }) =>
-        set((s) => ({
-          tasksCompleted: s.tasksCompleted + 1,
-          hintsSurfaced: s.hintsSurfaced + (hintUsed ? 1 : 0),
-        })),
-
-      advanceStep: (moduleId, subCategoryId, playedStep, maxSteps) =>
-        set((s) => {
-          const key = pathKey(moduleId, subCategoryId);
-          const current = s.progress[key] ?? 1;
-          // Only the frontier advances; replaying an older step changes nothing.
-          const next = Math.max(current, Math.min(maxSteps, playedStep + 1));
-          return { progress: { ...s.progress, [key]: clampStep(next, maxSteps) } };
-        }),
-
-      setStep: (moduleId, subCategoryId, step, maxSteps) =>
-        set((s) => ({
-          progress: { ...s.progress, [pathKey(moduleId, subCategoryId)]: clampStep(step, maxSteps) },
-        })),
-
-      setMilestones: (milestones) =>
-        set({
-          milestones: [...milestones]
-            .map((m) => ({ ...m, step: clampStep(m.step) }))
-            .sort((a, b) => a.step - b.step),
-        }),
-
-      updateSettings: (patch) =>
-        set((s) => ({ settings: { ...s.settings, ...patch } })),
-
-      toggleVoice: (channel) =>
-        set((s) => ({
-          settings: {
-            ...s.settings,
-            voice: { ...s.settings.voice, [channel]: !s.settings.voice[channel] },
-          },
-        })),
-
-      resetProgress: () =>
-        set({
-          artifacts: 0,
-          tasksCompleted: 0,
-          hintsSurfaced: 0,
-          progress: {},
-        }),
     }),
-    {
-      name: 'wonderkids-save-v1',
-      version: 4,
-      migrate: (persisted: unknown) => {
-        const s = (persisted ?? {}) as Record<string, unknown>;
-        const now = new Date();
 
-        // Profile → birth month/year + gender (girl|boy).
-        const prevProfile = (s.profile ?? {}) as Record<string, unknown>;
-        let birthYear = prevProfile.birthYear as number | undefined;
-        let birthMonth = prevProfile.birthMonth as number | undefined;
-        if (!birthYear) {
-          const legacyAge =
-            typeof prevProfile.age === 'number' ? (prevProfile.age as number) : 5;
-          birthYear = now.getFullYear() - legacyAge;
-          birthMonth = 6;
-        }
-        s.profile = {
-          name:
-            (prevProfile.name as string) ?? (s.profileName as string) ?? DEFAULT_PROFILE.name,
-          birthYear,
-          birthMonth: birthMonth ?? 6,
-          gender: prevProfile.gender === 'boy' ? 'boy' : 'girl',
-        } satisfies ChildProfile;
+  hydrate: (data) => set(fromPersisted(data)),
 
-        // Settings → voice channel map.
-        const prevSettings = (s.settings ?? {}) as Record<string, unknown>;
-        const prevVoice = (prevSettings.voice ?? {}) as Partial<VoiceChannelState>;
-        const voice: VoiceChannelState = {
-          selections: prevVoice.selections ?? (prevSettings.speakSelections as boolean) ?? true,
-          taskPrompt: prevVoice.taskPrompt ?? true,
-          taskIntro: prevVoice.taskIntro ?? true,
-          hint: prevVoice.hint ?? (prevSettings.speakGameHints as boolean) ?? true,
-        };
-        s.settings = { ...DEFAULT_SETTINGS, ...prevSettings, voice };
-        delete (s.settings as Record<string, unknown>).speakSelections;
-        delete (s.settings as Record<string, unknown>).speakGameHints;
-
-        // Path progress + milestones.
-        if (!s.progress) s.progress = {};
-        if (!Array.isArray(s.milestones)) {
-          const legacyGoal = s.parentGoal as { reward?: string } | undefined;
-          s.milestones = legacyGoal?.reward
-            ? [{ id: uid('m'), step: 10, reward: legacyGoal.reward }, ...DEFAULT_MILESTONES.slice(1)]
-            : DEFAULT_MILESTONES;
-        }
-        delete s.parentGoal;
-
-        return s as unknown as GameState;
-      },
-    },
-  ),
-);
+  resetAll: () => set(createInitialState()),
+}));

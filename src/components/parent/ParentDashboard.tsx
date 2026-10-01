@@ -14,6 +14,7 @@ import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
 import { Button } from '@/components/ui/Button';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
+import { useAuthStore } from '@/core/auth/useAuthStore';
 import styles from './Parent.module.css';
 
 const GENDER_OPTIONS: { id: Gender; label: string; icon: string }[] = [
@@ -56,6 +57,8 @@ export function ParentDashboard() {
   const progress = useGameStore((s) => s.progress);
   const setStep = useGameStore((s) => s.setStep);
   const resetProgress = useGameStore((s) => s.resetProgress);
+  const email = useAuthStore((s) => s.user?.email);
+  const logout = useAuthStore((s) => s.logout);
 
   const subPaths = moduleRegistry.getAll().flatMap((m) =>
     m.subCategories.map((sub) => ({ moduleId: m.id, moduleIcon: m.icon, sub })),
@@ -244,6 +247,15 @@ export function ParentDashboard() {
       <section className={styles.section}>
         <Button block variant="ghost" icon="♻️" onClick={resetProgress}>
           Скинути весь прогрес
+        </Button>
+      </section>
+
+      {/* ---- Account ---- */}
+      <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>👋 Акаунт</h3>
+        {email && <p className={styles.hint}>Ви увійшли як {email}</p>}
+        <Button block variant="ghost" icon="🚪" onClick={logout}>
+          Вийти з акаунту
         </Button>
       </section>
     </div>
