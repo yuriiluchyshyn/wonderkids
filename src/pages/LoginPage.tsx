@@ -1,13 +1,14 @@
 import { useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useAuthStore } from '@/core/auth/useAuthStore';
-import { Button } from '@/components/ui/Button';
 import styles from './LoginPage.module.css';
 
 /**
  * Entry screen. Login is email-only for now — type an address and go. If a
  * session already exists we skip straight to the hub.
+ *
+ * Intentionally theme-independent: this screen renders before a world is
+ * chosen, so it uses its own fixed styling rather than the app theme.
  */
 export function LoginPage() {
   const navigate = useNavigate();
@@ -30,22 +31,12 @@ export function LoginPage() {
 
   return (
     <div className={styles.wrap}>
-      <motion.div
-        className={styles.card}
-        initial={{ opacity: 0, y: 12, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-      >
-        <motion.div
-          className="emoji"
-          aria-hidden
-          animate={{ y: [0, -8, 0], rotate: [0, -5, 5, 0] }}
-          transition={{ repeat: Infinity, duration: 3 }}
-        >
-          <span className={styles.mascot}>🦄</span>
-        </motion.div>
+      <div className={styles.card}>
+        <span className={styles.mascot} aria-hidden>
+          🦄
+        </span>
 
-        <h1 className={styles.title}>ДивоСвіт</h1>
+        <h1 className={styles.title}>WonderKids</h1>
         <p className={styles.sub}>Увійди, щоб продовжити пригоду</p>
 
         <form className={styles.form} onSubmit={submit}>
@@ -71,15 +62,15 @@ export function LoginPage() {
 
           {error && <p className={styles.error}>{error}</p>}
 
-          <Button type="submit" block size="lg" icon="✨" silent>
+          <button className={styles.submit} type="submit" disabled={pending}>
             {pending ? 'Входимо…' : 'Увійти'}
-          </Button>
+          </button>
         </form>
 
         <p className={styles.hint}>
           Пароль не потрібен — поки що вхід лише за поштою.
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 }

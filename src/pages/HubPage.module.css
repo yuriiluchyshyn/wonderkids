@@ -15,3 +15,27 @@
   font-weight: 700;
   color: var(--text);
 }
+
+/* Discreet footer entry to the parent cabinet (kept low-key, away from kids'
+   main flow but still reachable without typing a URL). */
+.parentFooter {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 4px;
+}
+
+.parentBtn {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  opacity: 0.75;
+  transition: opacity 0.15s ease;
+}
+
+.parentBtn:hover {
+  opacity: 1;
+}

@@ -22,3 +22,6 @@ yarn-error.log*
 .env
 .env.*
 !.env.example
+
+# TypeScript incremental build cache (must never be committed)
+*.tsbuildinfo

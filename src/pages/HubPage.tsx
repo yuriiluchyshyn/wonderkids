@@ -56,6 +56,20 @@ export function HubPage() {
 
       <TaskGrid entries={visible} onStart={setPathEntry} />
 
+      <footer className={styles.parentFooter}>
+        <button
+          type="button"
+          className={styles.parentBtn}
+          onClick={() => navigate('/parent')}
+          aria-label="Кабінет батьків і налаштування"
+        >
+          <span className="emoji" aria-hidden>
+            ⚙️
+          </span>{' '}
+          Батькам
+        </button>
+      </footer>
+
       <PathModal
         entry={pathEntry}
         onClose={() => setPathEntry(null)}

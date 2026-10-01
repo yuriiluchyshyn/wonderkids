@@ -1,37 +1,45 @@
+/*
+ * Standalone, theme-independent styling. The login screen is shown before a
+ * child/world is chosen, so it deliberately uses its own fixed palette instead
+ * of the app's theme CSS variables.
+ */
+
 .wrap {
   min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
+  background: linear-gradient(160deg, #eef2ff 0%, #e2e8f0 100%);
 }
 
 .card {
   width: 100%;
   max-width: 420px;
-  padding: 28px 24px 24px;
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  color: var(--surface-ink);
-  box-shadow: var(--shadow);
+  padding: 32px 26px 26px;
+  border-radius: 22px;
+  background: #ffffff;
+  color: #1e293b;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.16);
   text-align: center;
 }
 
 .mascot {
   font-size: 3.4rem;
   line-height: 1;
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.16));
+  filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.18));
 }
 
 .title {
   margin: 10px 0 2px;
   font-size: 1.6rem;
+  color: #0f172a;
 }
 
 .sub {
-  margin: 0 0 20px;
+  margin: 0 0 22px;
   font-size: 1rem;
-  color: var(--text-soft);
+  color: #64748b;
 }
 
 .form {
@@ -44,7 +52,7 @@
 .label {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text-soft);
+  color: #475569;
   margin-left: 4px;
 }
 
@@ -52,28 +60,65 @@
   width: 100%;
   min-height: 56px;
   padding: 0 16px;
-  border-radius: var(--radius);
+  border-radius: 14px;
   font-size: 1.2rem;
   font-family: inherit;
-  color: var(--surface-ink);
-  background: color-mix(in srgb, var(--ring) 14%, var(--surface));
-  border: 2px solid color-mix(in srgb, var(--ring) 45%, transparent);
+  color: #1e293b;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+  color: #94a3b8;
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--ring);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+}
+
+.input[aria-invalid='true'] {
+  border-color: #dc2626;
 }
 
 .error {
   margin: 0;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #b91c1c;
+  color: #dc2626;
+}
+
+.submit {
+  margin-top: 4px;
+  min-height: 56px;
+  border: none;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: #4f46e5;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.submit:hover:not(:disabled) {
+  background: #4338ca;
+}
+
+.submit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.submit:disabled {
+  opacity: 0.65;
+  cursor: default;
 }
 
 .hint {
-  margin: 14px 0 0;
+  margin: 16px 0 0;
   font-size: 0.82rem;
-  color: var(--text-soft);
+  color: #94a3b8;
 }
