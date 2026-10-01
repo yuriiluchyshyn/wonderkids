@@ -37,19 +37,24 @@ export function MentalMathGame({ task, callbacks }: GameViewProps<MentalMathPayl
   return (
     <div className="stack">
       <div className={styles.prompt}>
-        <motion.div
+        <motion.button
           key={task.id}
+          type="button"
           className={styles.equation}
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
+          whileTap={{ scale: 0.94 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          onClick={() => callbacks.speakPrompt()}
+          aria-label="Повторити завдання"
+          title="Повторити завдання"
         >
           <span>{a}</span>
           <span className={styles.op}>{op}</span>
           <span>{b}</span>
           <span className={styles.op}>=</span>
           <span className={styles.q}>?</span>
-        </motion.div>
+        </motion.button>
       </div>
 
       <div className={styles.tiles}>

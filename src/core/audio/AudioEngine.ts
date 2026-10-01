@@ -116,6 +116,31 @@ export class AudioEngine {
     this.tone({ freq: 440, type: 'sine', start: 0.14, duration: 0.26, gain: 0.3 });
   }
 
+  /**
+   * Soft "aww, not quite" cue for a wrong answer — a gentle descending
+   * two-note sigh. Clearly reads as "sad / try again" while staying warm and
+   * cartoonish, never a harsh buzzer (Zero-Aggression UX).
+   */
+  sad(): void {
+    this.tone({ freq: 415.3, type: 'sine', duration: 0.22, gain: 0.3, glideTo: 392 });
+    this.tone({ freq: 329.63, type: 'sine', start: 0.2, duration: 0.4, gain: 0.3, glideTo: 293.66 });
+  }
+
+  /**
+   * Cheerful "level complete!" victory jingle — a rising arpeggio that lands
+   * on a bright high note with a sparkle. Distinct from the single-answer
+   * `success` sparkle so finishing a whole level feels like a big win.
+   */
+  win(): void {
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((freq, i) => {
+      this.tone({ freq, type: 'triangle', start: i * 0.11, duration: 0.26, gain: 0.34 });
+    });
+    // Final sparkle on top of the last note.
+    this.tone({ freq: 1567.98, type: 'triangle', start: 0.44, duration: 0.5, gain: 0.3 });
+    this.tone({ freq: 2093.0, type: 'sine', start: 0.5, duration: 0.4, gain: 0.14 });
+  }
+
   /** Balloon "ПОП!" burst. */
   pop(): void {
     this.tone({ freq: 900, type: 'square', duration: 0.06, gain: 0.3, glideTo: 180 });

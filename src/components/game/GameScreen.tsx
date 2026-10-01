@@ -37,6 +37,8 @@ interface GameScreenProps {
   subLabel: string;
   onExit: () => void;
   onPlayAgain: () => void;
+  /** Advance to the next step/level in place, without leaving to the hub. */
+  onContinue: () => void;
 }
 
 type Phase = 'intro' | 'play';
@@ -47,7 +49,7 @@ type Phase = 'intro' | 'play';
  * scaffolding helper (auto-scroll + jump-back + spoken how-to), and shows the
  * end-of-session celebration. Each voiced section has an inline mute toggle.
  */
-export function GameScreen({ config, subLabel, onExit, onPlayAgain }: GameScreenProps) {
+export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }: GameScreenProps) {
   const session = useGameSession(config);
   const theme = useActiveTheme();
   const showText = useShowText();
@@ -92,14 +94,14 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain }: GameScreen
     return () => window.clearTimeout(t);
   }, [session.hintActive, task?.id, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Win sound when the session completes (the mascot "reaches the apple"),
+  // Victory sound when the level is completed (the mascot "reaches the apple"),
   // plus an extra sparkle when a progression gift is earned.
   useEffect(() => {
     if (!session.finished) return;
     play('crunch');
-    play('fanfare');
+    play('win');
     if (stepGift) {
-      const t = window.setTimeout(() => play('success'), 650);
+      const t = window.setTimeout(() => play('fanfare'), 650);
       return () => window.clearTimeout(t);
     }
   }, [session.finished]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -124,7 +126,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain }: GameScreen
     },
     onMistake: () => {
       markActivity();
-      play('gentle');
+      play('sad');
       session.registerMistake();
     },
     speakPrompt: () => {
@@ -288,7 +290,18 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain }: GameScreen
           </p>
           <p className="muted">Усі {session.total} завдань виконано. Чудова робота!</p>
           <div className={styles.summaryActions}>
-            <Button size="lg" icon="🔁" block onClick={onPlayAgain}>
+            {config.step < maxSteps && (
+              <Button size="lg" icon="▶️" block onClick={onContinue}>
+                Наступний рівень!
+              </Button>
+            )}
+            <Button
+              size="lg"
+              variant={config.step < maxSteps ? 'ghost' : 'primary'}
+              icon="🔁"
+              block
+              onClick={onPlayAgain}
+            >
               Ще раз!
             </Button>
             <Button size="lg" variant="ghost" icon="🏠" block onClick={onExit}>

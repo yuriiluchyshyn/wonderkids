@@ -15,6 +15,23 @@
   font-size: clamp(2.3rem, 11vw, 3.4rem);
   font-weight: 800;
   color: var(--surface-ink);
+  /* Tappable to replay the spoken prompt (Voice-First). */
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: var(--radius, 18px);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Wraps a visual prompt (e.g. fraction pie) so a tap replays the prompt. */
+.promptBtn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .op {

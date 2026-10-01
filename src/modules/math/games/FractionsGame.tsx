@@ -39,7 +39,15 @@ export function FractionsGame({ task, callbacks }: GameViewProps<FractionPayload
   return (
     <div className="stack">
       <div className={styles.prompt}>
-        <PieFood food={food} denom={denom} filled={filled} />
+        <button
+          type="button"
+          className={styles.promptBtn}
+          onClick={() => callbacks.speakPrompt()}
+          aria-label="Повторити завдання"
+          title="Повторити завдання"
+        >
+          <PieFood food={food} denom={denom} filled={filled} />
+        </button>
       </div>
 
       <div className={styles.tiles}>

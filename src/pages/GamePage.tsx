@@ -54,6 +54,12 @@ export function GamePage() {
           setActiveStep(activeStep);
           setSessionKey((k) => k + 1);
         }}
+        onContinue={() => {
+          // Completing a session advances the stored frontier, so the next
+          // step is now unlocked — jump straight into it without a hub trip.
+          setActiveStep((s) => clampStep(s + 1, maxSteps));
+          setSessionKey((k) => k + 1);
+        }}
       />
     </div>
   );
