@@ -126,6 +126,20 @@
   margin-top: 18px;
 }
 
+.giftWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 2px 0 6px;
+}
+
+.giftLabel {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
 .jumpUp {
   position: fixed;
   right: calc(16px + env(safe-area-inset-right));

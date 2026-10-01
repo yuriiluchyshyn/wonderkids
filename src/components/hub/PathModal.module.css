@@ -78,6 +78,18 @@
   cursor: not-allowed;
 }
 
+/* Progression gift nodes — bigger & brighter at 10th and final steps. */
+.big {
+  box-shadow: var(--shadow), 0 0 0 3px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.biggest {
+  width: 74px;
+  height: 74px;
+  font-size: 2.1rem;
+  box-shadow: var(--shadow-lg), 0 0 0 4px var(--accent);
+}
+
 /* The chosen step to play. */
 .selected {
   outline: 4px solid var(--accent);

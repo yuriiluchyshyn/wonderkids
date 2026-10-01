@@ -5,10 +5,10 @@ import {
   type CelebrationStyle,
   type CompanionSpeed,
   type Gender,
-  type StepMilestone,
+  type Milestone,
 } from '@/core/store/useGameStore';
 import { computeAge } from '@/core/utils/age';
-import { MAX_STEPS, subSteps, pathKey } from '@/core/progress/path';
+import { subSteps, pathKey } from '@/core/progress/path';
 import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
 import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
@@ -64,12 +64,12 @@ export function ParentDashboard() {
     m.subCategories.map((sub) => ({ moduleId: m.id, moduleIcon: m.icon, sub })),
   );
 
-  const patchMilestone = (id: string, patch: Partial<StepMilestone>) =>
+  const patchMilestone = (id: string, patch: Partial<Milestone>) =>
     setMilestones(milestones.map((m) => (m.id === id ? { ...m, ...patch } : m)));
   const removeMilestone = (id: string) =>
     setMilestones(milestones.filter((m) => m.id !== id));
   const addMilestone = () =>
-    setMilestones([...milestones, { id: uid('m'), step: Math.min(MAX_STEPS, (milestones.at(-1)?.step ?? 0) + 5), reward: '' }]);
+    setMilestones([...milestones, { id: uid('m'), amount: (milestones.at(-1)?.amount ?? 0) + 50, reward: '' }]);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 12 }, (_, i) => currentYear - 3 - i); // ages ~3–14
@@ -172,24 +172,23 @@ export function ParentDashboard() {
 
       {/* ---- Milestone goals on the path ---- */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🎯 Цілі на шляху</h3>
+        <h3 className={styles.sectionTitle}>🎯 Сімейні цілі</h3>
         <p className={styles.hint}>
-          На якій сходинці дитина отримує яку нагороду. Вони показуються на мапі шляху.
+          Скільки артефактів (із будь-яких завдань) треба назбирати у спільний кошик, щоб отримати нагороду.
         </p>
         <div className="stack">
           {milestones.map((m) => (
             <div key={m.id} className={styles.milestoneRow}>
               <div className={styles.stepField}>
-                <span className={styles.stepLabel}>Сходинка</span>
+                <span className={styles.stepLabel}>Артефактів</span>
                 <input
                   className={styles.textInput}
                   type="number"
                   inputMode="numeric"
                   min={1}
-                  max={MAX_STEPS}
-                  value={m.step}
-                  onChange={(e) => patchMilestone(m.id, { step: Number(e.target.value) })}
-                  aria-label="Сходинка"
+                  value={m.amount}
+                  onChange={(e) => patchMilestone(m.id, { amount: Number(e.target.value) })}
+                  aria-label="Кількість артефактів"
                 />
               </div>
               <input

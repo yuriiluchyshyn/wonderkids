@@ -16,16 +16,32 @@ interface PathModalProps {
   onPlay: (entry: CatalogEntry, step: number) => void;
 }
 
+type GiftTier = 'small' | 'big' | 'biggest' | null;
+
+/** Which (if any) progression gift sits on a given step. */
+function giftTierFor(step: number, total: number): GiftTier {
+  if (step === total) return 'biggest';
+  if (step % 10 === 0) return 'big';
+  if (step % 5 === 0) return 'small';
+  return null;
+}
+
+const GIFT_EMOJI: Record<Exclude<GiftTier, null>, string> = {
+  small: '🎀',
+  big: '🎁',
+  biggest: '🏆',
+};
+
 /**
- * Duolingo-style learning path: 50 difficulty steps winding bottom→top. Steps
- * are themed collectibles (apple, pear…) with a number every fifth step. The
- * mascot sits on the current frontier; the child may tap any step up to the
- * frontier to replay it (higher ones are locked). Parent milestones show 🎁.
+ * Duolingo-style learning path: difficulty steps winding bottom→top. Steps are
+ * themed collectibles with a progression gift every 5th (small 🎀), 10th (big
+ * 🎁) and at the very end (biggest 🏆). The mascot sits on the current frontier;
+ * the child may tap any step up to it to replay (higher ones are locked). Family
+ * goals are NOT shown here — they live in the shared basket (Vault).
  */
 export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
   const theme = useActiveTheme();
   const { play, chime } = useSound();
-  const milestones = useGameStore((s) => s.milestones);
   const current = useGameStore((s) =>
     entry ? (s.progress[pathKey(entry.module.id, entry.sub.id)] ?? 1) : 1,
   );
@@ -37,12 +53,6 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
   useEffect(() => {
     if (entry) setSelected(current);
   }, [entry, current]);
-
-  const milestoneByStep = useMemo(() => {
-    const map = new Map<number, string>();
-    milestones.forEach((m) => map.set(m.step, m.reward));
-    return map;
-  }, [milestones]);
 
   // Hardest at top → easiest (1) at bottom, so the child climbs. Length is
   // per-adventure.
@@ -80,12 +90,10 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
               const unlocked = n <= current;
               const isCurrent = n === current;
               const isSelected = n === selected;
-              const reward = milestoneByStep.get(n);
               const offset = Math.sin(n * 0.6) * 32;
+              const gift = giftTierFor(n, totalSteps);
               const fruit = theme.pathIcons[n % theme.pathIcons.length];
-              const showNumber = n % 5 === 0;
-
-              const content = isCurrent ? theme.mascot.emoji : showNumber ? n : fruit;
+              const content = isCurrent ? theme.mascot.emoji : gift ? GIFT_EMOJI[gift] : fruit;
 
               return (
                 <div
@@ -98,6 +106,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                     className={[
                       styles.node,
                       isCurrent ? styles.current : unlocked ? styles.done : styles.locked,
+                      gift === 'biggest' ? styles.biggest : gift === 'big' ? styles.big : '',
                       isSelected ? styles.selected : '',
                     ].join(' ')}
                     disabled={!unlocked}
@@ -110,14 +119,8 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                     <span className="emoji" aria-hidden>
                       {content}
                     </span>
-                    {!showNumber && !isCurrent && <span className={styles.badge}>{n}</span>}
+                    {!isCurrent && <span className={styles.badge}>{n}</span>}
                   </motion.button>
-
-                  {reward && (
-                    <span className={`${styles.reward} ${!unlocked ? styles.rewardLocked : ''}`}>
-                      🎁 {reward}
-                    </span>
-                  )}
                 </div>
               );
             })}

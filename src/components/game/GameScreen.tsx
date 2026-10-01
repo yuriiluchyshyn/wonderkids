@@ -13,7 +13,24 @@ import { Companion } from './Companion';
 import { Celebration } from './Celebration';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
 import { useIdleRollback } from './useIdleRollback';
+import { subSteps } from '@/core/progress/path';
 import styles from './GameScreen.module.css';
+
+type GiftTier = 'small' | 'big' | 'biggest' | null;
+
+/** Progression gift earned for completing a 5th / 10th / final step. */
+function giftForStep(step: number, total: number): GiftTier {
+  if (total > 0 && step === total) return 'biggest';
+  if (step % 10 === 0) return 'big';
+  if (step % 5 === 0) return 'small';
+  return null;
+}
+
+const GIFT_META: Record<Exclude<GiftTier, null>, { emoji: string; label: string; size: string }> = {
+  small: { emoji: '🎀', label: 'Маленький подарунок!', size: '3.6rem' },
+  big: { emoji: '🎁', label: 'Великий подарунок!', size: '4.4rem' },
+  biggest: { emoji: '🏆', label: 'Найбільший подарунок!', size: '5.4rem' },
+};
 
 interface GameScreenProps {
   config: GameSessionConfig;
@@ -44,6 +61,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain }: GameScreen
   // Prefer the module's themed, child-level intro; fall back to the static one.
   const introText = module?.getIntro?.(config.subCategoryId, theme) ?? sub?.intro;
 
+  // A gift pops at every 5th / 10th / final step of the adventure.
+  const maxSteps = sub ? subSteps(sub) : 0;
+  const stepGift = giftForStep(config.step, maxSteps);
+
   const [phase, setPhase] = useState<Phase>(introText ? 'intro' : 'play');
   const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none');
 
@@ -71,11 +92,15 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain }: GameScreen
     return () => window.clearTimeout(t);
   }, [session.hintActive, task?.id, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Win sound when the session completes (the mascot "reaches the apple").
+  // Win sound when the session completes (the mascot "reaches the apple"),
+  // plus an extra sparkle when a progression gift is earned.
   useEffect(() => {
-    if (session.finished) {
-      play('crunch');
-      play('fanfare');
+    if (!session.finished) return;
+    play('crunch');
+    play('fanfare');
+    if (stepGift) {
+      const t = window.setTimeout(() => play('success'), 650);
+      return () => window.clearTimeout(t);
     }
   }, [session.finished]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -243,7 +268,21 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain }: GameScreen
 
       <Modal open={session.finished} dismissible={false} title="Ти неймовірний!" icon="🏆">
         <div className={styles.summary}>
-          <div className={`${styles.summaryArt} emoji`}>{theme.mascot.emoji}</div>
+          {stepGift ? (
+            <motion.div
+              className={styles.giftWrap}
+              initial={{ scale: 0, rotate: -25 }}
+              animate={{ scale: 1, rotate: [0, -10, 10, -6, 6, 0] }}
+              transition={{ type: 'spring', stiffness: 240, damping: 11 }}
+            >
+              <span className="emoji" style={{ fontSize: GIFT_META[stepGift].size }} aria-hidden>
+                {GIFT_META[stepGift].emoji}
+              </span>
+              <p className={styles.giftLabel}>{GIFT_META[stepGift].label}</p>
+            </motion.div>
+          ) : (
+            <div className={`${styles.summaryArt} emoji`}>{theme.mascot.emoji}</div>
+          )}
           <p className={styles.summaryBig}>
             Зібрано +{session.earned} {theme.artifact.emoji}
           </p>

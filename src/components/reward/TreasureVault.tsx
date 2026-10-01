@@ -9,11 +9,7 @@ import styles from './TreasureVault.module.css';
 export function TreasureVault() {
   const artifacts = useGameStore((s) => s.artifacts);
   const milestones = useGameStore((s) => s.milestones);
-  const progress = useGameStore((s) => s.progress);
   const theme = useActiveTheme();
-
-  // Highest step reached across every learning path.
-  const maxStep = Math.max(1, ...Object.values(progress), 0);
 
   return (
     <div className="stack">
@@ -44,19 +40,22 @@ export function TreasureVault() {
           </span>{' '}
           Сімейні цілі
         </h3>
+        <p className={styles.goalHint}>
+          {theme.artifact.name} з будь-якого завдання падають у спільний кошик!
+        </p>
         <div className="stack">
           {milestones.map((m) => {
-            const reached = maxStep >= m.step;
+            const reached = artifacts >= m.amount;
             return (
               <div key={m.id} className={styles.milestone}>
                 <span className={`${styles.mIcon} emoji`} aria-hidden>
-                  {reached ? '🎉' : '🎁'}
+                  {reached ? '🎉' : theme.artifact.emoji}
                 </span>
                 <div className={styles.mBody}>
                   <div className={styles.mReward}>{m.reward}</div>
                   <ProgressBar
-                    value={maxStep / m.step}
-                    label={reached ? 'Досягнуто!' : `Сходинка ${maxStep} / ${m.step}`}
+                    value={artifacts / m.amount}
+                    label={reached ? 'Досягнуто! 🎁' : `${artifacts} / ${m.amount}`}
                   />
                 </div>
               </div>

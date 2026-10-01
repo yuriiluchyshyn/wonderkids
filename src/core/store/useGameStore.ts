@@ -30,11 +30,14 @@ export interface ChildProfile {
   gender: Gender;
 }
 
-/** A parent-configured reward tied to reaching a path step (PRD §7.1). */
-export interface StepMilestone {
+/**
+ * A parent-configured reward earned when the shared artifact basket reaches a
+ * total amount (PRD §7.1). Artifacts from ANY adventure count toward it.
+ */
+export interface Milestone {
   id: string;
-  /** Path step (1..TOTAL_STEPS) at which the reward is earned. */
-  step: number;
+  /** Total collected artifacts required to earn this reward. */
+  amount: number;
   reward: string;
 }
 
@@ -62,7 +65,7 @@ export interface PersistableState {
   hintsSurfaced: number;
   /** Current path step per `${moduleId}:${subId}` (1-based). */
   progress: Record<string, number>;
-  milestones: StepMilestone[];
+  milestones: Milestone[];
   settings: Settings;
 }
 
@@ -80,7 +83,7 @@ export interface GameState extends PersistableState {
   advanceStep: (moduleId: string, subCategoryId: string, playedStep: number, maxSteps: number) => void;
   /** Parent control: set the current frontier step for a sub-category. */
   setStep: (moduleId: string, subCategoryId: string, step: number, maxSteps: number) => void;
-  setMilestones: (milestones: StepMilestone[]) => void;
+  setMilestones: (milestones: Milestone[]) => void;
   updateSettings: (patch: Partial<Omit<Settings, 'voice'>>) => void;
   toggleVoice: (channel: VoiceChannel) => void;
   resetProgress: () => void;
@@ -109,10 +112,10 @@ const DEFAULT_SETTINGS: Settings = {
   sessionLength: 5,
 };
 
-const DEFAULT_MILESTONES: StepMilestone[] = [
-  { id: 'm_cookie', step: 5, reward: 'Спекти печиво разом 🍪' },
-  { id: 'm_park', step: 15, reward: 'Поїздка в парк розваг 🎡' },
-  { id: 'm_trip', step: 30, reward: 'Велика сімейна пригода 🎉' },
+const DEFAULT_MILESTONES: Milestone[] = [
+  { id: 'm_cookie', amount: 30, reward: 'Спекти печиво разом 🍪' },
+  { id: 'm_park', amount: 100, reward: 'Поїздка в парк розваг 🎡' },
+  { id: 'm_trip', amount: 200, reward: 'Велика сімейна пригода 🎉' },
 ];
 
 /** A fresh save with all defaults — the starting point for a new user. */
@@ -148,7 +151,11 @@ function fromPersisted(data: Partial<PersistableState> | null | undefined): Pers
     hintsSurfaced:
       typeof data.hintsSurfaced === 'number' ? data.hintsSurfaced : base.hintsSurfaced,
     progress: data.progress && typeof data.progress === 'object' ? data.progress : base.progress,
-    milestones: Array.isArray(data.milestones) ? data.milestones : base.milestones,
+    milestones:
+      Array.isArray(data.milestones) &&
+      data.milestones.every((m) => m && typeof (m as Milestone).amount === 'number')
+        ? (data.milestones as Milestone[])
+        : base.milestones,
     settings: {
       ...base.settings,
       ...settings,
@@ -216,8 +223,8 @@ export const useGameStore = create<GameState>()((set) => ({
   setMilestones: (milestones) =>
     set({
       milestones: [...milestones]
-        .map((m) => ({ ...m, step: clampStep(m.step) }))
-        .sort((a, b) => a.step - b.step),
+        .map((m) => ({ ...m, amount: Math.max(1, Math.round(m.amount || 1)) }))
+        .sort((a, b) => a.amount - b.amount),
     }),
 
   updateSettings: (patch) =>
