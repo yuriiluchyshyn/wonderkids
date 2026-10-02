@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@/core/theme/ThemeProvider';
+import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useAuthStore } from '@/core/auth/useAuthStore';
 import { useGameStore } from '@/core/store/useGameStore';
 import { useRemoteSync } from '@/core/sync/useRemoteSync';
@@ -30,6 +31,9 @@ const splashBtn: CSSProperties = {
 /** Full-screen message shown while the save loads (or fails to) after login. */
 function SyncSplash({ error }: { error?: boolean }) {
   const logout = useAuthStore((s) => s.logout);
+  // Reflect the active theme while loading; a new child (no theme yet) resolves
+  // to the neutral galaxy default via useActiveTheme.
+  const theme = useActiveTheme();
   return (
     <div
       style={{
@@ -44,7 +48,7 @@ function SyncSplash({ error }: { error?: boolean }) {
       }}
     >
       <span className="emoji" style={{ fontSize: '3rem' }} aria-hidden>
-        {error ? '😿' : '🌌'}
+        {error ? '😿' : theme.icon}
       </span>
       {error ? (
         <>

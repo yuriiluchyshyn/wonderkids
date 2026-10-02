@@ -240,6 +240,32 @@ const DEFAULT_MILESTONES: Milestone[] = [
   { id: 'm_trip', amount: 200, reward: 'Велика сімейна пригода 🎉' },
 ];
 
+/**
+ * Remember the active child's theme locally so the loading splash can show the
+ * right spinner immediately on a cold reload — before the server save arrives.
+ * A brand-new user (nothing stored) resolves to the neutral galaxy default.
+ */
+const LAST_THEME_KEY = 'wk-last-theme-v1';
+
+function readLastTheme(): ThemeId | null {
+  try {
+    const v = typeof localStorage !== 'undefined' ? localStorage.getItem(LAST_THEME_KEY) : null;
+    return v ? (v as ThemeId) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeLastTheme(id: ThemeId | null): void {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    if (id) localStorage.setItem(LAST_THEME_KEY, id);
+    else localStorage.removeItem(LAST_THEME_KEY);
+  } catch {
+    /* ignore storage errors */
+  }
+}
+
 /** `YYYY-MM-DD` key used to reset the daily screen-time counter at midnight. */
 export function todayKey(d = new Date()): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
@@ -427,10 +453,16 @@ export function selectNicknameTaken(s: GameState, nickname: string, exceptId?: s
 export const useGameStore = create<GameState>()((set) => ({
   ...createInitialState(),
   ...resolveView([], null),
+  // Seed the splash theme from the last session (null → galaxy for new users).
+  themeId: readLastTheme(),
 
   setProfile: (patch) => set((s) => patchActive(s, (c) => ({ ...c, profile: sanitizeProfile({ ...c.profile, ...patch }) }))),
 
-  setTheme: (id) => set((s) => patchActive(s, (c) => ({ ...c, themeId: id }))),
+  setTheme: (id) =>
+    set((s) => {
+      writeLastTheme(id);
+      return patchActive(s, (c) => ({ ...c, themeId: id }));
+    }),
 
   awardArtifacts: (amount) =>
     set((s) => patchActive(s, (c) => ({ ...c, artifacts: c.artifacts + Math.max(0, amount) }))),
@@ -584,13 +616,16 @@ export const useGameStore = create<GameState>()((set) => ({
     set((s) => {
       const c = s.children.find((x) => x.id === id);
       if (!c) return {};
+      writeLastTheme(c.themeId);
       return { activeChildId: id, ...viewOf(c) };
     }),
 
   hydrate: (data) =>
     set(() => {
       const ps = fromPersisted(data);
-      return { ...ps, ...resolveView(ps.children, ps.activeChildId) };
+      const view = resolveView(ps.children, ps.activeChildId);
+      writeLastTheme(view.themeId);
+      return { ...ps, ...view };
     }),
 
   resetAll: () =>
