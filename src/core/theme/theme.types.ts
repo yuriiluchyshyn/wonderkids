@@ -56,4 +56,5 @@ export type ThemeId =
   | 'underwater'
   | 'forest'
   | 'lego'
-  | 'frozen';
+  | 'frozen'
+  | 'galaxy';

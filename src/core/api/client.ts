@@ -71,11 +71,11 @@ export const api = {
     });
   },
 
-  /** CHILD login by nickname-or-email + parent-set password. */
-  childLogin(identifier: string, password: string) {
+  /** CHILD login by unique nickname + parent-set PIN. */
+  childLogin(identifier: string, pin: string) {
     return request<{ token: string; childId: string; user: AuthUser }>('/api/auth/child-login', {
       method: 'POST',
-      body: { identifier, password },
+      body: { identifier, pin },
     });
   },
 

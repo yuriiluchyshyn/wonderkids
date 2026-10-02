@@ -6,7 +6,8 @@ import { useGameStore } from '@/core/store/useGameStore';
 /** Human-friendly messages for the error codes the API can return on login. */
 const LOGIN_ERRORS: Record<string, string> = {
   invalid_email: 'Схоже, це не схоже на електронну пошту. Перевір, будь ласка.',
-  invalid_credentials: 'Невірний пароль. Спробуй ще раз або спитай у батьків.',
+  invalid_pin: 'Невірний PIN. Спробуй ще раз або спитай у батьків.',
+  invalid_credentials: 'Перевір нік і PIN, будь ласка.',
   child_not_found: 'Схоже, такого гравця ще немає. Попроси батьків створити тобі акаунт 👨‍👩‍👧',
   network_error: 'Не вдалося зв’язатися із сервером. Він увімкнений?',
   login_failed: 'Щось пішло не так на сервері. Спробуй ще раз.',
@@ -22,8 +23,8 @@ export interface AuthState {
 
   /** Parent email-only login. Returns true on success. */
   login: (email: string) => Promise<boolean>;
-  /** Child login by nickname-or-email + parent-set password. */
-  childLogin: (identifier: string, password: string) => Promise<boolean>;
+  /** Child login by unique nickname + parent-set PIN. */
+  childLogin: (identifier: string, pin: string) => Promise<boolean>;
   /** Clear the session and wipe the in-memory save. */
   logout: () => void;
   clearError: () => void;
@@ -55,10 +56,10 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      childLogin: async (identifier, password) => {
+      childLogin: async (identifier, pin) => {
         set({ pending: true, error: null });
         try {
-          const { token, user, childId } = await api.childLogin(identifier, password);
+          const { token, user, childId } = await api.childLogin(identifier, pin);
           set({ token, user, childId, pending: false, error: null });
           return true;
         } catch (err) {

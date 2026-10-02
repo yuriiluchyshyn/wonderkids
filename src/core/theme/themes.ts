@@ -6,6 +6,46 @@ import type { Theme, ThemeId } from './theme.types';
  * and the full colour palette.
  */
 export const THEMES: Record<ThemeId, Theme> = {
+  /**
+   * Neutral, gender-balanced DEFAULT skin used before a child picks a world —
+   * a galaxy (Milky Way) look. The child's stored theme is `null` until they
+   * choose; everything resolves to this.
+   */
+  galaxy: {
+    id: 'galaxy',
+    name: 'Галактика',
+    icon: '🌌',
+    mascot: { name: 'Зоряний Кораблик', emoji: '🚀' },
+    goal: { name: 'Далека Планета', emoji: '🪐' },
+    artifact: { name: 'Зірочка', emoji: '⭐' },
+    celebrationEmojis: ['⭐', '🌟', '✨', '🪐', '🚀', '☄️'],
+    pathIcons: ['⭐', '🪐', '☄️', '🌙', '🛸'],
+    dreamBuild: { name: 'Космічна Станція', emoji: '🛰️' },
+    chest: { closed: '🛸', open: '✨' },
+    treasures: [
+      { id: 'star', name: 'Зірка', emoji: '⭐' },
+      { id: 'planet', name: 'Планета', emoji: '🪐' },
+      { id: 'comet', name: 'Комета', emoji: '☄️' },
+      { id: 'moon', name: 'Місяць', emoji: '🌙' },
+      { id: 'rocket', name: 'Ракета', emoji: '🚀' },
+      { id: 'satellite', name: 'Супутник', emoji: '🛰️' },
+      { id: 'ufo', name: 'НЛО', emoji: '🛸' },
+      { id: 'galaxy', name: 'Галактика', emoji: '🌌' },
+    ],
+    palette: {
+      bg1: '#0b1026',
+      bg2: '#2b1a52',
+      surface: '#18213f',
+      surfaceInk: '#e8ecff',
+      primary: '#7c6cff',
+      primaryInk: '#ffffff',
+      accent: '#35d6e8',
+      accentInk: '#052c33',
+      text: '#e8ecff',
+      textSoft: '#aab2db',
+      ring: '#8b7cff',
+    },
+  },
   unicorns: {
     id: 'unicorns',
     name: 'Єдинороги',
@@ -289,4 +329,5 @@ export const THEMES: Record<ThemeId, Theme> = {
 };
 
 export const THEME_LIST: Theme[] = Object.values(THEMES);
-export const DEFAULT_THEME_ID: ThemeId = 'unicorns';
+/** The neutral fallback skin used when a child hasn't chosen a theme (null). */
+export const DEFAULT_THEME_ID: ThemeId = 'galaxy';

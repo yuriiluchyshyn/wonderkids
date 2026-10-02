@@ -28,14 +28,14 @@ export function ChildLoginPage() {
   const clearError = useAuthStore((s) => s.clearError);
 
   const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
+  const [pin, setPin] = useState('');
 
   if (token) return <Navigate to="/" replace />;
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (pending) return;
-    const ok = await childLogin(identifier.trim(), password);
+    const ok = await childLogin(identifier.trim(), pin);
     if (ok) navigate('/', { replace: true });
   };
 
@@ -81,11 +81,11 @@ export function ChildLoginPage() {
         </div>
 
         <h1 className={styles.title}>WonderKids</h1>
-        <p className={styles.sub}>Привіт! Введи свій нік і пароль</p>
+        <p className={styles.sub}>Привіт! Введи свій нік і PIN</p>
 
         <form className={styles.form} onSubmit={submit}>
           <label className={styles.label} htmlFor="identifier">
-            Нік або пошта
+            Нік
           </label>
           <input
             id="identifier"
@@ -100,24 +100,26 @@ export function ChildLoginPage() {
               setIdentifier(e.target.value);
               if (error) clearError();
             }}
-            aria-label="Нік або пошта"
+            aria-label="Нік"
           />
 
-          <label className={styles.label} htmlFor="password">
-            Пароль
+          <label className={styles.label} htmlFor="pin">
+            PIN
           </label>
           <input
-            id="password"
+            id="pin"
             className={styles.input}
             type="password"
-            autoComplete="current-password"
+            inputMode="numeric"
+            autoComplete="off"
+            maxLength={4}
             placeholder="••••"
-            value={password}
+            value={pin}
             onChange={(e) => {
-              setPassword(e.target.value);
+              setPin(e.target.value.replace(/\D/g, '').slice(0, 4));
               if (error) clearError();
             }}
-            aria-label="Пароль"
+            aria-label="PIN"
             aria-invalid={Boolean(error)}
           />
 

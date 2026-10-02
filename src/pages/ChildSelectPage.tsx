@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useGameStore } from '@/core/store/useGameStore';
-import { THEMES } from '@/core/theme/themes';
+import { THEMES, DEFAULT_THEME_ID } from '@/core/theme/themes';
 import { useSound } from '@/core/audio/useSound';
 import { Button } from '@/components/ui/Button';
 import styles from './ChildSelectPage.module.css';
@@ -93,7 +93,7 @@ export function ChildSelectPage() {
 
       <div className={styles.grid}>
         {children.map((c) => {
-          const theme = THEMES[c.themeId];
+          const theme = THEMES[c.themeId ?? DEFAULT_THEME_ID];
           return (
             <motion.button
               key={c.id}

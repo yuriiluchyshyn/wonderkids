@@ -18,6 +18,14 @@ const STARS = [
   { top: '14%', left: '58%', s: 0.6, d: 1.1 },
   { top: '52%', left: '68%', s: 0.7, d: 0.2 },
   { top: '88%', left: '18%', s: 0.9, d: 0.8 },
+  { top: '6%', left: '40%', s: 0.5, d: 1.8 },
+  { top: '24%', left: '26%', s: 0.7, d: 0.5 },
+  { top: '36%', left: '74%', s: 0.9, d: 1.4 },
+  { top: '64%', left: '52%', s: 0.6, d: 0.7 },
+  { top: '76%', left: '84%', s: 0.8, d: 1.9 },
+  { top: '92%', left: '44%', s: 0.7, d: 1.0 },
+  { top: '48%', left: '34%', s: 0.5, d: 0.1 },
+  { top: '20%', left: '68%', s: 0.6, d: 1.6 },
 ] as const;
 
 /** Where the galaxy's motif icons sit (cycled over `motif`). */
@@ -42,6 +50,9 @@ export function GalaxyBackground({ galaxyId }: GalaxyBackgroundProps) {
   return (
     <div className={styles.sky} aria-hidden>
       <div className={styles.nebula} />
+      {/* Slowly rotating Milky Way swirl behind the stars. */}
+      <div className={styles.swirl} />
+      <div className={styles.swirl2} />
 
       {STARS.map((st, i) => (
         <motion.span

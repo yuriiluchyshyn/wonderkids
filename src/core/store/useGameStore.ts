@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { ThemeId } from '@/core/theme/theme.types';
-import { DEFAULT_THEME_ID } from '@/core/theme/themes';
 import {
   DEFAULT_VOICE_STATE,
   type VoiceChannel,
@@ -8,6 +7,8 @@ import {
 } from '@/core/audio/voiceChannels';
 import { clampStep, pathKey } from '@/core/progress/path';
 import { uid } from '@/core/utils/random';
+// Note: no DEFAULT_THEME_ID import — a child's theme is `null` until chosen;
+// useActiveTheme resolves null → the neutral galaxy skin.
 
 /** Rate at which the companion rolls back during inactivity (PRD §4.1). */
 export type CompanionSpeed = 'off' | 'slow' | 'medium' | 'fast';
@@ -120,7 +121,8 @@ export interface ScreenTimeState {
 export interface ChildState {
   id: string;
   profile: ChildProfile;
-  themeId: ThemeId;
+  /** Chosen theme, or `null` until the child picks one (→ neutral galaxy). */
+  themeId: ThemeId | null;
   artifacts: number;
   tasksCompleted: number;
   hintsSurfaced: number;
@@ -140,7 +142,7 @@ export interface ChildState {
  */
 export interface ActiveChildView {
   profile: ChildProfile;
-  themeId: ThemeId;
+  themeId: ThemeId | null;
   artifacts: number;
   tasksCompleted: number;
   hintsSurfaced: number;
@@ -280,7 +282,7 @@ function createChildState(input?: AddChildInput): ChildState {
   return {
     id: uid('child'),
     profile: sanitizeProfile({ ...DEFAULT_PROFILE, ...(input?.profile ?? {}) }),
-    themeId: input?.themeId ?? DEFAULT_THEME_ID,
+    themeId: input?.themeId ?? null,
     artifacts: 0,
     tasksCompleted: 0,
     hintsSurfaced: 0,
@@ -305,7 +307,7 @@ function migrateChild(raw: Record<string, unknown>): ChildState {
   return {
     id: typeof r.id === 'string' ? r.id : base.id,
     profile: sanitizeProfile({ ...base.profile, ...((r.profile as Partial<ChildProfile>) ?? {}) }),
-    themeId: (r.themeId as ThemeId) ?? base.themeId,
+    themeId: (r.themeId as ThemeId | null) ?? null,
     artifacts: typeof r.artifacts === 'number' ? r.artifacts : 0,
     tasksCompleted: typeof r.tasksCompleted === 'number' ? r.tasksCompleted : 0,
     hintsSurfaced: typeof r.hintsSurfaced === 'number' ? r.hintsSurfaced : 0,

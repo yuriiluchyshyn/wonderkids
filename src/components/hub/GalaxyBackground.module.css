@@ -18,6 +18,52 @@
   opacity: 0.7;
 }
 
+/* Rotating Milky Way disk — a soft conic sweep that slowly turns. */
+.swirl {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 170vmax;
+  height: 170vmax;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    color-mix(in srgb, var(--primary) 26%, transparent) 40deg,
+    transparent 95deg,
+    color-mix(in srgb, var(--accent) 22%, transparent) 155deg,
+    transparent 210deg,
+    color-mix(in srgb, var(--ring) 20%, transparent) 285deg,
+    transparent 340deg
+  );
+  filter: blur(42px);
+  opacity: 0.5;
+  animation: wkspin 90s linear infinite;
+}
+
+/* Bright galactic core glow, turning the other way. */
+.swirl2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 95vmax;
+  height: 95vmax;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 26%, transparent), transparent 62%);
+  filter: blur(34px);
+  opacity: 0.45;
+  animation: wkspin 62s linear infinite reverse;
+}
+
+@keyframes wkspin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
 .star {
   position: absolute;
   line-height: 1;
@@ -34,7 +80,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .star,
-  .motif {
+  .motif,
+  .swirl,
+  .swirl2 {
     animation: none;
   }
 }
