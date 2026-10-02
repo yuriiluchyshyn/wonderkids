@@ -16,6 +16,12 @@ export interface Theme {
   goal: { name: string; emoji: string };
   /** Collectible artifact earned per task. */
   artifact: { name: string; emoji: string };
+  /**
+   * The themed "play-time" token shown in the always-visible time header. A row
+   * of these drains one-by-one as the session burns down (eggs vanish, a car's
+   * fuel empties, unicorns fade...) — a wordless clock the child always sees.
+   */
+  timeToken: { name: string; emoji: string };
   /** Emojis spawned by the celebration/particle system. */
   celebrationEmojis: string[];
   /** Themed collectibles shown on the learning-path nodes (cycled). */

@@ -9,13 +9,13 @@ import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/store/useGameStore';
 import type { Treasure } from '@/core/theme/theme.types';
 import { hasChest, pickChestTreasure, treasureKey } from '@/core/progress/treasures';
+import { cn } from '@/core/utils/cn';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { VoiceToggle } from '@/components/ui/VoiceToggle';
 import { Companion } from './Companion';
 import { Celebration } from './Celebration';
 import { TreasureReveal } from './TreasureReveal';
-import { FuelGauge } from './FuelGauge';
 import { Cutscene } from './Cutscene';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
 import { useIdleRollback } from './useIdleRollback';
@@ -83,7 +83,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // chest-opening animation has played out.
   const [reveal, setReveal] = useState<{ treasure: Treasure; isNew: boolean } | null>(null);
   const [revealDone, setRevealDone] = useState(false);
-  const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none', session.registerRollback);
+  // Idle drift only nudges the companion back visually — it no longer appends
+  // tasks. Extra tasks are earned solely by repeated mistakes (3rd+), so the
+  // queue never balloons just because a child paused to think.
+  const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none');
 
   // ---- Screen-time / fuel engine (Tech Spec FR-TIME) ----
   const artifacts = useGameStore((s) => s.artifacts);
@@ -132,17 +135,21 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     return () => window.clearTimeout(t);
   }, [session.hintActive, task?.id, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Victory sound when the level is completed (the mascot "reaches the apple"),
-  // plus an extra sparkle when a progression gift is earned.
+  // The mascot reaches the goal and takes a happy "crunch" the instant the
+  // level is cleared (this fires before any treasure-chest reveal).
   useEffect(() => {
     if (!session.finished) return;
     play('crunch');
-    play('win');
-    if (stepGift) {
-      const t = window.setTimeout(() => play('fanfare'), 650);
-      return () => window.clearTimeout(t);
-    }
   }, [session.finished]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A clear, celebratory victory sound the moment the "Ти неймовірний!" screen
+  // actually appears (after any chest reveal) — the win screen is never silent.
+  useEffect(() => {
+    if (!(session.finished && revealDone)) return;
+    play('win');
+    const t = window.setTimeout(() => play('fanfare'), 480);
+    return () => window.clearTimeout(t);
+  }, [session.finished, revealDone]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // On a chest step, pick a treasure to reveal and add it to the collection.
   // The TreasureReveal overlay plays first; the celebration + summary wait for
@@ -245,37 +252,32 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       <button className={styles.back} onClick={onExit} aria-label="Назад до пригод">
         🏠
       </button>
-      <div>
+      <div className={styles.headerMain}>
         <div className={styles.title}>
           {module.icon} {subLabel}
         </div>
         {phase === 'play' && (
-          <div className={styles.progressWrap}>
-            <div
-              className={styles.progressLabel}
-              aria-label={`Завдання ${Math.min(session.solvedCount + 1, session.total)} з ${session.total}`}
-            >
-              🎯 Завдання {Math.min(session.solvedCount + 1, session.total)} з {session.total}
-              {session.extraTasks > 0 && (
-                <span className={styles.progressExtra}>
-                  {' '}
-                  (базових {session.baseTotal} + {session.extraTasks})
-                </span>
-              )}
-            </div>
-            {session.total <= 12 && (
-              <div className={styles.dots} aria-hidden>
-                {Array.from({ length: session.total }, (_, i) => (
-                  <span key={i} className={`${styles.dot} ${i < session.solvedCount ? styles.dotDone : ''}`} />
-                ))}
-              </div>
-            )}
+          <div
+            className={styles.dots}
+            role="img"
+            aria-label={`Завдання ${Math.min(session.solvedCount + 1, session.total)} з ${session.total}`}
+          >
+            {Array.from({ length: session.total }, (_, i) => {
+              const done = i < session.solvedCount;
+              const isExtra = i >= session.baseTotal;
+              return (
+                <span
+                  key={i}
+                  className={cn(styles.dot, done && styles.dotDone, isExtra && styles.dotExtra)}
+                  aria-hidden
+                />
+              );
+            })}
           </div>
         )}
       </div>
       {phase === 'play' && (
         <div className={styles.hud}>
-          <FuelGauge pct={screen.fuelPct} />
           <div className={styles.hudArtifacts}>
             <span className="emoji" aria-hidden>
               {theme.artifact.emoji}
@@ -289,6 +291,13 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
   // ---- Intro screen ----
   if (phase === 'intro') {
+    const startGame = () => {
+      // Stop the intro voice immediately — no lingering talking in-game.
+      speechEngine.cancel();
+      play('tap');
+      markActivity();
+      setPhase('play');
+    };
     return (
       <div className={styles.screen}>
         {header}
@@ -297,23 +306,18 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className={styles.introToggle}>
-            <VoiceToggle channel="taskIntro" />
+          <div className={styles.introClose}>
+            <button
+              className={styles.introCloseBtn}
+              onClick={startGame}
+              aria-label="Закрити і почати"
+            >
+              ✕
+            </button>
           </div>
           {IntroView && <IntroView subCategoryId={config.subCategoryId} />}
           {showText && introText && <p className={styles.introText}>{introText}</p>}
-          <Button
-            size="lg"
-            icon="▶️"
-            block
-            onClick={() => {
-              // Stop the intro voice immediately — no lingering talking in-game.
-              speechEngine.cancel();
-              play('tap');
-              markActivity();
-              setPhase('play');
-            }}
-          >
+          <Button size="lg" icon="▶️" block onClick={startGame}>
             Почнемо!
           </Button>
         </motion.div>

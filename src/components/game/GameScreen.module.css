@@ -40,44 +40,62 @@
   flex: 0 0 auto;
 }
 
+.headerMain {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
 .title {
   font-size: 1.3rem;
   font-weight: 800;
   color: var(--text);
 }
 
-.progressWrap {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.progressLabel {
-  font-size: 0.98rem;
-  font-weight: 800;
-  color: var(--text);
-}
-
-.progressExtra {
-  color: var(--accent);
-  font-weight: 700;
-}
-
 .dots {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
+  gap: 6px;
 }
 
 .dot {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: color-mix(in srgb, var(--ring) 35%, var(--surface));
 }
 
 .dotDone {
   background: var(--accent);
+}
+
+/* A freshly added task dot pops in with a quick blink so the child notices the
+   row grew (improvement set #3). CSS runs once, on mount. */
+.dotExtra {
+  animation: dotPop 0.7s ease;
+}
+
+@keyframes dotPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  30% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.3;
+  }
+  62% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .board {
@@ -104,9 +122,20 @@
   box-shadow: var(--shadow);
 }
 
-.introToggle {
+.introClose {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+}
+
+.introCloseBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--surface-ink);
+  background: color-mix(in srgb, var(--ring) 22%, var(--surface));
+  box-shadow: var(--shadow-sm);
 }
 
 .introText {

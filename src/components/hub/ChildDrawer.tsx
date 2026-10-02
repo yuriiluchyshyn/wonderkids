@@ -7,6 +7,8 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { Button } from '@/components/ui/Button';
 import { useAuthStore } from '@/core/auth/useAuthStore';
+import { useTimeBudget } from '@/core/time/screenTime';
+import { TimeBudget } from '@/components/layout/TimeBudget';
 import styles from './ChildDrawer.module.css';
 
 const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };
@@ -31,6 +33,7 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
   const theme = useActiveTheme();
   const { play } = useSound();
   const logout = useAuthStore((s) => s.logout);
+  const { fuelPct, inCooldown } = useTimeBudget();
 
   const switchPlayer = () => {
     play('tap');
@@ -77,6 +80,14 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
                 <div className={styles.name}>{profile.name}</div>
                 {profile.nickname && <div className={styles.nick}>@{profile.nickname}</div>}
               </div>
+            </div>
+
+            {/* ---- Play-time budget — the themed timeline, up top ---- */}
+            <div className={styles.timeBudget}>
+              <div className={styles.timeBudgetLabel}>
+                {inCooldown ? '😴 Час відпочити' : '⏳ Ігровий час'}
+              </div>
+              <TimeBudget pct={fuelPct} resting={inCooldown} slots={10} />
             </div>
 
             {/* ---- Artifact (скарбничка) — top ---- */}

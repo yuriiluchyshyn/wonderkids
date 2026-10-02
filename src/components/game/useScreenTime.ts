@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useGameStore } from '@/core/store/useGameStore';
+import { computeScreenTime } from '@/core/time/screenTime';
 
 /**
  * Non-aggressive screen-time engine (Tech Spec v2.1 FR-TIME). Translates the
@@ -46,32 +47,14 @@ export function useScreenTime(active: boolean): ScreenTimeStatus {
     return () => window.clearInterval(id);
   }, []);
 
-  const sessionMs = Math.max(1, timeControl.sessionDurationMinutes) * 60_000;
-  const start = screenTime.sessionStartedAt;
-  const elapsedMs = start ? Math.max(0, now - start) : 0;
-  const elapsedMin = elapsedMs / 60_000;
-
-  // Session fuel from elapsed active time.
-  const sessionFuel = start ? Math.max(0, 1 - elapsedMs / sessionMs) : 1;
-
-  // Daily cap, expressed on the same gauge: if less than one session's worth of
-  // daily time remains, the tank starts partly empty.
-  const dailyUsed = screenTime.minutesUsedToday + elapsedMin;
-  const dailyRemainingMin = Math.max(0, timeControl.maxDailyMinutes - dailyUsed);
-  const dailyFuel =
-    timeControl.maxDailyMinutes > 0
-      ? Math.max(0, Math.min(1, dailyRemainingMin / Math.max(1, timeControl.sessionDurationMinutes)))
-      : 1;
-
-  const fuel = Math.min(sessionFuel, dailyFuel);
-  const fuelPct = Math.round(fuel * 100);
-
-  const cooldownUntil = screenTime.cooldownUntil;
-  const inCooldown = cooldownUntil != null && now < cooldownUntil;
-  const cooldownRemainingSec = inCooldown ? Math.ceil((cooldownUntil! - now) / 1000) : 0;
+  const { fuelPct, inCooldown, cooldownRemainingSec, sessionActive } = computeScreenTime(
+    timeControl,
+    screenTime,
+    now,
+  );
 
   // Only "depleted" while actively playing a live session that just ran dry.
-  const depleted = active && !inCooldown && start != null && fuelPct <= 0;
+  const depleted = active && !inCooldown && sessionActive && fuelPct <= 0;
 
   return { fuelPct, depleted, inCooldown, cooldownRemainingSec, ready: !inCooldown };
 }

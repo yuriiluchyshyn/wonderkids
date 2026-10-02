@@ -14,6 +14,7 @@ import { VaultPage } from '@/pages/VaultPage';
 import { ParentPage } from '@/pages/ParentPage';
 import { AudioPage } from '@/pages/AudioPage';
 import { ChildSelectPage } from '@/pages/ChildSelectPage';
+import { TimeHeader } from '@/components/layout/TimeHeader';
 
 const splashBtn: CSSProperties = {
   minHeight: 48,
@@ -135,6 +136,7 @@ export function App() {
     <ThemeProvider>
       <BrowserRouter>
         <div className="app-shell">
+          <TimeHeader />
           <Routes>
             <Route path="/login" element={loginElement} />
             <Route path="/parent-login" element={<LoginPage />} />

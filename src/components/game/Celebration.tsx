@@ -22,11 +22,12 @@ export function Celebration({ active }: CelebrationProps) {
   const style = useGameStore((s) => s.settings.celebration);
   const { play } = useSound();
 
-  // Fire the burst + fanfare once per activation.
+  // Fire the confetti burst once per activation. The victory jingle/fanfare is
+  // owned by the GameScreen win modal so it stays in sync with the "Ти
+  // неймовірний!" screen (and never double-plays).
   useEffect(() => {
     if (!active) return;
     fireConfetti(style);
-    play('fanfare');
     if (style === 'balloons') {
       const t = setTimeout(() => play('pop'), 1400);
       return () => clearTimeout(t);

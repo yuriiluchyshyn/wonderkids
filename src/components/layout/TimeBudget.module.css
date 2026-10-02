@@ -1,0 +1,38 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: clamp(2px, 1.2vw, 8px);
+}
+
+.token {
+  font-size: clamp(1.05rem, 4.8vw, 1.6rem);
+  line-height: 1;
+  /* Smooth melt as the active token drains second-by-second. */
+  transition: opacity 0.9s linear, transform 0.9s ease, filter 0.4s ease;
+  transform-origin: center bottom;
+  will-change: opacity, transform;
+}
+
+.rowSm .token {
+  font-size: clamp(0.95rem, 3.4vw, 1.25rem);
+}
+
+/* Already-spent slots stay as faint ghosts so the row keeps its full width —
+   the child sees how much the tank *was*, and how much is gone. */
+.spent {
+  opacity: 0.16;
+  transform: scale(0.72);
+  filter: grayscale(1);
+}
+
+.fading {
+  filter: saturate(0.9);
+}
+
+/* Resting: the whole tank is spent and gently dimmed. */
+.resting .token {
+  opacity: 0.16;
+  filter: grayscale(1);
+}
