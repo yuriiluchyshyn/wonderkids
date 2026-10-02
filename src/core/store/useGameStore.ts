@@ -179,6 +179,11 @@ export interface GameState extends ActiveChildView, PersistableState {
   toggleVoice: (channel: VoiceChannel) => void;
   startPlaySession: () => void;
   enterCooldown: () => void;
+  /**
+   * Parent override: give the active child a fresh tank right now — lift any
+   * rest cooldown, clear the running session and zero today's used minutes.
+   */
+  resetScreenTime: () => void;
   resetProgress: () => void;
 
   // ---- account-level actions (manage the set of children) ----
@@ -576,6 +581,21 @@ export const useGameStore = create<GameState>()((set) => ({
         },
       });
     }),
+
+  resetScreenTime: () =>
+    set((s) =>
+      patchActive(s, (c) => ({
+        ...c,
+        screenTime: {
+          ...c.screenTime,
+          dayKey: todayKey(),
+          minutesUsedToday: 0,
+          sessionStartedAt: null,
+          cooldownUntil: null,
+          lastSessionEndedAt: null,
+        },
+      })),
+    ),
 
   resetProgress: () =>
     set((s) =>

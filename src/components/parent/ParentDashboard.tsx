@@ -82,6 +82,7 @@ export function ParentDashboard() {
   const progress = useGameStore((s) => s.progress);
   const setStep = useGameStore((s) => s.setStep);
   const resetProgress = useGameStore((s) => s.resetProgress);
+  const resetScreenTime = useGameStore((s) => s.resetScreenTime);
   const email = useAuthStore((s) => s.user?.email);
   const token = useAuthStore((s) => s.token);
   const logout = useAuthStore((s) => s.logout);
@@ -92,6 +93,7 @@ export function ParentDashboard() {
   const savedSnapshot = useRef<PersistableState | null>(null);
   const [saving, setSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
+  const [timeReset, setTimeReset] = useState(false);
 
   useEffect(() => {
     savedSnapshot.current = selectPersistable(useGameStore.getState());
@@ -119,6 +121,23 @@ export function ParentDashboard() {
       /* keep editing; the parent can retry */
     } finally {
       setSaving(false);
+    }
+  };
+
+  // Give the child a fresh tank right now: clear the cooldown + session + used
+  // minutes, then persist immediately so it takes effect even without a full
+  // "Save" (and the child's next sync picks it up).
+  const resetTimeNow = async () => {
+    resetScreenTime();
+    setTimeReset(true);
+    window.setTimeout(() => setTimeReset(false), 2500);
+    if (!token) return;
+    try {
+      const data = selectPersistable(useGameStore.getState());
+      await api.putState(token, data);
+      savedSnapshot.current = data;
+    } catch {
+      /* will persist on the next explicit Save */
     }
   };
 
@@ -350,6 +369,14 @@ export function ParentDashboard() {
             </option>
           ))}
         </select>
+
+        <label className={styles.fieldLabel}>Поповнити час зараз</label>
+        <p className={styles.hint}>
+          Миттєво повертає дитині повну шкалу й знімає відпочинок — незалежно від збереження інших змін.
+        </p>
+        <Button block icon={timeReset ? '✅' : '⛽'} onClick={resetTimeNow}>
+          {timeReset ? 'Час поповнено!' : 'Поповнити ігровий час'}
+        </Button>
       </section>
 
       {/* ---- Milestone goals on the path ---- */}
