@@ -32,14 +32,29 @@ export function useScreenTime(active: boolean): ScreenTimeStatus {
   const timeControl = useGameStore((s) => s.settings.timeControl);
   const screenTime = useGameStore((s) => s.screenTime);
   const startPlaySession = useGameStore((s) => s.startPlaySession);
+  const pausePlaySession = useGameStore((s) => s.pausePlaySession);
 
   const [now, setNow] = useState(() => Date.now());
 
-  // Begin (or resume) the session as soon as play starts — no-op during a
-  // cooldown or when a session is already running.
+  // Count time ONLY while the child is actively in a game and the tab is
+  // visible. Resume on entering play / returning to the tab; pause (banking the
+  // elapsed segment) when the tab is backgrounded or the game screen is left —
+  // so an open-but-idle browser never burns play time.
   useEffect(() => {
-    if (active) startPlaySession();
-  }, [active, startPlaySession]);
+    if (!active) return;
+    if (!document.hidden) startPlaySession();
+    const onVisibility = () => {
+      if (document.hidden) pausePlaySession();
+      else startPlaySession();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('pagehide', pausePlaySession);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pagehide', pausePlaySession);
+      pausePlaySession();
+    };
+  }, [active, startPlaySession, pausePlaySession]);
 
   // Re-evaluate fuel / cooldown once a second.
   useEffect(() => {

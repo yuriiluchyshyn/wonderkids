@@ -31,15 +31,19 @@ export function computeScreenTime(
 ): ScreenTimeComputed {
   const sessionMs = Math.max(1, timeControl.sessionDurationMinutes) * 60_000;
   const start = screenTime.sessionStartedAt;
-  const elapsedMs = start ? Math.max(0, now - start) : 0;
-  const elapsedMin = elapsedMs / 60_000;
+  // Only the live running segment advances; `sessionElapsedMs` is time banked
+  // from earlier segments. Together they are the real active play time — never
+  // wall-clock time while the browser merely sits open.
+  const runningMs = start ? Math.max(0, now - start) : 0;
+  const sessionUsedMs = Math.max(0, screenTime.sessionElapsedMs ?? 0) + runningMs;
+  const sessionUsedMin = sessionUsedMs / 60_000;
 
-  // Session fuel from elapsed active time.
-  const sessionFuel = start ? Math.max(0, 1 - elapsedMs / sessionMs) : 1;
+  // Session fuel from active play time only.
+  const sessionFuel = Math.max(0, 1 - sessionUsedMs / sessionMs);
 
   // Daily cap, expressed on the same gauge: if less than one session's worth of
   // daily time remains, the tank starts partly empty.
-  const dailyUsed = screenTime.minutesUsedToday + elapsedMin;
+  const dailyUsed = screenTime.minutesUsedToday + sessionUsedMin;
   const dailyRemainingMin = Math.max(0, timeControl.maxDailyMinutes - dailyUsed);
   const dailyFuel =
     timeControl.maxDailyMinutes > 0
@@ -53,7 +57,10 @@ export function computeScreenTime(
   const inCooldown = cooldownUntil != null && now < cooldownUntil;
   const cooldownRemainingSec = inCooldown ? Math.ceil((cooldownUntil - now) / 1000) : 0;
 
-  return { fuelPct, inCooldown, cooldownRemainingSec, sessionActive: start != null };
+  // A session is "live" if a segment is running or time is already banked.
+  const sessionActive = start != null || sessionUsedMs > 0;
+
+  return { fuelPct, inCooldown, cooldownRemainingSec, sessionActive };
 }
 
 const TICK_MS = 1000;

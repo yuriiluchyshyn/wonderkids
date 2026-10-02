@@ -106,8 +106,18 @@ export interface ScreenTimeState {
   /** `YYYY-MM-DD` the `minutesUsedToday` counter applies to (auto-resets). */
   dayKey: string;
   minutesUsedToday: number;
-  /** Epoch ms the current active session started, or null when idle. */
+  /**
+   * Epoch ms the CURRENT running play segment started, or null while paused
+   * (child left the game screen / tab hidden). Time is only ever counted while
+   * this is non-null — never while the browser merely sits open.
+   */
   sessionStartedAt: number | null;
+  /**
+   * Active play time already banked in THIS session from earlier segments
+   * (before the current pause/resume). Total session time = this + the live
+   * running segment. Reset to 0 when a session ends (cooldown) or is topped up.
+   */
+  sessionElapsedMs: number;
   /** Epoch ms until which play is locked (resting), or null when ready. */
   cooldownUntil: number | null;
   /** Epoch ms the last session ended (parent insight). */
@@ -178,6 +188,8 @@ export interface GameState extends ActiveChildView, PersistableState {
   updateTimeControl: (patch: Partial<TimeControl>) => void;
   toggleVoice: (channel: VoiceChannel) => void;
   startPlaySession: () => void;
+  /** Pause counting (bank the running segment) without ending the session. */
+  pausePlaySession: () => void;
   enterCooldown: () => void;
   /**
    * Parent override: give the active child a fresh tank right now — lift any
@@ -283,6 +295,7 @@ function createScreenTime(): ScreenTimeState {
     dayKey: todayKey(),
     minutesUsedToday: 0,
     sessionStartedAt: null,
+    sessionElapsedMs: 0,
     cooldownUntil: null,
     lastSessionEndedAt: null,
   };
@@ -358,10 +371,24 @@ function migrateChild(raw: Record<string, unknown>): ChildState {
       voice: { ...base.settings.voice, ...(settings.voice ?? {}) },
       timeControl: { ...base.settings.timeControl, ...(settings.timeControl ?? {}) },
     },
-    screenTime:
-      r.screenTime && typeof r.screenTime === 'object'
-        ? { ...base.screenTime, ...(r.screenTime as Partial<ScreenTimeState>) }
-        : base.screenTime,
+    screenTime: migrateScreenTime(r.screenTime, base.screenTime),
+  };
+}
+
+/**
+ * Load persisted screen-time, but never resume a "running" segment across a
+ * reload — the time between closing and reopening the app is NOT play time.
+ * Any previously running segment is collapsed to paused (banked time kept), so
+ * counting only ever restarts when the child actually re-enters a game.
+ */
+function migrateScreenTime(raw: unknown, base: ScreenTimeState): ScreenTimeState {
+  if (!raw || typeof raw !== 'object') return base;
+  const merged = { ...base, ...(raw as Partial<ScreenTimeState>) };
+  return {
+    ...merged,
+    sessionElapsedMs: Math.max(0, merged.sessionElapsedMs ?? 0),
+    // Treat a reload as a pause: drop the stale running segment.
+    sessionStartedAt: null,
   };
 }
 
@@ -536,6 +563,9 @@ export const useGameStore = create<GameState>()((set) => ({
       })),
     ),
 
+  // Start/resume counting — ONLY called while the child is actively in a game
+  // (and the tab is visible). Opens a fresh running segment; banked time is
+  // preserved so pausing and resuming never loses or double-counts time.
   startPlaySession: () =>
     set((s) => {
       const c = activeChild(s);
@@ -546,7 +576,7 @@ export const useGameStore = create<GameState>()((set) => ({
       // Still resting — never start mid-cooldown.
       if (st.cooldownUntil && now < st.cooldownUntil) return {};
       const dayRolled = st.dayKey !== key;
-      // A session is already running (survives reloads) — keep its start time.
+      // A segment is already running — keep its start time (idempotent resume).
       if (st.sessionStartedAt && !dayRolled) return {};
       return commit(s, {
         ...c,
@@ -554,8 +584,34 @@ export const useGameStore = create<GameState>()((set) => ({
           ...st,
           dayKey: key,
           minutesUsedToday: dayRolled ? 0 : st.minutesUsedToday,
+          // A new day starts a fresh tank; otherwise keep what was banked.
+          sessionElapsedMs: dayRolled ? 0 : st.sessionElapsedMs,
           sessionStartedAt: now,
           cooldownUntil: null,
+        },
+      });
+    }),
+
+  // Pause counting without ending the session — called when the child leaves
+  // the game screen or the tab goes to the background. Banks the running
+  // segment so an open-but-idle browser never burns play time.
+  pausePlaySession: () =>
+    set((s) => {
+      const c = activeChild(s);
+      if (!c) return {};
+      const st = c.screenTime;
+      if (st.sessionStartedAt == null) return {}; // already paused — nothing to bank
+      const now = Date.now();
+      const dayRolled = st.dayKey !== todayKey();
+      const segmentMs = Math.max(0, now - st.sessionStartedAt);
+      return commit(s, {
+        ...c,
+        screenTime: {
+          ...st,
+          dayKey: todayKey(),
+          minutesUsedToday: dayRolled ? 0 : st.minutesUsedToday,
+          sessionElapsedMs: (dayRolled ? 0 : st.sessionElapsedMs) + segmentMs,
+          sessionStartedAt: null,
         },
       });
     }),
@@ -566,8 +622,8 @@ export const useGameStore = create<GameState>()((set) => ({
       if (!c) return {};
       const now = Date.now();
       const st = c.screenTime;
-      const start = st.sessionStartedAt ?? now;
-      const playedMin = Math.max(0, (now - start) / 60_000);
+      const runningMs = st.sessionStartedAt ? Math.max(0, now - st.sessionStartedAt) : 0;
+      const playedMin = Math.max(0, (st.sessionElapsedMs + runningMs) / 60_000);
       const cooldownMs = Math.max(0, c.settings.timeControl.cooldownMinutes) * 60_000;
       const dayRolled = st.dayKey !== todayKey();
       return commit(s, {
@@ -576,6 +632,7 @@ export const useGameStore = create<GameState>()((set) => ({
           dayKey: todayKey(),
           minutesUsedToday: (dayRolled ? 0 : st.minutesUsedToday) + playedMin,
           sessionStartedAt: null,
+          sessionElapsedMs: 0,
           lastSessionEndedAt: now,
           cooldownUntil: now + cooldownMs,
         },
@@ -591,6 +648,7 @@ export const useGameStore = create<GameState>()((set) => ({
           dayKey: todayKey(),
           minutesUsedToday: 0,
           sessionStartedAt: null,
+          sessionElapsedMs: 0,
           cooldownUntil: null,
           lastSessionEndedAt: null,
         },
