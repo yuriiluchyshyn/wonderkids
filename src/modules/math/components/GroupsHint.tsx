@@ -43,11 +43,14 @@ export function GroupsHint({ rows, cols }: GroupsHintProps) {
           <div className={styles.row} key={r}>
             {Array.from({ length: cols }, (_, c) => {
               const key = `${r}-${c}`;
+              const on = lit.has(key);
               return (
                 <motion.button
                   key={key}
-                  className={`${styles.dot} ${lit.has(key) ? styles.on : ''}`}
+                  className={`${styles.dot} ${on ? styles.on : ''}`}
                   whileTap={{ scale: 0.8 }}
+                  animate={on ? { scale: [1, 1.3, 1] } : {}}
+                  transition={{ duration: 0.3 }}
                   onClick={() => tapDot(key)}
                   aria-label="Кружечок"
                 />

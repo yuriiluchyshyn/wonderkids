@@ -10,46 +10,82 @@
   align-items: center;
   gap: 8px;
   min-width: 0;
+  padding: 6px 12px 6px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
 }
 
 .avatar {
-  font-size: 1.8rem;
+  font-size: 2rem;
+  flex: 0 0 auto;
 }
 
 .name {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 800;
   color: var(--text);
-  max-width: 150px;
+  max-width: 32vw;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.vault {
+.caret {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  flex: 0 0 auto;
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+}
+
+.badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   height: 44px;
-  padding: 0 14px;
+  padding: 0 11px;
   border-radius: 999px;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--surface-ink);
-  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  background: color-mix(in srgb, var(--ring) 20%, var(--surface));
+  box-shadow: var(--shadow-sm);
 }
 
-.vault strong {
-  font-size: 1.15rem;
+/* The artifact piggy stands out — it opens the profile drawer. */
+.piggy {
+  background: color-mix(in srgb, var(--accent) 24%, var(--surface));
 }
 
-.art {
+.badgeIcon {
   font-size: 1.2rem;
+  line-height: 1;
 }
 
-.gear {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  font-size: 1.25rem;
-  background: color-mix(in srgb, var(--surface) 70%, transparent);
+.badgeCount {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.piggy .badgeCount {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 360px) {
+  .badge {
+    padding: 0 9px;
+    gap: 3px;
+  }
+
+  .badgeCount {
+    font-size: 0.85rem;
+  }
+
+  .name {
+    max-width: 26vw;
+  }
 }

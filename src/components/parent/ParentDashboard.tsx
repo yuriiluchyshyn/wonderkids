@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import {
   useGameStore,
   type CelebrationStyle,
+  type ChoicesGridSize,
   type CompanionSpeed,
+  type GameMode,
   type Gender,
   type Milestone,
+  type MinTasks,
 } from '@/core/store/useGameStore';
 import { computeAge } from '@/core/utils/age';
 import { subSteps, pathKey } from '@/core/progress/path';
@@ -14,6 +17,7 @@ import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
 import { Button } from '@/components/ui/Button';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
+import { ChildManager } from './ChildManager';
 import { useAuthStore } from '@/core/auth/useAuthStore';
 import styles from './Parent.module.css';
 
@@ -42,16 +46,32 @@ const CELEBRATION_OPTIONS: { id: CelebrationStyle; label: string; icon: string }
   { id: 'candy', label: 'Цукерки', icon: '🍬' },
 ];
 
-const SESSION_OPTIONS = [3, 5, 8, 10];
+const GAME_MODE_OPTIONS: { id: GameMode; label: string; icon: string }[] = [
+  { id: 'dynamic_task_extension', label: 'Динамічний', icon: '🔁' },
+  { id: 'fixed_strict', label: 'Фіксований', icon: '📏' },
+];
+
+const MIN_TASKS_OPTIONS: MinTasks[] = [5, 8, 10, 15, 20];
+
+const GRID_OPTIONS: { id: ChoicesGridSize; label: string; icon: string }[] = [
+  { id: 6, label: '6 (3×2)', icon: '⬜' },
+  { id: 9, label: '9 (3×3)', icon: '🔳' },
+];
+
+const SESSION_MIN_OPTIONS = [5, 10, 15, 20, 30];
+const COOLDOWN_MIN_OPTIONS = [15, 30, 45, 60, 90];
+const DAILY_MIN_OPTIONS = [20, 30, 45, 60, 90, 120];
 
 /** Main settings (PRD §10): profile, look & feel, pacing, goals. Audio lives
  *  on its own sub-page so the many sound options stay out of the way. */
 export function ParentDashboard() {
   const navigate = useNavigate();
+  const activeChildId = useGameStore((s) => s.activeChildId);
   const profile = useGameStore((s) => s.profile);
   const setProfile = useGameStore((s) => s.setProfile);
   const settings = useGameStore((s) => s.settings);
   const updateSettings = useGameStore((s) => s.updateSettings);
+  const updateTimeControl = useGameStore((s) => s.updateTimeControl);
   const milestones = useGameStore((s) => s.milestones);
   const setMilestones = useGameStore((s) => s.setMilestones);
   const progress = useGameStore((s) => s.progress);
@@ -77,6 +97,10 @@ export function ParentDashboard() {
 
   return (
     <div className="stack">
+      <ChildManager />
+
+      {activeChildId ? (
+        <>
       {/* ---- Child profile ---- */}
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>👤 Профіль дитини</h3>
@@ -88,6 +112,17 @@ export function ParentDashboard() {
           onChange={(e) => setProfile({ name: e.target.value })}
           aria-label="Ім'я дитини"
         />
+
+        <label className={styles.fieldLabel}>Унікальний нік (@нік)</label>
+        <input
+          className={styles.textInput}
+          value={profile.nickname}
+          maxLength={12}
+          placeholder="напр. marko_speed"
+          onChange={(e) => setProfile({ nickname: e.target.value })}
+          aria-label="Унікальний нік дитини"
+        />
+        <p className={styles.hint}>Лише малі літери, цифри та «_» (3–12 символів). Показується у шторці профілю.</p>
 
         <label className={styles.fieldLabel}>Дата народження</label>
         <div className={styles.inline}>
@@ -161,13 +196,106 @@ export function ParentDashboard() {
         </div>
       </section>
 
+      {/* ---- Game mode (anti-guessing engine) ---- */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>⏱️ Завдань у сесії</h3>
+        <h3 className={styles.sectionTitle}>🎮 Режим завершення гри</h3>
+        <p className={styles.hint}>
+          <b>Динамічний</b> (за замовчуванням): кожен відкат машинки додає +1 завдання — рівень завершено,
+          лише коли черга пройдена і транспорт на фініші. <b>Фіксований</b>: рівно задана кількість завдань,
+          без розширення (для наймолодших).
+        </p>
         <div className={styles.chipRow}>
-          {SESSION_OPTIONS.map((n) => (
-            <Chip key={n} label={String(n)} active={settings.sessionLength === n} onClick={() => updateSettings({ sessionLength: n })} />
+          {GAME_MODE_OPTIONS.map((o) => (
+            <Chip
+              key={o.id}
+              icon={o.icon}
+              label={o.label}
+              active={settings.gameMode === o.id}
+              onClick={() => updateSettings({ gameMode: o.id })}
+            />
           ))}
         </div>
+      </section>
+
+      <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>⏱️ Мінімум завдань на рівень</h3>
+        <div className={styles.chipRow}>
+          {MIN_TASKS_OPTIONS.map((n) => (
+            <Chip
+              key={n}
+              label={String(n)}
+              active={settings.minTasksPerLevel === n}
+              onClick={() => updateSettings({ minTasksPerLevel: n })}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>🔢 Сітка відповідей</h3>
+        <p className={styles.hint}>Більше варіантів — важче вгадати навмання (анти-вгадування).</p>
+        <div className={styles.chipRow}>
+          {GRID_OPTIONS.map((o) => (
+            <Chip
+              key={o.id}
+              icon={o.icon}
+              label={o.label}
+              active={settings.choicesGridSize === o.id}
+              onClick={() => updateSettings({ choicesGridSize: o.id })}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ---- Screen time / fuel ---- */}
+      <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>⛽ Екранний час</h3>
+        <p className={styles.hint}>
+          Дитина бачить лише тематичну шкалу пального — без цифрових таймерів. Коли пальне закінчується,
+          грається коротка мультанімація, а далі — спокійний відпочинок.
+        </p>
+
+        <label className={styles.fieldLabel}>Тривалість сеансу (хв)</label>
+        <select
+          className={styles.textInput}
+          value={settings.timeControl.sessionDurationMinutes}
+          onChange={(e) => updateTimeControl({ sessionDurationMinutes: Number(e.target.value) })}
+          aria-label="Тривалість сеансу у хвилинах"
+        >
+          {SESSION_MIN_OPTIONS.map((n) => (
+            <option key={n} value={n}>
+              {n} хв
+            </option>
+          ))}
+        </select>
+
+        <label className={styles.fieldLabel}>Відпочинок між сеансами (хв)</label>
+        <select
+          className={styles.textInput}
+          value={settings.timeControl.cooldownMinutes}
+          onChange={(e) => updateTimeControl({ cooldownMinutes: Number(e.target.value) })}
+          aria-label="Тривалість відпочинку у хвилинах"
+        >
+          {COOLDOWN_MIN_OPTIONS.map((n) => (
+            <option key={n} value={n}>
+              {n} хв
+            </option>
+          ))}
+        </select>
+
+        <label className={styles.fieldLabel}>Ліміт на день (хв)</label>
+        <select
+          className={styles.textInput}
+          value={settings.timeControl.maxDailyMinutes}
+          onChange={(e) => updateTimeControl({ maxDailyMinutes: Number(e.target.value) })}
+          aria-label="Денний ліміт у хвилинах"
+        >
+          {DAILY_MIN_OPTIONS.map((n) => (
+            <option key={n} value={n}>
+              {n} хв
+            </option>
+          ))}
+        </select>
       </section>
 
       {/* ---- Milestone goals on the path ---- */}
@@ -248,6 +376,14 @@ export function ParentDashboard() {
           Скинути весь прогрес
         </Button>
       </section>
+        </>
+      ) : (
+        <section className={styles.section}>
+          <p className={styles.hint} style={{ margin: 0, textAlign: 'center' }}>
+            Оберіть дитину вище або додайте нову, щоб налаштувати її гру.
+          </p>
+        </section>
+      )}
 
       {/* ---- Account ---- */}
       <section className={styles.section}>

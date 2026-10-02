@@ -10,6 +10,25 @@
   gap: 12px;
 }
 
+.hud {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.hudArtifacts {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.hudArtifacts .emoji {
+  font-size: 1.1rem;
+}
+
 .back {
   width: 54px;
   height: 54px;
@@ -27,8 +46,26 @@
   color: var(--text);
 }
 
+.progressWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progressLabel {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.progressExtra {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .dots {
   display: flex;
+  flex-wrap: wrap;
   gap: 7px;
 }
 

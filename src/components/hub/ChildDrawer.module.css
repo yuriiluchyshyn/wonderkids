@@ -1,0 +1,140 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(20, 8, 40, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(360px, 86vw);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: calc(20px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom));
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  background: color-mix(in srgb, var(--ring) 22%, transparent);
+  color: var(--surface-ink);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-right: 44px;
+}
+
+.avatar {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.identity {
+  min-width: 0;
+}
+
+.name {
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.nick {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+.artifact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+}
+
+.artifactIcon {
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.artifactInfo {
+  min-width: 0;
+}
+
+.artifactName {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--surface-ink);
+}
+
+.artifactCount {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--surface-ink);
+}
+
+.artifactUnit {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+.goals {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.goal {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.goalIcon {
+  font-size: 1.4rem;
+  flex: 0 0 auto;
+}
+
+.goalBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.goalReward {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--surface-ink);
+  margin-bottom: 4px;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}

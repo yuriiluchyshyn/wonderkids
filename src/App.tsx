@@ -2,13 +2,16 @@ import type { CSSProperties } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@/core/theme/ThemeProvider';
 import { useAuthStore } from '@/core/auth/useAuthStore';
+import { useGameStore } from '@/core/store/useGameStore';
 import { useRemoteSync } from '@/core/sync/useRemoteSync';
+import { getPortal } from '@/core/portal';
 import { LoginPage } from '@/pages/LoginPage';
 import { HubPage } from '@/pages/HubPage';
 import { GamePage } from '@/pages/GamePage';
 import { VaultPage } from '@/pages/VaultPage';
 import { ParentPage } from '@/pages/ParentPage';
 import { AudioPage } from '@/pages/AudioPage';
+import { ChildSelectPage } from '@/pages/ChildSelectPage';
 
 const splashBtn: CSSProperties = {
   minHeight: 48,
@@ -65,17 +68,45 @@ function SyncSplash({ error }: { error?: boolean }) {
 /** Routes available only once a save is loaded for the signed-in user. */
 function SyncedRoutes() {
   const status = useRemoteSync();
+  const children = useGameStore((s) => s.children);
+  const activeChildId = useGameStore((s) => s.activeChildId);
 
   if (status === 'error') return <SyncSplash error />;
   if (status !== 'ready') return <SyncSplash />;
 
+  const portal = getPortal();
+
+  // Parent portal (parents.*): ONLY the parent cabinet — never the child hub,
+  // so a parent never lands on "обери пригоду".
+  if (portal === 'parent') {
+    return (
+      <Routes>
+        <Route path="/parent" element={<ParentPage />} />
+        <Route path="/parent/audio" element={<AudioPage />} />
+        <Route path="*" element={<Navigate to="/parent" replace />} />
+      </Routes>
+    );
+  }
+
+  const hasChildren = children.length > 0;
+  const activeOk = hasChildren && children.some((c) => c.id === activeChildId);
+  // Only the dev host may reach the parent cabinet directly; the kid portal
+  // (play.*) must never expose it.
+  const canReachParent = portal === 'dev';
+  const noActiveFallback = canReachParent && !hasChildren ? '/parent' : '/who';
+
   return (
     <Routes>
-      <Route path="/" element={<HubPage />} />
-      <Route path="/play/:moduleId/:subId" element={<GamePage />} />
-      <Route path="/vault" element={<VaultPage />} />
-      <Route path="/parent" element={<ParentPage />} />
-      <Route path="/parent/audio" element={<AudioPage />} />
+      {canReachParent && <Route path="/parent" element={<ParentPage />} />}
+      {canReachParent && <Route path="/parent/audio" element={<AudioPage />} />}
+      <Route path="/who" element={<ChildSelectPage />} />
+
+      <Route path="/" element={activeOk ? <HubPage /> : <Navigate to={noActiveFallback} replace />} />
+      <Route
+        path="/play/:moduleId/:subId"
+        element={activeOk ? <GamePage /> : <Navigate to={noActiveFallback} replace />}
+      />
+      <Route path="/vault" element={activeOk ? <VaultPage /> : <Navigate to={noActiveFallback} replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

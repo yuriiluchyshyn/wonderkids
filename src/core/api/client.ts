@@ -83,4 +83,12 @@ export const api = {
       body: { state },
     });
   },
+
+  /** Check whether a child nickname is free (excludes the caller's account). */
+  checkNickname(token: string, nick: string) {
+    return request<{ available: boolean }>(
+      `/api/nickname?nick=${encodeURIComponent(nick)}`,
+      { token },
+    );
+  },
 };

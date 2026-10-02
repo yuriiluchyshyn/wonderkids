@@ -20,7 +20,7 @@ export function TaskGrid({ entries, onStart }: TaskGridProps) {
         <span className="emoji" style={{ fontSize: '3rem' }}>
           🔍
         </span>
-        <p>Поки що немає пригод за цим фільтром. Спробуй інший!</p>
+        <p>У цій галактиці ще немає планет. Обери іншу!</p>
       </motion.div>
     );
   }

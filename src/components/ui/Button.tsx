@@ -15,6 +15,8 @@ interface ButtonProps {
   icon?: string;
   /** Suppress the default tap sound (e.g. when the handler plays its own). */
   silent?: boolean;
+  /** Non-interactive, dimmed state (e.g. a locked "play on" during cooldown). */
+  disabled?: boolean;
   ariaLabel?: string;
   type?: 'button' | 'submit';
 }
@@ -31,12 +33,14 @@ export function Button({
   block = false,
   icon,
   silent = false,
+  disabled = false,
   ariaLabel,
   type = 'button',
 }: ButtonProps) {
   const { play } = useSound();
 
   const handleClick = () => {
+    if (disabled) return;
     if (!silent) play('tap');
     onClick?.();
   };
@@ -45,9 +49,17 @@ export function Button({
     <motion.button
       type={type}
       aria-label={ariaLabel}
-      className={cn(styles.btn, styles[variant], size === 'lg' && styles.lg, block && styles.block)}
-      whileTap={{ scale: 0.93 }}
-      whileHover={{ y: -2 }}
+      aria-disabled={disabled}
+      disabled={disabled}
+      className={cn(
+        styles.btn,
+        styles[variant],
+        size === 'lg' && styles.lg,
+        block && styles.block,
+        disabled && styles.disabled,
+      )}
+      whileTap={disabled ? undefined : { scale: 0.93 }}
+      whileHover={disabled ? undefined : { y: -2 }}
       transition={{ type: 'spring', stiffness: 500, damping: 24 }}
       onClick={handleClick}
     >

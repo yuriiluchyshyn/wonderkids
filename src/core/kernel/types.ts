@@ -31,6 +31,11 @@ export interface TaskConfig {
   step: number;
   /** Monotonic index of the task within the current session (0-based). */
   index: number;
+  /**
+   * Number of multiple-choice answers to present (anti-guessing grid size).
+   * Defaults to 9 (3×3) when a module ignores it.
+   */
+  choicesCount?: number;
 }
 
 /**

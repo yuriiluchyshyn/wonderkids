@@ -2,8 +2,6 @@ import { motion } from 'framer-motion';
 import { useGameStore } from '@/core/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { ProgressBar } from '@/components/ui/ProgressBar';
-import { DreamBuild } from './DreamBuild';
-import { TreasureCollection } from './TreasureCollection';
 import styles from './TreasureVault.module.css';
 
 /** The child's motivation hub: artifact piggy bank, milestone goals, dream build. */
@@ -64,10 +62,6 @@ export function TreasureVault() {
           })}
         </div>
       </div>
-
-      <TreasureCollection />
-
-      <DreamBuild />
     </div>
   );
 }

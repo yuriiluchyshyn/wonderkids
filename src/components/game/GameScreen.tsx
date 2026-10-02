@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { TaskCallbacks } from '@/core/kernel/types';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
@@ -15,8 +15,11 @@ import { VoiceToggle } from '@/components/ui/VoiceToggle';
 import { Companion } from './Companion';
 import { Celebration } from './Celebration';
 import { TreasureReveal } from './TreasureReveal';
+import { FuelGauge } from './FuelGauge';
+import { Cutscene } from './Cutscene';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
 import { useIdleRollback } from './useIdleRollback';
+import { useScreenTime } from './useScreenTime';
 import { subSteps } from '@/core/progress/path';
 import styles from './GameScreen.module.css';
 
@@ -80,7 +83,30 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // chest-opening animation has played out.
   const [reveal, setReveal] = useState<{ treasure: Treasure; isNew: boolean } | null>(null);
   const [revealDone, setRevealDone] = useState(false);
-  const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none');
+  const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none', session.registerRollback);
+
+  // ---- Screen-time / fuel engine (Tech Spec FR-TIME) ----
+  const artifacts = useGameStore((s) => s.artifacts);
+  const timeControl = useGameStore((s) => s.settings.timeControl);
+  const enterCooldown = useGameStore((s) => s.enterCooldown);
+  const startPlaySession = useGameStore((s) => s.startPlaySession);
+  const screen = useScreenTime(phase === 'play');
+  // `armed` = fuel ran dry (wait for a safe moment); `open` = cutscene showing.
+  const [bedtimeArmed, setBedtimeArmed] = useState(false);
+  const [bedtimeOpen, setBedtimeOpen] = useState(false);
+
+  const openBedtime = useCallback(() => {
+    setBedtimeOpen(true);
+    enterCooldown();
+    speechEngine.cancel();
+  }, [enterCooldown]);
+
+  const resumePlay = useCallback(() => {
+    setBedtimeArmed(false);
+    setBedtimeOpen(false);
+    startPlaySession();
+    onPlayAgain();
+  }, [startPlaySession, onPlayAgain]);
 
   const boardRef = useRef<HTMLDivElement>(null);
   const helperRef = useRef<HTMLDivElement>(null);
@@ -144,6 +170,22 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // Stop any lingering speech when leaving the screen.
   useEffect(() => () => speechEngine.cancel(), []);
 
+  // Arm the bedtime cutscene the moment the tank runs dry during play.
+  useEffect(() => {
+    if (phase === 'play' && screen.depleted && !bedtimeArmed) {
+      setBedtimeArmed(true);
+    }
+  }, [screen.depleted, phase, bedtimeArmed]);
+
+  // Open it at a safe moment: right after the current answer is counted, or a
+  // short grace if the child is idle — the current example is never cut off
+  // mid-solve (Tech Spec AC-2).
+  useEffect(() => {
+    if (!bedtimeArmed || bedtimeOpen) return;
+    const t = window.setTimeout(openBedtime, session.justSolved ? 250 : 4000);
+    return () => window.clearTimeout(t);
+  }, [bedtimeArmed, bedtimeOpen, session.justSolved, openBedtime]);
+
   if (!module || !task) {
     return (
       <div className="center" style={{ padding: 40 }}>
@@ -152,11 +194,25 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     );
   }
 
+  // The fuel-depleted cutscene + cooldown lock. Shown when the tank just ran
+  // dry (bedtimeOpen) or the child arrived while a cooldown is still active.
+  const showBedtime = bedtimeOpen || screen.inCooldown;
+  const bedtimeOverlay = showBedtime ? (
+    <Cutscene
+      playScene={bedtimeOpen}
+      cooldownMinutes={timeControl.cooldownMinutes}
+      cooldownRemainingSec={screen.cooldownRemainingSec}
+      ready={screen.ready}
+      onResume={resumePlay}
+      onExit={onExit}
+    />
+  ) : null;
+
   const callbacks: TaskCallbacks = {
     onSuccess: () => {
       markActivity();
       play('success');
-      play('crunch');
+      play('pop');
       session.registerSuccess();
     },
     onMistake: () => {
@@ -194,13 +250,40 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
           {module.icon} {subLabel}
         </div>
         {phase === 'play' && (
-          <div className={styles.dots} aria-label={`Завдання ${session.solvedCount} з ${session.total}`}>
-            {Array.from({ length: session.total }, (_, i) => (
-              <span key={i} className={`${styles.dot} ${i < session.solvedCount ? styles.dotDone : ''}`} />
-            ))}
+          <div className={styles.progressWrap}>
+            <div
+              className={styles.progressLabel}
+              aria-label={`Завдання ${Math.min(session.solvedCount + 1, session.total)} з ${session.total}`}
+            >
+              🎯 Завдання {Math.min(session.solvedCount + 1, session.total)} з {session.total}
+              {session.extraTasks > 0 && (
+                <span className={styles.progressExtra}>
+                  {' '}
+                  (базових {session.baseTotal} + {session.extraTasks})
+                </span>
+              )}
+            </div>
+            {session.total <= 12 && (
+              <div className={styles.dots} aria-hidden>
+                {Array.from({ length: session.total }, (_, i) => (
+                  <span key={i} className={`${styles.dot} ${i < session.solvedCount ? styles.dotDone : ''}`} />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
+      {phase === 'play' && (
+        <div className={styles.hud}>
+          <FuelGauge pct={screen.fuelPct} />
+          <div className={styles.hudArtifacts}>
+            <span className="emoji" aria-hidden>
+              {theme.artifact.emoji}
+            </span>{' '}
+            {artifacts}
+          </div>
+        </div>
+      )}
     </div>
   );
 
@@ -234,6 +317,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
             Почнемо!
           </Button>
         </motion.div>
+        {bedtimeOverlay}
       </div>
     );
   }
@@ -366,6 +450,8 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
           </div>
         </div>
       </Modal>
+
+      {bedtimeOverlay}
     </div>
   );
 }

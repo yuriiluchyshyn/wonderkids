@@ -1,0 +1,99 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+}
+
+.triggerIcon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.triggerText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.triggerKicker {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-soft);
+}
+
+.triggerName {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--surface-ink);
+}
+
+.caret {
+  font-size: 1rem;
+  color: var(--text-soft);
+  flex: 0 0 auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--ring) 14%, var(--surface));
+  color: var(--surface-ink);
+  border: 2px solid transparent;
+}
+
+.itemActive {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+}
+
+.itemSoon {
+  opacity: 0.7;
+}
+
+.itemIcon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.itemName {
+  font-size: 1.2rem;
+  font-weight: 800;
+  flex: 1;
+  text-align: left;
+}
+
+.soonTag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--accent-ink, #1c1917);
+  background: var(--accent);
+  padding: 4px 9px;
+  border-radius: 999px;
+}
+
+.check {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--primary);
+}

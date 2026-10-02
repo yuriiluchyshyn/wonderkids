@@ -79,6 +79,10 @@ h3 {
   --shadow-lg: 0 14px 36px rgba(31, 10, 60, 0.14);
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --maxw: 1100px;
+  /* Two operand colours shared by the equation and the counting-circle hint so
+     "6" and its 6 cubes read as one colour, "1" and its cube as another. */
+  --operand-a: #4f46e5;
+  --operand-b: #ec4899;
 }
 
 /* ---------- layout helpers ---------- */

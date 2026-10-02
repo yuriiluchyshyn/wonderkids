@@ -89,11 +89,14 @@ export class AudioEngine {
    * "brighter / closer" as they approach the full count; the final element
    * resolves with a little sparkle.
    */
-  countChime(filled: number, total: number): void {
+  countChime(filled: number, total: number, variant: 'a' | 'b' = 'a'): void {
     const ratio = total > 0 ? Math.min(1, filled / total) : 0;
-    const base = 392; // G4
+    // Group A and group B count in two distinct voices so a child adding
+    // "6 + 1" hears the two operands as different (G4 sine vs C5 triangle).
+    const base = variant === 'b' ? 523.25 : 392;
+    const voice: OscillatorType = variant === 'b' ? 'triangle' : 'sine';
     const freq = base * Math.pow(2, ratio * 1.5);
-    this.tone({ freq, type: 'sine', duration: 0.32, gain: 0.4 });
+    this.tone({ freq, type: voice, duration: 0.32, gain: 0.4 });
     this.tone({ freq: freq * 2, type: 'sine', duration: 0.22, gain: 0.1 });
     if (total > 0 && filled >= total) {
       // Reached the full count — a bright resolving sparkle.
@@ -139,6 +142,19 @@ export class AudioEngine {
     // Final sparkle on top of the last note.
     this.tone({ freq: 1567.98, type: 'triangle', start: 0.44, duration: 0.5, gain: 0.3 });
     this.tone({ freq: 2093.0, type: 'sine', start: 0.5, duration: 0.4, gain: 0.14 });
+  }
+
+  /**
+   * Warm "пара-па-пам" bedtime jingle for the fuel-depleted cutscene (Tech
+   * Spec FR-TIME-03). Two soft pickup notes, a gentle lift, then a cosy
+   * landing with a shimmer tail — reads as "time to rest", never an alarm.
+   */
+  bedtime(): void {
+    this.tone({ freq: 587.33, type: 'triangle', start: 0.0, duration: 0.2, gain: 0.3 });
+    this.tone({ freq: 587.33, type: 'triangle', start: 0.18, duration: 0.2, gain: 0.3 });
+    this.tone({ freq: 698.46, type: 'triangle', start: 0.36, duration: 0.26, gain: 0.32 });
+    this.tone({ freq: 523.25, type: 'triangle', start: 0.62, duration: 0.6, gain: 0.34 });
+    this.tone({ freq: 1046.5, type: 'sine', start: 0.66, duration: 0.5, gain: 0.1 });
   }
 
   /** Balloon "ПОП!" burst. */

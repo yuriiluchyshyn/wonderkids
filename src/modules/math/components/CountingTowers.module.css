@@ -27,3 +27,23 @@
   background: var(--accent);
   box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.18), 0 0 10px color-mix(in srgb, var(--accent) 60%, transparent);
 }
+
+/* Addition split: operand A / B cubes pre-tinted in their colour, glowing
+   fully once the child taps (counts) them. */
+.groupA {
+  background: color-mix(in srgb, var(--operand-a) 28%, var(--surface));
+}
+
+.groupB {
+  background: color-mix(in srgb, var(--operand-b) 28%, var(--surface));
+}
+
+.groupA.on {
+  background: var(--operand-a);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.18), 0 0 12px color-mix(in srgb, var(--operand-a) 65%, transparent);
+}
+
+.groupB.on {
+  background: var(--operand-b);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.18), 0 0 12px color-mix(in srgb, var(--operand-b) 65%, transparent);
+}

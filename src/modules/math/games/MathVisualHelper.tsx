@@ -18,6 +18,11 @@ function renderHelper(payload: MathPayload) {
   if (payload.op === '÷') {
     return <GroupsHint rows={payload.b} cols={payload.answer} />;
   }
+  // Addition: show the two operands in their own colours so "6 + 1" is a group
+  // of 6 cubes plus a group of 1, counted together.
+  if (payload.op === '+') {
+    return <CountingTowers count={payload.a + payload.b} split={{ a: payload.a, b: payload.b }} />;
+  }
   return <CountingTowers count={payload.answer} />;
 }
 

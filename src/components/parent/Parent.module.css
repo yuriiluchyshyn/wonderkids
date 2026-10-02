@@ -114,6 +114,92 @@
   margin: 4px 0 6px 4px;
 }
 
+/* ---- Children roster ---- */
+.childrenGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.childCard {
+  position: relative;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--ring) 12%, var(--surface));
+  border: 2px solid transparent;
+}
+
+.childCardActive {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+}
+
+.childPick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  padding: 14px 8px 12px;
+  color: var(--surface-ink);
+}
+
+.childAvatar {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.childName {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.childNick {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+.activeTag {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--primary);
+}
+
+.childRemove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+}
+
+.nickStatus {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  margin: -4px 0 2px 2px;
+}
+
+.nick_available {
+  color: #16a34a;
+}
+
+.nick_taken,
+.nick_invalid {
+  color: #dc2626;
+}
+
+.nick_error {
+  color: #d97706;
+}
+
 /* Parental gate */
 .challenge {
   display: flex;

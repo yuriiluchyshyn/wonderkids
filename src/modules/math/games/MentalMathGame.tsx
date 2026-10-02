@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import type { GameViewProps } from '@/core/kernel/types';
+import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { AnswerTile, type TileState } from '../components/AnswerTile';
 import type { MentalMathPayload } from '../math.types';
 import styles from './Games.module.css';
@@ -8,6 +9,7 @@ import styles from './Games.module.css';
 /** Mental arithmetic: read the equation, tap the right answer tile. */
 export function MentalMathGame({ task, callbacks }: GameViewProps<MentalMathPayload>) {
   const { a, b, op, answer, options } = task.payload;
+  const theme = useActiveTheme();
   const [solved, setSolved] = useState(false);
   const [wrong, setWrong] = useState<number | null>(null);
 
@@ -49,17 +51,23 @@ export function MentalMathGame({ task, callbacks }: GameViewProps<MentalMathPayl
           aria-label="Повторити завдання"
           title="Повторити завдання"
         >
-          <span>{a}</span>
+          <span className={styles.operandA}>{a}</span>
           <span className={styles.op}>{op}</span>
-          <span>{b}</span>
+          <span className={styles.operandB}>{b}</span>
           <span className={styles.op}>=</span>
           <span className={styles.q}>?</span>
         </motion.button>
       </div>
 
-      <div className={styles.tiles}>
+      <div className={styles.tilesGrid3}>
         {options.map((value) => (
-          <AnswerTile key={value} state={tileState(value)} onClick={() => choose(value)} ariaLabel={`Відповідь ${value}`}>
+          <AnswerTile
+            key={value}
+            state={tileState(value)}
+            onClick={() => choose(value)}
+            ariaLabel={`Відповідь ${value}`}
+            burst={theme.celebrationEmojis}
+          >
             {value}
           </AnswerTile>
         ))}

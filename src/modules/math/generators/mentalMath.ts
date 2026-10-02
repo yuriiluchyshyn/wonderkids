@@ -33,7 +33,7 @@ function opForSub(subCategoryId: string): MathOp | 'mixed' {
  * result for a small child.
  */
 export function generateMentalMath(config: TaskConfig): TaskInstance<MentalMathPayload> {
-  const { step, subCategoryId } = config;
+  const { step, subCategoryId, choicesCount = 9 } = config;
   const resolved = opForSub(subCategoryId);
   const op: MathOp = resolved === 'mixed' ? pick<MathOp>(['+', '-', '×', '÷']) : resolved;
 
@@ -75,7 +75,7 @@ export function generateMentalMath(config: TaskConfig): TaskInstance<MentalMathP
       b,
       op,
       answer,
-      options: buildNumberOptions(answer, 4, optionSpread(step)),
+      options: buildNumberOptions(answer, choicesCount, optionSpread(step)),
     },
   };
 }

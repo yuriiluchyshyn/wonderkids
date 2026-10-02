@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { GameViewProps } from '@/core/kernel/types';
+import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { AnswerTile, type TileState } from '../components/AnswerTile';
 import { FractionGlyph } from '../components/FractionGlyph';
 import { PieFood } from '../components/PieFood';
@@ -11,6 +12,7 @@ const sameFraction = (x: Fraction, y: Fraction) => x.n === y.n && x.d === y.d;
 /** Visual fractions: see the highlighted slices, tap the matching fraction. */
 export function FractionsGame({ task, callbacks }: GameViewProps<FractionPayload>) {
   const { food, denom, filled, answer, options } = task.payload;
+  const theme = useActiveTheme();
   const [solved, setSolved] = useState(false);
   const [wrong, setWrong] = useState<Fraction | null>(null);
 
@@ -57,6 +59,7 @@ export function FractionsGame({ task, callbacks }: GameViewProps<FractionPayload
             state={tileState(value)}
             onClick={() => choose(value)}
             ariaLabel={`${value.n} з ${value.d}`}
+            burst={theme.celebrationEmojis}
           >
             <FractionGlyph value={value} />
           </AnswerTile>

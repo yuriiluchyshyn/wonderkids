@@ -12,7 +12,8 @@ type SfxName =
   | 'fanfare'
   | 'win'
   | 'chestOpen'
-  | 'treasure';
+  | 'treasure'
+  | 'bedtime';
 
 /**
  * Returns sound-effect players that respect the `soundOn` setting. UI code calls
@@ -37,11 +38,12 @@ export function useSound() {
     [soundOn],
   );
 
-  /** Counting chime whose pitch rises with fill progress. */
+  /** Counting chime whose pitch rises with fill progress; `variant` picks the
+   *  voice so two operand groups (A/B) sound distinct. */
   const countChime = useCallback(
-    (filled: number, total: number) => {
+    (filled: number, total: number, variant: 'a' | 'b' = 'a') => {
       if (!soundOn) return;
-      audioEngine.countChime(filled, total);
+      audioEngine.countChime(filled, total, variant);
     },
     [soundOn],
   );

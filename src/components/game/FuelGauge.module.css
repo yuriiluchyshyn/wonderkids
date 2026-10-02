@@ -1,0 +1,51 @@
+.fuel {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.bar {
+  position: relative;
+  width: clamp(70px, 22vw, 120px);
+  height: 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ring) 30%, var(--surface));
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 15%);
+}
+
+.fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.6s ease;
+}
+
+/* Low fuel: warm amber, gently pulsing — a cue, never an alarm. */
+.low {
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+  animation: fuelPulse 1.6s ease-in-out infinite;
+}
+
+.pct {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text);
+  min-width: 2.6ch;
+  text-align: right;
+}
+
+@keyframes fuelPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
