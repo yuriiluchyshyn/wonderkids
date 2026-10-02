@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/core/auth/useAuthStore';
+import { getPortal } from '@/core/portal';
 import styles from './LoginPage.module.css';
 
 /**
@@ -59,13 +60,15 @@ export function LoginPage() {
 
   const [email, setEmail] = useState('');
 
-  if (token) return <Navigate to="/" replace />;
+  // This is the PARENT cabinet login (email-only for now). Parents land here;
+  // children use the credential login on the child portal.
+  if (token) return <Navigate to="/parent" replace />;
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (pending) return;
     const ok = await login(email);
-    if (ok) navigate('/', { replace: true });
+    if (ok) navigate('/parent', { replace: true });
   };
 
   return (
@@ -99,7 +102,7 @@ export function LoginPage() {
         </div>
 
         <h1 className={styles.title}>WonderKids</h1>
-        <p className={styles.sub}>Увійди, щоб продовжити пригоду</p>
+        <p className={styles.sub}>Кабінет батьків</p>
 
         <form className={styles.form} onSubmit={submit}>
           <label className={styles.label} htmlFor="email">
@@ -131,6 +134,14 @@ export function LoginPage() {
 
         <p className={styles.hint}>
           Пароль не потрібен — поки що вхід лише за поштою.
+          {getPortal() === 'dev' && (
+            <>
+              {' · '}
+              <a href="/login" className={styles.parentLink}>
+                Вхід для дитини
+              </a>
+            </>
+          )}
         </p>
       </div>
     </div>

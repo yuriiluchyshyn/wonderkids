@@ -40,6 +40,10 @@ export function useRemoteSync(): SyncStatus {
         if (!active) return;
         // `state` is null for a brand-new user → hydrate falls back to defaults.
         useGameStore.getState().hydrate(state ?? {});
+        // Child session: auto-select the child the token logged in as, so the
+        // hub shows immediately (no profile picker).
+        const childId = useAuthStore.getState().childId;
+        if (childId) useGameStore.getState().setActiveChild(childId);
         setStatus('ready');
       })
       .catch(() => {

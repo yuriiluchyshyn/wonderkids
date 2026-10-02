@@ -6,6 +6,7 @@ import { useGameStore } from '@/core/store/useGameStore';
 /** Human-friendly messages for the error codes the API can return on login. */
 const LOGIN_ERRORS: Record<string, string> = {
   invalid_email: 'Схоже, це не схоже на електронну пошту. Перевір, будь ласка.',
+  invalid_credentials: 'Невірний нік/пошта або пароль. Спитай у батьків.',
   network_error: 'Не вдалося зв’язатися із сервером. Він увімкнений?',
   login_failed: 'Щось пішло не так на сервері. Спробуй ще раз.',
 };
@@ -13,11 +14,15 @@ const LOGIN_ERRORS: Record<string, string> = {
 export interface AuthState {
   token: string | null;
   user: AuthUser | null;
+  /** Set for a child session — which child to auto-select after state loads. */
+  childId: string | null;
   pending: boolean;
   error: string | null;
 
-  /** Email-only login. Returns true on success. */
+  /** Parent email-only login. Returns true on success. */
   login: (email: string) => Promise<boolean>;
+  /** Child login by nickname-or-email + parent-set password. */
+  childLogin: (identifier: string, password: string) => Promise<boolean>;
   /** Clear the session and wipe the in-memory save. */
   logout: () => void;
   clearError: () => void;
@@ -28,6 +33,7 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       token: null,
       user: null,
+      childId: null,
       pending: false,
       error: null,
 
@@ -35,7 +41,24 @@ export const useAuthStore = create<AuthState>()(
         set({ pending: true, error: null });
         try {
           const { token, user } = await api.login(email);
-          set({ token, user, pending: false, error: null });
+          // Parent session → no child auto-selected.
+          set({ token, user, childId: null, pending: false, error: null });
+          return true;
+        } catch (err) {
+          const code = err instanceof ApiError ? err.code : 'login_failed';
+          set({
+            pending: false,
+            error: LOGIN_ERRORS[code] ?? LOGIN_ERRORS.login_failed,
+          });
+          return false;
+        }
+      },
+
+      childLogin: async (identifier, password) => {
+        set({ pending: true, error: null });
+        try {
+          const { token, user, childId } = await api.childLogin(identifier, password);
+          set({ token, user, childId, pending: false, error: null });
           return true;
         } catch (err) {
           const code = err instanceof ApiError ? err.code : 'login_failed';
@@ -50,7 +73,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         // Drop the signed-in child's data so the next login starts clean.
         useGameStore.getState().resetAll();
-        set({ token: null, user: null, error: null });
+        set({ token: null, user: null, childId: null, error: null });
       },
 
       clearError: () => set({ error: null }),
@@ -59,7 +82,7 @@ export const useAuthStore = create<AuthState>()(
       // Only the session identity is persisted locally; the game save itself
       // now lives on the server.
       name: 'wonderkids-auth-v1',
-      partialize: (s) => ({ token: s.token, user: s.user }),
+      partialize: (s) => ({ token: s.token, user: s.user, childId: s.childId }),
     },
   ),
 );

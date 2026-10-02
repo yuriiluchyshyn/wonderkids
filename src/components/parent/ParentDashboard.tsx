@@ -124,6 +124,30 @@ export function ParentDashboard() {
         />
         <p className={styles.hint}>Лише малі літери, цифри та «_» (3–12 символів). Показується у шторці профілю.</p>
 
+        <label className={styles.fieldLabel}>Пошта дитини (необов'язково)</label>
+        <input
+          className={styles.textInput}
+          value={profile.email}
+          type="email"
+          inputMode="email"
+          autoCapitalize="none"
+          autoCorrect="off"
+          placeholder="напр. marko@family.com"
+          onChange={(e) => setProfile({ email: e.target.value })}
+          aria-label="Пошта дитини"
+        />
+
+        <label className={styles.fieldLabel}>Пароль для входу дитини</label>
+        <input
+          className={styles.textInput}
+          value={profile.password}
+          type="text"
+          placeholder="мін. 4 символи"
+          onChange={(e) => setProfile({ password: e.target.value })}
+          aria-label="Пароль дитини"
+        />
+        <p className={styles.hint}>Дитина входить за ніком або поштою + цим паролем.</p>
+
         <label className={styles.fieldLabel}>Дата народження</label>
         <div className={styles.inline}>
           <select

@@ -27,8 +27,12 @@ export interface ChildProfile {
   name: string;
   /** Unique low-text handle shown in the child drawer (`^[a-z0-9_]{3,12}$`). */
   nickname: string;
-  /** Simple 3–4 digit login PIN for the child portal (`''` = no PIN). */
+  /** Simple 3–4 digit PIN for the in-account profile switcher (`''` = none). */
   pin: string;
+  /** Optional login email the parent assigns to the child (`''` = none). */
+  email: string;
+  /** Login password set by the parent — the child signs in with nick/email + this. */
+  password: string;
   birthYear: number;
   /** 1–12. */
   birthMonth: number;
@@ -202,6 +206,8 @@ const DEFAULT_PROFILE: ChildProfile = {
   name: 'Друже',
   nickname: '',
   pin: '',
+  email: '',
+  password: '',
   birthYear: CURRENT_YEAR - 5,
   birthMonth: 6,
   gender: 'girl',
@@ -257,13 +263,15 @@ function sanitizeProfile(p: Partial<ChildProfile>): ChildProfile {
       ? p.nickname.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 12)
       : '';
   const pin = typeof p.pin === 'string' ? p.pin.replace(/\D/g, '').slice(0, 4) : '';
+  const email = typeof p.email === 'string' ? p.email.trim().toLowerCase().slice(0, 120) : '';
+  const password = typeof p.password === 'string' ? p.password.slice(0, 64) : '';
   const birthMonth = Math.min(12, Math.max(1, Math.round(p.birthMonth ?? 6)));
   const birthYear = Math.min(
     CURRENT_YEAR,
     Math.max(CURRENT_YEAR - 14, Math.round(p.birthYear ?? CURRENT_YEAR - 5)),
   );
   const gender: Gender = p.gender === 'boy' ? 'boy' : 'girl';
-  return { name, nickname, pin, birthYear, birthMonth, gender };
+  return { name, nickname, pin, email, password, birthYear, birthMonth, gender };
 }
 
 /** A fresh child with all defaults (plus any overrides from the parent form). */

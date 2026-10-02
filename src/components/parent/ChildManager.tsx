@@ -38,6 +38,8 @@ interface NewChild {
   name: string;
   nickname: string;
   pin: string;
+  email: string;
+  password: string;
   gender: Gender;
   minTasksPerLevel: MinTasks;
   gameMode: GameMode;
@@ -48,6 +50,8 @@ const BLANK: NewChild = {
   name: '',
   nickname: '',
   pin: '',
+  email: '',
+  password: '',
   gender: 'girl',
   minTasksPerLevel: 10,
   gameMode: 'dynamic_task_extension',
@@ -118,11 +122,13 @@ export function ChildManager() {
   }, [draft.nickname, adding, token]);
 
   const pinValid = draft.pin === '' || /^\d{3,4}$/.test(draft.pin);
+  const passwordValid = draft.password.length === 0 || draft.password.length >= 4;
   const canSave =
     draft.name.trim().length > 0 &&
     NICKNAME_RE.test(draft.nickname.trim().toLowerCase()) &&
     (nickStatus === 'available' || nickStatus === 'error') &&
-    pinValid;
+    pinValid &&
+    passwordValid;
 
   const save = () => {
     if (!canSave) return;
@@ -131,6 +137,8 @@ export function ChildManager() {
         name: draft.name,
         nickname: draft.nickname,
         pin: draft.pin,
+        email: draft.email,
+        password: draft.password,
         gender: draft.gender,
       },
       settings: {
@@ -244,6 +252,40 @@ export function ChildManager() {
               aria-label="PIN дитини"
             />
             {!pinValid && <p className={`${styles.nickStatus} ${styles.nick_invalid}`}>PIN має бути 3 або 4 цифри.</p>}
+          </div>
+
+          <div>
+            <label className={styles.fieldLabel}>Пошта дитини (необов'язково)</label>
+            <input
+              className={styles.textInput}
+              value={draft.email}
+              type="email"
+              inputMode="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              placeholder="напр. marko@family.com"
+              onChange={(e) => setDraft((d) => ({ ...d, email: e.target.value }))}
+              aria-label="Пошта дитини"
+            />
+          </div>
+
+          <div>
+            <label className={styles.fieldLabel}>Пароль для входу дитини</label>
+            <input
+              className={styles.textInput}
+              value={draft.password}
+              type="text"
+              placeholder="мін. 4 символи"
+              onChange={(e) => setDraft((d) => ({ ...d, password: e.target.value }))}
+              aria-label="Пароль дитини"
+            />
+            <p className={styles.nickStatus}>
+              {draft.password
+                ? passwordValid
+                  ? '✅ Дитина входитиме за ніком/поштою + цим паролем.'
+                  : '✋ Пароль має бути щонайменше 4 символи.'
+                : 'Без пароля дитина не зможе увійти самостійно (лише вибір у кабінеті).'}
+            </p>
           </div>
 
           <div>

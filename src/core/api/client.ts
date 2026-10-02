@@ -10,7 +10,8 @@ const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
 
 export interface AuthUser {
   id: number;
-  email: string;
+  /** Absent for child sessions (which authenticate against a child profile). */
+  email?: string;
 }
 
 export class ApiError extends Error {
@@ -62,11 +63,19 @@ async function request<T>(
 }
 
 export const api = {
-  /** Email-only login: returns a token + user, creating the account if needed. */
+  /** Email-only PARENT login: returns a token + user, creating the account if needed. */
   login(email: string) {
     return request<{ token: string; user: AuthUser }>('/api/auth/login', {
       method: 'POST',
       body: { email },
+    });
+  },
+
+  /** CHILD login by nickname-or-email + parent-set password. */
+  childLogin(identifier: string, password: string) {
+    return request<{ token: string; childId: string; user: AuthUser }>('/api/auth/child-login', {
+      method: 'POST',
+      body: { identifier, password },
     });
   },
 

@@ -6,6 +6,7 @@ import { useGameStore } from '@/core/store/useGameStore';
 import { useRemoteSync } from '@/core/sync/useRemoteSync';
 import { getPortal } from '@/core/portal';
 import { LoginPage } from '@/pages/LoginPage';
+import { ChildLoginPage } from '@/pages/ChildLoginPage';
 import { HubPage } from '@/pages/HubPage';
 import { GamePage } from '@/pages/GamePage';
 import { VaultPage } from '@/pages/VaultPage';
@@ -121,12 +122,18 @@ function ProtectedApp() {
 
 /** Root application: theme side-effects + client routing + auth gate. */
 export function App() {
+  // `/login` is the CHILD credential login by default; on the parents.* portal
+  // it's the parent email login. `/parent-login` is always the parent login
+  // (so a parent can sign in on dev too).
+  const loginElement = getPortal() === 'parent' ? <LoginPage /> : <ChildLoginPage />;
+
   return (
     <ThemeProvider>
       <BrowserRouter>
         <div className="app-shell">
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={loginElement} />
+            <Route path="/parent-login" element={<LoginPage />} />
             <Route path="/*" element={<ProtectedApp />} />
           </Routes>
         </div>
