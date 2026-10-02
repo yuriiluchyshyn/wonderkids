@@ -5,7 +5,7 @@ import { ParentDashboard } from '@/components/parent/ParentDashboard';
 export function ParentPage() {
   return (
     <div className="page stack">
-      <SubPageHeader title="Налаштування" icon="⚙️" />
+      <SubPageHeader title="Налаштування" icon="⚙️" backTo={null} />
       <ParentDashboard />
     </div>
   );

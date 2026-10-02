@@ -75,7 +75,7 @@ export function ChildSelectPage() {
       <div className="page center" style={{ minHeight: '70dvh' }}>
         <div className={styles.empty}>
           <span className="emoji" style={{ fontSize: '3.4rem' }} aria-hidden>
-            🦄
+            🌌
           </span>
           <h1 className={styles.emptyTitle}>Ще немає гравців</h1>
           <p className="muted">Попроси дорослого створити твій профіль у кабінеті батьків.</p>
@@ -116,15 +116,6 @@ export function ChildSelectPage() {
           );
         })}
       </div>
-
-      <footer className={styles.footer}>
-        <button type="button" className={styles.parentLink} onClick={() => navigate('/parent')}>
-          <span className="emoji" aria-hidden>
-            ⚙️
-          </span>{' '}
-          Батькам
-        </button>
-      </footer>
 
       {/* ---- PIN pad ---- */}
       <AnimatePresence>

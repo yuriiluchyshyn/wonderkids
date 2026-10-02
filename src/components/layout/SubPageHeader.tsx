@@ -5,21 +5,25 @@ import styles from './SubPageHeader.module.css';
 interface SubPageHeaderProps {
   title: string;
   icon: string;
+  /** Where the back arrow goes. `null` hides it entirely (e.g. parent portal). */
+  backTo?: string | null;
 }
 
-/** Back-to-hub header shared by the Vault and Parent pages. */
-export function SubPageHeader({ title, icon }: SubPageHeaderProps) {
+/** Section header with an optional back arrow. */
+export function SubPageHeader({ title, icon, backTo = '/' }: SubPageHeaderProps) {
   const navigate = useNavigate();
   return (
     <div className={styles.header}>
-      <motion.button
-        className={styles.back}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => navigate('/')}
-        aria-label="Назад на головну"
-      >
-        ⬅️
-      </motion.button>
+      {backTo !== null && (
+        <motion.button
+          className={styles.back}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => navigate(backTo)}
+          aria-label="Назад"
+        >
+          ⬅️
+        </motion.button>
+      )}
       <h1 className={styles.title}>
         <span className="emoji" aria-hidden>
           {icon}

@@ -44,7 +44,7 @@ function SyncSplash({ error }: { error?: boolean }) {
       }}
     >
       <span className="emoji" style={{ fontSize: '3rem' }} aria-hidden>
-        {error ? '😿' : '🦄'}
+        {error ? '😿' : '🌌'}
       </span>
       {error ? (
         <>

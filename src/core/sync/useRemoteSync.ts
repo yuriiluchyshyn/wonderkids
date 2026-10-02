@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/core/api/client';
 import { useAuthStore } from '@/core/auth/useAuthStore';
+import { useSyncControl } from '@/core/sync/syncControl';
 import {
   useGameStore,
   selectPersistable,
@@ -64,6 +65,8 @@ export function useRemoteSync(): SyncStatus {
     const unsubscribe = useGameStore.subscribe((state) => {
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
+        // The parent cabinet pauses auto-save (explicit "Save" button there).
+        if (useSyncControl.getState().paused) return;
         api.putState(token, selectPersistable(state)).catch(() => {
           // Best-effort: a dropped save is retried on the next change. The
           // local store stays authoritative for the session.

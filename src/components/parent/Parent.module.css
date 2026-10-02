@@ -114,6 +114,23 @@
   margin: 4px 0 6px 4px;
 }
 
+/* Sticky explicit-save bar at the bottom of the parent cabinet. */
+.saveBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  padding: 12px 0 calc(10px + env(safe-area-inset-bottom));
+  margin-top: 4px;
+  background: linear-gradient(
+    to top,
+    var(--surface) 55%,
+    color-mix(in srgb, var(--surface) 70%, transparent) 85%,
+    transparent
+  );
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
 /* ---- Children roster ---- */
 .childrenGrid {
   display: grid;

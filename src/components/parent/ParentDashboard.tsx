@@ -1,7 +1,9 @@
 
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   useGameStore,
+  selectPersistable,
   type CelebrationStyle,
   type ChoicesGridSize,
   type CompanionSpeed,
@@ -9,7 +11,10 @@ import {
   type Gender,
   type Milestone,
   type MinTasks,
+  type PersistableState,
 } from '@/core/store/useGameStore';
+import { api } from '@/core/api/client';
+import { useSyncControl } from '@/core/sync/syncControl';
 import { computeAge } from '@/core/utils/age';
 import { subSteps, pathKey } from '@/core/progress/path';
 import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
@@ -78,7 +83,44 @@ export function ParentDashboard() {
   const setStep = useGameStore((s) => s.setStep);
   const resetProgress = useGameStore((s) => s.resetProgress);
   const email = useAuthStore((s) => s.user?.email);
+  const token = useAuthStore((s) => s.token);
   const logout = useAuthStore((s) => s.logout);
+
+  // Explicit-save mode: pause the live server-sync while editing here; snapshot
+  // the saved state so leaving without "Save" discards unsaved edits.
+  const setPaused = useSyncControl((s) => s.setPaused);
+  const savedSnapshot = useRef<PersistableState | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
+
+  useEffect(() => {
+    savedSnapshot.current = selectPersistable(useGameStore.getState());
+    setPaused(true);
+    return () => {
+      // Discard any unsaved edits by restoring the last saved snapshot — unless
+      // the session was just cleared (logout already reset the store).
+      if (savedSnapshot.current && useAuthStore.getState().token) {
+        useGameStore.getState().hydrate(savedSnapshot.current);
+      }
+      setPaused(false);
+    };
+  }, [setPaused]);
+
+  const saveChanges = async () => {
+    if (!token || saving) return;
+    setSaving(true);
+    try {
+      const data = selectPersistable(useGameStore.getState());
+      await api.putState(token, data);
+      savedSnapshot.current = data;
+      setJustSaved(true);
+      window.setTimeout(() => setJustSaved(false), 2500);
+    } catch {
+      /* keep editing; the parent can retry */
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const subPaths = moduleRegistry.getAll().flatMap((m) =>
     m.subCategories.map((sub) => ({ moduleId: m.id, moduleIcon: m.icon, sub })),
@@ -405,6 +447,13 @@ export function ParentDashboard() {
           Вийти з акаунту
         </Button>
       </section>
+
+      {/* ---- Explicit save (no live auto-save in the parent cabinet) ---- */}
+      <div className={styles.saveBar}>
+        <Button block size="lg" icon={justSaved ? '✅' : '💾'} onClick={saveChanges} disabled={saving}>
+          {saving ? 'Зберігаємо…' : justSaved ? 'Збережено!' : 'Зберегти зміни'}
+        </Button>
+      </div>
     </div>
   );
 }
