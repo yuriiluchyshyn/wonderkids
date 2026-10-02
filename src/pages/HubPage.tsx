@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ProfileBar } from '@/components/hub/ProfileBar';
 import { GalaxyPicker } from '@/components/hub/GalaxyPicker';
+import { GalaxyBackground } from '@/components/hub/GalaxyBackground';
 import { TaskGrid } from '@/components/hub/TaskGrid';
 import { PathModal } from '@/components/hub/PathModal';
 import { buildCatalog, filterCatalog, type CatalogEntry } from '@/components/hub/catalog';
@@ -31,7 +32,9 @@ export function HubPage() {
   );
 
   return (
-    <div className="page stack">
+    <>
+      <GalaxyBackground galaxyId={galaxyId} />
+      <div className="page stack" style={{ position: 'relative', zIndex: 1 }}>
       <ProfileBar />
 
       <GalaxyPicker galaxyId={galaxyId} onChange={setGalaxyId} />
@@ -83,6 +86,7 @@ export function HubPage() {
           navigate(`/play/${entry.module.id}/${entry.sub.id}?step=${step}`);
         }}
       />
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuthStore } from '@/core/auth/useAuthStore';
-import { getPortal } from '@/core/portal';
 import styles from './LoginPage.module.css';
 
 /** A sprinkle of world icons so the child login feels playful. */
@@ -60,6 +60,19 @@ export function ChildLoginPage() {
         ))}
       </div>
 
+      <motion.button
+        type="button"
+        className={styles.parentCorner}
+        whileTap={{ scale: 0.94 }}
+        onClick={() => navigate('/parent-login')}
+        aria-label="Вхід для батьків"
+      >
+        <span className={`${styles.parentCornerIcon} emoji`} aria-hidden>
+          👨‍👩‍👧
+        </span>
+        <span className={styles.parentCornerText}>Вхід для батьків</span>
+      </motion.button>
+
       <div className={styles.card}>
         <div className={styles.logoRow} aria-hidden>
           <span className={styles.logoIcon}>🦄</span>
@@ -115,14 +128,7 @@ export function ChildLoginPage() {
           </button>
         </form>
 
-        {getPortal() === 'dev' && (
-          <p className={styles.hint}>
-            Батькам:{' '}
-            <a href="/parent-login" className={styles.parentLink}>
-              вхід у кабінет
-            </a>
-          </p>
-        )}
+        <p className={styles.hint}>Немає акаунта? Попроси батьків створити тобі профіль 👨‍👩‍👧</p>
       </div>
     </div>
   );

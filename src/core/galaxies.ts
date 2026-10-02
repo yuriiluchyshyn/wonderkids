@@ -13,14 +13,16 @@ export interface Galaxy {
   /** Registered learning-module id when the galaxy is live; absent = soon. */
   moduleId?: string;
   comingSoon?: boolean;
+  /** Icons that float in the galactic background for this galaxy. */
+  motif: string[];
 }
 
 export const GALAXIES: Galaxy[] = [
-  { id: 'math', name: 'Математика', icon: '🧮', moduleId: 'math' },
-  { id: 'geography', name: 'Географія', icon: '🌍', comingSoon: true },
-  { id: 'language', name: 'Мова', icon: '🔤', comingSoon: true },
-  { id: 'science', name: 'Природа', icon: '🔬', comingSoon: true },
-  { id: 'music', name: 'Музика', icon: '🎵', comingSoon: true },
+  { id: 'math', name: 'Математика', icon: '🧮', moduleId: 'math', motif: ['➕', '➖', '✖️', '➗', '🔢', '📐'] },
+  { id: 'geography', name: 'Географія', icon: '🌍', comingSoon: true, motif: ['🌍', '🗺️', '🧭', '⛰️', '🏔️'] },
+  { id: 'language', name: 'Мова', icon: '🔤', comingSoon: true, motif: ['🔤', '📚', '✏️', '💬', '📝'] },
+  { id: 'science', name: 'Природа', icon: '🔬', comingSoon: true, motif: ['🔬', '🧪', '🧫', '🧲', '🌱'] },
+  { id: 'music', name: 'Музика', icon: '🎵', comingSoon: true, motif: ['🎵', '🎶', '🎹', '🥁', '🎺'] },
 ];
 
 /** The galaxy the hub opens on. */

@@ -189,6 +189,37 @@
   text-decoration: underline;
 }
 
+/* Top-right "parent entrance" on the child login. */
+.parentCorner {
+  position: absolute;
+  z-index: 2;
+  top: calc(14px + env(safe-area-inset-top));
+  right: calc(14px + env(safe-area-inset-right));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #475569;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(40, 40, 80, 0.16);
+  cursor: pointer;
+}
+
+.parentCornerIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+@media (max-width: 420px) {
+  .parentCornerText {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .decor {
     animation: none;

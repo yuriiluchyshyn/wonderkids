@@ -6,7 +6,8 @@ import { useGameStore } from '@/core/store/useGameStore';
 /** Human-friendly messages for the error codes the API can return on login. */
 const LOGIN_ERRORS: Record<string, string> = {
   invalid_email: 'Схоже, це не схоже на електронну пошту. Перевір, будь ласка.',
-  invalid_credentials: 'Невірний нік/пошта або пароль. Спитай у батьків.',
+  invalid_credentials: 'Невірний пароль. Спробуй ще раз або спитай у батьків.',
+  child_not_found: 'Схоже, такого гравця ще немає. Попроси батьків створити тобі акаунт 👨‍👩‍👧',
   network_error: 'Не вдалося зв’язатися із сервером. Він увімкнений?',
   login_failed: 'Щось пішло не так на сервері. Спробуй ще раз.',
 };
