@@ -63,8 +63,8 @@ export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<S
                 {i + 1}
               </span>
               {/* The ends of the line are labelled, so "in order" is unambiguous. */}
-              {i === 0 && <span className={styles.seqEnd}>найдавніше</span>}
-              {i === order.length - 1 && <span className={styles.seqEnd}>найновіше</span>}
+              {i === 0 && <span className={styles.seqEnd}>{payload.ends?.[0] ?? 'найдавніше'}</span>}
+              {i === order.length - 1 && <span className={styles.seqEnd}>{payload.ends?.[1] ?? 'найновіше'}</span>}
               <div
                 className={cn(
                   styles.seqCard,

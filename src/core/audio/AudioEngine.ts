@@ -25,10 +25,84 @@ export class AudioEngine {
       this.master.gain.value = 0.6;
       this.master.connect(this.ctx.destination);
     }
-    if (this.ctx.state === 'suspended') {
-      void this.ctx.resume();
+    // Not only 'suspended': iOS parks the context as 'interrupted' whenever
+    // another sound (a spoken phrase, a call) takes the audio session.
+    if (this.ctx.state !== 'running') {
+      void this.ctx.resume().catch(() => undefined);
     }
     return this.ctx;
+  }
+
+  /**
+   * Call once at start-up. Every touch re-opens the context, so a sound that
+   * fires later on its own (the victory jingle after a spoken fact) is never
+   * swallowed because the context was left asleep.
+   */
+  installUnlock(): void {
+    if (typeof document === 'undefined') return;
+    const wake = () => this.ensureContext();
+    for (const type of ['pointerdown', 'touchend', 'keydown'] as const) {
+      document.addEventListener(type, wake, { capture: true, passive: true });
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && this.ctx) this.ensureContext();
+    });
+  }
+
+  /** Run `play` as soon as the context is actually producing sound. */
+  private whenRunning(play: (ctx: AudioContext) => void): void {
+    const ctx = this.ensureContext();
+    if (ctx.state === 'running') {
+      play(ctx);
+      return;
+    }
+    void ctx
+      .resume()
+      .then(() => {
+        if (ctx.state === 'running') play(ctx);
+      })
+      .catch(() => undefined);
+  }
+
+  /**
+   * Play an encoded clip (a spoken phrase as base64 MP3) through the same
+   * context as the sound effects. Sharing one context is what keeps effects
+   * audible around speech on phones, and needs no fresh tap per clip. Rejects
+   * when the context cannot run or the clip cannot be decoded.
+   */
+  async playEncoded(base64: string): Promise<{ stop: () => void; ended: Promise<void> }> {
+    const ctx = this.ensureContext();
+    if (ctx.state !== 'running') {
+      await Promise.race([ctx.resume(), new Promise((resolve) => window.setTimeout(resolve, 400))]);
+      if ((ctx.state as AudioContextState) !== 'running') throw new Error('audio context is not running');
+    }
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+    const buffer = await ctx.decodeAudioData(bytes.buffer);
+
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    // Speech goes out at full level, past the effects' master gain.
+    source.connect(ctx.destination);
+    let stopped = false;
+    const ended = new Promise<void>((resolve) => {
+      source.onended = () => {
+        if (!stopped) resolve();
+      };
+    });
+    source.start();
+    return {
+      stop: () => {
+        stopped = true;
+        try {
+          source.stop();
+        } catch {
+          /* already finished */
+        }
+      },
+      ended,
+    };
   }
 
   /** Low-level helper: play one shaped tone. */
@@ -40,16 +114,16 @@ export class AudioEngine {
     gain?: number;
     glideTo?: number;
   }): void {
-    const ctx = this.ensureContext();
+    // Mobile browsers start the context suspended; a tone scheduled before it
+    // is running is silently dropped — so wait, then play.
+    this.whenRunning((ctx) => this.schedule(ctx, opts));
+  }
+
+  private schedule(
+    ctx: AudioContext,
+    opts: { freq: number; type?: OscillatorType; start?: number; duration: number; gain?: number; glideTo?: number },
+  ): void {
     if (!this.master) return;
-    if (ctx.state !== 'running') {
-      // Mobile browsers start the context suspended; a tone scheduled before
-      // it is running is silently dropped — so wait, then play.
-      void ctx.resume().then(() => {
-        if (ctx.state === 'running') this.tone(opts);
-      });
-      return;
-    }
     const {
       freq,
       type = 'sine',
@@ -207,7 +281,10 @@ export class AudioEngine {
 
   /** Crunchy "хрум-хрум" of eating the apple. */
   crunch(): void {
-    const ctx = this.ensureContext();
+    this.whenRunning((ctx) => this.crunchNow(ctx));
+  }
+
+  private crunchNow(ctx: AudioContext): void {
     if (!this.master) return;
     // Noise burst through a bandpass for a crispy texture.
     const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.18, ctx.sampleRate);
@@ -246,7 +323,13 @@ export class AudioEngine {
    * startling (Zero-Aggression UX).
    */
   chestOpen(): void {
-    const ctx = this.ensureContext();
+    this.whenRunning((ctx) => this.creak(ctx));
+    // Lid pop + rising sparkle as it opens.
+    this.tone({ freq: 523.25, type: 'triangle', start: 0.22, duration: 0.18, gain: 0.32 });
+    this.tone({ freq: 783.99, type: 'triangle', start: 0.34, duration: 0.3, gain: 0.3 });
+  }
+
+  private creak(ctx: AudioContext): void {
     if (!this.master) return;
     // Soft creak: short filtered noise sweeping upward (the lid lifting).
     const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.28, ctx.sampleRate);
@@ -264,9 +347,6 @@ export class AudioEngine {
     env.gain.value = 0.35;
     src.connect(band).connect(env).connect(this.master);
     src.start();
-    // Lid pop + rising sparkle as it opens.
-    this.tone({ freq: 523.25, type: 'triangle', start: 0.22, duration: 0.18, gain: 0.32 });
-    this.tone({ freq: 783.99, type: 'triangle', start: 0.34, duration: 0.3, gain: 0.3 });
   }
 
   /**
@@ -284,3 +364,4 @@ export class AudioEngine {
 
 /** Shared singleton — a single AudioContext for the whole app. */
 export const audioEngine = new AudioEngine();
+audioEngine.installUnlock();

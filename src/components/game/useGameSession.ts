@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
 import type { LearningModule, TaskInstance } from '@/core/kernel/types';
-import { tasksPerLevel } from '@/core/kernel/gameConfig';
+import { isFreePlay, tasksPerLevel } from '@/core/kernel/gameConfig';
+import { composeLevel, recallSteps } from '@/core/engine/recall';
+import { pick } from '@/core/utils/random';
 import { LevelEngine, taskKey } from '@/core/engine/LevelEngine';
 import type { AnswerResult } from '@/core/engine/BaseGameEngine';
 import { useGameStore } from '@/core/store/useGameStore';
@@ -49,6 +51,13 @@ export interface GameSession {
   /** Reports a wrong attempt; the result says which sound/animation to play. */
   registerMistake: () => AnswerResult | null;
   /**
+   * The companion drifted a whole step back while the child was away: one more
+   * task joins the level. False when the level cannot grow any further.
+   */
+  extendForIdle: () => boolean;
+  /** How many of the level's tasks were added by idle roll-back. */
+  idleExtras: number;
+  /**
    * True while a solved task's `outro` fact is on screen and the level waits
    * for it. The shell calls `outroDone` once the fact has been read out.
    */
@@ -56,16 +65,27 @@ export interface GameSession {
   outroDone: () => void;
 }
 
-/** Candidate tasks for one level: the module's own picker, or repeated draws. */
-function drawCandidates(
+/**
+ * Candidate tasks for one level: the module's own picker, or repeated draws.
+ * A generated path game (the math ladders) gets the same shape as a content
+ * one: half the level at the current step, half recalled from the steps just
+ * behind it (`core/engine/recall`).
+ */
+export function drawCandidates(
   module: LearningModule,
   base: { subCategoryId: string; step: number; choicesCount: number },
   count: number,
+  recall = true,
 ): TaskInstance[] {
   if (module.buildLevel) return module.buildLevel(base, count);
-  return Array.from({ length: count * CANDIDATE_FACTOR }, (_, index) =>
-    module.generateTask({ ...base, index }),
-  );
+  const draw = (stepOf: () => number) =>
+    Array.from({ length: count * CANDIDATE_FACTOR }, (_, index) =>
+      module.generateTask({ ...base, step: stepOf(), index }),
+    );
+  const fresh = draw(() => base.step);
+  const earlier = recallSteps(base.step);
+  if (!recall || earlier.length === 0) return fresh;
+  return composeLevel(fresh, draw(() => pick(earlier)), count, taskKey);
 }
 
 /**
@@ -82,6 +102,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   const sub = module?.subCategories.find((sc) => sc.id === subCategoryId);
   const maxSteps = sub ? subSteps(sub) : 30;
   const levelSize = sub ? tasksPerLevel(sub) : 0;
+  const free = sub ? isFreePlay(sub) : false;
   const gridSize = useGameStore((s) => s.settings.choicesGridSize);
   const awardArtifacts = useGameStore((s) => s.awardArtifacts);
   const recordTaskComplete = useGameStore((s) => s.recordTaskComplete);
@@ -94,9 +115,9 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     const base = { subCategoryId, step, choicesCount: gridSize };
     return new LevelEngine<TaskInstance>({
       steps_count_default: levelSize,
-      tasks: drawCandidates(module, base, levelSize),
+      tasks: drawCandidates(module, base, levelSize, !free),
     });
-  }, [module, subCategoryId, step, gridSize, levelSize]);
+  }, [module, subCategoryId, step, gridSize, levelSize, free]);
 
   // The engine is mutable; `tick` re-renders after each transition.
   const [, setTick] = useState(0);
@@ -109,6 +130,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   const [earned, setEarned] = useState(0);
   const [hintUsedThisSession, setHintUsedThisSession] = useState(false);
   const [awaitingOutro, setAwaitingOutro] = useState(false);
+  const [idleExtras, setIdleExtras] = useState(0);
   // The pending "go to the next task" step, run exactly once.
   const advanceRef = useRef<(() => void) | null>(null);
 
@@ -125,12 +147,32 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     setEarned(0);
     setHintUsedThisSession(false);
     setAwaitingOutro(false);
+    setIdleExtras(0);
     advanceRef.current = null;
     advancingRef.current = false;
   }, [engine]);
 
   const task = engine?.currentTask ?? null;
   const isRepeat = engine?.isRepeatShowing ?? false;
+
+  /** Append one question the level does not ask yet. False once capped. */
+  const appendFresh = useCallback((): boolean => {
+    if (!engine || !module) return false;
+    const base = { subCategoryId, step, choicesCount: gridSize };
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      const extra = module.generateTask({ ...base, index: engine.total + attempt });
+      if (engine.includesKey(taskKey(extra))) continue;
+      return engine.extend(extra);
+    }
+    return false;
+  }, [engine, module, subCategoryId, step, gridSize]);
+
+  const extendForIdle = useCallback((): boolean => {
+    if (!engine || engine.isFinished || advancingRef.current) return false;
+    const added = appendFresh();
+    if (added) setIdleExtras((n) => n + 1);
+    return added;
+  }, [engine, appendFresh]);
 
   const registerMistake = useCallback((): AnswerResult | null => {
     if (!engine || !module) return null;
@@ -146,16 +188,10 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     // A wrong tap once the hint is already showing reads as blind guessing —
     // add a fresh task so brute-forcing the grid is never a shortcut (Tech
     // Spec v2.1 DoD §2). The engine caps how far a level can grow.
-    if (next > HINT_THRESHOLD) {
-      const base = { subCategoryId, step, choicesCount: gridSize };
-      for (let attempt = 0; attempt < 8; attempt += 1) {
-        const extra = module.generateTask({ ...base, index: engine.total + attempt });
-        if (taskKey(extra) !== taskKey(current) && engine.extend(extra)) break;
-      }
-    }
+    if (next > HINT_THRESHOLD) appendFresh();
     rerender();
     return result;
-  }, [engine, module, subCategoryId, step, gridSize, rerender]);
+  }, [engine, module, appendFresh, rerender]);
 
   const registerSuccess = useCallback(() => {
     if (!engine) return;
@@ -192,7 +228,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     };
     advanceRef.current = advance;
 
-    if (current.outro) {
+    if (current.outro?.length) {
       // A fact follows: wait until the shell says it has been read to the end
       // (`outroDone`) — never cut a sentence off to start the next task.
       setAwaitingOutro(true);
@@ -220,6 +256,8 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     hintUsedThisSession,
     registerSuccess,
     registerMistake,
+    extendForIdle,
+    idleExtras,
     awaitingOutro,
     outroDone,
   };

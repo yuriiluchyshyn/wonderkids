@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   useGameStore,
   selectPersistable,
+  TIP_PREFIX,
   type CelebrationStyle,
   type ChoicesGridSize,
   type CompanionSpeed,
@@ -39,8 +40,9 @@ const MONTHS = [
 
 const SPEED_OPTIONS: { id: CompanionSpeed; label: string; icon: string }[] = [
   { id: 'off', label: 'Вимкнено', icon: '🛑' },
+  { id: 'verySlow', label: 'Дуже повільно', icon: '🐌' },
   { id: 'slow', label: 'Повільно', icon: '🐢' },
-  { id: 'medium', label: 'Помірно', icon: '🐌' },
+  { id: 'medium', label: 'Помірно', icon: '🚶' },
   { id: 'fast', label: 'Швидко', icon: '⚡' },
 ];
 
@@ -80,6 +82,8 @@ export function ParentDashboard() {
   const setStep = useGameStore((s) => s.setStep);
   const resetProgress = useGameStore((s) => s.resetProgress);
   const resetScreenTime = useGameStore((s) => s.resetScreenTime);
+  const tipsSeen = useGameStore((s) => s.treasures.filter((t) => t.startsWith(TIP_PREFIX)).length);
+  const resetTips = useGameStore((s) => s.resetTips);
   const email = useAuthStore((s) => s.user?.email);
   const token = useAuthStore((s) => s.token);
   const logout = useAuthStore((s) => s.logout);
@@ -253,12 +257,26 @@ export function ParentDashboard() {
       {/* ---- Companion & celebration ---- */}
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>🏎️ Відкочування супутника</h3>
-        <p className={styles.hint}>Якщо дитина довго не відповідає, супутник плавно котиться назад.</p>
+        <p className={styles.hint}>
+          Якщо дитина довго не відповідає, супутник плавно котиться назад. Щойно він відкотиться на цілий крок,
+          у рівні з’являється ще одне завдання (не більше трьох додаткових).
+        </p>
         <div className={styles.chipRow}>
           {SPEED_OPTIONS.map((o) => (
             <Chip key={o.id} icon={o.icon} label={o.label} active={settings.companionSpeed === o.id} onClick={() => updateSettings({ companionSpeed: o.id })} />
           ))}
         </div>
+      </section>
+
+      <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>💡 Підказки про кнопки</h3>
+        <p className={styles.hint}>
+          Під час першого знайомства гра пояснює дитині, що означає кожна кнопка. Підказка, яку дитина закрила,
+          більше не з’являється. Прочитано підказок: {tipsSeen}.
+        </p>
+        <Button variant="ghost" icon="🔄" disabled={tipsSeen === 0} onClick={resetTips}>
+          Показати всі підказки знову
+        </Button>
       </section>
 
       <section className={styles.section}>

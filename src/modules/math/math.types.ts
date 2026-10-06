@@ -43,6 +43,8 @@ export const MATH_SUB = {
   geometry: 'geometry',
   maze: 'maze',
   shop: 'shop',
+  compare: 'compare',
+  clock: 'clock',
 } as const;
 
 /** The original games with their own views and helper panel. */

@@ -7,3 +7,4 @@ import './math';
 import './geography';
 import './ecology';
 import './history';
+import './nature';

@@ -1,6 +1,6 @@
 import { useBalance } from '@/core/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { TaskCallbacks } from '@/core/kernel/types';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
@@ -18,7 +18,10 @@ import { Companion } from './Companion';
 import { Celebration } from './Celebration';
 import { TreasureReveal } from './TreasureReveal';
 import { Cutscene } from './Cutscene';
-import { TtsGuide } from './TtsGuide';
+import { CoachTips } from '@/components/coach/CoachTips';
+import { gameTips } from '@/components/coach/tips';
+import { pickOutro } from '@/core/content/outro';
+import type { TemplatePayload } from '@/core/templates/types';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
 import { useIdleRollback } from './useIdleRollback';
 import { useScreenTime } from './useScreenTime';
@@ -90,10 +93,21 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // chest-opening animation has played out.
   const [reveal, setReveal] = useState<{ treasure: Treasure; isNew: boolean } | null>(null);
   const [revealDone, setRevealDone] = useState(false);
-  // Idle drift only nudges the companion back visually — it no longer appends
-  // tasks. Extra tasks are earned solely by repeated mistakes (3rd+), so the
-  // queue never balloons just because a child paused to think.
-  const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none');
+  // An onboarding tip is on screen (the child is reading, not idling).
+  const [coaching, setCoaching] = useState(false);
+  // The fact told after this task: the next one from its pool, so a replay of
+  // the same task — even its repeat within this level — tells a new story.
+  // Picked once per showing; the last one stays up while the level finishes.
+  const outroPick = useRef<{ at: number; text?: string }>({ at: -1 });
+  if (task && !session.finished && outroPick.current.at !== session.index) {
+    outroPick.current = { at: session.index, text: pickOutro(task) };
+  }
+  const outro = outroPick.current.text;
+  // First-run tips: how to answer on this kind of board, then what each
+  // control does (text games also get the tap-to-hear one, PRD v4.0 §2.4).
+  const template = (task?.payload as Partial<TemplatePayload> | null | undefined)?.template;
+  const hasText = Boolean(sub?.hasText);
+  const tips = useMemo(() => gameTips({ template, hasText }), [template, hasText]);
 
   // ---- Screen-time / fuel engine (Tech Spec FR-TIME) ----
   // What is in the purse now (earned − spent on the planet).
@@ -127,6 +141,25 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     if (blocked) speechEngine.cancel();
   }, [blocked]);
 
+  // Idle drift is real: every whole step the companion slides back adds one
+  // task to the level, so the next answer moves it one step on from where it
+  // stands instead of leaping back to where it was. It never slides past the
+  // start, and never while the child is listening, reading or resting.
+  //
+  // The track is measured in the level's own tasks (`paced`); a task added by
+  // idling is not a longer track but one step of it lost: the companion stands
+  // at (solved − idle extras) of `paced`, and still arrives exactly at the end.
+  const { solvedCount, total, idleExtras, extendForIdle } = session;
+  const paced = Math.max(1, total - idleExtras);
+  const position = Math.max(0, (solvedCount - idleExtras) / paced);
+  const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none', {
+    paused:
+      phase !== 'play' || blocked || coaching || session.finished || session.justSolved || session.hintActive,
+    step: 1 / paced,
+    limit: position,
+    onRetreat: () => (extendForIdle() ? 1 / paced : null),
+  });
+
   const boardRef = useRef<HTMLDivElement>(null);
   const helperRef = useRef<HTMLDivElement>(null);
 
@@ -158,17 +191,21 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // read to the end (or, with the voice off, after time to read it).
   const outroVoice = useGameStore((s) => s.settings.voiceOn && s.settings.voice.taskPrompt);
   useEffect(() => {
-    if (!session.awaitingOutro || !task?.outro) return;
+    if (!session.awaitingOutro) return;
     const { outroDone } = session;
+    if (!outro) {
+      outroDone();
+      return;
+    }
     if (outroVoice && speechEngine.supported) {
       // Let the "correct!" sound land first, then speak.
       const start = window.setTimeout(
-        () => speechEngine.speak(task.outro as string, () => window.setTimeout(outroDone, 350)),
+        () => speechEngine.speak(outro, () => window.setTimeout(outroDone, 350)),
         450,
       );
       return () => window.clearTimeout(start);
     }
-    const reading = window.setTimeout(outroDone, Math.max(2200, task.outro.length * 60));
+    const reading = window.setTimeout(outroDone, Math.max(2200, outro.length * 60));
     return () => window.clearTimeout(reading);
   }, [session.awaitingOutro]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -275,14 +312,11 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const GameView = module.GameView;
   const VisualHelper =
     module.VisualHelper && (module.showsHelper?.(task) ?? true) ? module.VisualHelper : undefined;
-  // Text-based games get the tap-to-hear guide on first run (PRD v4.0 §2.4).
-  const showTtsGuide = phase === 'play' && Boolean(sub?.hasText);
+  const tipsEnabled = !session.finished && !session.justSolved && !session.hintActive && !blocked;
   const IntroView = module.IntroView;
   // When finished, pin the mascot at the goal (no idle roll-back on the
   // celebration screen); otherwise show progress minus any idle roll-back.
-  const progress = session.finished
-    ? 1
-    : Math.max(0, session.solvedCount / session.total - rollback);
+  const progress = session.finished ? 1 : Math.max(0, position - rollback);
 
   const scrollToAnswers = () => {
     play('tap');
@@ -291,7 +325,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
   const header = (
     <div className={styles.header}>
-      <button className={styles.back} onClick={onExit} aria-label="Назад до пригод">
+      <button className={styles.back} onClick={onExit} aria-label="Назад до пригод" data-tip="home">
         🏠
       </button>
       <div className={styles.headerMain}>
@@ -301,6 +335,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         {phase === 'play' && (
           <div
             className={styles.dots}
+            data-tip="dots"
             role="img"
             aria-label={`Завдання ${Math.min(session.solvedCount + 1, session.total)} з ${session.total}`}
           >
@@ -375,12 +410,17 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
       <Companion progress={progress} />
 
-      <div className={styles.board} ref={boardRef}>
+      <div className={styles.board} ref={boardRef} data-tip="board">
         <div className={styles.boardTop}>
+          {/* The one repeat of a task missed earlier: an icon, no words. */}
           {session.isRepeat && !session.finished && (
-            <span className={styles.repeatTag}>🔁 Спробуймо ще раз</span>
+            <span className={`${styles.repeatTag} emoji`} role="img" aria-label="Спробуймо ще раз">
+              🔁
+            </span>
           )}
-          <VoiceToggle channel="taskPrompt" />
+          <span data-tip="voice">
+            <VoiceToggle channel="taskPrompt" />
+          </span>
         </div>
 
         <AnimatePresence>
@@ -405,14 +445,14 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         />
 
         <AnimatePresence>
-          {session.justSolved && task.outro && showText && (
+          {session.justSolved && outro && showText && (
             <motion.p
               className={styles.outro}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
-              {task.outro}
+              {outro}
             </motion.p>
           )}
         </AnimatePresence>
@@ -529,7 +569,8 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         </div>
       </Modal>
 
-      {showTtsGuide && <TtsGuide />}
+      {/* Waits until the first task has been read out. */}
+      <CoachTips tips={tips} enabled={tipsEnabled} startDelayMs={2600} onOpenChange={setCoaching} />
 
       {bedtimeOverlay}
     </div>

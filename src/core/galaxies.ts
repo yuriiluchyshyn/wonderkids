@@ -23,7 +23,7 @@ export const GALAXIES: Galaxy[] = [
   { id: 'ecology', name: 'Екологія', icon: '♻️', moduleId: 'ecology', motif: ['♻️', '🌱', '🌳', '💧', '🐝'] },
   { id: 'history', name: 'Історія', icon: '🏛️', moduleId: 'history', motif: ['🏛️', '🦖', '⏳', '🏰', '📜'] },
   { id: 'language', name: 'Мова', icon: '🔤', comingSoon: true, motif: ['🔤', '📚', '✏️', '💬', '📝'] },
-  { id: 'science', name: 'Природа', icon: '🔬', comingSoon: true, motif: ['🔬', '🧪', '🧫', '🧲', '🌱'] },
+  { id: 'science', name: 'Природа', icon: '🌿', moduleId: 'nature', motif: ['🌿', '❄️', '🌷', '☀️', '🍂'] },
   { id: 'music', name: 'Музика', icon: '🎵', comingSoon: true, motif: ['🎵', '🎶', '🎹', '🥁', '🎺'] },
 ];
 

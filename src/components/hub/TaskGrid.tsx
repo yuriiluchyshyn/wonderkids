@@ -28,7 +28,7 @@ export function TaskGrid({ entries, onStart, isDimmed }: TaskGridProps) {
   }
 
   return (
-    <div className={styles.grid}>
+    <div className={styles.grid} data-tip="cards">
       <AnimatePresence mode="popLayout">
         {entries.map((entry) => (
           <TaskCard

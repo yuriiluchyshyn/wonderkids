@@ -27,7 +27,7 @@ function checkPayload(p, validate) {
       unique(ids, 'options');
       assert.ok(ids.includes(p.correctId), `correctId ${p.correctId} not among options`);
       assert.ok(p.options.length >= 2 && p.options.length <= 9, `bad option count ${p.options.length}`);
-      for (const o of p.options) assert.ok(o.emoji || o.label || o.glyphs || o.shape, 'option has no face');
+      for (const o of p.options) assert.ok(o.emoji || o.label || o.glyphs || o.shape || o.clock, 'option has no face');
       break;
     }
     case 'UI_DRAG_MATCH': {
@@ -93,6 +93,8 @@ try {
   const { moduleRegistry } = await server.ssrLoadModule('/src/core/kernel/ModuleRegistry.ts');
   const { toGameConfig, tasksPerLevel } = await server.ssrLoadModule('/src/core/kernel/gameConfig.ts');
   const { LevelEngine } = await server.ssrLoadModule('/src/core/engine/LevelEngine.ts');
+  // The same level builder the game uses (new + recalled tasks).
+  const { drawCandidates } = await server.ssrLoadModule('/src/components/game/useGameSession.ts');
   const { regionsOf } = await server.ssrLoadModule('/src/core/templates/worldMap.ts');
   const { isAdjacent } = await server.ssrLoadModule('/src/core/templates/validate.ts');
   const validate = { regions: regionsOf, isAdjacent };
@@ -105,7 +107,9 @@ try {
       assert.ok(!gameIds.has(config.game_id), `duplicate game_id ${config.game_id}`);
       gameIds.add(config.game_id);
       const size = tasksPerLevel(sub);
-      assert.ok(size >= 5 && size <= 8, `${config.game_id}: steps_count_default ${size} outside 5–8`);
+      // Path games ask 10 (5 new + 5 recall); free-play games 5–8.
+      const [minSize, maxSize] = config.progression === 'free' ? [5, 8] : [10, 10];
+      assert.ok(size >= minSize && size <= maxSize, `${config.game_id}: steps_count_default ${size} outside ${minSize}–${maxSize}`);
 
       const steps = config.progression === 'free' ? 1 : (sub.steps ?? 30);
       let minLevel = Infinity;
@@ -113,9 +117,7 @@ try {
         const base = { subCategoryId: sub.id, step, choicesCount: 9 };
         // Three independent draws per step to shake out random edge cases.
         for (let round = 0; round < 3; round += 1) {
-          const candidates = module.buildLevel
-            ? module.buildLevel(base, size)
-            : Array.from({ length: size * 5 }, (_, index) => module.generateTask({ ...base, index }));
+          const candidates = drawCandidates(module, base, size, config.progression !== 'free');
           const engine = new LevelEngine({ steps_count_default: size, tasks: candidates });
           minLevel = Math.min(minLevel, engine.total);
           if (engine.total < 3) problems.push(`${config.game_id} step ${step}: only ${engine.total} unique tasks`);
@@ -126,6 +128,10 @@ try {
               assert.ok(Number.isInteger(task.reward) && task.reward >= 1, `bad reward ${task.reward}`);
               if (task.payload?.template) checkPayload(task.payload, validate);
               if (module.getHintSpeech) assert.equal(typeof module.getHintSpeech(task), 'string');
+              if (Array.isArray(task.outro)) {
+                assert.ok(task.outro.length >= 10, `outro pool has only ${task.outro.length} texts (need 10)`);
+                assert.equal(new Set(task.outro).size, task.outro.length, 'outro pool repeats a text');
+              }
             } catch (err) {
               problems.push(`${config.game_id} step ${step}: ${err.message}`);
             }

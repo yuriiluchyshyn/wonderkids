@@ -20,7 +20,8 @@ interface ChildDrawerProps {
 
 /**
  * The child profile "shutter" + treasure panel (Tech Spec v2.1 US-4). Opens
- * from the name or the artifact piggy. Shows, top to bottom: the themed
+ * from the child's name (the artifact purse opens «Мій світ», where artifacts
+ * are spent). Shows, top to bottom: the themed
  * artifact (name + count), the family goals (how much more to collect), and the
  * world (theme) switcher. The treasure collection and dream build live as their
  * own badges in the header. No parent link — the parent portal is its own domain.

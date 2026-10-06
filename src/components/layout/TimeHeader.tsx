@@ -29,7 +29,7 @@ export function TimeHeader() {
   if (!children.some((c) => c.id === activeChildId)) return null;
 
   return (
-    <div className={styles.bar} aria-label="Ігровий час">
+    <div className={styles.bar} aria-label="Ігровий час" data-tip="time">
       <TimeBudget pct={fuelPct} resting={inCooldown} slots={10} />
     </div>
   );

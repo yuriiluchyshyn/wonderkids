@@ -20,7 +20,7 @@ export function Companion({ progress }: CompanionProps) {
   const left = 4 + clamped * 78;
 
   return (
-    <div className={styles.track} aria-hidden>
+    <div className={styles.track} data-tip="track" aria-hidden>
       <div className={styles.ground} />
       <motion.div
         className={styles.mascot}

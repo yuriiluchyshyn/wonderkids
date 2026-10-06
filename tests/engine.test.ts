@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { LevelEngine } from '../src/core/engine/LevelEngine.ts';
 import { MAX_EXTRA_TASKS } from '../src/core/engine/BaseGameEngine.ts';
 import { publishStatus } from '../src/core/engine/publish.ts';
+import { composeLevel, recallSteps } from '../src/core/engine/recall.ts';
 
 const tasks = (n: number) => Array.from({ length: n }, (_, i) => ({ id: `t${i}`, key: `q${i}` }));
 
@@ -92,4 +93,31 @@ test('publish status: soon → new (60 days) → live', () => {
   assert.equal(publishStatus(published, at + 60 * day), 'live');
   assert.equal(publishStatus(undefined), 'live');
   assert.equal(publishStatus('not a date'), 'live');
+});
+
+// ---- Spaced recall: half a level is new, half comes back from earlier steps ----
+
+const keyed = (prefix: string, n: number) => Array.from({ length: n }, (_, i) => ({ id: `${prefix}${i}`, key: `${prefix}${i}` }));
+const keyOf = (t: { key: string }) => t.key;
+
+test('recall reaches five steps back and never before step 1', () => {
+  assert.deepEqual(recallSteps(1), []);
+  assert.deepEqual(recallSteps(3), [1, 2]);
+  assert.deepEqual(recallSteps(9), [4, 5, 6, 7, 8]);
+});
+
+test('a level is five new tasks and five recalled, alternating from a new one', () => {
+  const level = composeLevel(keyed('n', 8), keyed('r', 8), 10, keyOf);
+  assert.deepEqual(level.map(keyOf), ['n0', 'r0', 'n1', 'r1', 'n2', 'r2', 'n3', 'r3', 'n4', 'r4']);
+});
+
+test('when one half is short the other fills the level', () => {
+  assert.equal(composeLevel(keyed('n', 2), keyed('r', 20), 10, keyOf).filter((t) => t.key.startsWith('r')).length, 8);
+  assert.equal(composeLevel(keyed('n', 20), [], 10, keyOf).length, 10);
+  assert.equal(composeLevel(keyed('n', 3), keyed('r', 2), 10, keyOf).length, 5);
+});
+
+test('a recalled task never repeats a new one', () => {
+  const level = composeLevel(keyed('n', 5), [...keyed('n', 5), ...keyed('r', 5)], 10, keyOf);
+  assert.equal(new Set(level.map(keyOf)).size, 10);
 });

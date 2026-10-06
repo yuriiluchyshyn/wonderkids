@@ -8,6 +8,8 @@ import { generateBalance } from './generators/balance';
 import { generateGeometry } from './generators/geometry';
 import { generateMaze } from './generators/maze';
 import { generateShop } from './generators/shop';
+import { generateCompare } from './generators/compare';
+import { clockIntro, generateClock } from './generators/clock';
 import type { TemplatePayload } from '@/core/templates/types';
 import { MathGameView } from './games/MathGameView';
 import { MathVisualHelper } from './games/MathVisualHelper';
@@ -21,6 +23,8 @@ import { MATH_SUB, isClassicPayload } from './math.types';
  */
 /** Publication date of the PRD v4.0 game pack (drives the "NEW" badge). */
 const V4_RELEASE = '2026-10-06T00:00:00Z';
+/** «Більше, менше, дорівнює» and «Котра година?». */
+const COMPARE_CLOCK_RELEASE = '2026-10-06T00:00:00Z';
 
 const subCategories: SubCategory[] = [
   {
@@ -31,7 +35,6 @@ const subCategories: SubCategory[] = [
     blurb: 'Збираємо все докупи',
     steps: 40,
     difficulty: [1, 3],
-    tasksPerLevel: 8,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -42,7 +45,6 @@ const subCategories: SubCategory[] = [
     blurb: 'Забираємо потрошку',
     steps: 40,
     difficulty: [1, 3],
-    tasksPerLevel: 8,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -53,7 +55,6 @@ const subCategories: SubCategory[] = [
     blurb: 'Однакові купки разом',
     steps: 30,
     difficulty: [2, 3],
-    tasksPerLevel: 8,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -64,7 +65,6 @@ const subCategories: SubCategory[] = [
     blurb: 'Ділимо порівну',
     steps: 25,
     difficulty: [2, 3],
-    tasksPerLevel: 8,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -75,7 +75,6 @@ const subCategories: SubCategory[] = [
     blurb: 'Усе разом: +, −, ×, ÷',
     steps: 60,
     difficulty: [1, 3],
-    tasksPerLevel: 8,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -88,7 +87,6 @@ const subCategories: SubCategory[] = [
     blurb: 'Шукаємо частинку смаколика',
     steps: 10,
     difficulty: 1,
-    tasksPerLevel: 6,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -101,7 +99,6 @@ const subCategories: SubCategory[] = [
     steps: 20,
     difficulty: [2, 3],
     publishDate: V4_RELEASE,
-    tasksPerLevel: 6,
     mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
   },
   {
@@ -115,7 +112,6 @@ const subCategories: SubCategory[] = [
     steps: 15,
     difficulty: 2,
     publishDate: V4_RELEASE,
-    tasksPerLevel: 6,
     mechanics: 'UI_BALANCE_SCALE',
   },
   {
@@ -128,7 +124,6 @@ const subCategories: SubCategory[] = [
     steps: 12,
     difficulty: [1, 3],
     publishDate: V4_RELEASE,
-    tasksPerLevel: 5,
     mechanics: 'UI_DRAG_MATCH',
   },
   {
@@ -142,7 +137,6 @@ const subCategories: SubCategory[] = [
     steps: 12,
     difficulty: 3,
     publishDate: V4_RELEASE,
-    tasksPerLevel: 5,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -156,8 +150,35 @@ const subCategories: SubCategory[] = [
     steps: 12,
     difficulty: 2,
     publishDate: V4_RELEASE,
-    tasksPerLevel: 6,
     mechanics: 'UI_DRAG_MATCH',
+    hasText: true,
+  },
+  {
+    id: MATH_SUB.compare,
+    landmark: { name: 'Школа порівнянь', emoji: '🏫' },
+    gameId: 'math_compare',
+    label: 'Більше, менше, дорівнює',
+    icon: '🐥',
+    blurb: 'Порівнюємо числа, приклади й величини',
+    intro:
+      'Порівнюймо! Знак «більше» і «менше» схожий на дзьобик пташки: він завжди відкритий до більшого числа. А якщо з обох боків однаково — ставимо «дорівнює».',
+    steps: 12,
+    difficulty: [1, 2],
+    publishDate: COMPARE_CLOCK_RELEASE,
+    mechanics: 'UI_GRID_CHOICE',
+    hasText: true,
+  },
+  {
+    id: MATH_SUB.clock,
+    landmark: { name: 'Годинникова вежа', emoji: '🕰️' },
+    gameId: 'math_clock',
+    label: 'Котра година?',
+    icon: '🕰️',
+    blurb: 'Вчимося розуміти годинник зі стрілками',
+    steps: 12,
+    difficulty: [1, 2],
+    publishDate: COMPARE_CLOCK_RELEASE,
+    mechanics: 'UI_GRID_CHOICE',
     hasText: true,
   },
 ];
@@ -179,6 +200,10 @@ function generateTask(config: TaskConfig): TaskInstance {
       return generateMaze(config);
     case MATH_SUB.shop:
       return generateShop(config);
+    case MATH_SUB.compare:
+      return generateCompare(config);
+    case MATH_SUB.clock:
+      return generateClock(config);
     default:
       return generateMentalMath(config);
   }
@@ -198,9 +223,12 @@ function getIntro(subCategoryId: string, theme: Theme, step: number): string | u
       if (step <= 4) return 'Склади малюнок із фігур! Перетягни кожну фігуру на контур такої самої форми.';
       if (step <= 8) return 'Площа — це скільки клітинок займає фігура. Зафарбуй клітинки, щоб вийшов загін потрібної площі.';
       return 'Периметр — це довжина паркану навколо фігури. Знайди фігуру, навколо якої паркан найдовший.';
+    case MATH_SUB.clock:
+      return clockIntro(step);
     case MATH_SUB.balance:
     case MATH_SUB.maze:
     case MATH_SUB.shop:
+    case MATH_SUB.compare:
       return subCategories.find((sc) => sc.id === subCategoryId)?.intro;
     case MATH_SUB.add:
       return `Додавати — це збирати разом! Поклади ${it}${it} і ще ${it}. Порахуй: один, два, три. Разом три ${it}!`;

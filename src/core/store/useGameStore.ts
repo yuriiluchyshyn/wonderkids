@@ -12,8 +12,14 @@ import { uid } from '@/core/utils/random';
 // Note: no DEFAULT_THEME_ID import — a child's theme is `null` until chosen;
 // useActiveTheme resolves null → the neutral galaxy skin.
 
-/** Rate at which the companion rolls back during inactivity (PRD §4.1). */
-export type CompanionSpeed = 'off' | 'slow' | 'medium' | 'fast';
+/**
+ * Rate at which the companion rolls back during inactivity (PRD §4.1). The
+ * actual timings live in `components/game/useIdleRollback.ts`.
+ */
+export type CompanionSpeed = 'off' | 'verySlow' | 'slow' | 'medium' | 'fast';
+
+/** Prefix of the "this tip has been read" keys kept in `treasures`. */
+export const TIP_PREFIX = 'tip:';
 
 /** Winning celebration styles (PRD §4.1 — 5 режимів святкування). */
 export type CelebrationStyle =
@@ -202,6 +208,14 @@ export interface GameState extends ActiveChildView, PersistableState {
    * Returns false when it cannot be afforded or is already owned.
    */
   buyWorldItem: (themeId: string, id: string) => boolean;
+  /**
+   * The child closed an onboarding tip — never show it again. Remembered as a
+   * `tip:<id>` key inside `treasures` (like world purchases), so it syncs to
+   * the account and a parent can reset it from their cabinet.
+   */
+  markTipSeen: (tipId: string) => void;
+  /** Parent: show every onboarding tip to the active child again. */
+  resetTips: () => void;
   recordTaskComplete: (opts: { hintUsed: boolean }) => void;
   advanceStep: (moduleId: string, subCategoryId: string, playedStep: number, maxSteps: number) => void;
   /** Count a finished level of a game (feeds the world the child builds). */
@@ -563,6 +577,17 @@ export const useGameStore = create<GameState>()((set) => ({
     );
     return bought;
   },
+
+  markTipSeen: (tipId) =>
+    set((s) =>
+      patchActive(s, (c) => {
+        const key = `${TIP_PREFIX}${tipId}`;
+        return c.treasures.includes(key) ? c : { ...c, treasures: [...c.treasures, key] };
+      }),
+    ),
+
+  resetTips: () =>
+    set((s) => patchActive(s, (c) => ({ ...c, treasures: c.treasures.filter((t) => !t.startsWith(TIP_PREFIX)) }))),
 
   recordTaskComplete: ({ hintUsed }) =>
     set((s) =>

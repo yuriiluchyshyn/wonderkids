@@ -17,6 +17,8 @@ import { isFreePlay } from '@/core/kernel/gameConfig';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/store/useGameStore';
 import { useShowText } from '@/core/ui/useUiPrefs';
+import { CoachTips } from '@/components/coach/CoachTips';
+import { hubTips } from '@/components/coach/tips';
 import styles from './HubPage.module.css';
 
 /** The adventure "shop window": profile, galaxy picker, planets and path. */
@@ -34,6 +36,7 @@ export function HubPage() {
   const setStars = useHubState((s) => s.setStars);
   const [pathEntry, setPathEntry] = useState<CatalogEntry | null>(null);
 
+  const tips = useMemo(() => hubTips(), []);
   const catalog = useMemo(() => buildCatalog(), []);
   const galaxy = getGalaxy(galaxyId);
   // "Planets" = the galaxy's adventures (module sub-categories).
@@ -62,7 +65,9 @@ export function HubPage() {
 
       <ThemeBrand />
 
-      <GalaxyPicker galaxyId={galaxyId} onChange={setGalaxyId} />
+      <div data-tip="galaxy">
+        <GalaxyPicker galaxyId={galaxyId} onChange={setGalaxyId} />
+      </div>
 
       <motion.header
         className={styles.hero}
@@ -101,7 +106,9 @@ export function HubPage() {
         </motion.div>
       ) : (
         <>
-        <StarFilter value={stars} onChange={setStars} />
+        <div data-tip="stars">
+          <StarFilter value={stars} onChange={setStars} />
+        </div>
         <TaskGrid
           entries={planets}
           isDimmed={(entry) => !matchesStars(entry)}
@@ -124,6 +131,8 @@ export function HubPage() {
         }}
       />
       </div>
+      {/* First-run guide to the hub's buttons; held back while the path is open. */}
+      <CoachTips tips={tips} enabled={pathEntry === null} />
     </>
   );
 }

@@ -5,6 +5,7 @@ import { cardSpeech, glyphSpeech, type Card, type Glyph, type TemplatePayload } 
 import { useShowText } from '@/core/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
 import { LandmarkArt, hasLandmarkArt } from './LandmarkArt';
+import { ClockFace } from './ClockFace';
 import { SpeakButton } from './SpeakButton';
 import styles from './Templates.module.css';
 
@@ -51,6 +52,7 @@ export function CardFace({ card, speaker = true }: { card: Card; speaker?: boole
         </span>
       )}
       {card.glyphs && <Glyphs glyphs={card.glyphs} />}
+      {card.clock && <ClockFace time={card.clock} className={styles.faceClock} />}
       {card.shape && (
         <span
           className={styles.shapeGrid}
@@ -98,6 +100,7 @@ export function Stimulus({
           </span>
         )
       )}
+      {s?.clock && <ClockFace time={s.clock} className={styles.stimulusClock} />}
       {s?.glyphs && <Glyphs glyphs={s.glyphs} className={styles.stimulusGlyphs} />}
       {s?.caption && <span className={styles.stimulusCaption}>{s.caption}</span>}
       {children}

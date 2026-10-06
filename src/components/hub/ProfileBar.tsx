@@ -18,9 +18,10 @@ const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };
 type HeaderModal = 'treasures' | null;
 
 /**
- * Status row: the child's name (tap → profile + crystal/goals drawer), the
- * treasure-collection badge (opens its modal), the world badge (opens «Мій світ»), and a
- * single artifact piggy in the top-right corner (also opens the drawer).
+ * Status row: the child's name (tap → profile + goals drawer), the
+ * treasure-collection badge (opens its modal), and the world badge and the
+ * artifact purse — both open «Мій світ», where artifacts are spent on
+ * buildings and decorations.
  */
 export function ProfileBar() {
   const profile = useGameStore((s) => s.profile);
@@ -47,6 +48,10 @@ export function ProfileBar() {
     play('tap');
     setDrawerOpen(true);
   };
+  const openWorld = () => {
+    play('tap');
+    navigate('/world');
+  };
   const openModal = (m: Exclude<HeaderModal, null>) => {
     play('tap');
     setModal(m);
@@ -58,7 +63,8 @@ export function ProfileBar() {
         className={styles.identity}
         whileTap={{ scale: 0.96 }}
         onClick={openDrawer}
-        aria-label="Відкрити профіль і скарбничку"
+        aria-label="Відкрити профіль і цілі"
+        data-tip="profile"
       >
         <span className={`${styles.avatar} emoji`} aria-hidden>
           {AVATAR[profile.gender] ?? AVATAR.girl}
@@ -78,6 +84,7 @@ export function ProfileBar() {
           whileTap={{ scale: 0.9 }}
           onClick={() => openModal('treasures')}
           aria-label={`Колекція скарбів: ${treasuresFound} з ${treasuresTotal}`}
+          data-tip="treasures"
         >
           <span className={`${styles.badgeIcon} emoji`} aria-hidden>
             {theme.chest.closed}
@@ -91,11 +98,9 @@ export function ProfileBar() {
         <motion.button
           className={styles.badge}
           whileTap={{ scale: 0.9 }}
-          onClick={() => {
-            play('tap');
-            navigate('/world');
-          }}
+          onClick={openWorld}
           aria-label={`${world.name}: збудовано ${buildingsOwned} з ${buildingsTotal}`}
+          data-tip="world"
         >
           <span className={`${styles.badgeIcon} emoji`} aria-hidden>
             {theme.dreamBuild.emoji}
@@ -105,12 +110,13 @@ export function ProfileBar() {
           </span>
         </motion.button>
 
-        {/* Artifact piggy — opens the profile + crystal/goals drawer. */}
+        {/* The purse — opens the planet, where artifacts buy buildings and decorations. */}
         <motion.button
           className={`${styles.badge} ${styles.piggy}`}
           whileTap={{ scale: 0.9 }}
-          onClick={openDrawer}
-          aria-label={`Скарбничка: ${artifacts} ${theme.artifact.name}`}
+          onClick={openWorld}
+          aria-label={`${theme.artifact.name}: ${artifacts}. Відкрити крамницю свого світу`}
+          data-tip="artifacts"
         >
           <span className={`${styles.badgeIcon} emoji`} aria-hidden>
             {theme.artifact.emoji}

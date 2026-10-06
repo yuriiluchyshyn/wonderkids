@@ -16,6 +16,12 @@ export interface FractionValue {
 /** A piece of a math line: plain text ("+", "=", "7") or a fraction. */
 export type Glyph = string | FractionValue;
 
+/** A time shown on an analogue clock face (`h` 1–12, `m` 0–59). */
+export interface ClockTime {
+  h: number;
+  m: number;
+}
+
 /** Anything a child can look at, tap or drag. */
 export interface Card {
   id: string;
@@ -29,6 +35,8 @@ export interface Card {
   speak?: string;
   /** A figure drawn on a small cell grid (geometry answers). */
   shape?: { cols: number; rows: number; cells: number[] };
+  /** A drawn clock face showing this time. */
+  clock?: ClockTime;
 }
 
 interface TemplateBase {
@@ -38,6 +46,8 @@ interface TemplateBase {
     /** Id of a drawn illustration (see LandmarkArt) — shown instead of `emoji`. */
     art?: string;
     glyphs?: Glyph[];
+    /** A drawn clock face showing this time. */
+    clock?: ClockTime;
     caption?: string;
   };
   /** Spoken how-to, played when the helper appears. */
@@ -71,6 +81,8 @@ export interface SequencePayload extends TemplateBase {
   /** Card ids in the shuffled order they start in. */
   initial: string[];
   orientation: 'horizontal' | 'vertical';
+  /** Labels of the first and last place. Default: «найдавніше» / «найновіше». */
+  ends?: [string, string];
 }
 
 /** UI_MAP_PUZZLE — tap a region, or drag a marker onto it. */

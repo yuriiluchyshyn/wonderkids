@@ -1,4 +1,5 @@
 import { publishStatus, type PublishStatus } from '@/core/engine/publish';
+import { PATH_TASKS_PER_LEVEL } from '@/core/engine/recall';
 import {
   DEFAULT_TASKS_PER_LEVEL,
   type Difficulty,
@@ -39,7 +40,12 @@ export function isFreePlay(sub: Pick<SubCategory, 'progression'>): boolean {
   return sub.progression === 'free';
 }
 
-export function tasksPerLevel(sub: Pick<SubCategory, 'tasksPerLevel'>): number {
+/**
+ * Tasks in one level. A path game always asks `PATH_TASKS_PER_LEVEL` (half
+ * new, half recall); only free-play games choose their own length.
+ */
+export function tasksPerLevel(sub: Pick<SubCategory, 'tasksPerLevel' | 'progression'>): number {
+  if (!isFreePlay(sub)) return PATH_TASKS_PER_LEVEL;
   return sub.tasksPerLevel ?? DEFAULT_TASKS_PER_LEVEL;
 }
 

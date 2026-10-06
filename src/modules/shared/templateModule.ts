@@ -3,6 +3,8 @@ import type { LearningModule, SubCategory, TaskConfig, TaskInstance } from '@/co
 import type { Card, TemplatePayload } from '@/core/templates/types';
 import { pick, shuffle, uid } from '@/core/utils/random';
 import { TemplateGameView } from '@/components/templates/TemplateGameView';
+import { RECALL_WINDOW, composeLevel } from '@/core/engine/recall';
+import { taskKey } from '@/core/engine/LevelEngine';
 
 /** Publication date of the PRD v4.0 game pack (drives the 60-day "NEW" badge). */
 export const V4_RELEASE = '2026-10-06T00:00:00Z';
@@ -18,7 +20,8 @@ export function templateTask(
   prompt: string,
   payload: TemplatePayload,
   step: number,
-  outro?: string,
+  /** One fact, or a pool of them — see `core/content/outro.ts`. */
+  outro?: string | string[],
 ): TaskInstance<TemplatePayload> {
   return { id: uid('tt'), key, prompt, payload, reward: rewardFor(step), outro };
 }
@@ -27,6 +30,36 @@ export function templateTask(
 export function withDistractors<T>(correct: T, pool: readonly T[], count: number, same: (a: T, b: T) => boolean): T[] {
   const others = shuffle(pool.filter((p) => !same(p, correct))).slice(0, Math.max(0, count - 1));
   return shuffle([correct, ...others]);
+}
+
+type Tasks = TaskInstance<TemplatePayload>[];
+
+/**
+ * A level of a path game from its step-by-step pool (docs/level-design.md):
+ * the questions this step unlocked are the new half, the ones unlocked during
+ * the previous `RECALL_WINDOW` steps are the recall half, and anything older
+ * tops the level up when either half is short.
+ */
+export function recallLevel(poolAt: (step: number) => Tasks, step: number, count: number): Tasks {
+  const pool = shuffle(poolAt(step));
+  if (step <= 1) return composeLevel(pool, [], count, taskKey);
+
+  const keysAt = (s: number) => (s >= 1 ? new Set(poolAt(s).map(taskKey)) : new Set<string>());
+  const before = keysAt(step - 1);
+  const longAgo = keysAt(step - 1 - RECALL_WINDOW);
+  const fresh = pool.filter((t) => !before.has(taskKey(t)));
+  const recent = pool.filter((t) => before.has(taskKey(t)) && !longAgo.has(taskKey(t)));
+  const older = pool.filter((t) => longAgo.has(taskKey(t)));
+  return composeLevel(fresh, [...recent, ...older], count, taskKey);
+}
+
+/**
+ * Ranked content (people by fame, flags by familiarity): which path step
+ * introduces each item. The first `atStart` items open the path, then
+ * `perStep` more arrive on every step. Returns 1-based steps, in list order.
+ */
+export function introSteps(total: number, atStart: number, perStep: number): number[] {
+  return Array.from({ length: total }, (_, i) => (i < atStart ? 1 : 2 + Math.floor((i - atStart) / perStep)));
 }
 
 /** How far along its path a game is, 0..1 — content tiers key off this. */
@@ -57,9 +90,9 @@ export interface TemplateGame extends SubCategory {
   /** All candidate tasks for a level at `step`. Must be side-effect free. */
   pool: (step: number, config: Omit<TaskConfig, 'index'>) => TaskInstance<TemplatePayload>[];
   /**
-   * Optional: compose one level yourself, in the order tasks should be asked
-   * (e.g. "this step's new flags plus a couple from earlier steps"). Without
-   * it a level is a random draw from `pool`.
+   * Optional: compose one level yourself, in the order tasks should be asked.
+   * Without it a path game gets `recallLevel` (new + recalled questions worked
+   * out from how `pool` grows step by step) and a free game a random draw.
    */
   level?: (step: number, count: number) => TaskInstance<TemplatePayload>[];
   /** Child-level explanation; a function when it changes along the path. */
@@ -97,7 +130,9 @@ export function defineTemplateModule(def: TemplateModuleDef): LearningModule {
     buildLevel: (config, count) => {
       const g = game(config.subCategoryId);
       if (!g) return [];
-      return g.level ? g.level(config.step, count) : shuffle(g.pool(config.step, config));
+      if (g.level) return g.level(config.step, count);
+      if (g.progression === 'free') return shuffle(g.pool(config.step, config));
+      return recallLevel((step) => g.pool(step, { ...config, step }), config.step, count);
     },
     // Counted at the top of the path, where every item is unlocked.
     taskCount: (subId) => {

@@ -1,6 +1,7 @@
 import type { TaskInstance } from '@/core/kernel/types';
 import type { TemplatePayload } from '@/core/templates/types';
 import { V4_RELEASE, card, defineTemplateModule, templateTask } from '../shared/templateModule';
+import { RECYCLING_FACTS } from './facts';
 
 const BINS = [
   { id: 'glass', name: 'Скло', emoji: '🫙', no: 'Дзень! Це не скло.' },
@@ -26,12 +27,6 @@ const RUBBISH = [
   { id: 'bucket', name: 'пластикове відерце', emoji: '🪣', bin: 'plastic', clue: 'Відерце легке і не б’ється — це пластик.' },
 ] as const;
 
-const FACTS: Record<string, string> = {
-  glass: 'Зі старого скла зроблять нові пляшки — і так можна безліч разів!',
-  paper: 'З паперу зроблять нові зошити, і дерева залишаться рости.',
-  plastic: 'З пластику зроблять нові іграшки, лавки і навіть одяг.',
-};
-
 /** Game 12 — «Сортування Сміття та Еко-патруль»: 3 bins. */
 function recycling(step: number): TaskInstance<TemplatePayload>[] {
   const bins = BINS.map((b) => card(b.id, b.emoji, b.name));
@@ -49,7 +44,8 @@ function recycling(step: number): TaskInstance<TemplatePayload>[] {
         hint: r.clue,
       },
       step,
-      FACTS[r.bin],
+      // Twelve stories per material: a replay tells the next one.
+      RECYCLING_FACTS[r.bin],
     ),
   );
 }

@@ -25,6 +25,11 @@ export class LevelEngine<TTask extends KeyedTask = KeyedTask> extends BaseGameEn
     return answer === true;
   }
 
+  /** Is this question (by content key) already somewhere in the level? */
+  includesKey(key: string): boolean {
+    return this.taskQueue.some((task) => taskKey(task) === key);
+  }
+
   /** Drop tasks that ask the same thing twice — a level never repeats itself. */
   prepareQueue(tasks: TTask[]): TTask[] {
     const seen = new Set<string>();

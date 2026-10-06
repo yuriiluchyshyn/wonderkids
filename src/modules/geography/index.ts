@@ -12,12 +12,34 @@ import {
 } from '../shared/templateModule';
 import { COUNTRIES, MAP_COUNTRIES, type Country } from './countries';
 import { BIOMES, BIOME_ANIMALS, CONTINENT_ANIMALS, DAY_NIGHT, LANDMARKS, OCEAN_FACTS } from './data';
+import { BIOME_FACTS, CONTINENT_FACTS, OCEAN_POOLS } from './facts';
+import { RECALL_WINDOW, composeLevel } from '@/core/engine/recall';
+import { taskKey } from '@/core/engine/LevelEngine';
+import { factPool, framed } from '../shared/facts';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 const byId = <T extends { id: string }>(a: T, b: T) => a.id === b.id;
 
-/** New flags introduced on each path step. */
-const FLAGS_PER_STEP = 6;
+/** New flags introduced on each path step — the "new" half of a level. */
+const FLAGS_PER_STEP = 5;
+
+/** Ten ways to confirm a flag, so a familiar one is not always met the same way. */
+function flagStories(country: Country): string[] {
+  const n = country.name;
+  return factPool(
+    `Так, це прапор країни ${n}!`,
+    country.look,
+    `Саме так! ${n} — це країна в ${country.continentName}.`,
+    `Чудово! Ти знаєш прапор країни ${n}.`,
+    `Молодець! Це ${n}.`,
+    `Влучно! Прапор країни ${n} ти вже не забудеш.`,
+    `Чудова пам’ять! Це прапор країни ${n}.`,
+    `Так тримати! Це ${n}. Шукай цю країну на карті в ${country.continentName}.`,
+    `Є! Під цим прапором живе ${n}.`,
+    `Точно! ${n}. Запам’ятай кольори цього прапора.`,
+    `Так! Якщо побачиш цей прапор на змаганнях — це ${n}.`,
+  );
+}
 /** Path length that walks through every country once. */
 const FLAG_STEPS = Math.ceil(COUNTRIES.length / FLAGS_PER_STEP);
 
@@ -33,7 +55,7 @@ function flagTask(country: Country, known: readonly Country[], step: number): Ta
       hint: country.look ?? `${country.name} — це країна в ${country.continentName}. Придивись до кольорів і малюнка на прапорах.`,
     },
     step,
-    `Так, це прапор країни ${country.name}!`,
+    flagStories(country),
   );
 }
 
@@ -42,16 +64,20 @@ const flagsKnownAt = (step: number) => COUNTRIES.slice(0, Math.max(12, step * FL
 
 /**
  * Game 7 — «Вгадай Прапор». The path walks down the familiarity ranking: each
- * step brings six new, slightly less famous flags and mixes in flags from
- * earlier steps, so what was learned keeps coming back.
+ * step brings five new, slightly less famous flags and recalls five met on
+ * the previous `RECALL_WINDOW` steps (older ones only when those run out).
  */
 function flagsLevel(step: number, count: number): Tasks {
   const start = (step - 1) * FLAGS_PER_STEP;
-  const fresh = COUNTRIES.slice(start, start + FLAGS_PER_STEP);
-  const earlier = shuffle(COUNTRIES.slice(0, start)).slice(0, Math.max(0, count - fresh.length));
+  const windowStart = Math.max(0, start - RECALL_WINDOW * FLAGS_PER_STEP);
   const known = flagsKnownAt(step);
-  // New flags first, then the reminders — the engine keeps this order.
-  return [...shuffle(fresh), ...earlier].map((country) => flagTask(country, known, step));
+  const tasks = (list: readonly Country[]) => shuffle(list).map((country) => flagTask(country, known, step));
+  return composeLevel(
+    tasks(COUNTRIES.slice(start, start + FLAGS_PER_STEP)),
+    [...tasks(COUNTRIES.slice(windowStart, start)), ...tasks(COUNTRIES.slice(0, windowStart))],
+    count,
+    taskKey,
+  );
 }
 
 function flags(step: number): Tasks {
@@ -74,7 +100,7 @@ function continents(step: number): Tasks {
         hint: `Шукай материк, який блимає. ${a.name[0].toUpperCase()}${a.name.slice(1)} живе там, де ${regionName(a.home)}.`,
       },
       step,
-      `${regionName(a.home)} — дім для тваринки ${a.name}!`,
+      factPool(`${regionName(a.home)} — дім для тваринки ${a.name}!`, `Так! ${a.name[0].toUpperCase()}${a.name.slice(1)} живе там, де ${regionName(a.home)}.`, CONTINENT_FACTS[a.home]),
     ),
   );
   // Countries join once the animals are familiar — the best-known ones first.
@@ -91,7 +117,7 @@ function continents(step: number): Tasks {
         hint: `${c.name} — це ${regionName(c.continent)}. Шукай материк, який блимає.`,
       },
       step,
-      `${c.name} — це ${regionName(c.continent)}.`,
+      factPool(`${c.name} — це ${regionName(c.continent)}.`, `Так! ${c.name} — це країна в ${c.continentName}.`, CONTINENT_FACTS[c.continent]),
     ),
   );
   return step <= 3 ? animals : [...animals, ...countries];
@@ -114,7 +140,7 @@ function biomes(step: number): Tasks {
         hint: `Подумай, де тваринці буде добре. ${a.fact}`,
       },
       step,
-      a.fact,
+      factPool(a.fact, BIOME_FACTS[a.home]),
     ),
   );
 }
@@ -134,7 +160,7 @@ function oceans(step: number): Tasks {
         hint: `Шукай воду, що переливається хвилями. ${OCEAN_FACTS[ocean.id]}`,
       },
       step,
-      OCEAN_FACTS[ocean.id],
+      OCEAN_POOLS[ocean.id],
     ),
   );
 }
@@ -155,7 +181,7 @@ function capitals(step: number): Tasks {
         hint: `${l.landmark} — символ ${l.country}. Згадай столицю цієї країни.`,
       },
       step,
-      `${l.landmark} стоїть у місті ${l.capital} — це столиця ${l.country}.`,
+      framed(`${l.landmark} стоїть у місті ${l.capital} — це столиця ${l.country}.`),
     ),
   );
   if (step <= 4) return landmarkTasks;
@@ -173,7 +199,7 @@ function capitals(step: number): Tasks {
         hint: 'Земля крутиться, як дзиґа. Сонце світить тільки на один її бік: там день, а на іншому боці — ніч.',
       },
       step,
-      q.why,
+      framed(q.why),
     ),
   );
   return [...landmarkTasks, ...dayNight];
@@ -193,12 +219,11 @@ export const geographyModule = defineTemplateModule({
       label: 'Вгадай Прапор',
       icon: '🚩',
       blurb: `Усі ${COUNTRIES.length} прапори світу — від найвідоміших`,
-      intro: 'У кожної країни є свій прапор. Послухай назву країни і знайди її прапор серед шести! На кожній сходинці — нові прапори, а знайомі повертаються, щоб ти їх не забув.',
-      // One step per six flags: the whole world, best-known first.
+      intro: 'У кожної країни є свій прапор. Послухай назву країни і знайди її прапор серед шести! На кожній сходинці — п’ять нових прапорів, а знайомі повертаються, щоб ти їх не забув.',
+      // One step per five flags: the whole world, best-known first.
       steps: FLAG_STEPS,
       difficulty: 1,
       publishDate: V4_RELEASE,
-      tasksPerLevel: 8,
       mechanics: 'UI_GRID_CHOICE',
       level: flagsLevel,
       pool: flags,
@@ -214,7 +239,6 @@ export const geographyModule = defineTemplateModule({
       steps: 12,
       difficulty: 2,
       publishDate: V4_RELEASE,
-      tasksPerLevel: 6,
       mechanics: 'UI_MAP_PUZZLE',
       pool: continents,
     },
@@ -263,7 +287,6 @@ export const geographyModule = defineTemplateModule({
       steps: 10,
       difficulty: 3,
       publishDate: V4_RELEASE,
-      tasksPerLevel: 6,
       mechanics: 'UI_GRID_CHOICE',
       hasText: true,
       pool: capitals,

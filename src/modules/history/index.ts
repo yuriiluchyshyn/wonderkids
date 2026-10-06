@@ -5,10 +5,15 @@ import {
   V4_RELEASE,
   card,
   defineTemplateModule,
+  introSteps,
   templateTask,
   unlocked,
   withDistractors,
 } from '../shared/templateModule';
+import { RECALL_WINDOW, composeLevel } from '@/core/engine/recall';
+import { taskKey } from '@/core/engine/LevelEngine';
+import { factPool, framed } from '../shared/facts';
+import { DIET_FACTS, EPOCH_FACTS } from './facts';
 import {
   UA_FIGURES,
   UA_INVENTIONS,
@@ -56,7 +61,7 @@ function dinosaurs(step: number): Tasks {
             : `${d.name} — травоїдний. У травоїдних зуби пласкі: ними перетирають листя.`,
       },
       step,
-      d.feature,
+      factPool(d.feature, DIET_FACTS[d.eats]),
     ),
   );
 
@@ -73,7 +78,7 @@ function dinosaurs(step: number): Tasks {
         hint: `Це ${d.eats === 'meat' ? 'хижак' : 'травоїдний динозавр'}. Його назва починається на літеру «${d.name[0]}».`,
       },
       step,
-      `Так, це ${d.name}!`,
+      framed(`Це ${d.name}. ${d.feature}`),
     ),
   );
 
@@ -99,7 +104,7 @@ function timeMachine(step: number): Tasks {
         hint: 'Знайди найдавнішу картку і постав її на місце 1. Щоб поміняти дві картки місцями, торкнись однієї, а потім другої. Зеленим обведено ті, що вже стоять правильно.',
       },
       step,
-      story,
+      framed(story),
     ),
   );
 
@@ -115,7 +120,7 @@ function timeMachine(step: number): Tasks {
         hint: `Подумай, без чого люди обходилися довше. ${first} — давніший винахід.`,
       },
       step,
-      story,
+      framed(story),
     ),
   );
 
@@ -134,7 +139,7 @@ function timeMachine(step: number): Tasks {
         hint: `Це ${EPOCHS.find((e) => e.id === epoch)?.name}. ${story}`,
       },
       step,
-      story,
+      factPool(story, EPOCH_FACTS[epoch]),
     ),
   );
 
@@ -151,7 +156,7 @@ function timeMachine(step: number): Tasks {
         hint: story,
       },
       step,
-      story,
+      framed(story),
     ),
   );
 
@@ -159,55 +164,96 @@ function timeMachine(step: number): Tasks {
 }
 
 /**
- * Games 15–16 — famous people: first pick a person's symbol out of four
- * (UI_GRID_CHOICE), later connect three people with their symbols at once
- * (UI_DRAG_MATCH).
+ * Games 15–16 — famous people, ranked by fame (see `data.ts`). Step N brings
+ * the people of fame level N, each asked two ways (what are they known for /
+ * who is known for this), and recalls people from the previous `RECALL_WINDOW`
+ * steps — one of them as a "connect three" (UI_DRAG_MATCH).
  */
-function figures(people: Achiever[], steps: number) {
-  return (step: number): Tasks => {
-    const known = unlocked(people, step, steps, 6);
-    const choice: Tasks = known.map((p) =>
-      templateTask(
-        `figure:${p.id}`,
-        `Чим прославився: ${p.name}?`,
-        {
-          template: 'UI_GRID_CHOICE',
-          cols: 2,
-          stimulus: { emoji: p.face, caption: p.name },
-          options: withDistractors(p, known, 4, byId).map((o) => card(o.id, o.symbol, o.symbolName)),
-          correctId: p.id,
-          hint: p.fact,
-        },
-        step,
-        p.fact,
-      ),
-    );
-    if (step <= Math.ceil(steps / 2)) return choice;
+function figures(people: Achiever[], atStart: number, perStep: number) {
+  const intro = introSteps(people.length, atStart, perStep);
+  const fame = new Map(people.map((p, i) => [p.id, intro[i]]));
+  const fameOf = (p: Achiever) => fame.get(p.id) ?? 1;
+  const knownAt = (step: number) => people.filter((p) => fameOf(p) <= step);
 
-    // Trios without a repeated symbol, so every connection is unambiguous.
-    const trios: Tasks = [];
-    const order = shuffle(known);
-    for (let i = 0; i + 3 <= order.length; i += 3) {
-      const trio = order.slice(i, i + 3);
-      trios.push(
-        templateTask(
-          `figures:${trio.map((p) => p.id).sort().join('+')}`,
-          'З’єднай людину з тим, чим вона прославилась',
-          {
-            template: 'UI_DRAG_MATCH',
-            items: shuffle(trio.map((p) => card(p.id, p.face, p.name))),
-            slots: shuffle(trio.map((p) => card(`s_${p.id}`, p.symbol, p.symbolName))),
-            pairs: Object.fromEntries(trio.map((p) => [p.id, `s_${p.id}`])),
-            hint: trio[0].fact,
-          },
-          step,
-          trio.map((p) => p.fact).join(' '),
-        ),
+  const knownFor = (p: Achiever, known: Achiever[], step: number) =>
+    templateTask(
+      `figure:${p.id}`,
+      `Чим прославився: ${p.name}?`,
+      {
+        template: 'UI_GRID_CHOICE',
+        cols: 2,
+        stimulus: { emoji: p.face, caption: p.name },
+        options: withDistractors(p, known, 4, byId).map((o) => card(o.id, o.symbol, o.symbolName)),
+        correctId: p.id,
+        hint: p.fact,
+      },
+      step,
+      framed(p.fact),
+    );
+
+  const whoIsIt = (p: Achiever, known: Achiever[], step: number) =>
+    templateTask(
+      `figure:who:${p.id}`,
+      `Хто прославився цим: ${p.symbolName}?`,
+      {
+        template: 'UI_GRID_CHOICE',
+        cols: 2,
+        stimulus: { emoji: p.symbol, caption: p.symbolName },
+        options: withDistractors(p, known, 4, byId).map((o) => card(o.id, o.face, o.name)),
+        correctId: p.id,
+        hint: `Ім’я цієї людини починається на літеру «${p.name[0]}».`,
+      },
+      step,
+      framed(p.fact),
+    );
+
+  const connect = (trio: Achiever[], step: number) =>
+    templateTask(
+      `figures:${trio.map((p) => p.id).sort().join('+')}`,
+      'З’єднай людину з тим, чим вона прославилась',
+      {
+        template: 'UI_DRAG_MATCH',
+        items: shuffle(trio.map((p) => card(p.id, p.face, p.name))),
+        slots: shuffle(trio.map((p) => card(`s_${p.id}`, p.symbol, p.symbolName))),
+        pairs: Object.fromEntries(trio.map((p) => [p.id, `s_${p.id}`])),
+        hint: trio[0].fact,
+      },
+      step,
+      trio.map((p) => p.fact).join(' '),
+    );
+
+  return {
+    steps: Math.max(...intro),
+    pool: (step: number): Tasks => {
+      const known = knownAt(step);
+      return known.flatMap((p) => [knownFor(p, known, step), whoIsIt(p, known, step)]);
+    },
+    level: (step: number, count: number): Tasks => {
+      const known = knownAt(step);
+      const both = (p: Achiever) => shuffle([knownFor(p, known, step), whoIsIt(p, known, step)]);
+      const fresh = shuffle(known.filter((p) => fameOf(p) === step).flatMap(both));
+
+      const recent = shuffle(known.filter((p) => fameOf(p) < step && fameOf(p) >= step - RECALL_WINDOW)).map(both);
+      const older = shuffle(known.filter((p) => fameOf(p) < step - RECALL_WINDOW)).map(both);
+      const trio = shuffle(known.filter((p) => fameOf(p) < step)).slice(0, 3);
+      return composeLevel(
+        fresh,
+        [
+          ...(trio.length === 3 ? [connect(trio, step)] : []),
+          // One question per recalled person first; their second one only if needed.
+          ...recent.map((pair) => pair[0]),
+          ...older.map((pair) => pair[0]),
+          ...recent.map((pair) => pair[1]),
+        ],
+        count,
+        taskKey,
       );
-    }
-    return [...choice.slice(0, 4), ...trios];
+    },
   };
 }
+
+const worldFigures = figures(WORLD_FIGURES, 5, 3);
+const uaFigures = figures(UA_FIGURES, 4, 1);
 
 /**
  * Games 17–18 — inventions: "who made it?" (names) and, further along the
@@ -229,7 +275,7 @@ function inventions(list: Invention[], steps: number) {
           hint: inv.fact,
         },
         step,
-        inv.fact,
+        framed(inv.fact),
       ),
     );
     if (step <= Math.ceil(steps / 2)) return whoMadeIt;
@@ -246,7 +292,7 @@ function inventions(list: Invention[], steps: number) {
           hint: inv.fact,
         },
         step,
-        inv.fact,
+        framed(inv.fact),
       ),
     );
     return [...whoMadeIt, ...whatDidTheyMake];
@@ -289,7 +335,6 @@ export const historyModule = defineTemplateModule({
       progression: 'free',
       difficulty: 2,
       publishDate: V4_RELEASE,
-      tasksPerLevel: 6,
       mechanics: ['UI_CHRONO_SEQUENCE', 'UI_GRID_CHOICE', 'UI_SORTER_BINS'],
       hasText: true,
       pool: timeMachine,
@@ -301,14 +346,14 @@ export const historyModule = defineTemplateModule({
       label: 'Видатні Постаті Світу',
       icon: '🌟',
       blurb: 'Хто чим прославився',
-      intro: 'Познайомся з людьми, які змінили світ: ученими, митцями і мандрівниками. З’єднай кожного з його справою.',
-      steps: 10,
+      intro: 'Познайомся з людьми, які змінили світ: ученими, митцями і мандрівниками. На кожній сходинці — нові постаті, а знайомі повертаються, щоб ти їх не забув.',
+      steps: worldFigures.steps,
       difficulty: 1,
       publishDate: V4_RELEASE,
-      tasksPerLevel: 6,
       mechanics: ['UI_DRAG_MATCH', 'UI_GRID_CHOICE'],
       hasText: true,
-      pool: figures(WORLD_FIGURES, 10),
+      level: worldFigures.level,
+      pool: worldFigures.pool,
     },
     {
       id: 'ua_figures',
@@ -318,13 +363,13 @@ export const historyModule = defineTemplateModule({
       icon: '🇺🇦',
       blurb: 'Українці, якими ми пишаємось',
       intro: 'Україна має багато видатних людей: поетів, князів, учених і космонавтів. Дізнайся, чим вони прославились!',
-      steps: 10,
+      steps: uaFigures.steps,
       difficulty: 2,
       publishDate: V4_RELEASE,
-      tasksPerLevel: 6,
       mechanics: ['UI_DRAG_MATCH', 'UI_GRID_CHOICE'],
       hasText: true,
-      pool: figures(UA_FIGURES, 10),
+      level: uaFigures.level,
+      pool: uaFigures.pool,
     },
     {
       id: 'inventions',
@@ -337,7 +382,6 @@ export const historyModule = defineTemplateModule({
       steps: 10,
       difficulty: 2,
       publishDate: V4_RELEASE,
-      tasksPerLevel: 6,
       mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
       hasText: true,
       pool: inventions(WORLD_INVENTIONS, 10),
@@ -353,7 +397,6 @@ export const historyModule = defineTemplateModule({
       steps: 10,
       difficulty: 2,
       publishDate: V4_RELEASE,
-      tasksPerLevel: 6,
       mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
       hasText: true,
       pool: inventions(UA_INVENTIONS, 10),

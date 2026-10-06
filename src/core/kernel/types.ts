@@ -54,9 +54,11 @@ export interface TaskInstance<TPayload = unknown> {
   prompt: string;
   /**
    * Short spoken (and shown) fact that rewards a correct answer — "Це прапор
-   * Японії!". The shell gives it time to play before the next task.
+   * Японії!". The shell gives it time to play before the next task. A list is
+   * a pool: every time the task is solved the child hears the next text from
+   * it (`core/content/outro.ts`), so a replay tells a new story.
    */
-  outro?: string;
+  outro?: string | string[];
   /** Artifacts awarded for completing this task. */
   reward: number;
   payload: TPayload;
@@ -156,8 +158,10 @@ export interface SubCategory {
    */
   publishDate?: string;
   /**
-   * Tasks in one level (`steps_count_default`, 5–8). A level shrinks on its own
-   * when fewer unique tasks exist. NOT the path length — that is `steps`.
+   * Tasks in one level (`steps_count_default`). Path games ask 10 — five new
+   * for the step and five recalled from earlier steps (`core/engine/recall`);
+   * free-play games 5–8. A level shrinks on its own when fewer unique tasks
+   * exist. NOT the path length — that is `steps`.
    */
   tasksPerLevel?: number;
   /** UI template(s) the game is built on. */
@@ -169,7 +173,7 @@ export interface SubCategory {
   hasText?: boolean;
 }
 
-/** Tasks per level when a game does not say (PRD v4.0 §2.3: 5–8). */
+/** Tasks per level of a free-play game that does not say (PRD v4.0 §2.3: 5–8). */
 export const DEFAULT_TASKS_PER_LEVEL = 6;
 
 /**
