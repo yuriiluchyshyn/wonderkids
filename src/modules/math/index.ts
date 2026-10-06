@@ -3,76 +3,211 @@ import type { LearningModule, SubCategory, TaskConfig, TaskInstance } from '@/co
 import type { Theme } from '@/core/theme/theme.types';
 import { generateMentalMath } from './generators/mentalMath';
 import { generateFraction } from './generators/fractions';
+import { FRACTION_OPS_INTRO, fractionOpsTier, generateFractionOps } from './generators/fractionOps';
+import { generateBalance } from './generators/balance';
+import { generateGeometry } from './generators/geometry';
+import { generateMaze } from './generators/maze';
+import { generateShop } from './generators/shop';
+import type { TemplatePayload } from '@/core/templates/types';
 import { MathGameView } from './games/MathGameView';
 import { MathVisualHelper } from './games/MathVisualHelper';
 import { MathIntroView } from './games/MathIntroView';
-import { MATH_SUB, type MathPayload } from './math.types';
+import { MATH_SUB, isClassicPayload } from './math.types';
 
 /**
- * Catalog cards exposed by the Math module — one adventure per operation plus
- * a mixed mode and fractions. Each adventure sets its own path length: the core
- * arithmetic ladders are long, fractions is short.
+ * Catalog cards exposed by the Math module, each with its declarative game
+ * config (PRD v4.0 §1.2). `steps` is the path length; `tasksPerLevel` how many
+ * tasks one level asks.
  */
+/** Publication date of the PRD v4.0 game pack (drives the "NEW" badge). */
+const V4_RELEASE = '2026-10-06T00:00:00Z';
+
 const subCategories: SubCategory[] = [
   {
     id: MATH_SUB.add,
+    landmark: { name: 'Інститут додавання', emoji: '🏛️' },
     label: 'Додавання',
     icon: '➕',
     blurb: 'Збираємо все докупи',
     steps: 40,
+    difficulty: [1, 3],
+    tasksPerLevel: 8,
+    mechanics: 'UI_GRID_CHOICE',
   },
   {
     id: MATH_SUB.sub,
+    landmark: { name: 'Інститут віднімання', emoji: '🏦' },
     label: 'Віднімання',
     icon: '➖',
     blurb: 'Забираємо потрошку',
     steps: 40,
+    difficulty: [1, 3],
+    tasksPerLevel: 8,
+    mechanics: 'UI_GRID_CHOICE',
   },
   {
     id: MATH_SUB.mul,
+    landmark: { name: 'Фабрика множення', emoji: '🏭' },
     label: 'Множення',
     icon: '✖️',
     blurb: 'Однакові купки разом',
     steps: 30,
+    difficulty: [2, 3],
+    tasksPerLevel: 8,
+    mechanics: 'UI_GRID_CHOICE',
   },
   {
     id: MATH_SUB.div,
+    landmark: { name: 'Центр ділення', emoji: '🏢' },
     label: 'Ділення',
     icon: '➗',
     blurb: 'Ділимо порівну',
     steps: 25,
+    difficulty: [2, 3],
+    tasksPerLevel: 8,
+    mechanics: 'UI_GRID_CHOICE',
   },
   {
     id: MATH_SUB.mixed,
+    landmark: { name: 'Академія наук', emoji: '🔬' },
     label: 'Усний Рахунок',
     icon: '🧮',
     blurb: 'Усе разом: +, −, ×, ÷',
     steps: 60,
+    difficulty: [1, 3],
+    tasksPerLevel: 8,
+    mechanics: 'UI_GRID_CHOICE',
   },
   {
+    // PRD v4.0, game 1: an introductory mode, shortened to 10 levels.
     id: MATH_SUB.fractions,
+    landmark: { name: 'Піцерія дробів', emoji: '🍕' },
+    gameId: 'math_tasty_fractions',
     label: 'Смачні Дроби',
     icon: '🍕',
     blurb: 'Шукаємо частинку смаколика',
+    steps: 10,
+    difficulty: 1,
+    tasksPerLevel: 6,
+    mechanics: 'UI_GRID_CHOICE',
+    hintDelaySec: 5,
+  },
+  {
+    id: MATH_SUB.fractionOps,
+    landmark: { name: 'Кондитерська дробів', emoji: '🧁' },
+    gameId: 'math_fraction_ops',
+    label: 'Дроби: дії',
+    icon: '🧁',
+    blurb: 'Додаємо, віднімаємо, множимо й ділимо дроби',
+    steps: 20,
+    difficulty: [2, 3],
+    publishDate: V4_RELEASE,
+    tasksPerLevel: 6,
+    mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
+    hintDelaySec: 12,
+  },
+  {
+    id: MATH_SUB.balance,
+    landmark: { name: 'Палата мір і ваг', emoji: '⚖️' },
+    gameId: 'math_balance_scale',
+    label: 'Математичні Ваги',
+    icon: '⚖️',
+    blurb: 'Знайди гирю, що врівноважить',
+    intro: 'Ваги люблять рівновагу! Зліва лежить приклад. Перетягни на праву шальку гирю, яка важить стільки ж.',
     steps: 15,
+    difficulty: 2,
+    publishDate: V4_RELEASE,
+    tasksPerLevel: 6,
+    mechanics: 'UI_BALANCE_SCALE',
+    hintDelaySec: 7,
+  },
+  {
+    id: MATH_SUB.geometry,
+    landmark: { name: 'Архітектурне бюро', emoji: '📐' },
+    gameId: 'math_geometry_builder',
+    label: 'Геометричний Конструктор',
+    icon: '📐',
+    blurb: 'Танграм, площа і периметр',
+    steps: 12,
+    difficulty: [1, 3],
+    publishDate: V4_RELEASE,
+    tasksPerLevel: 5,
+    mechanics: 'UI_DRAG_MATCH',
+    hintDelaySec: 12,
+  },
+  {
+    id: MATH_SUB.maze,
+    landmark: { name: 'Фортеця-лабіринт', emoji: '🏯' },
+    gameId: 'math_number_maze',
+    label: 'Числовий Лабіринт',
+    icon: '🧭',
+    blurb: 'Біжи тільки по правильних числах',
+    intro: 'Допоможи другові перебігти лабіринт! Ставати можна тільки на числа, які підходять під правило. Роби крок на сусідню клітинку.',
+    steps: 12,
+    difficulty: 3,
+    publishDate: V4_RELEASE,
+    tasksPerLevel: 5,
+    mechanics: 'UI_GRID_CHOICE',
+    hintDelaySec: 15,
+  },
+  {
+    id: MATH_SUB.shop,
+    landmark: { name: 'Крамниця', emoji: '🏪' },
+    gameId: 'math_shop_money',
+    label: 'Магазин',
+    icon: '🛒',
+    blurb: 'Рахуємо кишенькові гроші',
+    intro: 'Ласкаво просимо до магазину! Подивись на цінник і поклади на касу стільки грошей, скільки коштує іграшка.',
+    steps: 12,
+    difficulty: 2,
+    publishDate: V4_RELEASE,
+    tasksPerLevel: 6,
+    mechanics: 'UI_DRAG_MATCH',
+    hasText: true,
+    hintDelaySec: 12,
   },
 ];
 
+const NUMBER_WORDS = ['нуль', 'один', 'два', 'три', 'чотири', "п'ять", 'шість', 'сім', 'вісім', "дев'ять", 'десять', 'одинадцять', 'дванадцять'];
+
 /** Dispatches task generation to the right generator for the sub-category. */
 function generateTask(config: TaskConfig): TaskInstance {
-  if (config.subCategoryId === MATH_SUB.fractions) {
-    return generateFraction(config);
+  switch (config.subCategoryId) {
+    case MATH_SUB.fractions:
+      return generateFraction(config);
+    case MATH_SUB.fractionOps:
+      return generateFractionOps(config);
+    case MATH_SUB.balance:
+      return generateBalance(config);
+    case MATH_SUB.geometry:
+      return generateGeometry(config);
+    case MATH_SUB.maze:
+      return generateMaze(config);
+    case MATH_SUB.shop:
+      return generateShop(config);
+    default:
+      return generateMentalMath(config);
   }
-  return generateMentalMath(config);
 }
 
 /**
  * Short, concrete, 6-year-old-level explanation for each adventure, counted in
  * the active theme's own collectible (apples, bricks, snowflakes…).
  */
-function getIntro(subCategoryId: string, theme: Theme): string {
+function getIntro(subCategoryId: string, theme: Theme, step: number): string | undefined {
   const it = theme.artifact.emoji;
   switch (subCategoryId) {
+    // Each new kind of fraction sum is explained when the path reaches it.
+    case MATH_SUB.fractionOps:
+      return FRACTION_OPS_INTRO[fractionOpsTier(step)];
+    case MATH_SUB.geometry:
+      if (step <= 4) return 'Склади малюнок із фігур! Перетягни кожну фігуру на контур такої самої форми.';
+      if (step <= 8) return 'Площа — це скільки клітинок займає фігура. Зафарбуй клітинки, щоб вийшов загін потрібної площі.';
+      return 'Периметр — це довжина паркану навколо фігури. Знайди фігуру, навколо якої паркан найдовший.';
+    case MATH_SUB.balance:
+    case MATH_SUB.maze:
+    case MATH_SUB.shop:
+      return subCategories.find((sc) => sc.id === subCategoryId)?.intro;
     case MATH_SUB.add:
       return `Додавати — це збирати разом! Поклади ${it}${it} і ще ${it}. Порахуй: один, два, три. Разом три ${it}!`;
     case MATH_SUB.sub:
@@ -92,9 +227,12 @@ function getIntro(subCategoryId: string, theme: Theme): string {
 
 /** Task-aware, encouraging explanation of HOW to solve the current task. */
 function getHintSpeech(task: TaskInstance): string {
-  const p = task.payload as MathPayload;
+  if (!isClassicPayload(task.payload)) return (task.payload as TemplatePayload).hint ?? '';
+  const p = task.payload;
   if (p.kind === 'fraction') {
-    return `Подивись на тарілочку. Згори — скільки шматочків зафарбовано, а знизу — на скільки поділили. Полічи і обери дріб ${p.filled} з ${p.denom}.`;
+    // Count the highlighted slices aloud: «Один, два, три — з чотирьох!»
+    const counted = Array.from({ length: p.filled }, (_, i) => NUMBER_WORDS[i + 1] ?? String(i + 1)).join(', ');
+    return `Полічімо зафарбовані шматочки: ${counted}. Усього шматочків ${p.denom}. Отже, це ${p.filled} з ${p.denom}!`;
   }
   if (p.op === '×') {
     return `Це ${p.a} однакові купки, у кожній по ${p.b}. Торкайся кружечків по одному і рахуй усі разом.`;
@@ -118,6 +256,8 @@ export const mathModule: LearningModule = {
   generateTask,
   GameView: MathGameView,
   VisualHelper: MathVisualHelper,
+  // Template games scaffold inside their own layout — no separate panel.
+  showsHelper: (task) => isClassicPayload(task.payload),
   IntroView: MathIntroView,
   getIntro,
   getHintSpeech,

@@ -110,6 +110,39 @@ export class AudioEngine {
     this.tone({ freq: 987.77, type: 'triangle', start: 0.12, duration: 0.3, gain: 0.4 });
   }
 
+  // ---- Unified SFX set (PRD v4.0 §3.3) ----
+
+  /** SND_SUCCESS: a bright major xylophone/harp run. */
+  sndSuccess(): void {
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((freq, i) => {
+      this.tone({ freq, type: 'triangle', start: i * 0.07, duration: 0.32, gain: 0.34 });
+      this.tone({ freq: freq * 2, type: 'sine', start: i * 0.07, duration: 0.18, gain: 0.08 });
+    });
+  }
+
+  /** SND_ERROR: a soft double "boop-boop" — delicate, never startling. */
+  sndError(): void {
+    this.tone({ freq: 330, type: 'sine', duration: 0.13, gain: 0.26, glideTo: 300 });
+    this.tone({ freq: 330, type: 'sine', start: 0.17, duration: 0.16, gain: 0.26, glideTo: 290 });
+  }
+
+  /** SND_DRAG_START: a light "pop" as a card lifts. */
+  sndDragStart(): void {
+    this.tone({ freq: 420, type: 'sine', duration: 0.09, gain: 0.28, glideTo: 760 });
+  }
+
+  /** SND_DROP_SLOT: a magnetic snap into place. */
+  sndDropSlot(): void {
+    this.tone({ freq: 900, type: 'square', duration: 0.035, gain: 0.12 });
+    this.tone({ freq: 620, type: 'triangle', start: 0.03, duration: 0.14, gain: 0.3, glideTo: 520 });
+  }
+
+  /** SND_TTS_CLICK: a micro-click when a speaker button is tapped. */
+  sndTtsClick(): void {
+    this.tone({ freq: 1200, type: 'sine', duration: 0.045, gain: 0.16 });
+  }
+
   /**
    * Gentle, friendly "let's look again" cue for a mistake. Deliberately warm
    * and curious — never a buzzer or loss sound (Zero-Aggression UX).

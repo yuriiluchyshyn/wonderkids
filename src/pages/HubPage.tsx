@@ -1,13 +1,18 @@
 import { useMemo, useState } from 'react';
+import { StarFilter } from '@/components/hub/StarFilter';
+import { useHubState } from '@/core/ui/useHubState';
+import { difficultyRange } from '@/core/kernel/gameConfig';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ProfileBar } from '@/components/hub/ProfileBar';
 import { GalaxyPicker } from '@/components/hub/GalaxyPicker';
 import { GalaxyBackground } from '@/components/hub/GalaxyBackground';
 import { TaskGrid } from '@/components/hub/TaskGrid';
+import { ThemeBrand, hasOwnScenery } from '@/components/theme/ThemeDecor';
 import { PathModal } from '@/components/hub/PathModal';
 import { buildCatalog, filterCatalog, type CatalogEntry } from '@/components/hub/catalog';
-import { DEFAULT_GALAXY_ID, getGalaxy } from '@/core/galaxies';
+import { getGalaxy } from '@/core/galaxies';
+import { isFreePlay } from '@/core/kernel/gameConfig';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/store/useGameStore';
 import { useShowText } from '@/core/ui/useUiPrefs';
@@ -20,22 +25,40 @@ export function HubPage() {
   const profile = useGameStore((s) => s.profile);
   const showText = useShowText();
 
-  const [galaxyId, setGalaxyId] = useState(DEFAULT_GALAXY_ID);
+  // Remembered across navigation: returning from a game keeps the section.
+  const galaxyId = useHubState((s) => s.galaxyId);
+  const setGalaxyId = useHubState((s) => s.setGalaxy);
+  const stars = useHubState((s) => s.stars);
+  const setStars = useHubState((s) => s.setStars);
   const [pathEntry, setPathEntry] = useState<CatalogEntry | null>(null);
 
   const catalog = useMemo(() => buildCatalog(), []);
   const galaxy = getGalaxy(galaxyId);
   // "Planets" = the galaxy's adventures (module sub-categories).
-  const planets = useMemo(
+  const allPlanets = useMemo(
     () => (galaxy.moduleId ? filterCatalog(catalog, { subjectId: galaxy.moduleId }) : []),
     [catalog, galaxy.moduleId],
+  );
+  // Star filter SORTS, it never hides: games of the chosen level come first,
+  // the rest follow dimmed (still playable). A game spanning ★–★★★ matches
+  // every level in its range.
+  const matchesStars = (entry: CatalogEntry) => {
+    if (stars === null) return true;
+    const [min, max] = difficultyRange(entry.sub);
+    return stars >= min && stars <= max;
+  };
+  const planets = useMemo(
+    () => [...allPlanets.filter(matchesStars), ...allPlanets.filter((e) => !matchesStars(e))],
+    [allPlanets, stars], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return (
     <>
-      <GalaxyBackground galaxyId={galaxyId} />
+      {!hasOwnScenery(theme.id) && <GalaxyBackground galaxyId={galaxyId} />}
       <div className="page stack" style={{ position: 'relative', zIndex: 1 }}>
       <ProfileBar />
+
+      <ThemeBrand />
 
       <GalaxyPicker galaxyId={galaxyId} onChange={setGalaxyId} />
 
@@ -75,7 +98,19 @@ export function HubPage() {
           <p className={styles.comingSoonText}>Незабаром тут з'являться планети! 🚀</p>
         </motion.div>
       ) : (
-        <TaskGrid entries={planets} onStart={setPathEntry} />
+        <>
+        <StarFilter value={stars} onChange={setStars} />
+        <TaskGrid
+          entries={planets}
+          isDimmed={(entry) => !matchesStars(entry)}
+          onStart={(entry) => {
+            // Two kinds of games: a path opens its ladder first; free play has
+            // no levels, so it starts right away.
+            if (isFreePlay(entry.sub)) navigate(`/play/${entry.module.id}/${entry.sub.id}`);
+            else setPathEntry(entry);
+          }}
+        />
+        </>
       )}
 
       <PathModal

@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
 import type { LearningModule, TaskInstance } from '@/core/kernel/types';
+import { tasksPerLevel } from '@/core/kernel/gameConfig';
+import { LevelEngine, taskKey } from '@/core/engine/LevelEngine';
+import type { AnswerResult } from '@/core/engine/BaseGameEngine';
 import { useGameStore } from '@/core/store/useGameStore';
 import { subSteps } from '@/core/progress/path';
 
@@ -8,8 +11,11 @@ import { subSteps } from '@/core/progress/path';
 const HINT_THRESHOLD = 2;
 /** Pause after a correct answer so the celebration animation can play. */
 const ADVANCE_DELAY_MS = 850;
-/** Safety cap so a child who keeps guessing can't balloon the queue forever. */
-const MAX_EXTRA_TASKS = 25;
+/** Extra time for a spoken `outro` fact: per character, capped. */
+const OUTRO_MS_PER_CHAR = 70;
+const OUTRO_MAX_MS = 5200;
+/** How many candidates to draw per needed task when a module has no `buildLevel`. */
+const CANDIDATE_FACTOR = 5;
 
 export interface GameSessionConfig {
   moduleId: string;
@@ -22,154 +28,188 @@ export interface GameSession {
   module: LearningModule | undefined;
   task: TaskInstance | null;
   index: number;
-  /** Current required task count = `baseTotal` + `extraTasks` (live). */
+  /** Tasks in this level right now: base + queued repeats + extensions (live). */
   total: number;
-  /** Parent-set baseline before any roll-back extensions. */
+  /** Level length before any repeat/extension was added. */
   baseTotal: number;
-  /** Tasks added to the queue by roll-backs this session (dynamic mode). */
-  extraTasks: number;
   solvedCount: number;
   hintActive: boolean;
+  /** This showing is the one repeat of a task the child missed earlier. */
+  isRepeat: boolean;
   /** True when the just-answered task was correct (brief, before advancing). */
   justSolved: boolean;
   finished: boolean;
   earned: number;
   hintUsedThisSession: boolean;
   registerSuccess: () => void;
-  registerMistake: () => void;
-  /**
-   * A transport roll-back happened (idle drift or blind guessing). In
-   * `dynamic_task_extension` mode this appends +1 task to the queue, visibly
-   * backing the companion up; a no-op in `fixed_strict` mode.
-   */
-  registerRollback: () => void;
+  /** Reports a wrong attempt; the result says which sound/animation to play. */
+  registerMistake: () => AnswerResult | null;
+}
+
+/** Candidate tasks for one level: the module's own picker, or repeated draws. */
+function drawCandidates(
+  module: LearningModule,
+  base: { subCategoryId: string; step: number; choicesCount: number },
+  count: number,
+): TaskInstance[] {
+  if (module.buildLevel) return module.buildLevel(base, count);
+  return Array.from({ length: count * CANDIDATE_FACTOR }, (_, index) =>
+    module.generateTask({ ...base, index }),
+  );
 }
 
 /**
- * Owns the lifecycle of a learning session: generating tasks, counting mistakes
- * to raise the Zero-Aggression hint, awarding artifacts, and detecting the end
- * of the session. Keeps all this out of the view so the shell stays declarative.
+ * React binding of the Engine Layer (PRD v4.0 §3): owns one level's
+ * `LevelEngine` — the task queue, the "missed task returns once" rule and the
+ * dynamic level length — and exposes it as state the shell can render. Also
+ * counts mistakes to raise the Zero-Aggression hint and awards artifacts.
  */
 export function useGameSession(config: GameSessionConfig): GameSession {
   const { moduleId, subCategoryId, step } = config;
   const module = moduleRegistry.get(moduleId);
   const sub = module?.subCategories.find((sc) => sc.id === subCategoryId);
   const maxSteps = sub ? subSteps(sub) : 30;
+  const levelSize = sub ? tasksPerLevel(sub) : 0;
+  const hintDelaySec = sub?.hintDelaySec;
 
-  const baseTotal = useGameStore((s) => s.settings.minTasksPerLevel);
   const gameMode = useGameStore((s) => s.settings.gameMode);
   const gridSize = useGameStore((s) => s.settings.choicesGridSize);
   const awardArtifacts = useGameStore((s) => s.awardArtifacts);
   const recordTaskComplete = useGameStore((s) => s.recordTaskComplete);
   const advanceStep = useGameStore((s) => s.advanceStep);
+  const recordLevelComplete = useGameStore((s) => s.recordLevelComplete);
+  const voiceOn = useGameStore((s) => s.settings.voiceOn && s.settings.voice.taskPrompt);
+  const dynamic = gameMode === 'dynamic_task_extension';
 
-  const [index, setIndex] = useState(0);
-  const [task, setTask] = useState<TaskInstance | null>(null);
+  // One engine per level. Rebuilt only when the level itself changes.
+  const engine = useMemo(() => {
+    if (!module) return null;
+    const base = { subCategoryId, step, choicesCount: gridSize };
+    return new LevelEngine<TaskInstance>({
+      steps_count_default: levelSize,
+      tasks: drawCandidates(module, base, levelSize),
+      repeatOnError: dynamic,
+    });
+  }, [module, subCategoryId, step, gridSize, levelSize, dynamic]);
+
+  // The engine is mutable; `tick` re-renders after each transition.
+  const [, setTick] = useState(0);
+  const rerender = useCallback(() => setTick((t) => t + 1), []);
+
   const [mistakes, setMistakes] = useState(0);
   const [solvedCount, setSolvedCount] = useState(0);
   const [justSolved, setJustSolved] = useState(false);
   const [finished, setFinished] = useState(false);
   const [earned, setEarned] = useState(0);
   const [hintUsedThisSession, setHintUsedThisSession] = useState(false);
-  // Extra tasks appended by roll-backs (dynamic mode). A ref mirrors it so the
-  // deferred "advance" closure always sees the live required total.
-  const [extraTasks, setExtraTasks] = useState(0);
-  const extraRef = useRef(0);
-
-  const total = baseTotal + (gameMode === 'dynamic_task_extension' ? extraTasks : 0);
+  const [idleHint, setIdleHint] = useState(false);
 
   // Guards against double-advancing from rapid taps.
   const advancingRef = useRef(false);
+  const mistakesRef = useRef(0);
 
-  const makeTask = useCallback(
-    (i: number) => {
-      if (!module) return null;
-      return module.generateTask({ subCategoryId, step, index: i, choicesCount: gridSize });
-    },
-    [module, subCategoryId, step, gridSize],
-  );
-
-  // Generate the first task (and regenerate if the config changes).
   useEffect(() => {
-    setIndex(0);
     setMistakes(0);
+    mistakesRef.current = 0;
     setSolvedCount(0);
     setJustSolved(false);
     setFinished(false);
     setEarned(0);
     setHintUsedThisSession(false);
-    setExtraTasks(0);
-    extraRef.current = 0;
+    setIdleHint(false);
     advancingRef.current = false;
-    setTask(makeTask(0));
-  }, [makeTask]);
+  }, [engine]);
 
-  const registerRollback = useCallback(() => {
-    if (gameMode !== 'dynamic_task_extension') return;
-    setExtraTasks((e) => {
-      if (e >= MAX_EXTRA_TASKS) return e;
-      const next = e + 1;
-      extraRef.current = next;
-      return next;
-    });
-  }, [gameMode]);
+  const task = engine?.currentTask ?? null;
+  const isRepeat = engine?.isRepeatShowing ?? false;
 
-  const registerMistake = useCallback(() => {
-    setMistakes((m) => {
-      const next = m + 1;
-      if (next >= HINT_THRESHOLD) setHintUsedThisSession(true);
-      // A wrong tap once the hint is already showing reads as blind guessing —
-      // extend the queue so brute-forcing the grid is never a shortcut (DoD §2).
-      if (next > HINT_THRESHOLD) registerRollback();
-      return next;
-    });
-  }, [registerRollback]);
+  // A long pause on a task raises the helper by itself (per-game delay).
+  useEffect(() => {
+    setIdleHint(false);
+    if (!hintDelaySec || !task || finished) return;
+    const t = window.setTimeout(() => setIdleHint(true), hintDelaySec * 1000);
+    return () => window.clearTimeout(t);
+  }, [task?.id, engine?.position, hintDelaySec, finished]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const registerMistake = useCallback((): AnswerResult | null => {
+    if (!engine || !module) return null;
+    const current = engine.currentTask;
+    if (!current || advancingRef.current) return null;
+
+    const result = engine.submitAnswer(current.id, false);
+    const next = mistakesRef.current + 1;
+    mistakesRef.current = next;
+    setMistakes(next);
+    if (next >= HINT_THRESHOLD) setHintUsedThisSession(true);
+
+    // A wrong tap once the hint is already showing reads as blind guessing —
+    // add a fresh task so brute-forcing the grid is never a shortcut (Tech
+    // Spec v2.1 DoD §2). The engine caps how far a level can grow.
+    if (dynamic && next > HINT_THRESHOLD) {
+      const base = { subCategoryId, step, choicesCount: gridSize };
+      for (let attempt = 0; attempt < 8; attempt += 1) {
+        const extra = module.generateTask({ ...base, index: engine.total + attempt });
+        if (taskKey(extra) !== taskKey(current) && engine.extend(extra)) break;
+      }
+    }
+    rerender();
+    return result;
+  }, [engine, module, dynamic, subCategoryId, step, gridSize, rerender]);
 
   const registerSuccess = useCallback(() => {
-    if (advancingRef.current || !task) return;
+    if (!engine) return;
+    const current = engine.currentTask;
+    if (advancingRef.current || !current) return;
     advancingRef.current = true;
 
+    engine.submitAnswer(current.id, true);
     setJustSolved(true);
     setSolvedCount((c) => c + 1);
-    setEarned((e) => e + task.reward);
-    awardArtifacts(task.reward);
-    recordTaskComplete({ hintUsed: mistakes >= HINT_THRESHOLD });
+    setEarned((e) => e + current.reward);
+    awardArtifacts(current.reward);
+    recordTaskComplete({ hintUsed: mistakesRef.current >= HINT_THRESHOLD });
 
-    const nextIndex = index + 1;
+    // A spoken fact needs room to finish before the next prompt starts.
+    const advanceDelay =
+      current.outro && voiceOn
+        ? Math.min(OUTRO_MAX_MS, ADVANCE_DELAY_MS + current.outro.length * OUTRO_MS_PER_CHAR)
+        : current.outro
+          ? ADVANCE_DELAY_MS + 900
+          : ADVANCE_DELAY_MS;
     window.setTimeout(() => {
-      // Read the LIVE required total: a roll-back may have grown the queue while
-      // this task was being answered, so the finish can't be captured early.
-      const requiredTotal =
-        baseTotal + (gameMode === 'dynamic_task_extension' ? extraRef.current : 0);
-      if (nextIndex >= requiredTotal) {
-        // Session complete → climb the learning path (frontier only).
+      // Advance only now: a late mistake may still have queued a repeat or an
+      // extension, so "is the level over?" is read from the live queue.
+      engine.advance();
+      if (engine.isFinished) {
+        // Level complete → climb the learning path (frontier only).
         advanceStep(moduleId, subCategoryId, step, maxSteps);
+        recordLevelComplete(moduleId, subCategoryId);
         setFinished(true);
       } else {
-        setIndex(nextIndex);
+        mistakesRef.current = 0;
         setMistakes(0);
         setJustSolved(false);
-        setTask(makeTask(nextIndex));
         advancingRef.current = false;
       }
-    }, ADVANCE_DELAY_MS);
-  }, [task, index, baseTotal, gameMode, step, maxSteps, mistakes, awardArtifacts, recordTaskComplete, makeTask, advanceStep, moduleId, subCategoryId]);
+      rerender();
+    }, advanceDelay);
+  }, [engine, step, voiceOn, maxSteps, awardArtifacts, recordTaskComplete, advanceStep, recordLevelComplete, moduleId, subCategoryId, rerender]);
 
   return {
     module,
-    task,
-    index,
-    total,
-    baseTotal,
-    extraTasks: gameMode === 'dynamic_task_extension' ? extraTasks : 0,
+    // Keep the last task on screen while the finish celebration plays.
+    task: task ?? engine?.lastTask ?? null,
+    index: engine?.position ?? 0,
+    total: engine?.total ?? 0,
+    baseTotal: engine?.baseTotal ?? 0,
     solvedCount,
-    hintActive: mistakes >= HINT_THRESHOLD,
+    hintActive: !justSolved && (mistakes >= HINT_THRESHOLD || isRepeat || idleHint),
+    isRepeat,
     justSolved,
     finished,
     earned,
     hintUsedThisSession,
     registerSuccess,
     registerMistake,
-    registerRollback,
   };
 }

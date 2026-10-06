@@ -37,4 +37,15 @@ export const MATH_SUB = {
   div: 'div',
   mixed: 'mixed',
   fractions: 'fractions',
+  // PRD v4.0 game pack — built on the CORE UI templates.
+  fractionOps: 'fraction_ops',
+  balance: 'balance',
+  geometry: 'geometry',
+  maze: 'maze',
+  shop: 'shop',
 } as const;
+
+/** The original games with their own views and helper panel. */
+export function isClassicPayload(payload: unknown): payload is MathPayload {
+  return typeof payload === 'object' && payload !== null && 'kind' in payload;
+}

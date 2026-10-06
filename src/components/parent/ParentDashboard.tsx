@@ -10,7 +10,6 @@ import {
   type GameMode,
   type Gender,
   type Milestone,
-  type MinTasks,
   type PersistableState,
 } from '@/core/store/useGameStore';
 import { api } from '@/core/api/client';
@@ -18,6 +17,7 @@ import { useSyncControl } from '@/core/sync/syncControl';
 import { computeAge } from '@/core/utils/age';
 import { subSteps, pathKey } from '@/core/progress/path';
 import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
+import { isFreePlay } from '@/core/kernel/gameConfig';
 import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
 import { Button } from '@/components/ui/Button';
@@ -56,7 +56,6 @@ const GAME_MODE_OPTIONS: { id: GameMode; label: string; icon: string }[] = [
   { id: 'fixed_strict', label: 'Фіксований', icon: '📏' },
 ];
 
-const MIN_TASKS_OPTIONS: MinTasks[] = [5, 8, 10, 15, 20];
 
 const GRID_OPTIONS: { id: ChoicesGridSize; label: string; icon: string }[] = [
   { id: 6, label: '6 (3×2)', icon: '⬜' },
@@ -125,24 +124,28 @@ export function ParentDashboard() {
   };
 
   // Give the child a fresh tank right now: clear the cooldown + session + used
-  // minutes, then persist immediately so it takes effect even without a full
-  // "Save" (and the child's next sync picks it up).
+  // minutes. Takes effect immediately, without a full "Save".
   const resetTimeNow = async () => {
     resetScreenTime();
     setTimeReset(true);
     window.setTimeout(() => setTimeReset(false), 2500);
-    if (!token) return;
+    const childId = useGameStore.getState().activeChildId;
+    if (!token || !childId) return;
     try {
-      const data = selectPersistable(useGameStore.getState());
-      await api.putState(token, data);
-      savedSnapshot.current = data;
+      // Play time lives on the server (PRD v4.0 §2.2) — the top-up is a
+      // dedicated parent-only call, not part of the save.
+      const view = await api.sessionReset(token, childId);
+      useGameStore.getState().applyServerScreenTime(childId, view, false);
     } catch {
-      /* will persist on the next explicit Save */
+      /* offline: the tank refills once the request can be retried */
     }
   };
 
+  // Only games with a difficulty ladder have a step to set (free play has none).
   const subPaths = moduleRegistry.getAll().flatMap((m) =>
-    m.subCategories.map((sub) => ({ moduleId: m.id, moduleIcon: m.icon, sub })),
+    m.subCategories
+      .filter((sub) => !isFreePlay(sub))
+      .map((sub) => ({ moduleId: m.id, moduleIcon: m.icon, sub })),
   );
 
   const patchMilestone = (id: string, patch: Partial<Milestone>) =>
@@ -273,9 +276,9 @@ export function ParentDashboard() {
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>🎮 Режим завершення гри</h3>
         <p className={styles.hint}>
-          <b>Динамічний</b> (за замовчуванням): кожен відкат машинки додає +1 завдання — рівень завершено,
-          лише коли черга пройдена і транспорт на фініші. <b>Фіксований</b>: рівно задана кількість завдань,
-          без розширення (для наймолодших).
+          Рівень має 5–8 завдань (залежить від гри). <b>Динамічний</b> (за замовчуванням): завдання, у
+          якому дитина помилилась, повертається ще раз наприкінці рівня (не більше двох показів), а сліпе
+          вгадування додає нове завдання. <b>Фіксований</b>: без повторів і розширення (для наймолодших).
         </p>
         <div className={styles.chipRow}>
           {GAME_MODE_OPTIONS.map((o) => (
@@ -285,20 +288,6 @@ export function ParentDashboard() {
               label={o.label}
               active={settings.gameMode === o.id}
               onClick={() => updateSettings({ gameMode: o.id })}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>⏱️ Мінімум завдань на рівень</h3>
-        <div className={styles.chipRow}>
-          {MIN_TASKS_OPTIONS.map((n) => (
-            <Chip
-              key={n}
-              label={String(n)}
-              active={settings.minTasksPerLevel === n}
-              onClick={() => updateSettings({ minTasksPerLevel: n })}
             />
           ))}
         </div>
@@ -413,9 +402,11 @@ export function ParentDashboard() {
             </div>
           ))}
         </div>
-        <Button block variant="ghost" icon="➕" onClick={addMilestone}>
-          Додати ціль
-        </Button>
+        <div style={{ marginTop: 14 }}>
+          <Button block variant="ghost" icon="➕" onClick={addMilestone}>
+            Додати ціль
+          </Button>
+        </div>
       </section>
 
       {/* ---- Per-task step control ---- */}

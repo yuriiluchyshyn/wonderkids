@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { lazy, Suspense, type CSSProperties } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@/core/theme/ThemeProvider';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
@@ -11,10 +11,15 @@ import { ChildLoginPage } from '@/pages/ChildLoginPage';
 import { HubPage } from '@/pages/HubPage';
 import { GamePage } from '@/pages/GamePage';
 import { VaultPage } from '@/pages/VaultPage';
+import { WorldPage } from '@/pages/WorldPage';
 import { ParentPage } from '@/pages/ParentPage';
 import { AudioPage } from '@/pages/AudioPage';
 import { ChildSelectPage } from '@/pages/ChildSelectPage';
 import { TimeHeader } from '@/components/layout/TimeHeader';
+import { ThemeDecor } from '@/components/theme/ThemeDecor';
+
+// Loaded on demand: the admin tool is never part of what a child downloads.
+const AdminPage = lazy(() => import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage })));
 
 const splashBtn: CSSProperties = {
   minHeight: 48,
@@ -112,6 +117,7 @@ function SyncedRoutes() {
         path="/play/:moduleId/:subId"
         element={activeOk ? <GamePage /> : <Navigate to={noActiveFallback} replace />}
       />
+      <Route path="/world" element={activeOk ? <WorldPage /> : <Navigate to={noActiveFallback} replace />} />
       <Route path="/vault" element={activeOk ? <VaultPage /> : <Navigate to={noActiveFallback} replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
@@ -136,10 +142,23 @@ export function App() {
     <ThemeProvider>
       <BrowserRouter>
         <div className="app-shell">
+          <ThemeDecor />
           <TimeHeader />
           <Routes>
             <Route path="/login" element={loginElement} />
             <Route path="/parent-login" element={<LoginPage />} />
+            {/* Admin panel — guarded by the server-side ADMIN_KEY; the kids'
+                portal (play.*) does not even mount the route. */}
+            {getPortal() !== 'kid' && (
+              <Route
+                path="/admin/*"
+                element={
+                  <Suspense fallback={null}>
+                    <AdminPage />
+                  </Suspense>
+                }
+              />
+            )}
             <Route path="/*" element={<ProtectedApp />} />
           </Routes>
         </div>

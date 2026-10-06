@@ -1,0 +1,148 @@
+.lego,
+.minecraft {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ---- Lego: a yellow baseplate covered in studs, with loose bricks ---- */
+.lego {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.5) 0 3px, transparent 4px),
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.13) 0 10px, transparent 11px),
+    radial-gradient(circle at 50% 46%, #ffe14d 0 9px, transparent 10px);
+  background-size: 34px 34px;
+}
+
+.lego > span {
+  position: absolute;
+  display: block;
+  filter: drop-shadow(0 5px 0 rgba(0, 0, 0, 0.18));
+}
+
+/* ---- Minecraft: blocky sky and a strip of grass over dirt ---- */
+.sun {
+  position: absolute;
+  top: 6%;
+  right: 9%;
+  width: 64px;
+  height: 64px;
+  background: #fff7a8;
+  box-shadow: 0 0 0 8px rgba(255, 247, 168, 0.45);
+}
+
+/* A cloud made of three stacked white rectangles — no curves anywhere. */
+.cloud {
+  position: absolute;
+  width: 120px;
+  height: 24px;
+  background: #fff;
+  box-shadow:
+    24px -24px 0 0 #fff,
+    48px -24px 0 0 #fff,
+    -24px 24px 0 -0px rgba(255, 255, 255, 0.85),
+    72px 24px 0 0 rgba(255, 255, 255, 0.85);
+  opacity: 0.9;
+  animation: drift 60s linear infinite alternate;
+}
+
+@keyframes drift {
+  to {
+    transform: translateX(60px);
+  }
+}
+
+.ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 72px;
+  /* Grass top (two greens, jagged edge) over pixel-speckled dirt. */
+  background:
+    linear-gradient(90deg, #5cb531 50%, #4fa02a 50%) 0 0 / 24px 12px repeat-x,
+    linear-gradient(90deg, #4fa02a 50%, transparent 50%) 0 12px / 24px 6px repeat-x,
+    linear-gradient(90deg, rgba(0, 0, 0, 0.12) 25%, transparent 25% 50%, rgba(255, 255, 255, 0.08) 50% 75%, transparent 75%) 0 18px / 48px 12px,
+    linear-gradient(90deg, transparent 50%, rgba(0, 0, 0, 0.1) 50% 75%, transparent 75%) 12px 30px / 48px 12px,
+    #8a5a35;
+}
+
+.creeper {
+  position: absolute;
+  right: 5%;
+  bottom: 72px;
+  line-height: 0;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.25);
+}
+
+/* ---- Wordmarks ---- */
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 6px;
+}
+
+.brandBricks {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* White bubble letters, black then yellow outline, on a red square. */
+.legoLogo {
+  display: inline-grid;
+  place-items: center;
+  padding: 6px 12px 7px;
+  border-radius: 7px;
+  background: #e3000b;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.22);
+  font-family: 'Baloo 2', 'Arial Black', sans-serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.legoLogo span {
+  position: relative;
+  color: #fff;
+  z-index: 0;
+}
+
+.legoLogo span::before,
+.legoLogo span::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.legoLogo span::before {
+  -webkit-text-stroke: 9px #ffd500;
+}
+
+.legoLogo span::after {
+  -webkit-text-stroke: 5px #111;
+}
+
+.mcLogo {
+  font-family: 'Press Start 2P', 'Handjet', monospace;
+  font-size: clamp(1rem, 5.2vw, 1.6rem);
+  color: #c8c8c8;
+  letter-spacing: 0.02em;
+  text-shadow:
+    0 3px 0 #7a7a7a,
+    0 6px 0 #3a3a3a,
+    3px 6px 0 #1c1c1c;
+  -webkit-text-stroke: 1px #2a2a2a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud {
+    animation: none;
+  }
+}

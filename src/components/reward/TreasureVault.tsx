@@ -1,3 +1,4 @@
+import { useBalance } from '@/core/world/useBalance';
 import { motion } from 'framer-motion';
 import { useGameStore } from '@/core/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
@@ -6,7 +7,8 @@ import styles from './TreasureVault.module.css';
 
 /** The child's motivation hub: artifact piggy bank, milestone goals, dream build. */
 export function TreasureVault() {
-  const artifacts = useGameStore((s) => s.artifacts);
+  // What is in the purse now (earned − spent on the planet).
+  const artifacts = useBalance();
   const milestones = useGameStore((s) => s.milestones);
   const theme = useActiveTheme();
 
@@ -28,7 +30,7 @@ export function TreasureVault() {
         </motion.span>
         <div>
           <div className={styles.count}>{artifacts}</div>
-          <div className="muted">{theme.artifact.name} зібрано</div>
+          <div className="muted">{theme.artifact.name} у скарбничці</div>
         </div>
       </motion.div>
 

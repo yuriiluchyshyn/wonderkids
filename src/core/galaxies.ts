@@ -2,9 +2,9 @@
  * Galaxies = subjects (PRD). Each galaxy holds planets (adventures / learning
  * module sub-categories): Математика → планета додавання, віднімання, …
  *
- * Only "Математика" is implemented today (it maps to the `math` learning
- * module). The rest are placeholders shown in the galaxy picker as "coming
- * soon" so the universe reads as bigger than one subject.
+ * A galaxy is live when it points at a registered learning module; the rest
+ * are placeholders shown in the galaxy picker as "coming soon" so the universe
+ * reads as bigger than what is playable today.
  */
 export interface Galaxy {
   id: string;
@@ -19,7 +19,9 @@ export interface Galaxy {
 
 export const GALAXIES: Galaxy[] = [
   { id: 'math', name: 'Математика', icon: '🧮', moduleId: 'math', motif: ['➕', '➖', '✖️', '➗', '🔢', '📐'] },
-  { id: 'geography', name: 'Географія', icon: '🌍', comingSoon: true, motif: ['🌍', '🗺️', '🧭', '⛰️', '🏔️'] },
+  { id: 'geography', name: 'Географія', icon: '🌍', moduleId: 'geography', motif: ['🌍', '🗺️', '🧭', '⛰️', '🏔️'] },
+  { id: 'ecology', name: 'Екологія', icon: '♻️', moduleId: 'ecology', motif: ['♻️', '🌱', '🌳', '💧', '🐝'] },
+  { id: 'history', name: 'Історія', icon: '🏛️', moduleId: 'history', motif: ['🏛️', '🦖', '⏳', '🏰', '📜'] },
   { id: 'language', name: 'Мова', icon: '🔤', comingSoon: true, motif: ['🔤', '📚', '✏️', '💬', '📝'] },
   { id: 'science', name: 'Природа', icon: '🔬', comingSoon: true, motif: ['🔬', '🧪', '🧫', '🧲', '🌱'] },
   { id: 'music', name: 'Музика', icon: '🎵', comingSoon: true, motif: ['🎵', '🎶', '🎹', '🥁', '🎺'] },

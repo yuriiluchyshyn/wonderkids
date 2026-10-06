@@ -7,7 +7,7 @@ import { TimeBudget } from './TimeBudget';
 import styles from './TimeHeader.module.css';
 
 /** Routes where the child time clock should never show (auth / parent cabinet). */
-const HIDDEN_PREFIXES = ['/login', '/parent-login', '/parent', '/who'];
+const HIDDEN_PREFIXES = ['/login', '/parent-login', '/parent', '/who', '/admin'];
 
 /**
  * The master header above all headers (improvement set #3): an always-visible,

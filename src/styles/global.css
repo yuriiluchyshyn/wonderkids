@@ -4,7 +4,7 @@
    Theme palette comes from CSS variables set by ThemeProvider.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600;700&family=Handjet:wght@500;600;700;800&family=Press+Start+2P&display=swap');
 
 /* ---------- reset ---------- */
 *,
@@ -168,4 +168,70 @@ h3 {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* ============================================================
+   Themes that reshape the UI, not just recolour it. ThemeProvider sets
+   `data-theme` on <html>; everything keys off the shared tokens, so every
+   card, button and tile follows without per-component rules. The scenery
+   itself lives in components/theme/ThemeDecor.
+   ============================================================ */
+
+/* ---- Lego: chunky plastic — small radii, hard "brick" drop shadows ---- */
+:root[data-theme='lego'] {
+  --radius-sm: 6px;
+  --radius: 9px;
+  --radius-lg: 12px;
+  --radius-xl: 14px;
+  --shadow-sm: 0 4px 0 rgba(0, 0, 0, 0.2);
+  --shadow: 0 6px 0 rgba(0, 0, 0, 0.22);
+  --shadow-lg: 0 9px 0 rgba(0, 0, 0, 0.24);
+}
+
+:root[data-theme='lego'] body {
+  background: #ffd500;
+}
+
+:root[data-theme='lego'] h1,
+:root[data-theme='lego'] h2,
+:root[data-theme='lego'] h3 {
+  font-weight: 800;
+}
+
+/* ---- Minecraft: no curves at all, bevelled GUI panels, pixel type ---- */
+:root[data-theme='minecraft'] {
+  --radius-sm: 0px;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  /* The inventory-screen bevel: light top-left, dark bottom-right. */
+  --shadow-sm: inset 3px 3px 0 rgba(255, 255, 255, 0.5), inset -3px -3px 0 rgba(0, 0, 0, 0.28), 0 0 0 2px #1c1c1c;
+  --shadow: inset 4px 4px 0 rgba(255, 255, 255, 0.5), inset -4px -4px 0 rgba(0, 0, 0, 0.3), 0 0 0 3px #1c1c1c;
+  --shadow-lg: inset 4px 4px 0 rgba(255, 255, 255, 0.5), inset -4px -4px 0 rgba(0, 0, 0, 0.3), 0 0 0 3px #1c1c1c,
+    8px 8px 0 rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme='minecraft'] body,
+:root[data-theme='minecraft'] button,
+:root[data-theme='minecraft'] input,
+:root[data-theme='minecraft'] h1,
+:root[data-theme='minecraft'] h2,
+:root[data-theme='minecraft'] h3 {
+  /* Handjet: a pixel-grid face whose Cyrillic stays readable for new readers. */
+  font-family: 'Handjet', 'Fredoka', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Handjet runs small for its size — nudge the whole theme up a notch. */
+:root[data-theme='minecraft'] {
+  font-size: 112.5%;
+}
+
+:root[data-theme='minecraft'] * {
+  border-radius: 0 !important;
+}
+
+:root[data-theme='minecraft'] body {
+  padding-bottom: 72px; /* room for the grass strip */
 }

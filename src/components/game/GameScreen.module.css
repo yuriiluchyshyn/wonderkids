@@ -230,3 +230,32 @@
   color: var(--primary-ink);
   box-shadow: var(--shadow-lg);
 }
+
+/* "Let's try once more" — the one repeat of a task the child missed earlier. */
+.repeatTag {
+  margin-right: auto;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--surface-ink);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Short fact shown (and spoken) after a correct answer. */
+.outro {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, #22c55e 16%, var(--surface));
+  color: var(--surface-ink);
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Who moved into the child's world with this gift. */
+.residentLine {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+}

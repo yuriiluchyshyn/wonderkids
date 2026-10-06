@@ -49,7 +49,8 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  width: 86px;
+  /* Wide enough for four-digit goals (2000) without clipping. */
+  width: 112px;
   flex: 0 0 auto;
 }
 

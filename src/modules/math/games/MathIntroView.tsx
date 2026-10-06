@@ -44,9 +44,21 @@ function ItemRow({ items }: { items: string[] }) {
  * Short, playful animated demo shown before a math game begins — themed to the
  * active skin's collectible so the example matches the child's world.
  */
+/** Adventures that have an animated demo; newer games use a spoken intro only. */
+const WITH_DEMO: string[] = [
+  MATH_SUB.add,
+  MATH_SUB.sub,
+  MATH_SUB.mul,
+  MATH_SUB.div,
+  MATH_SUB.mixed,
+  MATH_SUB.fractions,
+];
+
 export function MathIntroView({ subCategoryId }: { subCategoryId: string }) {
   const theme = useActiveTheme();
   const it = theme.artifact.emoji;
+
+  if (!WITH_DEMO.includes(subCategoryId)) return null;
 
   if (subCategoryId === MATH_SUB.fractions) {
     return (

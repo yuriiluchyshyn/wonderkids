@@ -1,8 +1,19 @@
+/** Fetches a phrase as base64 MP3 from the cloud voice; rejects when unavailable. */
+export type CloudVoice = (text: string) => Promise<string>;
+
+/** Phrases kept in memory so repeats (prompts, hints) play instantly. */
+const CLOUD_CACHE_LIMIT = 150;
+/** If the cloud voice has not answered by then, the browser voice takes over. */
+const CLOUD_TIMEOUT_MS = 3500;
+
 /**
- * Voice-First TTS wrapper over the Web Speech API (PRD §8.1, Phase 1 offline).
+ * Voice-First TTS (PRD §8.1).
  *
- * Reads task prompts aloud in Ukrainian (uk-UA) so a pre-reader can play alone.
- * Gracefully degrades to a no-op when the browser has no speech synthesis.
+ * Phase 2 — a natural cloud voice (Google Cloud TTS via our own `/api/tts`
+ * proxy) when the account has it switched on; Phase 1 — the browser's Web
+ * Speech synthesiser otherwise, and as the automatic fallback whenever the
+ * cloud voice is slow, offline or misconfigured. Callers never need to know
+ * which one spoke.
  */
 export class SpeechEngine {
   private readonly synth: SpeechSynthesis | null =
@@ -10,23 +21,89 @@ export class SpeechEngine {
       ? window.speechSynthesis
       : null;
 
+  private cloud: CloudVoice | null = null;
+  private readonly cloudCache = new Map<string, string>();
+  private audio: HTMLAudioElement | null = null;
+  /** Bumped by every speak/cancel so a late cloud answer is dropped. */
+  private turn = 0;
+
   get supported(): boolean {
-    return this.synth !== null;
+    return this.synth !== null || this.cloud !== null;
+  }
+
+  /** Switch the natural cloud voice on (pass a fetcher) or off (null). */
+  setCloudVoice(cloud: CloudVoice | null): void {
+    this.cloud = cloud;
+    if (!cloud) this.cloudCache.clear();
   }
 
   /** Picks the best available Ukrainian voice, falling back to any voice. */
   private pickVoice(): SpeechSynthesisVoice | undefined {
     if (!this.synth) return undefined;
     const voices = this.synth.getVoices();
-    return (
-      voices.find((v) => v.lang?.toLowerCase().startsWith('uk')) ??
-      voices.find((v) => v.lang?.toLowerCase().startsWith('ru')) ??
-      voices[0]
-    );
+    return voices.find((v) => v.lang?.toLowerCase().startsWith('uk')) ?? voices[0];
   }
 
-  speak(text: string): void {
-    if (!this.synth) return;
+  /** Speaks `text`; `onEnd` fires when it finishes, is cut off, or cannot play. */
+  speak(text: string, onEnd?: () => void): void {
+    this.cancel();
+    const turn = this.turn;
+    if (!this.cloud) {
+      this.speakWithBrowser(text, onEnd);
+      return;
+    }
+
+    let settled = false;
+    const fallback = () => {
+      if (settled || turn !== this.turn) return;
+      settled = true;
+      this.speakWithBrowser(text, onEnd);
+    };
+    const timer = window.setTimeout(fallback, CLOUD_TIMEOUT_MS);
+
+    this.fetchCloud(text)
+      .then((base64) => {
+        window.clearTimeout(timer);
+        if (settled || turn !== this.turn) return;
+        settled = true;
+        const audio = new Audio(`data:audio/mpeg;base64,${base64}`);
+        this.audio = audio;
+        const done = () => {
+          if (this.audio === audio) this.audio = null;
+          onEnd?.();
+        };
+        audio.onended = done;
+        audio.onerror = done;
+        audio.play().catch(() => {
+          // Autoplay blocked or decode error — let the browser voice try.
+          if (this.audio === audio) this.audio = null;
+          if (turn === this.turn) this.speakWithBrowser(text, onEnd);
+        });
+      })
+      .catch(() => {
+        window.clearTimeout(timer);
+        fallback();
+      });
+  }
+
+  private async fetchCloud(text: string): Promise<string> {
+    const cached = this.cloudCache.get(text);
+    if (cached) return cached;
+    if (!this.cloud) throw new Error('cloud voice off');
+    const base64 = await this.cloud(text);
+    if (this.cloudCache.size >= CLOUD_CACHE_LIMIT) {
+      const oldest = this.cloudCache.keys().next().value;
+      if (oldest !== undefined) this.cloudCache.delete(oldest);
+    }
+    this.cloudCache.set(text, base64);
+    return base64;
+  }
+
+  private speakWithBrowser(text: string, onEnd?: () => void): void {
+    if (!this.synth) {
+      onEnd?.();
+      return;
+    }
     this.synth.cancel();
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'uk-UA';
@@ -36,10 +113,21 @@ export class SpeechEngine {
     utter.rate = 0.95;
     utter.pitch = 1.15;
     utter.volume = 1;
+    if (onEnd) {
+      utter.onend = onEnd;
+      utter.onerror = onEnd;
+    }
     this.synth.speak(utter);
   }
 
   cancel(): void {
+    this.turn += 1;
+    if (this.audio) {
+      this.audio.onended = null;
+      this.audio.onerror = null;
+      this.audio.pause();
+      this.audio = null;
+    }
     this.synth?.cancel();
   }
 }

@@ -5,7 +5,6 @@ import {
   type ChoicesGridSize,
   type GameMode,
   type Gender,
-  type MinTasks,
 } from '@/core/store/useGameStore';
 import { useAuthStore } from '@/core/auth/useAuthStore';
 import { api, ApiError } from '@/core/api/client';
@@ -22,7 +21,6 @@ const GENDER_OPTIONS: { id: Gender; label: string; icon: string }[] = [
   { id: 'girl', label: 'Дівчинка', icon: '👧' },
   { id: 'boy', label: 'Хлопчик', icon: '👦' },
 ];
-const MIN_TASKS_OPTIONS: MinTasks[] = [5, 8, 10, 15, 20];
 const GAME_MODE_OPTIONS: { id: GameMode; label: string; icon: string }[] = [
   { id: 'dynamic_task_extension', label: 'Динамічний', icon: '🔁' },
   { id: 'fixed_strict', label: 'Фіксований', icon: '📏' },
@@ -39,7 +37,6 @@ interface NewChild {
   nickname: string;
   pin: string;
   gender: Gender;
-  minTasksPerLevel: MinTasks;
   gameMode: GameMode;
   choicesGridSize: ChoicesGridSize;
 }
@@ -49,7 +46,6 @@ const BLANK: NewChild = {
   nickname: '',
   pin: '',
   gender: 'girl',
-  minTasksPerLevel: 10,
   gameMode: 'dynamic_task_extension',
   choicesGridSize: 9,
 };
@@ -134,7 +130,6 @@ export function ChildManager() {
         gender: draft.gender,
       },
       settings: {
-        minTasksPerLevel: draft.minTasksPerLevel,
         gameMode: draft.gameMode,
         choicesGridSize: draft.choicesGridSize,
       },
@@ -260,20 +255,6 @@ export function ChildManager() {
                   label={g.label}
                   active={draft.gender === g.id}
                   onClick={() => setDraft((d) => ({ ...d, gender: g.id }))}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className={styles.fieldLabel}>Мінімум завдань на рівень</label>
-            <div className={styles.chipRow}>
-              {MIN_TASKS_OPTIONS.map((n) => (
-                <Chip
-                  key={n}
-                  label={String(n)}
-                  active={draft.minTasksPerLevel === n}
-                  onClick={() => setDraft((d) => ({ ...d, minTasksPerLevel: n }))}
                 />
               ))}
             </div>

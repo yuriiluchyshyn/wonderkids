@@ -1,0 +1,558 @@
+/* The admin panel is a plain, dense tool for adults — fixed neutral colours,
+   independent of whichever kids' theme was last active. */
+.page {
+  --ink: #1f2937;
+  --soft: #6b7280;
+  --line: #e5e7eb;
+  --brand: #4f46e5;
+  min-height: 100dvh;
+  padding: 20px clamp(12px, 3vw, 32px) 60px;
+  background: #f3f4f6;
+  color: var(--ink);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 15px;
+}
+
+.page h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-family: inherit;
+  color: var(--ink);
+}
+
+.page h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-family: inherit;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.page input {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.gate {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 380px;
+  margin: 12vh auto 0;
+  padding: 24px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.gate p {
+  margin: 0;
+  color: var(--soft);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  max-width: 1100px;
+  margin: 0 auto 14px;
+}
+
+.totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-right: auto;
+}
+
+.totals span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--line);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.search,
+.account,
+.empty {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.account {
+  margin-bottom: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.accountHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin-bottom: 12px;
+}
+
+.meta {
+  margin: 0;
+  color: var(--soft);
+  font-size: 0.85rem;
+}
+
+.empty {
+  color: var(--soft);
+}
+
+/* ---- Google Speech ---- */
+.voice {
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid var(--line);
+}
+
+.voiceHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.pillOn,
+.pillOff {
+  margin-right: auto;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.pillOn {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.pillOff {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
+.switch,
+.switchOn {
+  flex: none;
+  width: 52px;
+  height: 30px;
+  padding: 3px;
+  border: none;
+  border-radius: 999px;
+  background: #cbd5e1;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.switch span,
+.switchOn span {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s;
+}
+
+.switchOn {
+  background: #22c55e;
+}
+
+.switchOn span {
+  transform: translateX(22px);
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn,
+.btnPrimary,
+.btnDanger {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnPrimary {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.btnDanger {
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.btn:disabled,
+.btnPrimary:disabled,
+.btnDanger:disabled,
+.switch:disabled,
+.switchOn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.noteOk {
+  color: #166534;
+  font-weight: 600;
+}
+
+/* Status lines that stand alone on the page line up with the cards. */
+.page > .noteOk,
+.page > .noteErr {
+  max-width: 1100px;
+  margin: 0 auto 10px;
+}
+
+.noteErr {
+  margin: 0;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+/* ---- Children ---- */
+.child {
+  border-top: 1px solid var(--line);
+}
+
+.childHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.childName {
+  font-weight: 700;
+}
+
+.nick {
+  color: var(--soft);
+  font-weight: 500;
+}
+
+.childStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-right: auto;
+  color: var(--soft);
+  font-size: 0.88rem;
+}
+
+.caret {
+  color: var(--soft);
+}
+
+.progress {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+  padding: 10px 0 14px;
+}
+
+.subjectTitle {
+  margin: 0 0 6px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--ink);
+}
+
+.games {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) 70px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.gameIdle {
+  color: #9ca3af;
+}
+
+.gameName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gameValue {
+  grid-column: -2 / -1;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.bar {
+  height: 8px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand);
+}
+
+/* ---- Setup guide ---- */
+.guide {
+  max-width: 1100px;
+  margin: 0 auto 14px;
+  padding: 12px 16px;
+  border: 1px solid #c7d2fe;
+  border-radius: 12px;
+  background: #eef2ff;
+  line-height: 1.5;
+}
+
+.guide summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.guide ol {
+  margin: 10px 0 8px;
+  padding-left: 22px;
+}
+
+.guide li {
+  margin-bottom: 6px;
+}
+
+.guide p {
+  margin: 0;
+  color: var(--soft);
+}
+
+.guide a {
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.guide code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #fff;
+}
+
+/* ---- Links styled as buttons ---- */
+a.btn,
+a.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* ---- One-line Google Speech status with its switch ---- */
+.voiceLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+
+.voiceLine strong {
+  overflow-wrap: anywhere;
+}
+
+/* ---- Keys ---- */
+.keyRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.keyRow .actions {
+  margin-top: 0;
+}
+
+.keyMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+}
+
+.keyMain code {
+  font-size: 0.85rem;
+  color: var(--soft);
+}
+
+.keyRow .pillOn,
+.keyRow .pillOff {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  border-radius: 10px;
+}
+
+/* ---- Add / edit form ---- */
+.editor {
+  max-width: 1100px;
+  margin: 0 auto 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.editor h2 {
+  margin-bottom: 12px;
+}
+
+.scope {
+  margin: 14px 0 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.scope legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+
+.radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.page .radio input,
+.page .pickList input {
+  width: 18px;
+  min-height: 18px;
+  height: 18px;
+  margin-top: 2px;
+  padding: 0;
+  flex: none;
+}
+
+.radio span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.radio small,
+.pickList small {
+  color: var(--soft);
+}
+
+.pick {
+  margin: 6px 0 0 28px;
+}
+
+.pickHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  color: var(--soft);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.pickList {
+  max-height: 260px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.pickList li {
+  border-bottom: 1px solid var(--line);
+}
+
+.pickList li:last-child {
+  border-bottom: none;
+}
+
+.pickList label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}

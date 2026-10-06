@@ -17,9 +17,11 @@ export interface Theme {
   /** Collectible artifact earned per task. */
   artifact: { name: string; emoji: string };
   /**
-   * The themed "play-time" token shown in the always-visible time header. A row
-   * of these drains one-by-one as the session burns down (eggs vanish, a car's
-   * fuel empties, unicorns fade...) — a wordless clock the child always sees.
+   * The "play-time" token shown in the always-visible time header: a row of
+   * them drains one-by-one as the session burns down — a wordless clock. It is
+   * an hourglass or a magic time crystal depending on the theme, and must never
+   * be a star or the theme's artifact: stars mean progress, difficulty and
+   * rewards only (PRD v4.0 §2.1).
    */
   timeToken: { name: string; emoji: string };
   /** Emojis spawned by the celebration/particle system. */
@@ -63,4 +65,5 @@ export type ThemeId =
   | 'forest'
   | 'lego'
   | 'frozen'
+  | 'minecraft'
   | 'galaxy';

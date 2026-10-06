@@ -14,19 +14,18 @@ const FOODS: { emoji: string; name: string }[] = [
   { emoji: '🍫', name: 'шоколадки' },
 ];
 
-function distractorFractions(answer: Fraction, denom: number): Fraction[] {
-  const used = new Set<number>([answer.n]);
-  const options: Fraction[] = [answer];
-  let guard = 0;
-  while (options.length < 3 && guard < 40) {
-    guard += 1;
-    const n = randInt(1, denom - 1);
-    if (!used.has(n)) {
-      used.add(n);
-      options.push({ n, d: denom });
-    }
-  }
-  return shuffle(options);
+/** How many answers to offer: 1/4, 2/4, 3/4, 4/4 (PRD v4.0, game 1). */
+const OPTIONS = 4;
+
+/**
+ * Answers share the task's denominator, so the child compares "how many
+ * slices", not unrelated fractions. Small denominators simply offer fewer.
+ */
+function sameDenominatorOptions(answer: Fraction, denom: number): Fraction[] {
+  const others = shuffle(
+    Array.from({ length: denom }, (_, i) => i + 1).filter((n) => n !== answer.n),
+  ).slice(0, OPTIONS - 1);
+  return [answer.n, ...others].sort((x, y) => x - y).map((n) => ({ n, d: denom }));
 }
 
 /**
@@ -43,6 +42,7 @@ export function generateFraction(config: TaskConfig): TaskInstance<FractionPaylo
 
   return {
     id: uid('fr'),
+    key: `fraction:${food.name}:${filled}/${denom}`,
     prompt: `Яка частинка ${food.name} зафарбована?`,
     reward: rewardForStep(step),
     payload: {
@@ -52,7 +52,7 @@ export function generateFraction(config: TaskConfig): TaskInstance<FractionPaylo
       denom,
       filled,
       answer,
-      options: distractorFractions(answer, denom),
+      options: sameDenominatorOptions(answer, denom),
     },
   };
 }

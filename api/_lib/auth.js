@@ -4,11 +4,7 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-only-change-me';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? '30d';
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-export function isValidEmail(email) {
-  return typeof email === 'string' && EMAIL_RE.test(email.trim());
-}
+export { isValidEmail } from './email.js';
 
 /** Sign a token identifying a (parent) account user. */
 export function signToken(user) {
@@ -27,8 +23,9 @@ export function signChildToken(userId, childId) {
 }
 
 /**
- * Verify the Bearer token on a request. Returns `{ id, email }` or null when
- * the token is missing or invalid.
+ * Verify the Bearer token on a request. Returns `{ id, email, childId }` (the
+ * account id; `childId` is set only for a child session) or null when the
+ * token is missing or invalid.
  */
 export function getUserFromReq(req) {
   const header = req.headers.authorization ?? '';
@@ -38,7 +35,7 @@ export function getUserFromReq(req) {
 
   try {
     const payload = jwt.verify(token, JWT_SECRET);
-    return { id: Number(payload.sub), email: payload.email };
+    return { id: Number(payload.sub), email: payload.email, childId: payload.childId ?? null };
   } catch {
     return null;
   }

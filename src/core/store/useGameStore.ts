@@ -6,6 +6,8 @@ import {
   type VoiceChannelState,
 } from '@/core/audio/voiceChannels';
 import { clampStep, pathKey } from '@/core/progress/path';
+import { playsKey } from '@/core/progress/plays';
+import { balanceOf, itemCost, ownedKey } from '@/core/world/world';
 import { uid } from '@/core/utils/random';
 // Note: no DEFAULT_THEME_ID import — a child's theme is `null` until chosen;
 // useActiveTheme resolves null → the neutral galaxy skin.
@@ -90,8 +92,17 @@ export interface Settings {
   celebration: CelebrationStyle;
   /** Game completion mode (default `dynamic_task_extension`). */
   gameMode: GameMode;
-  /** Baseline tasks required to finish a level (Tech Spec FR-GAME-04). */
+  /**
+   * @deprecated PRD v4.0 §2.3 removed the manual task-count setting: a level's
+   * length now comes from the game config (5–8, shrinking to the unique tasks
+   * available). Kept only so existing saves keep their shape.
+   */
   minTasksPerLevel: MinTasks;
+  /**
+   * Show the tap-to-hear speaker buttons next to text tasks and answers
+   * (PRD v4.0 §2.4). Parents switch it off to encourage independent reading.
+   */
+  ttsButtons: boolean;
   /** Anti-guessing grid size (9 = 3×3, default). */
   choicesGridSize: ChoicesGridSize;
   /** Non-aggressive screen-time / fuel limits. */
@@ -180,13 +191,29 @@ export interface GameState extends ActiveChildView, PersistableState {
   awardArtifacts: (amount: number) => void;
   /** Add a treasure (by fully-qualified id) to the collection, deduped. */
   collectTreasure: (treasureKey: string) => void;
+  /**
+   * Exchange artifacts for an item of the child's world. The lifetime total
+   * (`artifacts`) is kept; the purchase is remembered and everything on screen
+   * — counters and family goals alike — shows the balance "earned − spent"
+   * (`useBalance`). So a purchase really does set the goals back.
+   * Returns false when it cannot be afforded or is already owned.
+   */
+  buyWorldItem: (themeId: string, id: string) => boolean;
   recordTaskComplete: (opts: { hintUsed: boolean }) => void;
   advanceStep: (moduleId: string, subCategoryId: string, playedStep: number, maxSteps: number) => void;
+  /** Count a finished level of a game (feeds the world the child builds). */
+  recordLevelComplete: (moduleId: string, subCategoryId: string) => void;
   setStep: (moduleId: string, subCategoryId: string, step: number, maxSteps: number) => void;
   setMilestones: (milestones: Milestone[]) => void;
   updateSettings: (patch: Partial<Omit<Settings, 'voice' | 'timeControl'>>) => void;
   updateTimeControl: (patch: Partial<TimeControl>) => void;
   toggleVoice: (channel: VoiceChannel) => void;
+  /**
+   * Mirror the server's play-time numbers for a child (PRD v4.0 §2.2 — the
+   * backend is the source of truth). `running` re-anchors the local clock that
+   * animates the gauge between heartbeats.
+   */
+  applyServerScreenTime: (childId: string, view: ServerScreenTime, running: boolean) => void;
   startPlaySession: () => void;
   /** Pause counting (bank the running segment) without ending the session. */
   pausePlaySession: () => void;
@@ -210,6 +237,18 @@ export interface GameState extends ActiveChildView, PersistableState {
   hydrate: (data: Partial<PersistableState> | Record<string, unknown>) => void;
   /** Reset the entire account back to empty (used on logout / fresh login). */
   resetAll: () => void;
+}
+
+/** The play-time part of a `/api/v1/session/*` response. */
+export interface ServerScreenTime {
+  in_cooldown: boolean;
+  cooldown_remaining_seconds: number;
+  screen_time: {
+    dayKey: string;
+    minutesUsedToday: number;
+    sessionElapsedMs: number;
+    lastSessionEndedAt: number | null;
+  };
 }
 
 export interface AddChildInput {
@@ -248,6 +287,7 @@ const DEFAULT_SETTINGS: Settings = {
   gameMode: 'dynamic_task_extension',
   minTasksPerLevel: 10,
   choicesGridSize: 9,
+  ttsButtons: true,
   timeControl: { ...DEFAULT_TIME_CONTROL },
 };
 
@@ -506,6 +546,21 @@ export const useGameStore = create<GameState>()((set) => ({
       ),
     ),
 
+  buyWorldItem: (themeId, id) => {
+    let bought = false;
+    set((s) =>
+      patchActive(s, (c) => {
+        const key = ownedKey(themeId, id);
+        const cost = itemCost(id);
+        // The purse is checked here, not in the UI: nothing is ever overdrawn.
+        if (cost <= 0 || c.treasures.includes(key) || balanceOf(c.artifacts, c.treasures) < cost) return c;
+        bought = true;
+        return { ...c, treasures: [...c.treasures, key] };
+      }),
+    );
+    return bought;
+  },
+
   recordTaskComplete: ({ hintUsed }) =>
     set((s) =>
       patchActive(s, (c) => ({
@@ -523,6 +578,14 @@ export const useGameStore = create<GameState>()((set) => ({
         // Only the frontier advances; replaying an older step changes nothing.
         const next = Math.max(current, Math.min(maxSteps, playedStep + 1));
         return { ...c, progress: { ...c.progress, [key]: clampStep(next, maxSteps) } };
+      }),
+    ),
+
+  recordLevelComplete: (moduleId, subCategoryId) =>
+    set((s) =>
+      patchActive(s, (c) => {
+        const key = playsKey(moduleId, subCategoryId);
+        return { ...c, progress: { ...c.progress, [key]: (c.progress[key] ?? 0) + 1 } };
       }),
     ),
 
@@ -563,6 +626,33 @@ export const useGameStore = create<GameState>()((set) => ({
       })),
     ),
 
+  applyServerScreenTime: (childId, view, running) =>
+    set((s) => {
+      const c = s.children.find((ch) => ch.id === childId);
+      if (!c) return {};
+      const now = Date.now();
+      // Server time → local time via the remaining duration, so a skewed device
+      // clock can neither shorten nor stretch the rest.
+      const cooldownUntil = view.in_cooldown ? now + view.cooldown_remaining_seconds * 1000 : null;
+      const next: ChildState = {
+        ...c,
+        screenTime: {
+          dayKey: view.screen_time.dayKey,
+          minutesUsedToday: view.screen_time.minutesUsedToday,
+          sessionElapsedMs: view.screen_time.sessionElapsedMs,
+          lastSessionEndedAt: view.screen_time.lastSessionEndedAt,
+          cooldownUntil,
+          sessionStartedAt: running && !view.in_cooldown ? now : null,
+        },
+      };
+      const children = s.children.map((ch) => (ch.id === childId ? next : ch));
+      return childId === s.activeChildId ? { children, ...viewOf(next) } : { children };
+    }),
+
+  // The actions below drive the LOCAL clock only — an optimistic mirror that
+  // keeps the gauge moving between heartbeats and while offline. The server
+  // overwrites it on every /session response and never trusts it.
+  //
   // Start/resume counting — ONLY called while the child is actively in a game
   // (and the tab is visible). Opens a fresh running segment; banked time is
   // preserved so pausing and resuming never loses or double-counts time.

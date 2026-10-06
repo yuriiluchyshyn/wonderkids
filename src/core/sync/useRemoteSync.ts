@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/core/api/client';
+import { speechEngine } from '@/core/audio/SpeechEngine';
 import { useAuthStore } from '@/core/auth/useAuthStore';
 import { useSyncControl } from '@/core/sync/syncControl';
 import {
@@ -28,6 +29,7 @@ export function useRemoteSync(): SyncStatus {
   // --- Load on login (or token change) ---
   useEffect(() => {
     if (!token) {
+      speechEngine.setCloudVoice(null);
       setStatus('idle');
       return;
     }
@@ -37,8 +39,10 @@ export function useRemoteSync(): SyncStatus {
 
     api
       .getState<PersistableState>(token)
-      .then(({ state }) => {
+      .then(({ state, features }) => {
         if (!active) return;
+        // Natural cloud voice, when the admin switched it on for this account.
+        speechEngine.setCloudVoice(features?.cloudTts ? (text) => api.tts(token, text) : null);
         // `state` is null for a brand-new user → hydrate falls back to defaults.
         useGameStore.getState().hydrate(state ?? {});
         // Child session: auto-select the child the token logged in as, so the

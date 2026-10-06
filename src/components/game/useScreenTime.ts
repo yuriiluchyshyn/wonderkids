@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { api, type SessionView } from '@/core/api/client';
+import { useAuthStore } from '@/core/auth/useAuthStore';
 import { useGameStore } from '@/core/store/useGameStore';
 import { computeScreenTime } from '@/core/time/screenTime';
 
 /**
- * Non-aggressive screen-time engine (Tech Spec v2.1 FR-TIME). Translates the
- * parent-set limits + persisted session bookkeeping into a themed "fuel" level
- * the child sees — there is never a visible countdown clock (AC-2).
+ * Non-aggressive screen-time engine (Tech Spec v2.1 FR-TIME, PRD v4.0 §2.2).
  *
- *   Fuel(%) = 100 × (1 − t_active / sessionDuration)
- *
- * The daily cap drains the same gauge, so whichever limit is closer wins. The
- * session start is persisted, so a page reload cannot top up the tank or dodge
- * a cooldown.
+ * The SERVER owns the play-time budget: entering a game calls
+ * `POST /api/v1/session/start`, a heartbeat `PUT /api/v1/session/heartbeat`
+ * goes out every 30 s while the child plays, and leaving sends a final "pause"
+ * beat. Clearing storage, reloading or logging in elsewhere therefore cannot
+ * refill the tank. The store keeps a local mirror purely to animate the themed
+ * "fuel" gauge between beats — there is never a visible countdown (AC-2).
  */
 export interface ScreenTimeStatus {
   /** Remaining session fuel, 0..100, recomputed every second. */
@@ -24,37 +25,79 @@ export interface ScreenTimeStatus {
   cooldownRemainingSec: number;
   /** Convenience: play is allowed right now (not resting). */
   ready: boolean;
+  /** Tell the server the session is over (after the bedtime hand-off). */
+  endSession: () => void;
 }
 
 const TICK_MS = 1000;
+const HEARTBEAT_MS = 30_000;
 
 export function useScreenTime(active: boolean): ScreenTimeStatus {
   const timeControl = useGameStore((s) => s.settings.timeControl);
   const screenTime = useGameStore((s) => s.screenTime);
   const startPlaySession = useGameStore((s) => s.startPlaySession);
   const pausePlaySession = useGameStore((s) => s.pausePlaySession);
+  const enterCooldown = useGameStore((s) => s.enterCooldown);
+  const childId = useGameStore((s) => s.activeChildId);
+  const token = useAuthStore((s) => s.token);
 
   const [now, setNow] = useState(() => Date.now());
+  // Whether a play segment is currently open (visible tab, inside a game).
+  const runningRef = useRef(false);
+
+  const apply = useCallback(
+    (view: SessionView) => {
+      if (!childId) return;
+      useGameStore.getState().applyServerScreenTime(childId, view, runningRef.current);
+    },
+    [childId],
+  );
 
   // Count time ONLY while the child is actively in a game and the tab is
-  // visible. Resume on entering play / returning to the tab; pause (banking the
-  // elapsed segment) when the tab is backgrounded or the game screen is left —
-  // so an open-but-idle browser never burns play time.
+  // visible. A network hiccup never blocks play: the local clock keeps the
+  // gauge honest until the next beat gets through.
   useEffect(() => {
-    if (!active) return;
-    if (!document.hidden) startPlaySession();
-    const onVisibility = () => {
-      if (document.hidden) pausePlaySession();
-      else startPlaySession();
+    if (!active || !token || !childId) return;
+    let alive = true;
+    const guarded = (view: SessionView) => {
+      if (alive) apply(view);
     };
-    document.addEventListener('visibilitychange', onVisibility);
-    window.addEventListener('pagehide', pausePlaySession);
-    return () => {
-      document.removeEventListener('visibilitychange', onVisibility);
-      window.removeEventListener('pagehide', pausePlaySession);
+
+    const resume = () => {
+      runningRef.current = true;
+      startPlaySession();
+      api.sessionStart(token, childId).then(guarded).catch(() => {});
+    };
+    const pause = (keepalive = false) => {
+      if (!runningRef.current) return;
+      runningRef.current = false;
       pausePlaySession();
+      api.sessionHeartbeat(token, childId, 'pause', keepalive).then(guarded).catch(() => {});
     };
-  }, [active, startPlaySession, pausePlaySession]);
+
+    if (!document.hidden) resume();
+    const beat = window.setInterval(() => {
+      if (runningRef.current) api.sessionHeartbeat(token, childId).then(guarded).catch(() => {});
+    }, HEARTBEAT_MS);
+
+    const onVisibility = () => (document.hidden ? pause() : resume());
+    const onPageHide = () => pause(true);
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('pagehide', onPageHide);
+    return () => {
+      window.clearInterval(beat);
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pagehide', onPageHide);
+      pause();
+      alive = false;
+    };
+  }, [active, token, childId, apply, startPlaySession, pausePlaySession]);
+
+  const endSession = useCallback(() => {
+    runningRef.current = false;
+    enterCooldown();
+    if (token && childId) api.sessionHeartbeat(token, childId, 'depleted').then(apply).catch(() => {});
+  }, [token, childId, enterCooldown, apply]);
 
   // Re-evaluate fuel / cooldown once a second.
   useEffect(() => {
@@ -71,5 +114,5 @@ export function useScreenTime(active: boolean): ScreenTimeStatus {
   // Only "depleted" while actively playing a live session that just ran dry.
   const depleted = active && !inCooldown && sessionActive && fuelPct <= 0;
 
-  return { fuelPct, depleted, inCooldown, cooldownRemainingSec, ready: !inCooldown };
+  return { fuelPct, depleted, inCooldown, cooldownRemainingSec, ready: !inCooldown, endSession };
 }

@@ -1,3 +1,4 @@
+import { useBalance } from '@/core/world/useBalance';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useGameStore } from '@/core/store/useGameStore';
@@ -7,26 +8,24 @@ import { useSound } from '@/core/audio/useSound';
 import { treasureKey } from '@/core/progress/treasures';
 import { Modal } from '@/components/ui/Modal';
 import { TreasureCollection } from '@/components/reward/TreasureCollection';
-import { DreamBuild } from '@/components/reward/DreamBuild';
+import { useNavigate } from 'react-router-dom';
+import { useWorld } from '@/core/world/useWorld';
 import { ChildDrawer } from './ChildDrawer';
 import styles from './ProfileBar.module.css';
 
 const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };
 
-/** How many artifacts each Dream Build part costs (mirrors DreamBuild). */
-const DREAM_TOTAL_PARTS = 10;
-const DREAM_COST_PER_PART = 10;
-
-type HeaderModal = 'treasures' | 'dream' | null;
+type HeaderModal = 'treasures' | null;
 
 /**
  * Status row: the child's name (tap → profile + crystal/goals drawer), the
- * treasure-collection and dream-build badges (each opens its own modal), and a
+ * treasure-collection badge (opens its modal), the world badge (opens «Мій світ»), and a
  * single artifact piggy in the top-right corner (also opens the drawer).
  */
 export function ProfileBar() {
   const profile = useGameStore((s) => s.profile);
-  const artifacts = useGameStore((s) => s.artifacts);
+  // What is in the purse now (earned − spent on the planet).
+  const artifacts = useBalance();
   const collected = useGameStore((s) => s.treasures);
   const theme = useActiveTheme();
   const showText = useShowText();
@@ -41,7 +40,8 @@ export function ProfileBar() {
     0,
   );
   const treasuresTotal = theme.treasures.length;
-  const dreamParts = Math.min(DREAM_TOTAL_PARTS, Math.floor(artifacts / DREAM_COST_PER_PART));
+  const navigate = useNavigate();
+  const { def: world, buildingsOwned, buildingsTotal } = useWorld();
 
   const openDrawer = () => {
     play('tap');
@@ -87,18 +87,21 @@ export function ProfileBar() {
           </span>
         </motion.button>
 
-        {/* Dream build */}
+        {/* The world the child is building — opens «Мій світ». */}
         <motion.button
           className={styles.badge}
           whileTap={{ scale: 0.9 }}
-          onClick={() => openModal('dream')}
-          aria-label={`${theme.dreamBuild.name}: ${dreamParts} з ${DREAM_TOTAL_PARTS}`}
+          onClick={() => {
+            play('tap');
+            navigate('/world');
+          }}
+          aria-label={`${world.name}: збудовано ${buildingsOwned} з ${buildingsTotal}`}
         >
           <span className={`${styles.badgeIcon} emoji`} aria-hidden>
             {theme.dreamBuild.emoji}
           </span>
           <span className={styles.badgeCount}>
-            {dreamParts}/{DREAM_TOTAL_PARTS}
+            {buildingsOwned}/{buildingsTotal}
           </span>
         </motion.button>
 
@@ -118,10 +121,6 @@ export function ProfileBar() {
 
       <Modal open={modal === 'treasures'} onClose={() => setModal(null)}>
         <TreasureCollection />
-      </Modal>
-
-      <Modal open={modal === 'dream'} onClose={() => setModal(null)}>
-        <DreamBuild />
       </Modal>
 
       <ChildDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />

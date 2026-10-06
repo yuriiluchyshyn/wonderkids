@@ -1,0 +1,431 @@
+.card {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+/* What the child can spend right now. */
+.purse {
+  margin-left: auto;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ring) 30%, var(--surface));
+  font-size: 1.15rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ---- The window onto space ---- */
+.viewport {
+  position: relative;
+  height: min(74vw, 460px);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background:
+    radial-gradient(1.5px 1.5px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 64% 82%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 28% 70%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 90% 56%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 42% 8%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 6% 52%, #fff 50%, transparent 51%),
+    radial-gradient(120% 90% at 50% 110%, #312e81, #0b1026 70%);
+  touch-action: none;
+}
+
+.zoomWrap {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.zoomContent {
+  width: 640px !important;
+  height: 640px !important;
+}
+
+.stage {
+  position: relative;
+  width: 640px;
+  height: 640px;
+}
+
+/* Atmosphere. */
+.glow {
+  position: absolute;
+  inset: 122px;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 10px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 0 60px 26px color-mix(in srgb, var(--accent) 34%, transparent);
+  animation: pulseGlow 5s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  to {
+    box-shadow:
+      0 0 0 14px color-mix(in srgb, var(--accent) 22%, transparent),
+      0 0 80px 34px color-mix(in srgb, var(--accent) 42%, transparent);
+  }
+}
+
+/* A moon circling the planet, in front of the stars. */
+.orbit {
+  position: absolute;
+  inset: 20px;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  animation: spin 46s linear infinite;
+}
+
+.moon {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  font-size: 1.6rem;
+  animation: spin 46s linear infinite reverse;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.globe {
+  position: absolute;
+  inset: 0;
+}
+
+.surface {
+  position: absolute;
+  inset: 152px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at 34% 28%,
+    color-mix(in srgb, var(--primary) 55%, #fff) 0%,
+    var(--primary) 46%,
+    color-mix(in srgb, var(--primary) 62%, #000) 100%
+  );
+  box-shadow: inset -22px -26px 50px rgba(0, 0, 0, 0.38);
+}
+
+/* Continents. */
+.land1,
+.land2,
+.land3 {
+  position: absolute;
+  border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%;
+  background: color-mix(in srgb, var(--ring) 62%, var(--primary));
+  opacity: 0.75;
+}
+
+.land1 {
+  top: 14%;
+  left: 12%;
+  width: 44%;
+  height: 34%;
+}
+
+.land2 {
+  top: 54%;
+  left: 46%;
+  width: 40%;
+  height: 30%;
+  border-radius: 58% 42% 40% 60% / 44% 58% 42% 56%;
+}
+
+.land3 {
+  top: 60%;
+  left: 8%;
+  width: 24%;
+  height: 20%;
+}
+
+/* A spoke pins something to the rim at an angle, standing outwards. */
+.spoke {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.plot {
+  position: absolute;
+  left: 0;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: end center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.plotBuilding {
+  width: 64px;
+  height: 72px;
+  font-size: 3.2rem;
+}
+
+.plotDecor {
+  width: 44px;
+  height: 46px;
+  font-size: 1.75rem;
+}
+
+.thing {
+  display: block;
+  line-height: 1;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
+  transform-origin: 50% 100%;
+}
+
+/* An empty plot: a soft marker that says "something can go here". */
+.plotEmpty .plus {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 4px;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.plotDecor.plotEmpty .plus {
+  width: 24px;
+  height: 24px;
+  font-size: 0.9rem;
+}
+
+/* Affordable right now: it beckons. */
+.plotReady .plus {
+  border-style: solid;
+  border-color: #fde047;
+  background: rgba(253, 224, 71, 0.28);
+  color: #fde047;
+  animation: beckon 1.3s ease-in-out infinite;
+}
+
+@keyframes beckon {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(253, 224, 71, 0.7);
+  }
+  50% {
+    transform: scale(1.14);
+    box-shadow: 0 0 0 9px rgba(253, 224, 71, 0);
+  }
+}
+
+.plotLocked .plus {
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+
+.plotSelected .plus,
+.plotSelected .thing {
+  filter: drop-shadow(0 0 10px #fff);
+}
+
+.resident {
+  position: absolute;
+  left: 0;
+  margin-left: -0.6em;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* Below the window, so the buttons never cover a plot. */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.controls button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary) 14%, var(--surface));
+  color: var(--surface-ink);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+/* ---- Selected item / exchange ---- */
+.sheet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+}
+
+.sheetEmoji {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.sheetText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 150px;
+  min-width: 0;
+  margin-right: auto;
+  font-size: 0.92rem;
+}
+
+.sheetText strong {
+  font-size: 1.05rem;
+}
+
+.buy {
+  flex: 1 0 auto;
+  min-height: 52px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--primary-ink);
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.hint {
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* ---- Shelves ---- */
+.shelf {
+  margin-top: 16px;
+}
+
+.shelfTitle {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+  min-height: 104px;
+  padding: 8px 4px;
+  border: 2px solid color-mix(in srgb, var(--surface-ink) 10%, transparent);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--surface-ink);
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.itemEmoji {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.itemName {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.itemPrice {
+  margin-top: auto;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.itemOwned {
+  border-color: #16a34a;
+  background: color-mix(in srgb, #22c55e 12%, transparent);
+}
+
+.itemOwned .itemPrice {
+  color: #16a34a;
+}
+
+.itemReady {
+  border-color: #eab308;
+  background: color-mix(in srgb, #fde047 22%, transparent);
+}
+
+/* Not yet affordable: quieter, but still tappable to see the price. */
+.itemFar .itemEmoji {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.itemSelected {
+  outline: 3px solid var(--primary);
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow,
+  .orbit,
+  .moon,
+  .plotReady .plus {
+    animation: none;
+  }
+}
+
+.tradeoff {
+  margin-top: 2px;
+  color: var(--text-soft);
+  font-size: 0.82rem;
+}

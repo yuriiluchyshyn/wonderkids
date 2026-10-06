@@ -1,0 +1,71 @@
+/**
+ * Pure answer checks for the UI templates — Engine-Layer rules kept apart from
+ * rendering so they are trivially testable (no React, no `@/` imports).
+ */
+
+/** Every item sits on the slot it belongs to. */
+export function isMatchComplete(pairs: Record<string, string>, placed: Record<string, string>): boolean {
+  return Object.keys(pairs).every((item) => placed[item] === pairs[item]);
+}
+
+/** Positions (0-based) where the current order already agrees with the right one. */
+export function correctPositions(correct: string[], current: string[]): boolean[] {
+  return current.map((id, i) => correct[i] === id);
+}
+
+export function isSequenceCorrect(correct: string[], current: string[]): boolean {
+  return correct.length === current.length && correctPositions(correct, current).every(Boolean);
+}
+
+/** Tolerant float compare for fraction weights (1/2 vs 3/6). */
+export function sameValue(a: number, b: number): boolean {
+  return Math.abs(a - b) < 1e-9;
+}
+
+/** −1: left pan heavier, 0: balanced, 1: right pan heavier. */
+export function scaleTilt(left: number, right: number): -1 | 0 | 1 {
+  if (sameValue(left, right)) return 0;
+  return right > left ? 1 : -1;
+}
+
+/** Are all selected cells one piece (4-neighbour connected)? */
+export function isConnected(cells: ReadonlySet<number>, cols: number): boolean {
+  if (cells.size === 0) return false;
+  const [first] = cells;
+  const seen = new Set<number>([first]);
+  const stack = [first];
+  while (stack.length > 0) {
+    const c = stack.pop() as number;
+    const col = c % cols;
+    const next = [c - cols, c + cols];
+    if (col > 0) next.push(c - 1);
+    if (col < cols - 1) next.push(c + 1);
+    for (const n of next) {
+      if (cells.has(n) && !seen.has(n)) {
+        seen.add(n);
+        stack.push(n);
+      }
+    }
+  }
+  return seen.size === cells.size;
+}
+
+/** Perimeter (in cell sides) of a set of grid cells. */
+export function perimeter(cells: ReadonlySet<number>, cols: number): number {
+  let p = 0;
+  for (const c of cells) {
+    const col = c % cols;
+    if (!cells.has(c - cols)) p += 1;
+    if (!cells.has(c + cols)) p += 1;
+    if (col === 0 || !cells.has(c - 1)) p += 1;
+    if (col === cols - 1 || !cells.has(c + 1)) p += 1;
+  }
+  return p;
+}
+
+/** Can you step from one grid cell to the other (side by side)? */
+export function isAdjacent(a: number, b: number, cols: number): boolean {
+  const dr = Math.abs(Math.floor(a / cols) - Math.floor(b / cols));
+  const dc = Math.abs((a % cols) - (b % cols));
+  return dr + dc === 1;
+}

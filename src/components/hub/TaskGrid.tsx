@@ -6,10 +6,12 @@ import styles from './TaskGrid.module.css';
 interface TaskGridProps {
   entries: CatalogEntry[];
   onStart: (entry: CatalogEntry) => void;
+  /** Cards outside the active star filter: shown after the rest, toned down. */
+  isDimmed?: (entry: CatalogEntry) => boolean;
 }
 
 /** Responsive, animated grid of task cards (mobile-first vertical → multi-col). */
-export function TaskGrid({ entries, onStart }: TaskGridProps) {
+export function TaskGrid({ entries, onStart, isDimmed }: TaskGridProps) {
   if (entries.length === 0) {
     return (
       <motion.div
@@ -29,7 +31,12 @@ export function TaskGrid({ entries, onStart }: TaskGridProps) {
     <div className={styles.grid}>
       <AnimatePresence mode="popLayout">
         {entries.map((entry) => (
-          <TaskCard key={`${entry.module.id}:${entry.sub.id}`} entry={entry} onStart={onStart} />
+          <TaskCard
+            key={`${entry.module.id}:${entry.sub.id}`}
+            entry={entry}
+            onStart={onStart}
+            dimmed={isDimmed?.(entry) ?? false}
+          />
         ))}
       </AnimatePresence>
     </div>

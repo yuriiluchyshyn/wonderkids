@@ -4,3 +4,6 @@
  * (plus its module folder) — the core and Hub need no changes.
  */
 import './math';
+import './geography';
+import './ecology';
+import './history';

@@ -13,8 +13,9 @@ export const DEFAULT_STEPS = 30;
 /** Absolute ceiling (used to clamp parent-entered milestone steps). */
 export const MAX_STEPS = 200;
 
-/** Steps for a given adventure. */
-export function subSteps(sub: Pick<SubCategory, 'steps'>): number {
+/** Steps for a given adventure. A free-play game has no ladder — one "step". */
+export function subSteps(sub: Pick<SubCategory, 'steps' | 'progression'>): number {
+  if (sub.progression === 'free') return 1;
   return sub.steps ?? DEFAULT_STEPS;
 }
 

@@ -56,6 +56,22 @@ export function AudioSettings() {
       </section>
 
       <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>🔊 Кнопки озвучення тексту</h3>
+        <p className={styles.hint}>
+          Значок динаміка біля текстових завдань і відповідей зачитує їх уголос. Вимкни, щоб дитина
+          читала самостійно.
+        </p>
+        <div className={styles.chipRow}>
+          <Chip
+            icon={settings.ttsButtons ? '🔊' : '📖'}
+            label={settings.ttsButtons ? 'Показувати кнопки' : 'Вимкнено — читаємо самі'}
+            active={settings.ttsButtons}
+            onClick={() => updateSettings({ ttsButtons: !settings.ttsButtons })}
+          />
+        </div>
+      </section>
+
+      <section className={styles.section}>
         <h3 className={styles.sectionTitle}>🔤 Текстові підписи</h3>
         <p className={styles.hint}>Увімкнено — підписи для тих, хто читає. Вимкнено — лише малюнки.</p>
         <div className={styles.chipRow}>

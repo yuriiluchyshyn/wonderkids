@@ -1,3 +1,4 @@
+import { useBalance } from '@/core/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { TaskCallbacks } from '@/core/kernel/types';
@@ -17,10 +18,13 @@ import { Companion } from './Companion';
 import { Celebration } from './Celebration';
 import { TreasureReveal } from './TreasureReveal';
 import { Cutscene } from './Cutscene';
+import { TtsGuide } from './TtsGuide';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
 import { useIdleRollback } from './useIdleRollback';
 import { useScreenTime } from './useScreenTime';
 import { subSteps } from '@/core/progress/path';
+import { isFreePlay } from '@/core/kernel/gameConfig';
+import { useWorld } from '@/core/world/useWorld';
 import styles from './GameScreen.module.css';
 
 type GiftTier = 'small' | 'big' | 'biggest' | null;
@@ -60,7 +64,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const session = useGameSession(config);
   const theme = useActiveTheme();
   const showText = useShowText();
-  const { play } = useSound();
+  const { play, playCode } = useSound();
   const speakPrompt = useVoiceSpeak('taskPrompt');
   const speakIntro = useVoiceSpeak('taskIntro');
   const speakHint = useVoiceSpeak('hint');
@@ -68,14 +72,17 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const { module, task } = session;
   const sub = module?.subCategories.find((s) => s.id === config.subCategoryId);
   // Prefer the module's themed, child-level intro; fall back to the static one.
-  const introText = module?.getIntro?.(config.subCategoryId, theme) ?? sub?.intro;
+  const introText = module?.getIntro?.(config.subCategoryId, theme, config.step) ?? sub?.intro;
 
   // A gift pops at every 5th / 10th / final step of the adventure.
   const maxSteps = sub ? subSteps(sub) : 0;
-  const stepGift = giftForStep(config.step, maxSteps);
+  // Free-play games have no ladder: no step gifts, chests or "next level".
+  const free = sub ? isFreePlay(sub) : false;
+  const stepGift = free ? null : giftForStep(config.step, maxSteps);
   // Some steps hide a themed treasure chest the child opens on completion.
-  const stepHasChest = hasChest(config.step, maxSteps);
+  const stepHasChest = !free && hasChest(config.step, maxSteps);
   const collectTreasure = useGameStore((s) => s.collectTreasure);
+  const { newestResident } = useWorld();
 
   const [phase, setPhase] = useState<Phase>(introText ? 'intro' : 'play');
   // The treasure revealed by this step's chest (null until the session ends on
@@ -89,20 +96,22 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const { rollback, markActivity } = useIdleRollback(task?.id ?? 'none');
 
   // ---- Screen-time / fuel engine (Tech Spec FR-TIME) ----
-  const artifacts = useGameStore((s) => s.artifacts);
+  // What is in the purse now (earned − spent on the planet).
+  const artifacts = useBalance();
   const timeControl = useGameStore((s) => s.settings.timeControl);
-  const enterCooldown = useGameStore((s) => s.enterCooldown);
   const startPlaySession = useGameStore((s) => s.startPlaySession);
   const screen = useScreenTime(phase === 'play');
   // `armed` = fuel ran dry (wait for a safe moment); `open` = cutscene showing.
   const [bedtimeArmed, setBedtimeArmed] = useState(false);
   const [bedtimeOpen, setBedtimeOpen] = useState(false);
 
+  const { endSession } = screen;
   const openBedtime = useCallback(() => {
     setBedtimeOpen(true);
-    enterCooldown();
+    // Ends the session locally and on the server (which starts the cooldown).
+    endSession();
     speechEngine.cancel();
-  }, [enterCooldown]);
+  }, [endSession]);
 
   const resumePlay = useCallback(() => {
     setBedtimeArmed(false);
@@ -130,10 +139,15 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     const t = window.setTimeout(() => {
       helperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       const how = module?.getHintSpeech?.(task!);
-      speakHint(how ? `Ось підказка! ${how}` : 'Ось підказка! Порахуймо разом.');
+      speakHint(how ? `Ось підказка! ${how}` : 'Ось підказка! Подивімось разом.');
     }, 120);
     return () => window.clearTimeout(t);
   }, [session.hintActive, task?.id, phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A correct answer may come with a short fact ("Це прапор Японії!").
+  useEffect(() => {
+    if (session.justSolved && task?.outro) speakPrompt(task.outro);
+  }, [session.justSolved]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The mascot reaches the goal and takes a happy "crunch" the instant the
   // level is cleared (this fires before any treasure-chest reveal).
@@ -218,14 +232,15 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const callbacks: TaskCallbacks = {
     onSuccess: () => {
       markActivity();
-      play('success');
+      playCode('SND_SUCCESS');
       play('pop');
       session.registerSuccess();
     },
     onMistake: () => {
       markActivity();
-      play('sad');
-      session.registerMistake();
+      // Engine decides the feedback: SND_ERROR + a 300 ms shake in the view.
+      const result = session.registerMistake();
+      if (result) playCode(result.audio);
     },
     speakPrompt: () => {
       markActivity();
@@ -234,7 +249,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   };
 
   const GameView = module.GameView;
-  const VisualHelper = module.VisualHelper;
+  const VisualHelper =
+    module.VisualHelper && (module.showsHelper?.(task) ?? true) ? module.VisualHelper : undefined;
+  // Text-based games get the tap-to-hear guide on first run (PRD v4.0 §2.4).
+  const showTtsGuide = phase === 'play' && Boolean(sub?.hasText);
   const IntroView = module.IntroView;
   // When finished, pin the mascot at the goal (no idle roll-back on the
   // celebration screen); otherwise show progress minus any idle roll-back.
@@ -335,6 +353,9 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
       <div className={styles.board} ref={boardRef}>
         <div className={styles.boardTop}>
+          {session.isRepeat && !session.finished && (
+            <span className={styles.repeatTag}>🔁 Спробуймо ще раз</span>
+          )}
           <VoiceToggle channel="taskPrompt" />
         </div>
 
@@ -351,7 +372,26 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
           )}
         </AnimatePresence>
 
-        <GameView task={task} callbacks={callbacks} hintActive={session.hintActive} />
+        {/* Keyed by queue position: the repeat of a missed task is a fresh view. */}
+        <GameView
+          key={session.index}
+          task={task}
+          callbacks={callbacks}
+          hintActive={session.hintActive}
+        />
+
+        <AnimatePresence>
+          {session.justSolved && task.outro && showText && (
+            <motion.p
+              className={styles.outro}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+            >
+              {task.outro}
+            </motion.p>
+          )}
+        </AnimatePresence>
 
         <AnimatePresence>
           {session.hintActive && VisualHelper && (
@@ -374,7 +414,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       {/* Bouncing jump-back button so a child who scrolled to the helper can
           return to the answer tiles with one tap. */}
       <AnimatePresence>
-        {session.hintActive && (
+        {session.hintActive && VisualHelper && (
           <motion.button
             className={styles.jumpUp}
             aria-label="Повернутися до відповідей"
@@ -416,6 +456,16 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
                 {GIFT_META[stepGift].emoji}
               </span>
               <p className={styles.giftLabel}>{GIFT_META[stepGift].label}</p>
+              {/* The gift is a new resident of the child's world. */}
+              {newestResident && (
+                <p className={styles.residentLine}>
+                  У твоєму світі оселився:{' '}
+                  <span className="emoji" aria-hidden>
+                    {newestResident.emoji}
+                  </span>{' '}
+                  <strong>{newestResident.name}</strong>
+                </p>
+              )}
             </motion.div>
           ) : (
             <div className={`${styles.summaryArt} emoji`}>{theme.mascot.emoji}</div>
@@ -454,6 +504,8 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
           </div>
         </div>
       </Modal>
+
+      {showTtsGuide && <TtsGuide />}
 
       {bedtimeOverlay}
     </div>

@@ -45,8 +45,18 @@ export interface TaskConfig {
  */
 export interface TaskInstance<TPayload = unknown> {
   id: string;
+  /**
+   * Stable identity of the question itself (e.g. "3+4", "flag:jp"). Two tasks
+   * with the same key never appear in one level. Defaults to `prompt`.
+   */
+  key?: string;
   /** Short natural-language prompt, read aloud via TTS for pre-readers. */
   prompt: string;
+  /**
+   * Short spoken (and shown) fact that rewards a correct answer — "Це прапор
+   * Японії!". The shell gives it time to play before the next task.
+   */
+  outro?: string;
   /** Artifacts awarded for completing this task. */
   reward: number;
   payload: TPayload;
@@ -69,9 +79,34 @@ export interface TaskCallbacks {
 export interface GameViewProps<TPayload = unknown> {
   task: TaskInstance<TPayload>;
   callbacks: TaskCallbacks;
-  /** True once the shell has detected 2+ mistakes and wants a visual helper. */
+  /**
+   * True once the shell wants a visual helper: 2+ mistakes, a long pause, or
+   * the repeat showing of a task the child missed earlier.
+   */
   hintActive: boolean;
 }
+
+/** `path`: steps of rising difficulty. `free`: open play, no levels. */
+export type Progression = 'path' | 'free';
+
+/** Difficulty marking shown as 1–3 stars (PRD v4.0 §1.2). */
+export type Difficulty = 1 | 2 | 3;
+
+/** Core UI templates a game can be built from (PRD v4.0 §3.2). */
+export type MechanicsType =
+  | 'UI_GRID_CHOICE'
+  | 'UI_DRAG_MATCH'
+  | 'UI_CHRONO_SEQUENCE'
+  | 'UI_MAP_PUZZLE'
+  | 'UI_BALANCE_SCALE'
+  | 'UI_SORTER_BINS';
+
+/** Age band each difficulty targets. */
+export const DIFFICULTY_AGES: Record<Difficulty, string> = {
+  1: '6–7 років',
+  2: '7–8 років',
+  3: '9–10 років',
+};
 
 /** A selectable card category inside a subject (shown in the Hub catalog). */
 export interface SubCategory {
@@ -91,7 +126,53 @@ export interface SubCategory {
    * fewer). Defaults to DEFAULT_STEPS when omitted.
    */
   steps?: number;
+
+  /**
+   * What this game builds in the child's world («Землі знань»): a landmark
+   * that grows in four stages as the child progresses. `stages` names what
+   * appears at each stage (e.g. countries for a geography game); without it
+   * the same building simply grows.
+   */
+  landmark?: { name: string; emoji: string; stages?: [string, string][] };
+
+  /**
+   * How the game is entered from the Hub:
+   * - `path` (default): a Duolingo-style ladder — every next step is harder
+   *   than the one before, the child climbs it via «Мій шлях».
+   * - `free`: the content has no meaningful difficulty to grow (sort the
+   *   rubbish, name the five oceans). No ladder — the card opens straight into
+   *   play, all content is available, and it can be replayed without limit.
+   */
+  progression?: Progression;
+
+  // ---- Declarative game config (PRD v4.0 §1.2) ----
+  /** Globally unique game id, e.g. "geo_flags_quiz". Defaults to `${module}_${id}`. */
+  gameId?: string;
+  /** 1–3 stars; a pair marks a game that grows from one band to another. */
+  difficulty?: Difficulty | [Difficulty, Difficulty];
+  /**
+   * UTC publication date (ISO 8601). Before it the game is listed but locked
+   * («Скоро»); for 60 days after it the card carries a "NEW" badge.
+   */
+  publishDate?: string;
+  /**
+   * Tasks in one level (`steps_count_default`, 5–8). A level shrinks on its own
+   * when fewer unique tasks exist. NOT the path length — that is `steps`.
+   */
+  tasksPerLevel?: number;
+  /** UI template(s) the game is built on. */
+  mechanics?: MechanicsType | MechanicsType[];
+  /** Seconds of inactivity on a task before the helper appears by itself. */
+  hintDelaySec?: number;
+  /**
+   * The game shows text a child has to read (tasks or answers). Enables the
+   * tap-to-hear speaker buttons and the first-run guide pointing at them.
+   */
+  hasText?: boolean;
 }
+
+/** Tasks per level when a game does not say (PRD v4.0 §2.3: 5–8). */
+export const DEFAULT_TASKS_PER_LEVEL = 6;
 
 /**
  * The plugin contract. A learning subject (Math, Geography, ...) implements this
@@ -106,6 +187,13 @@ export interface LearningModule {
   subCategories: SubCategory[];
   /** Pure task generator — no side effects, fully deterministic given config + rng. */
   generateTask: (config: TaskConfig) => TaskInstance;
+  /**
+   * Optional: build the candidate tasks of a whole level at once. Content-based
+   * games (a fixed set of flags, animals, people…) implement this to hand out
+   * distinct items; without it the shell calls `generateTask` repeatedly and
+   * drops duplicates. May return fewer than `count` — the level then shrinks.
+   */
+  buildLevel?: (config: Omit<TaskConfig, 'index'>, count: number) => TaskInstance[];
   /** React component that renders the interactive game for a task. */
   GameView: ComponentType<GameViewProps>;
   /**
@@ -114,6 +202,16 @@ export interface LearningModule {
    * generic encouraging helper.
    */
   VisualHelper?: ComponentType<GameViewProps>;
+  /**
+   * Optional: how many different tasks a game has in total. Shown on the card
+   * of a free-play game («100 завдань»), where there is no path to show.
+   */
+  taskCount?: (subCategoryId: string) => number;
+  /**
+   * Whether `VisualHelper` has something to show for this task. Defaults to
+   * true; lets one module mix games with and without a separate helper panel.
+   */
+  showsHelper?: (task: TaskInstance) => boolean;
   /**
    * Optional animated demo shown in the pre-task intro (e.g. a pie splitting
    * for fractions). Receives the sub-category being introduced.
@@ -127,6 +225,7 @@ export interface LearningModule {
   /**
    * Optional child-level intro for an adventure, themed to the active skin
    * (e.g. counts in apples / bricks / snowflakes). Overrides SubCategory.intro.
+   * `step` lets a game explain each new task type as the path reaches it.
    */
-  getIntro?: (subCategoryId: string, theme: Theme) => string;
+  getIntro?: (subCategoryId: string, theme: Theme, step: number) => string | undefined;
 }

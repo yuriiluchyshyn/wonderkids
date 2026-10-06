@@ -44,13 +44,15 @@ export function generateMentalMath(config: TaskConfig): TaskInstance<MentalMathP
   if (op === '×') {
     const max = mulFactorMax(step);
     a = randInt(2, max);
-    b = randInt(2, max);
+    // One factor reaches a little further so even the first levels have
+    // enough different sums to fill a level without repeating.
+    b = randInt(2, max + 3);
     answer = a * b;
   } else if (op === '÷') {
     // Build from the answer so the division is always exact.
     const max = divFactorMax(step);
     b = randInt(2, max); // divisor
-    answer = randInt(1, max); // quotient
+    answer = randInt(1, max + 3); // quotient (wider, for variety on early levels)
     a = b * answer; // dividend
   } else if (op === '+') {
     const max = addSubMax(step);
@@ -67,6 +69,7 @@ export function generateMentalMath(config: TaskConfig): TaskInstance<MentalMathP
 
   return {
     id: uid('mm'),
+    key: `${a}${op}${b}`,
     prompt: spokenPrompt(a, b, op),
     reward: rewardForStep(step),
     payload: {

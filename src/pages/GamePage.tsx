@@ -4,6 +4,7 @@ import { GameScreen } from '@/components/game/GameScreen';
 import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
 import { useGameStore } from '@/core/store/useGameStore';
 import { clampStep, pathKey, subSteps } from '@/core/progress/path';
+import { gameStatus } from '@/core/kernel/gameConfig';
 
 /** Hosts a learning session at the step chosen on the path (?step=). */
 export function GamePage() {
@@ -14,10 +15,12 @@ export function GamePage() {
   const module = moduleRegistry.get(moduleId);
   const sub = module?.subCategories.find((s) => s.id === subId);
   // Frontier step from the store (advances when a session completes).
-  const liveStep = useGameStore((s) => s.progress[pathKey(moduleId, subId)] ?? 1);
+  const storedStep = useGameStore((s) => s.progress[pathKey(moduleId, subId)] ?? 1);
 
   // The step chosen on the path (never above the frontier); falls back to it.
   const maxSteps = sub ? subSteps(sub) : 30;
+  // A path can get shorter between releases — never trust a stored step past its end.
+  const liveStep = Math.min(storedStep, maxSteps);
   const requested = Number(search.get('step'));
   const chosenStep = requested ? Math.min(clampStep(requested, maxSteps), liveStep) : liveStep;
 
@@ -27,7 +30,7 @@ export function GamePage() {
   const [activeStep, setActiveStep] = useState(chosenStep);
   const [sessionKey, setSessionKey] = useState(0);
 
-  if (!module || !sub) {
+  if (!module || !sub || gameStatus(sub) === 'soon') {
     return (
       <div className="page center" style={{ minHeight: '60dvh' }}>
         <div className="stack" style={{ textAlign: 'center' }}>

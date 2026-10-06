@@ -1,4 +1,6 @@
+import { useBalance } from '@/core/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/core/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
@@ -7,8 +9,6 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { Button } from '@/components/ui/Button';
 import { useAuthStore } from '@/core/auth/useAuthStore';
-import { useTimeBudget } from '@/core/time/screenTime';
-import { TimeBudget } from '@/components/layout/TimeBudget';
 import styles from './ChildDrawer.module.css';
 
 const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };
@@ -28,12 +28,12 @@ interface ChildDrawerProps {
 export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
   const navigate = useNavigate();
   const profile = useGameStore((s) => s.profile);
-  const artifacts = useGameStore((s) => s.artifacts);
+  // What is in the purse now (earned − spent on the planet).
+  const artifacts = useBalance();
   const milestones = useGameStore((s) => s.milestones);
   const theme = useActiveTheme();
   const { play } = useSound();
   const logout = useAuthStore((s) => s.logout);
-  const { fuelPct, inCooldown } = useTimeBudget();
 
   const switchPlayer = () => {
     play('tap');
@@ -47,7 +47,9 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
     logout(); // clears the session → App redirects to /login
   };
 
-  return (
+  // Portalled to <body>: the hub page is its own stacking context, so an
+  // in-place drawer would slide UNDER the sticky play-time header.
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -82,14 +84,6 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
               </div>
             </div>
 
-            {/* ---- Play-time budget — the themed timeline, up top ---- */}
-            <div className={styles.timeBudget}>
-              <div className={styles.timeBudgetLabel}>
-                {inCooldown ? '😴 Час відпочити' : '⏳ Ігровий час'}
-              </div>
-              <TimeBudget pct={fuelPct} resting={inCooldown} slots={10} />
-            </div>
-
             {/* ---- Artifact (скарбничка) — top ---- */}
             <div className={styles.artifact}>
               <motion.span
@@ -103,7 +97,7 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
               <div className={styles.artifactInfo}>
                 <div className={styles.artifactName}>{theme.artifact.name}</div>
                 <div className={styles.artifactCount}>
-                  {artifacts} <span className={styles.artifactUnit}>зібрано</span>
+                  {artifacts} <span className={styles.artifactUnit}>у скарбничці</span>
                 </div>
               </div>
             </div>
@@ -135,7 +129,7 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
               })}
             </div>
 
-            <h3 className={styles.sectionTitle}>🌈 Світ</h3>
+            <h3 className={styles.sectionTitle}>🎨 Тема</h3>
             <ThemeGrid />
 
             <div className={styles.actions}>
@@ -149,6 +143,7 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
           </motion.aside>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

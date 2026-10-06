@@ -1,0 +1,164 @@
+.card {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 1.25rem;
+}
+
+.count {
+  margin-left: auto;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.hint,
+.note {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+}
+
+.note {
+  margin-top: 12px;
+}
+
+.locked {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+
+.built {
+  border-color: #16a34a;
+}
+
+/* ---- Lands of knowledge ---- */
+.land {
+  margin-top: 16px;
+}
+
+.landTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+}
+
+.landmarks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.landmark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border: 2px solid color-mix(in srgb, var(--surface-ink) 10%, transparent);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.landmark.built {
+  border-color: #16a34a;
+  background: color-mix(in srgb, #22c55e 12%, transparent);
+}
+
+.landmarkEmoji {
+  line-height: 1.1;
+  min-height: 3.1rem;
+  display: grid;
+  place-items: center;
+}
+
+.landmarkText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.landmarkName {
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.landmarkGame {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  line-height: 1.2;
+}
+
+.stageRow {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.stageChip {
+  font-size: 1rem;
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+
+.stagePip {
+  width: 16px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-ink) 18%, transparent);
+}
+
+.stageOn {
+  opacity: 1;
+  filter: none;
+}
+
+.stagePip.stageOn {
+  background: var(--primary);
+}
+
+/* ---- Residents ---- */
+.residents {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resident {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.residentEmoji {
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.residentName {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
