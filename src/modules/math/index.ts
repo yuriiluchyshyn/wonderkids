@@ -90,7 +90,6 @@ const subCategories: SubCategory[] = [
     difficulty: 1,
     tasksPerLevel: 6,
     mechanics: 'UI_GRID_CHOICE',
-    hintDelaySec: 5,
   },
   {
     id: MATH_SUB.fractionOps,
@@ -104,7 +103,6 @@ const subCategories: SubCategory[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 6,
     mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
-    hintDelaySec: 12,
   },
   {
     id: MATH_SUB.balance,
@@ -119,7 +117,6 @@ const subCategories: SubCategory[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 6,
     mechanics: 'UI_BALANCE_SCALE',
-    hintDelaySec: 7,
   },
   {
     id: MATH_SUB.geometry,
@@ -133,7 +130,6 @@ const subCategories: SubCategory[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 5,
     mechanics: 'UI_DRAG_MATCH',
-    hintDelaySec: 12,
   },
   {
     id: MATH_SUB.maze,
@@ -148,7 +144,6 @@ const subCategories: SubCategory[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 5,
     mechanics: 'UI_GRID_CHOICE',
-    hintDelaySec: 15,
   },
   {
     id: MATH_SUB.shop,
@@ -164,7 +159,6 @@ const subCategories: SubCategory[] = [
     tasksPerLevel: 6,
     mechanics: 'UI_DRAG_MATCH',
     hasText: true,
-    hintDelaySec: 12,
   },
 ];
 

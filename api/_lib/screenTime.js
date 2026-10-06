@@ -13,8 +13,12 @@
 
 /** Client pings every 30 s; a gap longer than this means play was paused. */
 export const HEARTBEAT_MAX_GAP_MS = 90_000;
-/** How long an empty tank may keep running (finishing the current task). */
-export const DEPLETION_GRACE_MS = 90_000;
+/**
+ * How long an empty tank may keep running. Out of time never interrupts a
+ * level: the child finishes the one in progress, and only then rests — so the
+ * server allows a level's worth of overrun before it ends the session itself.
+ */
+export const DEPLETION_GRACE_MS = 10 * 60_000;
 /** Tolerated client/server disagreement when the client reports "depleted". */
 const DEPLETED_TOLERANCE_MS = 20_000;
 

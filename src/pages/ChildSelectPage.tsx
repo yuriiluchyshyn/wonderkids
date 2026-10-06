@@ -1,3 +1,4 @@
+import { usePageMeta } from '@/core/seo/usePageMeta';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -16,6 +17,7 @@ const PIN_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'];
  * parent sets names, nicknames and PINs in the parent portal.
  */
 export function ChildSelectPage() {
+  usePageMeta({ title: 'Хто грає?' });
   const navigate = useNavigate();
   const children = useGameStore((s) => s.children);
   const setActiveChild = useGameStore((s) => s.setActiveChild);

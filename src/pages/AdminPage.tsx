@@ -1,3 +1,4 @@
+import { usePageMeta } from '@/core/seo/usePageMeta';
 import { useState, type FormEvent } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { adminApi } from '@/core/api/client';
@@ -14,6 +15,7 @@ import styles from './admin/Admin.module.css';
  *   /admin/speech  Google Speech keys and who each one serves
  */
 export function AdminPage() {
+  usePageMeta({ title: 'Адмінпанель' });
   const [adminKey, setAdminKey] = useState(() => sessionStorage.getItem(ADMIN_KEY_STORAGE) ?? '');
   const [draft, setDraft] = useState('');
   const [error, setError] = useState<string | null>(null);

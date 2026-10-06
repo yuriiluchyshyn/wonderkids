@@ -20,11 +20,12 @@ export function divFactorMax(step: number): number {
 }
 
 /**
- * Denominator ceiling for «Смачні Дроби» at a given step (2 → 8). The game is
+ * Denominator ceiling for «Смачні Дроби» at a given step (4 → 8). The game is
  * an introduction (PRD v4.0: ⭐, 10 levels), so it grows one slice at a time.
  */
 export function fractionDenomMax(step: number): number {
-  return Math.min(8, 2 + Math.floor((step - 1) * 0.7));
+  // Starts at quarters so even the first level has six different fractions.
+  return Math.min(8, 4 + Math.floor((step - 1) * 0.45));
 }
 
 /** Spread of the distractor answers — wider as it gets harder. */

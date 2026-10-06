@@ -1,18 +1,5 @@
 /** Content for the History games. Ordered easy → hard (see `unlocked`). */
 
-export const DINOSAURS = [
-  { id: 'trex', name: 'Тиранозавр', emoji: '🦖', eats: 'meat', fact: 'Тиранозавр мав зуби завбільшки з банан і полював на інших динозаврів.' },
-  { id: 'triceratops', name: 'Трицератопс', emoji: '🦕', eats: 'plants', fact: 'Трицератопс мав три роги і жував рослини.' },
-  { id: 'diplodocus', name: 'Диплодок', emoji: '🦕', eats: 'plants', fact: 'Диплодок довгою шиєю діставав листя з верхівок дерев.' },
-  { id: 'velociraptor', name: 'Велоцираптор', emoji: '🦖', eats: 'meat', fact: 'Велоцираптор був маленький, спритний і полював зграєю.' },
-  { id: 'stegosaurus', name: 'Стегозавр', emoji: '🦕', eats: 'plants', fact: 'Стегозавр носив пластини на спині та їв папороть.' },
-  { id: 'spinosaurus', name: 'Спінозавр', emoji: '🦖', eats: 'meat', fact: 'Спінозавр ловив рибу, як велетенський крокодил.' },
-  { id: 'brachiosaurus', name: 'Брахіозавр', emoji: '🦕', eats: 'plants', fact: 'Брахіозавр був вищий за чотириповерховий будинок і їв листя.' },
-  { id: 'allosaurus', name: 'Алозавр', emoji: '🦖', eats: 'meat', fact: 'Алозавр був грізним мисливцем із гострими кігтями.' },
-  { id: 'ankylosaurus', name: 'Анкілозавр', emoji: '🦕', eats: 'plants', fact: 'Анкілозавр був укритий панцирем і їв низенькі рослини.' },
-  { id: 'iguanodon', name: 'Ігуанодон', emoji: '🦕', eats: 'plants', fact: 'Ігуанодон зривав гілки шипом на великому пальці.' },
-] as const;
-
 export interface Achiever {
   id: string;
   name: string;

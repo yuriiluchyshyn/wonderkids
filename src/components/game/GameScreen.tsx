@@ -120,18 +120,27 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     onPlayAgain();
   }, [startPlaySession, onPlayAgain]);
 
+  const midLevel = phase === 'play' && !session.finished && session.solvedCount + session.index > 0;
+  // True while the rest screen covers the game: nothing may speak or run under it.
+  const blocked = bedtimeOpen || (screen.inCooldown && !midLevel);
+  useEffect(() => {
+    if (blocked) speechEngine.cancel();
+  }, [blocked]);
+
   const boardRef = useRef<HTMLDivElement>(null);
   const helperRef = useRef<HTMLDivElement>(null);
 
   // Speak the intro once when the intro screen is shown.
   useEffect(() => {
-    if (phase === 'intro' && introText) speakIntro(introText);
+    if (phase === 'intro' && introText && !blocked) speakIntro(introText);
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Read the prompt aloud whenever a new task appears during play (Voice-First).
+  // Keyed by queue position, not task id: the repeat of a missed task is read
+  // out again like any other task.
   useEffect(() => {
-    if (phase === 'play' && task) speakPrompt(task.prompt);
-  }, [task?.id, phase]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (phase === 'play' && task && !session.finished && !blocked) speakPrompt(task.prompt);
+  }, [session.index, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // When the scaffolding helper appears: scroll to it and speak the how-to.
   useEffect(() => {
@@ -142,12 +151,26 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       speakHint(how ? `Ось підказка! ${how}` : 'Ось підказка! Подивімось разом.');
     }, 120);
     return () => window.clearTimeout(t);
-  }, [session.hintActive, task?.id, phase]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [session.hintActive, session.index, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // A correct answer may come with a short fact ("Це прапор Японії!").
+  // The level waits for it: the next task starts only when the fact has been
+  // read to the end (or, with the voice off, after time to read it).
+  const outroVoice = useGameStore((s) => s.settings.voiceOn && s.settings.voice.taskPrompt);
   useEffect(() => {
-    if (session.justSolved && task?.outro) speakPrompt(task.outro);
-  }, [session.justSolved]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!session.awaitingOutro || !task?.outro) return;
+    const { outroDone } = session;
+    if (outroVoice && speechEngine.supported) {
+      // Let the "correct!" sound land first, then speak.
+      const start = window.setTimeout(
+        () => speechEngine.speak(task.outro as string, () => window.setTimeout(outroDone, 350)),
+        450,
+      );
+      return () => window.clearTimeout(start);
+    }
+    const reading = window.setTimeout(outroDone, Math.max(2200, task.outro.length * 60));
+    return () => window.clearTimeout(reading);
+  }, [session.awaitingOutro]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The mascot reaches the goal and takes a happy "crunch" the instant the
   // level is cleared (this fires before any treasure-chest reveal).
@@ -198,14 +221,13 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     }
   }, [screen.depleted, phase, bedtimeArmed]);
 
-  // Open it at a safe moment: right after the current answer is counted, or a
-  // short grace if the child is idle — the current example is never cut off
-  // mid-solve (Tech Spec AC-2).
+  // A level in progress is NEVER interrupted: out of time only takes effect
+  // once the child has finished the level they are on (and seen their reward).
   useEffect(() => {
-    if (!bedtimeArmed || bedtimeOpen) return;
-    const t = window.setTimeout(openBedtime, session.justSolved ? 250 : 4000);
+    if (!bedtimeArmed || bedtimeOpen || !(session.finished && revealDone)) return;
+    const t = window.setTimeout(openBedtime, 3200);
     return () => window.clearTimeout(t);
-  }, [bedtimeArmed, bedtimeOpen, session.justSolved, openBedtime]);
+  }, [bedtimeArmed, bedtimeOpen, session.finished, revealDone, openBedtime]);
 
   if (!module || !task) {
     return (
@@ -217,7 +239,9 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
   // The fuel-depleted cutscene + cooldown lock. Shown when the tank just ran
   // dry (bedtimeOpen) or the child arrived while a cooldown is still active.
-  const showBedtime = bedtimeOpen || screen.inCooldown;
+  // Arriving during a cooldown shows it at once; but a cooldown that starts
+  // while a level is being played waits for that level to end.
+  const showBedtime = blocked;
   const bedtimeOverlay = showBedtime ? (
     <Cutscene
       playScene={bedtimeOpen}

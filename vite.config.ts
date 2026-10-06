@@ -2,10 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 import { devApi } from './dev-api';
+import { seo } from './seo-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), devApi()],
+  plugins: [react(), devApi(), seo()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -20,6 +21,15 @@ export default defineConfig({
     proxy: process.env.VITE_API_TARGET
       ? { '/api': { target: process.env.VITE_API_TARGET, changeOrigin: true } }
       : undefined,
+  },
+  build: {
+    rollupOptions: {
+      // Two pages: the app, and the static public landing page (root domain).
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        landing: fileURLToPath(new URL('./landing.html', import.meta.url)),
+      },
+    },
   },
   preview: {
     port: 4321,

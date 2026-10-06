@@ -1,3 +1,4 @@
+import { usePageMeta } from '@/core/seo/usePageMeta';
 import { useMemo, useState } from 'react';
 import { StarFilter } from '@/components/hub/StarFilter';
 import { useHubState } from '@/core/ui/useHubState';
@@ -20,6 +21,7 @@ import styles from './HubPage.module.css';
 
 /** The adventure "shop window": profile, galaxy picker, planets and path. */
 export function HubPage() {
+  usePageMeta({ title: 'Обери планету' });
   const navigate = useNavigate();
   const theme = useActiveTheme();
   const profile = useGameStore((s) => s.profile);

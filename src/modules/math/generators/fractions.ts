@@ -42,7 +42,8 @@ export function generateFraction(config: TaskConfig): TaskInstance<FractionPaylo
 
   return {
     id: uid('fr'),
-    key: `fraction:${food.name}:${filled}/${denom}`,
+    // Same fraction on a different food is the SAME task — never ask it twice.
+    key: `fraction:${filled}/${denom}`,
     prompt: `Яка частинка ${food.name} зафарбована?`,
     reward: rewardForStep(step),
     payload: {

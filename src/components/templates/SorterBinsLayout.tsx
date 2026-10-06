@@ -32,7 +32,7 @@ export function SorterBinsLayout({ payload, callbacks, hintActive }: LayoutProps
     setSay(wrongSay?.[binId] ?? 'Ой, сюди не підходить. Спробуй інше місце!');
     callbacks.onMistake();
   };
-  const dnd = useDragDrop(onDrop, solved);
+  const dnd = useDragDrop(onDrop, solved, item.id);
 
   return (
     <div className="stack">
@@ -68,6 +68,7 @@ export function SorterBinsLayout({ payload, callbacks, hintActive }: LayoutProps
               styles.bin,
               solved && bin.id === correctBinId && styles.correct,
               hintActive && !solved && bin.id === correctBinId && styles.pulsing,
+              dnd.over === bin.id && styles.dropOver,
             )}
             animate={solved && bin.id === correctBinId ? PULSE : { scale: 1 }}
             {...dnd.target(bin.id)}

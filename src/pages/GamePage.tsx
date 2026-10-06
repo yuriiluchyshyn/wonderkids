@@ -1,3 +1,4 @@
+import { usePageMeta } from '@/core/seo/usePageMeta';
 import { useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { GameScreen } from '@/components/game/GameScreen';
@@ -14,6 +15,7 @@ export function GamePage() {
 
   const module = moduleRegistry.get(moduleId);
   const sub = module?.subCategories.find((s) => s.id === subId);
+  usePageMeta({ title: sub ? `${sub.label} · ${module?.title}` : 'Гра' });
   // Frontier step from the store (advances when a session completes).
   const storedStep = useGameStore((s) => s.progress[pathKey(moduleId, subId)] ?? 1);
 

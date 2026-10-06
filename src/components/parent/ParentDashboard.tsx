@@ -7,7 +7,6 @@ import {
   type CelebrationStyle,
   type ChoicesGridSize,
   type CompanionSpeed,
-  type GameMode,
   type Gender,
   type Milestone,
   type PersistableState,
@@ -22,7 +21,9 @@ import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
 import { Button } from '@/components/ui/Button';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
+import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { ChildManager } from './ChildManager';
+import { GoalRow } from './GoalRow';
 import { useAuthStore } from '@/core/auth/useAuthStore';
 import styles from './Parent.module.css';
 
@@ -51,10 +52,6 @@ const CELEBRATION_OPTIONS: { id: CelebrationStyle; label: string; icon: string }
   { id: 'candy', label: 'Цукерки', icon: '🍬' },
 ];
 
-const GAME_MODE_OPTIONS: { id: GameMode; label: string; icon: string }[] = [
-  { id: 'dynamic_task_extension', label: 'Динамічний', icon: '🔁' },
-  { id: 'fixed_strict', label: 'Фіксований', icon: '📏' },
-];
 
 
 const GRID_OPTIONS: { id: ChoicesGridSize; label: string; icon: string }[] = [
@@ -72,6 +69,7 @@ export function ParentDashboard() {
   const navigate = useNavigate();
   const activeChildId = useGameStore((s) => s.activeChildId);
   const profile = useGameStore((s) => s.profile);
+  const theme = useActiveTheme();
   const setProfile = useGameStore((s) => s.setProfile);
   const settings = useGameStore((s) => s.settings);
   const updateSettings = useGameStore((s) => s.updateSettings);
@@ -272,27 +270,6 @@ export function ParentDashboard() {
         </div>
       </section>
 
-      {/* ---- Game mode (anti-guessing engine) ---- */}
-      <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🎮 Режим завершення гри</h3>
-        <p className={styles.hint}>
-          Рівень має 5–8 завдань (залежить від гри). <b>Динамічний</b> (за замовчуванням): завдання, у
-          якому дитина помилилась, повертається ще раз наприкінці рівня (не більше двох показів), а сліпе
-          вгадування додає нове завдання. <b>Фіксований</b>: без повторів і розширення (для наймолодших).
-        </p>
-        <div className={styles.chipRow}>
-          {GAME_MODE_OPTIONS.map((o) => (
-            <Chip
-              key={o.id}
-              icon={o.icon}
-              label={o.label}
-              active={settings.gameMode === o.id}
-              onClick={() => updateSettings({ gameMode: o.id })}
-            />
-          ))}
-        </div>
-      </section>
-
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>🔢 Сітка відповідей</h3>
         <p className={styles.hint}>Більше варіантів — важче вгадати навмання (анти-вгадування).</p>
@@ -376,30 +353,13 @@ export function ParentDashboard() {
         </p>
         <div className="stack">
           {milestones.map((m) => (
-            <div key={m.id} className={styles.milestoneRow}>
-              <div className={styles.stepField}>
-                <span className={styles.stepLabel}>Артефактів</span>
-                <input
-                  className={styles.textInput}
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  value={m.amount}
-                  onChange={(e) => patchMilestone(m.id, { amount: Number(e.target.value) })}
-                  aria-label="Кількість артефактів"
-                />
-              </div>
-              <input
-                className={styles.textInput}
-                value={m.reward}
-                placeholder="Напр. Спекти печиво 🍪"
-                onChange={(e) => patchMilestone(m.id, { reward: e.target.value })}
-                aria-label="Нагорода"
-              />
-              <button className={styles.removeBtn} onClick={() => removeMilestone(m.id)} aria-label="Видалити ціль">
-                🗑️
-              </button>
-            </div>
+            <GoalRow
+              key={m.id}
+              goal={m}
+              artifact={theme.artifact.emoji}
+              onChange={(patch) => patchMilestone(m.id, patch)}
+              onRemove={() => removeMilestone(m.id)}
+            />
           ))}
         </div>
         <div style={{ marginTop: 14 }}>

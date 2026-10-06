@@ -1,11 +1,10 @@
-import { lazy, Suspense, type CSSProperties } from 'react';
+import { lazy, Suspense, useEffect, type CSSProperties } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@/core/theme/ThemeProvider';
-import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useAuthStore } from '@/core/auth/useAuthStore';
 import { useGameStore } from '@/core/store/useGameStore';
 import { useRemoteSync } from '@/core/sync/useRemoteSync';
-import { getPortal } from '@/core/portal';
+import { getPortal, isParentPath, portalUrl } from '@/core/portal';
 import { LoginPage } from '@/pages/LoginPage';
 import { ChildLoginPage } from '@/pages/ChildLoginPage';
 import { HubPage } from '@/pages/HubPage';
@@ -16,6 +15,7 @@ import { ParentPage } from '@/pages/ParentPage';
 import { AudioPage } from '@/pages/AudioPage';
 import { ChildSelectPage } from '@/pages/ChildSelectPage';
 import { TimeHeader } from '@/components/layout/TimeHeader';
+import { SpaceLoader } from '@/components/ui/SpaceLoader';
 import { ThemeDecor } from '@/components/theme/ThemeDecor';
 
 // Loaded on demand: the admin tool is never part of what a child downloads.
@@ -37,9 +37,6 @@ const splashBtn: CSSProperties = {
 /** Full-screen message shown while the save loads (or fails to) after login. */
 function SyncSplash({ error }: { error?: boolean }) {
   const logout = useAuthStore((s) => s.logout);
-  // Reflect the active theme while loading; a new child (no theme yet) resolves
-  // to the neutral galaxy default via useActiveTheme.
-  const theme = useActiveTheme();
   return (
     <div
       style={{
@@ -53,9 +50,13 @@ function SyncSplash({ error }: { error?: boolean }) {
         padding: 24,
       }}
     >
-      <span className="emoji" style={{ fontSize: '3rem' }} aria-hidden>
-        {error ? '😿' : theme.icon}
-      </span>
+      {error ? (
+        <span className="emoji" style={{ fontSize: '3rem' }} aria-hidden>
+          😿
+        </span>
+      ) : (
+        <SpaceLoader label="Завантажуємо твою пригоду" />
+      )}
       {error ? (
         <>
           <p style={{ fontWeight: 700 }}>Не вдалося завантажити твій прогрес.</p>
@@ -69,9 +70,7 @@ function SyncSplash({ error }: { error?: boolean }) {
             </button>
           </div>
         </>
-      ) : (
-        <p style={{ fontWeight: 700 }}>Завантажуємо твою пригоду…</p>
-      )}
+      ) : null}
     </div>
   );
 }
@@ -132,7 +131,19 @@ function ProtectedApp() {
 }
 
 /** Root application: theme side-effects + client routing + auth gate. */
+/** The root domain is the public site: send any app path to its portal. */
+function ToPortal() {
+  const { pathname, search } = window.location;
+  useEffect(() => {
+    if (pathname === '/') window.location.replace('/landing.html');
+    else window.location.replace(portalUrl(isParentPath(pathname) ? 'parent' : 'kid', pathname + search));
+  }, [pathname, search]);
+  return null;
+}
+
 export function App() {
+  if (getPortal() === 'site') return <ToPortal />;
+
   // `/login` is the CHILD credential login by default; on the parents.* portal
   // it's the parent email login. `/parent-login` is always the parent login
   // (so a parent can sign in on dev too).

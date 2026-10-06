@@ -60,16 +60,18 @@ Two kinds of games (`SubCategory.progression`):
 
 ### Engine layer vs presentation layer (PRD v4.0 §3)
 
-- **Engine** — `core/engine/BaseGameEngine.ts` (abstract, as specified) and `LevelEngine.ts` own one level's task queue. Rules: candidates are de-duplicated by `task.key` (falls back to `prompt`), so a level shrinks on its own when a game has fewer unique tasks than `tasksPerLevel`; a task the child gets wrong is queued **once more** at the end of the level and never shown a third time; blind guessing (3+ wrong taps on one task) appends a fresh task, capped by `MAX_EXTRA_TASKS`. `gameMode: 'fixed_strict'` turns repeats and extensions off.
+- **Engine** — `core/engine/BaseGameEngine.ts` (abstract, as specified) and `LevelEngine.ts` own one level's task queue. Rules: candidates are de-duplicated by `task.key` (falls back to `prompt`), so a level shrinks on its own when a game has fewer unique tasks than `tasksPerLevel`; a task the child gets wrong is queued **once more** at the end of the level and never shown a third time; blind guessing (3+ wrong taps on one task) appends a fresh task, capped by `MAX_EXTRA_TASKS`. Levels are always dynamic — the old parent setting (`gameMode`) is gone from the UI and ignored. `task.key` must identify the *question*, not its dressing: two tasks a child would call "the same" need the same key (e.g. 1/2 of a pizza and 1/2 of a cake).
 - **React binding** — `components/game/useGameSession.ts` builds the engine per level (via `module.buildLevel` or repeated `generateTask`) and exposes it to `GameScreen`. Modules never touch the store; views only call `callbacks.onSuccess / onMistake / speakPrompt`. `GameScreen` keys the view by queue position, so the repeat of a task is a fresh mount.
 - **Presentation** — `components/templates/*`: the CORE UI templates (`GridChoiceLayout`, `DragMatchLayout`, `SequenceLayout`, `InteractiveMapLayout`, `PhysicsScaleLayout`, `SorterBinsLayout`, plus `CashTrayLayout`, `TangramLayout`, `GridAreaLayout`, `NumberMazeLayout`). They render a declarative `TemplatePayload` (`core/templates/types.ts`) through `TemplateGameView`; pure answer checks live in `core/templates/validate.ts`. All dragging goes through `useDragDrop` (drag **or** tap-item-then-tap-target; targets are `data-drop` elements).
 
-A template-based subject is pure data: `modules/shared/templateModule.ts` → `defineTemplateModule({ games })`, where each game supplies `pool(step)` returning every task it can ask at that step (see `modules/geography`, `ecology`, `history`). New math games mix into the existing module: `MathGameView` routes template payloads to `TemplateGameView`, classic payloads (`kind: 'mental' | 'fraction'`) to their own views.
+A template-based subject is pure data: `modules/shared/templateModule.ts` → `defineTemplateModule({ games })`, where each game supplies `pool(step)` returning every task it can ask at that step (see `modules/geography`, `ecology`, `history`). A game may also supply `level(step, count)` to compose a level itself — the flag game does: `geography/countries.ts` lists all countries ordered by how familiar their flag is, each path step introduces the next six and mixes in flags from earlier steps. New math games mix into the existing module: `MathGameView` routes template payloads to `TemplateGameView`, classic payloads (`kind: 'mental' | 'fraction'`) to their own views.
 
 Feedback is unified (PRD v4.0 §3.3): the engine's `AnswerResult` names a sound code (`SND_SUCCESS`, `SND_ERROR`, …), `useSound().playCode` maps it to the synthesiser, and views shake for 300 ms on a mistake.
 
-- **Zero-aggression** is a product invariant: no fail states, no visible timers or countdowns, never the word "wrong". Mistakes lead to a hint: after 2 mistakes, after `hintDelaySec` of inactivity, or on the repeat showing — `hintActive` is then true and each template scaffolds itself (narrows choices, pulses the target, shows a counter).
-- **Text and voice**: text cards and prompts get a tap-to-hear `SpeakButton` (hidden when the parent turns `settings.ttsButtons` off); games with `hasText` show the one-time `TtsGuide`. `TaskInstance.outro` is a short fact spoken and shown after a correct answer — the session delays the next task to let it finish.
+- **Zero-aggression** is a product invariant: no fail states, no visible timers or countdowns, never the word "wrong". **Only mistakes raise a hint** — two on a task, or one on the repeat of a task missed earlier; never a pause, and a repeat starts as a normal task (its prompt is read out again). `hintActive` is then true and each template scaffolds itself (narrows choices, pulses the target, shows a counter).
+- **Every task says how to answer it.** `TemplateGameView` shows a one-line instruction under the prompt (tap / drag / swap), drag targets light up while a card hovers over them (`useDragDrop().over`), and when there is a single thing to place a tap on the target is enough (`soleItem`). Prompts must be explicit instructions a child can act on.
+- **Never interrupt a level.** Running out of play time only takes effect once the level in progress is finished (the server allows `DEPLETION_GRACE_MS` of overrun for that); while the rest screen is up nothing speaks or runs underneath.
+- **Text and voice**: text cards and prompts get a tap-to-hear `SpeakButton` (hidden when the parent turns `settings.ttsButtons` off); games with `hasText` show the one-time `TtsGuide`. `TaskInstance.outro` is a short fact spoken and shown after a correct answer — the level waits until it has been read to the end (`session.awaitingOutro` / `outroDone`), never a guessed delay. The speech engine silences itself when the page is hidden (phone locked, app switched).
 
 ### Screen time (server-authoritative)
 
@@ -111,9 +113,21 @@ One Zustand store. The persisted shape is only `{ children: ChildState[], active
 
 Two login kinds, both yielding a JWT whose subject is the **parent account id**: parent = email only (no password); child = nickname + PIN, token also carries `childId`, which is auto-selected after load.
 
-### Portals (`src/core/portal.ts`)
+### Portals and the public site (`src/core/portal.ts`)
 
-One bundle, three faces chosen by hostname: `parents.*` → parent cabinet only; `play.*` → child hub only, parent routes not mounted; anything else (localhost) → `dev`, everything reachable. Routing in `App.tsx` branches on this, so route changes need checking against all three.
+One deployment, four faces chosen by hostname: the **root domain** → `site` (the public landing page); `parents.*` → parent cabinet (+ admin) only; `play.*` → child hub only, parent routes not mounted; localhost / LAN / `*.vercel.app` → `dev`, everything reachable on one origin. Routing in `App.tsx` branches on this, so route changes need checking against all of them. On `site` the SPA only redirects app paths to their subdomain (`portalUrl`). `VITE_USE_SUBDOMAINS=false` keeps the whole app on the root domain.
+
+The landing page is **static HTML** (`landing.html`, a second Vite entry — no React), so crawlers get real content; `vercel.json` rewrites `/` to it on every host except `play.*` / `parents.*`. Its copy states concrete numbers (games, flags, tasks) — keep them true when content changes.
+
+### SEO
+
+- `seo-plugin.ts` (Vite) fills `__SITE_URL__` / `__PLAY_URL__` / `__PARENTS_URL__` in both HTML entries from `VITE_SITE_URL`, and emits `robots.txt` and `sitemap.xml`.
+- `landing.html` carries the full set: title, description, canonical, hreflang, Open Graph / Twitter (`public/og-image.png`), and JSON-LD (`WebSite`, `WebApplication`, `FAQPage` — the FAQ JSON must match the visible FAQ).
+- The SPA is `noindex` by default; `core/seo/usePageMeta` sets title, description, robots and canonical per page, and only the two public login pages opt into `index`. `vercel.json` adds `X-Robots-Tag: noindex` on personal paths.
+
+### Accounts
+
+Parent login is by email only (no password yet). **One mailbox = one account**: `api/_lib/email.js` derives `email_key` (Gmail dots, `+tags` and `googlemail.com` collapse), unique in `wk_parents`. Signing in never creates an account: an unknown address answers `account_not_found` (with a `suggestion` for a mistyped domain) and the account is created only after the parent confirms (`create: true`). Look-alike accounts that are genuinely different addresses cannot be merged automatically — the admin page flags them and can delete an account.
 
 ### Themes (`src/core/theme`)
 

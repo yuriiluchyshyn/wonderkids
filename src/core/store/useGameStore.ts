@@ -90,7 +90,10 @@ export interface Settings {
   showText: boolean;
   companionSpeed: CompanionSpeed;
   celebration: CelebrationStyle;
-  /** Game completion mode (default `dynamic_task_extension`). */
+  /**
+   * @deprecated Levels are always dynamic now (a missed task comes back once);
+   * the parent no longer chooses. Kept so existing saves keep their shape.
+   */
   gameMode: GameMode;
   /**
    * @deprecated PRD v4.0 §2.3 removed the manual task-count setting: a level's

@@ -4,6 +4,7 @@ import type { GameViewProps } from '@/core/kernel/types';
 import { cardSpeech, glyphSpeech, type Card, type Glyph, type TemplatePayload } from '@/core/templates/types';
 import { useShowText } from '@/core/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
+import { LandmarkArt, hasLandmarkArt } from './LandmarkArt';
 import { SpeakButton } from './SpeakButton';
 import styles from './Templates.module.css';
 
@@ -88,10 +89,14 @@ export function Stimulus({
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
     >
-      {s?.emoji && (
-        <span className={cn(styles.stimulusEmoji, 'emoji')} aria-hidden>
-          {s.emoji}
-        </span>
+      {s?.art && hasLandmarkArt(s.art) ? (
+        <LandmarkArt id={s.art} label={s.caption} />
+      ) : (
+        s?.emoji && (
+          <span className={cn(styles.stimulusEmoji, 'emoji')} aria-hidden>
+            {s.emoji}
+          </span>
+        )
       )}
       {s?.glyphs && <Glyphs glyphs={s.glyphs} className={styles.stimulusGlyphs} />}
       {s?.caption && <span className={styles.stimulusCaption}>{s.caption}</span>}

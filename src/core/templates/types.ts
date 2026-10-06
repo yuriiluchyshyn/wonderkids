@@ -33,7 +33,13 @@ export interface Card {
 
 interface TemplateBase {
   /** Picture / math line shown above the answers. */
-  stimulus?: { emoji?: string; glyphs?: Glyph[]; caption?: string };
+  stimulus?: {
+    emoji?: string;
+    /** Id of a drawn illustration (see LandmarkArt) — shown instead of `emoji`. */
+    art?: string;
+    glyphs?: Glyph[];
+    caption?: string;
+  };
   /** Spoken how-to, played when the helper appears. */
   hint?: string;
   /** Short spoken fact that rewards a correct answer. */

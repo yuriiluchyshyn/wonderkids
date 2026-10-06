@@ -54,14 +54,17 @@ export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<S
       >
         {order.map((id, i) => {
           const card = cards[correct.indexOf(id)];
-          // Hint gradient: hue runs from "ancient" amber to "future" blue.
+          // Once solved, the line is painted from "ancient" amber to "future" blue.
           const rank = correct.indexOf(id) / Math.max(1, cards.length - 1);
-          const tint = hintActive || solved ? `hsl(${35 + rank * 185} 85% 88%)` : undefined;
+          const tint = solved ? `hsl(${35 + rank * 185} 85% 88%)` : undefined;
           return (
-            <div key={id} className={styles.seqCell} {...dnd.target(id)}>
+            <div key={id} className={cn(styles.seqCell, dnd.over === id && styles.seqOver)} {...dnd.target(id)}>
               <span className={styles.seqIndex} aria-hidden>
                 {i + 1}
               </span>
+              {/* The ends of the line are labelled, so "in order" is unambiguous. */}
+              {i === 0 && <span className={styles.seqEnd}>найдавніше</span>}
+              {i === order.length - 1 && <span className={styles.seqEnd}>найновіше</span>}
               <div
                 className={cn(
                   styles.seqCard,

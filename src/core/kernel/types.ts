@@ -80,8 +80,8 @@ export interface GameViewProps<TPayload = unknown> {
   task: TaskInstance<TPayload>;
   callbacks: TaskCallbacks;
   /**
-   * True once the shell wants a visual helper: 2+ mistakes, a long pause, or
-   * the repeat showing of a task the child missed earlier.
+   * True once the shell wants a visual helper. Only mistakes turn it on: two
+   * on a task (one on the repeat of a task missed earlier) — never a pause.
    */
   hintActive: boolean;
 }
@@ -162,8 +162,6 @@ export interface SubCategory {
   tasksPerLevel?: number;
   /** UI template(s) the game is built on. */
   mechanics?: MechanicsType | MechanicsType[];
-  /** Seconds of inactivity on a task before the helper appears by itself. */
-  hintDelaySec?: number;
   /**
    * The game shows text a child has to read (tasks or answers). Enables the
    * tap-to-hear speaker buttons and the first-run guide pointing at them.

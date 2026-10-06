@@ -42,6 +42,14 @@ export class AudioEngine {
   }): void {
     const ctx = this.ensureContext();
     if (!this.master) return;
+    if (ctx.state !== 'running') {
+      // Mobile browsers start the context suspended; a tone scheduled before
+      // it is running is silently dropped — so wait, then play.
+      void ctx.resume().then(() => {
+        if (ctx.state === 'running') this.tone(opts);
+      });
+      return;
+    }
     const {
       freq,
       type = 'sine',
@@ -116,15 +124,17 @@ export class AudioEngine {
   sndSuccess(): void {
     const notes = [523.25, 659.25, 783.99, 1046.5];
     notes.forEach((freq, i) => {
-      this.tone({ freq, type: 'triangle', start: i * 0.07, duration: 0.32, gain: 0.34 });
+      this.tone({ freq, type: 'triangle', start: i * 0.07, duration: 0.32, gain: 0.5 });
       this.tone({ freq: freq * 2, type: 'sine', start: i * 0.07, duration: 0.18, gain: 0.08 });
     });
   }
 
   /** SND_ERROR: a soft double "boop-boop" — delicate, never startling. */
   sndError(): void {
-    this.tone({ freq: 330, type: 'sine', duration: 0.13, gain: 0.26, glideTo: 300 });
-    this.tone({ freq: 330, type: 'sine', start: 0.17, duration: 0.16, gain: 0.26, glideTo: 290 });
+    // Triangle + a higher pitch than before: still gentle, but it actually
+    // carries on a small phone speaker.
+    this.tone({ freq: 392, type: 'triangle', duration: 0.14, gain: 0.5, glideTo: 349 });
+    this.tone({ freq: 349, type: 'triangle', start: 0.18, duration: 0.2, gain: 0.5, glideTo: 294 });
   }
 
   /** SND_DRAG_START: a light "pop" as a card lifts. */

@@ -46,3 +46,28 @@ export function speechStatus(account: AdminAccount, keys: SpeechKey[]): SpeechSt
     ? { key, source, live: false, text: `вимкнено (${which})` }
     : { key, source, live: true, text: `працює: ${which}` };
 }
+
+/** Edit distance between two strings (small inputs only). */
+function distance(a: string, b: string): number {
+  const row = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i += 1) {
+    let prev = row[0];
+    row[0] = i;
+    for (let j = 1; j <= b.length; j += 1) {
+      const next = Math.min(row[j] + 1, row[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = row[j];
+      row[j] = next;
+    }
+  }
+  return row[b.length];
+}
+
+/**
+ * Other accounts whose email is within a couple of keystrokes of this one —
+ * almost always the same person who mistyped once (gamil.com, a swapped
+ * letter). They are different addresses, so the server cannot merge them; the
+ * admin decides which to remove.
+ */
+export function lookalikes(account: AdminAccount, all: AdminAccount[]): AdminAccount[] {
+  return all.filter((other) => other.id !== account.id && distance(other.email, account.email) <= 2);
+}

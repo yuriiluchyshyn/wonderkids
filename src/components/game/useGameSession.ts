@@ -7,13 +7,17 @@ import type { AnswerResult } from '@/core/engine/BaseGameEngine';
 import { useGameStore } from '@/core/store/useGameStore';
 import { subSteps } from '@/core/progress/path';
 
-/** Mistakes within a single task before the scaffolding helper appears (PRD §5). */
+/**
+ * Mistakes on a task before the helper appears (PRD §5). The helper is ONLY
+ * ever a response to mistakes — never to a pause, and never shown up-front.
+ */
 const HINT_THRESHOLD = 2;
+/** On the repeat of a task the child already missed, one more slip is enough. */
+const REPEAT_HINT_THRESHOLD = 1;
+/** If a spoken fact never reports back (speech glitch), move on after this. */
+const OUTRO_SAFETY_MS = 30_000;
 /** Pause after a correct answer so the celebration animation can play. */
 const ADVANCE_DELAY_MS = 850;
-/** Extra time for a spoken `outro` fact: per character, capped. */
-const OUTRO_MS_PER_CHAR = 70;
-const OUTRO_MAX_MS = 5200;
 /** How many candidates to draw per needed task when a module has no `buildLevel`. */
 const CANDIDATE_FACTOR = 5;
 
@@ -44,6 +48,12 @@ export interface GameSession {
   registerSuccess: () => void;
   /** Reports a wrong attempt; the result says which sound/animation to play. */
   registerMistake: () => AnswerResult | null;
+  /**
+   * True while a solved task's `outro` fact is on screen and the level waits
+   * for it. The shell calls `outroDone` once the fact has been read out.
+   */
+  awaitingOutro: boolean;
+  outroDone: () => void;
 }
 
 /** Candidate tasks for one level: the module's own picker, or repeated draws. */
@@ -61,8 +71,10 @@ function drawCandidates(
 /**
  * React binding of the Engine Layer (PRD v4.0 §3): owns one level's
  * `LevelEngine` — the task queue, the "missed task returns once" rule and the
- * dynamic level length — and exposes it as state the shell can render. Also
- * counts mistakes to raise the Zero-Aggression hint and awards artifacts.
+ * dynamic level length — and exposes it as state the shell can render. The
+ * level is always dynamic: a task the child gets wrong comes back once more, so
+ * it is solved twice in all and is never shown a third time. Also counts
+ * mistakes to raise the Zero-Aggression hint and awards artifacts.
  */
 export function useGameSession(config: GameSessionConfig): GameSession {
   const { moduleId, subCategoryId, step } = config;
@@ -70,16 +82,11 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   const sub = module?.subCategories.find((sc) => sc.id === subCategoryId);
   const maxSteps = sub ? subSteps(sub) : 30;
   const levelSize = sub ? tasksPerLevel(sub) : 0;
-  const hintDelaySec = sub?.hintDelaySec;
-
-  const gameMode = useGameStore((s) => s.settings.gameMode);
   const gridSize = useGameStore((s) => s.settings.choicesGridSize);
   const awardArtifacts = useGameStore((s) => s.awardArtifacts);
   const recordTaskComplete = useGameStore((s) => s.recordTaskComplete);
   const advanceStep = useGameStore((s) => s.advanceStep);
   const recordLevelComplete = useGameStore((s) => s.recordLevelComplete);
-  const voiceOn = useGameStore((s) => s.settings.voiceOn && s.settings.voice.taskPrompt);
-  const dynamic = gameMode === 'dynamic_task_extension';
 
   // One engine per level. Rebuilt only when the level itself changes.
   const engine = useMemo(() => {
@@ -88,9 +95,8 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     return new LevelEngine<TaskInstance>({
       steps_count_default: levelSize,
       tasks: drawCandidates(module, base, levelSize),
-      repeatOnError: dynamic,
     });
-  }, [module, subCategoryId, step, gridSize, levelSize, dynamic]);
+  }, [module, subCategoryId, step, gridSize, levelSize]);
 
   // The engine is mutable; `tick` re-renders after each transition.
   const [, setTick] = useState(0);
@@ -102,7 +108,9 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   const [finished, setFinished] = useState(false);
   const [earned, setEarned] = useState(0);
   const [hintUsedThisSession, setHintUsedThisSession] = useState(false);
-  const [idleHint, setIdleHint] = useState(false);
+  const [awaitingOutro, setAwaitingOutro] = useState(false);
+  // The pending "go to the next task" step, run exactly once.
+  const advanceRef = useRef<(() => void) | null>(null);
 
   // Guards against double-advancing from rapid taps.
   const advancingRef = useRef(false);
@@ -116,20 +124,13 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     setFinished(false);
     setEarned(0);
     setHintUsedThisSession(false);
-    setIdleHint(false);
+    setAwaitingOutro(false);
+    advanceRef.current = null;
     advancingRef.current = false;
   }, [engine]);
 
   const task = engine?.currentTask ?? null;
   const isRepeat = engine?.isRepeatShowing ?? false;
-
-  // A long pause on a task raises the helper by itself (per-game delay).
-  useEffect(() => {
-    setIdleHint(false);
-    if (!hintDelaySec || !task || finished) return;
-    const t = window.setTimeout(() => setIdleHint(true), hintDelaySec * 1000);
-    return () => window.clearTimeout(t);
-  }, [task?.id, engine?.position, hintDelaySec, finished]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const registerMistake = useCallback((): AnswerResult | null => {
     if (!engine || !module) return null;
@@ -145,7 +146,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     // A wrong tap once the hint is already showing reads as blind guessing —
     // add a fresh task so brute-forcing the grid is never a shortcut (Tech
     // Spec v2.1 DoD §2). The engine caps how far a level can grow.
-    if (dynamic && next > HINT_THRESHOLD) {
+    if (next > HINT_THRESHOLD) {
       const base = { subCategoryId, step, choicesCount: gridSize };
       for (let attempt = 0; attempt < 8; attempt += 1) {
         const extra = module.generateTask({ ...base, index: engine.total + attempt });
@@ -154,7 +155,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     }
     rerender();
     return result;
-  }, [engine, module, dynamic, subCategoryId, step, gridSize, rerender]);
+  }, [engine, module, subCategoryId, step, gridSize, rerender]);
 
   const registerSuccess = useCallback(() => {
     if (!engine) return;
@@ -169,14 +170,10 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     awardArtifacts(current.reward);
     recordTaskComplete({ hintUsed: mistakesRef.current >= HINT_THRESHOLD });
 
-    // A spoken fact needs room to finish before the next prompt starts.
-    const advanceDelay =
-      current.outro && voiceOn
-        ? Math.min(OUTRO_MAX_MS, ADVANCE_DELAY_MS + current.outro.length * OUTRO_MS_PER_CHAR)
-        : current.outro
-          ? ADVANCE_DELAY_MS + 900
-          : ADVANCE_DELAY_MS;
-    window.setTimeout(() => {
+    const advance = () => {
+      if (advanceRef.current !== advance) return; // already ran, or level changed
+      advanceRef.current = null;
+      setAwaitingOutro(false);
       // Advance only now: a late mistake may still have queued a repeat or an
       // extension, so "is the level over?" is read from the live queue.
       engine.advance();
@@ -192,8 +189,20 @@ export function useGameSession(config: GameSessionConfig): GameSession {
         advancingRef.current = false;
       }
       rerender();
-    }, advanceDelay);
-  }, [engine, step, voiceOn, maxSteps, awardArtifacts, recordTaskComplete, advanceStep, recordLevelComplete, moduleId, subCategoryId, rerender]);
+    };
+    advanceRef.current = advance;
+
+    if (current.outro) {
+      // A fact follows: wait until the shell says it has been read to the end
+      // (`outroDone`) — never cut a sentence off to start the next task.
+      setAwaitingOutro(true);
+      window.setTimeout(advance, OUTRO_SAFETY_MS);
+    } else {
+      window.setTimeout(advance, ADVANCE_DELAY_MS);
+    }
+  }, [engine, step, maxSteps, awardArtifacts, recordTaskComplete, advanceStep, recordLevelComplete, moduleId, subCategoryId, rerender]);
+
+  const outroDone = useCallback(() => advanceRef.current?.(), []);
 
   return {
     module,
@@ -203,7 +212,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     total: engine?.total ?? 0,
     baseTotal: engine?.baseTotal ?? 0,
     solvedCount,
-    hintActive: !justSolved && (mistakes >= HINT_THRESHOLD || isRepeat || idleHint),
+    hintActive: !justSolved && mistakes >= (isRepeat ? REPEAT_HINT_THRESHOLD : HINT_THRESHOLD),
     isRepeat,
     justSolved,
     finished,
@@ -211,5 +220,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     hintUsedThisSession,
     registerSuccess,
     registerMistake,
+    awaitingOutro,
+    outroDone,
   };
 }

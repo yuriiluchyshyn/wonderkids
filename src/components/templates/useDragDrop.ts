@@ -13,16 +13,28 @@ interface DragState {
 /**
  * Touch-native drag-and-drop shared by every drag template, with a tap
  * fallback for small hands: a child can either DRAG a card onto a target, or
- * TAP the card (it lifts) and then TAP the target.
+ * TAP the card (it lifts) and then TAP the target — or, when there is a single
+ * card, just TAP the target. While dragging, the target under the finger is
+ * reported as `over` so the layout can highlight it.
  *
  * Targets are any element carrying `data-drop="<targetId>"` (works for HTML
  * and SVG). Feedback follows PRD v4.0 §3.3: SND_DRAG_START + a 10% lift on
  * pick-up; the caller plays SND_DROP_SLOT when the drop is accepted.
  */
-export function useDragDrop(onDrop: (itemId: string, targetId: string) => void, disabled = false) {
+export function useDragDrop(
+  onDrop: (itemId: string, targetId: string) => void,
+  disabled = false,
+  /**
+   * When there is only one thing to place, pass its id: tapping a target then
+   * answers straight away — no need to pick the item up first.
+   */
+  soleItem?: string,
+) {
   const { playCode } = useSound();
   const [drag, setDrag] = useState<DragState | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
+  /** The target currently under the dragged card (highlighted until release). */
+  const [over, setOver] = useState<string | null>(null);
   const origin = useRef<{ x: number; y: number; moved: boolean } | null>(null);
 
   const targetAt = (x: number, y: number, el: HTMLElement): string | null => {
@@ -51,12 +63,18 @@ export function useDragDrop(onDrop: (itemId: string, targetId: string) => void, 
           o.moved = true;
           playCode('SND_DRAG_START');
         }
-        if (o.moved) setDrag({ id, dx, dy });
+        if (o.moved) {
+          setDrag({ id, dx, dy });
+          // Light up what the card is hovering over; nothing is accepted
+          // until the finger lifts.
+          setOver(targetAt(e.clientX, e.clientY, e.currentTarget));
+        }
       },
       onPointerUp: (e: PointerEvent<HTMLElement>) => {
         const o = origin.current;
         origin.current = null;
         setDrag(null);
+        setOver(null);
         if (!o) return;
         if (!o.moved) {
           // A tap: lift the card and wait for a tap on a target.
@@ -71,6 +89,7 @@ export function useDragDrop(onDrop: (itemId: string, targetId: string) => void, 
       onPointerCancel: () => {
         origin.current = null;
         setDrag(null);
+        setOver(null);
       },
     }),
     [disabled, onDrop, playCode],
@@ -81,13 +100,13 @@ export function useDragDrop(onDrop: (itemId: string, targetId: string) => void, 
     (targetId: string) => ({
       'data-drop': targetId,
       onClick: () => {
-        if (disabled || !selected) return;
-        const id = selected;
+        const id = selected ?? soleItem;
+        if (disabled || !id) return;
         setSelected(null);
         onDrop(id, targetId);
       },
     }),
-    [disabled, selected, onDrop],
+    [disabled, selected, soleItem, onDrop],
   );
 
   /** Inline style for a draggable: follows the finger, lifted 10% with a shadow. */
@@ -111,5 +130,5 @@ export function useDragDrop(onDrop: (itemId: string, targetId: string) => void, 
     [drag, selected, disabled],
   );
 
-  return { bind, target, styleFor, selected, dragging: drag?.id ?? null };
+  return { bind, target, styleFor, selected, over, dragging: drag?.id ?? null };
 }

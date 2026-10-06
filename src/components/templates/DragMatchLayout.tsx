@@ -66,7 +66,12 @@ export function DragMatchLayout({ payload, callbacks, hintActive }: LayoutProps<
           return (
             <motion.div
               key={slot.id}
-              className={cn(styles.slot, here.length > 0 && styles.slotFilled, hintSlot === slot.id && styles.pulsing)}
+              className={cn(
+                styles.slot,
+                here.length > 0 && styles.slotFilled,
+                hintSlot === slot.id && styles.pulsing,
+                dnd.over === slot.id && styles.dropOver,
+              )}
               animate={pulse === slot.id ? PULSE : { scale: 1 }}
               onAnimationComplete={() => pulse === slot.id && setPulse(null)}
               {...dnd.target(slot.id)}

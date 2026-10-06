@@ -1,0 +1,22 @@
+{
+  "name": "ДивоСвіт — навчальні ігри",
+  "short_name": "ДивоСвіт",
+  "lang": "uk",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fdf2ff",
+  "theme_color": "#7c3aed",
+  "description": "Навчальні ігри для дітей 6–10 років українською: математика, географія, історія, екологія.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

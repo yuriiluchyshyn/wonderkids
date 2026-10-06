@@ -10,29 +10,53 @@ import {
   unlocked,
   withDistractors,
 } from '../shared/templateModule';
-import { BIOMES, BIOME_ANIMALS, CONTINENT_ANIMALS, COUNTRIES, DAY_NIGHT, LANDMARKS, OCEAN_FACTS } from './data';
+import { COUNTRIES, MAP_COUNTRIES, type Country } from './countries';
+import { BIOMES, BIOME_ANIMALS, CONTINENT_ANIMALS, DAY_NIGHT, LANDMARKS, OCEAN_FACTS } from './data';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 const byId = <T extends { id: string }>(a: T, b: T) => a.id === b.id;
 
-/** Game 7 — «Вгадай Прапор»: hear the country, tap 1 of 6 flags. */
-function flags(step: number): Tasks {
-  const known = unlocked(COUNTRIES, step, 10, 8);
-  return known.map((country) =>
-    templateTask(
-      `flag:${country.id}`,
-      `Знайди прапор: ${country.name}`,
-      {
-        template: 'UI_GRID_CHOICE',
-        cols: 3,
-        options: withDistractors(country, known, 6, byId).map((c) => card(c.id, c.flag, undefined, c.name)),
-        correctId: country.id,
-        hint: country.look,
-      },
-      step,
-      `Так, це прапор країни ${country.name}!`,
-    ),
+/** New flags introduced on each path step. */
+const FLAGS_PER_STEP = 6;
+/** Path length that walks through every country once. */
+const FLAG_STEPS = Math.ceil(COUNTRIES.length / FLAGS_PER_STEP);
+
+function flagTask(country: Country, known: readonly Country[], step: number): TaskInstance<TemplatePayload> {
+  return templateTask(
+    `flag:${country.id}`,
+    `Знайди прапор: ${country.name}`,
+    {
+      template: 'UI_GRID_CHOICE',
+      cols: 3,
+      options: withDistractors(country, known, 6, byId).map((c) => card(c.id, c.flag, undefined, c.name)),
+      correctId: country.id,
+      hint: country.look ?? `${country.name} — це країна в ${country.continentName}. Придивись до кольорів і малюнка на прапорах.`,
+    },
+    step,
+    `Так, це прапор країни ${country.name}!`,
   );
+}
+
+/** Every flag met up to and including this step. */
+const flagsKnownAt = (step: number) => COUNTRIES.slice(0, Math.max(12, step * FLAGS_PER_STEP));
+
+/**
+ * Game 7 — «Вгадай Прапор». The path walks down the familiarity ranking: each
+ * step brings six new, slightly less famous flags and mixes in flags from
+ * earlier steps, so what was learned keeps coming back.
+ */
+function flagsLevel(step: number, count: number): Tasks {
+  const start = (step - 1) * FLAGS_PER_STEP;
+  const fresh = COUNTRIES.slice(start, start + FLAGS_PER_STEP);
+  const earlier = shuffle(COUNTRIES.slice(0, start)).slice(0, Math.max(0, count - fresh.length));
+  const known = flagsKnownAt(step);
+  // New flags first, then the reminders — the engine keeps this order.
+  return [...shuffle(fresh), ...earlier].map((country) => flagTask(country, known, step));
+}
+
+function flags(step: number): Tasks {
+  const known = flagsKnownAt(step);
+  return known.map((country) => flagTask(country, known, step));
 }
 
 /** Game 8 — «Склади Карту»: drag a flag or an animal onto its continent. */
@@ -53,8 +77,8 @@ function continents(step: number): Tasks {
       `${regionName(a.home)} — дім для тваринки ${a.name}!`,
     ),
   );
-  // Countries join once the animals are familiar.
-  const countries: Tasks = unlocked(COUNTRIES, step, 12, 0).map((c) =>
+  // Countries join once the animals are familiar — the best-known ones first.
+  const countries: Tasks = unlocked(MAP_COUNTRIES.slice(0, 60), step, 12, 0).map((c) =>
     templateTask(
       `where:${c.id}`,
       `На якому материку ${c.name}? Перетягни прапор`,
@@ -121,11 +145,11 @@ function capitals(step: number): Tasks {
   const landmarkTasks: Tasks = known.map((l) =>
     templateTask(
       `capital:${l.id}`,
-      `${l.landmark} — у якій це столиці?`,
+      `${l.landmark}: у якій столиці це можна побачити?`,
       {
         template: 'UI_GRID_CHOICE',
         cols: 2,
-        stimulus: { emoji: l.emoji, caption: l.landmark },
+        stimulus: { emoji: l.emoji, art: l.id, caption: l.landmark },
         options: withDistractors(l, known, 4, byId).map((o) => card(o.id, undefined, o.capital)),
         correctId: l.id,
         hint: `${l.landmark} — символ ${l.country}. Згадай столицю цієї країни.`,
@@ -168,14 +192,15 @@ export const geographyModule = defineTemplateModule({
       gameId: 'geo_flags_quiz',
       label: 'Вгадай Прапор',
       icon: '🚩',
-      blurb: 'Знайди прапор країни',
-      intro: 'У кожної країни є свій прапор. Послухай назву країни і знайди її прапор серед шести!',
-      steps: 10,
+      blurb: `Усі ${COUNTRIES.length} прапори світу — від найвідоміших`,
+      intro: 'У кожної країни є свій прапор. Послухай назву країни і знайди її прапор серед шести! На кожній сходинці — нові прапори, а знайомі повертаються, щоб ти їх не забув.',
+      // One step per six flags: the whole world, best-known first.
+      steps: FLAG_STEPS,
       difficulty: 1,
       publishDate: V4_RELEASE,
-      tasksPerLevel: 6,
+      tasksPerLevel: 8,
       mechanics: 'UI_GRID_CHOICE',
-      hintDelaySec: 10,
+      level: flagsLevel,
       pool: flags,
     },
     {
@@ -191,7 +216,6 @@ export const geographyModule = defineTemplateModule({
       publishDate: V4_RELEASE,
       tasksPerLevel: 6,
       mechanics: 'UI_MAP_PUZZLE',
-      hintDelaySec: 12,
       pool: continents,
     },
     {
@@ -208,7 +232,6 @@ export const geographyModule = defineTemplateModule({
       publishDate: V4_RELEASE,
       tasksPerLevel: 6,
       mechanics: 'UI_SORTER_BINS',
-      hintDelaySec: 10,
       hasText: true,
       pool: biomes,
     },
@@ -227,7 +250,6 @@ export const geographyModule = defineTemplateModule({
       // Only five oceans exist — the level shrinks to five on its own.
       tasksPerLevel: 6,
       mechanics: 'UI_MAP_PUZZLE',
-      hintDelaySec: 10,
       pool: oceans,
     },
     {
@@ -243,7 +265,6 @@ export const geographyModule = defineTemplateModule({
       publishDate: V4_RELEASE,
       tasksPerLevel: 6,
       mechanics: 'UI_GRID_CHOICE',
-      hintDelaySec: 12,
       hasText: true,
       pool: capitals,
     },

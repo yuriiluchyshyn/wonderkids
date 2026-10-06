@@ -56,6 +56,12 @@ export interface TemplateGame extends SubCategory {
   steps?: number;
   /** All candidate tasks for a level at `step`. Must be side-effect free. */
   pool: (step: number, config: Omit<TaskConfig, 'index'>) => TaskInstance<TemplatePayload>[];
+  /**
+   * Optional: compose one level yourself, in the order tasks should be asked
+   * (e.g. "this step's new flags plus a couple from earlier steps"). Without
+   * it a level is a random draw from `pool`.
+   */
+  level?: (step: number, count: number) => TaskInstance<TemplatePayload>[];
   /** Child-level explanation; a function when it changes along the path. */
   introFor?: (step: number) => string | undefined;
 }
@@ -88,9 +94,10 @@ export function defineTemplateModule(def: TemplateModuleDef): LearningModule {
       if (!g) throw new Error(`Unknown game ${def.id}:${config.subCategoryId}`);
       return pick(g.pool(config.step, config));
     },
-    buildLevel: (config) => {
+    buildLevel: (config, count) => {
       const g = game(config.subCategoryId);
-      return g ? shuffle(g.pool(config.step, config)) : [];
+      if (!g) return [];
+      return g.level ? g.level(config.step, count) : shuffle(g.pool(config.step, config));
     },
     // Counted at the top of the path, where every item is unlocked.
     taskCount: (subId) => {

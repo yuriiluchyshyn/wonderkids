@@ -3,7 +3,6 @@ import {
   useGameStore,
   selectNicknameTaken,
   type ChoicesGridSize,
-  type GameMode,
   type Gender,
 } from '@/core/store/useGameStore';
 import { useAuthStore } from '@/core/auth/useAuthStore';
@@ -21,10 +20,6 @@ const GENDER_OPTIONS: { id: Gender; label: string; icon: string }[] = [
   { id: 'girl', label: 'Дівчинка', icon: '👧' },
   { id: 'boy', label: 'Хлопчик', icon: '👦' },
 ];
-const GAME_MODE_OPTIONS: { id: GameMode; label: string; icon: string }[] = [
-  { id: 'dynamic_task_extension', label: 'Динамічний', icon: '🔁' },
-  { id: 'fixed_strict', label: 'Фіксований', icon: '📏' },
-];
 const GRID_OPTIONS: { id: ChoicesGridSize; label: string }[] = [
   { id: 6, label: '6' },
   { id: 9, label: '9' },
@@ -37,7 +32,6 @@ interface NewChild {
   nickname: string;
   pin: string;
   gender: Gender;
-  gameMode: GameMode;
   choicesGridSize: ChoicesGridSize;
 }
 
@@ -46,7 +40,6 @@ const BLANK: NewChild = {
   nickname: '',
   pin: '',
   gender: 'girl',
-  gameMode: 'dynamic_task_extension',
   choicesGridSize: 9,
 };
 
@@ -130,7 +123,6 @@ export function ChildManager() {
         gender: draft.gender,
       },
       settings: {
-        gameMode: draft.gameMode,
         choicesGridSize: draft.choicesGridSize,
       },
     });
@@ -255,21 +247,6 @@ export function ChildManager() {
                   label={g.label}
                   active={draft.gender === g.id}
                   onClick={() => setDraft((d) => ({ ...d, gender: g.id }))}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className={styles.fieldLabel}>Режим гри</label>
-            <div className={styles.chipRow}>
-              {GAME_MODE_OPTIONS.map((o) => (
-                <Chip
-                  key={o.id}
-                  icon={o.icon}
-                  label={o.label}
-                  active={draft.gameMode === o.id}
-                  onClick={() => setDraft((d) => ({ ...d, gameMode: o.id }))}
                 />
               ))}
             </div>

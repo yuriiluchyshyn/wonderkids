@@ -44,7 +44,7 @@ export function InteractiveMapLayout({ payload, callbacks, hintActive }: LayoutP
     window.setTimeout(() => setMissed(null), 600);
     callbacks.onMistake();
   };
-  const dnd = useDragDrop((_id, regionId) => answer(regionId), solved || mode === 'tap');
+  const dnd = useDragDrop((_id, regionId) => answer(regionId), solved || mode === 'tap', marker.id);
 
   const active = layer === 'continents' ? CONTINENTS : OCEANS;
   const backdrop = layer === 'continents' ? [] : CONTINENTS;
@@ -67,6 +67,7 @@ export function InteractiveMapLayout({ payload, callbacks, hintActive }: LayoutP
                 solved && r.id === targetId && styles.mapSolved,
                 missed === r.id && styles.mapMissed,
                 hintActive && !solved && r.id === targetId && styles.mapPulse,
+                dnd.over === r.id && styles.mapOver,
               )}
               role="button"
               aria-label={r.name}

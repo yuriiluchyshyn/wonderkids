@@ -900,3 +900,56 @@
 .shapeCellOn {
   background: var(--primary);
 }
+
+/* ---- A dragged card is hovering here: lit until the finger lifts ---- */
+.dropOver {
+  border-color: var(--accent) !important;
+  border-style: solid !important;
+  background: color-mix(in srgb, var(--accent) 22%, var(--tile)) !important;
+  transform: scale(1.04);
+}
+
+.mapOver {
+  fill: #fb923c;
+  stroke: #fff;
+  stroke-width: 1.6;
+}
+
+.seqOver .seqCard {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 22%, var(--tile));
+}
+
+/* "oldest" / "newest" tags on the first and last place of a sequence. */
+.seqEnd {
+  position: absolute;
+  top: -8px;
+  right: 6px;
+  z-index: 2;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-ink);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+/* ---- "How do I do this?" line under every task ---- */
+.howTo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: -4px 0 0;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 999px;
+  align-self: center;
+  background: color-mix(in srgb, var(--ring) 22%, transparent);
+  color: var(--surface-ink);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}

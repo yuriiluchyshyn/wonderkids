@@ -1,0 +1,124 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.system {
+  position: relative;
+  width: 168px;
+  height: 168px;
+}
+
+.sun {
+  position: absolute;
+  inset: 62px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff7c2, var(--ring, #fbbf24) 55%, var(--accent, #f97316));
+  box-shadow: 0 0 26px 8px color-mix(in srgb, var(--ring, #fbbf24) 55%, transparent);
+  animation: glow 1.8s ease-in-out infinite alternate;
+}
+
+.orbit {
+  position: absolute;
+  border: 2px dashed color-mix(in srgb, var(--primary, #7c3aed) 35%, transparent);
+  border-radius: 50%;
+  animation: turn linear infinite;
+}
+
+.orbit1 {
+  inset: 44px;
+  animation-duration: 2.2s;
+}
+
+.orbit2 {
+  inset: 22px;
+  animation-duration: 3.6s;
+  animation-direction: reverse;
+}
+
+.orbit3 {
+  inset: 0;
+  border-style: solid;
+  border-color: transparent;
+  animation-duration: 2.8s;
+}
+
+.planet,
+.rocket {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  margin-left: -8px;
+}
+
+.planet {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary, #7c3aed);
+  box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.18);
+}
+
+.planet2 {
+  width: 20px;
+  height: 20px;
+  top: -10px;
+  margin-left: -10px;
+  background: var(--accent, #ec4899);
+}
+
+.rocket {
+  top: -16px;
+  margin-left: -14px;
+  font-size: 1.7rem;
+  line-height: 1;
+  /* Nose along the direction of travel. */
+  transform: rotate(45deg);
+}
+
+.label {
+  margin: 0;
+  font-weight: 700;
+  text-align: center;
+}
+
+.label::after {
+  content: '';
+  animation: dots 1.6s steps(4, end) infinite;
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glow {
+  to {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes dots {
+  0% {
+    content: '';
+  }
+  25% {
+    content: '.';
+  }
+  50% {
+    content: '..';
+  }
+  75% {
+    content: '...';
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit,
+  .sun {
+    animation-duration: 12s;
+  }
+}

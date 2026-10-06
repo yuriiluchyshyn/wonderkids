@@ -69,7 +69,7 @@ export function PhysicsScaleLayout({ payload, callbacks, hintActive }: LayoutPro
             animate={{ rotate: -tilt * TILT_DEG }}
             transition={SWING}
           >
-            <div className={styles.panBowl} {...dnd.target('pan')}>
+            <div className={cn(styles.panBowl, dnd.over === 'pan' && styles.dropOver)} {...dnd.target('pan')}>
               {placed ? (
                 <motion.div className={styles.panLoad} initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
                   <CardFace card={placed} speaker={false} />

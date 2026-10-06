@@ -1,42 +1,6 @@
 /** Content for the Geography games. Ordered easy → hard: early path steps use
  *  only the first entries, later steps unlock the rest. */
 
-export interface Country {
-  id: string;
-  name: string;
-  flag: string;
-  continent: string;
-  /** Spoken description of the flag (the "what does it look like" hint). */
-  look: string;
-}
-
-export const COUNTRIES: Country[] = [
-  { id: 'ua', name: 'Україна', flag: '🇺🇦', continent: 'europe', look: 'У цього прапора дві смуги: синя, як небо, і жовта, як пшеничне поле.' },
-  { id: 'jp', name: 'Японія', flag: '🇯🇵', continent: 'asia', look: 'У цього прапора червоне коло посередині на білому тлі.' },
-  { id: 'fr', name: 'Франція', flag: '🇫🇷', continent: 'europe', look: 'Три стоячі смуги: синя, біла і червона.' },
-  { id: 'us', name: 'США', flag: '🇺🇸', continent: 'north_america', look: 'Червоні й білі смуги та синій куточок із зірочками.' },
-  { id: 'ca', name: 'Канада', flag: '🇨🇦', continent: 'north_america', look: 'Червоний кленовий листок посередині.' },
-  { id: 'br', name: 'Бразилія', flag: '🇧🇷', continent: 'south_america', look: 'Зелений прапор із жовтим ромбом і синім колом.' },
-  { id: 'it', name: 'Італія', flag: '🇮🇹', continent: 'europe', look: 'Три стоячі смуги: зелена, біла і червона.' },
-  { id: 'de', name: 'Німеччина', flag: '🇩🇪', continent: 'europe', look: 'Три лежачі смуги: чорна, червона і золота.' },
-  { id: 'gb', name: 'Велика Британія', flag: '🇬🇧', continent: 'europe', look: 'Синій прапор із червоними і білими хрестами.' },
-  { id: 'pl', name: 'Польща', flag: '🇵🇱', continent: 'europe', look: 'Дві смуги: біла згори і червона знизу.' },
-  { id: 'cn', name: 'Китай', flag: '🇨🇳', continent: 'asia', look: 'Червоний прапор із жовтими зірками в кутку.' },
-  { id: 'in', name: 'Індія', flag: '🇮🇳', continent: 'asia', look: 'Помаранчева, біла і зелена смуги та синє колесо посередині.' },
-  { id: 'au', name: 'Австралія', flag: '🇦🇺', continent: 'australia', look: 'Синій прапор із зірками і маленьким британським прапором у кутку.' },
-  { id: 'eg', name: 'Єгипет', flag: '🇪🇬', continent: 'africa', look: 'Червона, біла і чорна смуги та золотий орел посередині.' },
-  { id: 'es', name: 'Іспанія', flag: '🇪🇸', continent: 'europe', look: 'Червона, широка жовта і знову червона смуги.' },
-  { id: 'gr', name: 'Греція', flag: '🇬🇷', continent: 'europe', look: 'Сині й білі смуги та білий хрест у кутку.' },
-  { id: 'se', name: 'Швеція', flag: '🇸🇪', continent: 'europe', look: 'Синій прапор із жовтим хрестом.' },
-  { id: 'ch', name: 'Швейцарія', flag: '🇨🇭', continent: 'europe', look: 'Червоний квадрат із білим хрестом.' },
-  { id: 'tr', name: 'Туреччина', flag: '🇹🇷', continent: 'asia', look: 'Червоний прапор із білим півмісяцем і зіркою.' },
-  { id: 'mx', name: 'Мексика', flag: '🇲🇽', continent: 'north_america', look: 'Зелена, біла і червона смуги та орел посередині.' },
-  { id: 'ar', name: 'Аргентина', flag: '🇦🇷', continent: 'south_america', look: 'Блакитна, біла і блакитна смуги та сонечко посередині.' },
-  { id: 'za', name: 'Південна Африка', flag: '🇿🇦', continent: 'africa', look: 'Дуже кольоровий прапор із зеленою літерою, схожою на «У», що лежить на боці.' },
-  { id: 'ke', name: 'Кенія', flag: '🇰🇪', continent: 'africa', look: 'Чорна, червона і зелена смуги та щит зі списами.' },
-  { id: 'kr', name: 'Південна Корея', flag: '🇰🇷', continent: 'asia', look: 'Білий прапор із червоно-синім колом посередині.' },
-];
-
 export interface Dweller {
   id: string;
   name: string;

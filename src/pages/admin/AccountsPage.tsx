@@ -9,7 +9,7 @@ import { THEMES } from '@/core/theme/themes';
 import type { ThemeId } from '@/core/theme/theme.types';
 import { computeAge } from '@/core/utils/age';
 import { SpeechSwitch } from './SpeechSwitch';
-import { errorText, formatDate, speechStatus } from './shared';
+import { errorText, formatDate, lookalikes, speechStatus } from './shared';
 import styles from './Admin.module.css';
 
 /** A child's progress grouped by subject, with every game listed. */
@@ -135,6 +135,20 @@ export function AccountsPage({ adminKey, onLogout }: { adminKey: string; onLogou
     );
   }, [accounts, query]);
 
+  const remove = async (account: AdminAccount) => {
+    const kids = account.children.length;
+    const warning = kids
+      ? `Разом із ним буде видалено дітей (${kids}) і весь їхній прогрес. Цього не можна скасувати.`
+      : 'У ньому немає дітей.';
+    if (!window.confirm(`Видалити акаунт ${account.email}? ${warning}`)) return;
+    try {
+      await adminApi.deleteAccount(adminKey, account.id);
+      setAccounts((list) => list.filter((a) => a.id !== account.id));
+    } catch (err) {
+      setError(errorText(err));
+    }
+  };
+
   const childCount = accounts.reduce((n, a) => n + a.children.length, 0);
   const voiceOn = accounts.filter((a) => speechStatus(a, keys).live).length;
 
@@ -171,6 +185,7 @@ export function AccountsPage({ adminKey, onLogout }: { adminKey: string; onLogou
 
       {visible.map((account) => {
         const status = speechStatus(account, keys);
+        const similar = lookalikes(account, accounts);
         return (
           <section key={account.id} className={styles.account}>
             <div className={styles.accountHead}>
@@ -178,7 +193,19 @@ export function AccountsPage({ adminKey, onLogout }: { adminKey: string; onLogou
               <span className={styles.meta}>
                 #{account.id} · з {formatDate(account.createdAt)} · дітей: {account.children.length}
               </span>
+              <button type="button" className={styles.btnDanger} onClick={() => void remove(account)}>
+                Видалити акаунт
+              </button>
             </div>
+            {(account.duplicateMailbox || similar.length > 0) && (
+              <p className={styles.warn}>
+                {account.duplicateMailbox
+                  ? '⚠️ Дублікат: ця адреса веде до тієї самої поштової скриньки, що й інший акаунт. Вхід уже йде в основний — цей можна видалити.'
+                  : `⚠️ Дуже схожий на ${similar.map((a) => a.email).join(', ')} — імовірно, одруківка тієї самої людини.${
+                      account.children.length === 0 ? ' Тут немає дітей, тож його можна видалити.' : ''
+                    }`}
+              </p>
+            )}
 
             <div className={styles.voiceLine}>
               <strong>🗣️ Google Speech</strong>

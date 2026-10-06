@@ -1,3 +1,4 @@
+import { usePageMeta } from '@/core/seo/usePageMeta';
 import { useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -20,6 +21,12 @@ const DECOR = [
  * This is the default login — the home page lands here.
  */
 export function ChildLoginPage() {
+  usePageMeta({
+    title: 'Вхід для дітей',
+    description:
+      'Вхід у ДивоСвіт для дітей: введи свій нік і PIN, який дали батьки, — і вирушай у пригоду з математикою, географією та історією.',
+    index: true,
+  });
   const navigate = useNavigate();
   const token = useAuthStore((s) => s.token);
   const childLogin = useAuthStore((s) => s.childLogin);

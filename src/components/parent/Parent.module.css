@@ -251,3 +251,53 @@
   25% { transform: translateX(-8px); }
   75% { transform: translateX(8px); }
 }
+
+/* ---- A family goal: reward on top, price + delete below ---- */
+.goal {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'reward reward'
+    'amount remove';
+  align-items: end;
+  gap: 8px 10px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--ring) 10%, transparent);
+}
+
+.goalReward {
+  grid-area: reward;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.goalReward .textInput {
+  font-weight: 700;
+}
+
+.goalAmount {
+  grid-area: amount;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 220px;
+}
+
+.goal .removeBtn {
+  grid-area: remove;
+}
+
+.goal .textInput {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+/* Wide screens have room for everything on one line. */
+@media (min-width: 720px) {
+  .goal {
+    grid-template-columns: 1fr 220px auto;
+    grid-template-areas: 'reward amount remove';
+  }
+}

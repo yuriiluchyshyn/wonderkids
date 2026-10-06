@@ -1,12 +1,15 @@
+import { usePageMeta } from '@/core/seo/usePageMeta';
 import { useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/core/auth/useAuthStore';
+import { useAuthStore, type LoginOutcome } from '@/core/auth/useAuthStore';
 import { getPortal } from '@/core/portal';
 import styles from './LoginPage.module.css';
 
 /**
- * Entry screen. Login is email-only for now — type an address and go. If a
- * session already exists we skip straight to the hub.
+ * Parent entry screen. Login is email-only for now. Signing in never creates
+ * an account by itself: for an address we do not know, the page asks first (and
+ * suggests the fix when the domain looks mistyped). If a session already
+ * exists we skip straight to the cabinet.
  *
  * Intentionally theme-independent: this screen renders before a world is
  * chosen, so it uses its own neutral styling (no per-theme palette). To hint at
@@ -51,6 +54,12 @@ const DECOR: ReadonlyArray<{
 ];
 
 export function LoginPage() {
+  usePageMeta({
+    title: 'Кабінет батьків',
+    description:
+      'Вхід до кабінету батьків ДивоСвіту: додавайте дітей, налаштовуйте ігровий час, сімейні цілі та стежте за успіхами.',
+    index: true,
+  });
   const navigate = useNavigate();
   const token = useAuthStore((s) => s.token);
   const login = useAuthStore((s) => s.login);
@@ -59,16 +68,30 @@ export function LoginPage() {
   const clearError = useAuthStore((s) => s.clearError);
 
   const [email, setEmail] = useState('');
+  // Set when the address has no account yet: we ask before creating one, so a
+  // typo never quietly becomes a second, empty account.
+  const [unknown, setUnknown] = useState<Extract<LoginOutcome, { status: 'not_found' }> | null>(null);
 
   // This is the PARENT cabinet login (email-only for now). Parents land here;
   // children use the credential login on the child portal.
   if (token) return <Navigate to="/parent" replace />;
 
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
+  const signIn = async (address: string, create = false) => {
     if (pending) return;
-    const ok = await login(email);
-    if (ok) navigate('/parent', { replace: true });
+    const outcome = await login(address, create);
+    if (outcome.status === 'ok') navigate('/parent', { replace: true });
+    else if (outcome.status === 'not_found') setUnknown(outcome);
+  };
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    void signIn(email);
+  };
+
+  const trySuggestion = (address: string) => {
+    setEmail(address);
+    setUnknown(null);
+    void signIn(address);
   };
 
   return (
@@ -119,6 +142,7 @@ export function LoginPage() {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
+              setUnknown(null);
               if (error) clearError();
             }}
             aria-label="Електронна пошта"
@@ -126,10 +150,44 @@ export function LoginPage() {
           />
 
           {error && <p className={styles.error}>{error}</p>}
-
-          <button className={styles.submit} type="submit" disabled={pending}>
-            {pending ? 'Входимо…' : 'Увійти'}
-          </button>
+          {unknown ? (
+            <div className={styles.confirm} role="alert">
+              <p>
+                Акаунта з поштою <b>{unknown.email}</b> ще немає.
+              </p>
+              {unknown.suggestion && (
+                <>
+                  <p>
+                    Можливо, ви мали на увазі <b>{unknown.suggestion}</b>?
+                    {unknown.suggestionExists && ' Такий акаунт уже є.'}
+                  </p>
+                  <button
+                    className={styles.submit}
+                    type="button"
+                    disabled={pending}
+                    onClick={() => trySuggestion(unknown.suggestion as string)}
+                  >
+                    Увійти як {unknown.suggestion}
+                  </button>
+                </>
+              )}
+              <button
+                className={unknown.suggestion ? styles.secondary : styles.submit}
+                type="button"
+                disabled={pending}
+                onClick={() => void signIn(unknown.email, true)}
+              >
+                {pending ? 'Створюємо…' : `Створити новий акаунт для ${unknown.email}`}
+              </button>
+              <button className={styles.secondary} type="button" onClick={() => setUnknown(null)}>
+                Виправити пошту
+              </button>
+            </div>
+          ) : (
+            <button className={styles.submit} type="submit" disabled={pending}>
+              {pending ? 'Входимо…' : 'Увійти'}
+            </button>
+          )}
         </form>
 
         <p className={styles.hint}>

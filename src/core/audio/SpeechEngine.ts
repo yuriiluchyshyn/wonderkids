@@ -27,6 +27,16 @@ export class SpeechEngine {
   /** Bumped by every speak/cancel so a late cloud answer is dropped. */
   private turn = 0;
 
+  constructor() {
+    if (typeof document === 'undefined') return;
+    // Locking the phone or switching to another app must silence the voice —
+    // browsers happily keep reading a queued utterance in the background.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) this.cancel();
+    });
+    window.addEventListener('pagehide', () => this.cancel());
+  }
+
   get supported(): boolean {
     return this.synth !== null || this.cloud !== null;
   }

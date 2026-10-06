@@ -18,6 +18,8 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     public code: string,
+    /** The rest of the error body, when the server sent details. */
+    public data: Record<string, unknown> = {},
   ) {
     super(code);
     this.name = 'ApiError';
@@ -55,13 +57,15 @@ async function request<T>(
 
   if (!res.ok) {
     let code = `http_${res.status}`;
+    let details: Record<string, unknown> = {};
     try {
       const data = await res.json();
       if (data?.error) code = data.error;
+      if (data && typeof data === 'object') details = data;
     } catch {
       /* non-JSON error body — keep the generic code */
     }
-    throw new ApiError(res.status, code);
+    throw new ApiError(res.status, code, details);
   }
 
   if (res.status === 204) return undefined as T;
@@ -95,11 +99,14 @@ const sessionBody = (childId: string, extra: Record<string, unknown> = {}) => ({
 });
 
 export const api = {
-  /** Email-only PARENT login: returns a token + user, creating the account if needed. */
-  login(email: string) {
-    return request<{ token: string; user: AuthUser }>('/api/auth/login', {
+  /**
+   * Email-only PARENT login. An unknown address fails with `account_not_found`
+   * (see `ApiError.data` for a typo suggestion); pass `create` to register it.
+   */
+  login(email: string, create = false) {
+    return request<{ token: string; user: AuthUser; created: boolean }>('/api/auth/login', {
       method: 'POST',
-      body: { email },
+      body: create ? { email, create: true } : { email },
     });
   },
 
@@ -202,6 +209,8 @@ export interface AdminAccount {
   id: number;
   email: string;
   createdAt: string;
+  /** An older row sharing its mailbox with another account — safe to remove. */
+  duplicateMailbox: boolean;
   /** Google Speech switched off for this account specifically. */
   speechOff: boolean;
   /** The key assigned to this account, if any (otherwise the global key applies). */
@@ -236,6 +245,11 @@ export interface SpeechKeyDraft {
 export const adminApi = {
   listAccounts(adminKey: string) {
     return request<{ accounts: AdminAccount[] }>('/api/admin/users', { adminKey });
+  },
+
+  /** Remove an account together with its children and all their data. */
+  deleteAccount(adminKey: string, parentId: number) {
+    return request<{ ok: true }>(`/api/admin/users?id=${parentId}`, { method: 'DELETE', adminKey });
   },
 
   /** Switch Google Speech on/off for one account. */

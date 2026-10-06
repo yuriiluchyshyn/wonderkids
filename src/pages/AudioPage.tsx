@@ -1,3 +1,4 @@
+import { usePageMeta } from '@/core/seo/usePageMeta';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AudioSettings } from '@/components/settings/AudioSettings';
@@ -5,6 +6,7 @@ import styles from '@/components/layout/SubPageHeader.module.css';
 
 /** Dedicated audio & text settings page (hidden sub-page of settings). */
 export function AudioPage() {
+  usePageMeta({ title: 'Звук і голос' });
   const navigate = useNavigate();
   return (
     <div className="page stack">

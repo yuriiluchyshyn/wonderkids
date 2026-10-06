@@ -13,6 +13,11 @@ const LOGIN_ERRORS: Record<string, string> = {
   login_failed: 'Щось пішло не так на сервері. Спробуй ще раз.',
 };
 
+export type LoginOutcome =
+  | { status: 'ok' }
+  | { status: 'error' }
+  | { status: 'not_found'; email: string; suggestion: string | null; suggestionExists: boolean };
+
 export interface AuthState {
   token: string | null;
   user: AuthUser | null;
@@ -21,8 +26,12 @@ export interface AuthState {
   pending: boolean;
   error: string | null;
 
-  /** Parent email-only login. Returns true on success. */
-  login: (email: string) => Promise<boolean>;
+  /**
+   * Parent email-only login. Signing in never creates an account: an unknown
+   * address comes back as `not_found` (with a suggestion when the domain looks
+   * mistyped) and is only registered when called again with `create`.
+   */
+  login: (email: string, create?: boolean) => Promise<LoginOutcome>;
   /** Child login by unique nickname + parent-set PIN. */
   childLogin: (identifier: string, pin: string) => Promise<boolean>;
   /** Clear the session and wipe the in-memory save. */
@@ -39,20 +48,30 @@ export const useAuthStore = create<AuthState>()(
       pending: false,
       error: null,
 
-      login: async (email) => {
+      login: async (email, create = false) => {
         set({ pending: true, error: null });
         try {
-          const { token, user } = await api.login(email);
+          const { token, user } = await api.login(email, create);
           // Parent session → no child auto-selected.
           set({ token, user, childId: null, pending: false, error: null });
-          return true;
+          return { status: 'ok' };
         } catch (err) {
+          // Not an error to show: the page asks whether to create the account.
+          if (err instanceof ApiError && err.code === 'account_not_found') {
+            set({ pending: false, error: null });
+            return {
+              status: 'not_found',
+              email: String(err.data.email ?? email),
+              suggestion: typeof err.data.suggestion === 'string' ? err.data.suggestion : null,
+              suggestionExists: err.data.suggestionExists === true,
+            };
+          }
           const code = err instanceof ApiError ? err.code : 'login_failed';
           set({
             pending: false,
             error: LOGIN_ERRORS[code] ?? LOGIN_ERRORS.login_failed,
           });
-          return false;
+          return { status: 'error' };
         }
       },
 

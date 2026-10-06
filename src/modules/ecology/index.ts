@@ -75,7 +75,6 @@ export const ecologyModule = defineTemplateModule({
       publishDate: V4_RELEASE,
       tasksPerLevel: 6,
       mechanics: 'UI_SORTER_BINS',
-      hintDelaySec: 10,
       hasText: true,
       pool: recycling,
     },

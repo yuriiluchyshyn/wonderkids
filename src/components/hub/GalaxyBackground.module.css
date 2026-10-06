@@ -108,6 +108,22 @@
   fill: var(--accent);
 }
 
+/* Wide screens: the page content sits in a centred column, so a galaxy
+   stretched across the whole window just reads as smudges behind the cards.
+   Instead it becomes a compact, rounder disk tucked into the free margin. */
+@media (min-width: 900px) {
+  .galaxyTilt {
+    top: 30%;
+    left: 86%;
+    width: min(62vmin, 560px);
+    transform: translate(-50%, -50%) rotate(-22deg) scaleY(0.62);
+  }
+
+  .nebula {
+    filter: blur(22px);
+  }
+}
+
 @keyframes wkspin {
   to {
     transform: rotate(360deg);
