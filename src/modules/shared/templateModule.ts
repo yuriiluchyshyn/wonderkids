@@ -139,6 +139,10 @@ export function defineTemplateModule(def: TemplateModuleDef): LearningModule {
       const g = game(subId);
       return g ? g.pool(g.steps ?? 1, { subCategoryId: subId, step: g.steps ?? 1 }).length : 0;
     },
+    tasksAt: (subId, step) => {
+      const g = game(subId);
+      return g ? new Set(g.pool(step, { subCategoryId: subId, step }).map(taskKey)).size : 0;
+    },
     getHintSpeech: (task) => (task.payload as TemplatePayload).hint ?? '',
     getIntro: (subId, _theme, step) => {
       const g = game(subId);

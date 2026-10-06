@@ -86,7 +86,7 @@ The server owns the play-time budget (PRD v4.0 §2.2). `components/game/useScree
 
 - **The planet** — the child *exchanges* artifacts for items of the active theme: ten buildings (`BUILDING_COSTS`, the last is `theme.dreamBuild` and unlocks only when the other nine stand) and eight decorations (`DECOR_COSTS`), listed per theme in `themeWorlds.ts`. `artifacts` is never decremented: a purchase is remembered as a key `world:<themeId>:<itemId>` inside the child's `treasures` array (so it syncs with no schema change), and the balance is `earned − spent` (`balanceOf`). Every counter and the family goals show that balance — read it with `useBalance()`, never `s.artifacts` directly — so buying something for the planet genuinely sets the goals back: the child chooses between building and saving. An item's price depends only on its id (`b3`, `d5`), never on the theme. Buying goes through `store.buyWorldItem`, which re-checks the balance.
 - **«Землі знань»** — derived, not stored: one landmark per game (`SubCategory.landmark`, optionally with four named `stages`) that grows with the share of the path completed, or with levels played for free-play games.
-- **Residents** — derived: every 5th path step is a gift that brings one.
+- **Residents** — derived: every 5th path step is a gift that brings one (the theme's own ten, then the shared `VISITORS` list). This is a surprise by design: the UI never says when the next one comes, how many exist or who is next — only who has arrived.
 
 Levels played are counted in `progress` under `${module}:${sub}#plays` (`core/progress/plays.ts`). Code that walks `progress` or `treasures` keys must expect these extra `#plays` / `world:` / `tip:` entries.
 
@@ -100,7 +100,7 @@ Keys live in `wk_tts_keys` (AES-GCM-encrypted, `api/_lib/secrets.js`), each with
 
 ### Admin area (`src/pages/AdminPage.tsx`, `src/pages/admin/*`, `api/admin/*`)
 
-`/admin/*` is lazy-loaded and not mounted on the `play.*` portal. `/admin` lists every parent account, their children and each child's progress per game, with a one-line Google Speech status and on/off switch per account. `/admin/speech` manages the keys: add or edit, choose who each one serves (global or selected accounts), test, delete, plus the same per-account switches. It authenticates with a shared `ADMIN_KEY` env var sent as `x-admin-key` — deliberately not with parent tokens, because parent login is email-only.
+`/admin/*` is lazy-loaded and not mounted on the `play.*` portal. `/admin/games` is a live summary of every game (kind, mechanics, path length, stars, tasks per level, how many different tasks overall and per step), computed in the browser from `moduleRegistry` — exact where a module implements `tasksAt` (all template modules), sampled from `generateTask` otherwise; nothing there is hand-maintained. `/admin` lists every parent account, their children and each child's progress per game, with a one-line Google Speech status and on/off switch per account. `/admin/speech` manages the keys: add or edit, choose who each one serves (global or selected accounts), test, delete, plus the same per-account switches. It authenticates with a shared `ADMIN_KEY` env var sent as `x-admin-key` — deliberately not with parent tokens, because parent login is email-only.
 
 ### Themes that reshape the UI
 

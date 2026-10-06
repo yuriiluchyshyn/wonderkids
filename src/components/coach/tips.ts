@@ -43,7 +43,6 @@ export function gameTips(opts: { template?: TemplatePayload['template']; hasText
   tips.push(
     { id: 'game.track', anchor: '[data-tip="track"]', text: 'Твій друг біжить до фінішу. Кожна правильна відповідь — це крок уперед!' },
     { id: 'game.dots', anchor: '[data-tip="dots"]', text: 'Кружечки показують, скільки завдань у рівні. Зафарбовані — ти вже виконав.' },
-    { id: 'game.voice', anchor: '[data-tip="voice"]', text: 'Ця кнопка вмикає і вимикає голос, який читає завдання.' },
     { id: 'game.home', anchor: '[data-tip="home"]', text: 'Будиночок повертає до всіх ігор.' },
   );
   return tips;

@@ -3,8 +3,11 @@
   inset: 0;
   z-index: 60;
   display: grid;
+  /* One column that may shrink: without it a long button label widens the
+     card past the screen edge on a phone. */
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
-  padding: 24px;
+  padding: 18px;
   background: linear-gradient(
     160deg,
     color-mix(in srgb, var(--bg1) 92%, #000 8%),
@@ -15,7 +18,9 @@
 
 .scene,
 .rest {
+  box-sizing: border-box;
   width: min(520px, 100%);
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;

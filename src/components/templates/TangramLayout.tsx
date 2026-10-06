@@ -7,7 +7,7 @@ import { useDragDrop } from './useDragDrop';
 import styles from './Templates.module.css';
 
 /** SVG outline of one piece, centred on (0,0), `size` wide. */
-function PieceShape({ piece, className, fill }: { piece: Pick<TangramPiece, 'shape' | 'size'>; className?: string; fill?: string }) {
+export function PieceShape({ piece, className, fill }: { piece: Pick<TangramPiece, 'shape' | 'size'>; className?: string; fill?: string }) {
   const h = piece.size / 2;
   const common = { className, fill };
   switch (piece.shape) {

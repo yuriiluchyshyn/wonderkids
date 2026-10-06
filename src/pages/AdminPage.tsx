@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { adminApi } from '@/core/api/client';
 import { AccountsPage } from './admin/AccountsPage';
 import { SpeechPage } from './admin/SpeechPage';
+import { GamesPage } from './admin/GamesPage';
 import { ADMIN_KEY_STORAGE, errorText } from './admin/shared';
 import styles from './admin/Admin.module.css';
 
@@ -13,6 +14,7 @@ import styles from './admin/Admin.module.css';
  *
  *   /admin         accounts, children and their progress
  *   /admin/speech  Google Speech keys and who each one serves
+ *   /admin/games   live summary of every game, read from the module registry
  */
 export function AdminPage() {
   usePageMeta({ title: 'Адмінпанель' });
@@ -72,6 +74,7 @@ export function AdminPage() {
     <Routes>
       <Route index element={<AccountsPage adminKey={adminKey} onLogout={logout} />} />
       <Route path="speech" element={<SpeechPage adminKey={adminKey} />} />
+      <Route path="games" element={<GamesPage />} />
     </Routes>
   );
 }

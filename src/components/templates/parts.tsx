@@ -6,6 +6,7 @@ import { useShowText } from '@/core/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
 import { LandmarkArt, hasLandmarkArt } from './LandmarkArt';
 import { ClockFace } from './ClockFace';
+import { PieceShape } from './TangramLayout';
 import { SpeakButton } from './SpeakButton';
 import styles from './Templates.module.css';
 
@@ -101,6 +102,36 @@ export function Stimulus({
         )
       )}
       {s?.clock && <ClockFace time={s.clock} className={styles.stimulusClock} />}
+      {s?.shape && (
+        <span
+          className={cn(styles.shapeGrid, styles.stimulusShape)}
+          style={{ gridTemplateColumns: `repeat(${s.shape.cols}, 1fr)` }}
+          aria-hidden
+        >
+          {Array.from({ length: s.shape.cols * s.shape.rows }, (_, i) => (
+            <span key={i} className={cn(styles.shapeCell, s.shape?.cells.includes(i) && styles.shapeCellOn)} />
+          ))}
+        </span>
+      )}
+      {s?.pieces && (
+        <svg viewBox="0 0 100 100" className={styles.stimulusFigure} aria-hidden>
+          {s.pieces.map((piece) => (
+            <g key={piece.id} transform={`translate(${piece.x} ${piece.y}) rotate(${piece.rotate ?? 0})`}>
+              <PieceShape piece={piece} fill={piece.color} />
+            </g>
+          ))}
+        </svg>
+      )}
+      {s?.scene && (
+        <span className={styles.scene} aria-hidden>
+          {s.scene.map((chip, i) => (
+            <span key={i} className={styles.sceneChip}>
+              <span className={cn(styles.sceneEmoji, 'emoji')}>{chip.emoji}</span>
+              {chip.label && <span className={styles.sceneLabel}>{chip.label}</span>}
+            </span>
+          ))}
+        </span>
+      )}
       {s?.glyphs && <Glyphs glyphs={s.glyphs} className={styles.stimulusGlyphs} />}
       {s?.caption && <span className={styles.stimulusCaption}>{s.caption}</span>}
       {children}

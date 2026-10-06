@@ -572,3 +572,74 @@ a.btnPrimary {
   color: #92400e;
   font-size: 0.88rem;
 }
+
+/* ---- /admin/games ---- */
+.gamesNote {
+  max-width: 1100px;
+  margin: 0 auto 16px;
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.gamesSection {
+  max-width: 1100px;
+  margin: 0 auto 22px;
+}
+
+.gamesCount {
+  margin-left: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.gamesScroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.gamesTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.gamesTable th,
+.gamesTable td {
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.gamesTable td:first-child,
+.gamesTable td:nth-child(3) {
+  white-space: normal;
+  min-width: 170px;
+}
+
+.gamesTable th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #64748b;
+  background: #f8fafc;
+}
+
+.gamesTable tr:last-child td {
+  border-bottom: none;
+}
+
+.gamesId {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.gamesStars {
+  color: #f59e0b;
+}

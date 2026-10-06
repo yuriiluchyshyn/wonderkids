@@ -12,10 +12,10 @@ import {
 } from '../shared/templateModule';
 import { COUNTRIES, MAP_COUNTRIES, type Country } from './countries';
 import { BIOMES, BIOME_ANIMALS, CONTINENT_ANIMALS, DAY_NIGHT, LANDMARKS, OCEAN_FACTS } from './data';
-import { BIOME_FACTS, CONTINENT_FACTS, OCEAN_POOLS } from './facts';
+import { BIOME_FACTS, CAPITAL_FACTS, CONTINENT_FACTS, DAY_NIGHT_FACTS, OCEAN_POOLS } from './facts';
 import { RECALL_WINDOW, composeLevel } from '@/core/engine/recall';
 import { taskKey } from '@/core/engine/LevelEngine';
-import { factPool, framed } from '../shared/facts';
+import { factPool } from '../shared/facts';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 const byId = <T extends { id: string }>(a: T, b: T) => a.id === b.id;
@@ -181,7 +181,7 @@ function capitals(step: number): Tasks {
         hint: `${l.landmark} — символ ${l.country}. Згадай столицю цієї країни.`,
       },
       step,
-      framed(`${l.landmark} стоїть у місті ${l.capital} — це столиця ${l.country}.`),
+      factPool(`${l.landmark} стоїть у місті ${l.capital} — це столиця ${l.country}.`, CAPITAL_FACTS),
     ),
   );
   if (step <= 4) return landmarkTasks;
@@ -199,7 +199,7 @@ function capitals(step: number): Tasks {
         hint: 'Земля крутиться, як дзиґа. Сонце світить тільки на один її бік: там день, а на іншому боці — ніч.',
       },
       step,
-      framed(q.why),
+      factPool(q.why, DAY_NIGHT_FACTS),
     ),
   );
   return [...landmarkTasks, ...dayNight];

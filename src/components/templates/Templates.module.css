@@ -944,3 +944,46 @@
   width: clamp(72px, 24vw, 104px);
   height: auto;
 }
+
+/* ---- Bigger cell-grid figure as the task's picture ---- */
+.stimulusShape {
+  width: clamp(120px, 40vw, 170px);
+}
+
+/* ---- Word problem: what is known and what is asked, as picture chips ---- */
+.scene {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sceneChip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 64px;
+  max-width: 100%;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  background: var(--tile);
+  border: 2px solid var(--tile-edge);
+}
+
+.sceneEmoji {
+  font-size: clamp(1.2rem, 5.4vw, 1.7rem);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.sceneLabel {
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.stimulusFigure {
+  width: clamp(130px, 42vw, 180px);
+  height: auto;
+}

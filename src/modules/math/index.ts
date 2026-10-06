@@ -5,11 +5,12 @@ import { generateMentalMath } from './generators/mentalMath';
 import { generateFraction } from './generators/fractions';
 import { FRACTION_OPS_INTRO, fractionOpsTier, generateFractionOps } from './generators/fractionOps';
 import { generateBalance } from './generators/balance';
-import { generateGeometry } from './generators/geometry';
+import { GEOMETRY_STEPS, geometryIntro, generateGeometry } from './generators/geometry';
 import { generateMaze } from './generators/maze';
 import { generateShop } from './generators/shop';
 import { generateCompare } from './generators/compare';
 import { clockIntro, generateClock } from './generators/clock';
+import { WORD_PROBLEM_STEPS, generateWordProblem } from './generators/wordProblems';
 import type { TemplatePayload } from '@/core/templates/types';
 import { MathGameView } from './games/MathGameView';
 import { MathVisualHelper } from './games/MathVisualHelper';
@@ -120,8 +121,8 @@ const subCategories: SubCategory[] = [
     gameId: 'math_geometry_builder',
     label: 'Геометричний Конструктор',
     icon: '📐',
-    blurb: 'Танграм, площа і периметр',
-    steps: 12,
+    blurb: 'Складаємо фігури, рахуємо площу і периметр',
+    steps: GEOMETRY_STEPS,
     difficulty: [1, 3],
     publishDate: V4_RELEASE,
     mechanics: 'UI_DRAG_MATCH',
@@ -181,6 +182,21 @@ const subCategories: SubCategory[] = [
     mechanics: 'UI_GRID_CHOICE',
     hasText: true,
   },
+  {
+    id: MATH_SUB.wordProblems,
+    landmark: { name: 'Ринок', emoji: '🧺' },
+    gameId: 'math_word_problems',
+    label: 'Задачі',
+    icon: '📖',
+    blurb: 'Історії з життя: магазин, друзі, дорога',
+    intro:
+      'Послухай маленьку історію і дай відповідь на запитання. Картинки підкажуть, що ми знаємо і про що питають. Якщо треба — натисни на динамік, і я прочитаю задачу ще раз.',
+    steps: WORD_PROBLEM_STEPS,
+    difficulty: [1, 3],
+    publishDate: COMPARE_CLOCK_RELEASE,
+    mechanics: 'UI_GRID_CHOICE',
+    hasText: true,
+  },
 ];
 
 const NUMBER_WORDS = ['нуль', 'один', 'два', 'три', 'чотири', "п'ять", 'шість', 'сім', 'вісім', "дев'ять", 'десять', 'одинадцять', 'дванадцять'];
@@ -202,6 +218,8 @@ function generateTask(config: TaskConfig): TaskInstance {
       return generateShop(config);
     case MATH_SUB.compare:
       return generateCompare(config);
+    case MATH_SUB.wordProblems:
+      return generateWordProblem(config);
     case MATH_SUB.clock:
       return generateClock(config);
     default:
@@ -220,15 +238,14 @@ function getIntro(subCategoryId: string, theme: Theme, step: number): string | u
     case MATH_SUB.fractionOps:
       return FRACTION_OPS_INTRO[fractionOpsTier(step)];
     case MATH_SUB.geometry:
-      if (step <= 4) return 'Склади малюнок із фігур! Перетягни кожну фігуру на контур такої самої форми.';
-      if (step <= 8) return 'Площа — це скільки клітинок займає фігура. Зафарбуй клітинки, щоб вийшов загін потрібної площі.';
-      return 'Периметр — це довжина паркану навколо фігури. Знайди фігуру, навколо якої паркан найдовший.';
+      return geometryIntro(step);
     case MATH_SUB.clock:
       return clockIntro(step);
     case MATH_SUB.balance:
     case MATH_SUB.maze:
     case MATH_SUB.shop:
     case MATH_SUB.compare:
+    case MATH_SUB.wordProblems:
       return subCategories.find((sc) => sc.id === subCategoryId)?.intro;
     case MATH_SUB.add:
       return `Додавати — це збирати разом! Поклади ${it}${it} і ще ${it}. Порахуй: один, два, три. Разом три ${it}!`;

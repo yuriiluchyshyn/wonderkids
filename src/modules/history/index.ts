@@ -12,8 +12,17 @@ import {
 } from '../shared/templateModule';
 import { RECALL_WINDOW, composeLevel } from '@/core/engine/recall';
 import { taskKey } from '@/core/engine/LevelEngine';
-import { factPool, framed } from '../shared/facts';
-import { DIET_FACTS, EPOCH_FACTS } from './facts';
+import { factPool } from '../shared/facts';
+import {
+  CALLING_FACTS,
+  CALLING_OF,
+  DIET_FACTS,
+  EPOCH_FACTS,
+  FIRST_FACTS,
+  INVENTION_FACTS,
+  TIME_FACTS,
+  UA_INVENTION_FACTS,
+} from './facts';
 import {
   UA_FIGURES,
   UA_INVENTIONS,
@@ -78,7 +87,7 @@ function dinosaurs(step: number): Tasks {
         hint: `Це ${d.eats === 'meat' ? 'хижак' : 'травоїдний динозавр'}. Його назва починається на літеру «${d.name[0]}».`,
       },
       step,
-      framed(`Це ${d.name}. ${d.feature}`),
+      factPool(`Це ${d.name}. ${d.feature}`, DIET_FACTS[d.eats]),
     ),
   );
 
@@ -104,7 +113,7 @@ function timeMachine(step: number): Tasks {
         hint: 'Знайди найдавнішу картку і постав її на місце 1. Щоб поміняти дві картки місцями, торкнись однієї, а потім другої. Зеленим обведено ті, що вже стоять правильно.',
       },
       step,
-      framed(story),
+      factPool(story, TIME_FACTS),
     ),
   );
 
@@ -120,7 +129,7 @@ function timeMachine(step: number): Tasks {
         hint: `Подумай, без чого люди обходилися довше. ${first} — давніший винахід.`,
       },
       step,
-      framed(story),
+      factPool(story, FIRST_FACTS),
     ),
   );
 
@@ -156,7 +165,7 @@ function timeMachine(step: number): Tasks {
         hint: story,
       },
       step,
-      framed(story),
+      factPool(story, TIME_FACTS),
     ),
   );
 
@@ -188,7 +197,8 @@ function figures(people: Achiever[], atStart: number, perStep: number) {
         hint: p.fact,
       },
       step,
-      framed(p.fact),
+      // The person's own story, then nine about their calling.
+      factPool(p.fact, CALLING_FACTS[CALLING_OF[p.id] ?? 'science']),
     );
 
   const whoIsIt = (p: Achiever, known: Achiever[], step: number) =>
@@ -204,7 +214,8 @@ function figures(people: Achiever[], atStart: number, perStep: number) {
         hint: `Ім’я цієї людини починається на літеру «${p.name[0]}».`,
       },
       step,
-      framed(p.fact),
+      // The person's own story, then nine about their calling.
+      factPool(p.fact, CALLING_FACTS[CALLING_OF[p.id] ?? 'science']),
     );
 
   const connect = (trio: Achiever[], step: number) =>
@@ -259,7 +270,7 @@ const uaFigures = figures(UA_FIGURES, 4, 1);
  * Games 17–18 — inventions: "who made it?" (names) and, further along the
  * path, the reverse "what did they make?" (pictures).
  */
-function inventions(list: Invention[], steps: number) {
+function inventions(list: Invention[], steps: number, shared: string[]) {
   return (step: number): Tasks => {
     const known = unlocked(list, step, steps, 6);
     const whoMadeIt: Tasks = known.map((inv) =>
@@ -275,7 +286,7 @@ function inventions(list: Invention[], steps: number) {
           hint: inv.fact,
         },
         step,
-        framed(inv.fact),
+        factPool(inv.fact, shared),
       ),
     );
     if (step <= Math.ceil(steps / 2)) return whoMadeIt;
@@ -292,7 +303,7 @@ function inventions(list: Invention[], steps: number) {
           hint: inv.fact,
         },
         step,
-        framed(inv.fact),
+        factPool(inv.fact, shared),
       ),
     );
     return [...whoMadeIt, ...whatDidTheyMake];
@@ -384,7 +395,7 @@ export const historyModule = defineTemplateModule({
       publishDate: V4_RELEASE,
       mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
       hasText: true,
-      pool: inventions(WORLD_INVENTIONS, 10),
+      pool: inventions(WORLD_INVENTIONS, 10, INVENTION_FACTS),
     },
     {
       id: 'ua_inventions',
@@ -399,7 +410,7 @@ export const historyModule = defineTemplateModule({
       publishDate: V4_RELEASE,
       mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
       hasText: true,
-      pool: inventions(UA_INVENTIONS, 10),
+      pool: inventions(UA_INVENTIONS, 10, UA_INVENTION_FACTS),
     },
   ],
 });

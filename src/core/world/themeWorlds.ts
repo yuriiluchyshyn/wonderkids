@@ -3,7 +3,8 @@ import { itemCost, itemId, type Inhabitant, type ItemKind, type ShopItem } from 
 
 /**
  * What each theme's world is made of: its name, nine buildings, eight small
- * decorations, and the residents that gifts bring. The tenth and final building
+ * decorations, and the residents that gifts bring (its own ten, then the
+ * shared `VISITORS`). The tenth and final building
  * is always the theme's own "dream build".
  */
 interface ThemeWorldDef {
@@ -79,6 +80,25 @@ const WORLDS: Record<ThemeId, ThemeWorldDef> = {
   },
 };
 
+/**
+ * Guests who can move into any world once the theme's own residents are all
+ * there — so gifts keep bringing somebody new for a long time. The child never
+ * sees this list, only who has arrived (it is meant to be a surprise).
+ */
+// prettier-ignore
+const VISITORS: [string, string][] = [
+  ['🐶', 'Песик'], ['🐱', 'Кошеня'], ['🐹', 'Хом’ячок'], ['🐰', 'Кролик'], ['🦜', 'Папуга'], ['🐢', 'Черепаха'],
+  ['🦔', 'Їжачок'], ['🐿️', 'Білочка'], ['🦊', 'Лисичка'], ['🐼', 'Панда'], ['🐨', 'Коала'], ['🦁', 'Лев'],
+  ['🐯', 'Тигр'], ['🐘', 'Слон'], ['🦒', 'Жирафа'], ['🦓', 'Зебра'], ['🦘', 'Кенгуру'], ['🐵', 'Мавпочка'],
+  ['🦥', 'Лінивець'], ['🦦', 'Видра'], ['🦫', 'Бобер'], ['🐧', 'Пінгвін'], ['🦩', 'Фламінго'], ['🦚', 'Павич'],
+  ['🦢', 'Лебідь'], ['🦆', 'Качка'], ['🐓', 'Півник'], ['🦉', 'Сова'], ['🦅', 'Орел'], ['🐬', 'Дельфін'],
+  ['🐳', 'Кит'], ['🐙', 'Восьминіг'], ['🦀', 'Краб'], ['🐠', 'Рибка'], ['🦈', 'Акула'], ['🐸', 'Жабка'],
+  ['🦎', 'Ящірка'], ['🐝', 'Бджілка'], ['🦋', 'Метелик'], ['🐞', 'Сонечко'], ['🐌', 'Равлик'], ['🦖', 'Динозаврик'],
+  ['🧑‍🌾', 'Садівниця'], ['🧑‍🍳', 'Кухар'], ['🧑‍🎨', 'Художниця'], ['🧑‍🚒', 'Пожежник'], ['🧑‍⚕️', 'Лікарка'], ['🧑‍🏫', 'Учитель'],
+  ['🧑‍🔧', 'Майстер'], ['🧑‍✈️', 'Пілот'], ['🧑‍🔬', 'Науковиця'], ['🧑‍🎤', 'Співачка'], ['🤹', 'Жонглер'], ['🧙', 'Чарівник'],
+  ['🧚', 'Фея'], ['🧜‍♀️', 'Русалка'], ['🦸', 'Супергероїня'], ['🤖', 'Робот-помічник'], ['👽', 'Гість із космосу'], ['🐉', 'Дракончик'],
+];
+
 export interface ThemeWorld {
   name: string;
   /** Everything that can be built: ten buildings, then eight decorations. */
@@ -97,6 +117,11 @@ export function themeWorld(theme: Theme): ThemeWorld {
   return {
     name: def.name,
     items: [...buildings.map(make('building')), ...def.decor.map(make('decor'))],
-    residents: def.residents.map(([emoji, name], i) => ({ id: `r${i}`, name, emoji })),
+    // The theme's own residents first; visitors the theme already has under
+    // the same picture are skipped so nobody arrives twice.
+    residents: [
+      ...def.residents,
+      ...VISITORS.filter(([emoji]) => !def.residents.some(([own]) => own === emoji)),
+    ].map(([emoji, name], i) => ({ id: `r${i}`, name, emoji })),
   };
 }

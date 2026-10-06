@@ -48,6 +48,15 @@ interface TemplateBase {
     glyphs?: Glyph[];
     /** A drawn clock face showing this time. */
     clock?: ClockTime;
+    /** A figure drawn on a small cell grid. */
+    shape?: { cols: number; rows: number; cells: number[] };
+    /** A finished tangram figure, drawn in colour (100×100 canvas). */
+    pieces?: TangramPiece[];
+    /**
+     * A word problem laid out as a row of picture chips — what is known and
+     * what is asked: [🍎🍎 «7 грн»] [💵 «10 грн»] [❓ «здача»].
+     */
+    scene?: { emoji: string; label?: string }[];
     caption?: string;
   };
   /** Spoken how-to, played when the helper appears. */

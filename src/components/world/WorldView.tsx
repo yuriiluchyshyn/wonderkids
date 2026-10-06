@@ -56,8 +56,7 @@ function LandmarkTile({ landmark }: { landmark: Landmark }) {
 export function WorldView() {
   const showText = useShowText();
   const world = useWorld();
-  const { def, lands, residents, gifts } = world;
-  const nextResident = def.residents[residents.length];
+  const { def, lands, residents } = world;
 
   return (
     <div className="stack">
@@ -100,28 +99,28 @@ export function WorldView() {
             🎁
           </span>{' '}
           Мешканці
-          <span className={styles.count}>
-            {residents.length} / {def.residents.length}
-          </span>
+          <span className={styles.count}>{residents.length}</span>
         </h2>
+        {/* Who comes next, when and how many there are is a surprise: only
+            those who already moved in are shown, plus one mystery guest. */}
         <ul className={styles.residents}>
-          {def.residents.map((r, i) => {
-            const here = i < residents.length;
-            return (
-              <li key={r.id} className={cn(styles.resident, !here && styles.locked)} aria-label={here ? r.name : 'Ще не прийшов'}>
-                <span className={cn(styles.residentEmoji, 'emoji')} aria-hidden>
-                  {here ? r.emoji : '❔'}
-                </span>
-                {showText && <span className={styles.residentName}>{here ? r.name : '…'}</span>}
-              </li>
-            );
-          })}
+          {residents.map((r) => (
+            <li key={r.id} className={styles.resident} aria-label={r.name}>
+              <span className={cn(styles.residentEmoji, 'emoji')} aria-hidden>
+                {r.emoji}
+              </span>
+              {showText && <span className={styles.residentName}>{r.name}</span>}
+            </li>
+          ))}
+          {residents.length < def.residents.length && (
+            <li className={cn(styles.resident, styles.locked)} aria-label="Хтось іще в дорозі">
+              <span className={cn(styles.residentEmoji, 'emoji')} aria-hidden>
+                ❔
+              </span>
+              {showText && <span className={styles.residentName}>…</span>}
+            </li>
+          )}
         </ul>
-        <p className={styles.note}>
-          {nextResident
-            ? `Кожна 5-та сходинка на будь-якому шляху — це подарунок: до тебе приходить новий мешканець.`
-            : `Усі мешканці вже тут! Подарунків зібрано: ${gifts}.`}
-        </p>
       </section>
     </div>
   );

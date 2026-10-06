@@ -45,6 +45,7 @@ export const MATH_SUB = {
   shop: 'shop',
   compare: 'compare',
   clock: 'clock',
+  wordProblems: 'word_problems',
 } as const;
 
 /** The original games with their own views and helper panel. */

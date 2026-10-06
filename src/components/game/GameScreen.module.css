@@ -106,12 +106,6 @@
   box-shadow: var(--shadow);
 }
 
-.boardTop {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 4px;
-}
-
 .introCard {
   display: flex;
   flex-direction: column;
@@ -233,10 +227,11 @@
 
 /* The one repeat of a task the child missed earlier — a quiet icon, no text. */
 .repeatTag {
-  margin-right: auto;
-  align-self: center;
-  font-size: 1.1rem;
-  opacity: 0.75;
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 1rem;
+  opacity: 0.7;
 }
 
 /* Short fact shown (and spoken) after a correct answer. */

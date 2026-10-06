@@ -210,6 +210,12 @@ export interface LearningModule {
    */
   taskCount?: (subCategoryId: string) => number;
   /**
+   * Optional: how many different tasks a game can ask at a given path step
+   * (everything unlocked up to it). Content games know this exactly; without
+   * it the admin summary estimates by sampling `generateTask`.
+   */
+  tasksAt?: (subCategoryId: string, step: number) => number;
+  /**
    * Whether `VisualHelper` has something to show for this task. Defaults to
    * true; lets one module mix games with and without a separate helper panel.
    */

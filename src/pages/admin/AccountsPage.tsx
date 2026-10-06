@@ -161,6 +161,9 @@ export function AccountsPage({ adminKey, onLogout }: { adminKey: string; onLogou
           <span>🧒 Дітей: {childCount}</span>
           <span>🗣️ Google Speech: {voiceOn}</span>
         </div>
+        <Link to="/admin/games" className={styles.btn}>
+          🎮 Ігри
+        </Link>
         <Link to="/admin/speech" className={styles.btnPrimary}>
           🗣️ Налаштувати Google Speech
         </Link>

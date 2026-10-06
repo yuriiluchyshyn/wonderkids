@@ -411,17 +411,15 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       <Companion progress={progress} />
 
       <div className={styles.board} ref={boardRef} data-tip="board">
-        <div className={styles.boardTop}>
-          {/* The one repeat of a task missed earlier: an icon, no words. */}
-          {session.isRepeat && !session.finished && (
-            <span className={`${styles.repeatTag} emoji`} role="img" aria-label="Спробуймо ще раз">
-              🔁
-            </span>
-          )}
-          <span data-tip="voice">
-            <VoiceToggle channel="taskPrompt" />
+        {/* The one repeat of a task missed earlier: a quiet icon in the corner,
+            no words and no row of its own. (The voice on/off switch that used
+            to sit here looked like a second "read aloud" button; it lives in
+            the audio settings.) */}
+        {session.isRepeat && !session.finished && (
+          <span className={`${styles.repeatTag} emoji`} role="img" aria-label="Спробуймо ще раз">
+            🔁
           </span>
-        </div>
+        )}
 
         <AnimatePresence>
           {session.justSolved && (
