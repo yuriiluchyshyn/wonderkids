@@ -25,9 +25,22 @@ export interface ScreenTimeStatus {
   cooldownRemainingSec: number;
   /** Convenience: play is allowed right now (not resting). */
   ready: boolean;
+  /**
+   * The server has answered for this visit (or could not be reached), so the
+   * gauge is current. Before that the local mirror may be stale — yesterday's
+   * empty tank, a rest that has since ended — and must not lock anything.
+   */
+  synced: boolean;
   /** Tell the server the session is over (after the bedtime hand-off). */
   endSession: () => void;
 }
+
+/**
+ * The child whose gauge the server has already confirmed in this page load —
+ * remembered across game screens, so «Ще раз!» on an empty tank is stopped at
+ * the very next screen and not one tap later.
+ */
+let syncedChild: string | null = null;
 
 const TICK_MS = 1000;
 const HEARTBEAT_MS = 30_000;
@@ -42,6 +55,7 @@ export function useScreenTime(active: boolean): ScreenTimeStatus {
   const token = useAuthStore((s) => s.token);
 
   const [now, setNow] = useState(() => Date.now());
+  const [synced, setSynced] = useState(() => childId !== null && syncedChild === childId);
   // Whether a play segment is currently open (visible tab, inside a game).
   const runningRef = useRef(false);
 
@@ -66,7 +80,14 @@ export function useScreenTime(active: boolean): ScreenTimeStatus {
     const resume = () => {
       runningRef.current = true;
       startPlaySession();
-      api.sessionStart(token, childId).then(guarded).catch(() => {});
+      api
+        .sessionStart(token, childId)
+        .then(guarded)
+        .catch(() => {})
+        .finally(() => {
+          syncedChild = childId;
+          if (alive) setSynced(true);
+        });
     };
     const pause = (keepalive = false) => {
       if (!runningRef.current) return;
@@ -114,5 +135,5 @@ export function useScreenTime(active: boolean): ScreenTimeStatus {
   // Only "depleted" while actively playing a live session that just ran dry.
   const depleted = active && !inCooldown && sessionActive && fuelPct <= 0;
 
-  return { fuelPct, depleted, inCooldown, cooldownRemainingSec, ready: !inCooldown, endSession };
+  return { fuelPct, depleted, inCooldown, cooldownRemainingSec, ready: !inCooldown, synced, endSession };
 }

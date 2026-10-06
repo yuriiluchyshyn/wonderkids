@@ -135,6 +135,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   }, [startPlaySession, onPlayAgain]);
 
   const midLevel = phase === 'play' && !session.finished && session.solvedCount + session.index > 0;
+  // The gauge is empty and the rest has not started yet. Read from the gauge
+  // itself, not from "a session is running": the daily limit empties it too.
+  // Only once the server has confirmed it for this visit (`synced`).
+  const outOfTime = screen.synced && screen.fuelPct <= 0 && !screen.inCooldown;
   // True while the rest screen covers the game: nothing may speak or run under it.
   const blocked = bedtimeOpen || (screen.inCooldown && !midLevel);
   useEffect(() => {
@@ -253,10 +257,17 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
   // Arm the bedtime cutscene the moment the tank runs dry during play.
   useEffect(() => {
-    if (phase === 'play' && screen.depleted && !bedtimeArmed) {
+    if (phase === 'play' && outOfTime && !bedtimeArmed) {
       setBedtimeArmed(true);
     }
-  }, [screen.depleted, phase, bedtimeArmed]);
+  }, [outOfTime, phase, bedtimeArmed]);
+
+  // …but a NEW level never starts on an empty tank. Without this, «Наступний
+  // рівень!» / «Ще раз!» (or leaving and coming back) opened a fresh level
+  // that was again "in progress", so play could go on for ever.
+  useEffect(() => {
+    if (outOfTime && !midLevel && !session.finished && !bedtimeOpen) openBedtime();
+  }, [outOfTime, midLevel, session.finished, bedtimeOpen, openBedtime]);
 
   // A level in progress is NEVER interrupted: out of time only takes effect
   // once the child has finished the level they are on (and seen their reward).

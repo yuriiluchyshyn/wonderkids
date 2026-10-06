@@ -5,6 +5,11 @@ export type CloudVoice = (text: string) => Promise<string>;
 const CLOUD_CACHE_LIMIT = 150;
 /** If the cloud voice has not answered by then, the browser voice takes over. */
 const CLOUD_TIMEOUT_MS = 3500;
+/** A phrase that has not actually started sounding by then is treated as failed. */
+const START_TIMEOUT_MS = 3000;
+/** A moment of silence, played on the first touch to unlock the shared player. */
+const SILENCE = 'data:audio/wav;base64,UklGRkQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YSAAAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==';
+const UNLOCK_EVENTS = ['pointerdown', 'touchend', 'click'] as const;
 
 /**
  * Voice-First TTS (PRD §8.1).
@@ -23,9 +28,19 @@ export class SpeechEngine {
 
   private cloud: CloudVoice | null = null;
   private readonly cloudCache = new Map<string, string>();
-  private audio: HTMLAudioElement | null = null;
+  /**
+   * The one `<audio>` element every cloud phrase plays through. iOS only lets
+   * an element play without a tap if that same element was once started by a
+   * tap — so it is created and "blessed" on the first touch (`unlock`) and
+   * reused, instead of making a new element per phrase.
+   */
+  private player: HTMLAudioElement | null = null;
+  private unlocked = false;
   /** Bumped by every speak/cancel so a late cloud answer is dropped. */
   private turn = 0;
+  /** Reports the end of the phrase in progress — exactly once, however it ends. */
+  private pendingEnd: (() => void) | null = null;
+  private watchdog: number | undefined;
 
   constructor() {
     if (typeof document === 'undefined') return;
@@ -35,6 +50,23 @@ export class SpeechEngine {
       if (document.hidden) this.cancel();
     });
     window.addEventListener('pagehide', () => this.cancel());
+
+    const unlock = () => {
+      if (this.unlocked) return;
+      const player = (this.player ??= new Audio());
+      // Busy speaking already — this element is evidently allowed to play.
+      if (this.pendingEnd) return;
+      player.src = SILENCE;
+      player
+        .play()
+        .then(() => {
+          this.unlocked = true;
+          if (!this.pendingEnd) player.pause();
+          for (const type of UNLOCK_EVENTS) document.removeEventListener(type, unlock, true);
+        })
+        .catch(() => undefined);
+    };
+    for (const type of UNLOCK_EVENTS) document.addEventListener(type, unlock, true);
   }
 
   get supported(): boolean {
@@ -58,8 +90,9 @@ export class SpeechEngine {
   speak(text: string, onEnd?: () => void): void {
     this.cancel();
     const turn = this.turn;
+    this.pendingEnd = onEnd ?? (() => undefined);
     if (!this.cloud) {
-      this.speakWithBrowser(text, onEnd);
+      this.speakWithBrowser(text, turn);
       return;
     }
 
@@ -67,7 +100,7 @@ export class SpeechEngine {
     const fallback = () => {
       if (settled || turn !== this.turn) return;
       settled = true;
-      this.speakWithBrowser(text, onEnd);
+      this.speakWithBrowser(text, turn);
     };
     const timer = window.setTimeout(fallback, CLOUD_TIMEOUT_MS);
 
@@ -76,7 +109,7 @@ export class SpeechEngine {
         window.clearTimeout(timer);
         if (settled || turn !== this.turn) return;
         settled = true;
-        this.playWithElement(base64, text, turn, onEnd);
+        this.playWithElement(base64, text, turn);
       })
       .catch(() => {
         window.clearTimeout(timer);
@@ -84,27 +117,46 @@ export class SpeechEngine {
       });
   }
 
+  /** The phrase of `turn` is over (played, failed or gave up): tell the caller once. */
+  private finish(turn: number): void {
+    if (turn !== this.turn) return;
+    window.clearTimeout(this.watchdog);
+    const done = this.pendingEnd;
+    this.pendingEnd = null;
+    done?.();
+  }
+
   /**
-   * Plays a cloud phrase with an `<audio>` element, and falls back to the
-   * browser voice if that is refused. Deliberately NOT through the Web Audio
-   * context the sound effects use: on an iPhone Web Audio is silenced by the
-   * ring/silent switch, while an `<audio>` element keeps playing — routing
-   * speech through the context made the voice vanish on phones set to silent.
+   * Plays a cloud phrase with the shared `<audio>` element, and falls back to
+   * the browser voice if that is refused or never starts. Deliberately NOT
+   * through the Web Audio context the sound effects use: on an iPhone Web Audio
+   * is silenced by the ring/silent switch, while an `<audio>` element keeps
+   * playing.
    */
-  private playWithElement(base64: string, text: string, turn: number, onEnd?: () => void): void {
-    const audio = new Audio(`data:audio/mpeg;base64,${base64}`);
-    this.audio = audio;
-    const done = () => {
-      if (this.audio === audio) this.audio = null;
-      onEnd?.();
+  private playWithElement(base64: string, text: string, turn: number): void {
+    const audio = (this.player ??= new Audio());
+    let started = false;
+    const giveUp = () => {
+      if (turn !== this.turn) return;
+      window.clearTimeout(this.watchdog);
+      audio.onended = audio.onerror = audio.onplaying = null;
+      audio.pause();
+      this.speakWithBrowser(text, turn);
     };
-    audio.onended = done;
-    audio.onerror = done;
-    audio.play().catch(() => {
-      // Autoplay blocked or decode error — let the browser voice try.
-      if (this.audio === audio) this.audio = null;
-      if (turn === this.turn) this.speakWithBrowser(text, onEnd);
-    });
+    audio.onplaying = () => {
+      started = true;
+      window.clearTimeout(this.watchdog);
+    };
+    audio.onended = () => this.finish(turn);
+    audio.onerror = giveUp;
+    audio.src = `data:audio/mpeg;base64,${base64}`;
+    // Autoplay blocked or decode error — let the browser voice try.
+    audio.play().catch(giveUp);
+    // "Allowed" but nothing ever comes out (seen on phones): do not leave the
+    // caller waiting on a phrase that is not being spoken.
+    this.watchdog = window.setTimeout(() => {
+      if (!started) giveUp();
+    }, START_TIMEOUT_MS);
   }
 
   private async fetchCloud(text: string): Promise<string> {
@@ -120,9 +172,9 @@ export class SpeechEngine {
     return base64;
   }
 
-  private speakWithBrowser(text: string, onEnd?: () => void): void {
+  private speakWithBrowser(text: string, turn: number): void {
     if (!this.synth) {
-      onEnd?.();
+      this.finish(turn);
       return;
     }
     this.synth.cancel();
@@ -134,22 +186,33 @@ export class SpeechEngine {
     utter.rate = 0.95;
     utter.pitch = 1.15;
     utter.volume = 1;
-    if (onEnd) {
-      utter.onend = onEnd;
-      utter.onerror = onEnd;
-    }
+    let started = false;
+    utter.onstart = () => {
+      started = true;
+      window.clearTimeout(this.watchdog);
+    };
+    utter.onend = () => this.finish(turn);
+    utter.onerror = () => this.finish(turn);
     this.synth.speak(utter);
+    // A browser that silently refuses to speak fires no event at all.
+    window.clearTimeout(this.watchdog);
+    this.watchdog = window.setTimeout(() => {
+      if (!started && !this.synth?.speaking) this.finish(turn);
+    }, START_TIMEOUT_MS);
   }
 
+  /** Stops whatever is being said. The phrase's `onEnd` still fires (cut off). */
   cancel(): void {
+    const cut = this.pendingEnd;
+    this.pendingEnd = null;
     this.turn += 1;
-    if (this.audio) {
-      this.audio.onended = null;
-      this.audio.onerror = null;
-      this.audio.pause();
-      this.audio = null;
+    window.clearTimeout(this.watchdog);
+    if (this.player) {
+      this.player.onended = this.player.onerror = this.player.onplaying = null;
+      this.player.pause();
     }
     this.synth?.cancel();
+    cut?.();
   }
 }
 
