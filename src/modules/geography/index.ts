@@ -12,7 +12,8 @@ import {
 } from '../shared/templateModule';
 import { COUNTRIES, MAP_COUNTRIES, type Country } from './countries';
 import { BIOMES, BIOME_ANIMALS, CONTINENT_ANIMALS, DAY_NIGHT, LANDMARKS, OCEAN_FACTS } from './data';
-import { BIOME_FACTS, CAPITAL_FACTS, CONTINENT_FACTS, DAY_NIGHT_FACTS, OCEAN_POOLS } from './facts';
+import { ANIMAL_FACTS } from './animalFacts';
+import { DAY_NIGHT_FACTS, LANDMARK_FACTS, OCEAN_POOLS } from './facts';
 import { RECALL_WINDOW, composeLevel } from '@/core/engine/recall';
 import { taskKey } from '@/core/engine/LevelEngine';
 import { factPool } from '../shared/facts';
@@ -35,7 +36,7 @@ function flagStories(country: Country): string[] {
     `Влучно! Прапор країни ${n} ти вже не забудеш.`,
     `Чудова пам’ять! Це прапор країни ${n}.`,
     `Так тримати! Це ${n}. Шукай цю країну на карті в ${country.continentName}.`,
-    `Є! Під цим прапором живе ${n}.`,
+    `Є! Це прапор країни ${n}.`,
     `Точно! ${n}. Запам’ятай кольори цього прапора.`,
     `Так! Якщо побачиш цей прапор на змаганнях — це ${n}.`,
   );
@@ -97,10 +98,11 @@ function continents(step: number): Tasks {
         mode: 'drag',
         marker: card(a.id, a.emoji),
         targetId: a.home,
-        hint: `Шукай материк, який блимає. ${a.name[0].toUpperCase()}${a.name.slice(1)} живе там, де ${regionName(a.home)}.`,
+        hint: `Шукай материк, який блимає. ${a.name[0].toUpperCase()}${a.name.slice(1)} живе на материку ${regionName(a.home)}.`,
       },
       step,
-      factPool(`${regionName(a.home)} — дім для тваринки ${a.name}!`, `Так! ${a.name[0].toUpperCase()}${a.name.slice(1)} живе там, де ${regionName(a.home)}.`, CONTINENT_FACTS[a.home]),
+      // Ten facts about this very animal — not about its continent.
+      ANIMAL_FACTS[a.id],
     ),
   );
   // Countries join once the animals are familiar — the best-known ones first.
@@ -114,10 +116,10 @@ function continents(step: number): Tasks {
         mode: 'drag',
         marker: card(c.id, c.flag),
         targetId: c.continent,
-        hint: `${c.name} — це ${regionName(c.continent)}. Шукай материк, який блимає.`,
+        hint: `Шукай материк ${regionName(c.continent)} — він блимає.`,
       },
       step,
-      factPool(`${c.name} — це ${regionName(c.continent)}.`, `Так! ${c.name} — це країна в ${c.continentName}.`, CONTINENT_FACTS[c.continent]),
+      [`Так! ${c.name} — це країна в ${c.continentName}.`, `Саме так: ${c.name} — на материку ${regionName(c.continent)}.`],
     ),
   );
   return step <= 3 ? animals : [...animals, ...countries];
@@ -140,17 +142,26 @@ function biomes(step: number): Tasks {
         hint: `Подумай, де тваринці буде добре. ${a.fact}`,
       },
       step,
-      factPool(a.fact, BIOME_FACTS[a.home]),
+      ANIMAL_FACTS[a.id],
     ),
   );
 }
+
+/** «Пливи до …» needs the ocean's name in the genitive. */
+const OCEAN_TO: Record<string, string> = {
+  pacific: 'Тихого океану',
+  atlantic: 'Атлантичного океану',
+  indian: 'Індійського океану',
+  arctic: 'Північного Льодовитого океану',
+  southern: 'Південного океану',
+};
 
 /** Game 10 — «Моря та Океани Світу»: sail the ship to the named ocean. */
 function oceans(step: number): Tasks {
   return OCEANS.map((ocean) =>
     templateTask(
       `ocean:${ocean.id}`,
-      `Пливи до: ${ocean.name}!`,
+      `Пливи до ${OCEAN_TO[ocean.id]}!`,
       {
         template: 'UI_MAP_PUZZLE',
         layer: 'oceans',
@@ -181,7 +192,7 @@ function capitals(step: number): Tasks {
         hint: `${l.landmark} — символ ${l.country}. Згадай столицю цієї країни.`,
       },
       step,
-      factPool(`${l.landmark} стоїть у місті ${l.capital} — це столиця ${l.country}.`, CAPITAL_FACTS),
+      LANDMARK_FACTS[l.id],
     ),
   );
   if (step <= 4) return landmarkTasks;
