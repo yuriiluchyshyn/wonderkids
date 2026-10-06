@@ -1,5 +1,3 @@
-import { audioEngine } from './AudioEngine';
-
 /** Fetches a phrase as base64 MP3 from the cloud voice; rejects when unavailable. */
 export type CloudVoice = (text: string) => Promise<string>;
 
@@ -26,8 +24,6 @@ export class SpeechEngine {
   private cloud: CloudVoice | null = null;
   private readonly cloudCache = new Map<string, string>();
   private audio: HTMLAudioElement | null = null;
-  /** Stops the cloud phrase playing through the shared audio context. */
-  private stopClip: (() => void) | null = null;
   /** Bumped by every speak/cancel so a late cloud answer is dropped. */
   private turn = 0;
 
@@ -80,7 +76,7 @@ export class SpeechEngine {
         window.clearTimeout(timer);
         if (settled || turn !== this.turn) return;
         settled = true;
-        this.playCloud(base64, text, turn, onEnd);
+        this.playWithElement(base64, text, turn, onEnd);
       })
       .catch(() => {
         window.clearTimeout(timer);
@@ -89,31 +85,12 @@ export class SpeechEngine {
   }
 
   /**
-   * Plays a cloud phrase through the sound effects' own audio context: speech
-   * and effects then share one audio session, so on phones neither silences
-   * the other and no tap is needed per phrase. An `<audio>` element is the
-   * fallback, and the browser voice the last resort.
+   * Plays a cloud phrase with an `<audio>` element, and falls back to the
+   * browser voice if that is refused. Deliberately NOT through the Web Audio
+   * context the sound effects use: on an iPhone Web Audio is silenced by the
+   * ring/silent switch, while an `<audio>` element keeps playing — routing
+   * speech through the context made the voice vanish on phones set to silent.
    */
-  private playCloud(base64: string, text: string, turn: number, onEnd?: () => void): void {
-    audioEngine
-      .playEncoded(base64)
-      .then((clip) => {
-        if (turn !== this.turn) {
-          clip.stop();
-          return;
-        }
-        this.stopClip = clip.stop;
-        void clip.ended.then(() => {
-          if (turn !== this.turn) return;
-          this.stopClip = null;
-          onEnd?.();
-        });
-      })
-      .catch(() => {
-        if (turn === this.turn) this.playWithElement(base64, text, turn, onEnd);
-      });
-  }
-
   private playWithElement(base64: string, text: string, turn: number, onEnd?: () => void): void {
     const audio = new Audio(`data:audio/mpeg;base64,${base64}`);
     this.audio = audio;
@@ -166,8 +143,6 @@ export class SpeechEngine {
 
   cancel(): void {
     this.turn += 1;
-    this.stopClip?.();
-    this.stopClip = null;
     if (this.audio) {
       this.audio.onended = null;
       this.audio.onerror = null;

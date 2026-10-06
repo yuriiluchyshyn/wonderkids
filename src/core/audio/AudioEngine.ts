@@ -64,47 +64,6 @@ export class AudioEngine {
       .catch(() => undefined);
   }
 
-  /**
-   * Play an encoded clip (a spoken phrase as base64 MP3) through the same
-   * context as the sound effects. Sharing one context is what keeps effects
-   * audible around speech on phones, and needs no fresh tap per clip. Rejects
-   * when the context cannot run or the clip cannot be decoded.
-   */
-  async playEncoded(base64: string): Promise<{ stop: () => void; ended: Promise<void> }> {
-    const ctx = this.ensureContext();
-    if (ctx.state !== 'running') {
-      await Promise.race([ctx.resume(), new Promise((resolve) => window.setTimeout(resolve, 400))]);
-      if ((ctx.state as AudioContextState) !== 'running') throw new Error('audio context is not running');
-    }
-    const binary = atob(base64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
-    const buffer = await ctx.decodeAudioData(bytes.buffer);
-
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    // Speech goes out at full level, past the effects' master gain.
-    source.connect(ctx.destination);
-    let stopped = false;
-    const ended = new Promise<void>((resolve) => {
-      source.onended = () => {
-        if (!stopped) resolve();
-      };
-    });
-    source.start();
-    return {
-      stop: () => {
-        stopped = true;
-        try {
-          source.stop();
-        } catch {
-          /* already finished */
-        }
-      },
-      ended,
-    };
-  }
-
   /** Low-level helper: play one shaped tone. */
   private tone(opts: {
     freq: number;
