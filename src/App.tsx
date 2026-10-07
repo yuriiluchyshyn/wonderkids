@@ -141,12 +141,25 @@ function ToPortal() {
   return null;
 }
 
+/**
+ * The child portal has no parent cabinet, so a parent who signs in there has
+ * nowhere to land (they would end up on the child picker). Its «Вхід для
+ * батьків» leads here, and from here to the parents' own portal.
+ */
+function ToParentLogin() {
+  useEffect(() => {
+    window.location.replace(portalUrl('parent', '/parent-login'));
+  }, []);
+  return null;
+}
+
 export function App() {
   if (getPortal() === 'site') return <ToPortal />;
 
   // `/login` is the CHILD credential login by default; on the parents.* portal
   // it's the parent email login. `/parent-login` is always the parent login
-  // (so a parent can sign in on dev too).
+  // (so a parent can sign in on dev too) — except on the child portal, which
+  // sends it to the parents' portal.
   const loginElement = getPortal() === 'parent' ? <LoginPage /> : <ChildLoginPage />;
 
   return (
@@ -157,7 +170,7 @@ export function App() {
           <TimeHeader />
           <Routes>
             <Route path="/login" element={loginElement} />
-            <Route path="/parent-login" element={<LoginPage />} />
+            <Route path="/parent-login" element={getPortal() === 'kid' ? <ToParentLogin /> : <LoginPage />} />
             {/* Admin panel — guarded by the server-side ADMIN_KEY; the kids'
                 portal (play.*) does not even mount the route. */}
             {getPortal() !== 'kid' && (
