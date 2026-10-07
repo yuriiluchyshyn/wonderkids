@@ -152,10 +152,13 @@ export function Cutscene({
           </span>
           <p className={styles.restMsg}>{copy.message}</p>
 
-          <Button size="lg" block icon={ready ? '⛽' : '🔒'} disabled={!ready} onClick={onResume}>
-            {ready ? 'Грати далі!' : 'Відпочиваємо…'}
-          </Button>
-          <Button size="lg" variant="ghost" block icon="🏃" onClick={onExit}>
+          {/* No locked button and no clock while resting: there is nothing to wait at. */}
+          {ready && (
+            <Button size="lg" block icon="⛽" onClick={onResume}>
+              Грати далі!
+            </Button>
+          )}
+          <Button size="lg" variant={ready ? 'ghost' : 'primary'} block icon="🏃" onClick={onExit}>
             Піти відпочивати
           </Button>
         </motion.div>

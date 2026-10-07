@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
+import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { counted } from '@/core/lang/uk';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { Button } from '@/components/ui/Button';
@@ -34,6 +36,7 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
   const milestones = useGameStore((s) => s.milestones);
   const theme = useActiveTheme();
   const { play } = useSound();
+  const announce = useVoiceSpeak('selections');
   const logout = useAuthStore((s) => s.logout);
 
   const switchPlayer = () => {
@@ -110,7 +113,21 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
                 const reached = artifacts >= m.amount;
                 const remaining = Math.max(0, m.amount - artifacts);
                 return (
-                  <div key={m.id} className={styles.goal}>
+                  <div
+                    key={m.id}
+                    className={styles.goal}
+                    role="button"
+                    tabIndex={0}
+                    // Tap a goal to hear what it is and how far away it is.
+                    onClick={() => {
+                      play('tap');
+                      announce(
+                        reached
+                          ? `Ціль: ${m.reward || 'сімейна ціль'}. Досягнуто! Ти зібрав ${counted(m.amount, theme.artifact.counted)}.`
+                          : `Ціль: ${m.reward || 'сімейна ціль'}. Ще не досягнуто. Треба зібрати ще ${counted(remaining, theme.artifact.counted)}.`,
+                      );
+                    }}
+                  >
                     <span className={`${styles.goalIcon} emoji`} aria-hidden>
                       {reached ? '🎉' : theme.artifact.emoji}
                     </span>

@@ -99,7 +99,11 @@ The server owns the play-time budget (PRD v4.0 §2.2). `components/game/useScree
 
 Levels played are counted in `progress` under `${module}:${sub}#plays` (`core/child/progress/plays.ts`). Code that walks `progress` or `treasures` keys must expect these extra `#plays` / `world:` / `tip:` entries.
 
-`components/world/PlanetView.tsx` draws the planet: items stand on the rim of a rotating disc (tap one and the planet turns it to the top), inside a `react-zoom-pan-pinch` wrapper for drag / pinch / wheel zoom, with a fly-in when something is built. The scene is a fixed 640 px stage scaled to fit; get the zoom handle via `onInit`, not `ref` (the library takes no ref on React 18).
+`components/world/PlanetView.tsx` draws the planet as a globe the child turns with a finger in every direction: every thing has a place in degrees (`TOWN` for buildings, `DREAM` above it, `PARK` for decorations on the far side, residents in between), `project` turns it into a screen position for the current yaw / pitch, and what is on the far side is simply not drawn. No 3D library and no zoom library — positions are plain maths. Tapping a thing glides the planet to it and raises a **bar fixed to the bottom of the screen** (never beside the planet, where it got lost): a message with a button (build, sell) stays until something else is chosen or it is closed; one without (still saving, locked) fades out by itself. Buying or selling cuts off whatever was being said about the price. ⛶ opens the planet on the whole screen.
+
+**Where this is going (not built yet):** the planet is the first of a solar system. A next planet may only be started once a *spaceport* stands on the current one, and the spaceport is among the last, most expensive buildings — so it takes many levels to reach. Keep `PlanetView` and `world.ts` free of assumptions that there is exactly one planet per theme.
+
+The header has ONE door into «Мій світ» — the artifact purse. (A second badge showing the dream build used to open the same page.) Gifts («подарунки») are not a currency: every 5th path step is a gift that brings a resident to the world.
 
 ### Voice (`src/core/audio/SpeechEngine.ts`, `api/tts.js`)
 

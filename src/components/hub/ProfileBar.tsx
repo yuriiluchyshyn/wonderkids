@@ -9,7 +9,6 @@ import { treasureKey } from '@/core/child/progress/treasures';
 import { Modal } from '@/components/ui/Modal';
 import { TreasureCollection } from '@/components/reward/TreasureCollection';
 import { useNavigate } from 'react-router-dom';
-import { useWorld } from '@/core/child/world/useWorld';
 import { ChildDrawer } from './ChildDrawer';
 import styles from './ProfileBar.module.css';
 
@@ -19,9 +18,8 @@ type HeaderModal = 'treasures' | null;
 
 /**
  * Status row: the child's name (tap → profile + goals drawer), the
- * treasure-collection badge (opens its modal), and the world badge and the
- * artifact purse — both open «Мій світ», where artifacts are spent on
- * buildings and decorations.
+ * treasure-collection badge (opens its modal) and the artifact purse, which
+ * opens «Мій світ», where artifacts are spent on buildings and decorations.
  */
 export function ProfileBar() {
   const profile = useGameStore((s) => s.profile);
@@ -42,7 +40,6 @@ export function ProfileBar() {
   );
   const treasuresTotal = theme.treasures.length;
   const navigate = useNavigate();
-  const { def: world, buildingsOwned, buildingsTotal } = useWorld();
 
   const openDrawer = () => {
     play('tap');
@@ -94,23 +91,9 @@ export function ProfileBar() {
           </span>
         </motion.button>
 
-        {/* The world the child is building — opens «Мій світ». */}
-        <motion.button
-          className={styles.badge}
-          whileTap={{ scale: 0.9 }}
-          onClick={openWorld}
-          aria-label={`${world.name}: збудовано ${buildingsOwned} з ${buildingsTotal}`}
-          data-tip="world"
-        >
-          <span className={`${styles.badgeIcon} emoji`} aria-hidden>
-            {theme.dreamBuild.emoji}
-          </span>
-          <span className={styles.badgeCount}>
-            {buildingsOwned}/{buildingsTotal}
-          </span>
-        </motion.button>
-
-        {/* The purse — opens the planet, where artifacts buy buildings and decorations. */}
+        {/* The purse — the one way into «Мій світ», where artifacts buy buildings
+            and decorations. (A second badge with the dream build used to open
+            the same page; one door is enough, and the name gets the room.) */}
         <motion.button
           className={`${styles.badge} ${styles.piggy}`}
           whileTap={{ scale: 0.9 }}
