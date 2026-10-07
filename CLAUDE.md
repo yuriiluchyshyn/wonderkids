@@ -135,6 +135,10 @@ One deployment, four faces chosen by hostname: the **root domain** → `site` (t
 
 The landing page is **static HTML** (`landing.html`, a second Vite entry — no React), so crawlers get real content; `vercel.json` rewrites `/` to it on every host except `play.*` / `parents.*`. For that rewrite to apply, the Vercel build renames the app shell `index.html` → `app.html` (`seo-plugin.ts`, only when `VERCEL` is set): Vercel serves an existing file before rewrites, so an `index.html` in the output would take over `/`. The old `*.wonderkids.yluch.app` hosts 308-redirect to `pulsarkids.com` (`vercel.json`). Its copy states concrete numbers (games, flags, tasks) — keep them true when content changes.
 
+### Analytics
+
+Vercel Web Analytics (anonymous page views, no cookies) is on for the whole site: the app calls `inject()` from `@vercel/analytics` in `main.tsx` (query strings are cut off first — they can carry an Auth0 sign-in code), and the static landing page loads `/_vercel/insights/script.js` itself. `vercel.json`'s catch-all rewrite leaves `/_vercel/` alone for that. Numbers are in the Vercel dashboard → project → Analytics.
+
 ### SEO
 
 - `seo-plugin.ts` (Vite) fills `__SITE_URL__` / `__PLAY_URL__` / `__PARENTS_URL__` in both HTML entries from `VITE_SITE_URL`, and emits `robots.txt` and `sitemap.xml`.

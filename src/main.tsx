@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { inject } from '@vercel/analytics';
 import { adoptChildHandoff } from '@/core/account/auth/useAuthStore';
 import './styles/global.css';
 
@@ -10,6 +11,11 @@ import './games';
 // Opened from the parent cabinet as one of the children: sign in before the
 // first render, so the login page never flashes.
 adoptChildHandoff();
+
+// Vercel Web Analytics: anonymous page views, no cookies (a no-op outside a
+// Vercel deployment). Only the path is reported — a query string can carry a
+// sign-in code on its way back from Auth0.
+inject({ beforeSend: (event) => ({ ...event, url: event.url.split('?')[0] }) });
 
 const rootEl = document.getElementById('root');
 if (!rootEl) throw new Error('Root element #root not found');

@@ -99,7 +99,7 @@
       "destination": "/landing.html"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|_vercel/).*)",
       "destination": "/app.html"
     }
   ],
