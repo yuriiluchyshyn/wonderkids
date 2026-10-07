@@ -5,14 +5,18 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import styles from './LoginPage.module.css';
 
-/** A sprinkle of world icons so the child login feels playful. */
+/** A sprinkle of space things so the child login feels playful. */
 const DECOR = [
-  { e: '🦄', top: '10%', left: '8%', size: 3.2, rot: -10, delay: 0 },
-  { e: '🚀', top: '16%', left: '85%', size: 3.0, rot: 12, delay: 0.4 },
-  { e: '🦖', top: '70%', left: '10%', size: 3.4, rot: 8, delay: 0.9 },
-  { e: '🌈', top: '62%', left: '88%', size: 2.8, rot: -8, delay: 0.6 },
-  { e: '⭐', top: '40%', left: '4%', size: 2.2, rot: 0, delay: 1.1 },
-  { e: '🏁', top: '82%', left: '70%', size: 2.4, rot: 6, delay: 0.3 },
+  { e: '🪐', top: '8%', left: '6%', size: 3.4, rot: -12, delay: 0 },
+  { e: '🚀', top: '14%', left: '88%', size: 3.0, rot: 14, delay: 0.6 },
+  { e: '🌍', top: '72%', left: '9%', size: 3.2, rot: 8, delay: 1.1 },
+  { e: '🌙', top: '55%', left: '92%', size: 2.8, rot: 8, delay: 0.2 },
+  { e: '☄️', top: '20%', left: '21%', size: 2.2, rot: 10, delay: 1.6 },
+  { e: '🛰️', top: '82%', left: '86%', size: 2.6, rot: -8, delay: 0.3 },
+  { e: '⭐', top: '40%', left: '4%', size: 2.0, rot: 0, delay: 0.9 },
+  { e: '🛸', top: '86%', left: '45%', size: 2.6, rot: -6, delay: 1.4 },
+  { e: '🌟', top: '6%', left: '47%', size: 2.0, rot: 6, delay: 0.5 },
+  { e: '🔭', top: '34%', left: '82%', size: 2.2, rot: 6, delay: 0.7 },
 ] as const;
 
 /**
@@ -82,9 +86,9 @@ export function ChildLoginPage() {
 
       <div className={styles.card}>
         <div className={styles.logoRow} aria-hidden>
-          <span className={styles.logoIcon}>🦄</span>
+          <span className={styles.logoIcon}>🪐</span>
           <span className={styles.logoIcon}>🚀</span>
-          <span className={styles.logoIcon}>🦖</span>
+          <span className={styles.logoIcon}>⭐</span>
         </div>
 
         <h1 className={styles.title}>Pulsar Kids</h1>

@@ -1,11 +1,18 @@
 /*
- * Standalone, theme-NEUTRAL styling. The login screen is shown before a
- * world/theme is chosen, so it deliberately avoids any single theme palette.
- * Instead it uses a soft, multi-tone background and sprinkles icons from across
- * every theme, so no returning child feels "their" world was swapped out.
+ * Standalone styling: the login screen is shown before a child's world/theme
+ * is known, so it cannot read the theme variables. It wears the colours of the
+ * neutral «Галактика» theme (core/theme/themes.ts) — the same night sky as the
+ * public front page (landing.html), so the way in looks like one place.
  */
 
 .wrap {
+  --login-bg-1: #0b1026;
+  --login-bg-2: #2b1a52;
+  --login-ink: #e8ecff;
+  --login-soft: #aab2db;
+  --login-line: rgba(139, 124, 255, 0.3);
+  --login-brand: #a79bff;
+  --login-accent: #35d6e8;
   position: relative;
   min-height: 100dvh;
   display: flex;
@@ -13,7 +20,42 @@
   justify-content: center;
   padding: 24px;
   overflow: hidden;
-  background: linear-gradient(155deg, #fef9f3 0%, #eef6ff 48%, #f4f0ff 100%);
+  background:
+    radial-gradient(42% 36% at 84% 12%, rgba(53, 214, 232, 0.2), transparent 70%),
+    radial-gradient(46% 40% at 8% 80%, rgba(124, 108, 255, 0.28), transparent 72%),
+    linear-gradient(170deg, var(--login-bg-1) 0%, var(--login-bg-2) 55%, var(--login-bg-1) 100%);
+}
+
+/* Stars: three depths, each a tile of its own size so the pattern never lines up. */
+.wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 24px 36px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 150px 92px, #dfe6ff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 96px 190px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 210px 250px, #c9c2ff 50%, transparent 51%),
+    radial-gradient(2px 2px at 330px 130px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 280px 40px, #9fefff 50%, transparent 51%);
+  background-size:
+    230px 230px,
+    230px 230px,
+    310px 310px,
+    310px 310px,
+    410px 410px,
+    410px 410px;
+  animation: twinkle 5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 0.95;
+  }
 }
 
 /* Full-bleed decoration layer behind the card. */
@@ -27,9 +69,9 @@
 .decor {
   position: absolute;
   line-height: 1;
-  opacity: 0.28;
+  opacity: 0.55;
   transform: rotate(var(--rot, 0deg));
-  filter: drop-shadow(0 6px 10px rgba(40, 40, 80, 0.12));
+  filter: drop-shadow(0 0 12px rgba(139, 124, 255, 0.45));
   animation: floaty 6s ease-in-out infinite;
   will-change: transform;
 }
@@ -50,15 +92,17 @@
   width: 100%;
   max-width: 440px;
   padding: 34px 26px 24px;
+  border: 1px solid var(--login-line);
   border-radius: 32px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(6px);
-  color: #334155;
-  box-shadow: 0 20px 50px rgba(40, 40, 80, 0.16);
+  background: rgba(24, 33, 63, 0.86);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--login-ink);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
   text-align: center;
 }
 
-/* A small cluster of worlds instead of one themed mascot. */
+/* A small cluster of space things above the name. */
 .logoRow {
   display: flex;
   justify-content: center;
@@ -68,7 +112,7 @@
 .logoIcon {
   font-size: 2.4rem;
   line-height: 1;
-  filter: drop-shadow(0 4px 8px rgba(40, 40, 80, 0.16));
+  filter: drop-shadow(0 0 10px rgba(53, 214, 232, 0.4));
 }
 
 .logoIcon:nth-child(odd) {
@@ -83,13 +127,13 @@
   margin: 12px 0 2px;
   font-family: 'Baloo 2', 'Fredoka', sans-serif;
   font-size: 2rem;
-  color: #1f2937;
+  color: var(--login-ink);
 }
 
 .sub {
   margin: 0 0 22px;
   font-size: 1.05rem;
-  color: #64748b;
+  color: var(--login-soft);
 }
 
 .form {
@@ -102,7 +146,7 @@
 .label {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #475569;
+  color: var(--login-soft);
   margin-left: 4px;
 }
 
@@ -113,34 +157,34 @@
   border-radius: 18px;
   font-size: 1.2rem;
   font-family: inherit;
-  color: #1f2937;
-  background: #f8fafc;
-  border: 2px solid #e2e8f0;
+  color: var(--login-ink);
+  background: rgba(11, 16, 38, 0.6);
+  border: 2px solid var(--login-line);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .input::placeholder {
-  color: #94a3b8;
+  color: #6b739c;
 }
 
 .input:focus {
   outline: none;
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.18);
+  border-color: var(--login-accent);
+  box-shadow: 0 0 0 4px rgba(53, 214, 232, 0.2);
 }
 
 .input[aria-invalid='true'] {
-  border-color: #ef4444;
+  border-color: #f87171;
 }
 
 .error {
   margin: 0;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #ef4444;
+  color: #fca5a5;
 }
 
-/* Rainbow button: playful + multi-theme, not tied to any single world. */
+/* The same glowing button as «Грати» on the front page. */
 .submit {
   margin-top: 6px;
   min-height: 64px;
@@ -149,18 +193,10 @@
   font-family: inherit;
   font-size: 1.3rem;
   font-weight: 800;
-  color: #ffffff;
-  background: linear-gradient(
-    120deg,
-    #f87171 0%,
-    #fbbf24 28%,
-    #34d399 52%,
-    #38bdf8 76%,
-    #a78bfa 100%
-  );
+  color: var(--login-bg-1);
+  background: linear-gradient(135deg, var(--login-brand), var(--login-accent));
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(40, 40, 80, 0.22);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 26px rgba(53, 214, 232, 0.35);
   transition: filter 0.15s ease, transform 0.1s ease;
 }
 
@@ -180,11 +216,11 @@
 .hint {
   margin: 18px 0 0;
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: var(--login-soft);
 }
 
 .parentLink {
-  color: #7c3aed;
+  color: var(--login-accent);
   font-weight: 700;
   text-decoration: underline;
 }
@@ -199,13 +235,14 @@
   align-items: center;
   gap: 8px;
   padding: 8px 14px 8px 10px;
+  border: 1px solid var(--login-line);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: #475569;
+  background: rgba(24, 33, 63, 0.86);
+  color: var(--login-ink);
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 700;
-  box-shadow: 0 6px 16px rgba(40, 40, 80, 0.16);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
   cursor: pointer;
 }
 
@@ -221,7 +258,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .decor {
+  .decor,
+  .wrap::before {
     animation: none;
   }
 }
@@ -233,9 +271,9 @@
   gap: 10px;
   padding: 14px;
   border-radius: 16px;
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  color: #7c2d12;
+  background: rgba(253, 224, 71, 0.1);
+  border: 1px solid rgba(253, 224, 71, 0.4);
+  color: #fde68a;
   font-size: 0.95rem;
   line-height: 1.35;
   text-align: left;
@@ -249,10 +287,10 @@
 .secondary {
   min-height: 48px;
   padding: 0 16px;
-  border: 1px solid #fdba74;
+  border: 1px solid var(--login-line);
   border-radius: 14px;
-  background: #fff;
-  color: #9a3412;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--login-ink);
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 700;
