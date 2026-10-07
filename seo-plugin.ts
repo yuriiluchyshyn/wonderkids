@@ -1,3 +1,5 @@
+import { existsSync, renameSync } from 'node:fs';
+import path from 'node:path';
 import type { Plugin } from 'vite';
 
 /**
@@ -6,7 +8,11 @@ import type { Plugin } from 'vite';
  *  - replaces `__SITE_URL__`, `__PLAY_URL__`, `__PARENTS_URL__` and
  *    `__USE_SUBDOMAINS__` in every HTML entry (canonical links, Open Graph,
  *    JSON-LD, the landing page's default portal links);
- *  - serves / emits `robots.txt` and `sitemap.xml`.
+ *  - serves / emits `robots.txt` and `sitemap.xml`;
+ *  - on Vercel, renames the built app shell `index.html` → `app.html`. Vercel
+ *    serves an existing file before it looks at rewrites, so with an
+ *    `index.html` in the output the root URL would always be the (noindex) app
+ *    shell and never the landing page that `vercel.json` rewrites `/` to.
  *
  * The address comes from VITE_SITE_URL (the ROOT domain, no trailing slash).
  */
@@ -35,8 +41,14 @@ export function seo(): Plugin {
     '',
   ].join('\n');
 
+  let outDir = 'dist';
+
   return {
     name: 'wonderkids-seo',
+
+    configResolved(config) {
+      outDir = path.resolve(config.root, config.build.outDir);
+    },
 
     transformIndexHtml(html) {
       return html
@@ -63,6 +75,11 @@ export function seo(): Plugin {
     generateBundle() {
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots });
       this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap });
+    },
+
+    closeBundle() {
+      const shell = path.join(outDir, 'index.html');
+      if (process.env.VERCEL && existsSync(shell)) renameSync(shell, path.join(outDir, 'app.html'));
     },
   };
 }

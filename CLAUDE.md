@@ -133,7 +133,7 @@ Two login kinds, both yielding a JWT whose subject is the **parent account id**:
 
 One deployment, four faces chosen by hostname: the **root domain** → `site` (the public landing page); `parents.*` → parent cabinet (+ admin) only; `play.*` → child hub only, parent routes not mounted; localhost / LAN / `*.vercel.app` → `dev`, everything reachable on one origin. Routing in `App.tsx` branches on this, so route changes need checking against all of them. On `site` the SPA only redirects app paths to their subdomain (`portalUrl`). `VITE_USE_SUBDOMAINS=false` keeps the whole app on the root domain.
 
-The landing page is **static HTML** (`landing.html`, a second Vite entry — no React), so crawlers get real content; `vercel.json` rewrites `/` to it on every host except `play.*` / `parents.*`. Its copy states concrete numbers (games, flags, tasks) — keep them true when content changes.
+The landing page is **static HTML** (`landing.html`, a second Vite entry — no React), so crawlers get real content; `vercel.json` rewrites `/` to it on every host except `play.*` / `parents.*`. For that rewrite to apply, the Vercel build renames the app shell `index.html` → `app.html` (`seo-plugin.ts`, only when `VERCEL` is set): Vercel serves an existing file before rewrites, so an `index.html` in the output would take over `/`. The old `*.wonderkids.yluch.app` hosts 308-redirect to `pulsarkids.com` (`vercel.json`). Its copy states concrete numbers (games, flags, tasks) — keep them true when content changes.
 
 ### SEO
 
