@@ -159,6 +159,86 @@
   margin: 4px 0 6px 4px;
 }
 
+/* ---- Who is signed in (+ save / sign out on a wide screen) ---- */
+.accountBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 10px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.accountWho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.95rem;
+  color: var(--text-soft);
+  overflow-wrap: anywhere;
+}
+
+.accountWho b {
+  color: var(--surface-ink);
+}
+
+.accountActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* A compact button: the cabinet is used by adults, with a mouse too. */
+.barButton {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--surface-ink);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ring) 55%, transparent);
+  cursor: pointer;
+}
+
+.barSave {
+  color: var(--on-primary, #fff);
+  background: var(--primary);
+  box-shadow: none;
+}
+
+.barButton:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* Wide screen: save and sign out live at the top, stuck there while scrolling. */
+.wideOnly {
+  display: none;
+}
+
+@media (min-width: 760px) {
+  .wideOnly {
+    display: flex;
+  }
+
+  .narrowOnly {
+    display: none;
+  }
+
+  .accountBar {
+    position: sticky;
+    top: 8px;
+    z-index: 6;
+  }
+}
+
 /* Sticky explicit-save bar at the bottom of the parent cabinet. */
 .saveBar {
   position: sticky;

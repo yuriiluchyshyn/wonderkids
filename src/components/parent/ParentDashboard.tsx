@@ -23,6 +23,7 @@ import { GALAXIES } from '@/core/game/galaxies';
 import { portalUrl } from '@/core/app/portal';
 import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
+import { cn } from '@/core/utils/cn';
 import { Button } from '@/components/ui/Button';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
@@ -31,6 +32,15 @@ import { GoalRow } from './GoalRow';
 import { CHILD_HANDOFF, useAuthStore } from '@/core/account/auth/useAuthStore';
 import { auth0Enabled, auth0SendPasswordReset } from '@/core/account/auth/auth0';
 import styles from './Parent.module.css';
+
+/**
+ * The children's settings as text, to tell whether anything was changed since
+ * the last save. Play time is left out: the server owns it, and it moves by
+ * itself (and with «Заправити»), which is not an edit to save.
+ */
+function settingsJson(children: PersistableState['children']): string {
+  return JSON.stringify(children, (key, value) => (key === 'screenTime' ? undefined : value));
+}
 
 const GENDER_OPTIONS: { id: Gender; label: string; icon: string }[] = [
   { id: 'girl', label: 'Дівчинка', icon: '👧' },
@@ -96,6 +106,12 @@ export function ParentDashboard() {
   // the saved state so leaving without "Save" discards unsaved edits.
   const setPaused = useSyncControl((s) => s.setPaused);
   const savedSnapshot = useRef<PersistableState | null>(null);
+  // What was last saved, as text: «Зберегти» is offered only while the
+  // children's settings differ from it.
+  const [savedJson, setSavedJson] = useState(() => settingsJson(useGameStore.getState().children));
+  const dirty = useGameStore((s) => settingsJson(s.children)) !== savedJson;
+  // Only a password account has a password to change here.
+  const hasPassword = useAuthStore((s) => s.user?.provider) === 'auth0';
   const [saving, setSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
   const [timeReset, setTimeReset] = useState(false);
@@ -120,6 +136,7 @@ export function ParentDashboard() {
       const data = selectPersistable(useGameStore.getState());
       await api.putState(token, data);
       savedSnapshot.current = data;
+      setSavedJson(settingsJson(data.children));
       setJustSaved(true);
       window.setTimeout(() => setJustSaved(false), 2500);
     } catch {
@@ -208,6 +225,30 @@ export function ParentDashboard() {
 
   return (
     <div className="stack">
+      {/* ---- Who is signed in; on a wide screen also «Зберегти» and «Вийти» ---- */}
+      <div className={styles.accountBar}>
+        <span className={styles.accountWho}>
+          <span className="emoji" aria-hidden>
+            👤
+          </span>
+          {email ? (
+            <>
+              Ви увійшли як <b>{email}</b>
+            </>
+          ) : (
+            'Кабінет батьків'
+          )}
+        </span>
+        <div className={cn(styles.accountActions, styles.wideOnly)}>
+          <button type="button" className={cn(styles.barButton, styles.barSave)} onClick={saveChanges} disabled={saving || !dirty}>
+            {saving ? 'Зберігаємо…' : justSaved ? '✅ Збережено' : dirty ? '💾 Зберегти зміни' : 'Усе збережено'}
+          </button>
+          <button type="button" className={styles.barButton} onClick={logout}>
+            🚪 Вийти
+          </button>
+        </div>
+      </div>
+
       <ChildManager />
 
       {activeChildId ? (
@@ -509,7 +550,7 @@ export function ParentDashboard() {
       )}
 
       {/* ---- Password ---- */}
-      {auth0Enabled && email && (
+      {auth0Enabled && email && hasPassword && (
         <section className={styles.section}>
           <h3 className={styles.sectionTitle}>🔑 Пароль</h3>
           <p className={styles.hint}>
@@ -517,7 +558,7 @@ export function ParentDashboard() {
               ? `Лист із посиланням надіслано на ${email}. Відкрийте його й задайте новий пароль. Не бачите листа — перевірте «Спам».`
               : reset === 'failed'
                 ? 'Не вдалося надіслати лист. Спробуйте, будь ласка, ще раз за хвилину.'
-                : `Надішлемо на ${email} лист із посиланням, за яким можна задати новий пароль. Якщо ви входите через Google, пароль змінюється у вашому Google-акаунті.`}
+                : `Надішлемо на ${email} лист із посиланням, за яким можна задати новий пароль.`}
           </p>
           <Button block variant="ghost" icon="✉️" onClick={sendPasswordReset} disabled={reset === 'sending'}>
             {reset === 'sending' ? 'Надсилаємо…' : reset === 'sent' ? 'Надіслати ще раз' : 'Змінити пароль'}
@@ -525,21 +566,22 @@ export function ParentDashboard() {
         </section>
       )}
 
-      {/* ---- Account ---- */}
-      <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>👋 Акаунт</h3>
-        {email && <p className={styles.hint}>Ви увійшли як {email}</p>}
+      {/* ---- Sign out: the very last thing on a phone (on a wide screen it is at the top) ---- */}
+      <div className={styles.narrowOnly}>
         <Button block variant="ghost" icon="🚪" onClick={logout}>
           Вийти з акаунту
         </Button>
-      </section>
-
-      {/* ---- Explicit save (no live auto-save in the parent cabinet) ---- */}
-      <div className={styles.saveBar}>
-        <Button block size="lg" icon={justSaved ? '✅' : '💾'} onClick={saveChanges} disabled={saving}>
-          {saving ? 'Зберігаємо…' : justSaved ? 'Збережено!' : 'Зберегти зміни'}
-        </Button>
       </div>
+
+      {/* ---- Explicit save (no live auto-save in the parent cabinet). On a
+          phone it appears, stuck to the bottom, once something was changed. ---- */}
+      {(dirty || saving || justSaved) && (
+        <div className={cn(styles.saveBar, styles.narrowOnly)}>
+          <Button block icon={justSaved ? '✅' : '💾'} onClick={saveChanges} disabled={saving || !dirty}>
+            {saving ? 'Зберігаємо…' : justSaved && !dirty ? 'Збережено!' : 'Зберегти зміни'}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

@@ -12,6 +12,12 @@ export interface AuthUser {
   id: number;
   /** Absent for child sessions (which authenticate against a child profile). */
   email?: string;
+  /**
+   * How a parent signed in at Auth0: `auth0` = email and password, otherwise
+   * the social provider (`google-oauth2`). Kept on the device only; absent for
+   * sessions older than this field.
+   */
+  provider?: string;
 }
 
 export class ApiError extends Error {

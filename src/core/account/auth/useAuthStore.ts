@@ -18,6 +18,16 @@ const LOGIN_ERRORS: Record<string, string> = {
   auth0_required: 'Вхід оновлено. Оновіть сторінку й увійдіть ще раз.',
 };
 
+/** `google-oauth2|123…` → `google-oauth2`: the first part of an Auth0 user id. */
+function auth0Provider(idToken: string): string | undefined {
+  try {
+    const { sub } = JSON.parse(atob(idToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return typeof sub === 'string' ? sub.split('|')[0] : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export type LoginOutcome =
   | { status: 'ok' }
   | { status: 'error' }
@@ -93,7 +103,7 @@ export const useAuthStore = create<AuthState>()(
         set({ pending: true, error: null });
         try {
           const { token, user } = await api.auth0Login(idToken);
-          set({ token, user, childId: null, pending: false, error: null });
+          set({ token, user: { ...user, provider: auth0Provider(idToken) }, childId: null, pending: false, error: null });
           return null;
         } catch (err) {
           const code = err instanceof ApiError ? err.code : 'login_failed';
