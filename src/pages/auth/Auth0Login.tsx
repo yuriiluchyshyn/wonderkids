@@ -4,6 +4,10 @@ import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { AUTH0_CLIENT_ID, AUTH0_DOMAIN, auth0LoggingOut, auth0Logout, auth0ReturnUrl } from '@/core/account/auth/auth0';
 import styles from './LoginPage.module.css';
 
+/** While a parent is confirming their email: how often to look, and for how long (~10 min). */
+const RECHECK_MS = 6000;
+const RECHECK_LIMIT = 100;
+
 /**
  * The Auth0 half of the parent login. There is nothing to press: a parent
  * without a session is sent straight to Auth0 Universal Login, and — once
@@ -19,7 +23,7 @@ import styles from './LoginPage.module.css';
  * what a child downloads.
  */
 function Auth0Form() {
-  const { isLoading, isAuthenticated, error: auth0Error, loginWithRedirect, getIdTokenClaims } = useAuth0();
+  const { isLoading, isAuthenticated, error: auth0Error, loginWithRedirect, getIdTokenClaims, getAccessTokenSilently } = useAuth0();
   const loginWithAuth0 = useAuthStore((s) => s.loginWithAuth0);
   const pending = useAuthStore((s) => s.pending);
   const error = useAuthStore((s) => s.error);
@@ -51,13 +55,62 @@ function Auth0Form() {
     signIn();
   }, [isLoading, isAuthenticated, auth0Error]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Waiting for the parent to confirm their address (the link in the email
+  // opens elsewhere): ask Auth0 again, quietly, whenever they come back to this
+  // tab and every few seconds while it is in view — the cabinet then opens by
+  // itself, with nothing to press and no password to type again.
+  const recheck = async (): Promise<'in' | 'refused' | 'no-session'> => {
+    let idToken: string;
+    try {
+      await getAccessTokenSilently({ cacheMode: 'off' });
+      idToken = (await getIdTokenClaims())?.__raw ?? '';
+    } catch {
+      return 'no-session'; // nothing to ask Auth0 with — only signing in again helps
+    }
+    const code = await loginWithAuth0(idToken);
+    setRefused(code);
+    return code === null ? 'in' : 'refused';
+  };
+  const waiting = refused === 'email_not_verified';
+  useEffect(() => {
+    if (!waiting) return;
+    let tries = 0;
+    let busy = false;
+    const tick = async () => {
+      if (busy || document.visibilityState !== 'visible' || tries >= RECHECK_LIMIT) return;
+      busy = true;
+      tries += 1;
+      await recheck();
+      busy = false;
+    };
+    const timer = window.setInterval(() => void tick(), RECHECK_MS);
+    const onBack = () => void tick();
+    document.addEventListener('visibilitychange', onBack);
+    window.addEventListener('focus', onBack);
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', onBack);
+      window.removeEventListener('focus', onBack);
+    };
+  }, [waiting]); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (refused) {
     return (
       <div className={styles.form}>
         <div className={styles.confirm} role="alert">
           <p>{error}</p>
-          <button className={styles.submit} type="button" onClick={signIn}>
-            {refused === 'email_not_verified' ? 'Пошту підтверджено — увійти' : 'Спробувати ще раз'}
+          {waiting && <p>Щойно підтвердите — кабінет відкриється тут сам.</p>}
+          <button
+            className={styles.submit}
+            type="button"
+            onClick={() => {
+              if (!waiting) return signIn();
+              void recheck().then((outcome) => {
+                if (outcome === 'no-session') signIn();
+              });
+            }}
+          >
+            {waiting ? 'Пошту підтверджено — увійти' : 'Спробувати ще раз'}
           </button>
           {/* Signs out of Auth0 first, or it would return the same account. */}
           <button className={styles.secondary} type="button" onClick={auth0Logout}>
