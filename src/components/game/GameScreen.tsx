@@ -1,15 +1,15 @@
-import { useBalance } from '@/core/world/useBalance';
+import { useBalance } from '@/core/child/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { TaskCallbacks } from '@/core/kernel/types';
+import type { TaskCallbacks } from '@/core/game/kernel/types';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { speechEngine } from '@/core/audio/SpeechEngine';
-import { useShowText } from '@/core/ui/useUiPrefs';
+import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import type { Treasure } from '@/core/theme/theme.types';
-import { hasChest, pickChestTreasure, treasureKey } from '@/core/progress/treasures';
+import { hasChest, pickChestTreasure, treasureKey } from '@/core/child/progress/treasures';
 import { cn } from '@/core/utils/cn';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
@@ -20,14 +20,15 @@ import { TreasureReveal } from './TreasureReveal';
 import { Cutscene } from './Cutscene';
 import { CoachTips } from '@/components/coach/CoachTips';
 import { gameTips } from '@/components/coach/tips';
-import { pickOutro } from '@/core/content/outro';
-import type { TemplatePayload } from '@/core/templates/types';
+import { pickOutro } from '@/core/game/content/outro';
+import { IntroDemo } from '@/components/templates/IntroDemo';
+import type { TemplatePayload } from '@/core/game/templates/types';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
 import { useIdleRollback } from './useIdleRollback';
 import { useScreenTime } from './useScreenTime';
-import { subSteps } from '@/core/progress/path';
-import { isFreePlay } from '@/core/kernel/gameConfig';
-import { useWorld } from '@/core/world/useWorld';
+import { subSteps } from '@/core/child/progress/path';
+import { isFreePlay } from '@/core/game/kernel/gameConfig';
+import { useWorld } from '@/core/child/world/useWorld';
 import styles from './GameScreen.module.css';
 
 type GiftTier = 'small' | 'big' | 'biggest' | null;
@@ -324,7 +325,6 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const VisualHelper =
     module.VisualHelper && (module.showsHelper?.(task) ?? true) ? module.VisualHelper : undefined;
   const tipsEnabled = !session.finished && !session.justSolved && !session.hintActive && !blocked;
-  const IntroView = module.IntroView;
   // When finished, pin the mascot at the goal (no idle roll-back on the
   // celebration screen); otherwise show progress minus any idle roll-back.
   const progress = session.finished ? 1 : Math.max(0, position - rollback);
@@ -403,7 +403,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
               ✕
             </button>
           </div>
-          {IntroView && <IntroView subCategoryId={config.subCategoryId} />}
+          {sub?.demo && <IntroDemo demo={sub.demo} />}
           {showText && introText && <p className={styles.introText}>{introText}</p>}
           <Button size="lg" icon="▶️" block onClick={startGame}>
             Почнемо!

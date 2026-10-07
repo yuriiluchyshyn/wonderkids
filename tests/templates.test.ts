@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { isNextBubble, isRecipe, minGap } from '../src/core/templates/validate.ts';
+import { isNextBubble, isRecipe, minGap } from '../src/core/game/templates/validate.ts';
 
 test('bubble pop: only the next face in order pops', () => {
   const faces = ['МА', 'МА'];

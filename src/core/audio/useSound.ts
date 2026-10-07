@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
-import { useGameStore } from '@/core/store/useGameStore';
-import type { SoundCode } from '@/core/engine/BaseGameEngine';
+import { useGameStore } from '@/core/child/store/useGameStore';
+import type { SoundCode } from '@/core/game/engine/BaseGameEngine';
 import { audioEngine } from './AudioEngine';
 
 type SfxName =

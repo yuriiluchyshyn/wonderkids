@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { GALAXIES, getGalaxy } from '@/core/galaxies';
+import { GALAXIES, getGalaxy } from '@/core/game/galaxies';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { Modal } from '@/components/ui/Modal';

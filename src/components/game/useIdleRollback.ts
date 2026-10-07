@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useGameStore, type CompanionSpeed } from '@/core/store/useGameStore';
+import { useGameStore, type CompanionSpeed } from '@/core/child/store/useGameStore';
 
 /**
  * Idle intervals (PRD §4.1): after `delayMs` without an answer the companion

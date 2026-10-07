@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { MapPuzzlePayload } from '@/core/templates/types';
-import { CONTINENTS, OCEANS, type MapRegion } from '@/core/templates/worldMap';
+import type { MapPuzzlePayload } from '@/core/game/templates/types';
+import { CONTINENTS, OCEANS, type MapRegion } from '@/core/game/templates/worldMap';
 import { cn } from '@/core/utils/cn';
 import { CardFace, SHAKE, SHAKE_TRANSITION, type LayoutProps } from './parts';
 import { useDragDrop } from './useDragDrop';

@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { BalanceScalePayload } from '@/core/templates/types';
-import { scaleTilt } from '@/core/templates/validate';
+import type { BalanceScalePayload } from '@/core/game/templates/types';
+import { scaleTilt } from '@/core/game/templates/validate';
 import { cn } from '@/core/utils/cn';
 import { CardFace, Glyphs, type LayoutProps } from './parts';
 import { useDragDrop } from './useDragDrop';

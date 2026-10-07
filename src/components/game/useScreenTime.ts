@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { api, type SessionView } from '@/core/api/client';
-import { useAuthStore } from '@/core/auth/useAuthStore';
-import { useGameStore } from '@/core/store/useGameStore';
-import { computeScreenTime } from '@/core/time/screenTime';
+import { api, type SessionView } from '@/core/account/api/client';
+import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
+import { computeScreenTime } from '@/core/child/time/screenTime';
 
 /**
  * Non-aggressive screen-time engine (Tech Spec v2.1 FR-TIME, PRD v4.0 §2.2).

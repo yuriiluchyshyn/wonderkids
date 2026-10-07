@@ -1,12 +1,12 @@
 import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
-import { useShowText } from '@/core/ui/useUiPrefs';
+import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import { useGameStore } from '@/core/store/useGameStore';
-import { subSteps, pathKey } from '@/core/progress/path';
-import { difficultyRange, gameStatus, isFreePlay } from '@/core/kernel/gameConfig';
-import { DIFFICULTY_AGES } from '@/core/kernel/types';
+import { useGameStore } from '@/core/child/store/useGameStore';
+import { subSteps, pathKey } from '@/core/child/progress/path';
+import { difficultyRange, gameStatus, isFreePlay } from '@/core/game/kernel/gameConfig';
+import { DIFFICULTY_AGES } from '@/core/game/kernel/types';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { cn } from '@/core/utils/cn';

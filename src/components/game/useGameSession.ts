@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
-import type { LearningModule, TaskInstance } from '@/core/kernel/types';
-import { isFreePlay, tasksPerLevel } from '@/core/kernel/gameConfig';
-import { composeLevel, recallSteps } from '@/core/engine/recall';
+import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
+import type { LearningModule, TaskInstance } from '@/core/game/kernel/types';
+import { isFreePlay, tasksPerLevel } from '@/core/game/kernel/gameConfig';
+import { composeLevel, recallSteps } from '@/core/game/engine/recall';
 import { pick } from '@/core/utils/random';
-import { LevelEngine, taskKey } from '@/core/engine/LevelEngine';
-import type { AnswerResult } from '@/core/engine/BaseGameEngine';
-import { useGameStore } from '@/core/store/useGameStore';
-import { subSteps } from '@/core/progress/path';
+import { LevelEngine, taskKey } from '@/core/game/engine/LevelEngine';
+import type { AnswerResult } from '@/core/game/engine/BaseGameEngine';
+import { useGameStore } from '@/core/child/store/useGameStore';
+import { subSteps } from '@/core/child/progress/path';
 
 /**
  * Mistakes on a task before the helper appears (PRD §5). The helper is ONLY
@@ -69,7 +69,7 @@ export interface GameSession {
  * Candidate tasks for one level: the module's own picker, or repeated draws.
  * A generated path game (the math ladders) gets the same shape as a content
  * one: half the level at the current step, half recalled from the steps just
- * behind it (`core/engine/recall`).
+ * behind it (`core/game/engine/recall`).
  */
 export function drawCandidates(
   module: LearningModule,

@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { BubblePopPayload, Card } from '@/core/templates/types';
-import { isNextBubble } from '@/core/templates/validate';
+import type { BubblePopPayload, Card } from '@/core/game/templates/types';
+import { isNextBubble } from '@/core/game/templates/validate';
 import { shuffle } from '@/core/utils/random';
 import { cn } from '@/core/utils/cn';
 import { CardFace, Stimulus, type LayoutProps } from './parts';

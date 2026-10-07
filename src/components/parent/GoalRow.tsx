@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Milestone } from '@/core/store/useGameStore';
+import type { Milestone } from '@/core/child/store/useGameStore';
 import styles from './Parent.module.css';
 
 interface GoalRowProps {

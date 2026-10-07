@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import type { CashTrayPayload } from '@/core/templates/types';
+import type { CashTrayPayload } from '@/core/game/templates/types';
 import { cn } from '@/core/utils/cn';
 import { Bubble, CardFace, PULSE, type LayoutProps } from './parts';
 import { useDragDrop } from './useDragDrop';

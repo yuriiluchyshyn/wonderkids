@@ -4,9 +4,9 @@ import {
   selectNicknameTaken,
   type ChoicesGridSize,
   type Gender,
-} from '@/core/store/useGameStore';
-import { useAuthStore } from '@/core/auth/useAuthStore';
-import { api, ApiError } from '@/core/api/client';
+} from '@/core/child/store/useGameStore';
+import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { api, ApiError } from '@/core/account/api/client';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { Modal } from '@/components/ui/Modal';

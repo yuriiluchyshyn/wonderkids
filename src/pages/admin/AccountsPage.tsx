@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { adminApi, type AdminAccount, type AdminChild, type SpeechKey } from '@/core/api/client';
-import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
-import { isFreePlay } from '@/core/kernel/gameConfig';
-import { subSteps } from '@/core/progress/path';
-import { playsKey } from '@/core/progress/plays';
+import { adminApi, type AdminAccount, type AdminChild, type SpeechKey } from '@/core/account/api/client';
+import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
+import { isFreePlay } from '@/core/game/kernel/gameConfig';
+import { subSteps } from '@/core/child/progress/path';
+import { playsKey } from '@/core/child/progress/plays';
 import { THEMES } from '@/core/theme/themes';
 import type { ThemeId } from '@/core/theme/theme.types';
 import { computeAge } from '@/core/utils/age';

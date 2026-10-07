@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { THEME_LIST } from '@/core/theme/themes';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import styles from './ThemeGrid.module.css';

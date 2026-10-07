@@ -1,4 +1,4 @@
-import { ApiError, type AdminAccount, type SpeechKey } from '@/core/api/client';
+import { ApiError, type AdminAccount, type SpeechKey } from '@/core/account/api/client';
 
 export const ADMIN_KEY_STORAGE = 'wk-admin-key';
 

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
-import type { GridChoicePayload } from '@/core/templates/types';
+import type { GridChoicePayload } from '@/core/game/templates/types';
 import { cn } from '@/core/utils/cn';
 import { CardFace, SHAKE, SHAKE_TRANSITION, Stimulus, type LayoutProps } from './parts';
 import styles from './Templates.module.css';
@@ -8,7 +8,8 @@ import styles from './Templates.module.css';
 /**
  * UI_GRID_CHOICE — tap one card out of N (2 or 3 columns).
  * Helper (exclusion method, PRD §5): the grid narrows to the right answer and
- * one alternative, so the second look is a real choice, not a give-away.
+ * one alternative, so the second look is a real choice, not a give-away —
+ * unless the task brings a counting model (`payload.counting`), shown below.
  */
 export function GridChoiceLayout({ payload, callbacks, hintActive }: LayoutProps<GridChoicePayload>) {
   const { options, correctId, cols } = payload;
@@ -17,7 +18,8 @@ export function GridChoiceLayout({ payload, callbacks, hintActive }: LayoutProps
   const [shake, setShake] = useState<string | null>(null);
 
   const kept = useMemo(() => {
-    if (!hintActive) return null;
+    // A task with something to count keeps every answer: counting is the help.
+    if (!hintActive || payload.counting) return null;
     const other = options.find((o) => o.id !== correctId && !tried.includes(o.id)) ?? options.find((o) => o.id !== correctId);
     return new Set([correctId, other?.id]);
   }, [hintActive]); // eslint-disable-line react-hooks/exhaustive-deps

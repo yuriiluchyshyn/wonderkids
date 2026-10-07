@@ -1,4 +1,4 @@
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { THEMES, DEFAULT_THEME_ID } from './themes';
 import type { Theme } from './theme.types';
 

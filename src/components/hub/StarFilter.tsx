@@ -1,6 +1,6 @@
-import { DIFFICULTY_AGES, type Difficulty } from '@/core/kernel/types';
+import { DIFFICULTY_AGES, type Difficulty } from '@/core/game/kernel/types';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import { useShowText } from '@/core/ui/useUiPrefs';
+import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
 import styles from './StarFilter.module.css';
 

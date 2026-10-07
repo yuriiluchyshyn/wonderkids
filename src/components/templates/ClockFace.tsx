@@ -1,4 +1,4 @@
-import type { ClockTime } from '@/core/templates/types';
+import type { ClockTime } from '@/core/game/templates/types';
 
 /**
  * An analogue clock: twelve numbers, a short hour hand and a long minute hand.

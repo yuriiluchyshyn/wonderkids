@@ -1,15 +1,15 @@
-import { useBalance } from '@/core/world/useBalance';
+import { useBalance } from '@/core/child/world/useBalance';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
-import { useShowText } from '@/core/ui/useUiPrefs';
+import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { useSound } from '@/core/audio/useSound';
-import { treasureKey } from '@/core/progress/treasures';
+import { treasureKey } from '@/core/child/progress/treasures';
 import { Modal } from '@/components/ui/Modal';
 import { TreasureCollection } from '@/components/reward/TreasureCollection';
 import { useNavigate } from 'react-router-dom';
-import { useWorld } from '@/core/world/useWorld';
+import { useWorld } from '@/core/child/world/useWorld';
 import { ChildDrawer } from './ChildDrawer';
 import styles from './ProfileBar.module.css';
 

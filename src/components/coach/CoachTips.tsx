@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { TIP_PREFIX, useGameStore } from '@/core/store/useGameStore';
+import { TIP_PREFIX, useGameStore } from '@/core/child/store/useGameStore';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { speechEngine } from '@/core/audio/SpeechEngine';
 import styles from './CoachTips.module.css';

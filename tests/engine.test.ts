@@ -1,9 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { LevelEngine } from '../src/core/engine/LevelEngine.ts';
-import { MAX_EXTRA_TASKS } from '../src/core/engine/BaseGameEngine.ts';
-import { publishStatus } from '../src/core/engine/publish.ts';
-import { composeLevel, recallSteps } from '../src/core/engine/recall.ts';
+import { LevelEngine } from '../src/core/game/engine/LevelEngine.ts';
+import { MAX_EXTRA_TASKS } from '../src/core/game/engine/BaseGameEngine.ts';
+import { publishStatus } from '../src/core/game/engine/publish.ts';
+import { composeLevel, recallSteps } from '../src/core/game/engine/recall.ts';
 
 const tasks = (n: number) => Array.from({ length: n }, (_, i) => ({ id: `t${i}`, key: `q${i}` }));
 

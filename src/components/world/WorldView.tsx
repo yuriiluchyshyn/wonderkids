@@ -1,7 +1,7 @@
-import { useShowText } from '@/core/ui/useUiPrefs';
-import { LANDMARK_STAGES } from '@/core/world/world';
+import { useShowText } from '@/core/app/ui/useUiPrefs';
+import { LANDMARK_STAGES } from '@/core/child/world/world';
 import { PlanetView } from './PlanetView';
-import { useWorld, type Landmark } from '@/core/world/useWorld';
+import { useWorld, type Landmark } from '@/core/child/world/useWorld';
 import { cn } from '@/core/utils/cn';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { useSound } from '@/core/audio/useSound';

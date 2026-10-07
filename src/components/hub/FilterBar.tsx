@@ -1,8 +1,8 @@
-import { ALL_META } from '@/core/kernel/types';
-import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
+import { ALL_META } from '@/core/game/kernel/types';
+import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { Chip } from '@/components/ui/Chip';
 import { VoiceToggle } from '@/components/ui/VoiceToggle';
-import { useShowText } from '@/core/ui/useUiPrefs';
+import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import type { CatalogFilters } from './catalog';
 import styles from './FilterBar.module.css';

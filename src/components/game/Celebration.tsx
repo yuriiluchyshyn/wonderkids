@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';
 import { fireConfetti } from './celebration.helpers';
 import styles from './Celebration.module.css';

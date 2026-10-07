@@ -63,8 +63,8 @@ Three layers do the work, and a game author only ever touches the first:
 
 | Layer | Responsibility | Files |
 | --- | --- | --- |
-| **Content / Module** | *What* to ask: generates tasks + their data | `src/modules/<subject>/` |
-| **Engine** | Level assembly, recall, mistake handling, rewards | `src/core/engine/*`, `src/core/templates/validate.ts` |
+| **Content / Module** | *What* to ask: generates tasks + their data | `src/games/<subject>/` |
+| **Engine** | Level assembly, recall, mistake handling, rewards | `src/core/game/engine/*`, `src/core/game/templates/validate.ts` |
 | **Presentation** | *How* it looks & the interaction | `src/components/templates/*` |
 
 > Read `docs/level-design.md` **together with this file** — it is the deep dive
@@ -74,39 +74,33 @@ Three layers do the work, and a game author only ever touches the first:
 
 Key contracts (source of truth):
 
-- `src/core/kernel/types.ts` — `LearningModule`, `SubCategory`, `TaskInstance`, `TaskConfig`.
-- `src/core/templates/types.ts` — every `TemplatePayload` (the 10 templates).
-- `src/modules/shared/templateModule.ts` — `defineTemplateModule`, `TemplateGame`, helpers.
+- `src/core/game/kernel/types.ts` — `LearningModule`, `SubCategory`, `TaskInstance`, `TaskConfig`.
+- `src/core/game/templates/types.ts` — every `TemplatePayload` (the 10 templates).
+- `src/games/shared/templateModule.ts` — `defineSubject`, `GameCard`, `GameTasks`, helpers.
 
 ---
 
-## 2. The two ways to build a game
+## 2. How a game is built
 
-There are exactly two authoring paths. **Pick path A unless the game is
-mathematics with a bespoke visualisation.**
+Every game is **pure data on the shared UI templates** — no subject has
+screens of its own. A game's module produces, for each task, one
+`TemplatePayload`; the shared `TemplateGameView` renders it. You add a game by
+adding its card to `config.ts` and its task generator to `tasks.ts`; no React,
+no layout, no CSS.
 
-### Path A — Template game (data only, no view code) ✅ default
+There are two ways to *make the tasks*, and both play on the same screens:
 
-The game is **pure data**: its module produces, for each task, one
-`TemplatePayload` and reuses the shared `TemplateGameView` to render it. You add
-a game by adding one `TemplateGame` object (config + a `pool(step)` function);
-no React, no layout, no CSS. **This is how Geography, History, Ecology and
-Nature are built, and it is what Gemini should target for every new game.**
+- **From a pool** (the default — Geography, History, Language, Logic…): the game
+  supplies `pool(step)`, every task it can ask at that step. The subject is
+  registered with `defineSubject(SUBJECT, GAMES, TASKS)`.
+- **Generated one at a time** (Math): `generateTask({ step })` invents a task
+  with random numbers. The subject is registered with
+  `defineGeneratedSubject(SUBJECT, GAMES, { generateTask })`.
 
-A whole subject is declared with `defineTemplateModule({ id, title, icon, accent, games: [...] })`.
-
-### Path B — Custom module (bespoke `GameView`) ⚠️ advanced, rarely needed
-
-The module ships its own React `GameView` component and generators. Only the
-**Math** module does this, because it needs animated counters, pie-charts,
-clock faces and drag physics beyond the generic templates. A Game Spec should
-**not** choose this path unless it explicitly requires a brand-new interaction
-that none of the 10 templates can express — in which case flag it to Kiro as
-"needs a new template" rather than specifying a one-off.
-
-> **For Gemini:** always design on top of the 10 templates in §4 (Path A). If a
-> game idea cannot be expressed with them, say so in the spec's *Open questions*
-> section instead of inventing a mechanic.
+> **For Gemini:** always design on top of the templates in §4. If a game idea
+> cannot be expressed with them, say so in the spec's *Open questions* section
+> instead of inventing a mechanic — a new mechanic means a new shared template,
+> never a one-off screen inside a subject.
 
 ---
 
@@ -444,6 +438,20 @@ options** it expects, and a real example from the codebase.
 }
 ```
 
+Two optional fields any payload may carry, used by arithmetic:
+
+- `counting` — something to count by touch, shown in the helper panel below the
+  board when the hint fires: `{ kind: 'towers', count, split?: { a, b } }`
+  (cubes in towers of ten, two colours for the two numbers of a sum) or
+  `{ kind: 'groups', rows, cols }` (equal rows of dots). A task with `counting`
+  keeps all its answers on the board instead of narrowing to two.
+- `stimulus.pie: { food, denom, filled }` — a food cut into equal slices.
+
+A number in a math line may be written `{ text: '7', tone: 'a' | 'b' }` to wear
+the colour of its cubes in the counting helper. A game's animated intro picture
+is `demo` on its card: `{ kind: 'row', items }` (`'*'` = the theme's collectible),
+`{ kind: 'groups', groups, caption }` or `{ kind: 'pie', food, denom, filled }`.
+
 Two more `Card` fields: `silhouette: true` draws the pictogram as its black
 shadow (shadow lotto), and `lang: 'en'` makes the speaker read the card in
 English (English lessons).
@@ -592,7 +600,7 @@ outro: factPool(animal.fact, ANIMAL_FACTS[animal.id]);
 outro: factPool(person.fact, CALLING_FACTS[person.calling]);
 ```
 
-Shared fact pools live in a `facts.ts` next to the module. A spec must therefore
+Shared fact pools live in the subject's `content/` folder (`content/facts.ts`). A spec must therefore
 deliver, for every distinct task (or task category), **the own fact + ≥9
 category facts**.
 
@@ -613,20 +621,23 @@ type as the path unlocks it (see Nature's seasons game).
 A template subject folder looks like this (copy the shape):
 
 ```
-src/modules/<subject>/
-  index.ts     ← defineTemplateModule({...}); the games + their pool() functions
-  data.ts      ← the raw content arrays (ordered easy→hard where it matters)
-  facts.ts     ← the shared outro fact pools (≥9 per category)
-  questions.ts ← (optional) Q&A content, as in ecology
+src/games/<subject>/
+  index.ts       ← registration only: defineSubject(SUBJECT, GAMES, TASKS)
+  config.ts      ← SUBJECT + GAMES: the catalog card of every game (§3), no task logic
+  tasks.ts       ← the pool() / level() functions, exported as TASKS keyed by game id
+  content/
+    data.ts      ← the raw content arrays (ordered easy→hard where it matters)
+    facts.ts     ← the shared outro fact pools (≥9 per category)
+    questions.ts ← (optional) Q&A content, as in ecology
 ```
 
 Conventions:
 
-- **Order content easy → hard / famous → obscure** in `data.ts`; the path keys
+- **Order content easy → hard / famous → obscure** in `content/data.ts`; the path keys
   off list order (`unlocked`, `introSteps`).
 - Keep `pool(step)` **pure**: no randomness in the `key`, no I/O. Shuffling for
   presentation is fine; identity is not.
-- Register the module by adding one import line to `src/modules/index.ts`.
+- Register the subject by adding one import line to `src/games/index.ts`.
 - Reuse the shared release constant for `publishDate`
   (`V4_RELEASE = '2026-10-06T00:00:00Z'`).
 
@@ -636,7 +647,7 @@ Conventions:
 
 **Hard rules (a spec that breaks these cannot be built):**
 
-1. Build on the 10 templates (Path A). No new mechanics without flagging it.
+1. Build on the shared templates. No new mechanics without flagging it.
 2. All child/parent-facing text is **Ukrainian**.
 3. Every task has a stable `key` describing the question, unique per level.
 4. Every task has a `hint` and an `outro` pool of **≥10 genuinely different
@@ -662,29 +673,36 @@ Conventions:
 
 *(Reference for Kiro when turning a spec into code; Gemini can skip this.)*
 
-A template game becomes code like this (abridged from `geography/index.ts`):
+A template game becomes code like this (abridged from `geography/config.ts`, `tasks.ts` and `index.ts`):
 
 ```ts
-export const geographyModule = defineTemplateModule({
-  id: 'geography', title: 'Географія', icon: '🌍', accent: '#0ea5e9',
-  games: [
-    {
-      id: 'flags',
-      gameId: 'geo_flags_quiz',
-      label: 'Вгадай Прапор', icon: '🚩',
-      blurb: `Усі ${COUNTRIES.length} прапори світу — від найвідоміших`,
-      intro: 'У кожної країни є свій прапор…',
-      landmark: { name: 'Алея прапорів', emoji: '🚩', stages: [/* 4 */] },
-      steps: FLAG_STEPS,
-      difficulty: 1,
-      publishDate: V4_RELEASE,
-      mechanics: 'UI_GRID_CHOICE',
-      level: flagsLevel,          // ranked content → custom level()
-      pool: flags,                // all tasks available at a step
-    },
-    // …more games
-  ],
-});
+// config.ts — what the game is
+export const SUBJECT: SubjectDef = { id: 'geography', title: 'Географія', icon: '🌍', accent: '#0ea5e9' };
+export const GAMES: GameCard[] = [
+  {
+    id: 'flags',
+    gameId: 'geo_flags_quiz',
+    label: 'Вгадай Прапор', icon: '🚩',
+    blurb: `Усі ${COUNTRIES.length} прапори світу — від найвідоміших`,
+    intro: 'У кожної країни є свій прапор…',
+    landmark: { name: 'Алея прапорів', emoji: '🚩', stages: [/* 4 */] },
+    steps: FLAG_STEPS,
+    difficulty: 1,
+    publishDate: V4_RELEASE,
+    tasksPerLevel: 10,
+    mechanics: 'UI_GRID_CHOICE',
+  },
+  // …more games
+];
+
+// tasks.ts — how its tasks are made, under the same id
+export const TASKS: Record<string, GameTasks> = {
+  flags: { pool: flags, level: flagsLevel },   // ranked content → custom level()
+  // …more games
+};
+
+// index.ts — registration, nothing else
+export const geographyModule = defineSubject(SUBJECT, GAMES, TASKS);
 ```
 
 A single task is created with `templateTask(key, prompt, payload, step, outro)`:
@@ -705,11 +723,11 @@ templateTask(
 );
 ```
 
-Helpers available in `src/modules/shared/templateModule.ts`:
+Helpers available in `src/games/shared/templateModule.ts`:
 `card`, `templateTask`, `withDistractors`, `unlocked`, `introSteps`,
 `recallLevel`, `progressOf`, `rewardFor`; and `factPool` in `shared/facts.ts`.
 
-Final wiring: add `import './<subject>';` to `src/modules/index.ts`.
+Final wiring: add `import './<subject>';` to `src/games/index.ts`.
 
 ---
 
@@ -864,4 +882,4 @@ illustrative; the live game may differ.)
 > **Gemini:** fill §12 for one game, obeying §3 (config), §4 (templates +
 > option counts), §5 (anti-guessing), §6 (difficulty), §7 (icons), §8 (hints +
 > 10 facts), §10 (hard rules). **Kiro:** turn that filled spec into a
-> `defineTemplateModule` game using the patterns in §11.
+> `config.ts` card plus a `tasks.ts` generator using the patterns in §11.

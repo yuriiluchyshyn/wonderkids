@@ -2,11 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
-import { subSteps, pathKey } from '@/core/progress/path';
-import { hasChest } from '@/core/progress/treasures';
+import { subSteps, pathKey } from '@/core/child/progress/path';
+import { hasChest } from '@/core/child/progress/treasures';
 import type { CatalogEntry } from './catalog';
 import styles from './PathModal.module.css';
 

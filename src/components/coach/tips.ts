@@ -1,4 +1,4 @@
-import type { TemplatePayload } from '@/core/templates/types';
+import type { TemplatePayload } from '@/core/game/templates/types';
 import type { CoachTip } from './CoachTips';
 
 /** Tips for the hub, in the order the child meets the controls. */

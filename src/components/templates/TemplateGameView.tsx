@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
-import type { GameViewProps } from '@/core/kernel/types';
-import type { TemplatePayload } from '@/core/templates/types';
+import type { GameViewProps } from '@/core/game/kernel/types';
+import type { TemplatePayload } from '@/core/game/templates/types';
 import { PhysicsScaleLayout } from './PhysicsScaleLayout';
 import { CashTrayLayout } from './CashTrayLayout';
 import { DragMatchLayout } from './DragMatchLayout';

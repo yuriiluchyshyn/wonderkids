@@ -1,5 +1,5 @@
-import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
-import type { LearningModule, SubCategory } from '@/core/kernel/types';
+import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
+import type { LearningModule, SubCategory } from '@/core/game/kernel/types';
 
 /** A single catalog card: one subject sub-category offered by a module. */
 export interface CatalogEntry {

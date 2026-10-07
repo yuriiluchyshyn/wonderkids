@@ -1,4 +1,4 @@
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { VOICE_CHANNELS } from '@/core/audio/voiceChannels';
 import { Chip } from '@/components/ui/Chip';
 import { VoiceToggle } from '@/components/ui/VoiceToggle';

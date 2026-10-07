@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { DragMatchPayload } from '@/core/templates/types';
-import { isMatchComplete } from '@/core/templates/validate';
+import type { DragMatchPayload } from '@/core/game/templates/types';
+import { isMatchComplete } from '@/core/game/templates/validate';
 import { cn } from '@/core/utils/cn';
 import { CardFace, PULSE, SHAKE, SHAKE_TRANSITION, Stimulus, type LayoutProps } from './parts';
 import { useDragDrop } from './useDragDrop';

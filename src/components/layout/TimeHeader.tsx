@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom';
-import { useAuthStore } from '@/core/auth/useAuthStore';
-import { useGameStore } from '@/core/store/useGameStore';
-import { getPortal } from '@/core/portal';
-import { useTimeBudget } from '@/core/time/screenTime';
+import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
+import { getPortal } from '@/core/app/portal';
+import { useTimeBudget } from '@/core/child/time/screenTime';
 import { TimeBudget } from './TimeBudget';
 import styles from './TimeHeader.module.css';
 

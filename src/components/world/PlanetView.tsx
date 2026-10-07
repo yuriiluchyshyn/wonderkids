@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { TransformComponent, TransformWrapper, type ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
-import { useShowText } from '@/core/ui/useUiPrefs';
+import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
-import type { World } from '@/core/world/useWorld';
-import { sellPrice, type ItemState } from '@/core/world/world';
+import type { World } from '@/core/child/world/useWorld';
+import { sellPrice, type ItemState } from '@/core/child/world/world';
 import styles from './PlanetView.module.css';
 
 /** Places around the planet's rim; buildings take the even ones, decor the odd. */

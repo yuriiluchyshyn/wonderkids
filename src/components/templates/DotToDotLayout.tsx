@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { DotToDotPayload } from '@/core/templates/types';
+import type { DotToDotPayload } from '@/core/game/templates/types';
 import { cn } from '@/core/utils/cn';
 import { SHAKE, SHAKE_TRANSITION, Stimulus, type LayoutProps } from './parts';
 import styles from './Templates.module.css';

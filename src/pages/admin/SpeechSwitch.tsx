@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { adminApi, type AdminAccount } from '@/core/api/client';
+import { adminApi, type AdminAccount } from '@/core/account/api/client';
 import styles from './Admin.module.css';
 
 interface SpeechSwitchProps {

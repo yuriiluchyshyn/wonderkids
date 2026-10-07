@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { adminApi, type AdminAccount, type SpeechKey, type SpeechKeyDraft } from '@/core/api/client';
+import { adminApi, type AdminAccount, type SpeechKey, type SpeechKeyDraft } from '@/core/account/api/client';
 import { SpeechSwitch } from './SpeechSwitch';
 import { errorFor, errorText, speechStatus } from './shared';
 import styles from './Admin.module.css';

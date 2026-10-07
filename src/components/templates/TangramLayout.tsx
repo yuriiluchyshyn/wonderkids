@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { TangramPayload, TangramPiece } from '@/core/templates/types';
+import type { TangramPayload, TangramPiece } from '@/core/game/templates/types';
 import { cn } from '@/core/utils/cn';
 import { type LayoutProps } from './parts';
 import { useDragDrop } from './useDragDrop';

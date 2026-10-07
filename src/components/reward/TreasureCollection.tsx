@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
-import { useGameStore } from '@/core/store/useGameStore';
-import { treasureKey } from '@/core/progress/treasures';
+import { useGameStore } from '@/core/child/store/useGameStore';
+import { treasureKey } from '@/core/child/progress/treasures';
 import styles from './TreasureCollection.module.css';
 
 /**

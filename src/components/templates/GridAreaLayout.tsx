@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { GridAreaPayload } from '@/core/templates/types';
-import { isConnected } from '@/core/templates/validate';
+import type { GridAreaPayload } from '@/core/game/templates/types';
+import { isConnected } from '@/core/game/templates/validate';
 import { cn } from '@/core/utils/cn';
 import { Button } from '@/components/ui/Button';
 import { SHAKE, SHAKE_TRANSITION, Stimulus, type LayoutProps } from './parts';

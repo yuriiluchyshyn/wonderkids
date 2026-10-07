@@ -1,0 +1,109 @@
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { api, ApiError, type AuthUser } from '@/core/account/api/client';
+import { useGameStore } from '@/core/child/store/useGameStore';
+
+/** Human-friendly messages for the error codes the API can return on login. */
+const LOGIN_ERRORS: Record<string, string> = {
+  invalid_email: 'Схоже, це не схоже на електронну пошту. Перевір, будь ласка.',
+  invalid_pin: 'Невірний PIN. Спробуй ще раз або спитай у батьків.',
+  invalid_credentials: 'Перевір нік і PIN, будь ласка.',
+  child_not_found: 'Схоже, такого гравця ще немає. Попроси батьків створити тобі акаунт 👨‍👩‍👧',
+  network_error: 'Не вдалося зв’язатися із сервером. Він увімкнений?',
+  login_failed: 'Щось пішло не так на сервері. Спробуй ще раз.',
+};
+
+export type LoginOutcome =
+  | { status: 'ok' }
+  | { status: 'error' }
+  | { status: 'not_found'; email: string; suggestion: string | null; suggestionExists: boolean };
+
+export interface AuthState {
+  token: string | null;
+  user: AuthUser | null;
+  /** Set for a child session — which child to auto-select after state loads. */
+  childId: string | null;
+  pending: boolean;
+  error: string | null;
+
+  /**
+   * Parent email-only login. Signing in never creates an account: an unknown
+   * address comes back as `not_found` (with a suggestion when the domain looks
+   * mistyped) and is only registered when called again with `create`.
+   */
+  login: (email: string, create?: boolean) => Promise<LoginOutcome>;
+  /** Child login by unique nickname + parent-set PIN. */
+  childLogin: (identifier: string, pin: string) => Promise<boolean>;
+  /** Clear the session and wipe the in-memory save. */
+  logout: () => void;
+  clearError: () => void;
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      token: null,
+      user: null,
+      childId: null,
+      pending: false,
+      error: null,
+
+      login: async (email, create = false) => {
+        set({ pending: true, error: null });
+        try {
+          const { token, user } = await api.login(email, create);
+          // Parent session → no child auto-selected.
+          set({ token, user, childId: null, pending: false, error: null });
+          return { status: 'ok' };
+        } catch (err) {
+          // Not an error to show: the page asks whether to create the account.
+          if (err instanceof ApiError && err.code === 'account_not_found') {
+            set({ pending: false, error: null });
+            return {
+              status: 'not_found',
+              email: String(err.data.email ?? email),
+              suggestion: typeof err.data.suggestion === 'string' ? err.data.suggestion : null,
+              suggestionExists: err.data.suggestionExists === true,
+            };
+          }
+          const code = err instanceof ApiError ? err.code : 'login_failed';
+          set({
+            pending: false,
+            error: LOGIN_ERRORS[code] ?? LOGIN_ERRORS.login_failed,
+          });
+          return { status: 'error' };
+        }
+      },
+
+      childLogin: async (identifier, pin) => {
+        set({ pending: true, error: null });
+        try {
+          const { token, user, childId } = await api.childLogin(identifier, pin);
+          set({ token, user, childId, pending: false, error: null });
+          return true;
+        } catch (err) {
+          const code = err instanceof ApiError ? err.code : 'login_failed';
+          set({
+            pending: false,
+            error: LOGIN_ERRORS[code] ?? LOGIN_ERRORS.login_failed,
+          });
+          return false;
+        }
+      },
+
+      logout: () => {
+        // Drop the signed-in child's data so the next login starts clean.
+        useGameStore.getState().resetAll();
+        set({ token: null, user: null, childId: null, error: null });
+      },
+
+      clearError: () => set({ error: null }),
+    }),
+    {
+      // Only the session identity is persisted locally; the game save itself
+      // now lives on the server.
+      name: 'wonderkids-auth-v1',
+      partialize: (s) => ({ token: s.token, user: s.user, childId: s.childId }),
+    },
+  ),
+);

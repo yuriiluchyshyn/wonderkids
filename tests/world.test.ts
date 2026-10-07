@@ -15,7 +15,7 @@ import {
   landmarkStage,
   residentForGift,
   residents,
-} from '../src/core/world/world.ts';
+} from '../src/core/child/world/world.ts';
 
 const items = [
   ...BUILDING_COSTS.map((cost, i) => ({ id: itemId('building', i), name: `B${i}`, emoji: '🏠', kind: 'building' as const, cost })),

@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { GALAXIES } from '@/core/galaxies';
-import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
-import { difficultyRange, gameStatus, isFreePlay, tasksPerLevel, toGameConfig } from '@/core/kernel/gameConfig';
-import type { LearningModule, MechanicsType, SubCategory } from '@/core/kernel/types';
-import { taskKey } from '@/core/engine/LevelEngine';
-import { subSteps } from '@/core/progress/path';
+import { GALAXIES } from '@/core/game/galaxies';
+import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
+import { difficultyRange, gameStatus, isFreePlay, tasksPerLevel, toGameConfig } from '@/core/game/kernel/gameConfig';
+import type { LearningModule, MechanicsType, SubCategory } from '@/core/game/kernel/types';
+import { taskKey } from '@/core/game/engine/LevelEngine';
+import { subSteps } from '@/core/child/progress/path';
 import { formatDate } from './shared';
 import styles from './Admin.module.css';
 
@@ -39,7 +39,7 @@ interface GameRow {
 
 /**
  * Everything here is read from the live module registry — the same objects
- * the hub and the game shell use — so a game added under `src/modules` shows
+ * the hub and the game shell use — so a game added under `src/games` shows
  * up by itself, with nothing to keep in sync.
  */
 function describe(module: LearningModule, sub: SubCategory): GameRow {
@@ -122,7 +122,7 @@ export function GamesPage() {
       </header>
 
       <p className={styles.gamesNote}>
-        Сторінка будується з реєстру ігрових модулів (<code>src/modules</code>) у момент відкриття — тут немає
+        Сторінка будується з реєстру ігрових модулів (<code>src/games</code>) у момент відкриття — тут немає
         списку, який треба оновлювати вручну. «Завдань» — це кількість різних запитань у грі. Для ігор, де завдання
         створює генератор (позначені «≈»), число отримано пробними запусками, тому справжнє — не менше за показане.
       </p>

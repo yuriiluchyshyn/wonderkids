@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
-import type { GameViewProps } from '@/core/kernel/types';
-import { cardSpeech, glyphSpeech, type Card, type Glyph, type TemplatePayload } from '@/core/templates/types';
-import { useShowText } from '@/core/ui/useUiPrefs';
+import type { GameViewProps } from '@/core/game/kernel/types';
+import { cardSpeech, glyphSpeech, type Card, type Glyph, type TemplatePayload } from '@/core/game/templates/types';
+import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
 import { LandmarkArt, hasLandmarkArt } from './LandmarkArt';
 import { ClockFace } from './ClockFace';
+import { PieFood } from './PieFood';
 import { PieceShape } from './TangramLayout';
 import { SpeakButton } from './SpeakButton';
 import styles from './Templates.module.css';
@@ -27,6 +28,10 @@ export function Glyphs({ glyphs, className }: { glyphs: Glyph[]; className?: str
         typeof g === 'string' ? (
           <span key={i} aria-hidden>
             {g}
+          </span>
+        ) : 'text' in g ? (
+          <span key={i} className={g.tone === 'a' ? styles.toneA : styles.toneB} aria-hidden>
+            {g.text}
           </span>
         ) : (
           <span key={i} className={styles.frac} aria-hidden>
@@ -101,6 +106,7 @@ export function Stimulus({
           </span>
         )
       )}
+      {s?.pie && <PieFood {...s.pie} />}
       {s?.clock && <ClockFace time={s.clock} className={styles.stimulusClock} />}
       {s?.shape && (
         <span

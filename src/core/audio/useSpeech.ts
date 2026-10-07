@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { speechEngine } from './SpeechEngine';
 import type { VoiceChannel } from './voiceChannels';
 

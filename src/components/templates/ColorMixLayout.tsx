@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { ColorMixPayload } from '@/core/templates/types';
-import { isRecipe } from '@/core/templates/validate';
+import type { ColorMixPayload } from '@/core/game/templates/types';
+import { isRecipe } from '@/core/game/templates/validate';
 import { cn } from '@/core/utils/cn';
 import { SHAKE, SHAKE_TRANSITION, Stimulus, type LayoutProps } from './parts';
 import styles from './Templates.module.css';

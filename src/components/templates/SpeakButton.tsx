@@ -1,5 +1,5 @@
 import { useState, type MouseEvent } from 'react';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';
 import { speechEngine, type SpeechLang } from '@/core/audio/SpeechEngine';
 import { cn } from '@/core/utils/cn';

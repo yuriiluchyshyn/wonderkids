@@ -65,9 +65,9 @@ src/
 
 ### Як додати новий предмет (напр. Географію)
 
-1. Створити `src/modules/geography/` із генераторами завдань і React-компонентом
+1. Створити `src/games/geography/` із генераторами завдань і React-компонентом
    гри, що реалізує контракт `LearningModule`.
-2. Додати один рядок `import './geography';` у `src/modules/index.ts`.
+2. Додати один рядок `import './geography';` у `src/games/index.ts`.
 
 Ядро та Хаб **не змінюються** — каталог підхопить новий модуль автоматично
 (`CoreApp.registerModule` з PRD §9).

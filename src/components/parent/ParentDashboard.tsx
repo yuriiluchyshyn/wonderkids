@@ -11,13 +11,13 @@ import {
   type Gender,
   type Milestone,
   type PersistableState,
-} from '@/core/store/useGameStore';
-import { api } from '@/core/api/client';
-import { useSyncControl } from '@/core/sync/syncControl';
+} from '@/core/child/store/useGameStore';
+import { api } from '@/core/account/api/client';
+import { useSyncControl } from '@/core/account/sync/syncControl';
 import { computeAge } from '@/core/utils/age';
-import { subSteps, pathKey } from '@/core/progress/path';
-import { moduleRegistry } from '@/core/kernel/ModuleRegistry';
-import { isFreePlay } from '@/core/kernel/gameConfig';
+import { subSteps, pathKey } from '@/core/child/progress/path';
+import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
+import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
 import { Button } from '@/components/ui/Button';
@@ -25,7 +25,7 @@ import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { ChildManager } from './ChildManager';
 import { GoalRow } from './GoalRow';
-import { useAuthStore } from '@/core/auth/useAuthStore';
+import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import styles from './Parent.module.css';
 
 const GENDER_OPTIONS: { id: Gender; label: string; icon: string }[] = [

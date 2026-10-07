@@ -132,14 +132,14 @@ function checkPayload(p, validate) {
 }
 
 try {
-  await server.ssrLoadModule('/src/modules/index.ts');
-  const { moduleRegistry } = await server.ssrLoadModule('/src/core/kernel/ModuleRegistry.ts');
-  const { toGameConfig, tasksPerLevel } = await server.ssrLoadModule('/src/core/kernel/gameConfig.ts');
-  const { LevelEngine } = await server.ssrLoadModule('/src/core/engine/LevelEngine.ts');
+  await server.ssrLoadModule('/src/games/index.ts');
+  const { moduleRegistry } = await server.ssrLoadModule('/src/core/game/kernel/ModuleRegistry.ts');
+  const { toGameConfig, tasksPerLevel } = await server.ssrLoadModule('/src/core/game/kernel/gameConfig.ts');
+  const { LevelEngine } = await server.ssrLoadModule('/src/core/game/engine/LevelEngine.ts');
   // The same level builder the game uses (new + recalled tasks).
   const { drawCandidates } = await server.ssrLoadModule('/src/components/game/useGameSession.ts');
-  const { regionsOf } = await server.ssrLoadModule('/src/core/templates/worldMap.ts');
-  const { isAdjacent, minGap } = await server.ssrLoadModule('/src/core/templates/validate.ts');
+  const { regionsOf } = await server.ssrLoadModule('/src/core/game/templates/worldMap.ts');
+  const { isAdjacent, minGap } = await server.ssrLoadModule('/src/core/game/templates/validate.ts');
   const validate = { regions: regionsOf, isAdjacent, minGap };
 
   const gameIds = new Set();

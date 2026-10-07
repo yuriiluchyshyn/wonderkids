@@ -1,25 +1,25 @@
 import { lazy, Suspense, useEffect, type CSSProperties } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@/core/theme/ThemeProvider';
-import { useAuthStore } from '@/core/auth/useAuthStore';
-import { useGameStore } from '@/core/store/useGameStore';
-import { useRemoteSync } from '@/core/sync/useRemoteSync';
-import { getPortal, isParentPath, portalUrl } from '@/core/portal';
-import { LoginPage } from '@/pages/LoginPage';
-import { ChildLoginPage } from '@/pages/ChildLoginPage';
-import { HubPage } from '@/pages/HubPage';
-import { GamePage } from '@/pages/GamePage';
-import { VaultPage } from '@/pages/VaultPage';
-import { WorldPage } from '@/pages/WorldPage';
-import { ParentPage } from '@/pages/ParentPage';
-import { AudioPage } from '@/pages/AudioPage';
-import { ChildSelectPage } from '@/pages/ChildSelectPage';
+import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
+import { useRemoteSync } from '@/core/account/sync/useRemoteSync';
+import { getPortal, isParentPath, portalUrl } from '@/core/app/portal';
+import { LoginPage } from '@/pages/auth/LoginPage';
+import { ChildLoginPage } from '@/pages/auth/ChildLoginPage';
+import { HubPage } from '@/pages/child/HubPage';
+import { GamePage } from '@/pages/child/GamePage';
+import { VaultPage } from '@/pages/child/VaultPage';
+import { WorldPage } from '@/pages/child/WorldPage';
+import { ParentPage } from '@/pages/parent/ParentPage';
+import { AudioPage } from '@/pages/child/AudioPage';
+import { ChildSelectPage } from '@/pages/auth/ChildSelectPage';
 import { TimeHeader } from '@/components/layout/TimeHeader';
 import { SpaceLoader } from '@/components/ui/SpaceLoader';
 import { ThemeDecor } from '@/components/theme/ThemeDecor';
 
 // Loaded on demand: the admin tool is never part of what a child downloads.
-const AdminPage = lazy(() => import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage })));
+const AdminPage = lazy(() => import('@/pages/admin/AdminPage').then((m) => ({ default: m.AdminPage })));
 
 const splashBtn: CSSProperties = {
   minHeight: 48,

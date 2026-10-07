@@ -1,6 +1,6 @@
-import { useBalance } from '@/core/world/useBalance';
+import { useBalance } from '@/core/child/world/useBalance';
 import { motion } from 'framer-motion';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import styles from './TreasureVault.module.css';

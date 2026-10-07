@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { SorterBinsPayload } from '@/core/templates/types';
+import type { SorterBinsPayload } from '@/core/game/templates/types';
 import { cn } from '@/core/utils/cn';
 import { Bubble, CardFace, PULSE, SHAKE, SHAKE_TRANSITION, type LayoutProps } from './parts';
 import { useDragDrop } from './useDragDrop';

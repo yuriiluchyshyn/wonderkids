@@ -8,11 +8,11 @@
 
 | Що | Де |
 | --- | --- |
-| Правило «нове + повторення» | `src/core/engine/recall.ts` |
-| Черга завдань рівня, повтор помилки | `src/core/engine/BaseGameEngine.ts`, `LevelEngine.ts` |
+| Правило «нове + повторення» | `src/core/game/engine/recall.ts` |
+| Черга завдань рівня, повтор помилки | `src/core/game/engine/BaseGameEngine.ts`, `LevelEngine.ts` |
 | Збирання рівня для гри | `src/components/game/useGameSession.ts` (`drawCandidates`) |
-| Ігри «на шаблонах» | `src/modules/shared/templateModule.ts` (`recallLevel`, `introSteps`) |
-| Пули текстів після відповіді | `src/core/content/outro.ts`, `src/modules/shared/facts.ts` |
+| Ігри «на шаблонах» | `src/games/shared/templateModule.ts` (`recallLevel`, `introSteps`) |
+| Пули текстів після відповіді | `src/core/game/content/outro.ts`, `src/games/shared/facts.ts` |
 | Перевірка всього вмісту | `npm run check:content` |
 
 ## 1. Терміни
@@ -87,7 +87,7 @@
 
 Тобто досить, щоб `pool` був чесним: на сходинці N повертав усе, що відкрито до N включно,
 і щоб `key` завдання не залежав від випадковості. Приклад — «Пори року і місяці»
-(`src/modules/nature/index.ts`): кожна сходинка додає один тип запитань.
+(`src/games/nature/tasks.ts`): кожна сходинка додає один тип запитань.
 
 ### 3.3. Вміст із рейтингом (прапори, видатні постаті)
 
@@ -105,8 +105,8 @@
    на кожен; потім давніші.
 4. Усе передається в `composeLevel`.
 
-Так зроблено в `figures()` (`src/modules/history/index.ts`) і `flagsLevel()`
-(`src/modules/geography/index.ts`). Щоб додати постать, достатньо вставити її в список
+Так зроблено в `figures()` (`src/games/history/tasks.ts`) і `flagsLevel()`
+(`src/games/geography/tasks.ts`). Щоб додати постать, достатньо вставити її в список
 у потрібне місце за відомістю — сходинки перерахуються самі.
 
 ## 4. Складність
@@ -147,7 +147,7 @@
 не було нудним, **кожне завдання повинно мати пул щонайменше з 10 різних текстів**:
 `outro` — це `string[]`.
 
-- `pickOutro` (`src/core/content/outro.ts`) щоразу бере наступний текст пулу, почавши
+- `pickOutro` (`src/core/game/content/outro.ts`) щоразу бере наступний текст пулу, почавши
   з випадкового місця, тож дитина почує всі тексти, перш ніж якийсь повториться.
   Позиція запам’ятовується на пристрої окремо для кожного пулу.
 - Завдання зі спільним пулом (усі паперові предмети «Еко-патруля») мають спільну позицію —
@@ -167,9 +167,9 @@ factPool(person.fact, CALLING_FACTS[CALLING_OF[person.id]]);
 
 Правило просте: перший текст пулу — власний факт завдання, далі — щонайменше дев’ять справжніх
 фактів його категорії (матеріалу, материка, покликання постаті, теми запитання). Один факт,
-переказаний десятьма способами, пулом не вважається. Пули лежать у файлах `facts.ts` поруч
-із модулем (`ecology/facts.ts`, `ecology/questions.ts`, `geography/facts.ts`, `history/facts.ts`,
-`nature/data.ts`).
+переказаний десятьма способами, пулом не вважається. Пули лежать у папці `content/` кожного предмета (`ecology/content/facts.ts`,
+`ecology/content/questions.ts`, `geography/content/facts.ts`, `history/content/facts.ts`,
+`nature/content/data.ts`).
 
 ## 7. Підказки про кнопки
 

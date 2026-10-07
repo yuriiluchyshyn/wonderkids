@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import type { SequencePayload } from '@/core/templates/types';
-import { correctPositions, isSequenceCorrect } from '@/core/templates/validate';
+import type { SequencePayload } from '@/core/game/templates/types';
+import { correctPositions, isSequenceCorrect } from '@/core/game/templates/validate';
 import { cn } from '@/core/utils/cn';
 import { Button } from '@/components/ui/Button';
 import { CardFace, SHAKE, SHAKE_TRANSITION, Stimulus, type LayoutProps } from './parts';

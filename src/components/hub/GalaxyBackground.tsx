@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { getGalaxy } from '@/core/galaxies';
+import { getGalaxy } from '@/core/game/galaxies';
 import styles from './GalaxyBackground.module.css';
 
 interface GalaxyBackgroundProps {

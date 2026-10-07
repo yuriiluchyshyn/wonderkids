@@ -1,14 +1,14 @@
-import { useBalance } from '@/core/world/useBalance';
+import { useBalance } from '@/core/child/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { useGameStore } from '@/core/store/useGameStore';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { Button } from '@/components/ui/Button';
-import { useAuthStore } from '@/core/auth/useAuthStore';
+import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import styles from './ChildDrawer.module.css';
 
 const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };

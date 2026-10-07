@@ -1,5 +1,5 @@
 import confetti from 'canvas-confetti';
-import type { CelebrationStyle } from '@/core/store/useGameStore';
+import type { CelebrationStyle } from '@/core/child/store/useGameStore';
 
 /**
  * Fires a canvas-confetti burst pattern matching the chosen celebration style
