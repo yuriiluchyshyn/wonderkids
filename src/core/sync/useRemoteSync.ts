@@ -42,7 +42,7 @@ export function useRemoteSync(): SyncStatus {
       .then(({ state, features }) => {
         if (!active) return;
         // Natural cloud voice, when the admin switched it on for this account.
-        speechEngine.setCloudVoice(features?.cloudTts ? (text) => api.tts(token, text) : null);
+        speechEngine.setCloudVoice(features?.cloudTts ? (text, lang) => api.tts(token, text, lang) : null);
         // `state` is null for a brand-new user → hydrate falls back to defaults.
         useGameStore.getState().hydrate(state ?? {});
         // Child session: auto-select the child the token logged in as, so the

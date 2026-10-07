@@ -8,6 +8,8 @@ import { taskKey } from '@/core/engine/LevelEngine';
 
 /** Publication date of the PRD v4.0 game pack (drives the 60-day "NEW" badge). */
 export const V4_RELEASE = '2026-10-06T00:00:00Z';
+/** Publication date of the Tech Spec v6 game pack (language, logic, astronomy, art). */
+export const V6_RELEASE = '2026-10-07T00:00:00Z';
 
 /** Artifacts per task — grows gently along the path. */
 export function rewardFor(step: number): number {

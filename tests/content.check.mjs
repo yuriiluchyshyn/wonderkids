@@ -35,6 +35,7 @@ function checkPayload(p, validate) {
       unique(slots, 'slots');
       unique(p.items.map((i) => i.id), 'items');
       for (const item of p.items) assert.ok(slots.includes(p.pairs[item.id]), `item ${item.id} has no slot`);
+      assert.equal(new Set(Object.values(p.pairs)).size, p.items.length, 'two items share a slot');
       break;
     }
     case 'UI_CHRONO_SEQUENCE': {
@@ -100,6 +101,31 @@ function checkPayload(p, validate) {
       }
       break;
     }
+    case 'UI_BUBBLE_POP': {
+      assert.ok(p.bubbles.length >= 2 && p.bubbles.length <= 6, `bad bubble count ${p.bubbles.length}`);
+      const all = [...p.bubbles, ...(p.extras ?? [])];
+      unique(all.map((b) => b.id), 'bubbles');
+      for (const b of all) assert.ok(b.label || b.emoji, 'bubble has no face');
+      // A decoy must never look like a bubble that has to be popped.
+      const faces = new Set(p.bubbles.map((b) => b.label ?? b.emoji));
+      for (const x of p.extras ?? []) assert.ok(!faces.has(x.label ?? x.emoji), `decoy ${x.label} repeats a real bubble`);
+      break;
+    }
+    case 'UI_DOT_TO_DOT': {
+      assert.ok(p.stars.length >= 4 && p.stars.length <= 15, `bad star count ${p.stars.length}`);
+      unique(p.stars.map((s) => s.label), 'star labels');
+      for (const s of p.stars) assert.ok(s.label && s.x >= 8 && s.x <= 92 && s.y >= 8 && s.y <= 92, `star ${s.label} off the sky in ${p.figure.name}`);
+      assert.ok(validate.minGap(p.stars) >= 12, `stars too close in ${p.figure.name}`);
+      break;
+    }
+    case 'UI_COLOR_MIX': {
+      const ids = p.paints.map((x) => x.id);
+      unique(ids, 'paints');
+      assert.ok(p.recipe.length === 2 && p.recipe[0] !== p.recipe[1], 'recipe needs two different paints');
+      for (const id of p.recipe) assert.ok(ids.includes(id), `paint ${id} is not on the table`);
+      assert.ok(p.paints.length >= 3 && p.paints.length <= 6, `bad paint count ${p.paints.length}`);
+      break;
+    }
     default:
       assert.fail(`unknown template ${p.template}`);
   }
@@ -113,8 +139,8 @@ try {
   // The same level builder the game uses (new + recalled tasks).
   const { drawCandidates } = await server.ssrLoadModule('/src/components/game/useGameSession.ts');
   const { regionsOf } = await server.ssrLoadModule('/src/core/templates/worldMap.ts');
-  const { isAdjacent } = await server.ssrLoadModule('/src/core/templates/validate.ts');
-  const validate = { regions: regionsOf, isAdjacent };
+  const { isAdjacent, minGap } = await server.ssrLoadModule('/src/core/templates/validate.ts');
+  const validate = { regions: regionsOf, isAdjacent, minGap };
 
   const gameIds = new Set();
   const rows = [];

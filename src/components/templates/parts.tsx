@@ -48,7 +48,7 @@ export function CardFace({ card, speaker = true }: { card: Card; speaker?: boole
   return (
     <span className={styles.face}>
       {card.emoji && (
-        <span className={cn(styles.faceEmoji, 'emoji')} aria-hidden>
+        <span className={cn(styles.faceEmoji, 'emoji', card.silhouette && styles.silhouette)} aria-hidden>
           {card.emoji}
         </span>
       )}
@@ -66,7 +66,7 @@ export function CardFace({ card, speaker = true }: { card: Card; speaker?: boole
         </span>
       )}
       {label && <span className={styles.faceLabel}>{label}</span>}
-      {speaker && (card.label || card.speak) && <SpeakButton text={cardSpeech(card)} className={styles.faceSpeak} />}
+      {speaker && (card.label || card.speak) && <SpeakButton text={cardSpeech(card)} className={styles.faceSpeak} lang={card.lang} />}
     </span>
   );
 }

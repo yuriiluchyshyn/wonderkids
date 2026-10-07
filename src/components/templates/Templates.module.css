@@ -988,3 +988,319 @@
   width: clamp(130px, 42vw, 180px);
   height: auto;
 }
+
+/* ---- Shadow lotto: a pictogram drawn as its own black shadow ---- */
+.silhouette {
+  filter: brightness(0);
+  opacity: 0.78;
+}
+
+/* ---- UI_BUBBLE_POP ---- */
+.popTarget {
+  align-self: center;
+  min-width: 96px;
+}
+
+.popTarget .faceEmoji {
+  font-size: clamp(2.8rem, 13vw, 4rem);
+}
+
+.popTarget .faceLabel {
+  font-size: clamp(1.05rem, 4.6vw, 1.3rem);
+  font-weight: 800;
+}
+
+.popRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  min-height: 52px;
+}
+
+.popPlace {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  height: 52px;
+  padding: 0 8px;
+  border-bottom: 4px solid var(--tile-edge);
+  font-size: clamp(1.3rem, 6vw, 1.8rem);
+  font-weight: 800;
+  color: var(--surface-ink);
+}
+
+.popPlaceOn {
+  border-bottom-color: var(--accent);
+}
+
+.popRowDone .popPlace {
+  border-bottom-color: #16a34a;
+}
+
+.popField {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px 18px;
+  min-height: 190px;
+  padding: 14px 6px;
+}
+
+.popFloat {
+  display: inline-flex;
+  animation: bubbleFloat 3.6s ease-in-out infinite;
+}
+
+@keyframes bubbleFloat {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(5px, -9px);
+  }
+  66% {
+    transform: translate(-5px, 7px);
+  }
+}
+
+.popBubble {
+  display: grid;
+  place-items: center;
+  min-width: clamp(68px, 20vw, 88px);
+  height: clamp(68px, 20vw, 88px);
+  padding: 0 12px;
+  border: 2px solid color-mix(in srgb, var(--primary) 45%, #fff);
+  border-radius: 999px;
+  /* A soap bubble: see-through, with a highlight in the corner. */
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.95) 0 9%, transparent 22%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--primary) 10%, transparent) 40%, color-mix(in srgb, var(--primary) 32%, transparent) 100%);
+  color: var(--surface-ink);
+  font-family: inherit;
+  font-size: clamp(1.35rem, 6.2vw, 1.9rem);
+  font-weight: 800;
+  box-shadow: inset 0 -6px 14px color-mix(in srgb, var(--accent) 22%, transparent);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.popBubble:disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ---- UI_DOT_TO_DOT ---- */
+.sky {
+  align-self: center;
+  width: min(100%, 440px);
+  border-radius: var(--radius-lg);
+  /* The night sky is content, not chrome: the same in every theme. */
+  background: radial-gradient(circle at 30% 20%, #1e3a8a, #0b1026 70%);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.skySvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: manipulation;
+}
+
+.skyStar {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.skyDot {
+  fill: #e2e8f0;
+  transition: fill 0.2s;
+}
+
+.skyDotOn {
+  fill: #fde047;
+}
+
+.skyDotNext {
+  fill: #fb923c;
+  animation: starPulse 1s ease-in-out infinite;
+}
+
+@keyframes starPulse {
+  0%,
+  100% {
+    stroke: rgba(251, 146, 60, 0.9);
+    stroke-width: 0;
+  }
+  50% {
+    stroke: rgba(251, 146, 60, 0.35);
+    stroke-width: 5;
+  }
+}
+
+.skyLabel {
+  fill: #cbd5e1;
+  font-size: 4.6px;
+  font-weight: 800;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+.skyLabelOn {
+  fill: #fde047;
+}
+
+.skyLine {
+  fill: none;
+  stroke: #93c5fd;
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.skyLineDone {
+  stroke: #fde047;
+  stroke-width: 1.2;
+}
+
+.skyFigure {
+  font-size: 46px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ---- UI_COLOR_MIX ---- */
+.mixStage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(16px, 8vw, 44px);
+}
+
+.mixObject {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--surface-ink);
+}
+
+.mixEmoji {
+  font-size: clamp(3.6rem, 18vw, 5.2rem);
+  line-height: 1.05;
+  /* Unpainted: a grey outline of itself. */
+  filter: grayscale(1) brightness(1.25) contrast(0.7);
+  transition: filter 0.9s ease 0.3s;
+}
+
+.mixEmojiOn {
+  filter: none;
+}
+
+.mixPot {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: clamp(120px, 36vw, 160px);
+  height: clamp(96px, 28vw, 124px);
+  padding: 8px;
+  border: 4px solid #374151;
+  border-top-width: 8px;
+  border-radius: 14px 14px 50% 50% / 14px 14px 60% 60%;
+  background: #1f2937;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.mixLiquid {
+  position: relative;
+  width: 100%;
+  height: 18%;
+  border-radius: 8px 8px 46% 46% / 8px 8px 60% 60%;
+  background: #4b5563;
+  transition:
+    height 0.45s ease,
+    background 0.9s ease;
+}
+
+.mixLiquidOn {
+  height: 62%;
+}
+
+.mixLiquidDone {
+  height: 86%;
+}
+
+.mixBubble {
+  position: absolute;
+  bottom: 8%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+  animation: mixBoil 0.8s ease-in infinite;
+}
+
+@keyframes mixBoil {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-46px) scale(1.15);
+    opacity: 0;
+  }
+}
+
+.mixName {
+  position: absolute;
+  inset: auto 0 10px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.mixPaints {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  gap: 10px;
+}
+
+.mixPaint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 92px;
+  padding: 10px 6px;
+  border: 3px solid var(--tile-edge);
+  border-radius: var(--radius-lg);
+  background: var(--tile);
+  color: var(--surface-ink);
+  font-family: inherit;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mixPaintUsed {
+  opacity: 0.35;
+  box-shadow: none;
+}
+
+.mixBlob {
+  width: 46px;
+  height: 46px;
+  border: 3px solid rgba(0, 0, 0, 0.18);
+  border-radius: 54% 46% 58% 42% / 48% 56% 44% 52%;
+}

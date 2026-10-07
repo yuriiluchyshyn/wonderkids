@@ -8,3 +8,7 @@ import './geography';
 import './ecology';
 import './history';
 import './nature';
+import './language';
+import './logic';
+import './astronomy';
+import './art';

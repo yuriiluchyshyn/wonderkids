@@ -22,7 +22,10 @@ export const GALAXIES: Galaxy[] = [
   { id: 'geography', name: 'Географія', icon: '🌍', moduleId: 'geography', motif: ['🌍', '🗺️', '🧭', '⛰️', '🏔️'] },
   { id: 'ecology', name: 'Екологія', icon: '♻️', moduleId: 'ecology', motif: ['♻️', '🌱', '🌳', '💧', '🐝'] },
   { id: 'history', name: 'Історія', icon: '🏛️', moduleId: 'history', motif: ['🏛️', '🦖', '⏳', '🏰', '📜'] },
-  { id: 'language', name: 'Мова', icon: '🔤', comingSoon: true, motif: ['🔤', '📚', '✏️', '💬', '📝'] },
+  { id: 'language', name: 'Мова', icon: '🔤', moduleId: 'language', motif: ['🔤', '📚', '✏️', '💬', '📝'] },
+  { id: 'logic', name: 'Логіка', icon: '🧩', moduleId: 'logic', motif: ['🧩', '🔷', '🔺', '🪞', '♟️'] },
+  { id: 'astronomy', name: 'Астрономія', icon: '🔭', moduleId: 'astronomy', motif: ['🔭', '🪐', '⭐', '🌙', '☄️'] },
+  { id: 'art', name: 'Творчість', icon: '🎨', moduleId: 'art', motif: ['🎨', '🖌️', '🌈', '✏️', '🖍️'] },
   { id: 'science', name: 'Природа', icon: '🌿', moduleId: 'nature', motif: ['🌿', '❄️', '🌷', '☀️', '🍂'] },
   { id: 'music', name: 'Музика', icon: '🎵', comingSoon: true, motif: ['🎵', '🎶', '🎹', '🥁', '🎺'] },
 ];

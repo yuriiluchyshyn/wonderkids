@@ -37,7 +37,14 @@ export interface Card {
   shape?: { cols: number; rows: number; cells: number[] };
   /** A drawn clock face showing this time. */
   clock?: ClockTime;
+  /** Draw the pictogram as a black shadow of itself (shadow lotto). */
+  silhouette?: boolean;
+  /** Language the speaker reads this card in. Default: Ukrainian. */
+  lang?: SpeechLang;
 }
+
+/** Languages the voice can read a card in. */
+export type SpeechLang = 'uk' | 'en';
 
 interface TemplateBase {
   /** Picture / math line shown above the answers. */
@@ -178,6 +185,64 @@ export interface NumberMazePayload extends TemplateBase {
   divisor?: number;
 }
 
+/**
+ * Bubble pop (UI_CHRONO_SEQUENCE family) — soap bubbles float about; the child
+ * pops them in the right order (letters of the alphabet, syllables or letters
+ * of a word). Two bubbles with the same face are interchangeable.
+ */
+export interface BubblePopPayload extends TemplateBase {
+  template: 'UI_BUBBLE_POP';
+  /** Bubbles in the CORRECT popping order. */
+  bubbles: Card[];
+  /** Decoy bubbles that never pop. */
+  extras?: Card[];
+  /** What is being built (picture, word, speaker) — shown above the bubbles. */
+  target?: Card;
+}
+
+/** One star of a dot-to-dot figure, on a 100×100 canvas. */
+export interface DotStar {
+  x: number;
+  y: number;
+  label: string;
+}
+
+/**
+ * Dot-to-dot (UI_CHRONO_SEQUENCE family) — join the stars in the order of
+ * their labels; the finished line reveals the figure.
+ */
+export interface DotToDotPayload extends TemplateBase {
+  template: 'UI_DOT_TO_DOT';
+  /** Stars in the CORRECT joining order. */
+  stars: DotStar[];
+  /** What the finished drawing turns out to be. */
+  figure: { name: string; emoji: string };
+}
+
+/** A tube of paint. */
+export interface Paint {
+  id: string;
+  name: string;
+  /** CSS colour of the paint. */
+  color: string;
+}
+
+/**
+ * Colour mixer (UI_DRAG_MATCH family) — pour two paints into the cauldron to
+ * get the colour the object needs.
+ */
+export interface ColorMixPayload extends TemplateBase {
+  template: 'UI_COLOR_MIX';
+  /** The object to paint: drawn grey until the right colour is mixed. */
+  object: Card;
+  /** The colour to get. */
+  result: Paint;
+  /** Tubes on offer. */
+  paints: Paint[];
+  /** Ids of the two paints that give `result`. */
+  recipe: [string, string];
+}
+
 export type TemplatePayload =
   | GridChoicePayload
   | DragMatchPayload
@@ -188,7 +253,10 @@ export type TemplatePayload =
   | CashTrayPayload
   | TangramPayload
   | GridAreaPayload
-  | NumberMazePayload;
+  | NumberMazePayload
+  | BubblePopPayload
+  | DotToDotPayload
+  | ColorMixPayload;
 
 /** Spoken form of a card (for the speaker button). */
 export function cardSpeech(card: Card): string {

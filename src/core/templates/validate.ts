@@ -94,3 +94,28 @@ export function nextStepTowards(from: number, goal: number, walkable: ReadonlySe
   while (cameFrom.get(cell) !== from) cell = cameFrom.get(cell) as number;
   return cell;
 }
+
+/**
+ * Bubble pop: may the bubble with face `tapped` be popped now? `faces` are the
+ * faces in the right order, `popped` how many are gone already. Compared by
+ * face, so the two «МА» of «МАМА» are interchangeable.
+ */
+export function isNextBubble(faces: readonly string[], popped: number, tapped: string): boolean {
+  return popped < faces.length && faces[popped] === tapped;
+}
+
+/** Colour mixer: are these exactly the two paints of the recipe (any order)? */
+export function isRecipe(recipe: readonly string[], poured: readonly string[]): boolean {
+  return poured.length === recipe.length && [...poured].sort().join('|') === [...recipe].sort().join('|');
+}
+
+/** Smallest distance between any two points — dot-to-dot stars must not overlap. */
+export function minGap(points: readonly { x: number; y: number }[]): number {
+  let min = Infinity;
+  for (let i = 0; i < points.length; i += 1) {
+    for (let j = i + 1; j < points.length; j += 1) {
+      min = Math.min(min, Math.hypot(points[i].x - points[j].x, points[i].y - points[j].y));
+    }
+  }
+  return min;
+}

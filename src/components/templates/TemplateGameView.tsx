@@ -11,6 +11,9 @@ import { NumberMazeLayout } from './NumberMazeLayout';
 import { SequenceLayout } from './SequenceLayout';
 import { SorterBinsLayout } from './SorterBinsLayout';
 import { TangramLayout } from './TangramLayout';
+import { BubblePopLayout } from './BubblePopLayout';
+import { DotToDotLayout } from './DotToDotLayout';
+import { ColorMixLayout } from './ColorMixLayout';
 import { SpeakButton } from './SpeakButton';
 import styles from './Templates.module.css';
 
@@ -26,6 +29,9 @@ const LAYOUTS: Record<TemplatePayload['template'], ComponentType<any>> = {
   UI_TANGRAM: TangramLayout,
   UI_GRID_AREA: GridAreaLayout,
   UI_NUMBER_MAZE: NumberMazeLayout,
+  UI_BUBBLE_POP: BubblePopLayout,
+  UI_DOT_TO_DOT: DotToDotLayout,
+  UI_COLOR_MIX: ColorMixLayout,
 };
 
 /**

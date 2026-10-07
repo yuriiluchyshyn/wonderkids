@@ -1,7 +1,7 @@
 import { useState, type MouseEvent } from 'react';
 import { useGameStore } from '@/core/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';
-import { speechEngine } from '@/core/audio/SpeechEngine';
+import { speechEngine, type SpeechLang } from '@/core/audio/SpeechEngine';
 import { cn } from '@/core/utils/cn';
 import styles from './Templates.module.css';
 
@@ -10,6 +10,8 @@ interface SpeakButtonProps {
   text: string;
   size?: 'sm' | 'md';
   className?: string;
+  /** Language to read it in. Default: Ukrainian. */
+  lang?: SpeechLang;
 }
 
 /**
@@ -18,7 +20,7 @@ interface SpeakButtonProps {
  * while the text is being read. Parents can hide these buttons to encourage
  * independent reading (`settings.ttsButtons`).
  */
-export function SpeakButton({ text, size = 'sm', className }: SpeakButtonProps) {
+export function SpeakButton({ text, size = 'sm', className, lang }: SpeakButtonProps) {
   const enabled = useGameStore((s) => s.settings.ttsButtons);
   const voiceOn = useGameStore((s) => s.settings.voiceOn);
   const { playCode } = useSound();
@@ -31,7 +33,7 @@ export function SpeakButton({ text, size = 'sm', className }: SpeakButtonProps) 
     e.stopPropagation();
     playCode('SND_TTS_CLICK');
     setSpeaking(true);
-    speechEngine.speak(text, () => setSpeaking(false));
+    speechEngine.speak(text, () => setSpeaking(false), lang);
   };
 
   return (

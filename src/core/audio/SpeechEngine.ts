@@ -1,5 +1,8 @@
 /** Fetches a phrase as base64 MP3 from the cloud voice; rejects when unavailable. */
-export type CloudVoice = (text: string) => Promise<string>;
+/** Language of a phrase. Everything is Ukrainian except the English-lesson cards. */
+export type SpeechLang = 'uk' | 'en';
+
+export type CloudVoice = (text: string, lang: SpeechLang) => Promise<string>;
 
 /** Phrases kept in memory so repeats (prompts, hints) play instantly. */
 const CLOUD_CACHE_LIMIT = 150;
@@ -79,20 +82,20 @@ export class SpeechEngine {
     if (!cloud) this.cloudCache.clear();
   }
 
-  /** Picks the best available Ukrainian voice, falling back to any voice. */
-  private pickVoice(): SpeechSynthesisVoice | undefined {
+  /** Picks the best available voice of the language, falling back to any voice. */
+  private pickVoice(lang: SpeechLang): SpeechSynthesisVoice | undefined {
     if (!this.synth) return undefined;
     const voices = this.synth.getVoices();
-    return voices.find((v) => v.lang?.toLowerCase().startsWith('uk')) ?? voices[0];
+    return voices.find((v) => v.lang?.toLowerCase().startsWith(lang)) ?? (lang === 'uk' ? voices[0] : undefined);
   }
 
   /** Speaks `text`; `onEnd` fires when it finishes, is cut off, or cannot play. */
-  speak(text: string, onEnd?: () => void): void {
+  speak(text: string, onEnd?: () => void, lang: SpeechLang = 'uk'): void {
     this.cancel();
     const turn = this.turn;
     this.pendingEnd = onEnd ?? (() => undefined);
     if (!this.cloud) {
-      this.speakWithBrowser(text, turn);
+      this.speakWithBrowser(text, turn, lang);
       return;
     }
 
@@ -100,16 +103,16 @@ export class SpeechEngine {
     const fallback = () => {
       if (settled || turn !== this.turn) return;
       settled = true;
-      this.speakWithBrowser(text, turn);
+      this.speakWithBrowser(text, turn, lang);
     };
     const timer = window.setTimeout(fallback, CLOUD_TIMEOUT_MS);
 
-    this.fetchCloud(text)
+    this.fetchCloud(text, lang)
       .then((base64) => {
         window.clearTimeout(timer);
         if (settled || turn !== this.turn) return;
         settled = true;
-        this.playWithElement(base64, text, turn);
+        this.playWithElement(base64, text, turn, lang);
       })
       .catch(() => {
         window.clearTimeout(timer);
@@ -133,7 +136,7 @@ export class SpeechEngine {
    * is silenced by the ring/silent switch, while an `<audio>` element keeps
    * playing.
    */
-  private playWithElement(base64: string, text: string, turn: number): void {
+  private playWithElement(base64: string, text: string, turn: number, lang: SpeechLang): void {
     const audio = (this.player ??= new Audio());
     let started = false;
     const giveUp = () => {
@@ -141,7 +144,7 @@ export class SpeechEngine {
       window.clearTimeout(this.watchdog);
       audio.onended = audio.onerror = audio.onplaying = null;
       audio.pause();
-      this.speakWithBrowser(text, turn);
+      this.speakWithBrowser(text, turn, lang);
     };
     audio.onplaying = () => {
       started = true;
@@ -159,28 +162,29 @@ export class SpeechEngine {
     }, START_TIMEOUT_MS);
   }
 
-  private async fetchCloud(text: string): Promise<string> {
-    const cached = this.cloudCache.get(text);
+  private async fetchCloud(text: string, lang: SpeechLang): Promise<string> {
+    const cacheKey = `${lang}|${text}`;
+    const cached = this.cloudCache.get(cacheKey);
     if (cached) return cached;
     if (!this.cloud) throw new Error('cloud voice off');
-    const base64 = await this.cloud(text);
+    const base64 = await this.cloud(text, lang);
     if (this.cloudCache.size >= CLOUD_CACHE_LIMIT) {
       const oldest = this.cloudCache.keys().next().value;
       if (oldest !== undefined) this.cloudCache.delete(oldest);
     }
-    this.cloudCache.set(text, base64);
+    this.cloudCache.set(cacheKey, base64);
     return base64;
   }
 
-  private speakWithBrowser(text: string, turn: number): void {
+  private speakWithBrowser(text: string, turn: number, lang: SpeechLang): void {
     if (!this.synth) {
       this.finish(turn);
       return;
     }
     this.synth.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'uk-UA';
-    const voice = this.pickVoice();
+    utter.lang = lang === 'en' ? 'en-US' : 'uk-UA';
+    const voice = this.pickVoice(lang);
     if (voice) utter.voice = voice;
     // Slightly slower and higher — warm and clear for small ears.
     utter.rate = 0.95;

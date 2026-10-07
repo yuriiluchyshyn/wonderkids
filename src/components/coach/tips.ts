@@ -5,7 +5,7 @@ import type { CoachTip } from './CoachTips';
 export function hubTips(): CoachTip[] {
   return [
     { id: 'hub.card', anchor: '[data-tip="cards"] article', text: 'Це гра. Натисни на неї, щоб почати гратися!' },
-    { id: 'hub.galaxy', anchor: '[data-tip="galaxy"]', text: 'Тут можна обрати інший предмет: математику, географію, історію чи природу.' },
+    { id: 'hub.galaxy', anchor: '[data-tip="galaxy"]', text: 'Тут можна обрати інший предмет: математику, мову, логіку, географію чи астрономію.' },
     { id: 'hub.stars', anchor: '[data-tip="stars"]', text: 'Зірочки показують складність. Одна зірочка — найлегші ігри, три — найважчі.' },
     {
       id: 'hub.artifacts',
@@ -31,6 +31,9 @@ const HOW_TO: Record<TemplatePayload['template'], string> = {
   UI_TANGRAM: 'Перетягни кожну фігуру на її контур.',
   UI_GRID_AREA: 'Торкайся клітинок, щоб зафарбувати їх, а тоді натисни «Готово».',
   UI_NUMBER_MAZE: 'Торкайся сусідньої клітинки, щоб зробити крок.',
+  UI_BUBBLE_POP: 'Лопай бульбашки по порядку: торкнись тієї, що має бути наступною.',
+  UI_DOT_TO_DOT: 'Торкайся зірочок по порядку — між ними з’явиться лінія.',
+  UI_COLOR_MIX: 'Торкнись двох фарб, щоб вилити їх у казан і змішати.',
 };
 
 /** Tips for the game screen. `template` is the board of the current task. */

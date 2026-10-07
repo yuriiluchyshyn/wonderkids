@@ -398,6 +398,56 @@ options** it expects, and a real example from the codebase.
 
 ---
 
+### 4.11 `UI_BUBBLE_POP` — pop the bubbles in order (family of `UI_CHRONO_SEQUENCE`)
+
+- **Use it for:** the alphabet, building a word from syllables or letters.
+- **Options:** **2–6 bubbles** in the right order, plus optional decoys (`extras`) that never pop.
+  Bubbles with the same face (the two «МА» of «МАМА») are interchangeable.
+- **Payload:**
+
+```ts
+{
+  template: 'UI_BUBBLE_POP',
+  bubbles: Card[],   // in the CORRECT popping order
+  extras?: Card[],   // decoys — their face must differ from every real bubble
+  target?: Card,     // what is being built: picture, word, speaker
+}
+```
+
+### 4.12 `UI_DOT_TO_DOT` — join the stars in order (family of `UI_CHRONO_SEQUENCE`)
+
+- **Use it for:** counting (by ones, twos, tens), the alphabet — the line reveals a figure.
+- **Options:** **4–15 stars** on a 100×100 canvas, at least 12 units apart, 8 units from the edge.
+- **Payload:**
+
+```ts
+{
+  template: 'UI_DOT_TO_DOT',
+  stars: { x, y, label }[],          // in the CORRECT joining order, labels all different
+  figure: { name, emoji },           // shown when the drawing is finished
+}
+```
+
+### 4.13 `UI_COLOR_MIX` — pour two paints into the cauldron (family of `UI_DRAG_MATCH`)
+
+- **Use it for:** colour theory. The object is drawn grey and gets its colour on success.
+- **Options:** **3–6 paints**; exactly two of them are the recipe.
+- **Payload:**
+
+```ts
+{
+  template: 'UI_COLOR_MIX',
+  object: Card,                      // emoji + label of the thing to paint
+  result: { id, name, color },       // the colour to get
+  paints: { id, name, color }[],
+  recipe: [string, string],          // ids of the two paints
+}
+```
+
+Two more `Card` fields: `silhouette: true` draws the pictogram as its black
+shadow (shadow lotto), and `lang: 'en'` makes the speaker read the card in
+English (English lessons).
+
 ### Template picker (cheat sheet)
 
 | The game asks the child to… | Template | Options |
@@ -412,6 +462,9 @@ options** it expects, and a real example from the codebase.
 | rebuild a shape | `UI_TANGRAM` | n pieces |
 | build a given area | `UI_GRID_AREA` | grid |
 | follow a number rule across a grid | `UI_NUMBER_MAZE` | grid |
+| pop letters / syllables in order | `UI_BUBBLE_POP` | 2–6 bubbles |
+| join numbered or lettered dots | `UI_DOT_TO_DOT` | 4–15 stars |
+| mix two paints | `UI_COLOR_MIX` | 3–6 paints |
 
 ---
 

@@ -124,11 +124,11 @@ export const api = {
   },
 
   /** One phrase from the natural cloud voice, as base64 MP3. */
-  async tts(token: string, text: string) {
+  async tts(token: string, text: string, lang: 'uk' | 'en' = 'uk') {
     const { audio } = await request<{ audio: string }>('/api/tts', {
       method: 'POST',
       token,
-      body: { text },
+      body: lang === 'uk' ? { text } : { text, lang },
     });
     return audio;
   },
