@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { api, ApiError, type AuthUser } from '@/core/account/api/client';
 import { useGameStore } from '@/core/child/store/useGameStore';
-import { auth0Enabled, auth0LogoutUrl } from './auth0';
+import { auth0Enabled, auth0Logout } from './auth0';
 
 /** Human-friendly messages for the error codes the API can return on login. */
 const LOGIN_ERRORS: Record<string, string> = {
@@ -120,10 +120,12 @@ export const useAuthStore = create<AuthState>()(
 
       logout: () => {
         const wasParent = Boolean(get().token) && !get().childId;
+        // Before the session is cleared: the parent login it reveals must
+        // already know we are leaving.
+        if (wasParent && auth0Enabled) auth0Logout();
         // Drop the signed-in child's data so the next login starts clean.
         useGameStore.getState().resetAll();
         set({ token: null, user: null, childId: null, error: null });
-        if (wasParent && auth0Enabled) window.location.assign(auth0LogoutUrl());
       },
 
       clearError: () => set({ error: null }),
