@@ -66,6 +66,21 @@
       ],
       "destination": "https://parents.pulsarkids.com/:path*",
       "permanent": true
+    },
+    {
+      "source": "/landing.html",
+      "missing": [
+        {
+          "type": "host",
+          "value": "play\\..*"
+        },
+        {
+          "type": "host",
+          "value": "parents\\..*"
+        }
+      ],
+      "destination": "/",
+      "permanent": true
     }
   ],
   "rewrites": [
