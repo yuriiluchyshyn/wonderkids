@@ -43,15 +43,6 @@ export function portalUrl(portal: 'kid' | 'parent', path = '/'): string {
   return `${window.location.protocol}//${portal === 'kid' ? 'play' : 'parents'}.${rootHost()}${path}`;
 }
 
-/**
- * Absolute URL of the public site's front page (the landing page). On dev
- * hosts that is this origin's own root.
- */
-export function siteUrl(): string {
-  if (getPortal() === 'dev') return `${window.location.origin}/`;
-  return `${window.location.protocol}//${rootHost()}/`;
-}
-
 /** Paths that belong to the parent portal; everything else is the child's. */
 export function isParentPath(pathname: string): boolean {
   return /^\/(parent|parent-login|admin)(\/|$)/.test(pathname);

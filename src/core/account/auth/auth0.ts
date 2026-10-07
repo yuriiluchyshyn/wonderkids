@@ -1,4 +1,4 @@
-import { siteUrl } from '@/core/app/portal';
+import { portalUrl } from '@/core/app/portal';
 
 /**
  * Auth0 settings for the parent login. Both values are public (they identify
@@ -27,13 +27,14 @@ export function auth0ReturnUrl(): string {
  * Auth0 by itself — would sign the same parent straight back in; on a tablet
  * shared with a child that is no sign-out at all.
  *
- * Auth0 then returns to the public front page (not to the parent login, which
- * would bounce straight back to Auth0). That URL must be listed in the Auth0
- * application's Allowed Logout URLs.
+ * Auth0 then returns to the child login (not to the parent login, which would
+ * bounce straight back to Auth0): the tablet goes back to the child. That URL
+ * must be listed in the Auth0 application's Allowed Logout URLs.
  */
 export function auth0Logout(): void {
   leaving = true;
-  const params = new URLSearchParams({ client_id: AUTH0_CLIENT_ID, returnTo: siteUrl() });
+  const returnTo = new URL(portalUrl('kid', '/login'), window.location.origin).href;
+  const params = new URLSearchParams({ client_id: AUTH0_CLIENT_ID, returnTo });
   window.location.assign(`https://${AUTH0_DOMAIN}/v2/logout?${params}`);
 }
 
