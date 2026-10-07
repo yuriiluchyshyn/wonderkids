@@ -3,6 +3,7 @@
 // In local dev the same files are served by the Vite plugin in dev-api.ts.
 import pg from 'pg';
 import { emailKey, normaliseEmail } from './email.js';
+import { refillIfRested } from './screenTime.js';
 
 const { Pool } = pg;
 
@@ -227,6 +228,18 @@ function assembleChild(row, settings, stats, screen, progressRows, treasureRows,
   const sc = screen ?? {};
   const progress = {};
   for (const p of progressRows) progress[`${p.module_id}:${p.sub_id}`] = p.step;
+  // What the gauge shows before a game opens: a long enough break has already
+  // refilled the tank (the row itself is updated by the next /session/start).
+  const rested = refillIfRested(
+    {
+      minutesUsedToday: Number(sc.minutes_used_today ?? 0),
+      sessionElapsedMs: Number(sc.session_elapsed_ms ?? 0),
+      lastSessionEndedAt: numOrNull(sc.last_session_ended_at),
+      lastHeartbeatAt: numOrNull(sc.last_heartbeat_at),
+    },
+    { cooldownMin: s.cooldown_min ?? 45 },
+    Date.now(),
+  );
 
   return {
     id: row.id,
@@ -266,8 +279,8 @@ function assembleChild(row, settings, stats, screen, progressRows, treasureRows,
     },
     screenTime: {
       dayKey: sc.day_key ?? '',
-      minutesUsedToday: sc.minutes_used_today ?? 0,
-      sessionElapsedMs: Number(sc.session_elapsed_ms ?? 0),
+      minutesUsedToday: rested.minutesUsedToday,
+      sessionElapsedMs: rested.sessionElapsedMs,
       // Never running on load: the client opens a segment via /session/start.
       sessionStartedAt: null,
       cooldownUntil: numOrNull(sc.cooldown_until),

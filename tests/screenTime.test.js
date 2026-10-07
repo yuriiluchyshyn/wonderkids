@@ -5,6 +5,7 @@ import {
   describe,
   heartbeat,
   localDayKey,
+  refillIfRested,
   nextLocalMidnight,
   resetSession,
   startSession,
@@ -128,4 +129,29 @@ test('maxDailyMin = 0 means no daily cap', () => {
   const l = { sessionMin: 15, cooldownMin: 45, maxDailyMin: 0 };
   const s = { ...fresh(), minutesUsedToday: 500 };
   assert.equal(describe(startSession(s, l, T0, TZ), l, T0).remaining_time_seconds, 15 * 60);
+});
+
+test('a break as long as the cooldown refills the tank; the day still counts the minutes', () => {
+  let s = startSession(fresh(), limits, T0, TZ);
+  s = play(s, T0, 2 * MIN);
+  s = heartbeat(s, limits, T0 + 2 * MIN, TZ, 'pause');
+
+  // Back after ten minutes: the same session goes on.
+  let back = startSession(s, limits, T0 + 12 * MIN, TZ);
+  assert.equal(describe(back, limits, T0 + 12 * MIN).remaining_time_seconds, 13 * 60);
+
+  // Back after the 45-minute rest: a full session, two minutes gone from the day.
+  const later = T0 + 2 * MIN + 45 * MIN;
+  back = startSession(s, limits, later, TZ);
+  assert.equal(back.sessionElapsedMs, 0);
+  assert.equal(back.minutesUsedToday, 2);
+  assert.equal(describe(back, limits, later).remaining_time_seconds, 15 * 60);
+  assert.equal(describe(back, limits, later).daily_remaining_seconds, 58 * 60);
+});
+
+test('an app that was killed without a pause also rests', () => {
+  let s = startSession(fresh(), limits, T0, TZ);
+  s = play(s, T0, 3 * MIN);
+  assert.equal(refillIfRested(s, limits, T0 + 4 * MIN).sessionElapsedMs, 3 * MIN);
+  assert.equal(refillIfRested(s, limits, T0 + 60 * MIN).sessionElapsedMs, 0);
 });

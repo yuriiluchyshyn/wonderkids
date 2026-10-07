@@ -3,12 +3,25 @@ import { LANDMARK_STAGES } from '@/core/world/world';
 import { PlanetView } from './PlanetView';
 import { useWorld, type Landmark } from '@/core/world/useWorld';
 import { cn } from '@/core/utils/cn';
+import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useSound } from '@/core/audio/useSound';
 import styles from './WorldView.module.css';
 
 const STAGE_NAMES = ['Ще не розпочато', 'Закладено фундамент', 'Будівництво триває', 'Майже готово', 'Збудовано!'];
 
+/** Tap a picture to hear what it is (the caption may be hidden or unreadable yet). */
+function useSayOnTap() {
+  const speak = useVoiceSpeak('selections');
+  const { play } = useSound();
+  return (text: string) => () => {
+    play('tap');
+    speak(text);
+  };
+}
+
 function LandmarkTile({ landmark }: { landmark: Landmark }) {
   const showText = useShowText();
+  const say = useSayOnTap();
   const { stage, stages } = landmark;
   // With named stages, the newest unlocked one is the face of the landmark.
   const face = stage > 0 && stages ? stages[stage - 1] : null;
@@ -16,6 +29,13 @@ function LandmarkTile({ landmark }: { landmark: Landmark }) {
     <li
       className={cn(styles.landmark, stage === 0 && styles.locked, stage === LANDMARK_STAGES && styles.built)}
       aria-label={`${landmark.name}: ${STAGE_NAMES[stage]}`}
+      role="button"
+      tabIndex={0}
+      onClick={say(
+        stage === 0
+          ? `${landmark.name}. Грай у гру «${landmark.sub.label}», щоб це збудувати.`
+          : `${face?.[1] ?? landmark.name}. ${STAGE_NAMES[stage]}`,
+      )}
     >
       <span className={cn(styles.landmarkEmoji, 'emoji')} style={{ fontSize: `${1.7 + stage * 0.32}rem` }} aria-hidden>
         {stage === 0 ? '🚧' : (face?.[0] ?? landmark.emoji)}
@@ -57,6 +77,7 @@ export function WorldView() {
   const showText = useShowText();
   const world = useWorld();
   const { def, lands, residents } = world;
+  const say = useSayOnTap();
 
   return (
     <div className="stack">
@@ -105,7 +126,7 @@ export function WorldView() {
             those who already moved in are shown, plus one mystery guest. */}
         <ul className={styles.residents}>
           {residents.map((r) => (
-            <li key={r.id} className={styles.resident} aria-label={r.name}>
+            <li key={r.id} className={styles.resident} aria-label={r.name} role="button" tabIndex={0} onClick={say(r.name)}>
               <span className={cn(styles.residentEmoji, 'emoji')} aria-hidden>
                 {r.emoji}
               </span>
@@ -113,7 +134,13 @@ export function WorldView() {
             </li>
           ))}
           {residents.length < def.residents.length && (
-            <li className={cn(styles.resident, styles.locked)} aria-label="Хтось іще в дорозі">
+            <li
+              className={cn(styles.resident, styles.locked)}
+              aria-label="Хтось іще в дорозі"
+              role="button"
+              tabIndex={0}
+              onClick={say('Хтось іще в дорозі до тебе. Це сюрприз!')}
+            >
               <span className={cn(styles.residentEmoji, 'emoji')} aria-hidden>
                 ❔
               </span>

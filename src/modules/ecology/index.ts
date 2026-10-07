@@ -130,6 +130,7 @@ export const ecologyModule = defineTemplateModule({
       steps: QUESTIONS_PER_TOPIC,
       difficulty: [1, 2],
       publishDate: V4_RELEASE,
+      tasksPerLevel: 10,
       mechanics: 'UI_GRID_CHOICE',
       hasText: true,
       pool: whyQuestions,

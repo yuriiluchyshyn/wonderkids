@@ -97,6 +97,27 @@ function endSession(state, limits, now, tzOffsetMin) {
   };
 }
 
+/**
+ * A break at least as long as the parents' cooldown is a rest, whether or not
+ * the tank ran dry first: the minutes already played move to the day's total
+ * and the next session starts full. Without this a few minutes played in the
+ * morning stayed "used" on the gauge until midnight. The daily cap still counts
+ * them. `lastHeartbeatAt` is the last beat of a session that was never paused
+ * (app killed); `lastSessionEndedAt` the moment it was paused or ended.
+ */
+export function refillIfRested(state, limits, now) {
+  const lastPlay = state.lastHeartbeatAt ?? state.lastSessionEndedAt ?? null;
+  if (!(state.sessionElapsedMs > 0) || lastPlay === null) return state;
+  const rest = Math.max(HEARTBEAT_MAX_GAP_MS, Math.max(0, limits.cooldownMin) * MIN);
+  if (now - lastPlay < rest) return state;
+  return {
+    ...state,
+    minutesUsedToday: state.minutesUsedToday + state.sessionElapsedMs / MIN,
+    sessionElapsedMs: 0,
+    lastHeartbeatAt: null,
+  };
+}
+
 /** What the API reports back (snake_case, per the PRD contract). */
 export function describe(state, limits, now) {
   const r = remaining(state, limits);
@@ -126,7 +147,7 @@ export function peek(state, now, tzOffsetMin) {
 
 /** A play segment begins: open the heartbeat window (unless resting). */
 export function startSession(state, limits, now, tzOffsetMin) {
-  const next = normalise(state, now, tzOffsetMin);
+  const next = refillIfRested(normalise(state, now, tzOffsetMin), limits, now);
   if (next.cooldownUntil !== null) return next;
   // Arriving with an already-empty tank (e.g. daily cap reached elsewhere).
   if (remaining(next, limits).remainingMs <= 0) return endSession(next, limits, now, tzOffsetMin);
@@ -152,6 +173,8 @@ export function heartbeat(state, limits, now, tzOffsetMin, end) {
     if (gap > 0 && gap <= HEARTBEAT_MAX_GAP_MS) next.sessionElapsedMs += gap;
   }
   next.lastHeartbeatAt = end === 'pause' ? null : now;
+  // Remember when play stopped: a long enough break refills the tank.
+  if (end === 'pause' && next.sessionElapsedMs > 0) next.lastSessionEndedAt = now;
 
   const r = remaining(next, limits);
   const overrun = Math.max(r.sessionOverrunMs, r.dailyOverrunMs);

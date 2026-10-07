@@ -422,15 +422,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       <Companion progress={progress} />
 
       <div className={styles.board} ref={boardRef} data-tip="board">
-        {/* The one repeat of a task missed earlier: a quiet icon in the corner,
-            no words and no row of its own. (The voice on/off switch that used
-            to sit here looked like a second "read aloud" button; it lives in
-            the audio settings.) */}
-        {session.isRepeat && !session.finished && (
-          <span className={`${styles.repeatTag} emoji`} role="img" aria-label="Спробуймо ще раз">
-            🔁
-          </span>
-        )}
+        {/* A repeated task looks like any other: the child does not need to
+            be told it is a repeat. (The voice on/off switch that used to sit
+            here looked like a second "read aloud" button; it lives in the
+            audio settings.) */}
 
         <AnimatePresence>
           {session.justSolved && (

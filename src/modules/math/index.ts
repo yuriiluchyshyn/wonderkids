@@ -6,7 +6,7 @@ import { generateFraction } from './generators/fractions';
 import { FRACTION_OPS_INTRO, fractionOpsTier, generateFractionOps } from './generators/fractionOps';
 import { generateBalance } from './generators/balance';
 import { GEOMETRY_STEPS, geometryIntro, generateGeometry } from './generators/geometry';
-import { generateMaze } from './generators/maze';
+import { MAZE_STEPS, generateMaze, mazeIntro } from './generators/maze';
 import { generateShop } from './generators/shop';
 import { generateCompare } from './generators/compare';
 import { clockIntro, generateClock } from './generators/clock';
@@ -20,7 +20,7 @@ import { MATH_SUB, isClassicPayload } from './math.types';
 /**
  * Catalog cards exposed by the Math module, each with its declarative game
  * config (PRD v4.0 §1.2). `steps` is the path length; `tasksPerLevel` how many
- * tasks one level asks.
+ * tasks one level asks — every game states its own.
  */
 /** Publication date of the PRD v4.0 game pack (drives the "NEW" badge). */
 const V4_RELEASE = '2026-10-06T00:00:00Z';
@@ -36,6 +36,7 @@ const subCategories: SubCategory[] = [
     blurb: 'Збираємо все докупи',
     steps: 40,
     difficulty: [1, 3],
+    tasksPerLevel: 10,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -46,6 +47,7 @@ const subCategories: SubCategory[] = [
     blurb: 'Забираємо потрошку',
     steps: 40,
     difficulty: [1, 3],
+    tasksPerLevel: 10,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -56,6 +58,7 @@ const subCategories: SubCategory[] = [
     blurb: 'Однакові купки разом',
     steps: 30,
     difficulty: [2, 3],
+    tasksPerLevel: 10,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -66,6 +69,7 @@ const subCategories: SubCategory[] = [
     blurb: 'Ділимо порівну',
     steps: 25,
     difficulty: [2, 3],
+    tasksPerLevel: 10,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -76,6 +80,7 @@ const subCategories: SubCategory[] = [
     blurb: 'Усе разом: +, −, ×, ÷',
     steps: 60,
     difficulty: [1, 3],
+    tasksPerLevel: 10,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -88,6 +93,7 @@ const subCategories: SubCategory[] = [
     blurb: 'Шукаємо частинку смаколика',
     steps: 10,
     difficulty: 1,
+    tasksPerLevel: 10,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -100,6 +106,7 @@ const subCategories: SubCategory[] = [
     steps: 20,
     difficulty: [2, 3],
     publishDate: V4_RELEASE,
+    tasksPerLevel: 10,
     mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
   },
   {
@@ -113,6 +120,7 @@ const subCategories: SubCategory[] = [
     steps: 15,
     difficulty: 2,
     publishDate: V4_RELEASE,
+    tasksPerLevel: 10,
     mechanics: 'UI_BALANCE_SCALE',
   },
   {
@@ -125,6 +133,7 @@ const subCategories: SubCategory[] = [
     steps: GEOMETRY_STEPS,
     difficulty: [1, 3],
     publishDate: V4_RELEASE,
+    tasksPerLevel: 10,
     mechanics: 'UI_DRAG_MATCH',
   },
   {
@@ -135,9 +144,11 @@ const subCategories: SubCategory[] = [
     icon: '🧭',
     blurb: 'Біжи тільки по правильних числах',
     intro: 'Допоможи другові перебігти лабіринт! Ставати можна тільки на числа, які підходять під правило. Роби крок на сусідню клітинку.',
-    steps: 12,
+    steps: MAZE_STEPS,
     difficulty: 3,
     publishDate: V4_RELEASE,
+    // One maze is a dozen steps of its own — five make a full level.
+    tasksPerLevel: 5,
     mechanics: 'UI_GRID_CHOICE',
   },
   {
@@ -151,6 +162,7 @@ const subCategories: SubCategory[] = [
     steps: 12,
     difficulty: 2,
     publishDate: V4_RELEASE,
+    tasksPerLevel: 10,
     mechanics: 'UI_DRAG_MATCH',
     hasText: true,
   },
@@ -166,6 +178,7 @@ const subCategories: SubCategory[] = [
     steps: 12,
     difficulty: [1, 2],
     publishDate: COMPARE_CLOCK_RELEASE,
+    tasksPerLevel: 10,
     mechanics: 'UI_GRID_CHOICE',
     hasText: true,
   },
@@ -179,6 +192,7 @@ const subCategories: SubCategory[] = [
     steps: 12,
     difficulty: [1, 2],
     publishDate: COMPARE_CLOCK_RELEASE,
+    tasksPerLevel: 10,
     mechanics: 'UI_GRID_CHOICE',
     hasText: true,
   },
@@ -194,6 +208,7 @@ const subCategories: SubCategory[] = [
     steps: WORD_PROBLEM_STEPS,
     difficulty: [1, 3],
     publishDate: COMPARE_CLOCK_RELEASE,
+    tasksPerLevel: 10,
     mechanics: 'UI_GRID_CHOICE',
     hasText: true,
   },
@@ -241,8 +256,9 @@ function getIntro(subCategoryId: string, theme: Theme, step: number): string | u
       return geometryIntro(step);
     case MATH_SUB.clock:
       return clockIntro(step);
-    case MATH_SUB.balance:
     case MATH_SUB.maze:
+      return mazeIntro(step, subCategories.find((sc) => sc.id === subCategoryId)?.intro);
+    case MATH_SUB.balance:
     case MATH_SUB.shop:
     case MATH_SUB.compare:
     case MATH_SUB.wordProblems:

@@ -8,8 +8,6 @@
 
 /** How many steps back a level reaches for its reminders. */
 export const RECALL_WINDOW = 5;
-/** Tasks in one level of a path game: half new, half recall. */
-export const PATH_TASKS_PER_LEVEL = 10;
 /** Share of a level given to the current step's own material. */
 export const FRESH_SHARE = 0.5;
 

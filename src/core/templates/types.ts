@@ -167,8 +167,15 @@ export interface NumberMazePayload extends TemplateBase {
   rows: number;
   /** Row-major cell values. */
   cells: number[];
-  /** Cell indices of the one valid route, start → finish. */
+  /** Cell indices of the route, start → finish. */
   path: number[];
+  /**
+   * Cells of side corridors: they fit the rule too, but lead to a dead end
+   * and the child has to walk back. Empty / absent — one way through.
+   */
+  open?: number[];
+  /** The rule, when it is "divisible by" — lets the content check verify the grid. */
+  divisor?: number;
 }
 
 export type TemplatePayload =

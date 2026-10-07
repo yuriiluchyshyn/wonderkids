@@ -20,6 +20,9 @@
 
 .block {
   width: 100%;
+  /* A full-width button may wrap its label rather than push past the screen. */
+  white-space: normal;
+  padding-block: 8px;
 }
 
 .lg {

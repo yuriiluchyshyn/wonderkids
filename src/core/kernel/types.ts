@@ -158,12 +158,14 @@ export interface SubCategory {
    */
   publishDate?: string;
   /**
-   * Tasks in one level (`steps_count_default`). Path games ask 10 — five new
-   * for the step and five recalled from earlier steps (`core/engine/recall`);
-   * free-play games 5–8. A level shrinks on its own when fewer unique tasks
-   * exist. NOT the path length — that is `steps`.
+   * Tasks in one level (`steps_count_default`), 5–10 — required, every game
+   * decides for itself: 10 suits a quick tap-the-answer game on a path (half
+   * new for the step, half recalled from earlier steps — `core/engine/recall`),
+   * 6 a free-play game, 5 a game whose single task is long (the number maze).
+   * A level shrinks on its own when fewer unique tasks exist. NOT the path
+   * length — that is `steps`.
    */
-  tasksPerLevel?: number;
+  tasksPerLevel: number;
   /** UI template(s) the game is built on. */
   mechanics?: MechanicsType | MechanicsType[];
   /**
@@ -172,9 +174,6 @@ export interface SubCategory {
    */
   hasText?: boolean;
 }
-
-/** Tasks per level of a free-play game that does not say (PRD v4.0 §2.3: 5–8). */
-export const DEFAULT_TASKS_PER_LEVEL = 6;
 
 /**
  * The plugin contract. A learning subject (Math, Geography, ...) implements this

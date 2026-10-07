@@ -69,3 +69,28 @@ export function isAdjacent(a: number, b: number, cols: number): boolean {
   const dc = Math.abs((a % cols) - (b % cols));
   return dr + dc === 1;
 }
+
+/**
+ * The next cell to step on to get from `from` to `goal` walking only over
+ * `walkable` cells (shortest way), or null when there is none — the maze hint
+ * shows just this one step, never the whole route.
+ */
+export function nextStepTowards(from: number, goal: number, walkable: ReadonlySet<number>, cols: number): number | null {
+  if (from === goal) return null;
+  const cameFrom = new Map<number, number>([[from, from]]);
+  const queue = [from];
+  while (queue.length > 0) {
+    const cell = queue.shift() as number;
+    if (cell === goal) break;
+    for (const next of walkable) {
+      if (!cameFrom.has(next) && isAdjacent(cell, next, cols)) {
+        cameFrom.set(next, cell);
+        queue.push(next);
+      }
+    }
+  }
+  if (!cameFrom.has(goal)) return null;
+  let cell = goal;
+  while (cameFrom.get(cell) !== from) cell = cameFrom.get(cell) as number;
+  return cell;
+}

@@ -6,7 +6,9 @@ import {
   balanceOf,
   itemCost,
   itemId,
+  lossKey,
   ownedKey,
+  sellPrice,
   shopState,
   spentOn,
   giftsEarned,
@@ -85,4 +87,16 @@ test('every 5th path step is a gift that brings one resident', () => {
   assert.equal(residentForGift(all, 3), 'c');
   assert.equal(residentForGift(all, 5), 'a');
   assert.equal(residentForGift(all, 0), undefined);
+});
+
+test('selling returns 80% of the price and the rest is lost for good', () => {
+  const key = ownedKey('lego', 'b3');
+  const cost = itemCost('b3');
+  assert.equal(sellPrice('b3'), Math.floor(cost * 0.8));
+  assert.equal(balanceOf(1000, [key]), 1000 - cost);
+  // Sold: the item is gone, the loss stays on the books.
+  const loss = cost - sellPrice('b3');
+  assert.equal(balanceOf(1000, [lossKey(loss, 'a')]), 1000 - loss);
+  // Buying and selling twice loses twice.
+  assert.equal(balanceOf(1000, [lossKey(loss, 'a'), lossKey(loss, 'b')]), 1000 - 2 * loss);
 });

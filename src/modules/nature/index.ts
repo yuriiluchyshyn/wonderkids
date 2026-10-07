@@ -213,6 +213,7 @@ export const natureModule = defineTemplateModule({
       steps: 8,
       difficulty: 1,
       publishDate: RELEASE,
+      tasksPerLevel: 10,
       mechanics: ['UI_SORTER_BINS', 'UI_GRID_CHOICE', 'UI_CHRONO_SEQUENCE'],
       hasText: true,
       pool: seasons,

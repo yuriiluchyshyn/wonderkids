@@ -9,7 +9,7 @@ import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useShowText } from '@/core/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
 import type { World } from '@/core/world/useWorld';
-import type { ItemState } from '@/core/world/world';
+import { sellPrice, type ItemState } from '@/core/world/world';
 import styles from './PlanetView.module.css';
 
 /** Places around the planet's rim; buildings take the even ones, decor the odd. */
@@ -51,6 +51,10 @@ export function PlanetView({ world }: PlanetViewProps) {
   const { play } = useSound();
   const announce = useVoiceSpeak('selections');
   const buy = useGameStore((s) => s.buyWorldItem);
+  const sell = useGameStore((s) => s.sellWorldItem);
+  // The item whose «Продати» was tapped once: the warning has been read out
+  // and the next tap really sells.
+  const [selling, setSelling] = useState<string | null>(null);
   const milestones = useGameStore((s) => s.milestones);
 
   const zoom = useRef<ReactZoomPanPinchRef | null>(null);
@@ -78,17 +82,37 @@ export function PlanetView({ world }: PlanetViewProps) {
   // The family goal the child is closest to: buying moves it further away.
   const nextGoal = [...milestones].sort((a, b) => a.amount - b.amount).find((m) => m.reward.trim());
 
+  /** What the info card says about an item — also what is read aloud. */
+  const describe = (state: ItemState): string => {
+    const { name, cost } = state.item;
+    if (state.status === 'owned') return `${name}. Уже стоїть на твоїй планеті.`;
+    if (state.status === 'locked') return `${name}. Це головна мрія! Спершу збудуй усі інші будівлі.`;
+    if (state.status === 'saving') return `${name}. Коштує ${cost}. Збери ще ${state.missing} — і можна будувати.`;
+    return `${name}. Коштує ${cost}. Можна будувати!`;
+  };
+
   const select = (state: ItemState) => {
     play('tap');
     setSelectedId(state.item.id);
+    setSelling(null);
     setRotation((r) => turnTo(r, slotOf(state)));
+    announce(describe(state));
+  };
+
+  // Selling takes two taps: the first explains, out loud, that less comes
+  // back than was paid; the second does it.
+  const askToSell = (state: ItemState) => {
+    play('tap');
+    setSelling(state.item.id);
+    const back = sellPrice(state.item.id);
     announce(
-      state.status === 'owned'
-        ? state.item.name
-        : state.status === 'locked'
-          ? `${state.item.name}. Спершу збудуй усе інше`
-          : `${state.item.name}. Коштує ${state.item.cost}`,
+      `Якщо продати, тобі повернуть ${back}, а не ${state.item.cost}. Це менше, ніж ти заплатив. Якщо часто купувати і продавати, скарбів ставатиме дедалі менше. Подумай добре!`,
     );
+  };
+  const confirmSell = (state: ItemState) => {
+    if (sell(theme.id, state.item.id) <= 0) return;
+    play('pop');
+    setSelling(null);
   };
 
   const build = (state: ItemState) => {
@@ -262,6 +286,8 @@ export function PlanetView({ world }: PlanetViewProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
+            // Tap the card to hear it again.
+            onClick={() => announce(describe(selected))}
           >
             <span className={cn(styles.sheetEmoji, 'emoji')} aria-hidden>
               {selected.item.emoji}
@@ -300,10 +326,35 @@ export function PlanetView({ world }: PlanetViewProps) {
                 type="button"
                 className={styles.buy}
                 whileTap={{ scale: 0.93 }}
-                onClick={() => build(selected)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  build(selected);
+                }}
               >
                 🔨 {showText ? 'Збудувати' : ''} {selected.item.cost} {theme.artifact.emoji}
               </motion.button>
+            )}
+            {selected.status === 'owned' && (
+              <div className={styles.sellRow} onClick={(e) => e.stopPropagation()}>
+                {selling === selected.item.id ? (
+                  <>
+                    <span className={styles.sellWarn}>
+                      Повернуть {sellPrice(selected.item.id)} {theme.artifact.emoji}, а не {selected.item.cost} — це менше,
+                      ніж ти заплатив.
+                    </span>
+                    <button type="button" className={styles.sellYes} onClick={() => confirmSell(selected)}>
+                      Так, продати
+                    </button>
+                    <button type="button" className={styles.sellNo} onClick={() => setSelling(null)}>
+                      Залишити
+                    </button>
+                  </>
+                ) : (
+                  <button type="button" className={styles.sellAsk} onClick={() => askToSell(selected)}>
+                    💱 {showText ? 'Продати за' : ''} {sellPrice(selected.item.id)} {theme.artifact.emoji}
+                  </button>
+                )}
+              </div>
             )}
           </motion.div>
         ) : (

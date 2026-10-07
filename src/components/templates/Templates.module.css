@@ -838,7 +838,7 @@
 /* ---- Number maze ---- */
 .maze {
   display: grid;
-  gap: 6px;
+  gap: calc(24px / var(--maze-cols, 4));
   align-self: center;
   width: min(100%, 400px);
 }
@@ -854,7 +854,8 @@
   background: var(--tile);
   color: var(--surface-ink);
   font-family: inherit;
-  font-size: clamp(1.1rem, 5.4vw, 1.6rem);
+  /* Shrinks with the grid: a 6×6 maze still fits «−108» in a cell. */
+  font-size: clamp(0.8rem, calc(22vw / var(--maze-cols, 4)), calc(5.8rem / var(--maze-cols, 4)));
   font-weight: 800;
   box-shadow: var(--shadow-sm);
 }

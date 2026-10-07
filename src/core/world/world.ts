@@ -55,9 +55,33 @@ export function ownedKey(themeId: string, id: string): string {
   return `${OWNED_PREFIX}${themeId}:${id}`;
 }
 
-/** Artifacts already exchanged for world items, across every theme. */
+/**
+ * Selling gives back less than the item cost: this share of the price returns
+ * to the purse, the rest is gone for good — so buying and selling over and
+ * over slowly empties it. That is the lesson, and the child is told so.
+ */
+export const SELL_REFUND = 0.8;
+
+/** What selling an item puts back into the purse. */
+export function sellPrice(id: string): number {
+  return Math.floor(itemCost(id) * SELL_REFUND);
+}
+
+const LOSS_PREFIX = 'worldloss:';
+
+/**
+ * Key remembering the artifacts lost in one sale (kept beside the treasures,
+ * like purchases). `stamp` only makes the key unique: two sales of the same
+ * item must both count.
+ */
+export function lossKey(amount: number, stamp: string): string {
+  return `${LOSS_PREFIX}${Math.max(0, Math.floor(amount))}:${stamp}`;
+}
+
+/** Artifacts no longer in the purse: what stands on the planets + what sales lost. */
 export function spentOn(ownedKeys: readonly string[]): number {
   return ownedKeys.reduce((sum, key) => {
+    if (key.startsWith(LOSS_PREFIX)) return sum + (Number(key.split(':')[1]) || 0);
     if (!key.startsWith(OWNED_PREFIX)) return sum;
     return sum + itemCost(key.slice(key.lastIndexOf(':') + 1));
   }, 0);

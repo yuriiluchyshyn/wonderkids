@@ -274,8 +274,8 @@ export function ParentDashboard() {
           Під час першого знайомства гра пояснює дитині, що означає кожна кнопка. Підказка, яку дитина закрила,
           більше не з’являється. Прочитано підказок: {tipsSeen}.
         </p>
-        <Button variant="ghost" icon="🔄" disabled={tipsSeen === 0} onClick={resetTips}>
-          Показати всі підказки знову
+        <Button variant="ghost" icon="🔄" block disabled={tipsSeen === 0} onClick={resetTips}>
+          Показати знову
         </Button>
       </section>
 

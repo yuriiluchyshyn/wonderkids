@@ -429,3 +429,35 @@
   color: var(--text-soft);
   font-size: 0.82rem;
 }
+
+/* ---- Selling a built item (two taps: warning first) ---- */
+.sellRow {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.sellWarn {
+  flex-basis: 100%;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.sellAsk,
+.sellYes,
+.sellNo {
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: inherit;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.sellYes {
+  background: #f59e0b;
+  color: #1f2937;
+}

@@ -7,7 +7,7 @@ import {
 } from '@/core/audio/voiceChannels';
 import { clampStep, pathKey } from '@/core/progress/path';
 import { playsKey } from '@/core/progress/plays';
-import { balanceOf, itemCost, ownedKey } from '@/core/world/world';
+import { balanceOf, itemCost, lossKey, ownedKey, sellPrice } from '@/core/world/world';
 import { uid } from '@/core/utils/random';
 // Note: no DEFAULT_THEME_ID import — a child's theme is `null` until chosen;
 // useActiveTheme resolves null → the neutral galaxy skin.
@@ -208,6 +208,11 @@ export interface GameState extends ActiveChildView, PersistableState {
    * Returns false when it cannot be afforded or is already owned.
    */
   buyWorldItem: (themeId: string, id: string) => boolean;
+  /**
+   * Sell a built item back. Only `sellPrice` returns to the purse — the
+   * difference is remembered as a loss. Returns what was refunded (0 = not owned).
+   */
+  sellWorldItem: (themeId: string, id: string) => number;
   /**
    * The child closed an onboarding tip — never show it again. Remembered as a
    * `tip:<id>` key inside `treasures` (like world purchases), so it syncs to
@@ -576,6 +581,24 @@ export const useGameStore = create<GameState>()((set) => ({
       }),
     );
     return bought;
+  },
+
+  sellWorldItem: (themeId, id) => {
+    let refund = 0;
+    set((s) =>
+      patchActive(s, (c) => {
+        const key = ownedKey(themeId, id);
+        if (!c.treasures.includes(key)) return c;
+        refund = sellPrice(id);
+        const loss = itemCost(id) - refund;
+        const stamp = `${Date.now().toString(36)}${uid('').slice(1, 4)}`;
+        return {
+          ...c,
+          treasures: [...c.treasures.filter((t) => t !== key), ...(loss > 0 ? [lossKey(loss, stamp)] : [])],
+        };
+      }),
+    );
+    return refund;
   },
 
   markTipSeen: (tipId) =>

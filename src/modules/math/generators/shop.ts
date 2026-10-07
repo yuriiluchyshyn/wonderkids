@@ -18,19 +18,36 @@ const TOYS = [
 ];
 
 /** Ukrainian coins and notes used in the tray, in hryvnias. */
-const DENOMINATIONS = [50, 20, 10, 5, 2, 1];
+const DENOMINATIONS = [100, 50, 20, 10, 5, 2, 1];
+/** How many different coins and notes lie in front of the child. */
+const WALLET_SIZE = 5;
 
-/** The fewest coins/notes that make `amount`. */
-function exactChange(amount: number): number[] {
+/**
+ * The coins and notes that make `amount` using each value at most once, or
+ * null when that cannot be done (4 would need two 2s). The wallet never holds
+ * two of the same, so only such prices are asked.
+ */
+function distinctChange(amount: number): number[] | null {
   const out: number[] = [];
   let left = amount;
   for (const d of DENOMINATIONS) {
-    while (left >= d) {
+    if (left >= d) {
       out.push(d);
       left -= d;
     }
   }
-  return out;
+  return left === 0 ? out : null;
+}
+
+/** A price in the step's range that distinct coins can pay exactly. */
+function payablePrice(step: number): number {
+  const low = 3 + step * 2;
+  const high = Math.min(95, 9 + step * 5);
+  for (let i = 0; i < 40; i += 1) {
+    const price = randInt(low, high);
+    if (distinctChange(price)) return price;
+  }
+  return 7;
 }
 
 /**
@@ -40,7 +57,7 @@ function exactChange(amount: number): number[] {
 export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> {
   const { step } = config;
   const toy = pick(TOYS);
-  const price = Math.min(95, randInt(4 + step * 2, 9 + step * 5));
+  const price = payablePrice(step);
   const reward = rewardForStep(step) + 1;
 
   if (step >= 7 && Math.random() < 0.5) {
@@ -63,8 +80,13 @@ export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> 
     };
   }
 
-  // The exact coins are always there, plus a few extras to choose between.
-  const extras = Array.from({ length: 3 }, () => pick(DENOMINATIONS.filter((d) => d <= Math.max(5, price))));
+  // The exact coins are always there, plus other values to choose between —
+  // every coin and note is different, so the child really has to add up.
+  const exact = distinctChange(price) ?? [];
+  const others = shuffle(DENOMINATIONS.filter((d) => !exact.includes(d)));
+  // Mostly values near the price: a 100 next to a 7 is no temptation.
+  const near = others.filter((d) => d <= Math.max(10, price * 2));
+  const extras = [...near, ...others.filter((d) => !near.includes(d))].slice(0, Math.max(2, WALLET_SIZE - exact.length));
   return {
     id: uid('sh'),
     key: `pay:${toy.name}:${price}`,
@@ -75,7 +97,7 @@ export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> 
       template: 'UI_CASH_TRAY',
       item: { id: 'toy', emoji: toy.emoji },
       price,
-      wallet: shuffle([...exactChange(price), ...extras]),
+      wallet: shuffle([...exact, ...extras]),
       hint: `Почни з найбільшої купюри, яка не перевищує ${price}, а потім додавай менші.`,
     },
   };

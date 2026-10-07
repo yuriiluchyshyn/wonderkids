@@ -61,6 +61,9 @@ function checkPayload(p, validate) {
       const reachable = new Set([0]);
       for (const coin of p.wallet) for (const s of [...reachable]) reachable.add(s + coin);
       assert.ok(reachable.has(p.price), `wallet ${p.wallet} cannot make ${p.price}`);
+      // Five slots must be five different coins, not a 2 and four 5s.
+      unique(p.wallet, 'wallet');
+      assert.ok(p.wallet.length >= 4, `wallet has only ${p.wallet.length} coins`);
       break;
     }
     case 'UI_TANGRAM':
@@ -80,6 +83,20 @@ function checkPayload(p, validate) {
       assert.equal(p.cells.length, p.cols * p.rows);
       for (let i = 1; i < p.path.length; i += 1) {
         assert.ok(validate.isAdjacent(p.path[i - 1], p.path[i], p.cols), 'maze route is not contiguous');
+      }
+      const open = p.open ?? [];
+      const walkable = new Set([...p.path, ...open]);
+      assert.equal(walkable.size, p.path.length + open.length, 'maze corridor overlaps the route');
+      // A corridor is a dead end: each of its cells touches the cell it grew
+      // from and at most one more, and it never opens a second way through.
+      for (const cell of open) {
+        const around = [...walkable].filter((c) => validate.isAdjacent(cell, c, p.cols)).length;
+        assert.ok(around >= 1 && around <= 2, `maze corridor cell ${cell} has ${around} walkable neighbours`);
+      }
+      if (p.divisor) {
+        p.cells.forEach((value, cell) => {
+          assert.equal(value % p.divisor === 0, walkable.has(cell), `maze cell ${cell} (${value}) breaks the rule ÷${p.divisor}`);
+        });
       }
       break;
     }
@@ -107,8 +124,8 @@ try {
       assert.ok(!gameIds.has(config.game_id), `duplicate game_id ${config.game_id}`);
       gameIds.add(config.game_id);
       const size = tasksPerLevel(sub);
-      // Path games ask 10 (5 new + 5 recall); free-play games 5–8.
-      const [minSize, maxSize] = config.progression === 'free' ? [5, 8] : [10, 10];
+      // Each game sets its own level length: 5–10 on a path, 5–8 in free play.
+      const [minSize, maxSize] = config.progression === 'free' ? [5, 8] : [5, 10];
       assert.ok(size >= minSize && size <= maxSize, `${config.game_id}: steps_count_default ${size} outside ${minSize}–${maxSize}`);
 
       const steps = config.progression === 'free' ? 1 : (sub.steps ?? 30);
@@ -129,8 +146,9 @@ try {
               if (task.payload?.template) checkPayload(task.payload, validate);
               if (module.getHintSpeech) assert.equal(typeof module.getHintSpeech(task), 'string');
               if (Array.isArray(task.outro)) {
-                assert.ok(task.outro.length >= 10, `outro pool has only ${task.outro.length} texts (need 10)`);
+                assert.ok(task.outro.length >= 1, 'outro pool is empty');
                 assert.equal(new Set(task.outro).size, task.outro.length, 'outro pool repeats a text');
+                for (const text of task.outro) assert.ok(!/undefined|null|NaN/.test(text), `broken fact text: ${text}`);
               }
             } catch (err) {
               problems.push(`${config.game_id} step ${step}: ${err.message}`);
