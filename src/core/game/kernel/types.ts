@@ -110,9 +110,9 @@ export type MechanicsType = Mechanics;
 
 /** Age band each difficulty targets. */
 export const DIFFICULTY_AGES: Record<Difficulty, string> = {
-  1: '6–7 років',
-  2: '7–8 років',
-  3: '9–10 років',
+  1: '4–6 років',
+  2: '6–8 років',
+  3: '8–10 років',
 };
 
 /**

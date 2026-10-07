@@ -121,7 +121,7 @@ defaults. **Bold = required.**
 | `introFor` | `(step) => string \| undefined` | Per-step intro (explain each new task type as the path reaches it). Overrides `intro` for that step. | — |
 | `progression` | `'path'` \| `'free'` | `path` = Duolingo-style ladder of rising difficulty. `free` = open play, no levels, unlimited replay. | `'path'` |
 | `steps` | integer ≥ 1 | **Path length** (number of difficulty steps). Required for `path`; omit for `free`. | — |
-| `difficulty` | `1` \| `2` \| `3` \| `[min,max]` | Age badge, shown as 1–3 stars. `1`=6–7 y, `2`=7–8 y, `3`=9–10 y. A pair marks a game spanning bands. | `1` |
+| `difficulty` | `1` \| `2` \| `3` \| `[min,max]` | Age badge, shown as 1–3 stars. `1`=4–6 y, `2`=6–8 y, `3`=8–10 y. A pair marks a game spanning bands. | `1` |
 | `tasksPerLevel` | integer 5–10 | Tasks per level — **required for every game**. 10 for a quick path game, 6 for free play (5–8), 5 when one task is long (a maze). | `10` |
 | `mechanics` | one or more `MechanicsType` | Which UI template(s) the game uses (see §4). Array if the game mixes templates. | — |
 | `hasText` | boolean | `true` if the child must read task/answer text — enables tap-to-hear speaker buttons + the first-run guide. Set it whenever any option or prompt relies on reading. | `false` |

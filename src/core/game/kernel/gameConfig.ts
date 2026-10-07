@@ -16,7 +16,7 @@ export interface GameConfig {
   game_id: string;
   module: string;
   title_key: string;
-  /** 1 – easy (6–7 y), 2 – medium (7–8 y), 3 – hard (9–10 y). */
+  /** 1 – easy (4–6 y), 2 – medium (6–8 y), 3 – hard (8–10 y). */
   difficulty: Difficulty;
   /** Upper bound when the game spans difficulty bands. */
   difficulty_max: Difficulty;

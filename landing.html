@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Pulsar Kids — навчальні ігри для дітей 6–10 років українською</title>
+    <title>Pulsar Kids — навчальні ігри для дітей 4–10 років українською</title>
     <meta
       name="description"
-      content="Pulsar Kids — ігрова платформа, де діти 6–10 років вчать математику, географію, історію та екологію українською. Без реклами, сліз і таймерів: помилка — це підказка, а час за екраном контролюють батьки."
+      content="Pulsar Kids — ігрова платформа, де діти 4–10 років вчать математику, географію, історію та екологію українською. Без реклами, сліз і таймерів: помилка — це підказка, а час за екраном контролюють батьки."
     />
     <meta name="keywords" content="навчальні ігри для дітей, ігри українською, математика для дітей, прапори світу, дроби, розвивальні ігри, екранний час, Pulsar Kids, Пульсар Кідс, pulsarkids" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -35,7 +35,7 @@
     <meta name="twitter:title" content="Pulsar Kids — навчання, схоже на пригоду" />
     <meta
       name="twitter:description"
-      content="42 навчальні гри українською для дітей 6–10 років. Без реклами, сліз і таймерів."
+      content="42 навчальні гри українською для дітей 4–10 років. Без реклами, сліз і таймерів."
     />
     <meta name="twitter:image" content="__SITE_URL__/og-image.png" />
 
@@ -57,7 +57,7 @@
             "name": "Pulsar Kids",
             "alternateName": ["Пульсар Кідс", "PulsarKids"],
             "inLanguage": "uk",
-            "description": "Навчальні ігри для дітей 6–10 років українською: математика, мова, англійська, логіка, географія, астрономія, історія, природа, екологія, творчість."
+            "description": "Навчальні ігри для дітей 4–10 років українською: математика, мова, англійська, логіка, географія, астрономія, історія, природа, екологія, творчість."
           },
           {
             "@type": "WebApplication",
@@ -69,7 +69,7 @@
             "browserRequirements": "Сучасний браузер на телефоні, планшеті або комп’ютері",
             "inLanguage": "uk",
             "isFamilyFriendly": true,
-            "audience": { "@type": "EducationalAudience", "educationalRole": "student", "audienceType": "Діти 6–10 років" },
+            "audience": { "@type": "EducationalAudience", "educationalRole": "student", "audienceType": "Діти 4–10 років" },
             "educationalUse": "Вправи, самостійне навчання",
             "about": ["Математика", "Географія", "Історія", "Екологія"],
             "image": "__SITE_URL__/og-image.png"
@@ -78,6 +78,10 @@
       }
     </script>
 
+    <script>
+      // Scroll animations hide things until they are scrolled to — only when the script that reveals them can run.
+      if ('IntersectionObserver' in window) document.documentElement.classList.add('js');
+    </script>
     <style>
       /* The palette of the game's own «Галактика» theme (core/theme/themes.ts). */
       :root {
@@ -552,6 +556,166 @@
       footer a {
         margin: 0 8px;
       }
+
+      /* ---- motion ---- */
+      /* Things rise into place when scrolled to (the script adds .reveal, then .in). */
+      .js .reveal {
+        opacity: 0;
+      }
+      .js .reveal.in {
+        opacity: 1;
+        animation: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) var(--delay, 0s) backwards;
+      }
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(28px) scale(0.97);
+        }
+      }
+      /* The hero is on screen from the start: it comes in on load, line by line. */
+      .hero > div:first-child > * {
+        animation: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+      }
+      .hero > div:first-child > :nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .hero > div:first-child > :nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      .hero > div:first-child > :nth-child(4) {
+        animation-delay: 0.3s;
+      }
+      .hero > div:first-child > :nth-child(5) {
+        animation-delay: 0.4s;
+      }
+      .system {
+        animation: zoom-in 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s backwards;
+      }
+      @keyframes zoom-in {
+        from {
+          opacity: 0;
+          transform: scale(0.7) rotate(-20deg);
+        }
+      }
+      .sun {
+        animation: sun-pulse 4s ease-in-out infinite alternate;
+      }
+      @keyframes sun-pulse {
+        to {
+          transform: scale(1.07);
+          box-shadow:
+            0 0 34px 12px rgba(253, 224, 71, 0.7),
+            0 0 90px 34px rgba(245, 158, 11, 0.38);
+        }
+      }
+
+      /* Pictures are alive: each card's icon moves a little, no two neighbours in step. */
+      .card .icon {
+        width: fit-content;
+        animation: bob 3.6s ease-in-out infinite;
+        animation-delay: calc(var(--n, 0) * -0.9s);
+      }
+      .card:nth-child(3n + 2) .icon {
+        animation-name: sway;
+        animation-duration: 4.2s;
+      }
+      .card:nth-child(3n) .icon {
+        animation-name: breathe;
+        animation-duration: 3.2s;
+      }
+      @keyframes bob {
+        50% {
+          transform: translateY(-7px) rotate(4deg);
+        }
+      }
+      @keyframes sway {
+        25% {
+          transform: rotate(-9deg);
+        }
+        75% {
+          transform: rotate(9deg);
+        }
+      }
+      @keyframes breathe {
+        50% {
+          transform: scale(1.14) rotate(-3deg);
+        }
+      }
+      .card {
+        transition:
+          transform 0.25s,
+          border-color 0.25s,
+          box-shadow 0.25s;
+      }
+      @media (hover: hover) {
+        .card:hover {
+          transform: translateY(-5px);
+          border-color: rgba(53, 214, 232, 0.5);
+          box-shadow:
+            0 14px 34px rgba(0, 0, 0, 0.45),
+            0 0 22px rgba(53, 214, 232, 0.16);
+        }
+        .card:hover .icon {
+          animation: hop 0.6s ease;
+        }
+      }
+      @keyframes hop {
+        30% {
+          transform: translateY(-12px) scale(1.15) rotate(-8deg);
+        }
+        60% {
+          transform: translateY(0) scale(0.95) rotate(6deg);
+        }
+      }
+      .logo .emoji {
+        display: inline-block;
+        animation: sway 6s ease-in-out infinite;
+      }
+      .btn .emoji {
+        display: inline-block;
+        animation: bob 2.8s ease-in-out infinite;
+      }
+      .steps .card::before {
+        animation: breathe 2.6s ease-in-out infinite;
+        animation-delay: calc(var(--n, 0) * 0.5s);
+      }
+      /* The numbers run up to their value when scrolled to; equal-width digits keep them from jittering. */
+      .numbers b {
+        font-variant-numeric: tabular-nums;
+      }
+      .numbers b.done {
+        animation: pop 0.45s ease;
+      }
+      @keyframes pop {
+        40% {
+          transform: scale(1.22);
+          text-shadow: 0 0 22px rgba(53, 214, 232, 0.8);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .js .reveal,
+        .js .reveal.in {
+          opacity: 1;
+          animation: none;
+        }
+        .hero > div:first-child > *,
+        .system,
+        .sun,
+        .card .icon,
+        .card:hover .icon,
+        .logo .emoji,
+        .btn .emoji,
+        .steps .card::before,
+        .numbers b.done {
+          animation: none;
+        }
+        .card {
+          transition: none;
+        }
+        .card:hover {
+          transform: none;
+        }
+      }
     </style>
   </head>
   <body>
@@ -574,7 +738,7 @@
     <main>
       <div class="wrap hero">
         <div>
-          <span class="eyebrow">Навчальні ігри українською · 6–10 років</span>
+          <span class="eyebrow">Навчальні ігри українською · 4–10 років</span>
           <h1>Навчання, схоже на <span>пригоду</span></h1>
           <p class="lead">
             Pulsar Kids — це ігрова панель, де дитина вчить математику, географію, історію та екологію, граючи.
@@ -888,6 +1052,70 @@
           a.href = target[a.getAttribute('data-portal')];
         });
         document.getElementById('year').textContent = new Date().getFullYear();
+      })();
+    </script>
+    <script>
+      // Scroll animations: sections rise into view, and the numbers run up from zero to their value.
+      (function () {
+        if (!('IntersectionObserver' in window)) return;
+        var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Cards of one grid come in one after another, and their icons move out of step.
+        document.querySelectorAll('.grid, .steps').forEach(function (grid) {
+          Array.prototype.forEach.call(grid.children, function (card, i) {
+            card.style.setProperty('--n', i);
+            card.style.setProperty('--delay', Math.min(i % 4, 3) * 0.09 + 's');
+          });
+        });
+
+        var seen = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              e.target.classList.add('in');
+              seen.unobserve(e.target);
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        document.querySelectorAll('section h2, section .sub, .card, .band').forEach(function (el) {
+          el.classList.add('reveal');
+          seen.observe(el);
+        });
+
+        if (calm) return;
+        function runUp(el, to) {
+          var from = performance.now();
+          var time = 1100 + Math.min(to, 200) * 4;
+          (function frame(now) {
+            // A frame's clock can be a little behind the moment we started, hence the lower bound.
+            var t = Math.max(0, Math.min((now - from) / time, 1));
+            el.textContent = Math.round(to * (1 - Math.pow(1 - t, 3)));
+            if (t < 1) return requestAnimationFrame(frame);
+            el.classList.add('done');
+          })(from);
+        }
+        var counted = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              counted.unobserve(e.target);
+              var i = Array.prototype.indexOf.call(e.target.parentNode.parentNode.children, e.target.parentNode);
+              setTimeout(function () {
+                runUp(e.target, Number(e.target.dataset.to));
+              }, i * 120);
+            });
+          },
+          { threshold: 0.6 },
+        );
+        document.querySelectorAll('.numbers b').forEach(function (b) {
+          var to = parseInt(b.textContent, 10);
+          if (isNaN(to)) return;
+          b.dataset.to = to;
+          b.setAttribute('aria-label', to);
+          b.textContent = '0';
+          counted.observe(b);
+        });
       })();
     </script>
     <!-- Vercel Web Analytics: anonymous page views, no cookies. -->
