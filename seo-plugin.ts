@@ -11,7 +11,7 @@ import type { Plugin } from 'vite';
  * The address comes from VITE_SITE_URL (the ROOT domain, no trailing slash).
  */
 export function seo(): Plugin {
-  const site = (process.env.VITE_SITE_URL ?? 'https://wonderkids.yluch.app').replace(/\/$/, '');
+  const site = (process.env.VITE_SITE_URL ?? 'https://pulsarkids.com').replace(/\/$/, '');
   const useSubdomains = process.env.VITE_USE_SUBDOMAINS !== 'false';
   const sub = (name: string) => (useSubdomains ? site.replace('://', `://${name}.`) : site);
 

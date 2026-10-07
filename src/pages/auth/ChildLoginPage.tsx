@@ -24,7 +24,7 @@ export function ChildLoginPage() {
   usePageMeta({
     title: 'Вхід для дітей',
     description:
-      'Вхід у ДивоСвіт для дітей: введи свій нік і PIN, який дали батьки, — і вирушай у пригоду з математикою, географією та історією.',
+      'Вхід у Pulsar Kids для дітей: введи свій нік і PIN, який дали батьки, — і вирушай у пригоду з математикою, географією та історією.',
     index: true,
   });
   const navigate = useNavigate();
@@ -87,7 +87,7 @@ export function ChildLoginPage() {
           <span className={styles.logoIcon}>🦖</span>
         </div>
 
-        <h1 className={styles.title}>WonderKids</h1>
+        <h1 className={styles.title}>Pulsar Kids</h1>
         <p className={styles.sub}>Привіт! Введи свій нік і PIN</p>
 
         <form className={styles.form} onSubmit={submit}>

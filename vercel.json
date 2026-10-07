@@ -1,5 +1,40 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wonderkids.yluch.app"
+        }
+      ],
+      "destination": "https://pulsarkids.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "play.wonderkids.yluch.app"
+        }
+      ],
+      "destination": "https://play.pulsarkids.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "parents.wonderkids.yluch.app"
+        }
+      ],
+      "destination": "https://parents.pulsarkids.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/",

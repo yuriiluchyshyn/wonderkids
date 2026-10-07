@@ -6,6 +6,8 @@ import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { speechEngine } from '@/core/audio/SpeechEngine';
+import { Chip } from '@/components/ui/Chip';
 import { counted } from '@/core/lang/uk';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
@@ -25,7 +27,8 @@ interface ChildDrawerProps {
  * from the child's name (the artifact purse opens «Мій світ», where artifacts
  * are spent). Shows, top to bottom: the themed
  * artifact (name + count), the family goals (how much more to collect), and the
- * world (theme) switcher. The treasure collection and dream build live as their
+ * world (theme) switcher, and two sound switches (mute everything; hide the
+ * tap-to-hear speaker icons). The treasure collection and dream build live as their
  * own badges in the header. No parent link — the parent portal is its own domain.
  */
 export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
@@ -38,6 +41,17 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
   const { play } = useSound();
   const announce = useVoiceSpeak('selections');
   const logout = useAuthStore((s) => s.logout);
+  const soundOn = useGameStore((s) => s.settings.soundOn);
+  const voiceOn = useGameStore((s) => s.settings.voiceOn);
+  const ttsButtons = useGameStore((s) => s.settings.ttsButtons);
+  const updateSettings = useGameStore((s) => s.updateSettings);
+
+  // "Mute everything" is both master switches at once: effects and the voice.
+  const muted = !soundOn && !voiceOn;
+  const toggleMute = () => {
+    if (!muted) speechEngine.cancel();
+    updateSettings({ soundOn: muted, voiceOn: muted });
+  };
 
   const switchPlayer = () => {
     play('tap');
@@ -149,6 +163,22 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
 
             <h3 className={styles.sectionTitle}>🎨 Тема</h3>
             <ThemeGrid />
+
+            <h3 className={styles.sectionTitle}>🔈 Звук</h3>
+            <div className={styles.sound}>
+              <Chip
+                icon={muted ? '🔇' : '🔊'}
+                label={muted ? 'Звук вимкнено' : 'Вимкнути весь звук'}
+                active={muted}
+                onClick={toggleMute}
+              />
+              <Chip
+                icon={ttsButtons ? '🔈' : '📖'}
+                label={ttsButtons ? 'Сховати значки озвучення' : 'Значки озвучення сховано'}
+                active={!ttsButtons}
+                onClick={() => updateSettings({ ttsButtons: !ttsButtons })}
+              />
+            </div>
 
             <div className={styles.actions}>
               <Button block icon="🔄" variant="ghost" onClick={switchPlayer}>

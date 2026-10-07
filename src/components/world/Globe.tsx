@@ -36,8 +36,8 @@ interface GlobeProps {
 /**
  * A planet as a globe: the real planet (`PlanetArt`) turned by `yaw`, with
  * everything built on it standing at its own place. What is on the far side is
- * not drawn; what is not built yet is a dim outline — never a button to build
- * (building is done from the list below the planet).
+ * not drawn; what is not built yet is a dim outline. Everything can be tapped
+ * (`onTap`) — the planet view then tells what it is and offers to build it.
  */
 export function Globe({ planetId, cx, cy, radius, yaw, pitch, items, residents, level, locked, detail = true, selectedId, justBuilt, onTap }: GlobeProps) {
   /** Things on the far side are hidden; near the edge they shrink away. */

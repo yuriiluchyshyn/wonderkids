@@ -1,7 +1,7 @@
-# WonderKids — Game Authoring Guide
+# Pulsar Kids — Game Authoring Guide
 
 > **What this document is.** A complete, self-contained specification of **how a
-> new game is created** in the WonderKids (ДивоСвіт) codebase: which game
+> new game is created** in the Pulsar Kids codebase: which game
 > *types* exist, which *UI templates* a game can be built on, how many answer
 > *options* each supports, how *difficulty* and *levels* work, which *icons /
 > illustrations* are available, and what *content* (hints, reward facts) every
@@ -46,7 +46,7 @@
 
 ## 1. Architecture in 60 seconds
 
-WonderKids is a **micro-kernel plugin app**. A *subject* (Math, Geography,
+Pulsar Kids is a **micro-kernel plugin app**. A *subject* (Math, Geography,
 History, Ecology, Nature…) is a **module** that registers itself once with the
 `moduleRegistry`. The Hub discovers every registered module and builds its
 catalog automatically — adding a subject or a game touches no core code.

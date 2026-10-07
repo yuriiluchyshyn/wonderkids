@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "WonderKids / ДивоСвіт — sensory, zero-aggression learning playground for kids 3-10 (POC)",
+  "description": "Pulsar Kids — sensory, zero-aggression learning playground for kids 3-10 (POC)",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

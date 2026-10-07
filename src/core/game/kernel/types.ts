@@ -3,7 +3,7 @@ import type { Theme } from '@/core/theme/theme.types';
 import { Mechanics } from './mechanics';
 
 /**
- * Core kernel contracts for the WonderKids micro-kernel plugin architecture.
+ * Core kernel contracts for the Pulsar Kids micro-kernel plugin architecture.
  *
  * The PRD specifies an imperative `LearningModule` contract with
  * `renderGameView(container: HTMLElement, ...)`. In a React codebase we adapt

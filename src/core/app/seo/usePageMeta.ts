@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-const SITE_NAME = 'ДивоСвіт';
+const SITE_NAME = 'Pulsar Kids';
 
 interface PageMeta {
-  /** Page name; the site name is appended ("Вхід для дітей — ДивоСвіт"). */
+  /** Page name; the site name is appended ("Вхід для дітей — Pulsar Kids"). */
   title: string;
   description?: string;
   /**

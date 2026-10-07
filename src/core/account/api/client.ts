@@ -1,5 +1,5 @@
 /**
- * Thin fetch wrapper around the WonderKids API.
+ * Thin fetch wrapper around the Pulsar Kids API.
  *
  * In dev the base URL is empty, so requests go to `/api/...` on the Vite dev
  * server, which proxies them to the backend (see vite.config.ts). Set

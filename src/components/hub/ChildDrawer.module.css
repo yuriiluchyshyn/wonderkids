@@ -147,6 +147,12 @@
   margin-top: 2px;
 }
 
+.sound {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .actions {
   display: flex;
   flex-direction: column;

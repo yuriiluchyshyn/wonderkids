@@ -61,7 +61,7 @@ export function LoginPage() {
   usePageMeta({
     title: 'Кабінет батьків',
     description:
-      'Вхід до кабінету батьків ДивоСвіту: додавайте дітей, налаштовуйте ігровий час, сімейні цілі та стежте за успіхами.',
+      'Вхід до кабінету батьків Pulsar Kids: додавайте дітей, налаштовуйте ігровий час, сімейні цілі та стежте за успіхами.',
     index: true,
   });
   const token = useAuthStore((s) => s.token);
@@ -100,7 +100,7 @@ export function LoginPage() {
           ))}
         </div>
 
-        <h1 className={styles.title}>WonderKids</h1>
+        <h1 className={styles.title}>Pulsar Kids</h1>
         <p className={styles.sub}>Кабінет батьків</p>
 
         {auth0Enabled ? (
@@ -113,7 +113,7 @@ export function LoginPage() {
 
         <p className={styles.hint}>
           {auth0Enabled
-            ? 'Уже користувалися ДивоСвітом? Увійдіть із тією самою поштою — діти й прогрес на місці.'
+            ? 'Уже користувалися Pulsar Kids? Увійдіть із тією самою поштою — діти й прогрес на місці.'
             : 'Пароль не потрібен — поки що вхід лише за поштою.'}
           {getPortal() === 'dev' && (
             <>

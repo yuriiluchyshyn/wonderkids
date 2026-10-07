@@ -23,8 +23,8 @@ const MAX_PITCH = 70 * RAD;
 const ZOOM_MIN = 0.7;
 /** Far enough in for the smallest decoration to be looked at closely. */
 const ZOOM_MAX = 4;
-/** A message with nothing to press fades out by itself after this long. */
-const NOTICE_MS = 5000;
+/** A message with nothing to press fades out by itself after this long — long enough to be read out. */
+const NOTICE_MS = 9000;
 
 interface PlanetViewProps {
   world: World;
@@ -35,9 +35,10 @@ interface PlanetViewProps {
 /**
  * The planet the child builds: a globe that turns under the finger in every
  * direction and zooms under two, with buildings, decorations and residents
- * spread evenly over its surface. Things are built from the list below the
- * planet, never on it: choosing one turns the planet to its place and brings
- * up a bar at the bottom of the screen with the button to build or sell it.
+ * spread evenly over its surface. Tapping a thing — on the planet or in the
+ * list below it, built or not — turns the planet to its place, reads out what
+ * it is and what it costs, and brings up a bar at the bottom of the screen
+ * with the button to build or sell it when that is possible.
  * Tapping a planet of the system shows that planet — a closed one under a
  * lock — and what it asks for. ⛶ opens the whole solar system.
  */
@@ -120,7 +121,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     const port = state.item.id === SPACEPORT_ID ? ' Космопорт відкриває шлях до наступної планети.' : '';
     if (state.status === 'owned') return `${name}. Уже стоїть на твоїй планеті.${port}`;
     if (state.status === 'locked') return `${name}. Це головна мрія! Спершу збудуй усі інші будівлі та космопорт.`;
-    if (state.status === 'saving') return `${name}. Коштує ${cost}. Збери ще ${state.missing} — і можна будувати.`;
+    if (state.status === 'saving') return `${name}. Коштує ${cost}. У тебе є ${balance}. Збери ще ${state.missing} — і можна будувати.`;
     return `${name}. Коштує ${cost}. Можна будувати!${port}`;
   };
 
@@ -230,7 +231,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     ? 'Ця планета ще закрита.'
     : suggestion
       ? `Уже можна збудувати: ${suggestion.item.name}!`
-      : 'Обери у списку внизу, що хочеш збудувати.';
+      : 'Торкнися будь-чого на планеті або у списку внизу.';
 
   return (
     <section className={styles.card}>
@@ -326,13 +327,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
               justBuilt={justBuilt}
               onTap={(state) => {
                 if (wasDrag()) return;
-                // Only what stands can be chosen here; the rest is built from the list.
-                if (state.status === 'owned') {
-                  select(state);
-                  return;
-                }
-                play('tap');
-                announce(world.open ? `${state.item.name}. Ще не збудовано. Обери у списку внизу.` : `${state.item.name}. Ця планета ще закрита.`);
+                select(state);
               }}
             />
           </>
@@ -484,7 +479,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                 {selected.status === 'locked' && 'Це головна мрія! Спершу збудуй усі інші будівлі та космопорт.'}
                 {selected.status === 'saving' && (
                   <>
-                    Ще {selected.missing} {theme.artifact.emoji} — і можна будувати
+                    Коштує {selected.item.cost} {theme.artifact.emoji} · є {balance} · збери ще {selected.missing} {theme.artifact.emoji}
                   </>
                 )}
                 {selected.status === 'affordable' && (

@@ -3,11 +3,11 @@
  * site, the parent portal and the child portal stay apart (Tech Spec v2.1 §2 —
  * Domain Isolation):
  *
- *   wonderkids.app           → 'site'    the public landing page (served as
+ *   pulsarkids.com           → 'site'    the public landing page (served as
  *                                        static landing.html); any app path
  *                                        opened here is sent to its subdomain
- *   parents.wonderkids.app   → 'parent'  only the parent portal (+ admin)
- *   play.wonderkids.app      → 'kid'     only the child portal
+ *   parents.pulsarkids.com   → 'parent'  only the parent portal (+ admin)
+ *   play.pulsarkids.com      → 'kid'     only the child portal
  *   localhost / LAN / *.vercel.app → 'dev'  everything, for development
  *
  * The same bundle behaves correctly on each host.
