@@ -20,13 +20,15 @@
 }
 
 .hudArtifacts {
-  font-size: 0.95rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: var(--text);
+  white-space: nowrap;
 }
 
 .hudArtifacts .emoji {
-  font-size: 1.1rem;
+  font-size: 1.7rem;
+  vertical-align: -0.12em;
 }
 
 .back {
@@ -48,9 +50,14 @@
   gap: 5px;
 }
 
+/* Always one line: a long name shrinks to fit (`--chars` is its length),
+   and only then is cut short. */
 .title {
-  font-size: 1.15rem;
+  overflow: hidden;
+  font-size: clamp(0.85rem, calc((100vw - 200px) / var(--chars, 16) * 1.7), 1.15rem);
   font-weight: 800;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   color: var(--text);
 }
 

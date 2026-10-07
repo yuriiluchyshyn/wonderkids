@@ -54,6 +54,10 @@ export interface SystemPlanet {
   open: boolean;
   /** Everything it asks for is done — the way on is clear. */
   done: boolean;
+  /** What it asks for before the child may fly on. */
+  needs: PlanetNeeds;
+  /** Every buildable item of this planet with its status for this child. */
+  items: ItemState[];
 }
 
 export interface World {
@@ -62,6 +66,8 @@ export interface World {
   planet: number;
   planetId: WorldPlanetId;
   planetName: string;
+  /** The child may build on the planet being looked at (a closed one can only be looked at). */
+  open: boolean;
   /** The furthest planet the child may build on. */
   frontier: number;
   /** All eight planets, outermost first. */
@@ -87,8 +93,8 @@ export interface World {
 
 /**
  * The active child's world, derived live from their artifacts and progress.
- * `viewPlanet` is the planet to show (1-based); by default the furthest one
- * the child has reached.
+ * `viewPlanet` is the planet to show (1-based) — any of the eight, a closed
+ * one too; by default the furthest one the child has reached.
  */
 export function useWorld(viewPlanet?: number): World {
   const theme = useActiveTheme();
@@ -145,18 +151,28 @@ export function useWorld(viewPlanet?: number): World {
       return { id, planet, world, owned, needs };
     });
     const frontier = frontierPlanet(planets.map((p) => p.needs.done), planets.map((p) => p.owned.size > 0));
-    const shown = planets[Math.max(1, Math.min(frontier, Math.floor(viewPlanet ?? frontier))) - 1];
+    const shown = planets[Math.max(1, Math.min(PLANET_COUNT, Math.floor(viewPlanet ?? frontier))) - 1];
     def = shown.world;
 
-    const items = shopState(def.items, shown.owned, balance);
+    const system = planets.map((p) => ({
+      planet: p.planet,
+      id: p.id,
+      name: PLANET_NAMES[p.id],
+      open: p.planet <= frontier,
+      done: p.needs.done,
+      needs: p.needs,
+      items: shopState(p.world.items, p.owned, balance),
+    }));
+    const { items } = system[shown.planet - 1];
     const buildings = items.filter((i) => i.item.kind === 'building');
     return {
       def,
       planet: shown.planet,
       planetId: shown.id,
       planetName: PLANET_NAMES[shown.id],
+      open: shown.planet <= frontier,
       frontier,
-      system: planets.map((p) => ({ planet: p.planet, id: p.id, name: PLANET_NAMES[p.id], open: p.planet <= frontier, done: p.needs.done })),
+      system,
       needs: shown.needs,
       sunReached: planets[PLANET_COUNT - 1].needs.done,
       items,

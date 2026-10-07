@@ -45,218 +45,8 @@
     radial-gradient(1px 1px at 6% 52%, #fff 50%, transparent 51%),
     radial-gradient(120% 90% at 50% 110%, #312e81, #0b1026 70%);
   touch-action: none;
-}
-
-.zoomWrap {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.zoomContent {
-  width: 640px !important;
-  height: 640px !important;
-}
-
-.stage {
-  position: relative;
-  width: 640px;
-  height: 640px;
-}
-
-/* Atmosphere. */
-.glow {
-  position: absolute;
-  inset: 122px;
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 10px color-mix(in srgb, var(--accent) 18%, transparent),
-    0 0 60px 26px color-mix(in srgb, var(--accent) 34%, transparent);
-  animation: pulseGlow 5s ease-in-out infinite alternate;
-}
-
-@keyframes pulseGlow {
-  to {
-    box-shadow:
-      0 0 0 14px color-mix(in srgb, var(--accent) 22%, transparent),
-      0 0 80px 34px color-mix(in srgb, var(--accent) 42%, transparent);
-  }
-}
-
-/* A moon circling the planet, in front of the stars. */
-.orbit {
-  position: absolute;
-  inset: 20px;
-  border: 1px dashed rgba(255, 255, 255, 0.16);
-  border-radius: 50%;
-  animation: spin 46s linear infinite;
-}
-
-.moon {
-  position: absolute;
-  top: -14px;
-  left: 50%;
-  font-size: 1.6rem;
-  animation: spin 46s linear infinite reverse;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.globe {
-  position: absolute;
-  inset: 0;
-}
-
-.surface {
-  position: absolute;
-  inset: 152px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: radial-gradient(
-    circle at 34% 28%,
-    color-mix(in srgb, var(--primary) 55%, #fff) 0%,
-    var(--primary) 46%,
-    color-mix(in srgb, var(--primary) 62%, #000) 100%
-  );
-  box-shadow: inset -22px -26px 50px rgba(0, 0, 0, 0.38);
-}
-
-/* Continents. */
-.land1,
-.land2,
-.land3 {
-  position: absolute;
-  border-radius: 46% 54% 60% 40% / 52% 44% 56% 48%;
-  background: color-mix(in srgb, var(--ring) 62%, var(--primary));
-  opacity: 0.75;
-}
-
-.land1 {
-  top: 14%;
-  left: 12%;
-  width: 44%;
-  height: 34%;
-}
-
-.land2 {
-  top: 54%;
-  left: 46%;
-  width: 40%;
-  height: 30%;
-  border-radius: 58% 42% 40% 60% / 44% 58% 42% 56%;
-}
-
-.land3 {
-  top: 60%;
-  left: 8%;
-  width: 24%;
-  height: 20%;
-}
-
-/* A spoke pins something to the rim at an angle, standing outwards. */
-.spoke {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-}
-
-.plot {
-  position: absolute;
-  left: 0;
-  transform: translateX(-50%);
-  display: grid;
-  place-items: end center;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-family: inherit;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.plotBuilding {
-  width: 64px;
-  height: 72px;
-  font-size: 3.2rem;
-}
-
-.plotDecor {
-  width: 44px;
-  height: 46px;
-  font-size: 1.75rem;
-}
-
-.thing {
-  display: block;
-  line-height: 1;
-  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
-  transform-origin: 50% 100%;
-}
-
-/* An empty plot: a soft marker that says "something can go here". */
-.plotEmpty .plus {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  margin-bottom: 4px;
-  border: 2px dashed rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  font-size: 1.2rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.plotDecor.plotEmpty .plus {
-  width: 24px;
-  height: 24px;
-  font-size: 0.9rem;
-}
-
-/* Affordable right now: it beckons. */
-.plotReady .plus {
-  border-style: solid;
-  border-color: #fde047;
-  background: rgba(253, 224, 71, 0.28);
-  color: #fde047;
-  animation: beckon 1.3s ease-in-out infinite;
-}
-
-@keyframes beckon {
-  0%,
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(253, 224, 71, 0.7);
-  }
-  50% {
-    transform: scale(1.14);
-    box-shadow: 0 0 0 9px rgba(253, 224, 71, 0);
-  }
-}
-
-.plotLocked .plus {
-  font-size: 0.95rem;
-  opacity: 0.7;
-}
-
-.plotSelected .plus,
-.plotSelected .thing {
-  filter: drop-shadow(0 0 10px #fff);
-}
-
-.resident {
-  position: absolute;
-  left: 0;
-  margin-left: -0.6em;
-  font-size: 1.25rem;
-  line-height: 1;
+  /* The things on the globe are layered by depth — among themselves only. */
+  isolation: isolate;
 }
 
 /* Below the window, so the buttons never cover a plot. */
@@ -282,17 +72,6 @@
 }
 
 /* ---- Selected item / exchange ---- */
-.sheet {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-  padding: 12px 14px;
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
-}
-
 .sheetEmoji {
   font-size: 2.4rem;
   line-height: 1;
@@ -415,15 +194,6 @@
   outline-offset: 1px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .glow,
-  .orbit,
-  .moon,
-  .plotReady .plus {
-    animation: none;
-  }
-}
-
 .tradeoff {
   margin-top: 2px;
   color: var(--text-soft);
@@ -431,14 +201,6 @@
 }
 
 /* ---- Selling a built item (two taps: warning first) ---- */
-.sellRow {
-  flex-basis: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-
 .sellWarn {
   flex-basis: 100%;
   font-size: 0.9rem;
@@ -463,93 +225,12 @@
 }
 
 /* ---- The globe: turned by the finger, drawn from projected places ---- */
-.halo,
-.ball {
-  position: absolute;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
 .halo {
-  background: radial-gradient(circle, color-mix(in srgb, var(--primary) 45%, transparent) 38%, transparent 68%);
-}
-
-.ball {
-  overflow: hidden;
-  background: radial-gradient(circle at 34% 28%, #7dd3fc, #2563eb 62%, #1e3a8a);
-  box-shadow: inset -18px -22px 40px rgba(0, 0, 0, 0.35);
-}
-
-/* A continent: a soft patch that slides over the ball as it turns. */
-.patch {
   position: absolute;
-  border-radius: 46% 54% 52% 48% / 55% 45% 55% 45%;
-  transform: translate(-50%, -50%);
-}
-
-.tone1 {
-  background: #4ade80;
-}
-
-.tone2 {
-  background: #86efac;
-}
-
-.tone3 {
-  background: #fde68a;
-}
-
-/* Light from the upper left, night on the lower right — over the land too. */
-.shade {
-  position: absolute;
-  inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.32), transparent 42%), radial-gradient(circle at 74% 78%, rgba(3, 7, 30, 0.5), transparent 58%);
-}
-
-/* A thing standing on the globe (the «plot*» classes dress it). */
-.pin {
-  position: absolute;
-  display: grid;
-  place-items: end center;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-family: inherit;
-  cursor: pointer;
-  transform-origin: 50% 100%;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.walker {
-  position: absolute;
-  font-size: 1.3rem;
-  line-height: 1;
+  background: radial-gradient(circle, color-mix(in srgb, var(--primary) 45%, transparent) 38%, transparent 68%);
+  transform: translate(-50%, -50%);
   pointer-events: none;
-}
-
-/* ---- The whole screen for the planet ---- */
-.full {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  display: flex;
-  flex-direction: column;
-  border-radius: 0;
-  padding: calc(12px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom));
-  overflow: hidden;
-}
-
-.full .viewport {
-  flex: 1;
-  height: auto;
-  min-height: 0;
-}
-
-.full .shelf {
-  display: none;
 }
 
 /* ---- The next thing to do: tap to hear, tap the name to go to it ---- */
@@ -612,14 +293,6 @@
   cursor: pointer;
 }
 
-/* ---- The planet as it really looks (PlanetArt), under the things built on it ---- */
-.ballArt {
-  position: absolute;
-  height: auto;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
 .where {
   display: block;
   font-size: 0.8rem;
@@ -677,76 +350,67 @@
   font-size: 14px;
 }
 
-/* ---- A building of a later planet: a level up, and it shows ---- */
-.level {
-  position: absolute;
-  top: -4px;
-  right: -8px;
-  min-width: 18px;
-  padding: 1px 4px;
-  border-radius: 999px;
-  background: #fde047;
-  color: #1f2937;
-  font-size: 11px;
-  font-weight: 800;
-  line-height: 1.3;
-}
-
-.upgraded .thing {
-  position: relative;
-  filter: drop-shadow(0 0 6px #fde047) drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
-}
-
-/* ---- What the planet asks for before flying on ---- */
+/* ---- What the planet asks for: a sheet at the bottom, raised by tapping a planet ---- */
 .needs {
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+  align-items: center;
 }
 
 .needsTitle {
-  margin: 0 0 8px;
-  font-size: 1rem;
+  flex: 1;
+  margin: 0;
+  font-size: 1.05rem;
 }
 
 .needsList {
+  flex-basis: 100%;
   display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 6px;
-  margin: 0 0 8px;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.needRow {
+/* A picture and a number — the words are for those who already read. */
+.needChip {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 2px;
   width: 100%;
-  min-height: 48px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: var(--radius);
-  background: var(--surface);
+  min-height: 72px;
+  padding: 8px 2px;
+  border: 2px solid color-mix(in srgb, var(--surface-ink) 10%, transparent);
+  border-radius: var(--radius-sm);
+  background: transparent;
   color: inherit;
   font: inherit;
-  text-align: left;
   cursor: pointer;
 }
 
 .needDone {
-  opacity: 0.7;
+  border-color: #16a34a;
+  background: color-mix(in srgb, #22c55e 12%, transparent);
 }
 
-.needText {
-  flex: 1;
+.needIcon {
+  font-size: 1.6rem;
+  line-height: 1.1;
 }
 
 .needCount {
+  font-size: 0.95rem;
   font-weight: 800;
   white-space: nowrap;
 }
 
-.full .needs {
-  display: none;
+.needText {
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.needs .buy {
+  flex-basis: 100%;
 }

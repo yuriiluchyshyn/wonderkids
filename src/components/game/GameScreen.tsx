@@ -1,6 +1,6 @@
 import { useBalance } from '@/core/child/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { spokenPrompt, type TaskCallbacks } from '@/core/game/kernel/types';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
@@ -365,7 +365,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         🏠
       </button>
       <div className={styles.headerMain}>
-        <div className={styles.title}>
+        <div className={styles.title} style={{ '--chars': subLabel.length + 3 } as CSSProperties}>
           {module.icon} {subLabel}
         </div>
         {phase === 'play' && (

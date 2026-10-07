@@ -1,6 +1,6 @@
 import confetti from 'canvas-confetti';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { speechEngine } from '@/core/audio/SpeechEngine';
@@ -12,47 +12,19 @@ import type { World } from '@/core/child/world/useWorld';
 import { DREAM_ID, GALAXY_NAME, PLANET_COUNT, SPACEPORT_ID, sellPrice, type ItemState, type Need } from '@/core/child/world/world';
 import { PlanetArt } from '@/components/templates/PlanetArt';
 import { counted } from '@/core/lang/uk';
+import { Globe } from './Globe';
+import { SolarSystem } from './SolarSystem';
+import { RAD, itemPlace, type Place } from './places';
+import { useGestures } from './useGestures';
 import styles from './PlanetView.module.css';
 
-const RAD = Math.PI / 180;
 /** How far the planet can be tipped towards a pole. */
 const MAX_PITCH = 70 * RAD;
 const ZOOM_MIN = 0.7;
-const ZOOM_MAX = 2.2;
+/** Far enough in for the smallest decoration to be looked at closely. */
+const ZOOM_MAX = 4;
 /** A message with nothing to press fades out by itself after this long. */
 const NOTICE_MS = 5000;
-
-/** A place on the globe, in degrees: latitude (north is up) and longitude. */
-type Place = [lat: number, lon: number];
-
-/**
- * Where things stand, by district — so the planet reads as a map, not a heap:
- * the town (buildings) faces the child at first, the dream build crowns the
- * north above it, the park (decorations) lies on the far side, and residents
- * stroll in the lands between.
- */
-const TOWN: Place[] = [[38, -30], [38, 0], [38, 30], [12, -30], [12, 0], [12, 30], [-14, -30], [-14, 0], [-14, 30]];
-const DREAM: Place = [66, 0];
-/** The spaceport stands apart, south of the town — the launch pad needs room. */
-const SPACEPORT: Place = [-42, 0];
-const PARK: Place[] = [[28, 143], [28, 168], [28, 193], [28, 218], [-2, 143], [-2, 168], [-2, 193], [-2, 218]];
-const residentPlace = (i: number): Place => [34 - (i % 4) * 22, (i % 2 === 0 ? 82 : 272) + (Math.floor(i / 2) % 3) * 13];
-
-function placeOf({ item }: ItemState): Place {
-  if (item.id === SPACEPORT_ID) return SPACEPORT;
-  if (item.id === DREAM_ID) return DREAM;
-  const index = Number(item.id.slice(1));
-  return item.kind === 'decor' ? PARK[index % PARK.length] : TOWN[index % TOWN.length];
-}
-
-/** A place as seen right now: screen offset from the centre (in radii) and depth (1 = nearest, < 0 = behind). */
-function project([lat, lon]: Place, yaw: number, pitch: number) {
-  const y = Math.sin(lat * RAD);
-  const flat = Math.cos(lat * RAD);
-  const x = flat * Math.sin(lon * RAD + yaw);
-  const z = flat * Math.cos(lon * RAD + yaw);
-  return { x, y: y * Math.cos(pitch) - z * Math.sin(pitch), depth: y * Math.sin(pitch) + z * Math.cos(pitch) };
-}
 
 interface PlanetViewProps {
   world: World;
@@ -62,10 +34,12 @@ interface PlanetViewProps {
 
 /**
  * The planet the child builds: a globe that turns under the finger in every
- * direction, with a town, a park and residents on its surface. Empty plots
- * glow with a «+»; tapping anything turns the planet to it and brings up a bar
- * at the bottom of the screen saying what it is — with the button to build or
- * sell it there. ⛶ opens the planet on the whole screen.
+ * direction and zooms under two, with buildings, decorations and residents
+ * spread evenly over its surface. Things are built from the list below the
+ * planet, never on it: choosing one turns the planet to its place and brings
+ * up a bar at the bottom of the screen with the button to build or sell it.
+ * Tapping a planet of the system shows that planet — a closed one under a
+ * lock — and what it asks for. ⛶ opens the whole solar system.
  */
 export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   const theme = useActiveTheme();
@@ -84,6 +58,8 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   const [full, setFull] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [justBuilt, setJustBuilt] = useState<string | null>(null);
+  // The "what this planet asks for" sheet, raised by tapping a planet of the system.
+  const [needsOpen, setNeedsOpen] = useState(false);
 
   // The window the planet is drawn in.
   const viewport = useRef<HTMLDivElement>(null);
@@ -99,7 +75,6 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   }, []);
 
   // ---- Turning: drag with a finger, or glide to a chosen place ----
-  const drag = useRef<{ x: number; y: number; moved: boolean } | null>(null);
   const glide = useRef(0);
   const radius = size ? Math.min(size.w, size.h) * 0.34 * zoom : 0;
 
@@ -122,24 +97,15 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   }, []);
   useEffect(() => () => cancelAnimationFrame(glide.current), []);
 
-  const onPointerDown = (e: ReactPointerEvent) => {
-    cancelAnimationFrame(glide.current);
-    drag.current = { x: e.clientX, y: e.clientY, moved: false };
-  };
-  const onPointerMove = (e: ReactPointerEvent) => {
-    const d = drag.current;
-    if (!d || radius === 0) return;
-    const dx = e.clientX - d.x;
-    const dy = e.clientY - d.y;
-    if (!d.moved && Math.hypot(dx, dy) < 6) return;
-    d.moved = true;
-    d.x = e.clientX;
-    d.y = e.clientY;
-    setView((v) => ({ yaw: v.yaw + dx / radius, pitch: Math.max(-MAX_PITCH, Math.min(MAX_PITCH, v.pitch + dy / radius)) }));
-  };
-  /** True when the finger just turned the planet — that touch must not also press a plot. */
-  const wasDrag = () => drag.current?.moved ?? false;
-  const onPointerUp = () => window.setTimeout(() => (drag.current = null), 0);
+  const zoomBy = (factor: number) => setZoom((z) => Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z * factor)));
+  const { handlers, wasDrag } = useGestures({
+    onStart: () => cancelAnimationFrame(glide.current),
+    onDrag: (dx, dy) => {
+      if (radius === 0) return;
+      setView((v) => ({ yaw: v.yaw + dx / radius, pitch: Math.max(-MAX_PITCH, Math.min(MAX_PITCH, v.pitch + dy / radius)) }));
+    },
+    onPinch: zoomBy,
+  });
 
   const { items, balance } = world;
   const selected = items.find((s) => s.item.id === selectedId) ?? null;
@@ -163,8 +129,17 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     setSelling(null);
   };
 
+  const placeOf = (state: ItemState): Place => itemPlace(items.findIndex((s) => s.item.id === state.item.id), items.length);
+
   const select = (state: ItemState) => {
     play('tap');
+    setNeedsOpen(false);
+    // A closed planet can only be looked at.
+    if (!world.open) {
+      turnTo(placeOf(state));
+      announce(`${state.item.name}. Ця планета ще закрита.`);
+      return;
+    }
     // A second tap on the same thing puts it down again.
     if (selectedId === state.item.id) {
       speechEngine.cancel();
@@ -227,34 +202,38 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     cancelAnimationFrame(glide.current);
     setView((v) => ({ ...v, yaw: v.yaw + direction * 40 * RAD }));
   };
-  const zoomBy = (factor: number) => setZoom((z) => Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z * factor)));
 
   const cx = (size?.w ?? 0) / 2;
   const cy = (size?.h ?? 0) / 2;
-  /** Things on the far side are hidden; near the edge they shrink away. */
-  const seen = (place: Place) => {
-    const p = project(place, view.yaw, view.pitch);
-    return { ...p, left: cx + p.x * radius, top: cy - p.y * radius, scale: 0.55 + 0.45 * Math.max(0, p.depth), visible: p.depth > 0.08 };
-  };
 
   const nextName = world.system[world.planet]?.name ?? 'Сонце';
-  const line = (text: string, n: Need, say: string) => ({ text, done: n.done, count: `${n.have} / ${n.need}`, say });
-  const { needs } = world;
-  /** The "before you fly on" list — every row can be tapped to hear it. */
-  const needRows: { text: string; done: boolean; count?: string; say: string }[] = [
-    { text: 'Збудувати космопорт', done: needs.spaceport, say: 'Збудуй космопорт: він відкриває шлях до наступної планети.' },
-    line('Збудувати все на планеті', needs.built, `Збудуй усе на цій планеті. Уже є ${needs.built.have} з ${needs.built.need}.`),
-    line(`Землі знань ${world.planet}-го рівня`, needs.lands, `Підніми землі знань до рівня ${world.planet}: грай у різні ігри. Уже є ${needs.lands.have} з ${needs.lands.need}.`),
-    line('Мешканці', needs.residents, `Запроси мешканців: вони приходять з подарунками на шляху. Уже є ${needs.residents.have} з ${counted(needs.residents.need, ['мешканця', 'мешканців', 'мешканців'])}.`),
-    line('Скарби', needs.treasures, `Знайди скарби у скринях. Уже є ${needs.treasures.have} з ${needs.treasures.need}.`),
+  // A closed planet opens when the one the child is building on is done, so
+  // that is the planet whose list it shows.
+  const gate = world.system[(world.open ? world.planet : world.frontier) - 1];
+  const { needs } = gate;
+  const chip = (icon: string, text: string, n: Need, say: string) => ({ icon, text, done: n.done, count: `${n.have}/${n.need}`, say });
+  /** What the planet asks for, as a row of pictures with numbers — each can be tapped to hear it. */
+  const needChips: { icon: string; text: string; done: boolean; count?: string; say: string }[] = [
+    { icon: '🚀', text: 'Космопорт', done: needs.spaceport, say: 'Збудуй космопорт: він відкриває шлях до наступної планети.' },
+    chip('🏗️', 'Будівлі', needs.built, `Збудуй усе на планеті ${gate.name}. Уже є ${needs.built.have} з ${needs.built.need}.`),
+    chip('🗺️', 'Землі знань', needs.lands, `Підніми землі знань до рівня ${gate.planet}: грай у різні ігри. Уже є ${needs.lands.have} з ${needs.lands.need}.`),
+    chip('🎁', 'Мешканці', needs.residents, `Запроси мешканців: вони приходять з подарунками на шляху. Уже є ${needs.residents.have} з ${counted(needs.residents.need, ['мешканця', 'мешканців', 'мешканців'])}.`),
+    chip('💎', 'Скарби', needs.treasures, `Знайди скарби у скринях. Уже є ${needs.treasures.have} з ${needs.treasures.need}.`),
   ];
+  const needsTitle = !world.open
+    ? `🔒 Спершу — планета ${gate.name}`
+    : needs.done
+      ? '🚀 Шлях далі відкрито!'
+      : `🚀 Щоб летіти ${nextName === 'Сонце' ? 'до Сонця' : `на ${nextName}`}`;
 
-  const hintText = suggestion
-    ? `Уже можна збудувати: ${suggestion.item.name}!`
-    : 'Торкнись плюсика на планеті, щоб побачити, що там можна збудувати.';
+  const hintText = !world.open
+    ? 'Ця планета ще закрита.'
+    : suggestion
+      ? `Уже можна збудувати: ${suggestion.item.name}!`
+      : 'Обери у списку внизу, що хочеш збудувати.';
 
   return (
-    <section className={cn(styles.card, full && styles.full)}>
+    <section className={styles.card}>
       <header className={styles.head}>
         <h2 className={styles.title}>
           <span className="emoji" aria-hidden>
@@ -285,12 +264,14 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
             onClick={() => {
               play('tap');
               speechEngine.cancel();
+              deselect();
+              // A second tap on the planet being shown puts its list away.
+              setNeedsOpen(p.planet !== world.planet || !needsOpen);
+              onPlanet(p.planet);
               if (!p.open) {
-                announce(`${p.name}. Сюди ще не можна. Спершу зроби все на планеті ${world.system[p.planet - 2].name} і збудуй там космопорт.`);
+                announce(`${p.name}. Сюди ще не можна. Спершу зроби все на планеті ${world.system[world.frontier - 1].name} і збудуй там космопорт.`);
                 return;
               }
-              deselect();
-              onPlanet(p.planet);
               announce(p.done ? `${p.name}. Тут уже все збудовано!` : `${p.name}. Планета номер ${p.planet} з ${PLANET_COUNT} на шляху до Сонця.`);
             }}
           >
@@ -326,75 +307,34 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
         </button>
       </div>
 
-      <div
-        className={styles.viewport}
-        ref={viewport}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-        onWheel={(e) => zoomBy(e.deltaY < 0 ? 1.08 : 0.93)}
-      >
+      <div className={styles.viewport} ref={viewport} {...handlers} onWheel={(e) => zoomBy(e.deltaY < 0 ? 1.08 : 0.93)}>
         {size && (
           <>
             <div className={styles.halo} style={{ left: cx, top: cy, width: radius * 2.5, height: radius * 2.5 }} aria-hidden />
-            {/* The planet itself, as it really looks, turned by the same finger. */}
-            <PlanetArt id={world.planetId} turned={view.yaw / (2 * Math.PI)} className={styles.ballArt} style={{ left: cx, top: cy, width: radius * 3.36 }} />
-
-            {world.residents.map((resident, i) => {
-              const p = seen(residentPlace(i));
-              if (!p.visible) return null;
-              return (
-                <span
-                  key={resident.id}
-                  className={cn(styles.walker, 'emoji')}
-                  style={{ left: p.left, top: p.top, transform: `translate(-50%, -85%) scale(${p.scale})`, zIndex: Math.round(p.depth * 100) }}
-                  aria-hidden
-                >
-                  {resident.emoji}
-                </span>
-              );
-            })}
-
-            {items.map((state) => {
-              const { item, status } = state;
-              const p = seen(placeOf(state));
-              if (!p.visible) return null;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={cn(
-                    styles.pin,
-                    item.kind === 'building' ? styles.plotBuilding : styles.plotDecor,
-                    status !== 'owned' && styles.plotEmpty,
-                    status === 'affordable' && styles.plotReady,
-                    status === 'locked' && styles.plotLocked,
-                    selectedId === item.id && styles.plotSelected,
-                    status === 'owned' && world.planet > 1 && styles.upgraded,
-                  )}
-                  style={{ left: p.left, top: p.top, transform: `translate(-50%, -88%) scale(${p.scale})`, zIndex: 100 + Math.round(p.depth * 100) }}
-                  onClick={() => !wasDrag() && select(state)}
-                  aria-label={`${item.name}: ${status === 'owned' ? 'збудовано' : status === 'locked' ? 'закрито' : `коштує ${item.cost}`}`}
-                >
-                  {status === 'owned' ? (
-                    <motion.span
-                      className={cn(styles.thing, 'emoji')}
-                      initial={justBuilt === item.id ? { scale: 0, y: -70, rotate: -25 } : false}
-                      animate={{ scale: 1, y: 0, rotate: 0 }}
-                      transition={{ type: 'spring', stiffness: 170, damping: 9 }}
-                    >
-                      {item.emoji}
-                      {world.planet > 1 && <span className={styles.level}>{world.planet}</span>}
-                    </motion.span>
-                  ) : (
-                    <span className={styles.plus} aria-hidden>
-                      {status === 'locked' ? '🔒' : '+'}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+            <Globe
+              planetId={world.planetId}
+              cx={cx}
+              cy={cy}
+              radius={radius}
+              yaw={view.yaw}
+              pitch={view.pitch}
+              items={items}
+              residents={world.open ? world.residents : []}
+              level={world.planet}
+              locked={!world.open}
+              selectedId={selectedId}
+              justBuilt={justBuilt}
+              onTap={(state) => {
+                if (wasDrag()) return;
+                // Only what stands can be chosen here; the rest is built from the list.
+                if (state.status === 'owned') {
+                  select(state);
+                  return;
+                }
+                play('tap');
+                announce(world.open ? `${state.item.name}. Ще не збудовано. Обери у списку внизу.` : `${state.item.name}. Ця планета ще закрита.`);
+              }}
+            />
           </>
         )}
       </div>
@@ -416,12 +356,14 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
           type="button"
           onClick={() => {
             play('tap');
-            setFull((f) => !f);
+            speechEngine.cancel();
+            deselect();
+            setNeedsOpen(false);
+            setFull(true);
           }}
-          aria-label={full ? 'Згорнути планету' : 'Відкрити планету на весь екран'}
-          aria-pressed={full}
+          aria-label="Показати всю Сонячну систему"
         >
-          {full ? '✕' : '⛶'}
+          ⛶
         </button>
       </div>
 
@@ -432,10 +374,11 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
         tabIndex={0}
         onClick={() => {
           play('tap');
+          if (!world.open) setNeedsOpen(true);
           announce(hintText);
         }}
       >
-        {suggestion ? (
+        {world.open && suggestion ? (
           <>
             Уже можна збудувати:{' '}
             <button
@@ -454,44 +397,68 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
         )}
       </p>
 
-      {/* Before flying on: nearly everything this planet has to give. */}
-      <div className={styles.needs}>
-        <h3 className={styles.needsTitle}>
-          🚀 {world.needs.done ? 'Шлях далі відкрито!' : `Щоб летіти далі — до ${nextName === 'Сонце' ? 'Сонця' : `планети ${nextName}`}`}
-        </h3>
-        <ul className={styles.needsList}>
-          {needRows.map((row) => (
-            <li key={row.text}>
+      {/* What the planet asks for — raised by tapping a planet of the system. */}
+      <AnimatePresence>
+        {needsOpen && !selected && (
+          <motion.div
+            key={`needs-${world.planet}`}
+            className={cn(styles.bar, styles.needs)}
+            role="status"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+          >
+            <h3 className={styles.needsTitle}>{needsTitle}</h3>
+            <button
+              type="button"
+              className={styles.barClose}
+              onClick={() => {
+                speechEngine.cancel();
+                setNeedsOpen(false);
+              }}
+              aria-label="Закрити"
+            >
+              ✕
+            </button>
+            <ul className={styles.needsList}>
+              {needChips.map((row) => (
+                <li key={row.text}>
+                  <button
+                    type="button"
+                    className={cn(styles.needChip, row.done && styles.needDone)}
+                    aria-label={row.text}
+                    onClick={() => {
+                      play('tap');
+                      announce(`${row.say} ${row.done ? 'Готово!' : 'Ще не готово.'}`);
+                    }}
+                  >
+                    <span className={cn(styles.needIcon, 'emoji')} aria-hidden>
+                      {row.icon}
+                    </span>
+                    <span className={styles.needCount}>{row.done ? '✅' : (row.count ?? '—')}</span>
+                    {showText && <span className={styles.needText}>{row.text}</span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {world.open && needs.done && world.planet < PLANET_COUNT && (
               <button
                 type="button"
-                className={cn(styles.needRow, row.done && styles.needDone)}
+                className={styles.buy}
                 onClick={() => {
-                  play('tap');
-                  announce(`${row.say} ${row.done ? 'Готово!' : 'Ще не готово.'}`);
+                  play('fanfare');
+                  deselect();
+                  setNeedsOpen(false);
+                  onPlanet(world.planet + 1);
+                  announce(`Летимо! Наступна планета — ${nextName}.`);
                 }}
               >
-                <span aria-hidden>{row.done ? '✅' : '⬜'}</span>
-                <span className={styles.needText}>{row.text}</span>
-                {row.count && <span className={styles.needCount}>{row.count}</span>}
+                🚀 Летіти: {nextName}
               </button>
-            </li>
-          ))}
-        </ul>
-        {world.needs.done && world.planet < PLANET_COUNT && (
-          <button
-            type="button"
-            className={styles.buy}
-            onClick={() => {
-              play('fanfare');
-              deselect();
-              onPlanet(world.planet + 1);
-              announce(`Летимо! Наступна планета — ${nextName}.`);
-            }}
-          >
-            🚀 Летіти: {nextName}
-          </button>
+            )}
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
 
       {/* What is selected — at the bottom of the screen, wherever the child
           has scrolled to, with the exchange itself. */}
@@ -595,8 +562,8 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                     className={cn(
                       styles.item,
                       state.status === 'owned' && styles.itemOwned,
-                      state.status === 'affordable' && styles.itemReady,
-                      (state.status === 'saving' || state.status === 'locked') && styles.itemFar,
+                      world.open && state.status === 'affordable' && styles.itemReady,
+                      (!world.open || state.status === 'saving' || state.status === 'locked') && styles.itemFar,
                       selectedId === state.item.id && styles.itemSelected,
                     )}
                     onClick={() => select(state)}
@@ -606,7 +573,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                     </span>
                     {showText && <span className={styles.itemName}>{state.item.name}</span>}
                     <span className={styles.itemPrice}>
-                      {state.status === 'owned' ? '✓' : state.status === 'locked' ? '🔒' : `${state.item.cost} ${theme.artifact.emoji}`}
+                      {state.status === 'owned' ? '✓' : state.status === 'locked' || !world.open ? '🔒' : `${state.item.cost} ${theme.artifact.emoji}`}
                     </span>
                   </button>
                 </li>
@@ -614,6 +581,8 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
           </ul>
         </div>
       ))}
+
+      {full && <SolarSystem world={world} onClose={() => setFull(false)} />}
     </section>
   );
 }
