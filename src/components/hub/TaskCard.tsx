@@ -74,7 +74,9 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
       initial={{ opacity: 0, y: 20, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+      // The entrance may spring; a card changing places (the star filter
+      // re-sorts the grid) glides instead — a spring made it leap up the page.
+      transition={{ type: 'spring', stiffness: 260, damping: 22, layout: { duration: 0.6, ease: [0.3, 0, 0.2, 1] } }}
     >
       {status === 'new' && (
         <span className={styles.badgeNew} aria-label="Нова гра">
