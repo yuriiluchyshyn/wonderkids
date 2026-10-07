@@ -61,16 +61,22 @@ export function HubPage() {
   );
   // Star filter SORTS, it never hides: games of the chosen level come first,
   // the rest follow dimmed (still playable). A game spanning ★–★★★ matches
-  // every level in its range.
+  // every level in its range — but one that STARTS at the chosen level goes
+  // ahead of one that only grows into it. Where most games span a range
+  // (math), picking a level would otherwise change nothing on the screen.
   const matchesStars = (entry: CatalogEntry) => {
     if (stars === null) return true;
     const [min, max] = difficultyRange(entry.sub);
     return stars >= min && stars <= max;
   };
-  const planets = useMemo(
-    () => [...allPlanets.filter(matchesStars), ...allPlanets.filter((e) => !matchesStars(e))],
-    [allPlanets, stars], // eslint-disable-line react-hooks/exhaustive-deps
-  );
+  const planets = useMemo(() => {
+    if (stars === null) return allPlanets;
+    const below = (entry: CatalogEntry) => stars - difficultyRange(entry.sub)[0];
+    return [
+      ...allPlanets.filter(matchesStars).sort((a, b) => below(a) - below(b)),
+      ...allPlanets.filter((e) => !matchesStars(e)),
+    ];
+  }, [allPlanets, stars]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
