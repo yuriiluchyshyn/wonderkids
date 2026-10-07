@@ -27,8 +27,8 @@ interface ChildDrawerProps {
  * from the child's name (the artifact purse opens «Мій світ», where artifacts
  * are spent). Shows, top to bottom: the themed
  * artifact (name + count), the family goals (how much more to collect), and the
- * world (theme) switcher, and two sound switches (mute everything; hide the
- * tap-to-hear speaker icons). The treasure collection and dream build live as their
+ * world (theme) switcher, and three sound switches (mute everything; mute
+ * only the voice, keeping sound effects; hide the tap-to-hear speaker icons). The treasure collection and dream build live as their
  * own badges in the header. No parent link — the parent portal is its own domain.
  */
 export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
@@ -171,6 +171,15 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
                 label={muted ? 'Звук вимкнено' : 'Вимкнути весь звук'}
                 active={muted}
                 onClick={toggleMute}
+              />
+              <Chip
+                icon={voiceOn ? '🗣️' : '🤐'}
+                label={voiceOn ? 'Вимкнути голос' : 'Голос вимкнено'}
+                active={!voiceOn}
+                onClick={() => {
+                  if (voiceOn) speechEngine.cancel();
+                  updateSettings({ voiceOn: !voiceOn });
+                }}
               />
               <Chip
                 icon={ttsButtons ? '🔈' : '📖'}

@@ -38,15 +38,18 @@ function Auth0Form() {
     })();
   }, [isAuthenticated, getIdTokenClaims, loginWithAuth0]);
 
-  const signIn = () => void loginWithRedirect();
+  // `replace`, not `assign`: this page only passes the parent on, so «Back»
+  // on the Auth0 screen must return to where they came from, not to here
+  // (which would send them straight to Auth0 again).
+  const signIn = () => void loginWithRedirect({ openUrl: (url) => window.location.replace(url) });
 
   // No session anywhere and nothing went wrong → off to Auth0.
   const leaving = useRef(false);
   useEffect(() => {
     if (isLoading || isAuthenticated || auth0Error || leaving.current || auth0LoggingOut()) return;
     leaving.current = true;
-    void loginWithRedirect();
-  }, [isLoading, isAuthenticated, auth0Error, loginWithRedirect]);
+    signIn();
+  }, [isLoading, isAuthenticated, auth0Error]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (refused) {
     return (

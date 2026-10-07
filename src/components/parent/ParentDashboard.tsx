@@ -19,6 +19,8 @@ import { computeAge } from '@/core/utils/age';
 import { subSteps, pathKey } from '@/core/child/progress/path';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
+import { GALAXIES } from '@/core/game/galaxies';
+import { portalUrl } from '@/core/app/portal';
 import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
 import { Button } from '@/components/ui/Button';
@@ -26,7 +28,7 @@ import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { ChildManager } from './ChildManager';
 import { GoalRow } from './GoalRow';
-import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { CHILD_HANDOFF, useAuthStore } from '@/core/account/auth/useAuthStore';
 import styles from './Parent.module.css';
 
 const GENDER_OPTIONS: { id: Gender; label: string; icon: string }[] = [
@@ -145,12 +147,44 @@ export function ParentDashboard() {
     }
   };
 
-  // Only games with a difficulty ladder have a step to set (free play has none).
-  const subPaths = moduleRegistry.getAll().flatMap((m) =>
-    m.subCategories
-      .filter((sub) => !isFreePlay(sub))
-      .map((sub) => ({ moduleId: m.id, moduleIcon: m.icon, sub })),
-  );
+  // Only games with a difficulty ladder have a step to set (free play has
+  // none). One group per galaxy, in the hub's order.
+  const stepGroups = moduleRegistry
+    .getAll()
+    .map((m) => {
+      const galaxy = GALAXIES.find((g) => g.moduleId === m.id);
+      return {
+        moduleId: m.id,
+        name: galaxy?.name ?? m.id,
+        icon: galaxy?.icon ?? m.icon,
+        order: galaxy ? GALAXIES.indexOf(galaxy) : GALAXIES.length,
+        subs: m.subCategories.filter((sub) => !isFreePlay(sub)),
+      };
+    })
+    .filter((g) => g.subs.length > 0)
+    .sort((a, b) => a.order - b.order);
+
+  // «Відкрити гру»: the child's game in a new tab, signed in as that child —
+  // no nick and PIN to type. The tab is opened at once (a browser only allows
+  // that inside the tap itself) and pointed at the game when the server has
+  // answered with the child's session.
+  const [openGameError, setOpenGameError] = useState(false);
+  const openChildGame = () => {
+    if (!token || !activeChildId) return;
+    setOpenGameError(false);
+    const tab = window.open('', '_blank');
+    api
+      .openChild(token, activeChildId)
+      .then((session) => {
+        const url = new URL(portalUrl('kid', '/login'), window.location.origin).href + CHILD_HANDOFF + session.token;
+        if (tab) tab.location.replace(url);
+        else window.location.assign(url);
+      })
+      .catch(() => {
+        tab?.close();
+        setOpenGameError(true);
+      });
+  };
 
   const patchMilestone = (id: string, patch: Partial<Milestone>) =>
     setMilestones(milestones.map((m) => (m.id === id ? { ...m, ...patch } : m)));
@@ -172,6 +206,14 @@ export function ParentDashboard() {
       {/* ---- Child profile ---- */}
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>👤 Профіль дитини</h3>
+        <Button block icon="🎮" onClick={openChildGame}>
+          Відкрити гру дитини
+        </Button>
+        <p className={styles.hint}>
+          {openGameError
+            ? 'Не вдалося відкрити гру. Якщо дитину щойно додано — спершу натисніть «Зберегти зміни».'
+            : 'Гра відкриється в новій вкладці вже від імені дитини — нік і PIN вводити не треба.'}
+        </p>
         <label className={styles.fieldLabel}>Ім'я</label>
         <input
           className={styles.textInput}
@@ -399,33 +441,47 @@ export function ParentDashboard() {
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>🪜 Сходинка завдання</h3>
         <p className={styles.hint}>
-          Познач, на якій сходинці зараз має бути дитина для кожного завдання.
+          Відкрий галактику й познач, на якій сходинці зараз має бути дитина для кожного завдання.
         </p>
         <div className="stack">
-          {subPaths.map(({ moduleId, moduleIcon, sub }) => {
-            const step = progress[pathKey(moduleId, sub.id)] ?? 1;
-            const maxSteps = subSteps(sub);
-            return (
-              <div key={`${moduleId}:${sub.id}`} className={styles.stepRow}>
-                <span className={styles.stepName}>
-                  <span className="emoji" aria-hidden>
-                    {sub.icon || moduleIcon}
-                  </span>
-                  {sub.label}
+          {/* One galaxy at a time: all closed until the parent opens one. */}
+          {stepGroups.map((group) => (
+            <details key={group.moduleId} className={styles.stepGroup}>
+              <summary className={styles.stepGroupHead}>
+                <span className="emoji" aria-hidden>
+                  {group.icon}
                 </span>
-                <input
-                  className={styles.textInput}
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  max={maxSteps}
-                  value={step}
-                  onChange={(e) => setStep(moduleId, sub.id, Number(e.target.value), maxSteps)}
-                  aria-label={`Сходинка для ${sub.label} (макс ${maxSteps})`}
-                />
+                <span className={styles.stepGroupName}>{group.name}</span>
+                <span className={styles.stepGroupCount}>{group.subs.length}</span>
+              </summary>
+              <div className="stack">
+                {group.subs.map((sub) => {
+                  const step = progress[pathKey(group.moduleId, sub.id)] ?? 1;
+                  const maxSteps = subSteps(sub);
+                  return (
+                    <div key={sub.id} className={styles.stepRow}>
+                      <span className={styles.stepName}>
+                        <span className="emoji" aria-hidden>
+                          {sub.icon || group.icon}
+                        </span>
+                        {sub.label}
+                      </span>
+                      <input
+                        className={styles.textInput}
+                        type="number"
+                        inputMode="numeric"
+                        min={1}
+                        max={maxSteps}
+                        value={step}
+                        onChange={(e) => setStep(group.moduleId, sub.id, Number(e.target.value), maxSteps)}
+                        aria-label={`Сходинка для ${sub.label} (макс ${maxSteps})`}
+                      />
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
+            </details>
+          ))}
         </div>
       </section>
 

@@ -493,6 +493,12 @@ export async function resolveChildLogin(identifier, pin) {
   return { status: 'ok', userId: match.parent_id, childId: match.id };
 }
 
+/** Whether this child profile belongs to this parent account. */
+export async function ownsChild(parentId, childId) {
+  const { rowCount } = await getPool().query(`SELECT 1 FROM wk_children WHERE id = $1 AND parent_id = $2`, [childId, parentId]);
+  return rowCount > 0;
+}
+
 /**
  * Apply a screen-time transition for one child inside a row-locked
  * transaction. `transition(state, limits)` is one of the pure functions from

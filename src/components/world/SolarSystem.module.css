@@ -161,6 +161,25 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Puts the story away and stops the voice. */
+.story .storyClose {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  align-self: auto;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid rgba(139, 124, 255, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8ecff;
+  font-size: 1.1rem;
+}
+
+.storyHead {
+  padding-right: 48px;
+}
+
 /* A phone on its side: the story keeps to the left so the planet stays in view. */
 @media (orientation: landscape) and (max-height: 520px) {
   .story {

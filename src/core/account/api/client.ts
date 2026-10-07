@@ -126,6 +126,15 @@ export const api = {
     });
   },
 
+  /** A PARENT session opens one of its own children's games: a child token for it. */
+  openChild(token: string, childId: string) {
+    return request<{ token: string; childId: string; user: AuthUser }>('/api/auth/child-login', {
+      method: 'POST',
+      token,
+      body: { childId },
+    });
+  },
+
   /** Load the signed-in user's saved state (`state` is `null` when empty). */
   getState<T>(token: string) {
     return request<{ state: T | null; features?: { cloudTts?: boolean } }>('/api/state', { token });

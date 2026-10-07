@@ -74,6 +74,50 @@
   background: color-mix(in srgb, var(--ring) 16%, transparent);
 }
 
+/* Step controls, one collapsible group per galaxy. */
+.stepGroup {
+  border: 1px solid var(--border, rgba(127, 127, 127, 0.25));
+  border-radius: var(--radius);
+  padding: 0 12px;
+}
+
+.stepGroup[open] {
+  padding-bottom: 12px;
+}
+
+.stepGroupHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+
+.stepGroupHead::-webkit-details-marker {
+  display: none;
+}
+
+.stepGroupHead::after {
+  content: '▸';
+  transition: transform 0.15s;
+}
+
+.stepGroup[open] > .stepGroupHead::after {
+  transform: rotate(90deg);
+}
+
+.stepGroupName {
+  flex: 1;
+}
+
+.stepGroupCount {
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
 .stepRow {
   display: flex;
   align-items: center;

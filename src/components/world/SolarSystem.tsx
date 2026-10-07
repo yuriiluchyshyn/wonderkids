@@ -49,7 +49,8 @@ interface SolarSystemProps {
  * with all eight planets going round it. Pinch (or tap a planet) to fly up to
  * one and see what stands on it — what is not built yet is dimmed, a planet
  * not reached yet is dark under a lock. A tapped planet tells a story about
- * itself (`PLANET_FACTS`), a new one every time; the things on a planet not
+ * itself (`PLANET_FACTS`), a new one every time, and ✕ on the story puts it
+ * away and stops the voice; the things on a planet not
  * reached yet say nothing. Looking only: building is done on the planet's own
  * page.
  */
@@ -295,6 +296,18 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
 
       {teller && told && (
         <div className={styles.story} onPointerDown={(e) => e.stopPropagation()} onWheel={(e) => e.stopPropagation()}>
+          <button
+            type="button"
+            className={styles.storyClose}
+            onClick={() => {
+              play('tap');
+              speechEngine.cancel();
+              setTold(null);
+            }}
+            aria-label="Закрити й зупинити розповідь"
+          >
+            ✕
+          </button>
           <div className={styles.storyHead}>
             <h2>{teller.name}</h2>
             <span>{teller.open ? `Збудовано ${teller.items.filter((s) => s.status === 'owned').length} з ${teller.items.length}` : '🔒 Сюди ти ще не долетів'}</span>

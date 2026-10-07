@@ -138,3 +138,26 @@ export const useAuthStore = create<AuthState>()(
     },
   ),
 );
+
+/** The fragment the parent cabinet opens the child portal with: `#child=<token>`. */
+export const CHILD_HANDOFF = '#child=';
+
+/**
+ * A parent opened this tab from the cabinet to play as one of their children
+ * (see `ParentDashboard`): take the child session from the URL fragment — which
+ * never reaches a server — and wipe it from the address bar and history.
+ */
+export function adoptChildHandoff(): void {
+  const { hash, pathname, search } = window.location;
+  if (!hash.startsWith(CHILD_HANDOFF)) return;
+  const token = hash.slice(CHILD_HANDOFF.length);
+  window.history.replaceState(null, '', pathname + search);
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    if (typeof payload.childId !== 'string') return;
+    useGameStore.getState().resetAll();
+    useAuthStore.setState({ token, user: { id: Number(payload.sub) }, childId: payload.childId, error: null });
+  } catch {
+    /* not a token — ignore, the login page shows as usual */
+  }
+}
