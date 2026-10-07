@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { api, ApiError, type AuthUser } from '@/core/account/api/client';
 import { useGameStore } from '@/core/child/store/useGameStore';
+import { auth0Enabled, auth0LogoutUrl } from './auth0';
 
 /** Human-friendly messages for the error codes the API can return on login. */
 const LOGIN_ERRORS: Record<string, string> = {
@@ -11,6 +12,10 @@ const LOGIN_ERRORS: Record<string, string> = {
   child_not_found: 'Схоже, такого гравця ще немає. Попроси батьків створити тобі акаунт 👨‍👩‍👧',
   network_error: 'Не вдалося зв’язатися із сервером. Він увімкнений?',
   login_failed: 'Щось пішло не так на сервері. Спробуй ще раз.',
+  invalid_token: 'Не вдалося підтвердити вхід. Спробуйте увійти ще раз.',
+  email_missing: 'Цей спосіб входу не передав нам вашу пошту. Оберіть інший, будь ласка.',
+  email_not_verified: 'Спершу підтвердьте пошту: відкрийте лист, який ми надіслали, і натисніть посилання в ньому.',
+  auth0_required: 'Вхід оновлено. Оновіть сторінку й увійдіть ще раз.',
 };
 
 export type LoginOutcome =
@@ -32,16 +37,25 @@ export interface AuthState {
    * mistyped) and is only registered when called again with `create`.
    */
   login: (email: string, create?: boolean) => Promise<LoginOutcome>;
+  /**
+   * Parent login through Auth0: trades the ID token for our own session. On
+   * failure returns the error code (also shown through `error`), else null.
+   */
+  loginWithAuth0: (idToken: string) => Promise<string | null>;
   /** Child login by unique nickname + parent-set PIN. */
   childLogin: (identifier: string, pin: string) => Promise<boolean>;
-  /** Clear the session and wipe the in-memory save. */
+  /**
+   * Clear the session and wipe the in-memory save. A parent who signed in
+   * through Auth0 is also signed out there (the page leaves for Auth0 and
+   * comes back to the parent login).
+   */
   logout: () => void;
   clearError: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       token: null,
       user: null,
       childId: null,
@@ -75,6 +89,19 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
+      loginWithAuth0: async (idToken) => {
+        set({ pending: true, error: null });
+        try {
+          const { token, user } = await api.auth0Login(idToken);
+          set({ token, user, childId: null, pending: false, error: null });
+          return null;
+        } catch (err) {
+          const code = err instanceof ApiError ? err.code : 'login_failed';
+          set({ pending: false, error: LOGIN_ERRORS[code] ?? LOGIN_ERRORS.login_failed });
+          return code;
+        }
+      },
+
       childLogin: async (identifier, pin) => {
         set({ pending: true, error: null });
         try {
@@ -92,9 +119,11 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
+        const wasParent = Boolean(get().token) && !get().childId;
         // Drop the signed-in child's data so the next login starts clean.
         useGameStore.getState().resetAll();
         set({ token: null, user: null, childId: null, error: null });
+        if (wasParent && auth0Enabled) window.location.assign(auth0LogoutUrl());
       },
 
       clearError: () => set({ error: null }),

@@ -13,6 +13,9 @@ const API_ENV = [
   'ADMIN_KEY',
   'SECRETS_KEY',
   'GOOGLE_TTS_ENDPOINT',
+  // Public values shared with the frontend; the API verifies Auth0 tokens with them.
+  'VITE_AUTH0_DOMAIN',
+  'VITE_AUTH0_CLIENT_ID',
 ];
 
 /** The Docker database from the workspace-root docker-compose.yml. */

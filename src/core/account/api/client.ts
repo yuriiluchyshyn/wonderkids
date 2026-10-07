@@ -110,6 +110,14 @@ export const api = {
     });
   },
 
+  /** PARENT login with the ID token from Auth0 Universal Login. */
+  auth0Login(idToken: string) {
+    return request<{ token: string; user: AuthUser; created: boolean }>('/api/auth/auth0', {
+      method: 'POST',
+      body: { idToken },
+    });
+  },
+
   /** CHILD login by unique nickname + parent-set PIN. */
   childLogin(identifier: string, pin: string) {
     return request<{ token: string; childId: string; user: AuthUser }>('/api/auth/child-login', {

@@ -1,15 +1,19 @@
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
-import { useState, type FormEvent } from 'react';
+import { lazy, Suspense, useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuthStore, type LoginOutcome } from '@/core/account/auth/useAuthStore';
+import { auth0Enabled } from '@/core/account/auth/auth0';
 import { getPortal } from '@/core/app/portal';
 import styles from './LoginPage.module.css';
 
+// Loaded on demand: the Auth0 SDK is never part of what a child downloads.
+const Auth0Login = lazy(() => import('./Auth0Login').then((m) => ({ default: m.Auth0Login })));
+
 /**
- * Parent entry screen. Login is email-only for now. Signing in never creates
- * an account by itself: for an address we do not know, the page asks first (and
- * suggests the fix when the domain looks mistyped). If a session already
- * exists we skip straight to the cabinet.
+ * Parent entry screen. With Auth0 configured (`VITE_AUTH0_*`) the parent signs
+ * in on Auth0 Universal Login (`Auth0Login`); without it the login is
+ * email-only (`EmailLoginForm`). If a session already exists we skip straight
+ * to the cabinet.
  *
  * Intentionally theme-independent: this screen renders before a world is
  * chosen, so it uses its own neutral styling (no per-theme palette). To hint at
@@ -60,39 +64,11 @@ export function LoginPage() {
       'Вхід до кабінету батьків ДивоСвіту: додавайте дітей, налаштовуйте ігровий час, сімейні цілі та стежте за успіхами.',
     index: true,
   });
-  const navigate = useNavigate();
   const token = useAuthStore((s) => s.token);
-  const login = useAuthStore((s) => s.login);
-  const pending = useAuthStore((s) => s.pending);
-  const error = useAuthStore((s) => s.error);
-  const clearError = useAuthStore((s) => s.clearError);
 
-  const [email, setEmail] = useState('');
-  // Set when the address has no account yet: we ask before creating one, so a
-  // typo never quietly becomes a second, empty account.
-  const [unknown, setUnknown] = useState<Extract<LoginOutcome, { status: 'not_found' }> | null>(null);
-
-  // This is the PARENT cabinet login (email-only for now). Parents land here;
-  // children use the credential login on the child portal.
+  // This is the PARENT cabinet login. Parents land here; children use the
+  // credential login on the child portal.
   if (token) return <Navigate to="/parent" replace />;
-
-  const signIn = async (address: string, create = false) => {
-    if (pending) return;
-    const outcome = await login(address, create);
-    if (outcome.status === 'ok') navigate('/parent', { replace: true });
-    else if (outcome.status === 'not_found') setUnknown(outcome);
-  };
-
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    void signIn(email);
-  };
-
-  const trySuggestion = (address: string) => {
-    setEmail(address);
-    setUnknown(null);
-    void signIn(address);
-  };
 
   return (
     <div className={styles.wrap}>
@@ -127,71 +103,18 @@ export function LoginPage() {
         <h1 className={styles.title}>WonderKids</h1>
         <p className={styles.sub}>Кабінет батьків</p>
 
-        <form className={styles.form} onSubmit={submit}>
-          <label className={styles.label} htmlFor="email">
-            Електронна пошта
-          </label>
-          <input
-            id="email"
-            className={styles.input}
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            autoFocus
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setUnknown(null);
-              if (error) clearError();
-            }}
-            aria-label="Електронна пошта"
-            aria-invalid={Boolean(error)}
-          />
-
-          {error && <p className={styles.error}>{error}</p>}
-          {unknown ? (
-            <div className={styles.confirm} role="alert">
-              <p>
-                Акаунта з поштою <b>{unknown.email}</b> ще немає.
-              </p>
-              {unknown.suggestion && (
-                <>
-                  <p>
-                    Можливо, ви мали на увазі <b>{unknown.suggestion}</b>?
-                    {unknown.suggestionExists && ' Такий акаунт уже є.'}
-                  </p>
-                  <button
-                    className={styles.submit}
-                    type="button"
-                    disabled={pending}
-                    onClick={() => trySuggestion(unknown.suggestion as string)}
-                  >
-                    Увійти як {unknown.suggestion}
-                  </button>
-                </>
-              )}
-              <button
-                className={unknown.suggestion ? styles.secondary : styles.submit}
-                type="button"
-                disabled={pending}
-                onClick={() => void signIn(unknown.email, true)}
-              >
-                {pending ? 'Створюємо…' : `Створити новий акаунт для ${unknown.email}`}
-              </button>
-              <button className={styles.secondary} type="button" onClick={() => setUnknown(null)}>
-                Виправити пошту
-              </button>
-            </div>
-          ) : (
-            <button className={styles.submit} type="submit" disabled={pending}>
-              {pending ? 'Входимо…' : 'Увійти'}
-            </button>
-          )}
-        </form>
+        {auth0Enabled ? (
+          <Suspense fallback={null}>
+            <Auth0Login />
+          </Suspense>
+        ) : (
+          <EmailLoginForm />
+        )}
 
         <p className={styles.hint}>
-          Пароль не потрібен — поки що вхід лише за поштою.
+          {auth0Enabled
+            ? 'Уже користувалися ДивоСвітом? Увійдіть із тією самою поштою — діти й прогрес на місці.'
+            : 'Пароль не потрібен — поки що вхід лише за поштою.'}
           {getPortal() === 'dev' && (
             <>
               {' · '}
@@ -203,5 +126,106 @@ export function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+/**
+ * Email-only login, used while Auth0 is not configured. Signing in never
+ * creates an account by itself: for an address we do not know, the form asks
+ * first (and suggests the fix when the domain looks mistyped).
+ */
+function EmailLoginForm() {
+  const navigate = useNavigate();
+  const login = useAuthStore((s) => s.login);
+  const pending = useAuthStore((s) => s.pending);
+  const error = useAuthStore((s) => s.error);
+  const clearError = useAuthStore((s) => s.clearError);
+
+  const [email, setEmail] = useState('');
+  // Set when the address has no account yet: we ask before creating one, so a
+  // typo never quietly becomes a second, empty account.
+  const [unknown, setUnknown] = useState<Extract<LoginOutcome, { status: 'not_found' }> | null>(null);
+
+  const signIn = async (address: string, create = false) => {
+    if (pending) return;
+    const outcome = await login(address, create);
+    if (outcome.status === 'ok') navigate('/parent', { replace: true });
+    else if (outcome.status === 'not_found') setUnknown(outcome);
+  };
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    void signIn(email);
+  };
+
+  const trySuggestion = (address: string) => {
+    setEmail(address);
+    setUnknown(null);
+    void signIn(address);
+  };
+
+  return (
+    <form className={styles.form} onSubmit={submit}>
+      <label className={styles.label} htmlFor="email">
+        Електронна пошта
+      </label>
+      <input
+        id="email"
+        className={styles.input}
+        type="email"
+        inputMode="email"
+        autoComplete="email"
+        autoFocus
+        placeholder="you@example.com"
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          setUnknown(null);
+          if (error) clearError();
+        }}
+        aria-label="Електронна пошта"
+        aria-invalid={Boolean(error)}
+      />
+
+      {error && <p className={styles.error}>{error}</p>}
+      {unknown ? (
+        <div className={styles.confirm} role="alert">
+          <p>
+            Акаунта з поштою <b>{unknown.email}</b> ще немає.
+          </p>
+          {unknown.suggestion && (
+            <>
+              <p>
+                Можливо, ви мали на увазі <b>{unknown.suggestion}</b>?
+                {unknown.suggestionExists && ' Такий акаунт уже є.'}
+              </p>
+              <button
+                className={styles.submit}
+                type="button"
+                disabled={pending}
+                onClick={() => trySuggestion(unknown.suggestion as string)}
+              >
+                Увійти як {unknown.suggestion}
+              </button>
+            </>
+          )}
+          <button
+            className={unknown.suggestion ? styles.secondary : styles.submit}
+            type="button"
+            disabled={pending}
+            onClick={() => void signIn(unknown.email, true)}
+          >
+            {pending ? 'Створюємо…' : `Створити новий акаунт для ${unknown.email}`}
+          </button>
+          <button className={styles.secondary} type="button" onClick={() => setUnknown(null)}>
+            Виправити пошту
+          </button>
+        </div>
+      ) : (
+        <button className={styles.submit} type="submit" disabled={pending}>
+          {pending ? 'Входимо…' : 'Увійти'}
+        </button>
+      )}
+    </form>
   );
 }

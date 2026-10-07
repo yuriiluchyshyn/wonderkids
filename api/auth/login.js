@@ -1,11 +1,15 @@
 import { createParent, ensureSchema, findParentByEmail } from '../_lib/db.js';
 import { isValidEmail, signToken } from '../_lib/auth.js';
+import { auth0Enabled } from '../_lib/auth0.js';
 import { normaliseEmail, suggestEmail } from '../_lib/email.js';
 
 /**
  * Parent login by email → POST /api/auth/login  { email, create? }
  *
- * No password yet (POC). Signing in NEVER creates an account by itself: an
+ * The fallback while Auth0 is not configured (see ./auth0.js); once it is,
+ * this endpoint answers 403 `auth0_required`.
+ *
+ * No password (POC). Signing in NEVER creates an account by itself: an
  * unknown address answers 404 `account_not_found` (with a `suggestion` when the
  * domain looks mistyped), and the account is only created when the client
  * repeats the call with `create: true` after the parent confirmed it. This is
@@ -18,6 +22,11 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'method_not_allowed' });
+  }
+
+  // With Auth0 configured this door is shut: an address alone proves nothing.
+  if (auth0Enabled()) {
+    return res.status(403).json({ error: 'auth0_required' });
   }
 
   const { email, create } = req.body ?? {};
