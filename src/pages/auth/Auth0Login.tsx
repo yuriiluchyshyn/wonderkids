@@ -93,7 +93,11 @@ export function Auth0Login() {
     <Auth0Provider
       domain={AUTH0_DOMAIN}
       clientId={AUTH0_CLIENT_ID}
-      authorizationParams={{ redirect_uri: auth0ReturnUrl(), ui_locales: 'uk' }}
+      // `prompt: 'login'`: the sign-in form every time. Our own session lasts
+      // for weeks, so nothing is lost — and a parent who backs out of an
+      // unfinished sign-in (the two-factor set-up has no way back) gets the
+      // form again, where they can pick another account or register.
+      authorizationParams={{ redirect_uri: auth0ReturnUrl(), ui_locales: 'uk', prompt: 'login' }}
     >
       <Auth0Form />
     </Auth0Provider>

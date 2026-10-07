@@ -29,6 +29,7 @@ import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { ChildManager } from './ChildManager';
 import { GoalRow } from './GoalRow';
 import { CHILD_HANDOFF, useAuthStore } from '@/core/account/auth/useAuthStore';
+import { auth0Enabled, auth0SendPasswordReset } from '@/core/account/auth/auth0';
 import styles from './Parent.module.css';
 
 const GENDER_OPTIONS: { id: Gender; label: string; icon: string }[] = [
@@ -168,6 +169,14 @@ export function ParentDashboard() {
   // no nick and PIN to type. The tab is opened at once (a browser only allows
   // that inside the tap itself) and pointed at the game when the server has
   // answered with the child's session.
+  // «Змінити пароль»: Auth0 emails the link; nothing about passwords lives here.
+  const [reset, setReset] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
+  const sendPasswordReset = async () => {
+    if (!email || reset === 'sending') return;
+    setReset('sending');
+    setReset((await auth0SendPasswordReset(email)) ? 'sent' : 'failed');
+  };
+
   const [openGameError, setOpenGameError] = useState(false);
   const openChildGame = () => {
     if (!token || !activeChildId) return;
@@ -496,6 +505,23 @@ export function ParentDashboard() {
           <p className={styles.hint} style={{ margin: 0, textAlign: 'center' }}>
             Оберіть дитину вище або додайте нову, щоб налаштувати її гру.
           </p>
+        </section>
+      )}
+
+      {/* ---- Password ---- */}
+      {auth0Enabled && email && (
+        <section className={styles.section}>
+          <h3 className={styles.sectionTitle}>🔑 Пароль</h3>
+          <p className={styles.hint}>
+            {reset === 'sent'
+              ? `Лист із посиланням надіслано на ${email}. Відкрийте його й задайте новий пароль. Не бачите листа — перевірте «Спам».`
+              : reset === 'failed'
+                ? 'Не вдалося надіслати лист. Спробуйте, будь ласка, ще раз за хвилину.'
+                : `Надішлемо на ${email} лист із посиланням, за яким можна задати новий пароль. Якщо ви входите через Google, пароль змінюється у вашому Google-акаунті.`}
+          </p>
+          <Button block variant="ghost" icon="✉️" onClick={sendPasswordReset} disabled={reset === 'sending'}>
+            {reset === 'sending' ? 'Надсилаємо…' : reset === 'sent' ? 'Надіслати ще раз' : 'Змінити пароль'}
+          </Button>
         </section>
       )}
 

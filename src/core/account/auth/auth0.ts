@@ -38,6 +38,25 @@ export function auth0Logout(): void {
   window.location.assign(`https://${AUTH0_DOMAIN}/v2/logout?${params}`);
 }
 
+/**
+ * Asks Auth0 to email the parent a link for setting a new password. Auth0
+ * answers the same whether or not the address has a password account (a
+ * parent who signs in with Google has none), so this only fails when the
+ * request itself does not get through.
+ */
+export async function auth0SendPasswordReset(email: string): Promise<boolean> {
+  try {
+    const res = await fetch(`https://${AUTH0_DOMAIN}/dbconnections/change_password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client_id: AUTH0_CLIENT_ID, email, connection: 'Username-Password-Authentication' }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 let leaving = false;
 
 /**
