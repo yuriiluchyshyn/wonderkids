@@ -7,7 +7,7 @@ import styles from './LoginPage.module.css';
 /**
  * The Auth0 half of the parent login: one button that leaves for Auth0
  * Universal Login, and — once Auth0 sends the parent back — the exchange of
- * its ID token for our own session (`POST /api/auth/auth0`). When that
+ * its ID token for our own session (`POST /api/auth/login`). When that
  * succeeds the session appears in the store and `LoginPage` moves on to the
  * cabinet.
  *

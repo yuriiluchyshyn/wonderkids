@@ -112,7 +112,7 @@ export const api = {
 
   /** PARENT login with the ID token from Auth0 Universal Login. */
   auth0Login(idToken: string) {
-    return request<{ token: string; user: AuthUser; created: boolean }>('/api/auth/auth0', {
+    return request<{ token: string; user: AuthUser; created: boolean }>('/api/auth/login', {
       method: 'POST',
       body: { idToken },
     });
