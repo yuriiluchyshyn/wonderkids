@@ -38,6 +38,11 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Only to look at: the tap belongs to what is underneath. */
+.inert {
+  pointer-events: none;
+}
+
 .thing {
   position: relative;
   display: block;

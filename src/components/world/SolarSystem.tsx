@@ -3,8 +3,10 @@ import { createPortal } from 'react-dom';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { speechEngine } from '@/core/audio/SpeechEngine';
+import { PLANET_FACTS } from '@/core/child/world/planetFacts';
 import type { World } from '@/core/child/world/useWorld';
 import { PLANET_COUNT, type WorldPlanetId } from '@/core/child/world/world';
+import { pickOutro } from '@/core/game/content/outro';
 import { cn } from '@/core/utils/cn';
 import { Globe } from './Globe';
 import { RAD } from './places';
@@ -46,12 +48,16 @@ interface SolarSystemProps {
  * The whole screen for the child's solar system, and nothing else: the Sun
  * with all eight planets going round it. Pinch (or tap a planet) to fly up to
  * one and see what stands on it — what is not built yet is dimmed, a planet
- * not reached yet is dark under a lock. Looking only: building is done on the
- * planet's own page.
+ * not reached yet is dark under a lock. A tapped planet tells a story about
+ * itself (`PLANET_FACTS`), a new one every time; the things on a planet not
+ * reached yet say nothing. Looking only: building is done on the planet's own
+ * page.
  */
 export function SolarSystem({ world, onClose }: SolarSystemProps) {
   const { play } = useSound();
   const announce = useVoiceSpeak('selections');
+  /** The planet that is telling about itself, and the story it tells now. */
+  const [told, setTold] = useState<{ id: WorldPlanetId; fact: string } | null>(null);
 
   const box = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<{ w: number; h: number } | null>(null);
@@ -128,6 +134,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
     flight.current = null;
     const c = camera.current;
     const s = Math.max(1, Math.min(ZOOM_MAX, c.s * factor));
+    if (s <= STILL_ABOVE) setTold(null);
     const px = x - w / 2;
     const py = y - h / 2;
     camera.current = held({ s, x: c.x + px / c.s - px / s, y: c.y + py / c.s - py / s });
@@ -141,6 +148,14 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
     },
     onPinch: zoomAt,
   });
+
+  /** The planet's next story, shown and read out; its pool comes round only after all twenty. */
+  const tell = (id: WorldPlanetId, name: string) => {
+    const fact = pickOutro({ outro: [...PLANET_FACTS[id]] });
+    if (!fact) return;
+    setTold({ id, fact });
+    announce(`${name}. ${fact}`);
+  };
 
   const { cam } = frame;
   const toScreen = (x: number, y: number) => ({ left: w / 2 + (x - cam.x) * cam.s, top: h / 2 + (y - cam.y) * cam.s });
@@ -158,6 +173,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
   const sun = toScreen(0, 0);
   const sunSize = short * 0.11 * cam.s;
   const zoomed = cam.s > STILL_ABOVE;
+  const teller = told && planets.find((p) => p.id === told.id);
 
   return createPortal(
     <div
@@ -197,7 +213,6 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
 
           {planets.map((p) => {
             const touch = Math.max(48, p.radius * 2);
-            const built = p.items.filter((s) => s.status === 'owned').length;
             return (
               <div key={p.id} className={styles.planet}>
                 {p.planet === world.frontier && (
@@ -213,7 +228,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
                     if (wasDrag()) return;
                     play('tap');
                     flyTo({ x: p.x, y: p.y, s: (short * FOCUS_SHARE) / p.across });
-                    announce(p.open ? `${p.name}. Збудовано ${built} з ${p.items.length}.` : `${p.name}. Сюди ти ще не долетів.`);
+                    tell(p.id, p.name);
                   }}
                 />
                 <Globe
@@ -228,11 +243,16 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
                   level={p.planet}
                   locked={!p.open}
                   detail={p.radius >= DETAIL_RADIUS}
-                  onTap={(state) => {
-                    if (wasDrag()) return;
-                    play('tap');
-                    announce(`${state.item.name}. ${state.status === 'owned' ? 'Уже збудовано!' : 'Ще не збудовано.'}`);
-                  }}
+                  // On a planet not reached yet the things are only seen: a tap goes through to the planet.
+                  onTap={
+                    p.open
+                      ? (state) => {
+                          if (wasDrag()) return;
+                          play('tap');
+                          announce(`${state.item.name}. ${state.status === 'owned' ? 'Уже збудовано!' : 'Ще не збудовано.'}`);
+                        }
+                      : undefined
+                  }
                 />
               </div>
             );
@@ -263,6 +283,8 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
           disabled={!zoomed}
           onClick={() => {
             play('tap');
+            speechEngine.cancel();
+            setTold(null);
             flyTo(OVERVIEW);
           }}
           aria-label="Показати всю Сонячну систему"
@@ -270,6 +292,25 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
           ☀️
         </button>
       </div>
+
+      {teller && told && (
+        <div className={styles.story} onPointerDown={(e) => e.stopPropagation()} onWheel={(e) => e.stopPropagation()}>
+          <div className={styles.storyHead}>
+            <h2>{teller.name}</h2>
+            <span>{teller.open ? `Збудовано ${teller.items.filter((s) => s.status === 'owned').length} з ${teller.items.length}` : '🔒 Сюди ти ще не долетів'}</span>
+          </div>
+          <p aria-live="polite">{told.fact}</p>
+          <button
+            type="button"
+            onClick={() => {
+              play('tap');
+              tell(teller.id, teller.name);
+            }}
+          >
+            Розкажи ще ✨
+          </button>
+        </div>
+      )}
     </div>,
     document.body,
   );

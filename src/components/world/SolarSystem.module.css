@@ -101,3 +101,72 @@
 .buttons .off {
   opacity: 0.35;
 }
+
+/* What the tapped planet tells about itself: read aloud, and written here. */
+.story {
+  position: absolute;
+  left: 50%;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(100% - 24px, 560px);
+  max-height: 46%;
+  padding: 14px 16px;
+  overflow-y: auto;
+  border: 1px solid rgba(139, 124, 255, 0.45);
+  border-radius: var(--radius);
+  background: rgba(11, 16, 38, 0.88);
+  box-shadow: var(--shadow-lg);
+  color: #e8ecff;
+  transform: translateX(-50%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  touch-action: pan-y;
+}
+
+.storyHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.storyHead h2 {
+  font-size: 1.4rem;
+  color: #fde047;
+}
+
+.storyHead span {
+  font-size: 0.9rem;
+  color: #aab2db;
+}
+
+.story p {
+  font-size: 1.08rem;
+  line-height: 1.45;
+}
+
+.story button {
+  align-self: flex-end;
+  min-height: 56px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #a79bff, #35d6e8);
+  color: #0b1026;
+  font-size: 1.1rem;
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* A phone on its side: the story keeps to the left so the planet stays in view. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .story {
+    left: calc(12px + env(safe-area-inset-left));
+    width: min(42%, 380px);
+    max-height: calc(100% - 24px);
+    transform: none;
+  }
+}

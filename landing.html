@@ -10,7 +10,7 @@
     />
     <meta name="keywords" content="навчальні ігри для дітей, ігри українською, математика для дітей, прапори світу, дроби, розвивальні ігри, екранний час, Pulsar Kids, Пульсар Кідс, pulsarkids" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <meta name="theme-color" content="#7c3aed" />
+    <meta name="theme-color" content="#0b1026" />
     <link rel="canonical" href="__SITE_URL__/" />
     <link rel="alternate" hreflang="uk" href="__SITE_URL__/" />
     <link rel="alternate" hreflang="x-default" href="__SITE_URL__/" />
@@ -73,50 +73,26 @@
             "educationalUse": "Вправи, самостійне навчання",
             "about": ["Математика", "Географія", "Історія", "Екологія"],
             "image": "__SITE_URL__/og-image.png"
-          },
-          {
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "Для якого віку Pulsar Kids?",
-                "acceptedAnswer": { "@type": "Answer", "text": "Ігри розраховані на дітей 6–10 років. Кожна гра позначена зірочками складності: одна — 6–7 років, дві — 7–8 років, три — 9–10 років." }
-              },
-              {
-                "@type": "Question",
-                "name": "Що буде, якщо дитина помилиться?",
-                "acceptedAnswer": { "@type": "Answer", "text": "Нічого страшного: немає програшу, життів чи червоних хрестиків. Після помилок з’являється підказка, а завдання, яке не вдалося, повернеться ще раз наприкінці рівня." }
-              },
-              {
-                "@type": "Question",
-                "name": "Як обмежити час за екраном?",
-                "acceptedAnswer": { "@type": "Answer", "text": "У кабінеті батьків задаються тривалість сеансу, перерва між сеансами та денний ліміт. Час рахує сервер, тому його не обійти перезавантаженням чи іншим пристроєм. Рівень, який дитина вже почала, вона завжди дограє до кінця." }
-              },
-              {
-                "@type": "Question",
-                "name": "Чи може грати дитина, яка ще погано читає?",
-                "acceptedAnswer": { "@type": "Answer", "text": "Так. Завдання озвучуються голосом, а біля тексту є кнопка-динамік, яка читає його вголос. Батьки можуть вимкнути озвучення, щоб дитина тренувала читання." }
-              },
-              {
-                "@type": "Question",
-                "name": "Як почати?",
-                "acceptedAnswer": { "@type": "Answer", "text": "Батьки заходять у кабінет за електронною поштою, додають дитину та задають їй нік і PIN. Дитина входить у гру з цим ніком і PIN-кодом." }
-              }
-            ]
           }
         ]
       }
     </script>
 
     <style>
+      /* The palette of the game's own «Галактика» theme (core/theme/themes.ts). */
       :root {
-        --ink: #2e1065;
-        --soft: #5b4a80;
-        --brand: #7c3aed;
-        --pink: #ec4899;
-        --sun: #fbbf24;
-        --card: #ffffff;
+        --bg-1: #0b1026;
+        --bg-2: #2b1a52;
+        --surface: rgba(24, 33, 63, 0.82);
+        --line: rgba(139, 124, 255, 0.24);
+        --ink: #e8ecff;
+        --soft: #aab2db;
+        --brand: #7c6cff;
+        --brand-light: #a79bff;
+        --accent: #35d6e8;
+        --sun: #fde047;
         --radius: 26px;
+        color-scheme: dark;
       }
       *,
       *::before,
@@ -125,14 +101,65 @@
       }
       html {
         scroll-behavior: smooth;
+        background: var(--bg-1);
       }
       body {
+        position: relative;
         margin: 0;
         font-family: 'Fredoka', system-ui, -apple-system, 'Segoe UI', sans-serif;
         font-size: 1.06rem;
         line-height: 1.55;
         color: var(--ink);
-        background: linear-gradient(170deg, #fdf2ff 0%, #ede9fe 45%, #e0f2fe 100%);
+        background: linear-gradient(170deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-1) 100%);
+        overflow-x: hidden;
+      }
+      /* The sky: three depths of stars, each a tile of its own size so the pattern never lines up. */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background-image:
+          radial-gradient(1.5px 1.5px at 24px 36px, #fff 50%, transparent 51%),
+          radial-gradient(1px 1px at 150px 92px, #dfe6ff 50%, transparent 51%),
+          radial-gradient(1.5px 1.5px at 96px 190px, #fff 50%, transparent 51%),
+          radial-gradient(1px 1px at 210px 250px, #c9c2ff 50%, transparent 51%),
+          radial-gradient(1px 1px at 60px 300px, #fff 50%, transparent 51%),
+          radial-gradient(2px 2px at 330px 130px, #fff 50%, transparent 51%),
+          radial-gradient(1px 1px at 280px 40px, #9fefff 50%, transparent 51%),
+          radial-gradient(2.5px 2.5px at 180px 420px, #fff 50%, transparent 51%);
+        background-size:
+          230px 230px,
+          230px 230px,
+          310px 310px,
+          310px 310px,
+          410px 410px,
+          410px 410px,
+          530px 530px,
+          530px 530px;
+        opacity: 0.8;
+        animation: twinkle 5s ease-in-out infinite alternate;
+        pointer-events: none;
+      }
+      /* Nebula clouds in the theme's colours. */
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+          radial-gradient(42% 36% at 84% 12%, rgba(53, 214, 232, 0.2), transparent 70%),
+          radial-gradient(46% 40% at 8% 80%, rgba(124, 108, 255, 0.26), transparent 72%),
+          radial-gradient(30% 26% at 22% 20%, rgba(139, 124, 255, 0.18), transparent 75%);
+        pointer-events: none;
+      }
+      @keyframes twinkle {
+        from {
+          opacity: 0.45;
+        }
+        to {
+          opacity: 0.9;
+        }
       }
       h1,
       h2,
@@ -145,7 +172,7 @@
         margin: 0;
       }
       a {
-        color: var(--brand);
+        color: var(--accent);
       }
       .wrap {
         width: min(100% - 32px, 1080px);
@@ -160,9 +187,10 @@
         position: sticky;
         top: 0;
         z-index: 10;
-        background: rgba(253, 242, 255, 0.86);
+        background: rgba(11, 16, 38, 0.78);
+        -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(124, 58, 237, 0.12);
+        border-bottom: 1px solid var(--line);
       }
       .bar {
         display: flex;
@@ -191,7 +219,7 @@
         text-decoration: none;
       }
       nav a:hover {
-        color: var(--brand);
+        color: var(--accent);
       }
       @media (min-width: 860px) {
         nav {
@@ -212,20 +240,25 @@
         font-weight: 800;
         font-size: 1.15rem;
         text-decoration: none;
-        transition: transform 0.15s, box-shadow 0.15s;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
       }
       .btn:hover {
         transform: translateY(-2px);
       }
       .btn-play {
-        background: linear-gradient(135deg, var(--brand), var(--pink));
-        color: #fff;
-        box-shadow: 0 10px 24px rgba(124, 58, 237, 0.35);
+        background: linear-gradient(135deg, var(--brand-light), var(--accent));
+        color: var(--bg-1);
+        box-shadow: 0 0 26px rgba(53, 214, 232, 0.35);
+      }
+      .btn-play:hover {
+        box-shadow: 0 0 34px rgba(53, 214, 232, 0.55);
       }
       .btn-parent {
-        background: #fff;
-        color: var(--brand);
-        border: 2px solid rgba(124, 58, 237, 0.3);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--ink);
+        border: 2px solid rgba(139, 124, 255, 0.6);
       }
       .btn-small {
         min-height: 44px;
@@ -257,12 +290,12 @@
       .eyebrow {
         display: inline-block;
         padding: 6px 14px;
+        border: 1px solid var(--line);
         border-radius: 999px;
-        background: #fff;
-        color: var(--brand);
+        background: rgba(124, 108, 255, 0.18);
+        color: #c9c2ff;
         font-weight: 600;
         font-size: 0.95rem;
-        box-shadow: 0 2px 10px rgba(124, 58, 237, 0.12);
       }
       h1 {
         margin-top: 14px;
@@ -270,7 +303,7 @@
         font-weight: 800;
       }
       h1 span {
-        background: linear-gradient(135deg, var(--brand), var(--pink));
+        background: linear-gradient(135deg, var(--brand-light), var(--accent));
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -293,54 +326,107 @@
         color: var(--soft);
       }
 
-      /* A little planet with things standing on it — what the child builds. */
-      .planet {
+      /* The Solar System the child travels through in the game: the Sun and
+         eight planets, each on its own orbit — the nearer, the faster. */
+      .system {
         position: relative;
-        width: min(78vw, 360px);
+        width: min(84vw, 420px);
         aspect-ratio: 1;
         margin: 0 auto;
-      }
-      .planet .disc {
-        position: absolute;
-        inset: 20%;
-        border-radius: 50%;
-        background: radial-gradient(circle at 34% 28%, #c4b5fd, #7c3aed 55%, #4c1d95);
-        box-shadow:
-          inset -18px -22px 40px rgba(0, 0, 0, 0.3),
-          0 0 0 10px rgba(236, 72, 153, 0.14),
-          0 0 60px 20px rgba(236, 72, 153, 0.28);
-      }
-      .planet .ring {
-        position: absolute;
-        inset: 0;
-        animation: spin 60s linear infinite;
-      }
-      .planet .ring span {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-      }
-      .planet .ring i {
-        position: absolute;
-        bottom: 29.5cqw;
-        left: 0;
-        transform: translateX(-50%);
-        font-style: normal;
-        font-size: clamp(1.7rem, 8cqw, 2.6rem);
-        line-height: 1;
-      }
-      .planet {
         container-type: inline-size;
       }
-      @keyframes spin {
+      .sun {
+        position: absolute;
+        inset: 43.5%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 40% 36%, #fff7c2, var(--sun) 38%, #f59e0b 78%, #ea580c);
+        box-shadow:
+          0 0 24px 8px rgba(253, 224, 71, 0.55),
+          0 0 70px 26px rgba(245, 158, 11, 0.3);
+      }
+      .orbit {
+        position: absolute;
+        inset: calc(50% - var(--d) / 2);
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        animation: orbit var(--t) linear var(--from) infinite;
+      }
+      /* A planet turns against its orbit, so it stays upright all the way round. */
+      .orbit i {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: var(--s);
+        height: var(--s);
+        margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+        border-radius: 50%;
+        box-shadow: inset calc(var(--s) * -0.16) calc(var(--s) * -0.14) calc(var(--s) * 0.3) rgba(0, 0, 0, 0.5);
+        animation: orbit var(--t) linear var(--from) infinite reverse;
+      }
+      @keyframes orbit {
         to {
           transform: rotate(360deg);
         }
       }
+      .mercury {
+        --s: 3.2cqw;
+        background: radial-gradient(circle at 35% 30%, #d6d3d1, #8f8a86 65%, #57534e);
+      }
+      .venus {
+        --s: 4.6cqw;
+        background: radial-gradient(circle at 35% 30%, #fff1c2, #e9c46a 60%, #b98a2e);
+      }
+      .earth {
+        --s: 5cqw;
+        background:
+          radial-gradient(circle at 30% 36%, #4ade80 0 18%, transparent 19%),
+          radial-gradient(circle at 66% 62%, #22c55e 0 22%, transparent 23%),
+          radial-gradient(circle at 70% 22%, #86efac 0 10%, transparent 11%),
+          radial-gradient(circle at 35% 30%, #60a5fa, #2563eb 70%);
+      }
+      .mars {
+        --s: 4cqw;
+        background:
+          radial-gradient(circle at 50% 6%, #fff 0 10%, transparent 11%),
+          radial-gradient(circle at 62% 60%, #9a3412 0 20%, transparent 21%),
+          radial-gradient(circle at 35% 30%, #fb923c, #dc4a12 70%);
+      }
+      .jupiter {
+        --s: 9cqw;
+        background:
+          radial-gradient(ellipse 14% 9% at 68% 61%, #c2410c 0 96%, transparent 100%),
+          linear-gradient(180deg, #d6a574 0 14%, #f1dcc0 14% 26%, #c98b5a 26% 40%, #f3e3cc 40% 52%, #b9764a 52% 66%, #ecd3b0 66% 80%, #c79465 80%);
+      }
+      /* Saturn's box is as wide as its rings: half a ring in front, the ball, the whole ring behind. */
+      .orbit .saturn {
+        --s: 7cqw;
+        --ring: rgba(232, 210, 158, 0.95);
+        --ring-out: rgba(200, 180, 132, 0.75);
+        width: calc(var(--s) * 2.3);
+        margin-left: calc(var(--s) * -1.15);
+        border-radius: 0;
+        box-shadow: none;
+        rotate: -16deg;
+        background:
+          radial-gradient(ellipse 50% 60% at 50% 0, transparent 60%, var(--ring) 62%, var(--ring) 80%, transparent 82%, transparent 86%, var(--ring-out) 88%, var(--ring-out) 97%, transparent 99%) 0 100% / 100% 50% no-repeat,
+          radial-gradient(circle closest-side, #f6e4b4, #dcb96f 62%, #9c7a38 99%, transparent 100%),
+          radial-gradient(ellipse 50% 30% at 50% 50%, transparent 60%, var(--ring) 62%, var(--ring) 80%, transparent 82%, transparent 86%, var(--ring-out) 88%, var(--ring-out) 97%, transparent 99%);
+      }
+      .uranus {
+        --s: 5.8cqw;
+        background: radial-gradient(circle at 35% 30%, #c8f4f1, #67d2d3 60%, #3aa9b3);
+      }
+      .neptune {
+        --s: 5.6cqw;
+        background: radial-gradient(circle at 35% 30%, #7aa7ff, #2f5fe0 60%, #1e3a9a);
+      }
       @media (prefers-reduced-motion: reduce) {
-        .planet .ring {
+        /* Paused, not removed: every planet keeps its own place on the orbit. */
+        .orbit,
+        .orbit i {
+          animation-play-state: paused;
+        }
+        body::before {
           animation: none;
         }
         html {
@@ -369,9 +455,10 @@
       }
       .card {
         padding: 22px;
+        border: 1px solid var(--line);
         border-radius: var(--radius);
-        background: var(--card);
-        box-shadow: 0 6px 20px rgba(46, 16, 101, 0.07);
+        background: var(--surface);
+        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
       }
       .card .icon {
         font-size: 2.3rem;
@@ -390,27 +477,30 @@
         margin: 8px 0 0;
         padding-left: 1.1em;
       }
+      .card li::marker {
+        color: var(--brand-light);
+      }
       .tag {
         display: inline-block;
         margin-top: 10px;
         padding: 3px 12px;
         border-radius: 999px;
-        background: #f3e8ff;
-        color: var(--brand);
+        background: rgba(53, 214, 232, 0.14);
+        color: #7fe7f3;
         font-weight: 600;
         font-size: 0.9rem;
       }
       .band {
-        background: #fff;
+        border: 1px solid rgba(53, 214, 232, 0.3);
         border-radius: 36px;
         padding: 36px 22px;
-        box-shadow: 0 10px 34px rgba(46, 16, 101, 0.08);
+        background: linear-gradient(135deg, rgba(124, 108, 255, 0.22), rgba(53, 214, 232, 0.1)), var(--surface);
+        box-shadow: 0 10px 34px rgba(0, 0, 0, 0.4);
       }
       .numbers {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
         gap: 12px;
-        margin-top: 22px;
         text-align: center;
       }
       .numbers b {
@@ -418,7 +508,7 @@
         font-family: 'Baloo 2', sans-serif;
         font-size: 2.5rem;
         line-height: 1;
-        color: var(--brand);
+        color: var(--accent);
       }
       .numbers span {
         color: var(--soft);
@@ -441,28 +531,11 @@
         width: 44px;
         height: 44px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--brand), var(--pink));
-        color: #fff;
+        background: linear-gradient(135deg, var(--brand-light), var(--accent));
+        color: var(--bg-1);
         font-family: 'Baloo 2', sans-serif;
         font-weight: 800;
         font-size: 1.3rem;
-      }
-      details {
-        margin-top: 12px;
-        padding: 16px 20px;
-        border-radius: 20px;
-        background: #fff;
-        box-shadow: 0 4px 14px rgba(46, 16, 101, 0.06);
-      }
-      summary {
-        font-family: 'Baloo 2', sans-serif;
-        font-weight: 700;
-        font-size: 1.15rem;
-        cursor: pointer;
-      }
-      details p {
-        margin-top: 8px;
-        color: var(--soft);
       }
       .final {
         text-align: center;
@@ -492,7 +565,6 @@
           <a href="#games">Ігри</a>
           <a href="#world">Планета</a>
           <a href="#parents">Батькам</a>
-          <a href="#faq">Питання</a>
         </nav>
         <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">Батькам</a>
         <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/">Грати</a>
@@ -515,18 +587,16 @@
           <p class="cta-note">Спершу батьки створюють профіль дитини в кабінеті, а тоді дитина заходить у гру за ніком і PIN-кодом.</p>
         </div>
 
-        <div class="planet" role="img" aria-label="Планета з будівлями, яку дитина будує за зібрані кристали">
-          <div class="disc"></div>
-          <div class="ring">
-            <span style="transform: rotate(0deg)"><i class="emoji">🏰</i></span>
-            <span style="transform: rotate(45deg)"><i class="emoji">🌈</i></span>
-            <span style="transform: rotate(90deg)"><i class="emoji">🎡</i></span>
-            <span style="transform: rotate(135deg)"><i class="emoji">🦄</i></span>
-            <span style="transform: rotate(180deg)"><i class="emoji">🚀</i></span>
-            <span style="transform: rotate(225deg)"><i class="emoji">🌳</i></span>
-            <span style="transform: rotate(270deg)"><i class="emoji">🏛️</i></span>
-            <span style="transform: rotate(315deg)"><i class="emoji">🦖</i></span>
-          </div>
+        <div class="system" role="img" aria-label="Сонячна система: Сонце і вісім планет, якими мандрує дитина">
+          <div class="sun"></div>
+          <div class="orbit" style="--d: 25%; --t: 12s; --from: -3s"><i class="mercury"></i></div>
+          <div class="orbit" style="--d: 33%; --t: 17s; --from: -21s"><i class="venus"></i></div>
+          <div class="orbit" style="--d: 42%; --t: 23s; --from: -9s"><i class="earth"></i></div>
+          <div class="orbit" style="--d: 50%; --t: 30s; --from: -40s"><i class="mars"></i></div>
+          <div class="orbit" style="--d: 63%; --t: 48s; --from: -70s"><i class="jupiter"></i></div>
+          <div class="orbit" style="--d: 78%; --t: 68s; --from: -25s"><i class="saturn"></i></div>
+          <div class="orbit" style="--d: 88%; --t: 93s; --from: -120s"><i class="uranus"></i></div>
+          <div class="orbit" style="--d: 96%; --t: 120s; --from: -60s"><i class="neptune"></i></div>
         </div>
       </div>
 
@@ -777,48 +847,6 @@
               <p>На сторінці гри вона вводить свій нік і PIN, обирає тему та першу планету.</p>
             </article>
           </div>
-        </div>
-      </section>
-
-      <section id="faq">
-        <div class="wrap">
-          <h2>Часті питання</h2>
-          <details>
-            <summary>Для якого віку Pulsar Kids?</summary>
-            <p>
-              Ігри розраховані на дітей 6–10 років. Кожна гра позначена зірочками складності: одна — 6–7 років, дві — 7–8
-              років, три — 9–10 років.
-            </p>
-          </details>
-          <details>
-            <summary>Що буде, якщо дитина помилиться?</summary>
-            <p>
-              Нічого страшного: немає програшу, життів чи червоних хрестиків. Після помилок з’являється підказка, а
-              завдання, яке не вдалося, повернеться ще раз наприкінці рівня.
-            </p>
-          </details>
-          <details>
-            <summary>Як обмежити час за екраном?</summary>
-            <p>
-              У кабінеті батьків задаються тривалість сеансу, перерва між сеансами та денний ліміт. Час рахує сервер, тому
-              його не обійти перезавантаженням чи іншим пристроєм. Рівень, який дитина вже почала, вона завжди дограє до
-              кінця.
-            </p>
-          </details>
-          <details>
-            <summary>Чи може грати дитина, яка ще погано читає?</summary>
-            <p>
-              Так. Завдання озвучуються голосом, а біля тексту є кнопка-динамік, яка читає його вголос. Батьки можуть
-              вимкнути озвучення, щоб дитина тренувала читання.
-            </p>
-          </details>
-          <details>
-            <summary>Як почати?</summary>
-            <p>
-              Батьки заходять у кабінет за електронною поштою, додають дитину та задають їй нік і PIN. Дитина входить у гру
-              з цим ніком і PIN-кодом.
-            </p>
-          </details>
         </div>
       </section>
 

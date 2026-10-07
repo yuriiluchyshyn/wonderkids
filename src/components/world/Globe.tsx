@@ -38,6 +38,8 @@ interface GlobeProps {
  * everything built on it standing at its own place. What is on the far side is
  * not drawn; what is not built yet is a dim outline. Everything can be tapped
  * (`onTap`) — the planet view then tells what it is and offers to build it.
+ * Without `onTap` the things are only a picture: a tap falls through to
+ * whatever lies under the planet.
  */
 export function Globe({ planetId, cx, cy, radius, yaw, pitch, items, residents, level, locked, detail = true, selectedId, justBuilt, onTap }: GlobeProps) {
   /** Things on the far side are hidden; near the edge they shrink away. */
@@ -76,13 +78,14 @@ export function Globe({ planetId, cx, cy, radius, yaw, pitch, items, residents, 
             <button
               key={item.id}
               type="button"
-              className={cn(styles.pin, !built && styles.ghost, selectedId === item.id && styles.selected, built && level > 1 && styles.upgraded)}
+              className={cn(styles.pin, !onTap && styles.inert, !built && styles.ghost, selectedId === item.id && styles.selected, built && level > 1 && styles.upgraded)}
               style={{
                 left: p.left,
                 top: p.top,
                 fontSize: radius * (item.kind === 'building' ? BUILDING_SIZE : DECOR_SIZE) * p.scale,
                 zIndex: 100 + Math.round(p.depth * 100),
               }}
+              tabIndex={onTap ? undefined : -1}
               onClick={() => onTap?.(state)}
               aria-label={`${item.name}: ${built ? 'збудовано' : 'ще не збудовано'}`}
             >
