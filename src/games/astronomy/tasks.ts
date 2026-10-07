@@ -1,12 +1,15 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskInstance } from '@/core/game/kernel/types';
-import type { DotStar, TemplatePayload } from '@/core/game/templates/types';
+import type { Card, DotStar, TemplatePayload } from '@/core/game/templates/types';
 import { shuffle } from '@/core/utils/random';
 import { factPool } from '../shared/facts';
 import { card, templateTask, type GameTasks } from '../shared/templateModule';
 import { type Planet, PLANETS, SOLAR_FACTS, LINE_UPS, BY_SIZE, FEATURES, FEATURES_PER_STEP, planet, type Figure, type Labels, ALPHABET, SKY_FACTS, SKY_STEPS } from './content/data';
 
 type Tasks = TaskInstance<TemplatePayload>[];
+
+/** A planet's card: drawn as it really looks and turning (the emoji is only the stand-in). */
+const planetCard = (p: Planet): Card => ({ ...card(p.id, p.emoji, p.name), planet: p.id });
 
 /** A shuffled order that is guaranteed not to be already solved. */
 function scramble(ids: string[]): string[] {
@@ -27,7 +30,7 @@ function lineUp(kind: 'sun' | 'size', order: Planet[], places: number[], step: n
     kind === 'sun' ? 'Розстав планети: від найближчої до Сонця — до найдальшої.' : 'Розстав планети за розміром: від найменшої до найбільшої.',
     {
       template: Mechanics.ChronoSequence,
-      cards: row.map((p) => card(p.id, p.emoji, p.name)),
+      cards: row.map((p) => planetCard(p)),
       initial: scramble(row.map((p) => p.id)),
       orientation: 'horizontal',
       ends: kind === 'sun' ? ['біля Сонця', 'найдалі'] : ['найменша', 'найбільша'],
@@ -65,7 +68,7 @@ function planets(step: number): Tasks {
         {
           template: Mechanics.DragMatch,
           items: shuffle(set.map((f) => card(`f:${f[0]}`, f[2], f[3]))),
-          slots: shuffle(slots.map((p) => card(p.id, p.emoji, p.name))),
+          slots: shuffle(slots.map((p) => planetCard(p))),
           pairs: Object.fromEntries(set.map((f) => [`f:${f[0]}`, f[1]])),
           hint: `«${lead[3]}» — це ${planet(lead[1]).name}.`,
         },

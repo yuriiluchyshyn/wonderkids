@@ -1,5 +1,5 @@
 import type { Theme, ThemeId } from '@/core/theme/theme.types';
-import { itemCost, itemId, type Inhabitant, type ItemKind, type ShopItem } from './world';
+import { DREAM_ID, SPACEPORT_ID, itemCost, itemId, type Inhabitant, type ItemKind, type ShopItem } from './world';
 
 /**
  * What each theme's world is made of: its name, nine buildings, eight small
@@ -20,7 +20,7 @@ interface ThemeWorldDef {
 const WORLDS: Record<ThemeId, ThemeWorldDef> = {
   galaxy: {
     name: 'Зоряне місто',
-    buildings: [['🌟', 'Зоряний ліхтар'], ['🌙', 'Місячна база'], ['☄️', 'Кометна станція'], ['🔭', 'Обсерваторія'], ['🪐', 'Планета-дім'], ['🛸', 'Космопорт'], ['📡', 'Антена зв’язку'], ['🌌', 'Парк туманностей'], ['🌠', 'Фабрика зірок']],
+    buildings: [['🌟', 'Зоряний ліхтар'], ['🌙', 'Місячна база'], ['☄️', 'Кометна станція'], ['🔭', 'Обсерваторія'], ['🪐', 'Планета-дім'], ['🛸', 'Док зорельотів'], ['📡', 'Антена зв’язку'], ['🌌', 'Парк туманностей'], ['🌠', 'Фабрика зірок']],
     decor: [['🌠', 'Зорепад'], ['🪨', 'Астероїд'], ['🌙', 'Місяць-супутник'], ['🚩', 'Прапор першопрохідця'], ['🔦', 'Маячок'], ['🌵', 'Космічний кактус'], ['💫', 'Зоряна арка'], ['🎆', 'Салют']],
     residents: [['👽', 'Прибулець'], ['🤖', 'Робот'], ['👨‍🚀', 'Космонавт'], ['👾', 'Піксельний гість'], ['🐕', 'Космопес'], ['🛸', 'Літаюча тарілка'], ['🐈', 'Зоряний кіт'], ['🧑‍🔬', 'Науковиця'], ['🐉', 'Космічний дракон'], ['🦄', 'Зоряний єдиноріг']],
   },
@@ -106,17 +106,22 @@ export interface ThemeWorld {
   residents: Inhabitant[];
 }
 
-/** The full world of a theme, with its dream build as the final building. */
-export function themeWorld(theme: Theme): ThemeWorld {
+/**
+ * One planet of a theme's world (1-based; the same things on every planet,
+ * dearer on each next one): nine buildings, the spaceport that opens the next
+ * planet, the theme's dream build as the final building, and the decorations.
+ */
+export function themeWorld(theme: Theme, planet = 1): ThemeWorld {
   const def = WORLDS[theme.id] ?? WORLDS.galaxy;
-  const buildings: [string, string][] = [...def.buildings, [theme.dreamBuild.emoji, theme.dreamBuild.name]];
   const make = (kind: ItemKind) => ([emoji, name]: [string, string], index: number): ShopItem => {
     const id = itemId(kind, index);
-    return { id, name, emoji, kind, cost: itemCost(id) };
+    return { id, name, emoji, kind, cost: itemCost(id, planet) };
   };
+  const spaceport: ShopItem = { id: SPACEPORT_ID, name: 'Космопорт', emoji: '🚀', kind: 'building', cost: itemCost(SPACEPORT_ID, planet) };
+  const dream: ShopItem = { id: DREAM_ID, name: theme.dreamBuild.name, emoji: theme.dreamBuild.emoji, kind: 'building', cost: itemCost(DREAM_ID, planet) };
   return {
     name: def.name,
-    items: [...buildings.map(make('building')), ...def.decor.map(make('decor'))],
+    items: [...def.buildings.map(make('building')), spaceport, dream, ...def.decor.map(make('decor'))],
     // The theme's own residents first; visitors the theme already has under
     // the same picture are skipped so nobody arrives twice.
     residents: [

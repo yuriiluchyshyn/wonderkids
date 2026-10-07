@@ -32,7 +32,8 @@ export const GAMES: GameCard[] = [
     steps: PATTERN_STEPS.length,
     difficulty: [1, 2],
     publishDate: V6_RELEASE,
-    tasksPerLevel: 10,
+    // Five, not ten: one task here is a long look (nine answers, several shadows to place).
+    tasksPerLevel: 5,
     mechanics: Mechanics.GridChoice,
   },
   {
@@ -52,7 +53,8 @@ export const GAMES: GameCard[] = [
     steps: SHADOW_STEPS.length,
     difficulty: [1, 3],
     publishDate: V6_RELEASE,
-    tasksPerLevel: 10,
+    // Five, not ten: one task here is a long look (nine answers, several shadows to place).
+    tasksPerLevel: 5,
     mechanics: Mechanics.DragMatch,
   },
   {
@@ -71,7 +73,8 @@ export const GAMES: GameCard[] = [
     steps: MIRROR_STEPS.length,
     difficulty: [1, 3],
     publishDate: V6_RELEASE,
-    tasksPerLevel: 10,
+    // Five, not ten: one task here is a long look (nine answers, several shadows to place).
+    tasksPerLevel: 5,
     mechanics: Mechanics.GridChoice,
   },
 ];

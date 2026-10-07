@@ -7,6 +7,7 @@ import { cn } from '@/core/utils/cn';
 import { LandmarkArt, hasLandmarkArt } from './LandmarkArt';
 import { ClockFace } from './ClockFace';
 import { PieFood } from './PieFood';
+import { PlanetArt, hasPlanetArt } from './PlanetArt';
 import { PieceShape } from './TangramLayout';
 import { SpeakButton } from './SpeakButton';
 import styles from './Templates.module.css';
@@ -66,7 +67,12 @@ export function CardFace({ card, speaker = true }: { card: Card; speaker?: boole
   return (
     <span className={styles.face}>
       {card.image && <Picture src={card.image} emoji={card.emoji} />}
-      {card.emoji && !card.image && (
+      {card.planet && hasPlanetArt(card.planet) && (
+        <span className={styles.faceEmoji}>
+          <PlanetArt id={card.planet} />
+        </span>
+      )}
+      {card.emoji && !card.image && !card.planet && (
         <span
           className={cn(styles.faceEmoji, 'emoji', card.silhouette && styles.silhouette)}
           style={card.silhouette && card.blur ? ({ '--shadow-blur': `${card.blur}px` } as CSSProperties) : undefined}

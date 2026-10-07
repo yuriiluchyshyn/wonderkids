@@ -1415,3 +1415,30 @@
 .placedMini .picture {
   width: 34px;
 }
+
+/* ---- A real-looking planet that turns on its axis (PlanetArt) ---- */
+.planetArt {
+  display: block;
+  width: 1.9em;
+  height: auto;
+}
+
+/* The surface tile is twice the disc: one tile's width is one full turn. */
+.planetSpin {
+  animation: planetSpin 16s linear infinite;
+}
+
+@keyframes planetSpin {
+  from {
+    transform: translateX(-200px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planetSpin {
+    animation: none;
+  }
+}

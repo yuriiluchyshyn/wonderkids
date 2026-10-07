@@ -36,15 +36,20 @@ export function HubPage() {
   const setStars = useHubState((s) => s.setStars);
   const [pathEntry, setPathEntry] = useState<CatalogEntry | null>(null);
 
-  // Back from a game: bring its card into view (the cards fly in first).
-  const focusGame = (useLocation().state as { focusGame?: string } | null)?.focusGame;
+  // Back from a game: bring its card into view (the cards fly in first). The
+  // note is used once and wiped from the history entry at once — a reload of
+  // the hub must open at the top, not jump to the game played last.
+  const location = useLocation();
+  const focusGame = (location.state as { focusGame?: string } | null)?.focusGame;
   useEffect(() => {
     if (!focusGame) return;
+    navigate(location.pathname, { replace: true, state: null });
     const t = window.setTimeout(() => {
       document.querySelector(`[data-game="${focusGame}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 450);
-    return () => window.clearTimeout(t);
-  }, [focusGame]);
+    // No cleanup: wiping the note re-runs this effect, and the scroll must still happen.
+    void t;
+  }, [focusGame]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const tips = useMemo(() => hubTips(), []);
   const catalog = useMemo(() => buildCatalog(), []);

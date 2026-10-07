@@ -100,3 +100,56 @@ test('selling returns 80% of the price and the rest is lost for good', () => {
   // Buying and selling twice loses twice.
   assert.equal(balanceOf(1000, [lossKey(loss, 'a'), lossKey(loss, 'b')]), 1000 - 2 * loss);
 });
+
+// ---------------------------------------------------------- The solar system —
+
+test('the first planet keeps the keys children already have; later planets add their number', async () => {
+  const { parseOwned, SPACEPORT_ID, SPACEPORT_COST } = await import('../src/core/child/world/world.ts');
+  assert.equal(ownedKey('lego', 'b3'), 'world:lego:b3');
+  assert.equal(ownedKey('lego', 'b3', 3), 'world:lego:p3:b3');
+  assert.deepEqual(parseOwned('world:lego:b3'), { themeId: 'lego', planet: 1, id: 'b3' });
+  assert.deepEqual(parseOwned('world:lego:p3:b3'), { themeId: 'lego', planet: 3, id: 'b3' });
+  assert.equal(parseOwned('lego:crown'), null);
+  assert.equal(itemCost(SPACEPORT_ID), SPACEPORT_COST);
+  // Every next planet is dearer, and the purse knows it.
+  assert.equal(itemCost('b0', 1), 30);
+  assert.equal(itemCost('b0', 5), 60);
+  assert.equal(spentOn([ownedKey('lego', 'b0'), ownedKey('lego', 'b0', 5)]), 90);
+  assert.equal(sellPrice('b0', 5), 48);
+});
+
+test('the dream build waits for the spaceport too', async () => {
+  const { SPACEPORT_ID, SPACEPORT_COST } = await import('../src/core/child/world/world.ts');
+  const withPort = [...items, { id: SPACEPORT_ID, name: 'Port', emoji: '🚀', kind: 'building' as const, cost: SPACEPORT_COST }];
+  const allButDream = new Set(BUILDING_COSTS.slice(0, -1).map((_, i) => itemId('building', i)));
+  assert.equal(statusOf(shopState(withPort, allButDream, 5000), 'b9').status, 'locked');
+  assert.equal(statusOf(shopState(withPort, new Set([...allButDream, SPACEPORT_ID]), 5000), 'b9').status, 'affordable');
+});
+
+test('a landmark gains one level for every eighth of its game', async () => {
+  const { landmarkLevel } = await import('../src/core/child/world/world.ts');
+  const at = (step: number) => landmarkLevel({ free: false, steps: 41, step, plays: 1 });
+  assert.equal(at(1), 0);
+  assert.equal(at(5), 0);
+  assert.equal(at(6), 1);
+  assert.equal(at(21), 4);
+  assert.equal(at(41), 8);
+  assert.equal(landmarkLevel({ free: true, steps: 1, step: 1, plays: 3 }), 2);
+  assert.equal(landmarkLevel({ free: true, steps: 1, step: 1, plays: 40 }), 8);
+});
+
+test('a planet lets the child fly on only when nearly everything on it is done', async () => {
+  const { planetNeeds, frontierPlanet } = await import('../src/core/child/world/world.ts');
+  const base = { planet: 2, itemsOwned: 19, itemsTotal: 19, spaceport: true, landLevels: [2, 2, 3, 1, 0], gifts: 8, treasuresFound: 3, treasuresTotal: 12 };
+  assert.equal(planetNeeds(base).done, true);
+  assert.equal(planetNeeds({ ...base, spaceport: false }).done, false, 'no spaceport');
+  assert.equal(planetNeeds({ ...base, itemsOwned: 18 }).done, false, 'something not built');
+  assert.equal(planetNeeds({ ...base, landLevels: [2, 2, 1, 1, 0] }).done, false, 'too few lands at level 2');
+  assert.equal(planetNeeds({ ...base, gifts: 7 }).done, false, 'too few residents');
+  assert.equal(planetNeeds({ ...base, treasuresFound: 2 }).done, false, 'too few treasures');
+  const none = Array(8).fill(false);
+  assert.equal(frontierPlanet(none, none), 1);
+  assert.equal(frontierPlanet([true, true, ...none.slice(2)], none), 3);
+  // Something already stands on planet 2: it stays open even if planet 1 is no longer complete.
+  assert.equal(frontierPlanet(none, [true, true, ...none.slice(2)]), 2);
+});

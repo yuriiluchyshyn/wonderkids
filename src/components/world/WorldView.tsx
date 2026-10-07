@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
-import { LANDMARK_STAGES } from '@/core/child/world/world';
+import { LANDMARK_STAGES, PLANET_COUNT } from '@/core/child/world/world';
 import { PlanetView } from './PlanetView';
 import { useWorld, type Landmark } from '@/core/child/world/useWorld';
 import { cn } from '@/core/utils/cn';
@@ -19,7 +20,7 @@ function useSayOnTap() {
   };
 }
 
-function LandmarkTile({ landmark }: { landmark: Landmark }) {
+function LandmarkTile({ landmark, planet }: { landmark: Landmark; planet: number }) {
   const showText = useShowText();
   const say = useSayOnTap();
   const { stage, stages } = landmark;
@@ -34,7 +35,9 @@ function LandmarkTile({ landmark }: { landmark: Landmark }) {
       onClick={say(
         stage === 0
           ? `${landmark.name}. Грай у гру «${landmark.sub.label}», щоб це збудувати.`
-          : `${face?.[1] ?? landmark.name}. ${STAGE_NAMES[stage]}`,
+          : `${face?.[1] ?? landmark.name}. ${STAGE_NAMES[stage]}. Рівень ${landmark.level} з ${PLANET_COUNT}. ${
+              landmark.level >= planet ? 'Для цієї планети досить!' : `Для цієї планети потрібен рівень ${planet} — грай далі у гру «${landmark.sub.label}».`
+            }`,
       )}
     >
       <span className={cn(styles.landmarkEmoji, 'emoji')} style={{ fontSize: `${1.7 + stage * 0.32}rem` }} aria-hidden>
@@ -44,7 +47,8 @@ function LandmarkTile({ landmark }: { landmark: Landmark }) {
         <span className={styles.landmarkText}>
           <span className={styles.landmarkName}>{face?.[1] ?? landmark.name}</span>
           <span className={styles.landmarkGame}>
-            {landmark.sub.icon} {stage === 0 ? `Грай «${landmark.sub.label}», щоб збудувати` : STAGE_NAMES[stage]}
+            {landmark.sub.icon} {stage === 0 ? `Грай «${landmark.sub.label}», щоб збудувати` : STAGE_NAMES[stage]} · рівень {landmark.level}
+            {landmark.level >= planet ? ' ✅' : ''}
           </span>
         </span>
       )}
@@ -75,14 +79,16 @@ function LandmarkTile({ landmark }: { landmark: Landmark }) {
  */
 export function WorldView() {
   const showText = useShowText();
-  const world = useWorld();
+  // The planet being looked at; by default the furthest one reached.
+  const [planet, setPlanet] = useState<number | undefined>(undefined);
+  const world = useWorld(planet);
   const { def, lands, residents } = world;
   const say = useSayOnTap();
 
   return (
     <div className="stack">
       {/* ---- The planet: exchange artifacts for buildings and decorations ---- */}
-      <PlanetView world={world} />
+      <PlanetView world={world} onPlanet={setPlanet} />
 
       {/* ---- Lands of knowledge ---- */}
       <section className={styles.card}>
@@ -92,7 +98,11 @@ export function WorldView() {
           </span>{' '}
           Землі знань
         </h2>
-        {showText && <p className={styles.hint}>Кожна гра будує щось своє. Що далі проходиш — то більше виростає!</p>}
+        {showText && (
+          <p className={styles.hint}>
+            Кожна гра будує щось своє і росте рівень за рівнем — по одному на кожну планету. Для планети «{world.planetName}» потрібен рівень {world.planet}.
+          </p>
+        )}
         {lands.map(({ module, landmarks }) => (
           <div key={module.id} className={styles.land}>
             <h3 className={styles.landTitle}>
@@ -106,7 +116,7 @@ export function WorldView() {
             </h3>
             <ul className={styles.landmarks}>
               {landmarks.map((landmark) => (
-                <LandmarkTile key={landmark.sub.id} landmark={landmark} />
+                <LandmarkTile key={landmark.sub.id} landmark={landmark} planet={world.planet} />
               ))}
             </ul>
           </div>

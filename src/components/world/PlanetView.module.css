@@ -611,3 +611,142 @@
   font-size: 1.1rem;
   cursor: pointer;
 }
+
+/* ---- The planet as it really looks (PlanetArt), under the things built on it ---- */
+.ballArt {
+  position: absolute;
+  height: auto;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.where {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+/* ---- The solar system: eight planets and the Sun ---- */
+.system {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding: 6px;
+  overflow-x: auto;
+  border-radius: var(--radius);
+  background: #0b1026;
+}
+
+.systemPlanet {
+  position: relative;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.systemHere {
+  border-color: #fde047;
+  box-shadow: 0 0 12px rgba(253, 224, 71, 0.7);
+}
+
+.systemClosed > svg,
+.systemClosed > .emoji {
+  opacity: 0.4;
+  filter: grayscale(0.6);
+}
+
+.systemSun {
+  margin-left: auto;
+  font-size: 34px;
+}
+
+.systemLock {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  font-size: 14px;
+}
+
+/* ---- A building of a later planet: a level up, and it shows ---- */
+.level {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  min-width: 18px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: #fde047;
+  color: #1f2937;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.upgraded .thing {
+  position: relative;
+  filter: drop-shadow(0 0 6px #fde047) drop-shadow(0 4px 4px rgba(0, 0, 0, 0.35));
+}
+
+/* ---- What the planet asks for before flying on ---- */
+.needs {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+}
+
+.needsTitle {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.needsList {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.needRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.needDone {
+  opacity: 0.7;
+}
+
+.needText {
+  flex: 1;
+}
+
+.needCount {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.full .needs {
+  display: none;
+}

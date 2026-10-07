@@ -62,6 +62,8 @@ export interface Card {
   glyphs?: Glyph[];
   /** What the speaker button says. Defaults to `label`. */
   speak?: string;
+  /** A drawn, turning planet shown instead of `emoji` — its id (`'mars'`, see `PlanetArt`). */
+  planet?: string;
   /** A figure drawn on a small cell grid (geometry answers). */
   shape?: { cols: number; rows: number; cells: number[] };
   /** A drawn clock face showing this time. */

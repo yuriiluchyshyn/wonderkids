@@ -207,12 +207,12 @@ export interface GameState extends ActiveChildView, PersistableState {
    * (`useBalance`). So a purchase really does set the goals back.
    * Returns false when it cannot be afforded or is already owned.
    */
-  buyWorldItem: (themeId: string, id: string) => boolean;
+  buyWorldItem: (themeId: string, id: string, planet?: number) => boolean;
   /**
    * Sell a built item back. Only `sellPrice` returns to the purse — the
    * difference is remembered as a loss. Returns what was refunded (0 = not owned).
    */
-  sellWorldItem: (themeId: string, id: string) => number;
+  sellWorldItem: (themeId: string, id: string, planet?: number) => number;
   /**
    * The child closed an onboarding tip — never show it again. Remembered as a
    * `tip:<id>` key inside `treasures` (like world purchases), so it syncs to
@@ -568,12 +568,12 @@ export const useGameStore = create<GameState>()((set) => ({
       ),
     ),
 
-  buyWorldItem: (themeId, id) => {
+  buyWorldItem: (themeId, id, planet = 1) => {
     let bought = false;
     set((s) =>
       patchActive(s, (c) => {
-        const key = ownedKey(themeId, id);
-        const cost = itemCost(id);
+        const key = ownedKey(themeId, id, planet);
+        const cost = itemCost(id, planet);
         // The purse is checked here, not in the UI: nothing is ever overdrawn.
         if (cost <= 0 || c.treasures.includes(key) || balanceOf(c.artifacts, c.treasures) < cost) return c;
         bought = true;
@@ -583,14 +583,14 @@ export const useGameStore = create<GameState>()((set) => ({
     return bought;
   },
 
-  sellWorldItem: (themeId, id) => {
+  sellWorldItem: (themeId, id, planet = 1) => {
     let refund = 0;
     set((s) =>
       patchActive(s, (c) => {
-        const key = ownedKey(themeId, id);
+        const key = ownedKey(themeId, id, planet);
         if (!c.treasures.includes(key)) return c;
-        refund = sellPrice(id);
-        const loss = itemCost(id) - refund;
+        refund = sellPrice(id, planet);
+        const loss = itemCost(id, planet) - refund;
         const stamp = `${Date.now().toString(36)}${uid('').slice(1, 4)}`;
         return {
           ...c,
