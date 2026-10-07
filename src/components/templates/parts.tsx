@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import type { ReactNode } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 import type { GameViewProps } from '@/core/game/kernel/types';
 import { cardSpeech, glyphSpeech, type Card, type Glyph, type TemplatePayload } from '@/core/game/templates/types';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
@@ -45,6 +45,19 @@ export function Glyphs({ glyphs, className }: { glyphs: Glyph[]; className?: str
   );
 }
 
+/** A real picture (a portrait); the pictogram takes over if the file does not load. */
+function Picture({ src, emoji, className }: { src: string; emoji?: string; className?: string }) {
+  const [broken, setBroken] = useState(false);
+  if (broken) {
+    return emoji ? (
+      <span className={cn(styles.faceEmoji, 'emoji')} aria-hidden>
+        {emoji}
+      </span>
+    ) : null;
+  }
+  return <img className={cn(styles.picture, className)} src={src} alt="" loading="lazy" decoding="async" draggable={false} onError={() => setBroken(true)} />;
+}
+
 /** The face of a card: pictogram, then math or a label with its speaker. */
 export function CardFace({ card, speaker = true }: { card: Card; speaker?: boolean }) {
   const showText = useShowText();
@@ -52,8 +65,13 @@ export function CardFace({ card, speaker = true }: { card: Card; speaker?: boole
   const label = card.label && (showText || !card.emoji) ? card.label : null;
   return (
     <span className={styles.face}>
-      {card.emoji && (
-        <span className={cn(styles.faceEmoji, 'emoji', card.silhouette && styles.silhouette)} aria-hidden>
+      {card.image && <Picture src={card.image} emoji={card.emoji} />}
+      {card.emoji && !card.image && (
+        <span
+          className={cn(styles.faceEmoji, 'emoji', card.silhouette && styles.silhouette)}
+          style={card.silhouette && card.blur ? ({ '--shadow-blur': `${card.blur}px` } as CSSProperties) : undefined}
+          aria-hidden
+        >
           {card.emoji}
         </span>
       )}
@@ -97,7 +115,9 @@ export function Stimulus({
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
     >
-      {s?.art && hasLandmarkArt(s.art) ? (
+      {s?.image ? (
+        <Picture src={s.image} emoji={s.emoji} className={styles.pictureBig} />
+      ) : s?.art && hasLandmarkArt(s.art) ? (
         <LandmarkArt id={s.art} label={s.caption} />
       ) : (
         s?.emoji && (

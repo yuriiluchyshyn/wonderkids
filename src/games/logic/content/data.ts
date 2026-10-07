@@ -1,18 +1,44 @@
-export const PER_STEP = 5;
+/** New tasks every path step opens, in each logic game (the other half of a level is recall). */
+export const PER_STEP = 25;
 
-/** Picture sets a pattern is drawn with — four clearly different things each. */
-export const SETS: string[][] = [
-  ['🔴', '🔵', '🟡', '🟢'],
-  ['⭐', '🌙', '☀️', '☁️'],
-  ['🚗', '🚌', '🚜', '🚲'],
-  ['🍎', '🍌', '🍇', '🍓'],
-  ['🐶', '🐱', '🐭', '🐸'],
-  ['🔺', '🟦', '🟣', '🔶'],
-  ['⚽', '🏀', '🎾', '🏐'],
-  ['🌷', '🌻', '🌵', '🍄'],
-  ['🧦', '👟', '🧢', '🧤'],
-  ['🥕', '🍅', '🥒', '🌽'],
-];
+/** Answers on the board of a tap-the-answer task — always nine, never four. */
+export const CHOICES = 9;
+
+const row = (line: string) => line.trim().split(/\s+/);
+
+/**
+ * Picture sets a pattern is drawn with — nine clearly different things each.
+ * A pattern takes a few of them for its roles; all nine are the answers.
+ */
+export const SETS: string[][] = `
+🔴 🔵 🟡 🟢 🟣 🟠 🟤 ⚫ ⚪
+⭐ 🌙 ☀️ ☁️ ⚡ ❄️ 🌈 🔥 💧
+🚗 🚌 🚜 🚲 🚂 ✈️ 🚀 ⛵ 🚁
+🍎 🍌 🍇 🍓 🍐 🍊 🍋 🍉 🍒
+🐶 🐱 🐭 🐸 🐰 🐻 🐷 🐮 🦊
+🔺 🟦 🟣 🔶 ⭐ ❤️ 🟩 ⬛ 🔷
+⚽ 🏀 🎾 🏐 🏈 ⚾ 🎱 🏓 🥊
+🌷 🌻 🌵 🍄 🌹 🌲 🌴 🍀 🍁
+🧦 👟 🧢 🧤 👕 👗 👖 🧣 👒
+🥕 🍅 🥒 🌽 🥦 🍆 🧅 🥔 🌶️
+🐟 🐙 🦀 🐬 🐳 🦈 🐢 🦐 🐚
+🦆 🦉 🦅 🦜 🐧 🦢 🐓 🦩 🕊️
+🦋 🐝 🐞 🐜 🐌 🕷️ 🐛 🦗 🪲
+🍞 🧀 🥚 🍕 🍔 🍩 🍪 🍦 🍭
+🎸 🥁 🎺 🎹 🎻 🎤 🔔 🎷 🪗
+🔨 🔧 ✂️ 🪚 🔑 🧲 🔦 🪜 📏
+🧸 🎈 🎁 🪁 🎲 🧩 🪀 🎮 🪆
+🏠 🏰 ⛺ 🏫 🗼 ⛪ 🏭 🎡 🌉
+❤️ 💛 💚 💙 💜 🧡 🖤 🤍 🤎
+🐘 🦒 🦁 🐒 🦓 🐊 🦛 🐪 🦘
+✏️ 📚 🎒 🖍️ 📐 🎨 📎 🔍 🖌️
+☕ 🥛 🧃 🍵 🥤 🥄 🍴 🥣 🫖
+😀 😴 😎 🤔 😢 😡 🥳 😱 🤗
+🪑 🛏️ 🚪 🛁 💡 ⏰ 📺 🧹 🪞
+`
+  .trim()
+  .split('\n')
+  .map(row);
 
 /**
  * One path step: the repeating unit (letters = different pictures), how many
@@ -31,53 +57,59 @@ export const PATTERN_STEPS: { unit: string; length: number; gap: number | null }
   { unit: 'ABAC', length: 8, gap: null },
 ];
 
-export const PATTERN_FACTS = [
-  'Візерунок — це коли щось повторюється за правилом.',
-  'Щоб розгадати візерунок, знайди шматочок, який повторюється.',
-  'Смужки зебри, соти бджіл, пелюстки квітів — у природі повно візерунків.',
-  'Дні тижня теж ідуть візерунком: сім днів — і знову понеділок.',
-  'У музиці візерунок зі звуків називають ритмом.',
-  'Українська вишиванка — це візерунок із хрестиків, що повторюються.',
-  'День і ніч змінюють одне одного — це найпростіший візерунок: А, Б, А, Б.',
-  'Пори року повторюються по колу: зима, весна, літо, осінь.',
-  'Плитку на підлозі часто викладають візерунком.',
-  'Математики кажуть, що їхня наука — це пошук візерунків.',
-  'Серце б’ється у рівному ритмі — тук-тук, тук-тук.',
-];
+/**
+ * Everything the shadow lotto can show, as pictograms whose black shadows can
+ * still be told apart. A line is a **family** (things of one kind); the groups
+ * between `|` are **look-alikes** within it — the closer two things sit here,
+ * the more their shadows resemble each other:
+ *
+ *   another family    nothing alike          — the opening steps
+ *   the same family   a dog and a horse      — the middle of the path
+ *   the same group    a dog, a fox, a wolf   — the end of it
+ *
+ * Never list two things with the same outline (a white and a black cat, an
+ * apple and an orange, two round balls): their shadows are one and the same.
+ */
+export const SHADOW_WORLD: string[][][] = `
+🐕 🐩 🦮 🐺 🦊 🦝 🐈 🐅 🐆 | 🐎 🦄 🦓 🦌 🫏 🫎 | 🐂 🐃 🐄 🦬 🐐 🐏 🐑 | 🐪 🐫 🦙 🦒 🦘 | 🐘 🦣 🦏 🦛 | 🐁 🐀 🐿️ 🦫 🦔 🐇 | 🦨 🦡 🦦 🐖 🐗 | 🐒 🦍 🦧 🦥 | 🐊 🦎 🐍 🐢 🦕 🦖 🐉
+🦆 🦢 🦩 🪿 🐧 🦤 | 🕊️ 🐦 🦅 🦉 🦜 🦚 🦃 🐓 | 🐤 🐥 🐣 🦇
+🐟 🐠 🐡 🦈 🐬 🐳 🐋 🦭 | 🐙 🦑 🦐 🦞 🦀 🪼 🐚
+🦋 🐝 🐞 🪲 🦟 🪰 🦗 🪳 | 🐛 🐜 🕷️ 🦂 🪱 🐌
+🚗 🚙 🏎️ 🛻 🚐 🚌 | 🚚 🚛 🚜 🚒 🚎 | 🏍️ 🛵 🚲 🛴 🛹 🛼 🦽 🦼 🛺
+🚂 🚄 🚇 🚝 🚞 🚋 | ✈️ 🛩️ 🚁 🚀 🛸 🪂 🛰️ 🚡 | ⛵ 🚤 🛥️ 🛳️ 🚢 🛶 ⛴️
+🍎 🍐 🍌 🍇 🍓 🍒 🍍 🍉 🍋 | 🍆 🥦 🥒 🌶️ 🌽 🥕 🧄 🧅 🥔 🍄 🥑 🫑
+🍞 🥐 🥖 🥨 🥯 🥞 🧇 🥪 | 🍗 🍖 🌭 🍔 🍟 🍕 🌮 🌯 | 🎂 🍰 🧁 🍫 🍬 🍭 🍦 🍧 🍿
+☕ 🍵 🥛 🧃 🥤 🧋 🍼 🫖 🍶 | 🥄 🍴 🔪 🥢 🍽️ 🥣 🫙 🏺
+🔨 🪓 ⛏️ 🔧 🪛 🪚 | 🔩 ✂️ 🧲 🪜 🔦 🪝 📎 📌
+👕 👗 👘 👔 🧥 🥼 🦺 👚 🩱 | 👖 🩳 🧦 🧤 🧣 | 🎩 🧢 👒 🎓 ⛑️ 👑 | 👞 👟 🥾 🥿 👠 👡 🩰 👢 | 👜 👛 🎒 🧳 👓 🕶️ 🌂 ☂️
+🏠 🏢 🏫 🏭 🏥 🏛️ | 🏯 🏰 ⛪ 🕌 🛕 🗼 🗽 ⛺ 🛖 | 🎡 🎢 🎠 ⛲ 🌉
+🌲 🌳 🌴 🌵 🎄 🎋 🪴 | 🌱 🌿 ☘️ 🍀 🍁 🍂 🍃 🌾 | 🌷 🌹 🌺 🌸 🌼 🌻 🪻 🪷 💐
+🏓 🏸 🏒 🏑 🥍 🏏 🎣 🏹 🪃 🎿 | ⚽ 🏈 🥊 🥋 ⛸️ 🛷 🥌 🎯 🎽 🤿 | 🧸 🪆 🎲 🧩 ♟️ 🎮 🕹️ 🪅 🪀 🪁 🎈
+🎸 🎻 🪕 🎹 🥁 🪗 | 🎺 🎷 📯 🪈 🎤 🎧 🔔
+🪑 🛋️ 🛏️ 🚪 🪟 🛁 🚽 🚿 🪞 | 🧹 🧺 🪣 🧽 🧴 🪥 🧼 🧯 | 🔑 🗝️ 🔒 💡 🕯️ 🪔 ⏰ ⌚ ⏳
+📱 💻 ⌨️ 🖨️ 📷 📺 📻 ☎️ 🔭 🔬 🧭 | 📚 📖 ✏️ 🖊️ 🖌️ 🖍️ 🎨 📦 🎁 📐 📏
+⭐ 🌙 ☁️ ⚡ ❄️ 🔥 💧 🌈 | 🪐 ☄️ 🌋 ⛰️ 🏝️ 🌍
+`
+  .trim()
+  .split('\n')
+  .map((family) => family.split('|').map(row));
 
-export type Thing = [emoji: string, name: string];
-
-/** Steps 1–3: things that look nothing alike. */
-export const MIXED: Thing[] = [
-  ['🐘', 'слон'], ['🐍', 'змія'], ['🦒', 'жирафа'], ['🚗', 'машина'], ['🌳', 'дерево'],
-  ['🏠', 'будинок'], ['⭐', 'зірка'], ['☂️', 'парасолька'], ['🐢', 'черепаха'], ['✈️', 'літак'],
-  ['🎸', 'гітара'], ['🦋', 'метелик'], ['🚲', 'велосипед'], ['🍌', 'банан'], ['🔑', 'ключ'],
-];
-/** Steps 4–7: one family a step — the shadows are closer to each other. */
-export const FAMILIES: Thing[][] = [
-  [['🐕', 'собака'], ['🐈', 'кішка'], ['🐇', 'заєць'], ['🐎', 'кінь'], ['🐖', 'свиня']],
-  [['🦆', 'качка'], ['🦉', 'сова'], ['🦅', 'орел'], ['🦜', 'папуга'], ['🦢', 'лебідь']],
-  [['🐟', 'риба'], ['🐙', 'восьминіг'], ['🦀', 'краб'], ['🐬', 'дельфін'], ['🦈', 'акула']],
-  [['🚂', 'паровоз'], ['🚁', 'гелікоптер'], ['⛵', 'вітрильник'], ['🚀', 'ракета'], ['🛴', 'самокат']],
-];
-/** Steps 8–10: look-alikes, four pairs on the board — attention to detail. */
-export const LOOKALIKES: Thing[][] = [
-  [['🚌', 'автобус'], ['🚚', 'вантажівка'], ['🚜', 'трактор'], ['🏍️', 'мотоцикл'], ['🛵', 'скутер']],
-  [['🍁', 'кленовий листок'], ['🍀', 'конюшина'], ['🌿', 'гілочка'], ['🌲', 'ялинка'], ['🌴', 'пальма']],
-  [['🔨', 'молоток'], ['🔧', 'гайковий ключ'], ['✂️', 'ножиці'], ['🪚', 'пилка'], ['🔪', 'ніж']],
-];
-
-export const SHADOW_FACTS = [
-  'Тінь з’являється там, куди не потрапляє світло.',
-  'Опівдні, коли сонце високо, тінь найкоротша.',
-  'Увечері й уранці тіні довгі-предовгі.',
-  'Тінь завжди повторює обриси предмета — тому за нею його можна впізнати.',
-  'Що ближче предмет до лампи, то більша його тінь на стіні.',
-  'За тінню від палички можна дізнатися, котра година, — так працює сонячний годинник.',
-  'У театрі тіней ляльок не видно — глядачі бачать лише їхні тіні.',
-  'Руками можна скласти тінь собаки, зайця чи птаха.',
-  'Місячне затемнення — це коли на Місяць падає тінь Землі.',
-  'У тіні дерева влітку прохолодніше, ніж на сонці.',
+/**
+ * How the shadow lotto hardens along its path, one entry per step: how many
+ * pairs are on the board, how close their shadows are (`mix` — see
+ * `SHADOW_WORLD`), and how soft the edge of a shadow is, in pixels.
+ */
+export const SHADOW_STEPS: { pairs: number; mix: 'apart' | 'family' | 'twoGroups' | 'group'; blur: number }[] = [
+  { pairs: 3, mix: 'apart', blur: 0.6 },
+  { pairs: 3, mix: 'apart', blur: 0.9 },
+  { pairs: 4, mix: 'apart', blur: 1.2 },
+  { pairs: 3, mix: 'family', blur: 1.5 },
+  { pairs: 4, mix: 'family', blur: 1.8 },
+  { pairs: 4, mix: 'family', blur: 2.1 },
+  { pairs: 4, mix: 'twoGroups', blur: 2.4 },
+  { pairs: 4, mix: 'twoGroups', blur: 2.7 },
+  { pairs: 4, mix: 'group', blur: 3 },
+  { pairs: 5, mix: 'group', blur: 3.3 },
 ];
 
 /** The left half of a figure: rows of '#' (filled) and '.' (empty); the mirror stands on its right edge. */
@@ -86,7 +118,7 @@ export interface Half {
   rows: string[];
 }
 
-/** Hand-drawn halves of familiar things (steps 3–4). */
+/** Hand-drawn halves of familiar things (they open steps 3 and 4). */
 export const DRAWN: Half[] = [
   { name: 'Метелик', rows: ['##.', '###', '.##', '###', '#..'] },
   { name: 'Сердечко', rows: ['.##', '###', '###', '.##', '..#'] },
@@ -100,19 +132,20 @@ export const DRAWN: Half[] = [
   { name: 'Ключ', rows: ['.##', '#..', '.##', '..#', '.##'] },
 ];
 
-/** Half-figure size per path step: [cols, rows]. Steps 3–4 use the drawn ones (3×5). */
-export const HALF_SIZE: [number, number][] = [[2, 3], [2, 4], [3, 5], [3, 5], [3, 3], [3, 4], [4, 3], [4, 4], [4, 5], [5, 4]];
-
-export const MIRROR_FACTS = [
-  'У дзеркалі ліве і праве міняються місцями.',
-  'Фігуру, обидві половинки якої однакові, називають симетричною.',
-  'Крила метелика симетричні — їхні візерунки віддзеркалюють один одного.',
-  'Обличчя людини майже симетричне: два ока, два вуха, дві брови.',
-  'Сніжинки симетричні — у кожної шість однакових промінців.',
-  'Якщо скласти аркуш навпіл і вирізати половинку серця, вийде ціле серце.',
-  'Літери А, М, О, Т симетричні: їхні половинки однакові.',
-  'Спокійна вода в озері працює як дзеркало — у ній відбиваються дерева й хмари.',
-  'Напис на машині швидкої допомоги іноді дзеркальний — щоб водії читали його у дзеркалі.',
-  'Будівельники люблять симетрію: палаци й храми часто мають однакові крила.',
-  'Листок дерева можна скласти навпіл по жилці — половинки збігаються.',
+/**
+ * The mirror game step by step: the size of the half-figure ([cols, rows]) and
+ * how many cells a wrong answer differs from the right one by — from "nothing
+ * like it" on the first steps to a single cell at the end.
+ */
+export const MIRROR_STEPS: { size: [number, number]; differ: [min: number, max: number] }[] = [
+  { size: [2, 3], differ: [3, 5] },
+  { size: [2, 4], differ: [3, 6] },
+  { size: [3, 5], differ: [3, 6] },
+  { size: [3, 5], differ: [2, 4] },
+  { size: [3, 3], differ: [2, 3] },
+  { size: [3, 4], differ: [2, 3] },
+  { size: [4, 3], differ: [1, 3] },
+  { size: [4, 4], differ: [1, 2] },
+  { size: [4, 5], differ: [1, 2] },
+  { size: [5, 4], differ: [1, 1] },
 ];

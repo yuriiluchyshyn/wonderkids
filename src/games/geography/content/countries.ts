@@ -83,6 +83,8 @@ const LOOKS: Record<string, string> = {
 export interface Country {
   id: string;
   name: string;
+  /** The name in the genitive: «прапор України», «столиця Японії». */
+  of: string;
   flag: string;
   /** Region id on the world map. */
   continent: string;
@@ -97,10 +99,60 @@ function flagOf(code: string): string {
   return [...code].map((c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65)).join('');
 }
 
+/** Genitives the rules of `genitive` below would get wrong. */
+// prettier-ignore
+const OF: Record<string, string> = {
+  'Єгипет': 'Єгипту',
+  'Нідерланди': 'Нідерландів',
+  'Об’єднані Арабські Емірати': 'Об’єднаних Арабських Еміратів',
+  'Філіппіни': 'Філіппін',
+  'Багамські Острови': 'Багамських Островів',
+  'Бангладеш': 'Бангладеш',
+  'Мальдіви': 'Мальдів',
+  'Республіка Конго': 'Республіки Конго',
+  'Демократична Республіка Конго': 'Демократичної Республіки Конго',
+  'Коморські Острови': 'Коморських Островів',
+  'Сейшельські Острови': 'Сейшельських Островів',
+  'Нікарагуа': 'Нікарагуа',
+  'Сент-Вінсент і Гренадини': 'Сент-Вінсенту і Гренадин',
+  'Антигуа і Барбуда': 'Антигуа і Барбуди',
+  'Самоа': 'Самоа',
+  'Соломонові Острови': 'Соломонових Островів',
+  'Маршаллові Острови': 'Маршаллових Островів',
+};
+
+/** One word of a country's name in the genitive: Україна → України, Китай → Китаю, Перу → Перу. */
+function wordOf(word: string): string {
+  if (word === word.toLocaleUpperCase('uk')) return word;
+  if (/ія$/.test(word)) return word.slice(0, -1) + 'ї';
+  if (/[еє]я$/.test(word)) return word.slice(0, -1) + 'ї';
+  if (/[жчшщ]а$/.test(word)) return word.slice(0, -1) + 'і';
+  if (/а$/.test(word)) return word.slice(0, -1) + 'и';
+  if (/я$/.test(word)) return word.slice(0, -1) + 'і';
+  if (/[йь]$/.test(word)) return word.slice(0, -1) + 'ю';
+  // Марокко, Перу, Чилі, Зімбабве do not change.
+  if (/[оуіеєюиї]$/.test(word)) return word;
+  return word + 'у';
+}
+
+/** «Велика Британія» → «Великої Британії»; the odd ones are listed in `OF`. */
+function genitive(name: string): string {
+  if (OF[name]) return OF[name];
+  const words = name.split(' ');
+  return words
+    .map((word, i) => {
+      if (i < words.length - 1 && /а$/.test(word)) return word.slice(0, -1) + 'ої';
+      if (i < words.length - 1 && /ий$/.test(word)) return word.slice(0, -2) + 'ого';
+      return wordOf(word);
+    })
+    .join(' ');
+}
+
 /** All countries, most familiar flag first. */
 export const COUNTRIES: Country[] = RANKED.map(([code, name, continent]) => ({
   id: code.toLowerCase(),
   name,
+  of: genitive(name),
   flag: flagOf(code),
   continent: CONTINENTS[continent].id,
   continentName: CONTINENTS[continent].name,

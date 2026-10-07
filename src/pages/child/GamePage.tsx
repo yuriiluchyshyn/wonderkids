@@ -6,6 +6,8 @@ import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { clampStep, pathKey, subSteps } from '@/core/child/progress/path';
 import { gameStatus } from '@/core/game/kernel/gameConfig';
+import { GALAXIES } from '@/core/game/galaxies';
+import { useHubState } from '@/core/app/ui/useHubState';
 
 /** Hosts a learning session at the step chosen on the path (?step=). */
 export function GamePage() {
@@ -32,6 +34,14 @@ export function GamePage() {
   const [activeStep, setActiveStep] = useState(chosenStep);
   const [sessionKey, setSessionKey] = useState(0);
 
+  // The little house leads back to where the child came from: this game's
+  // galaxy, scrolled to this game's card — not to the top of the default one.
+  const backToHub = () => {
+    const galaxy = GALAXIES.find((g) => g.moduleId === moduleId);
+    if (galaxy) useHubState.getState().setGalaxy(galaxy.id);
+    navigate('/', { state: { focusGame: `${moduleId}:${subId}` } });
+  };
+
   if (!module || !sub || gameStatus(sub) === 'soon') {
     return (
       <div className="page center" style={{ minHeight: '60dvh' }}>
@@ -54,7 +64,7 @@ export function GamePage() {
         key={sessionKey}
         config={{ moduleId, subCategoryId: subId, step: activeStep }}
         subLabel={sub.label}
-        onExit={() => navigate('/')}
+        onExit={backToHub}
         onPlayAgain={() => {
           setActiveStep(activeStep);
           setSessionKey((k) => k + 1);

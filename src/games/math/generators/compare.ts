@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, GridChoicePayload } from '@/core/game/templates/types';
 import { pick, randInt, uid } from '@/core/utils/random';
@@ -114,7 +115,7 @@ export function generateCompare(config: TaskConfig): TaskInstance<GridChoicePayl
     reward: rewardForStep(step),
     outro: `Так! ${verdict[0].toUpperCase()}${verdict.slice(1)}.`,
     payload: {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 3,
       stimulus: { glyphs: [left.text, '?', right.text] },
       options: SIGNS,

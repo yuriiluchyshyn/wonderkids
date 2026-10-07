@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { SubCategory } from '@/core/game/kernel/types';
 import type { Theme } from '@/core/theme/theme.types';
 import { FRACTION_OPS_INTRO, fractionOpsTier } from './generators/fractionOps';
@@ -41,7 +42,7 @@ export const GAMES: SubCategory[] = [
     steps: 40,
     difficulty: [1, 3],
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
   {
     id: MATH_SUB.sub,
@@ -53,7 +54,7 @@ export const GAMES: SubCategory[] = [
     steps: 40,
     difficulty: [1, 3],
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
   {
     id: MATH_SUB.mul,
@@ -65,7 +66,7 @@ export const GAMES: SubCategory[] = [
     steps: 30,
     difficulty: [2, 3],
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
   {
     id: MATH_SUB.div,
@@ -77,7 +78,7 @@ export const GAMES: SubCategory[] = [
     steps: 25,
     difficulty: [2, 3],
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
   {
     id: MATH_SUB.mixed,
@@ -89,7 +90,7 @@ export const GAMES: SubCategory[] = [
     steps: 60,
     difficulty: [1, 3],
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
   {
     // PRD v4.0, game 1: an introductory mode, shortened to 10 levels.
@@ -103,7 +104,7 @@ export const GAMES: SubCategory[] = [
     steps: 10,
     difficulty: 1,
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
   {
     id: MATH_SUB.fractionOps,
@@ -116,7 +117,7 @@ export const GAMES: SubCategory[] = [
     difficulty: [2, 3],
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
+    mechanics: [Mechanics.GridChoice, Mechanics.DragMatch],
   },
   {
     id: MATH_SUB.balance,
@@ -130,7 +131,7 @@ export const GAMES: SubCategory[] = [
     difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_BALANCE_SCALE',
+    mechanics: Mechanics.BalanceScale,
   },
   {
     id: MATH_SUB.geometry,
@@ -143,7 +144,7 @@ export const GAMES: SubCategory[] = [
     difficulty: [1, 3],
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_DRAG_MATCH',
+    mechanics: Mechanics.DragMatch,
   },
   {
     id: MATH_SUB.maze,
@@ -158,7 +159,7 @@ export const GAMES: SubCategory[] = [
     publishDate: V4_RELEASE,
     // One maze is a dozen steps of its own — five make a full level.
     tasksPerLevel: 5,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
   {
     id: MATH_SUB.shop,
@@ -172,7 +173,7 @@ export const GAMES: SubCategory[] = [
     difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_DRAG_MATCH',
+    mechanics: Mechanics.DragMatch,
     hasText: true,
   },
   {
@@ -188,7 +189,7 @@ export const GAMES: SubCategory[] = [
     difficulty: [1, 2],
     publishDate: COMPARE_CLOCK_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
     hasText: true,
   },
   {
@@ -202,7 +203,7 @@ export const GAMES: SubCategory[] = [
     difficulty: [1, 2],
     publishDate: COMPARE_CLOCK_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
     hasText: true,
   },
   {
@@ -218,7 +219,7 @@ export const GAMES: SubCategory[] = [
     difficulty: [1, 3],
     publishDate: COMPARE_CLOCK_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
     hasText: true,
   },
 ];

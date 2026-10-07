@@ -154,6 +154,12 @@ export function useGameSession(config: GameSessionConfig): GameSession {
 
   const task = engine?.currentTask ?? null;
   const isRepeat = engine?.isRepeatShowing ?? false;
+  // The engine is the truth about "the level is over". Finishing also writes
+  // to the store (path step, plays), and React renders that store change
+  // before this hook's own `finished` state lands — for one render the queue
+  // had moved on while `finished` was still false, so the shell took the last
+  // task for a new one and read its prompt out under the win screen.
+  const over = finished || Boolean(engine && engine.total > 0 && engine.isFinished);
 
   /** Append one question the level does not ask yet. False once capped. */
   const appendFresh = useCallback((): boolean => {
@@ -251,7 +257,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     hintActive: !justSolved && mistakes >= (isRepeat ? REPEAT_HINT_THRESHOLD : HINT_THRESHOLD),
     isRepeat,
     justSolved,
-    finished,
+    finished: over,
     earned,
     hintUsedThisSession,
     registerSuccess,

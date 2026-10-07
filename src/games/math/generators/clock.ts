@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { ClockTime, GridChoicePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
@@ -83,7 +84,7 @@ export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayloa
       key: `clock:find:${digital(time)}`,
       prompt: `Знайди годинник, який показує: ${sayTime(time)}.`,
       payload: {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { glyphs: [digital(time)] },
         // No speaker on these cards: hearing each clock's time would give it away.
@@ -99,7 +100,7 @@ export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayloa
     key: `clock:read:${digital(time)}`,
     prompt: 'Котра година на годиннику?',
     payload: {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 2,
       stimulus: { clock: time },
       options: options.map((t) => ({ id: digital(t), label: digital(t), speak: sayTime(t) })),

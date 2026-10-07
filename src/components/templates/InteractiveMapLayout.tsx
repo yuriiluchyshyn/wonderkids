@@ -9,7 +9,7 @@ import { useDragDrop } from './useDragDrop';
 import styles from './Templates.module.css';
 
 function RegionShape({ region, className, ...rest }: { region: MapRegion; className: string } & Record<string, unknown>) {
-  if (region.points) return <polygon points={region.points} className={className} {...rest} />;
+  if (region.path) return <path d={region.path} className={className} {...rest} />;
   return (
     <g {...rest}>
       {region.rects?.map((r, i) => (

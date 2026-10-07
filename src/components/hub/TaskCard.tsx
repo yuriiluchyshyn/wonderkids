@@ -67,6 +67,7 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
   return (
     <motion.article
       ref={ref}
+      data-game={`${entry.module.id}:${sub.id}`}
       className={cn(styles.card, !showText && styles.compact, locked && styles.locked, dimmed && styles.dimmed)}
       aria-disabled={locked}
       layout

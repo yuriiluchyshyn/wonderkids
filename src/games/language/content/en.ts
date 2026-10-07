@@ -1,5 +1,6 @@
 import { ASSOC_EN } from './assoc';
 import type { LangPack, Sentence, Word } from '../tasks';
+import { EN_FACTS_MORE, withMoreFacts } from './facts';
 
 /** Three-letter words for the phonics steps: C-A-T, D-O-G. */
 const PHONICS = `
@@ -11,6 +12,10 @@ car|🚗 jam|🍓 gem|💎 log|🪵 fog|🌫️ tub|🛁 pin|📌 pie|🥧 tea|�
 six|6️⃣ one|1️⃣ two|2️⃣ red|🔴 sad|😢 hot|🥵 wet|💦 run|🏃 hug|🤗 cry|😭
 ape|🦍 cub|🐻 axe|🪓 saw|🪚 bow|🏹 gas|⛽ oil|🛢️ tie|👔 cap|🧢 art|🎨
 zoo|🦓 net|🥅 sky|🌌 kid|🧒 mop|🧹 ham|🍖 bun|🥯 nap|😴 elf|🧝 gym|🏋️
+cab cob cod cop cot cut dad den dig dot fan fig fin fit gap gum hip hit hop hut
+jar jaw jog joy jug kit lap lid lot mat mix mom mud mug nod pad pal pat paw pea
+peg pet pit pod pop pup rag rib rod rug sip sit sum tab tag tan tap tin tip top
+tug vet wag wax wig win yak yam zip bib bud dip hum lab rim row sap
 `;
 
 /** Longer words to spell: four letters first, then five. */
@@ -30,6 +35,19 @@ water|💧 onion|🧅 bacon|🥓 pasta|🍝 donut|🍩 train|🚆 plane|🛩️ 
 clock|⏰ phone|📱 watch|⌚ brush|🖌️ broom|🧹 spoon|🥄 knife|🔪 plate|🍽️ robot|🤖 crown|👑
 dress|👗 shirt|👕 pants|👖 scarf|🧣 glove|🧤 heart|❤️ cloud|☁️ beach|🏖️ world|🌍 plant|🌱
 tooth|🦷 mouth|👄 brain|🧠 queen|👸 clown|🤡 ghost|👻 angel|👼 music|🎵 piano|🎹 smile|😄
+bank barn bath bead beak bean beef belt bush cage camp cane cape cart cave chin clap claw clay coal
+comb cook cord cork crow cube curl desk dish doll dove drop dust farm fort gate glue gold hair hall
+harp hawk heel hill hive hood hook horn hose iron joke jump knee knot lace lake lamb lane lawn lime
+line loaf mail mask meal mint mist moth nail neck nest oven page pail palm park path pipe plum pond
+pool rake roof room root rope sail sand seed shop silk sink sled soil song tail tape town tray twig
+vase vest vine wall wave whip wing wire wood wool yard yarn
+bench brick bride chain chalk cheek chest cliff coach coast couch crane cream dance dream earth elbow fairy feast fence
+field flame flour flute fruit giant glass globe goose grass gravy guest hotel jeans jelly jewel judge lunch magic maple
+march medal month night noise north nurse ocean olive paint paper party pearl pedal penny petal pilot porch prize puppy
+purse quilt radio ranch river ruler scale shade shelf shell skate skirt slide smoke snack spark stamp steam stick stone
+storm story straw sugar swing sword table teeth thumb toast tower towel track trail tulip uncle voice wagon wheat wheel
+bridge bubble bucket butter button cheese cherry circle crayon dragon engine finger garden hammer island jacket kettle kitten ladder letter
+lizard mirror monkey orange pencil pepper pillow pocket rabbit school spider spring square stairs street ticket tunnel turtle valley violin zipper
 `;
 
 /** A word in two halves: compound words first (sun + flower), then two-syllable words. */
@@ -97,7 +115,14 @@ hot pot dot spot
 const cells = (raw: string) => raw.trim().split(/\s+/);
 const lines = (raw: string) => raw.trim().split('\n');
 
-const PHONICS_WORDS = cells(PHONICS).map((cell) => cell.split('|') as Word);
+/** Each word once, in the order written. */
+const words = (raw: string): Word[] => {
+  const seen = new Set<string>();
+  return cells(raw)
+    .map((cell) => cell.split('|') as Word)
+    .filter((w) => !seen.has(w[0]) && seen.add(w[0]));
+};
+const PHONICS_WORDS = words(PHONICS);
 
 // ---- Sentences: built from parts so every combination is a correct one. ----
 
@@ -113,9 +138,24 @@ const DOERS: [who: string, emoji: string, does: string[]][] = [
   ['Kids', '🧒', ['play', 'run', 'jump', 'laugh', 'sing']],
   ['Horses', '🐴', ['run', 'jump', 'eat', 'sleep', 'walk']],
   ['Babies', '👶', ['cry', 'sleep', 'eat', 'smile', 'crawl']],
+  ['Ducks', '🦆', ['swim', 'quack', 'fly', 'eat', 'walk']],
+  ['Lions', '🦁', ['roar', 'run', 'sleep', 'eat', 'hunt']],
+  ['Monkeys', '🐒', ['climb', 'jump', 'play', 'eat', 'swing']],
+  ['Rabbits', '🐰', ['hop', 'run', 'eat', 'hide', 'dig']],
+  ['Cows', '🐄', ['moo', 'eat', 'walk', 'sleep', 'stand']],
+  ['Pigs', '🐷', ['oink', 'eat', 'sleep', 'dig', 'run']],
+  ['Owls', '🦉', ['fly', 'hoot', 'hunt', 'watch', 'sleep']],
+  ['Wolves', '🐺', ['howl', 'run', 'hunt', 'sleep', 'eat']],
+  ['Snakes', '🐍', ['hiss', 'crawl', 'hide', 'sleep', 'hunt']],
+  ['Whales', '🐳', ['swim', 'dive', 'sing', 'eat', 'jump']],
+  ['Mice', '🐭', ['squeak', 'run', 'hide', 'eat', 'sleep']],
+  ['Hens', '🐔', ['cluck', 'peck', 'walk', 'eat', 'sleep']],
+  ['Ants', '🐜', ['work', 'walk', 'dig', 'climb', 'carry']],
+  ['Planes', '✈️', ['fly', 'land', 'turn', 'climb', 'wait']],
+  ['Boys', '👦', ['run', 'play', 'read', 'jump', 'swim']],
 ];
 
-const PEOPLE = ['Mom', 'Dad', 'Grandma', 'Grandpa', 'Anna', 'Tom', 'Kate', 'Max', 'Lily', 'Sam'];
+const PEOPLE = ['Mom', 'Dad', 'Grandma', 'Grandpa', 'Anna', 'Tom', 'Kate', 'Max', 'Lily', 'Sam', 'Emma', 'Ben', 'Mia', 'Jack', 'Lucy'];
 const ACTIONS: [phrase: string, emoji: string][] = [
   ['reads books', '📖'],
   ['eats apples', '🍎'],
@@ -127,6 +167,26 @@ const ACTIONS: [phrase: string, emoji: string][] = [
   ['washes dishes', '🍽️'],
   ['plays football', '⚽'],
   ['makes soup', '🍲'],
+  ['feeds cats', '🐱'],
+  ['rides bikes', '🚲'],
+  ['wears hats', '🎩'],
+  ['loves music', '🎵'],
+  ['paints pictures', '🖼️'],
+  ['grows flowers', '🌷'],
+  ['drives cars', '🚗'],
+  ['builds houses', '🏠'],
+  ['catches fish', '🐟'],
+  ['opens doors', '🚪'],
+  ['sings songs', '🎶'],
+  ['needs help', '🤝'],
+  ['likes apples', '🍏'],
+  ['has toys', '🧸'],
+  ['sees stars', '⭐'],
+  ['wants milk', '🥛'],
+  ['finds keys', '🔑'],
+  ['eats cake', '🎂'],
+  ['drinks tea', '🍵'],
+  ['reads maps', '🗺️'],
 ];
 
 const HEROES: [who: string, emoji: string][] = [
@@ -140,9 +200,19 @@ const HEROES: [who: string, emoji: string][] = [
   ['The green frog', '🐸'],
   ['The old horse', '🐴'],
   ['The yellow bird', '🐤'],
+  ['The brown fox', '🦊'],
+  ['The gray wolf', '🐺'],
+  ['The fat pig', '🐷'],
+  ['The tall giraffe', '🦒'],
+  ['The fast rabbit', '🐰'],
+  ['The black sheep', '🐑'],
+  ['The young lion', '🦁'],
+  ['The pink duck', '🦆'],
+  ['The sleepy koala', '🐨'],
+  ['The clever owl', '🦉'],
 ];
 /** One-word endings make four-word sentences, two-word ones — five. */
-const ENDINGS = ['runs', 'sleeps', 'jumps', 'runs fast', 'sleeps well', 'eats slowly', 'jumps high', 'plays outside', 'walks home', 'swims well'];
+const ENDINGS = ['runs', 'sleeps', 'jumps', 'eats', 'plays', 'walks', 'hides', 'waits', 'smiles', 'rests', 'runs fast', 'sleeps well', 'eats slowly', 'jumps high', 'plays outside', 'walks home', 'swims well', 'hides here', 'sits down', 'goes away', 'comes back', 'looks up', 'stands still', 'runs away', 'wakes up'];
 
 const TWO: Sentence[] = DOERS[0][2].flatMap((_, i) => DOERS.map(([who, emoji, does]): Sentence => [`${who} ${does[i]}.`, emoji]));
 const THREE: Sentence[] = ACTIONS.flatMap(([phrase, emoji], i) => PEOPLE.map((_, j): Sentence => [`${PEOPLE[(i + j) % PEOPLE.length]} ${phrase}.`, emoji]));
@@ -156,7 +226,7 @@ export const EN: LangPack = {
   prefix: 'en_',
   alphabet: [...'abcdefghijklmnopqrstuvwxyz'],
   partWords: PHONICS_WORDS.map(([word, emoji]) => ({ parts: [...word], emoji })),
-  spellWords: cells(SPELL).map((cell) => cell.split('|') as Word),
+  spellWords: words(SPELL),
   halves: cells(HALVES).map((cell) => cell.split('|') as [string, string, string]),
   assoc: ASSOC_EN,
   rhymes: lines(RHYMES).map(cells),
@@ -195,7 +265,8 @@ export const EN: LangPack = {
       difficulty: [2, 3],
     },
   },
-  facts: {
+  facts: withMoreFacts(
+    {
     general: [
       'Англійською розмовляють у багатьох країнах: у Великій Британії, США, Канаді, Австралії.',
       'Англійська — мова, якою найчастіше спілкуються люди з різних країн.',
@@ -235,4 +306,6 @@ export const EN: LangPack = {
       'В англійській мові, на відміну від української, слова майже не змінюють закінчень.',
     ],
   },
+    EN_FACTS_MORE,
+  ),
 };

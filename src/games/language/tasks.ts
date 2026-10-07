@@ -1,10 +1,15 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskInstance } from '@/core/game/kernel/types';
 import type { Card, DragMatchPayload, SpeechLang, TemplatePayload } from '@/core/game/templates/types';
+import { counted, noun } from '@/core/lang/uk';
 import { shuffle } from '@/core/utils/random';
 import { factPool } from '../shared/facts';
 import { templateTask, type GameTasks, type TemplateGame } from '../shared/templateModule';
 
 type Tasks = TaskInstance<TemplatePayload>[];
+
+const SYLLABLE = noun('склад', 'm');
+const LETTER = noun('літера', 'f');
 
 /** A word with its picture. */
 export type Word = [word: string, emoji: string];
@@ -63,8 +68,8 @@ export const STAGE = {
 /** The four games of a language, in catalog order. */
 export const GAME_KINDS = ['bubbles', 'chain', 'rhymes', 'sentences'] as const;
 export type GameKind = (typeof GAME_KINDS)[number];
-/** New questions a step opens (the other half of a level is recall). */
-const PER_STEP = 5;
+/** New questions a step opens, where the content allows (the other half of a level is recall). */
+const PER_STEP = 25;
 
 interface Tier<T> {
   from: number;
@@ -106,7 +111,7 @@ function scramble(ids: string[]): string[] {
 
 function match(pairs: { item: Card; slot: Card }[], hint: string): DragMatchPayload {
   return {
-    template: 'UI_DRAG_MATCH',
+    template: Mechanics.DragMatch,
     items: shuffle(pairs.map((p) => p.item)),
     slots: shuffle(pairs.map((p) => p.slot)),
     pairs: Object.fromEntries(pairs.map((p) => [p.item.id, p.slot.id])),
@@ -114,14 +119,14 @@ function match(pairs: { item: Card; slot: Card }[], hint: string): DragMatchPayl
   };
 }
 
-/** Runs of neighbouring letters: twenty of three, fifteen of four, fifteen of five, spread over the alphabet. */
+/** Every run of two to six neighbouring letters — short runs first, each length spread over the whole alphabet. */
 function alphabetRuns(alphabet: string[]): string[][] {
-  const spread = (length: number, count: number) =>
-    Array.from({ length: count }, (_, i) => {
-      const start = Math.round((i * (alphabet.length - length)) / (count - 1));
-      return alphabet.slice(start, start + length);
-    });
-  return [...spread(3, 20), ...spread(4, 15), ...spread(5, 15)];
+  return [2, 3, 4, 5, 6].flatMap((length) => {
+    const starts = Array.from({ length: alphabet.length - length + 1 }, (_, i) => i);
+    // A stride that shares no factor with the count visits every start once, far apart.
+    const stride = [7, 5, 3, 2, 1].find((k) => starts.length % k !== 0) ?? 1;
+    return starts.map((_, i) => alphabet.slice((i * stride) % starts.length, ((i * stride) % starts.length) + length));
+  });
 }
 
 /** The task generators of the four games of one language, by game id. */
@@ -139,8 +144,14 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
   // Bubble pop: 1–10 the alphabet, 11–25 syllables / phonics, 26–50 words.
   const abcTier: Tier<string[]> = { from: 1, to: STAGE.parts - 1, items: alphabetRuns(pack.alphabet) };
   const partTier: Tier<LangPack['partWords'][number]> = { from: STAGE.parts, to: STAGE.spell - 1, items: pack.partWords };
-  const spellTier: Tier<Word> = { from: STAGE.spell, to: LANGUAGE_STEPS, items: pack.spellWords };
-  // From `STAGE.strays` the Ukrainian word is no longer written out and stray letters float about.
+  // The words to spell are shared out between the two halves of the stage in
+  // proportion to their length in steps — shorter words first, each asked once.
+  // From `STAGE.strays` on, stray letters float about and the Ukrainian word is
+  // no longer written out.
+  const shownSteps = STAGE.strays - STAGE.spell;
+  const shownCount = Math.min(shownSteps * PER_STEP, Math.ceil((pack.spellWords.length * shownSteps) / (LANGUAGE_STEPS - STAGE.spell + 1)));
+  const spellTier: Tier<Word> = { from: STAGE.spell, to: STAGE.strays - 1, items: pack.spellWords.slice(0, shownCount) };
+  const strayTier: Tier<Word> = { from: STAGE.strays, to: LANGUAGE_STEPS, items: pack.spellWords.slice(shownCount) };
 
   function bubbles(step: number): Tasks {
     const tasks: Tasks = [];
@@ -152,7 +163,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
           `abc:${run.join('')}`,
           uk ? `Лопай літери за абеткою: від ${shown[0]} до ${shown[shown.length - 1]}.` : 'Лопай англійські літери за абеткою — від першої до останньої.',
           {
-            template: 'UI_BUBBLE_POP',
+            template: Mechanics.BubblePop,
             bubbles: run.map((l, i) => letterCard(`b${i}`, l)),
             hint: uk ? `Згадай абетку: ${shown.join(', ')}.` : 'Згадай англійську абетку. Потрібна бульбашка блимає.',
           },
@@ -169,38 +180,38 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
           `parts:${whole}`,
           uk ? `Збери слово зі складів: ${whole}.` : 'Збери англійське слово з літер. Воно написане під малюнком.',
           {
-            template: 'UI_BUBBLE_POP',
+            template: Mechanics.BubblePop,
             target: { id: 'target', emoji, label: upper(whole), speak: whole, lang },
             bubbles: parts.map((part, i) => ({ id: `b${i}`, label: upper(part), speak: part, lang })),
             hint: uk ? `Слово «${whole}» складається так: ${parts.join(' — ')}.` : 'Подивись на слово під малюнком і лопай літери зліва направо.',
           },
           step,
-          outro('bubbles', uk ? `У слові «${whole}» ${parts.length} склади: ${parts.join('-')}.` : undefined),
+          outro('bubbles', uk ? `У слові «${whole}» ${counted(parts.length, SYLLABLE)}: ${parts.join('-')}.` : undefined),
         ),
       );
     }
 
-    for (const [whole, emoji] of opened(spellTier, step)) {
+    const spell = ([whole, emoji]: Word, hard: boolean) => {
       const letters = [...whole];
       // Ukrainian only: an English learner always needs to see the word.
-      const byEar = uk && step >= STAGE.strays;
-      const strays = step >= STAGE.strays ? shuffle(pack.alphabet.filter((l) => !letters.includes(l))).slice(0, 2) : [];
-      tasks.push(
-        templateTask(
-          `spell:${whole}`,
-          uk ? `Склади слово з літер: ${whole}.` : 'Склади англійське слово з літер. Воно написане під малюнком.',
-          {
-            template: 'UI_BUBBLE_POP',
-            target: { id: 'target', emoji, label: byEar ? undefined : upper(whole), speak: whole, lang },
-            bubbles: letters.map((l, i) => letterCard(`b${i}`, l)),
-            extras: strays.map((l, i) => letterCard(`x${i}`, l)),
-            hint: uk ? `Вимов слово повільно: ${letters.map(upper).join(', ')}.` : 'Подивись на слово під малюнком і лопай літери зліва направо. Зайві літери не лопаються.',
-          },
-          step,
-          outro('bubbles', uk ? `У слові «${whole}» ${letters.length} ${letters.length < 5 ? 'літери' : 'літер'}.` : undefined),
-        ),
+      const byEar = uk && hard;
+      const strays = hard ? shuffle(pack.alphabet.filter((l) => !letters.includes(l))).slice(0, 2) : [];
+      return templateTask(
+        `spell:${whole}`,
+        uk ? (byEar ? 'Послухай слово і склади його з літер.' : `Склади слово з літер: ${whole}.`) : 'Склади англійське слово з літер. Воно написане під малюнком.',
+        {
+          template: Mechanics.BubblePop,
+          target: { id: 'target', emoji, label: byEar ? undefined : upper(whole), speak: whole, lang },
+          bubbles: letters.map((l, i) => letterCard(`b${i}`, l)),
+          extras: strays.map((l, i) => letterCard(`x${i}`, l)),
+          hint: uk ? `Вимов слово повільно: ${letters.map(upper).join(', ')}.` : 'Подивись на слово під малюнком і лопай літери зліва направо. Зайві літери не лопаються.',
+        },
+        step,
+        outro('bubbles', uk ? `У слові «${whole}» ${counted(letters.length, LETTER)}.` : undefined),
       );
-    }
+    };
+    for (const w of opened(spellTier, step)) tasks.push(spell(w, false));
+    for (const w of opened(strayTier, step)) tasks.push(spell(w, true));
 
     return tasks;
   }
@@ -315,7 +326,9 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
     family: number;
   }
   const rhymeLeads: Rhyme[] = (() => {
-    const PAIRS = [[0, 1], [2, 3], [0, 2], [1, 3], [0, 3], [1, 2]];
+    // Every pair a family can make, nearest neighbours first: a family of six gives fifteen.
+    const PAIRS: [number, number][] = [];
+    for (let gap = 1; gap < 8; gap += 1) for (let i = 0; i + gap < 8; i += 1) PAIRS.push([i, i + gap]);
     const parse = (entry: string): Word => {
       const [text, emoji] = entry.split('|');
       return [text, emoji ?? ''];
@@ -368,7 +381,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
           `sentence:${text}`,
           uk ? 'Постав слова по порядку, щоб вийшло речення.' : 'Постав англійські слова по порядку, щоб вийшло речення.',
           {
-            template: 'UI_CHRONO_SEQUENCE',
+            template: Mechanics.ChronoSequence,
             stimulus: { emoji },
             cards,
             initial: scramble(cards.map((c) => c.id)),

@@ -1,3 +1,5 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
+import { conjugate, inflect, lowerFirst, noun, verb } from '@/core/lang/uk';
 import type { TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { shuffle } from '@/core/utils/random';
@@ -22,11 +24,26 @@ import {
   WORLD_INVENTIONS,
   type Achiever,
   type Invention,
+  WHO_ASK,
 } from './content/data';
 import { DINOSAURS } from './content/dinosaurs';
 import { EARLIER, EPOCHS, EPOCH_ITEMS, SEQUENCES, WHEN } from './content/timeMachine';
 
 type Tasks = TaskInstance<TemplatePayload>[];
+
+const FAMOUS = verb('прославитися', ['прославиться', 'прославляться'], { perfective: true });
+const CREATE = verb('створити', ['створить', 'створять'], { perfective: true });
+const HE = noun('він', 'm', { animate: true });
+const SHE = noun('вона', 'f', { animate: true });
+const THEY = noun('вони', 'm', { animate: true, number: 'pl' });
+/** «прославився», «прославилася», «прославилися» — by who it is said of. */
+const becameFamous = (who?: 'she' | 'they') => conjugate(FAMOUS, 'past', who === 'she' ? SHE : who === 'they' ? THEY : HE);
+/** «брати Райт», «конструктори Антонова»: a group is not a proper name inside a sentence. */
+const inSentence = (name: string) => (/^(Брати|Конструктори) /.test(name) ? lowerFirst(name) : name);
+/** The person's portrait — `public/people/<id>.webp` (sources in its CREDITS.md). */
+const portrait = (p: Achiever) => `/people/${p.id}.webp`;
+/** «створив» for one inventor, «створили» for several («Брати Райт», «… і …»). */
+const created = (by: string) => conjugate(CREATE, 'past', / і |^Брати |^Конструктори /.test(by) ? THEY : HE);
 const byId = <T extends { id: string }>(a: T, b: T) => a.id === b.id;
 
 /** A shuffled order that is guaranteed not to be already solved. */
@@ -49,9 +66,10 @@ function dinosaurs(step: number): Tasks {
   const feeding: Tasks = DINOSAURS.map((d) =>
     templateTask(
       `dino:eat:${d.id}`,
-      `Чим нагодувати: ${d.name}?`,
+      // «Чим нагодувати стегозавра?»
+      `Чим нагодувати ${inflect(noun(lowerFirst(d.name), 'm', { animate: true }), 'acc')}?`,
       {
-        template: 'UI_SORTER_BINS',
+        template: Mechanics.SorterBins,
         item: card(d.id, d.eats === 'meat' ? '🦖' : '🦕', d.name),
         bins,
         correctBinId: d.eats,
@@ -71,7 +89,7 @@ function dinosaurs(step: number): Tasks {
       `dino:who:${d.id}`,
       `Хто це? ${d.feature}`,
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji: d.eats === 'meat' ? '🦖' : '🦕' },
         options: withDistractors(d, DINOSAURS, 4, byId).map((o) => card(o.id, undefined, o.name)),
@@ -98,7 +116,7 @@ function timeMachine(step: number): Tasks {
       // The instruction comes first and never changes; the topic follows.
       `Постав по порядку: що було найраніше — на місце 1, що найпізніше — на останнє. ${topic}`,
       {
-        template: 'UI_CHRONO_SEQUENCE',
+        template: Mechanics.ChronoSequence,
         cards: cards.map(([emoji, label], c) => card(`c${c}`, emoji, label)),
         initial: scramble(cards.map((_, c) => `c${c}`)),
         orientation: 'horizontal',
@@ -114,7 +132,7 @@ function timeMachine(step: number): Tasks {
       `tm:first:${i}`,
       'Що з’явилося раніше?',
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         options: shuffle([card('first', firstEmoji, first), card('later', laterEmoji, later)]),
         correctId: 'first',
@@ -130,9 +148,9 @@ function timeMachine(step: number): Tasks {
   const epochs: Tasks = EPOCH_ITEMS.map(([emoji, label, epoch, story], i) =>
     templateTask(
       `tm:epoch:${i}`,
-      `Коли це було: ${label}?`,
+      `${label} — коли це було?`,
       {
-        template: 'UI_SORTER_BINS',
+        template: Mechanics.SorterBins,
         item: card(`item${i}`, emoji, label),
         bins: epochBins,
         correctBinId: epoch,
@@ -149,7 +167,7 @@ function timeMachine(step: number): Tasks {
       `tm:when:${i}`,
       question,
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji },
         options: shuffle([card('right', undefined, correct), card('a', undefined, wrongA), card('b', undefined, wrongB)]),
@@ -179,11 +197,11 @@ function figures(people: Achiever[], atStart: number, perStep: number) {
   const knownFor = (p: Achiever, known: Achiever[], step: number) =>
     templateTask(
       `figure:${p.id}`,
-      `Чим прославився: ${p.name}?`,
+      `Чим ${becameFamous(p.who)} ${inSentence(p.name)}?`,
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
-        stimulus: { emoji: p.face, caption: p.name },
+        stimulus: { emoji: p.face, image: portrait(p), caption: p.name },
         options: withDistractors(p, known, 4, byId).map((o) => card(o.id, o.symbol, o.symbolName)),
         correctId: p.id,
         hint: p.fact,
@@ -196,12 +214,12 @@ function figures(people: Achiever[], atStart: number, perStep: number) {
   const whoIsIt = (p: Achiever, known: Achiever[], step: number) =>
     templateTask(
       `figure:who:${p.id}`,
-      `Хто прославився цим: ${p.symbolName}?`,
+      WHO_ASK[p.id] ?? `${p.symbolName} — хто цим прославився?`,
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji: p.symbol, caption: p.symbolName },
-        options: withDistractors(p, known, 4, byId).map((o) => card(o.id, o.face, o.name)),
+        options: withDistractors(p, known, 4, byId).map((o) => ({ ...card(o.id, o.face, o.name), image: portrait(o) })),
         correctId: p.id,
         hint: `Ім’я цієї людини починається на літеру «${p.name[0]}».`,
       },
@@ -215,8 +233,8 @@ function figures(people: Achiever[], atStart: number, perStep: number) {
       `figures:${trio.map((p) => p.id).sort().join('+')}`,
       'З’єднай людину з тим, чим вона прославилась',
       {
-        template: 'UI_DRAG_MATCH',
-        items: shuffle(trio.map((p) => card(p.id, p.face, p.name))),
+        template: Mechanics.DragMatch,
+        items: shuffle(trio.map((p) => ({ ...card(p.id, p.face, p.name), image: portrait(p) }))),
         slots: shuffle(trio.map((p) => card(`s_${p.id}`, p.symbol, p.symbolName))),
         pairs: Object.fromEntries(trio.map((p) => [p.id, `s_${p.id}`])),
         hint: trio[0].fact,
@@ -268,9 +286,9 @@ function inventions(list: Invention[], steps: number, shared: string[]) {
     const whoMadeIt: Tasks = known.map((inv) =>
       templateTask(
         `inventor:${inv.id}`,
-        `Хто це створив: ${inv.name}?`,
+        `Чий це винахід — ${lowerFirst(inv.name)}?`,
         {
-          template: 'UI_GRID_CHOICE',
+          template: Mechanics.GridChoice,
           cols: 2,
           stimulus: { emoji: inv.emoji, caption: inv.name },
           options: withDistractors(inv, known, 4, byId).map((o) => card(o.id, undefined, o.by)),
@@ -286,9 +304,9 @@ function inventions(list: Invention[], steps: number, shared: string[]) {
     const whatDidTheyMake: Tasks = known.map((inv) =>
       templateTask(
         `invention:${inv.id}`,
-        `Що створив: ${inv.by}?`,
+        `Що ${created(inv.by)} ${inSentence(inv.by)}?`,
         {
-          template: 'UI_GRID_CHOICE',
+          template: Mechanics.GridChoice,
           cols: 2,
           options: withDistractors(inv, known, 4, byId).map((o) => card(o.id, o.emoji, o.name)),
           correctId: inv.id,

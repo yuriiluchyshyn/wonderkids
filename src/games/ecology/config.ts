@@ -1,5 +1,6 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
-import { QUESTIONS_PER_TOPIC } from './content/questions';
+import { WHY_STEPS } from './content/questions';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
@@ -20,14 +21,14 @@ export const GAMES: GameCard[] = [
     gameId: 'eco_recycling_patrol',
     label: 'Еко-патруль',
     icon: '♻️',
-    blurb: 'Сортуємо сміття: тридцять предметів — скло, папір, пластик',
-    intro: 'Галявину треба прибрати! Скло, папір і пластик кидаємо в різні баки — тоді з них зроблять нові речі.',
+    blurb: 'Сортуємо сміття: сто предметів — скло, папір, пластик, метал і органіка',
+    intro: 'Галявину треба прибрати! Скло, папір, пластик, метал і залишки їжі кидаємо в різні баки — тоді з них зроблять нові речі.',
     // No difficulty to grow here — open play, unlimited replays.
     progression: 'free',
     difficulty: 1,
     publishDate: V4_RELEASE,
     tasksPerLevel: 6,
-    mechanics: 'UI_SORTER_BINS',
+    mechanics: Mechanics.SorterBins,
     hasText: true,
   },
   {
@@ -39,11 +40,11 @@ export const GAMES: GameCard[] = [
     blurb: 'Чому тануть льодовики і чому не можна палити листя',
     intro:
       'Природі потрібна наша допомога. Послухай запитання і вибери відповідь — а я розповім, чому це важливо: про повітря, воду, тварин, сміття і тепло на планеті.',
-    steps: QUESTIONS_PER_TOPIC,
+    steps: WHY_STEPS,
     difficulty: [1, 2],
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
     hasText: true,
   },
 ];

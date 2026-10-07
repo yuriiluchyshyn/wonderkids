@@ -1,4 +1,5 @@
 
+import { useTimeBudget } from '@/core/child/time/screenTime';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -127,6 +128,7 @@ export function ParentDashboard() {
 
   // Give the child a fresh tank right now: clear the cooldown + session + used
   // minutes. Takes effect immediately, without a full "Save".
+  const budget = useTimeBudget();
   const resetTimeNow = async () => {
     resetScreenTime();
     setTimeReset(true);
@@ -358,6 +360,12 @@ export function ParentDashboard() {
         <p className={styles.hint}>
           Миттєво повертає дитині повну шкалу й знімає відпочинок — незалежно від збереження інших змін.
         </p>
+        {/* The real countdown lives here, for the parent — the child's rest screen never shows one. */}
+        {budget.inCooldown && (
+          <p className="muted" role="status">
+            😴 Дитина відпочиває. До наступної гри: {Math.floor(budget.cooldownRemainingSec / 60)} хв {String(budget.cooldownRemainingSec % 60).padStart(2, '0')} с
+          </p>
+        )}
         <Button block icon={timeReset ? '✅' : '⛽'} onClick={resetTimeNow}>
           {timeReset ? 'Час поповнено!' : 'Поповнити ігровий час'}
         </Button>

@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import { glyphSpeech, type Card, type FractionValue, type Glyph, type GridChoicePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
@@ -137,7 +138,7 @@ export function generateFractionOps(config: TaskConfig): TaskInstance<GridChoice
     prompt: `Обчисли: ${[sum.a, sum.op, sum.b].map(glyphSpeech).join(' ')}`,
     reward: rewardForStep(config.step) + 1,
     payload: {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 2,
       stimulus: { glyphs },
       options,

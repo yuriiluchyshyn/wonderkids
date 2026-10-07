@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { SKY_STEPS } from './content/data';
 
@@ -32,7 +33,7 @@ export const GAMES: GameCard[] = [
     difficulty: [1, 2],
     publishDate: V6_RELEASE,
     tasksPerLevel: 6,
-    mechanics: ['UI_CHRONO_SEQUENCE', 'UI_DRAG_MATCH'],
+    mechanics: [Mechanics.ChronoSequence, Mechanics.DragMatch],
     hasText: true,
   },
   {
@@ -54,6 +55,6 @@ export const GAMES: GameCard[] = [
     difficulty: [1, 2],
     publishDate: V6_RELEASE,
     tasksPerLevel: 5,
-    mechanics: 'UI_CHRONO_SEQUENCE',
+    mechanics: Mechanics.ChronoSequence,
   },
 ];

@@ -1,9 +1,9 @@
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StarFilter } from '@/components/hub/StarFilter';
 import { useHubState } from '@/core/app/ui/useHubState';
 import { difficultyRange } from '@/core/game/kernel/gameConfig';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ProfileBar } from '@/components/hub/ProfileBar';
 import { GalaxyPicker } from '@/components/hub/GalaxyPicker';
@@ -35,6 +35,16 @@ export function HubPage() {
   const stars = useHubState((s) => s.stars);
   const setStars = useHubState((s) => s.setStars);
   const [pathEntry, setPathEntry] = useState<CatalogEntry | null>(null);
+
+  // Back from a game: bring its card into view (the cards fly in first).
+  const focusGame = (useLocation().state as { focusGame?: string } | null)?.focusGame;
+  useEffect(() => {
+    if (!focusGame) return;
+    const t = window.setTimeout(() => {
+      document.querySelector(`[data-game="${focusGame}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 450);
+    return () => window.clearTimeout(t);
+  }, [focusGame]);
 
   const tips = useMemo(() => hubTips(), []);
   const catalog = useMemo(() => buildCatalog(), []);

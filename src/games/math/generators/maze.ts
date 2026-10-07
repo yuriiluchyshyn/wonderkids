@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { NumberMazePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
@@ -131,7 +132,7 @@ export function generateMaze(config: TaskConfig): TaskInstance<NumberMazePayload
       : `Біжи тільки по числах, які діляться на ${k}`,
     reward: rewardForStep(step) + 2,
     payload: {
-      template: 'UI_NUMBER_MAZE',
+      template: Mechanics.NumberMaze,
       cols: size,
       rows: size,
       cells,

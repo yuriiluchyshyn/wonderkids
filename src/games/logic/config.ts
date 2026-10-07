@@ -1,5 +1,6 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
-import { PATTERN_STEPS, HALF_SIZE } from './content/data';
+import { MIRROR_STEPS, PATTERN_STEPS, SHADOW_STEPS } from './content/data';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
@@ -32,7 +33,7 @@ export const GAMES: GameCard[] = [
     difficulty: [1, 2],
     publishDate: V6_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
   {
     id: 'shadows',
@@ -42,16 +43,17 @@ export const GAMES: GameCard[] = [
     blurb: 'Знайди для кожного малюнка його тінь',
     intro: 'У кожного предмета є тінь — чорний силует такої самої форми. Перетягни кожен малюнок на його тінь!',
     introFor: (step) => {
-      if (step === 4) return 'Тепер тіні більше схожі одна на одну. Придивляйся до дрібниць!';
-      if (step === 8) return 'Найскладніше: чотири схожі тіні одразу. Будь дуже уважним!';
+      if (step === 4) return 'Тепер на дошці речі одного роду — їхні тіні більше схожі одна на одну. Придивляйся до дрібниць!';
+      if (step === 7) return 'Тепер тіні ходять парами: дві дуже схожі й ще дві дуже схожі. Не переплутай!';
+      if (step === 9) return 'Найскладніше: усі тіні майже однакові, як у собаки, вовка й лисиці. Будь дуже уважним!';
       return undefined;
     },
     landmark: { name: 'Театр тіней', emoji: '🎭' },
-    steps: 10,
-    difficulty: 1,
+    steps: SHADOW_STEPS.length,
+    difficulty: [1, 3],
     publishDate: V6_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_DRAG_MATCH',
+    mechanics: Mechanics.DragMatch,
   },
   {
     id: 'mirror',
@@ -60,12 +62,16 @@ export const GAMES: GameCard[] = [
     icon: '🪞',
     blurb: 'Домалюй другу половинку — як у дзеркалі',
     intro: 'Тут намальована лише ліва половинка малюнка. Права має бути такою самою, тільки віддзеркаленою. Знайди її!',
-    introFor: (step) => (step === 3 ? 'А тепер половинки справжніх малюнків: метелика, сердечка, ялинки. Знайди другу половинку!' : undefined),
+    introFor: (step) => {
+      if (step === 3) return 'А тепер половинки справжніх малюнків: метелика, сердечка, ялинки. Знайди другу половинку!';
+      if (step === 7) return 'Тепер половинки дуже схожі одна на одну: відрізняються однією-двома клітинками. Перевіряй кожну!';
+      return undefined;
+    },
     landmark: { name: 'Дзеркальний палац', emoji: '🏰' },
-    steps: HALF_SIZE.length,
+    steps: MIRROR_STEPS.length,
     difficulty: [1, 3],
     publishDate: V6_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
 ];

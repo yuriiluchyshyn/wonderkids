@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { GameCard, SubjectDef } from '../shared/templateModule';
 import { RELEASE } from './tasks';
 
@@ -34,7 +35,7 @@ export const GAMES: GameCard[] = [
     difficulty: 1,
     publishDate: RELEASE,
     tasksPerLevel: 10,
-    mechanics: ['UI_SORTER_BINS', 'UI_GRID_CHOICE', 'UI_CHRONO_SEQUENCE'],
+    mechanics: [Mechanics.SorterBins, Mechanics.GridChoice, Mechanics.ChronoSequence],
     hasText: true,
   },
 ];

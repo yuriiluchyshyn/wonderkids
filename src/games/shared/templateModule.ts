@@ -25,8 +25,10 @@ export function templateTask(
   step: number,
   /** One fact, or a pool of them — see `core/game/content/outro.ts`. */
   outro?: string | string[],
+  /** How the voice says the prompt, when it differs from the written one. */
+  speak?: string,
 ): TaskInstance<TemplatePayload> {
-  return { id: uid('tt'), key, prompt, payload, reward: rewardFor(step), outro };
+  return { id: uid('tt'), key, prompt, payload, reward: rewardFor(step), outro, speak };
 }
 
 /** `correct` plus `count - 1` random others from `pool`, shuffled. */

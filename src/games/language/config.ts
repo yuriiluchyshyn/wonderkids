@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { EN } from './content/en';
 import { UK } from './content/uk';
@@ -19,10 +20,10 @@ export const PACKS: LangPack[] = [UK, EN];
 
 /** What every language game has in common, whatever the language. */
 const COMMON: Record<GameKind, Pick<GameCard, 'mechanics'>> = {
-  bubbles: { mechanics: 'UI_CHRONO_SEQUENCE' },
-  chain: { mechanics: 'UI_DRAG_MATCH' },
-  rhymes: { mechanics: 'UI_DRAG_MATCH' },
-  sentences: { mechanics: 'UI_CHRONO_SEQUENCE' },
+  bubbles: { mechanics: Mechanics.BubblePop },
+  chain: { mechanics: Mechanics.DragMatch },
+  rhymes: { mechanics: Mechanics.DragMatch },
+  sentences: { mechanics: Mechanics.ChronoSequence },
 };
 
 /** What the child is told when the path reaches a new stage of a game: [step, text]. */

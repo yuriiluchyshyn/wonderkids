@@ -1,5 +1,7 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { GridChoicePayload } from '@/core/game/templates/types';
+import { countForm } from '@/core/lang/uk';
 import { pick, randInt, uid } from '@/core/utils/random';
 import { rewardForStep } from '../difficulty';
 import { buildNumberOptions } from './options';
@@ -13,6 +15,9 @@ function count(n: number, [few, many]: Forms): string {
   const ones = n % 10;
   return `${n} ${ones >= 2 && ones <= 4 && !(tens >= 12 && tens <= 14) ? few : many}`;
 }
+
+/** «лежать 3 кульки», but «лежить 5 кульок»: the verb follows the count. */
+const lies = (n: number) => (countForm(n) === 1 ? 'лежать' : 'лежить');
 
 interface Thing {
   forms: Forms;
@@ -119,7 +124,7 @@ const TEMPLATES: Template[] = [
   }],
   [1, 'table', () => {
     const t = pick(THINGS); const a = randInt(2, 5); const b = randInt(2, 5);
-    return { text: `На столі лежить ${count(a, t.forms)}, а в кошику — ще ${b}. Скільки всього ${t.forms[1]}?`,
+    return { text: `На столі ${lies(a)} ${count(a, t.forms)}, а в кошику — ще ${b}. Скільки всього ${t.forms[1]}?`,
       scene: [chip(many(t.emoji, a), 'на столі'), chip(many(t.emoji, b), 'у кошику'), ASK], answer: a + b,
       how: 'Слово «всього» підказує: треба скласти разом те, що на столі, і те, що в кошику.', solution: plus(a, b), nums: [a, b] };
   }],
@@ -206,7 +211,7 @@ const TEMPLATES: Template[] = [
   // ---------------------------------------------------------------- level 4
   [4, 'change', () => {
     const h = hero(); const t = pick(THINGS); const k = randInt(2, 4); const pay = pick([10, 20]); const p = randInt(3, pay - 2);
-    return { text: `${h.name} ${h.v('пішов', 'пішла')} в магазин і хоче купити ${count(k, t.forms)}. Вони коштують ${count(p, HRYVNIA)}. ${h.name} дає продавчині ${pay} гривень. Скільки гривень здачі дасть продавчиня?`,
+    return { text: `${h.name} ${h.v('пішов', 'пішла')} в магазин і хоче купити ${count(k, t.forms)}. Вони коштують ${count(p, HRYVNIA)}. ${h.name} дає продавчині ${count(pay, HRYVNIA)}. Скільки гривень здачі дасть продавчиня?`,
       scene: [chip(many(t.emoji, k), `${p} грн`), money(pay), chip('🪙', 'здача?')], answer: pay - p,
       how: `Здача — це гроші, які лишилися. Від ${pay} відніми ціну покупки.`, solution: minus(pay, p), nums: [k, p, pay] };
   }],
@@ -230,7 +235,7 @@ const TEMPLATES: Template[] = [
   }],
   [4, 'cheaper', () => {
     const a = randInt(12, 20); const b = randInt(2, 6);
-    return { text: `Іграшка коштувала ${a} гривень, а потім подешевшала на ${b}. Скільки гривень вона коштує тепер?`,
+    return { text: `Іграшка коштувала ${count(a, HRYVNIA)}, а потім подешевшала на ${b}. Скільки гривень вона коштує тепер?`,
       scene: [chip('🧸', `${a} грн`), chip('⬇️', `на ${b}`), ASK], answer: a - b,
       how: '«Подешевшала» — означає, що ціна стала меншою. Відніми.', solution: minus(a, b), nums: [a, b] };
   }],
@@ -249,7 +254,7 @@ const TEMPLATES: Template[] = [
   }],
   [5, 'twoThings', () => {
     const h = hero(); const p = randInt(8, 15); const q = randInt(5, 12); const pay = p + q < 28 ? 30 : 50;
-    return { text: `${h.name} ${h.v('купив', 'купила')} зошит за ${p} гривень і ручку за ${q} гривень. Продавчині ${h.he} ${h.v('дав', 'дала')} ${pay} гривень. Скільки гривень здачі ${h.he} отримає?`,
+    return { text: `${h.name} ${h.v('купив', 'купила')} зошит за ${count(p, HRYVNIA)} і ручку за ${count(q, HRYVNIA)}. Продавчині ${h.he} ${h.v('дав', 'дала')} ${count(pay, HRYVNIA)}. Скільки гривень здачі ${h.he} отримає?`,
       scene: [chip('📓', `${p} грн`), chip('🖊️', `${q} грн`), money(pay), chip('🪙', 'здача?')], answer: pay - p - q,
       how: `Спочатку дізнайся, скільки коштує все разом: ${plus(p, q)}. Потім відніми це від ${pay}.`, solution: `${plus(p, q)}, а ${minus(pay, p + q)}`, nums: [p, q, pay] };
   }],
@@ -268,7 +273,7 @@ const TEMPLATES: Template[] = [
   // ---------------------------------------------------------------- level 6
   [6, 'boxes', () => {
     const k = randInt(2, 6); const m = randInt(2, 5);
-    return { text: `У кожній коробці лежить ${count(k, PENCILS)}. Скільки олівців у ${m} коробках?`,
+    return { text: `У кожній коробці ${lies(k)} ${count(k, PENCILS)}. Скільки олівців у ${m} коробках?`,
       scene: [...Array.from({ length: Math.min(m, 4) }, () => chip('📦', k)), ...(m > 4 ? [chip('…')] : []), ASK], answer: k * m,
       how: `Це ${m} однакові купки по ${k}. Однакові купки множимо.`, solution: times(k, m), nums: [k, m] };
   }],
@@ -311,7 +316,7 @@ const TEMPLATES: Template[] = [
   }],
   [7, 'onePrice', () => {
     const m = randInt(2, 6); const p = randInt(3, 9); const t = m * p;
-    return { text: `${count(m, NOTEBOOKS)} коштують ${t} гривень. Усі зошити однакові. Скільки гривень коштує один зошит?`,
+    return { text: `${count(m, NOTEBOOKS)} коштують ${count(t, HRYVNIA)}. Усі зошити однакові. Скільки гривень коштує один зошит?`,
       scene: [chip(many('📓', m), `${t} грн`), chip('📓', 'один — ?')], answer: p,
       how: 'Усі зошити коштують однаково. Поділи всю суму на кількість зошитів.', solution: divided(t, m), nums: [t, m] };
   }],
@@ -330,7 +335,7 @@ const TEMPLATES: Template[] = [
   // ---------------------------------------------------------------- level 8
   [8, 'buyMany', () => {
     const h = hero(); const th = pick(THINGS); const m = randInt(2, 5); const p = randInt(3, 9); const pay = m * p < 18 ? 20 : 50;
-    return { text: `${h.name} ${h.v('купив', 'купила')} ${count(m, th.forms)} по ${count(p, HRYVNIA)} за штуку. Продавчині ${h.he} ${h.v('дав', 'дала')} ${pay} гривень. Скільки гривень здачі?`,
+    return { text: `${h.name} ${h.v('купив', 'купила')} ${count(m, th.forms)} по ${count(p, HRYVNIA)} за штуку. Продавчині ${h.he} ${h.v('дав', 'дала')} ${count(pay, HRYVNIA)}. Скільки гривень здачі?`,
       scene: [chip(many(th.emoji, m), `по ${p} грн`), money(pay), chip('🪙', 'здача?')], answer: pay - m * p,
       how: `Спочатку дізнайся, скільки коштує покупка: ${times(p, m)}. Потім відніми це від ${pay}.`, solution: `${times(p, m)}, а ${minus(pay, m * p)}`, nums: [m, p, pay] };
   }],
@@ -398,7 +403,7 @@ const TEMPLATES: Template[] = [
   }],
   [10, 'pencilsAndBook', () => {
     const h = hero(); const m = randInt(2, 6); const p = randInt(3, 8); const q = randInt(10, 25);
-    return { text: `${h.name} ${h.v('купив', 'купила')} ${count(m, PENCILS)} по ${count(p, HRYVNIA)} і зошит за ${q} гривень. Скільки гривень ${h.he} ${h.v('заплатив', 'заплатила')}?`,
+    return { text: `${h.name} ${h.v('купив', 'купила')} ${count(m, PENCILS)} по ${count(p, HRYVNIA)} і зошит за ${count(q, HRYVNIA)}. Скільки гривень ${h.he} ${h.v('заплатив', 'заплатила')}?`,
       scene: [chip(many('✏️', m), `по ${p} грн`), chip('📓', `${q} грн`), ASK], answer: m * p + q,
       how: `Спочатку порахуй олівці: ${times(p, m)}. Потім додай ціну зошита.`, solution: `${times(p, m)}, а ${plus(m * p, q)}`, nums: [m, p, q] };
   }],
@@ -445,7 +450,7 @@ export function generateWordProblem(config: TaskConfig): TaskInstance<GridChoice
     reward: rewardForStep(step) + 1,
     outro: `Так! ${problem.solution[0].toUpperCase()}${problem.solution.slice(1)}.`,
     payload: {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 3,
       stimulus: { scene: problem.scene },
       options: buildNumberOptions(problem.answer, 6, 6).map((n) => ({ id: `n${n}`, glyphs: [String(n)] })),

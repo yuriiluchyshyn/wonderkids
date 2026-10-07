@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import { pick, randInt, uid } from '@/core/utils/random';
 import { buildNumberOptions } from './options';
@@ -93,7 +94,7 @@ export function generateMentalMath(config: TaskConfig): TaskInstance<GridChoiceP
     prompt: spokenPrompt(a, b, op),
     reward: rewardForStep(step),
     payload: {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 3,
       // The two numbers wear the colours of their cubes in the helper below.
       stimulus: { glyphs: [{ text: String(a), tone: 'a' }, op, { text: String(b), tone: 'b' }, '=', '?'] },

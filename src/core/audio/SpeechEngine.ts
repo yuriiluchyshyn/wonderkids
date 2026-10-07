@@ -94,6 +94,13 @@ export class SpeechEngine {
     this.cancel();
     const turn = this.turn;
     this.pendingEnd = onEnd ?? (() => undefined);
+    // Locked phone, another app in front: say nothing. Cutting a phrase off
+    // reports its end, and whoever waited for it (a fact, then the next task)
+    // would otherwise carry on reading into a dark screen.
+    if (typeof document !== 'undefined' && document.hidden) {
+      this.finish(turn);
+      return;
+    }
     if (!this.cloud) {
       this.speakWithBrowser(text, turn, lang);
       return;

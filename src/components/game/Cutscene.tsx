@@ -8,71 +8,56 @@ import { Button } from '@/components/ui/Button';
 import styles from './Cutscene.module.css';
 
 /** How long the themed micro-animation plays before the rest screen (AC-2: 4–6s). */
-const SCENE_MS = 5200;
+const SCENE_MS = 9000;
 
 interface SceneCopy {
   icon: string;
   zzz: string;
   title: string;
-  /** On-screen friendly explanation (Tech Spec §7.2). */
+  /**
+   * The friendly explanation (Tech Spec §7.2) — shown AND read out. It never
+   * says how long the rest is: a number to wait for only winds a child up.
+   */
   message: string;
-  /** Spoken announcement (Tech Spec AC-2). */
-  tts: string;
 }
 
 /** Per-theme bedtime cutscene content — a calm, story-shaped goodbye. */
-function bedtimeScene(theme: Theme, cooldownMin: number): SceneCopy {
-  const cd = Math.max(1, Math.round(cooldownMin));
+function bedtimeScene(theme: Theme): SceneCopy {
   switch (theme.id) {
     case 'cars':
       return {
         icon: '🏎️',
         zzz: '💤',
         title: 'Мультфільм: Піт-стоп!',
-        message: `Наш спорткар проїхав чудову дистанцію і йому час відпочити! Час побігати в кімнаті або випити смачного соку. Бак знову буде повний через ${cd} хв!`,
-        tts: 'Наш двигун втомився і пішов відпочивати! Час побігати в кімнаті або випити водички. Зустрінемось на треку пізніше!',
+        message: `Наш спорткар проїхав чудову дистанцію і йому час відпочити! Час побігати в кімнаті або випити смачного соку. Повернись за деякий час — бак знову буде повний!`,
       };
     case 'space':
       return {
         icon: '🚀',
         zzz: '🌙',
         title: 'Мультфільм: Посадка на станцію!',
-        message: `Ракета м'яко пристикувалася до станції й увімкнула нічник. Відпочинь трохи — політ продовжимо за ${cd} хв!`,
-        tts: 'Наша ракета втомилася і пристикувалася до станції відпочити! Час побігати в кімнаті або випити водички. Зустрінемось у космосі пізніше!',
+        message: `Ракета м'яко пристикувалася до станції й увімкнула нічник. Відпочинь трохи. Повернись за деякий час — і політ продовжимо!`,
       };
     case 'unicorns':
       return {
         icon: '🦄',
         zzz: '☁️',
         title: 'Мультфільм: Сон кристала!',
-        message: `Кристал м'яко огорнувся хмаринкою і заснув, щоб відновити веселку. Він знову засяє за ${cd} хв!`,
-        tts: 'Наш кристал втомився і пішов відпочивати, щоб відновити веселку! Час побігати в кімнаті або випити водички. Зустрінемось у чарівній країні пізніше!',
+        message: `Кристал м'яко огорнувся хмаринкою і заснув, щоб відновити веселку. Повернись за деякий час — і він знову засяє!`,
       };
     default:
       return {
         icon: theme.mascot.emoji,
         zzz: '💤',
         title: 'Мультфільм: Час відпочинку!',
-        message: `${theme.mascot.name} сьогодні чудово попрацював і йде відпочивати. Час побігати в кімнаті або випити водички. Повернемось за ${cd} хв!`,
-        tts: `Наш друг ${theme.mascot.name} втомився і пішов відпочивати! Час побігати в кімнаті або випити водички. Зустрінемось пізніше!`,
+        message: `${theme.mascot.name} сьогодні чудово попрацював і йде відпочивати. Час побігати в кімнаті або випити водички. Повернись за деякий час!`,
       };
   }
-}
-
-function formatMMSS(totalSec: number): string {
-  const s = Math.max(0, totalSec);
-  const mm = Math.floor(s / 60);
-  const ss = s % 60;
-  return `${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}`;
 }
 
 interface CutsceneProps {
   /** Play the ~5s scene first; when false, open straight on the rest screen. */
   playScene: boolean;
-  /** Parent-set cooldown length (minutes) — shown in the copy. */
-  cooldownMinutes: number;
-  /** Live seconds remaining in the cooldown. */
-  cooldownRemainingSec: number;
   /** True once the cooldown has elapsed and play may resume. */
   ready: boolean;
   /** Child chose to play on (only possible once `ready`). */
@@ -91,8 +76,6 @@ type Phase = 'scene' | 'cooldown';
  */
 export function Cutscene({
   playScene,
-  cooldownMinutes,
-  cooldownRemainingSec,
   ready,
   onResume,
   onExit,
@@ -100,15 +83,22 @@ export function Cutscene({
   const theme = useActiveTheme();
   const { play } = useSound();
   const { speak } = useSpeech();
-  const copy = useMemo(() => bedtimeScene(theme, cooldownMinutes), [theme, cooldownMinutes]);
+  const copy = useMemo(() => bedtimeScene(theme), [theme]);
 
   const [phase, setPhase] = useState<Phase>(playScene ? 'scene' : 'cooldown');
 
-  // Kick off the jingle + spoken goodbye, then slide to the rest screen.
+  // The message is read out once, however the screen was reached — after the
+  // scene started or straight on the rest screen. A beat later than the
+  // screen itself: the game underneath silences all speech as it is covered.
+  useEffect(() => {
+    const t = window.setTimeout(() => speak(copy.message), 600);
+    return () => window.clearTimeout(t);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Kick off the jingle, then slide to the rest screen.
   useEffect(() => {
     if (phase !== 'scene') return;
     play('bedtime');
-    speak(copy.tts);
     const t = window.setTimeout(() => setPhase('cooldown'), SCENE_MS);
     return () => window.clearTimeout(t);
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -163,7 +153,7 @@ export function Cutscene({
           <p className={styles.restMsg}>{copy.message}</p>
 
           <Button size="lg" block icon={ready ? '⛽' : '🔒'} disabled={!ready} onClick={onResume}>
-            {ready ? 'Грати далі!' : `Заправка через ${formatMMSS(cooldownRemainingSec)}`}
+            {ready ? 'Грати далі!' : 'Відпочиваємо…'}
           </Button>
           <Button size="lg" variant="ghost" block icon="🏃" onClick={onExit}>
             Піти відпочивати

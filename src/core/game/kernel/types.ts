@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import type { Theme } from '@/core/theme/theme.types';
+import { Mechanics } from './mechanics';
 
 /**
  * Core kernel contracts for the WonderKids micro-kernel plugin architecture.
@@ -50,8 +51,14 @@ export interface TaskInstance<TPayload = unknown> {
    * with the same key never appear in one level. Defaults to `prompt`.
    */
   key?: string;
-  /** Short natural-language prompt, read aloud via TTS for pre-readers. */
+  /** Short natural-language prompt, shown on screen (and read aloud unless `speak` is set). */
   prompt: string;
+  /**
+   * How the prompt is said, when the voice needs other words than the screen:
+   * a number spelled out, a label turned into a sentence. Read it with
+   * `spokenPrompt(task)` — never `task.prompt` — wherever the voice speaks.
+   */
+  speak?: string;
   /**
    * Short spoken (and shown) fact that rewards a correct answer — "Це прапор
    * Японії!". The shell gives it time to play before the next task. A list is
@@ -63,6 +70,9 @@ export interface TaskInstance<TPayload = unknown> {
   reward: number;
   payload: TPayload;
 }
+
+/** What the voice says for a task: its spoken form, or the written prompt. */
+export const spokenPrompt = (task: Pick<TaskInstance, 'prompt' | 'speak'>): string => task.speak ?? task.prompt;
 
 /** Callbacks the shell hands to a module's game view. */
 export interface TaskCallbacks {
@@ -94,14 +104,9 @@ export type Progression = 'path' | 'free';
 /** Difficulty marking shown as 1–3 stars (PRD v4.0 §1.2). */
 export type Difficulty = 1 | 2 | 3;
 
-/** Core UI templates a game can be built from (PRD v4.0 §3.2). */
-export type MechanicsType =
-  | 'UI_GRID_CHOICE'
-  | 'UI_DRAG_MATCH'
-  | 'UI_CHRONO_SEQUENCE'
-  | 'UI_MAP_PUZZLE'
-  | 'UI_BALANCE_SCALE'
-  | 'UI_SORTER_BINS';
+export { Mechanics };
+/** Core UI templates a game can be built from (PRD v4.0 §3.2) — see `mechanics.ts`. */
+export type MechanicsType = Mechanics;
 
 /** Age band each difficulty targets. */
 export const DIFFICULTY_AGES: Record<Difficulty, string> = {

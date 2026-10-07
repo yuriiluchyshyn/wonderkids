@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskInstance } from '@/core/game/kernel/types';
 import type { DotStar, TemplatePayload } from '@/core/game/templates/types';
 import { shuffle } from '@/core/utils/random';
@@ -25,7 +26,7 @@ function lineUp(kind: 'sun' | 'size', order: Planet[], places: number[], step: n
     `${kind}:${row.map((p) => p.id).join('-')}`,
     kind === 'sun' ? 'Розстав планети: від найближчої до Сонця — до найдальшої.' : 'Розстав планети за розміром: від найменшої до найбільшої.',
     {
-      template: 'UI_CHRONO_SEQUENCE',
+      template: Mechanics.ChronoSequence,
       cards: row.map((p) => card(p.id, p.emoji, p.name)),
       initial: scramble(row.map((p) => p.id)),
       orientation: 'horizontal',
@@ -62,7 +63,7 @@ function planets(step: number): Tasks {
         `feature:${lead[0]}`,
         'З’єднай кожну підказку з її планетою.',
         {
-          template: 'UI_DRAG_MATCH',
+          template: Mechanics.DragMatch,
           items: shuffle(set.map((f) => card(`f:${f[0]}`, f[2], f[3]))),
           slots: shuffle(slots.map((p) => card(p.id, p.emoji, p.name))),
           pairs: Object.fromEntries(set.map((f) => [`f:${f[0]}`, f[1]])),
@@ -92,7 +93,7 @@ function skyTask(figure: Figure, labels: Labels, step: number) {
     `sky:${figure.name}:${text[0]}-${last}`,
     prompt,
     {
-      template: 'UI_DOT_TO_DOT',
+      template: Mechanics.DotToDot,
       stars,
       figure: { name: figure.name, emoji: figure.emoji },
       hint:

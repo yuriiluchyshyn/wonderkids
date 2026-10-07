@@ -15,7 +15,11 @@ export interface Theme {
   /** The goal the mascot travels toward (apple → rainbow, finish flag, ...). */
   goal: { name: string; emoji: string };
   /** Collectible artifact earned per task. */
-  artifact: { name: string; emoji: string };
+  /**
+   * `counted` — the name after a number, lower-case: one, two–four, five and
+   * more («цеглинка», «цеглинки», «цеглинок»). Read out on the win screen.
+   */
+  artifact: { name: string; emoji: string; counted: [one: string, few: string, many: string] };
   /**
    * The "play-time" token shown in the always-visible time header: a row of
    * them drains one-by-one as the session burns down — a wordless clock. It is

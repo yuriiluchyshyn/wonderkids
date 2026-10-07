@@ -3,6 +3,8 @@
  * first inside a topic; the path takes one question of every topic per step.
  * `why` is the explanation told after the answer (and used as the helper).
  */
+import { MORE_QUESTIONS } from './questionsMore';
+
 export type Topic = 'waste' | 'air' | 'water' | 'climate' | 'wildlife' | 'energy';
 
 type Question = [emoji: string, question: string, right: string, wrongA: string, wrongB: string, why: string];
@@ -73,17 +75,50 @@ export interface EcoQuestion {
   emoji: string;
   question: string;
   right: string;
-  wrong: [string, string];
+  /** Hand-written wrong answers, where the question has them. */
+  wrong: string[];
   why: string;
+  kind: AnswerKind;
+  /** The path step this question belongs to. */
+  level: number;
 }
 
-/** One question of every topic per round — the order the path unlocks them in. */
-export const ECO_QUESTIONS: EcoQuestion[] = Array.from({ length: QUESTIONS_PER_TOPIC }, (_, round) =>
-  TOPICS.map((topic): EcoQuestion => {
+/** What a question asks for — wrong answers on the board are of the same kind, so none stands out by its shape. */
+export type AnswerKind = 'why' | 'what' | 'how';
+const kindOf = (question: string): AnswerKind => (/^(Чому|Навіщо)/.test(question) ? 'why' : /^(Як|Куди|Де|Звідки|Коли|Скільки)(\s|$)/.test(question) ? 'how' : 'what');
+
+/** Questions a path step opens — five new ones, as on every path (docs/level-design.md). */
+export const QUESTIONS_PER_STEP = 5;
+
+const HAND_MADE: Omit<EcoQuestion, 'level'>[] = Array.from({ length: QUESTIONS_PER_TOPIC }, (_, round) =>
+  TOPICS.map((topic) => {
     const [emoji, question, right, wrongA, wrongB, why] = BY_TOPIC[topic][round];
-    return { id: `${topic}${round}`, topic, emoji, question, right, wrong: [wrongA, wrongB], why };
+    return { id: `${topic}${round}`, topic, emoji, question, right, wrong: [wrongA, wrongB], why, kind: kindOf(question) };
   }),
 ).flat();
+
+const MORE: Omit<EcoQuestion, 'level'>[] = (() => {
+  const byTopic = TOPICS.map((topic) =>
+    MORE_QUESTIONS[topic]
+      .trim()
+      .split('\n')
+      .map((line, i) => {
+        const [emoji, question, right, why] = line.split('|');
+        return { id: `${topic}m${i}`, topic, emoji, question, right, wrong: [], why, kind: kindOf(question) };
+      }),
+  );
+  // One of every topic per round, so a level never dwells on a single topic.
+  return Array.from({ length: Math.max(...byTopic.map((t) => t.length)) }, (_, round) => byTopic.flatMap((t) => (t[round] ? [t[round]] : []))).flat();
+})();
+
+/**
+ * Every question in the order the path opens them, each with its own `level`
+ * — the path step it first appears on. A question never moves to another level.
+ */
+export const ECO_QUESTIONS: EcoQuestion[] = [...HAND_MADE, ...MORE].map((q, i) => ({ ...q, level: Math.floor(i / QUESTIONS_PER_STEP) + 1 }));
+
+/** Path length: as many steps as the questions fill, five a step. */
+export const WHY_STEPS = Math.floor(ECO_QUESTIONS.length / QUESTIONS_PER_STEP);
 
 /** Nine more things to tell per topic; a question adds its own explanation. */
 export const TOPIC_FACTS: Record<Topic, string[]> = {

@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { GALAXIES } from '@/core/game/galaxies';
@@ -10,12 +11,19 @@ import { formatDate } from './shared';
 import styles from './Admin.module.css';
 
 const MECHANICS: Record<MechanicsType, string> = {
-  UI_GRID_CHOICE: 'Вибір відповіді',
-  UI_DRAG_MATCH: 'Перетягування',
-  UI_CHRONO_SEQUENCE: 'Розставити по порядку',
-  UI_MAP_PUZZLE: 'Карта',
-  UI_BALANCE_SCALE: 'Ваги',
-  UI_SORTER_BINS: 'Сортування',
+  [Mechanics.GridChoice]: 'Вибір відповіді',
+  [Mechanics.DragMatch]: 'Перетягування',
+  [Mechanics.ChronoSequence]: 'Розставити по порядку',
+  [Mechanics.MapPuzzle]: 'Карта',
+  [Mechanics.BalanceScale]: 'Ваги',
+  [Mechanics.SorterBins]: 'Сортування',
+  [Mechanics.CashTray]: 'Каса',
+  [Mechanics.Tangram]: 'Танграм',
+  [Mechanics.GridArea]: 'Клітинки',
+  [Mechanics.NumberMaze]: 'Лабіринт',
+  [Mechanics.BubblePop]: 'Бульбашки',
+  [Mechanics.DotToDot]: 'З’єднай зорі',
+  [Mechanics.ColorMix]: 'Змішування фарб',
 };
 
 /** Draws per step when a game can only be counted by playing its generator. */

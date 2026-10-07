@@ -481,11 +481,19 @@ English (English lessons).
 The platform is built around a **Zero-Aggression, anti-guessing** philosophy
 (see the PRD and `docs/level-design.md`):
 
-- **Give the recommended option counts** from §4. For `UI_GRID_CHOICE`, the
-  default anti-guessing grid is 3×3 (9) at the engine level (`TaskConfig.choicesCount`
-  defaults to 9), but **template games set their own `options` list** and in
-  practice use **4 or 6** — enough to prevent guessing without overwhelming a
-  pre-reader. Prefer **4** for text answers, **6** for pictorial answers.
+- **Nine options, always — never four.** Every `UI_GRID_CHOICE` task offers
+  **nine** answers in a 3×3 grid (`cols: 3`, nine `options`). Four or six leave
+  too much to guessing; where §4 or an older example still says "4 or 6", this
+  rule wins. The hint narrows the board to two by itself.
+- **Harder means more alike.** As the path climbs, wrong answers must resemble
+  the right one more and more (unrelated things → the same family → look-alikes),
+  and a step should open ~25 new tasks from a group of 100+ items, so a child
+  rarely meets the same task twice.
+- **Board names are the `Mechanics` enum** (`Mechanics.GridChoice`, …), never a
+  string literal — in `mechanics` and in a payload's `template` alike.
+- **Texts go through the phrase engine** (`src/core/lang/uk.ts`) whenever a word
+  changes with the task: right case, gender, number and tense — «Коли достигають
+  кавуни?», never «Коли це буває: достигають кавуни?».
 - **Distractors must be *plausible and already-known*.** A wrong option is drawn
   only from content the child has already met at this step (`knownAt(step)`), so
   an answer the child has never seen can never be the trap. Use the

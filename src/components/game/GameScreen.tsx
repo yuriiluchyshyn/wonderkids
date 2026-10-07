@@ -1,7 +1,7 @@
 import { useBalance } from '@/core/child/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { TaskCallbacks } from '@/core/game/kernel/types';
+import { spokenPrompt, type TaskCallbacks } from '@/core/game/kernel/types';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { speechEngine } from '@/core/audio/SpeechEngine';
@@ -29,6 +29,7 @@ import { useScreenTime } from './useScreenTime';
 import { subSteps } from '@/core/child/progress/path';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { useWorld } from '@/core/child/world/useWorld';
+import { counted } from '@/core/lang/uk';
 import styles from './GameScreen.module.css';
 
 type GiftTier = 'small' | 'big' | 'biggest' | null;
@@ -39,6 +40,11 @@ function giftForStep(step: number, total: number): GiftTier {
   if (step % 10 === 0) return 'big';
   if (step % 5 === 0) return 'small';
   return null;
+}
+
+/** «Усі 6 завдань виконано.» — the count in the form its number asks for. */
+function tasksDone(total: number): string {
+  return total === 1 ? 'Завдання виконано.' : `Усі ${counted(total, ['завдання', 'завдання', 'завдань'])} виконано.`;
 }
 
 const GIFT_META: Record<Exclude<GiftTier, null>, { emoji: string; label: string; size: string }> = {
@@ -113,7 +119,6 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // ---- Screen-time / fuel engine (Tech Spec FR-TIME) ----
   // What is in the purse now (earned − spent on the planet).
   const artifacts = useBalance();
-  const timeControl = useGameStore((s) => s.settings.timeControl);
   const startPlaySession = useGameStore((s) => s.startPlaySession);
   const screen = useScreenTime(phase === 'play');
   // `armed` = fuel ran dry (wait for a safe moment); `open` = cutscene showing.
@@ -177,7 +182,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // Keyed by queue position, not task id: the repeat of a missed task is read
   // out again like any other task.
   useEffect(() => {
-    if (phase === 'play' && task && !session.finished && !blocked) speakPrompt(task.prompt);
+    if (phase === 'play' && task && !session.finished && !blocked) speakPrompt(spokenPrompt(task));
   }, [session.index, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // When the scaffolding helper appears: scroll to it and speak the how-to.
@@ -215,11 +220,33 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   }, [session.awaitingOutro]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The mascot reaches the goal and takes a happy "crunch" the instant the
-  // level is cleared (this fires before any treasure-chest reveal).
+  // level is cleared (this fires before any treasure-chest reveal). Whatever
+  // was still being read out — the last task, a hint — stops here: nothing
+  // about a task may sound under the win screen.
   useEffect(() => {
     if (!session.finished) return;
+    speechEngine.cancel();
     play('crunch');
   }, [session.finished]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // The win screen is read out — its title and what was earned, never the
+  // buttons. `summarySaid` lets the rest screen wait for the last word.
+  const voiceOn = useGameStore((s) => s.settings.voiceOn);
+  const [summarySaid, setSummarySaid] = useState(false);
+  const summarySpeech = `Ти неймовірний! Зібрано ${counted(session.earned, theme.artifact.counted)}. ${tasksDone(session.total)} Чудова робота!`;
+  useEffect(() => {
+    if (!(session.finished && revealDone)) {
+      setSummarySaid(false);
+      return;
+    }
+    if (blocked || !voiceOn || !speechEngine.supported) {
+      setSummarySaid(true);
+      return;
+    }
+    // Let the victory jingle ring first.
+    const t = window.setTimeout(() => speechEngine.speak(summarySpeech, () => setSummarySaid(true)), 900);
+    return () => window.clearTimeout(t);
+  }, [session.finished, revealDone]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // A clear, celebratory victory sound the moment the "Ти неймовірний!" screen
   // actually appears (after any chest reveal) — the win screen is never silent.
@@ -273,10 +300,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // A level in progress is NEVER interrupted: out of time only takes effect
   // once the child has finished the level they are on (and seen their reward).
   useEffect(() => {
-    if (!bedtimeArmed || bedtimeOpen || !(session.finished && revealDone)) return;
+    if (!bedtimeArmed || bedtimeOpen || !(session.finished && revealDone && summarySaid)) return;
     const t = window.setTimeout(openBedtime, 3200);
     return () => window.clearTimeout(t);
-  }, [bedtimeArmed, bedtimeOpen, session.finished, revealDone, openBedtime]);
+  }, [bedtimeArmed, bedtimeOpen, session.finished, revealDone, summarySaid, openBedtime]);
 
   if (!module || !task) {
     return (
@@ -294,8 +321,6 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const bedtimeOverlay = showBedtime ? (
     <Cutscene
       playScene={bedtimeOpen}
-      cooldownMinutes={timeControl.cooldownMinutes}
-      cooldownRemainingSec={screen.cooldownRemainingSec}
       ready={screen.ready}
       onResume={resumePlay}
       onExit={onExit}
@@ -317,7 +342,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     },
     speakPrompt: () => {
       markActivity();
-      speakPrompt(task.prompt);
+      speakPrompt(spokenPrompt(task));
     },
   };
 
@@ -550,7 +575,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
               {reveal.treasure.name}
             </p>
           )}
-          <p className="muted">Усі {session.total} завдань виконано. Чудова робота!</p>
+          <p className="muted">{tasksDone(session.total)} Чудова робота!</p>
           <div className={styles.summaryActions}>
             {config.step < maxSteps && (
               <Button size="lg" icon="▶️" block onClick={onContinue}>

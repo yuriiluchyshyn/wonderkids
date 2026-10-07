@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 /**
  * Declarative task payloads for the CORE UI templates (PRD v4.0 §3.2).
  *
@@ -50,6 +51,11 @@ export interface Card {
   id: string;
   /** Big pictogram — the primary, pre-reader-friendly face of the card. */
   emoji?: string;
+  /**
+   * A real picture (a portrait) shown instead of `emoji`, which stays as the
+   * stand-in if the file does not load. A light square WebP from `public/`.
+   */
+  image?: string;
   /** Short text label. Cards with a label get a tap-to-hear speaker button. */
   label?: string;
   /** Math content rendered instead of `label` (numbers, fractions). */
@@ -62,6 +68,8 @@ export interface Card {
   clock?: ClockTime;
   /** Draw the pictogram as a black shadow of itself (shadow lotto). */
   silhouette?: boolean;
+  /** How soft the edge of that shadow is, in pixels — softer is harder to recognise. */
+  blur?: number;
   /** Language the speaker reads this card in. Default: Ukrainian. */
   lang?: SpeechLang;
 }
@@ -73,6 +81,8 @@ interface TemplateBase {
   /** Picture / math line shown above the answers. */
   stimulus?: {
     emoji?: string;
+    /** A real picture shown instead of `emoji` (see `Card.image`). */
+    image?: string;
     /** Id of a drawn illustration (see LandmarkArt) — shown instead of `emoji`. */
     art?: string;
     glyphs?: Glyph[];
@@ -104,15 +114,16 @@ interface TemplateBase {
 
 /** UI_GRID_CHOICE — tap one card out of N. */
 export interface GridChoicePayload extends TemplateBase {
-  template: 'UI_GRID_CHOICE';
-  cols: 2 | 3;
+  template: Mechanics.GridChoice;
+  /** 3 — the usual 3×3 board; 1 — a list, for answers that are whole sentences. */
+  cols: 1 | 2 | 3;
   options: Card[];
   correctId: string;
 }
 
 /** UI_DRAG_MATCH — drag every item onto its slot. */
 export interface DragMatchPayload extends TemplateBase {
-  template: 'UI_DRAG_MATCH';
+  template: Mechanics.DragMatch;
   items: Card[];
   slots: Card[];
   /** itemId → slotId. */
@@ -121,7 +132,7 @@ export interface DragMatchPayload extends TemplateBase {
 
 /** UI_CHRONO_SEQUENCE — put the cards in order. */
 export interface SequencePayload extends TemplateBase {
-  template: 'UI_CHRONO_SEQUENCE';
+  template: Mechanics.ChronoSequence;
   /** Cards in the CORRECT order. */
   cards: Card[];
   /** Card ids in the shuffled order they start in. */
@@ -133,7 +144,7 @@ export interface SequencePayload extends TemplateBase {
 
 /** UI_MAP_PUZZLE — tap a region, or drag a marker onto it. */
 export interface MapPuzzlePayload extends TemplateBase {
-  template: 'UI_MAP_PUZZLE';
+  template: Mechanics.MapPuzzle;
   /** Which layer of the world map is interactive. */
   layer: 'continents' | 'oceans';
   mode: 'tap' | 'drag';
@@ -144,7 +155,7 @@ export interface MapPuzzlePayload extends TemplateBase {
 
 /** UI_BALANCE_SCALE — find the weight that balances the left pan. */
 export interface BalanceScalePayload extends TemplateBase {
-  template: 'UI_BALANCE_SCALE';
+  template: Mechanics.BalanceScale;
   left: { glyphs: Glyph[]; value: number };
   weights: (Card & { value: number })[];
   /** Coloured dot groups for the helper cloud (e.g. [3, 4] for 3 + 4). */
@@ -153,7 +164,7 @@ export interface BalanceScalePayload extends TemplateBase {
 
 /** UI_SORTER_BINS — send the object to the right container. */
 export interface SorterBinsPayload extends TemplateBase {
-  template: 'UI_SORTER_BINS';
+  template: Mechanics.SorterBins;
   item: Card;
   bins: Card[];
   correctBinId: string;
@@ -164,7 +175,7 @@ export interface SorterBinsPayload extends TemplateBase {
 
 /** Cash tray (UI_DRAG_MATCH family) — put coins down until they add up. */
 export interface CashTrayPayload extends TemplateBase {
-  template: 'UI_CASH_TRAY';
+  template: Mechanics.CashTray;
   item: Card;
   price: number;
   /** Coins and notes on offer, in hryvnias. */
@@ -184,14 +195,14 @@ export interface TangramPiece {
 }
 
 export interface TangramPayload extends TemplateBase {
-  template: 'UI_TANGRAM';
+  template: Mechanics.Tangram;
   figure: string;
   pieces: TangramPiece[];
 }
 
 /** Grid overlay — build a pen of a given area by colouring cells. */
 export interface GridAreaPayload extends TemplateBase {
-  template: 'UI_GRID_AREA';
+  template: Mechanics.GridArea;
   cols: number;
   rows: number;
   targetArea: number;
@@ -199,7 +210,7 @@ export interface GridAreaPayload extends TemplateBase {
 
 /** Number maze — walk the grid stepping only on cells that fit the rule. */
 export interface NumberMazePayload extends TemplateBase {
-  template: 'UI_NUMBER_MAZE';
+  template: Mechanics.NumberMaze;
   cols: number;
   rows: number;
   /** Row-major cell values. */
@@ -221,7 +232,7 @@ export interface NumberMazePayload extends TemplateBase {
  * of a word). Two bubbles with the same face are interchangeable.
  */
 export interface BubblePopPayload extends TemplateBase {
-  template: 'UI_BUBBLE_POP';
+  template: Mechanics.BubblePop;
   /** Bubbles in the CORRECT popping order. */
   bubbles: Card[];
   /** Decoy bubbles that never pop. */
@@ -242,7 +253,7 @@ export interface DotStar {
  * their labels; the finished line reveals the figure.
  */
 export interface DotToDotPayload extends TemplateBase {
-  template: 'UI_DOT_TO_DOT';
+  template: Mechanics.DotToDot;
   /** Stars in the CORRECT joining order. */
   stars: DotStar[];
   /** What the finished drawing turns out to be. */
@@ -262,7 +273,7 @@ export interface Paint {
  * get the colour the object needs.
  */
 export interface ColorMixPayload extends TemplateBase {
-  template: 'UI_COLOR_MIX';
+  template: Mechanics.ColorMix;
   /** The object to paint: drawn grey until the right colour is mixed. */
   object: Card;
   /** The colour to get. */

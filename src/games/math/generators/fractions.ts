@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import type { FractionValue, GridChoicePayload } from '@/core/game/templates/types';
@@ -49,7 +50,7 @@ export function generateFraction(config: TaskConfig): TaskInstance<GridChoicePay
     prompt: `Яка частинка ${food.name} зафарбована?`,
     reward: rewardForStep(step),
     payload: {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 2,
       stimulus: { pie: { food: food.emoji, denom, filled } },
       options: sameDenominatorOptions(answer, denom).map((f) => ({ id: `${f.n}/${f.d}`, glyphs: [f] })),

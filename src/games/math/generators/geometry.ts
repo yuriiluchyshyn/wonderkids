@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, TangramPiece, TemplatePayload } from '@/core/game/templates/types';
 import { perimeter } from '@/core/game/templates/validate';
@@ -100,7 +101,7 @@ function buildTask(figure: Figure, reward: number): TaskInstance<TemplatePayload
     reward,
     outro: figure.say,
     payload: {
-      template: 'UI_TANGRAM',
+      template: Mechanics.Tangram,
       figure: figure.name,
       pieces: withIds(figure.pieces),
       hint: 'Знайди контур такої самої форми і такого самого розміру.',
@@ -121,7 +122,7 @@ function countTask(figure: Figure, reward: number): TaskInstance<TemplatePayload
     reward,
     outro: figure.say,
     payload: {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 2,
       stimulus: { pieces: withIds(figure.pieces) },
       options: options.map((n) => ({ id: `n${n}`, glyphs: [String(n)] })),
@@ -146,7 +147,7 @@ function areaReadTask(min: number, max: number, reward: number): TaskInstance<Te
     reward,
     outro: `Так! Площа фігури — ${area}: у ній саме стільки клітинок.`,
     payload: {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 2,
       stimulus: figureCard(cells, cols, rows),
       options: buildNumberOptions(area, 4, 2).map((n) => ({ id: `n${n}`, glyphs: [String(n)] })),
@@ -168,7 +169,7 @@ function areaBuildTask(min: number, max: number, reward: number): TaskInstance<T
     reward,
     outro: `Чудовий загін! Його площа — ${targetArea} клітинок.`,
     payload: {
-      template: 'UI_GRID_AREA',
+      template: Mechanics.GridArea,
       cols: 5,
       rows: 4,
       targetArea,
@@ -190,7 +191,7 @@ function perimeterReadTask(min: number, max: number, reward: number): TaskInstan
     reward,
     outro: `Так! Периметр — ${length}: саме стільки сторін клітинок на краю фігури.`,
     payload: {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 2,
       stimulus: figureCard(cells, cols, rows),
       options: buildNumberOptions(length, 4, 3).map((n) => ({ id: `n${n}`, glyphs: [String(n)] })),
@@ -218,7 +219,7 @@ function longestFenceTask(min: number, max: number, reward: number): TaskInstanc
       reward,
       outro: `Так! Її периметр — ${longest}: саме стільки сторін клітинок треба обійти.`,
       payload: {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         options: shuffle(options),
         correctId: `f${lengths.indexOf(longest)}`,

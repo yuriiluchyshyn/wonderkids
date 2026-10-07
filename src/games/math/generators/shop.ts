@@ -1,8 +1,12 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
+import { counted } from '@/core/lang/uk';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import { rewardForStep } from '../difficulty';
 import { buildNumberOptions } from './options';
+
+const HRYVNIA = ['гривня', 'гривні', 'гривень'] as const;
 
 const TOYS = [
   { emoji: '🧸', name: 'ведмедик' },
@@ -70,7 +74,7 @@ export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> 
       reward,
       outro: `Так, решта — ${change} гривень!`,
       payload: {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji: toy.emoji, glyphs: [String(paid), '−', String(price), '=', '?'] },
         options: buildNumberOptions(change, 4, 6).map((n) => ({ id: String(n), glyphs: [String(n), 'грн'], speak: `${n} гривень` })),
@@ -90,11 +94,11 @@ export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> 
   return {
     id: uid('sh'),
     key: `pay:${toy.name}:${price}`,
-    prompt: `Купи іграшку: ${toy.name} коштує ${price} гривень. Поклади гроші на касу`,
+    prompt: `Купи іграшку: ${toy.name}. Ціна — ${counted(price, HRYVNIA)}. Поклади гроші на касу.`,
     reward,
     outro: 'Ка-чин! Дякуємо за покупку!',
     payload: {
-      template: 'UI_CASH_TRAY',
+      template: Mechanics.CashTray,
       item: { id: 'toy', emoji: toy.emoji },
       price,
       wallet: shuffle([...exact, ...extras]),

@@ -39,7 +39,7 @@ export function GridChoiceLayout({ payload, callbacks, hintActive }: LayoutProps
   return (
     <div className="stack">
       <Stimulus payload={payload} onSpeak={callbacks.speakPrompt} />
-      <div className={cn(styles.grid, cols === 3 ? styles.cols3 : styles.cols2)}>
+      <div className={cn(styles.grid, cols === 3 ? styles.cols3 : cols === 1 ? styles.cols1 : styles.cols2)}>
         {options.map((option) => {
           const faded = kept !== null && !kept.has(option.id);
           const isCorrect = solved && option.id === correctId;

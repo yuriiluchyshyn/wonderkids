@@ -1,19 +1,30 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
+import { accusative } from '@/core/lang/uk';
 import type { TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { shuffle } from '@/core/utils/random';
 import { factPool } from '../shared/facts';
 import { card, templateTask, type GameTasks } from '../shared/templateModule';
 import { RECYCLING_FACTS } from './content/facts';
-import { ECO_QUESTIONS, QUESTIONS_PER_TOPIC, TOPIC_FACTS } from './content/questions';
-
-/** Questions a path step adds: one of every topic. */
-const QUESTIONS_PER_STEP = ECO_QUESTIONS.length / QUESTIONS_PER_TOPIC;
+import { ECO_QUESTIONS, TOPIC_FACTS, type EcoQuestion } from './content/questions';
+import { MORE_RUBBISH } from './content/rubbish';
 
 const BINS = [
   { id: 'glass', name: 'Скло', emoji: '🫙', no: 'Дзень! Це не скло.' },
   { id: 'paper', name: 'Папір', emoji: '📄', no: 'Шурх! Це не папір.' },
   { id: 'plastic', name: 'Пластик', emoji: '🧴', no: 'Ой! Це не пластик.' },
+  { id: 'metal', name: 'Метал', emoji: '🥫', no: 'Дзинь! Це не метал.' },
+  { id: 'organic', name: 'Органіка', emoji: '🍂', no: 'Хрум! Це не для компосту.' },
 ] as const;
+
+/** What gives a material away — the helper's clue for the things of `content/rubbish.ts`. */
+const CLUE: Record<(typeof BINS)[number]['id'], string> = {
+  glass: 'Воно тверде, прозоре і дзвенить — це скло.',
+  paper: 'Його можна порвати і зім’яти — це папір.',
+  plastic: 'Воно легке, гнеться і не б’ється — це пластик.',
+  metal: 'Воно тверде, блищить і брязкає — це метал.',
+  organic: 'Це залишки рослин та їжі — вони перегниють у компості.',
+};
 
 /** Rubbish found on the meadow, with the marker clue the helper points out. */
 const RUBBISH = [
@@ -48,16 +59,17 @@ const RUBBISH = [
   { id: 'cap', name: 'кришечка від пляшки', emoji: '🔘', bin: 'plastic', clue: 'Кришечка легка і тверда, але не б’ється — це пластик.' },
 ] as const;
 
-/** Game 12 — «Сортування Сміття та Еко-патруль»: 3 bins. */
+/** Game 12 — «Сортування Сміття та Еко-патруль»: five bins, a hundred things to sort. */
 function recycling(step: number): TaskInstance<TemplatePayload>[] {
   const bins = BINS.map((b) => card(b.id, b.emoji, b.name));
   const wrongSay = Object.fromEntries(BINS.map((b) => [b.id, `${b.no} Спробуй інший бак!`]));
-  return RUBBISH.map((r) =>
+  const all = [...RUBBISH, ...MORE_RUBBISH.map((r) => ({ ...r, clue: CLUE[r.bin] }))];
+  return all.map((r) =>
     templateTask(
       `bin:${r.id}`,
-      `Куди викинути: ${r.name}?`,
+      `Куди викинути ${accusative(r.name)}?`,
       {
-        template: 'UI_SORTER_BINS',
+        template: Mechanics.SorterBins,
         item: card(r.id, r.emoji, r.name),
         bins,
         correctBinId: r.bin,
@@ -71,20 +83,37 @@ function recycling(step: number): TaskInstance<TemplatePayload>[] {
   );
 }
 
+/** Answers on the board of «Чому так?» — nine, so the right one cannot be guessed. */
+const CHOICES = 9;
+
 /**
- * «Чому так?» — why we look after nature. Each step unlocks six more
- * questions (one per topic); `recallLevel` mixes them with earlier ones.
+ * Eight wrong answers for a question: its own hand-written ones, then right
+ * answers of questions about OTHER topics (an answer from the same topic
+ * could happen to fit) and of the same kind — a "because…" among "because…"s.
+ */
+function wrongAnswers(q: EcoQuestion): string[] {
+  const others = ECO_QUESTIONS.filter((o) => o.topic !== q.topic && o.right !== q.right);
+  const sameKind = shuffle(others.filter((o) => o.kind === q.kind));
+  const rest = shuffle(others.filter((o) => o.kind !== q.kind));
+  return [...new Set([...q.wrong, ...sameKind.map((o) => o.right), ...rest.map((o) => o.right)])].slice(0, CHOICES - 1);
+}
+
+/**
+ * «Чому так?» — why we look after nature. Every question has a level of its
+ * own; a step opens the five of its level and `recallLevel` adds five from
+ * the levels just behind it.
  */
 function whyQuestions(step: number): TaskInstance<TemplatePayload>[] {
-  return ECO_QUESTIONS.slice(0, step * QUESTIONS_PER_STEP).map((q) =>
+  return ECO_QUESTIONS.filter((q) => q.level <= step).map((q) =>
     templateTask(
       `eco:why:${q.id}`,
       q.question,
       {
-        template: 'UI_GRID_CHOICE',
-        cols: 2,
+        template: Mechanics.GridChoice,
+        // Whole sentences: a list reads better than a 3×3 board.
+        cols: 1,
         stimulus: { emoji: q.emoji },
-        options: shuffle([card('right', undefined, q.right), card('a', undefined, q.wrong[0]), card('b', undefined, q.wrong[1])]),
+        options: shuffle([card('right', undefined, q.right), ...wrongAnswers(q).map((text, i) => card(`w${i}`, undefined, text))]),
         correctId: 'right',
         hint: q.why,
       },

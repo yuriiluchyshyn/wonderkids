@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { BalanceScalePayload, Card, FractionValue, Glyph } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
@@ -40,7 +41,7 @@ export function generateBalance(config: TaskConfig): TaskInstance<BalanceScalePa
       ...base,
       key: `eq:${left.n}/${left.d}`,
       payload: {
-        template: 'UI_BALANCE_SCALE',
+        template: Mechanics.BalanceScale,
         left: { glyphs: [left], value: left.n / left.d },
         weights: shuffle([eq.simple, ...others]).map(fractionWeight),
         hint: `Скороти дріб: поділи верх і низ на одне й те саме число. ${left.n} з ${left.d} — це стільки ж, скільки ${eq.simple.n} з ${eq.simple.d}.`,
@@ -79,7 +80,7 @@ export function generateBalance(config: TaskConfig): TaskInstance<BalanceScalePa
     ...base,
     key: glyphs.join(''),
     payload: {
-      template: 'UI_BALANCE_SCALE',
+      template: Mechanics.BalanceScale,
       left: { glyphs, value: answer },
       weights: buildNumberOptions(answer, 4, 4).map(numberWeight),
       hintDots,

@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { COUNTRIES } from './content/countries';
 import { FLAG_STEPS, BIOME_STEPS, OCEAN_STEPS, CAPITALS, CAPITAL_STEPS } from './tasks';
@@ -29,7 +30,7 @@ export const GAMES: GameCard[] = [
     difficulty: 1,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
   },
   {
     id: 'continents',
@@ -43,7 +44,7 @@ export const GAMES: GameCard[] = [
     difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_MAP_PUZZLE',
+    mechanics: Mechanics.MapPuzzle,
   },
   {
     id: 'biomes',
@@ -57,7 +58,7 @@ export const GAMES: GameCard[] = [
     difficulty: [1, 2],
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: ['UI_SORTER_BINS', 'UI_GRID_CHOICE'],
+    mechanics: [Mechanics.SorterBins, Mechanics.GridChoice],
     hasText: true,
   },
   {
@@ -72,7 +73,7 @@ export const GAMES: GameCard[] = [
     difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_MAP_PUZZLE',
+    mechanics: Mechanics.MapPuzzle,
   },
   {
     id: 'capitals',
@@ -86,7 +87,7 @@ export const GAMES: GameCard[] = [
     difficulty: 3,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: 'UI_GRID_CHOICE',
+    mechanics: Mechanics.GridChoice,
     hasText: true,
   },
 ];

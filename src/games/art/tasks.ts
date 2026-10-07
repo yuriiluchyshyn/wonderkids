@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { factPool } from '../shared/facts';
@@ -16,7 +17,7 @@ function mixer(step: number): Tasks {
         `mix:${mixId}:${emoji}`,
         `${need}. Які дві фарби треба змішати?`,
         {
-          template: 'UI_COLOR_MIX',
+          template: Mechanics.ColorMix,
           object: { id: 'object', emoji, label: name },
           result: { id: mixId, name: mix.name, color: mix.color },
           paints: tubes.map((id) => ({ id, name: PAINTS[id].name, color: PAINTS[id].color })),

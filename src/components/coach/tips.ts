@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import type { CoachTip } from './CoachTips';
 
@@ -21,19 +22,19 @@ export function hubTips(): CoachTip[] {
 
 /** How to answer on each kind of board — told once, not printed on every task. */
 const HOW_TO: Record<TemplatePayload['template'], string> = {
-  UI_GRID_CHOICE: 'Щоб відповісти, торкнись правильної картки.',
-  UI_DRAG_MATCH: 'Перетягни кожну картку на її місце. Або торкнись картки, а потім — місця для неї.',
-  UI_CHRONO_SEQUENCE: 'Торкнись двох карток, щоб поміняти їх місцями. Коли все стоїть по порядку — натисни «Готово».',
-  UI_MAP_PUZZLE: 'Перетягни на карту або просто торкнись потрібного місця на ній.',
-  UI_BALANCE_SCALE: 'Перетягни гирю на праву шальку ваг.',
-  UI_SORTER_BINS: 'Перетягни предмет у потрібне місце — або просто торкнись цього місця.',
-  UI_CASH_TRAY: 'Торкайся монет і купюр, щоб покласти їх на касу.',
-  UI_TANGRAM: 'Перетягни кожну фігуру на її контур.',
-  UI_GRID_AREA: 'Торкайся клітинок, щоб зафарбувати їх, а тоді натисни «Готово».',
-  UI_NUMBER_MAZE: 'Торкайся сусідньої клітинки, щоб зробити крок.',
-  UI_BUBBLE_POP: 'Лопай бульбашки по порядку: торкнись тієї, що має бути наступною.',
-  UI_DOT_TO_DOT: 'Торкайся зірочок по порядку — між ними з’явиться лінія.',
-  UI_COLOR_MIX: 'Торкнись двох фарб, щоб вилити їх у казан і змішати.',
+  [Mechanics.GridChoice]: 'Щоб відповісти, торкнись правильної картки.',
+  [Mechanics.DragMatch]: 'Перетягни кожну картку на її місце. Або торкнись картки, а потім — місця для неї.',
+  [Mechanics.ChronoSequence]: 'Торкнись двох карток, щоб поміняти їх місцями. Коли все стоїть по порядку — натисни «Готово».',
+  [Mechanics.MapPuzzle]: 'Перетягни на карту або просто торкнись потрібного місця на ній.',
+  [Mechanics.BalanceScale]: 'Перетягни гирю на праву шальку ваг.',
+  [Mechanics.SorterBins]: 'Перетягни предмет у потрібне місце — або просто торкнись цього місця.',
+  [Mechanics.CashTray]: 'Торкайся монет і купюр, щоб покласти їх на касу.',
+  [Mechanics.Tangram]: 'Перетягни кожну фігуру на її контур.',
+  [Mechanics.GridArea]: 'Торкайся клітинок, щоб зафарбувати їх, а тоді натисни «Готово».',
+  [Mechanics.NumberMaze]: 'Торкайся сусідньої клітинки, щоб зробити крок.',
+  [Mechanics.BubblePop]: 'Лопай бульбашки по порядку: торкнись тієї, що має бути наступною.',
+  [Mechanics.DotToDot]: 'Торкайся зірочок по порядку — між ними з’явиться лінія.',
+  [Mechanics.ColorMix]: 'Торкнись двох фарб, щоб вилити їх у казан і змішати.',
 };
 
 /** Tips for the game screen. `template` is the board of the current task. */

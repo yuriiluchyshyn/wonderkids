@@ -1,3 +1,4 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { worldFigures, uaFigures } from './tasks';
 
@@ -27,7 +28,7 @@ export const GAMES: GameCard[] = [
     difficulty: 1,
     publishDate: V4_RELEASE,
     tasksPerLevel: 6,
-    mechanics: 'UI_SORTER_BINS',
+    mechanics: Mechanics.SorterBins,
     hasText: true,
   },
   {
@@ -43,7 +44,7 @@ export const GAMES: GameCard[] = [
     difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 6,
-    mechanics: ['UI_CHRONO_SEQUENCE', 'UI_GRID_CHOICE', 'UI_SORTER_BINS'],
+    mechanics: [Mechanics.ChronoSequence, Mechanics.GridChoice, Mechanics.SorterBins],
     hasText: true,
   },
   {
@@ -58,7 +59,7 @@ export const GAMES: GameCard[] = [
     difficulty: 1,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: ['UI_DRAG_MATCH', 'UI_GRID_CHOICE'],
+    mechanics: [Mechanics.DragMatch, Mechanics.GridChoice],
     hasText: true,
   },
   {
@@ -73,7 +74,7 @@ export const GAMES: GameCard[] = [
     difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: ['UI_DRAG_MATCH', 'UI_GRID_CHOICE'],
+    mechanics: [Mechanics.DragMatch, Mechanics.GridChoice],
     hasText: true,
   },
   {
@@ -88,7 +89,7 @@ export const GAMES: GameCard[] = [
     difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
+    mechanics: [Mechanics.GridChoice, Mechanics.DragMatch],
     hasText: true,
   },
   {
@@ -103,7 +104,7 @@ export const GAMES: GameCard[] = [
     difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
-    mechanics: ['UI_GRID_CHOICE', 'UI_DRAG_MATCH'],
+    mechanics: [Mechanics.GridChoice, Mechanics.DragMatch],
     hasText: true,
   },
 ];

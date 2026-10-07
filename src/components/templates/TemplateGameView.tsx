@@ -1,5 +1,6 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { ComponentType } from 'react';
-import type { GameViewProps } from '@/core/game/kernel/types';
+import { spokenPrompt, type GameViewProps } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { PhysicsScaleLayout } from './PhysicsScaleLayout';
 import { CashTrayLayout } from './CashTrayLayout';
@@ -19,19 +20,19 @@ import styles from './Templates.module.css';
 
 /* eslint-disable @typescript-eslint/no-explicit-any -- each layout narrows `payload` itself */
 const LAYOUTS: Record<TemplatePayload['template'], ComponentType<any>> = {
-  UI_GRID_CHOICE: GridChoiceLayout,
-  UI_DRAG_MATCH: DragMatchLayout,
-  UI_CHRONO_SEQUENCE: SequenceLayout,
-  UI_MAP_PUZZLE: InteractiveMapLayout,
-  UI_BALANCE_SCALE: PhysicsScaleLayout,
-  UI_SORTER_BINS: SorterBinsLayout,
-  UI_CASH_TRAY: CashTrayLayout,
-  UI_TANGRAM: TangramLayout,
-  UI_GRID_AREA: GridAreaLayout,
-  UI_NUMBER_MAZE: NumberMazeLayout,
-  UI_BUBBLE_POP: BubblePopLayout,
-  UI_DOT_TO_DOT: DotToDotLayout,
-  UI_COLOR_MIX: ColorMixLayout,
+  [Mechanics.GridChoice]: GridChoiceLayout,
+  [Mechanics.DragMatch]: DragMatchLayout,
+  [Mechanics.ChronoSequence]: SequenceLayout,
+  [Mechanics.MapPuzzle]: InteractiveMapLayout,
+  [Mechanics.BalanceScale]: PhysicsScaleLayout,
+  [Mechanics.SorterBins]: SorterBinsLayout,
+  [Mechanics.CashTray]: CashTrayLayout,
+  [Mechanics.Tangram]: TangramLayout,
+  [Mechanics.GridArea]: GridAreaLayout,
+  [Mechanics.NumberMaze]: NumberMazeLayout,
+  [Mechanics.BubblePop]: BubblePopLayout,
+  [Mechanics.DotToDot]: DotToDotLayout,
+  [Mechanics.ColorMix]: ColorMixLayout,
 };
 
 /**
@@ -50,7 +51,7 @@ export function TemplateGameView(props: GameViewProps) {
       {/* The written task, with its tap-to-hear speaker (PRD v4.0 §2.4). */}
       <p className={styles.prompt}>
         <span>{props.task.prompt}</span>
-        <SpeakButton text={props.task.prompt} size="md" />
+        <SpeakButton text={spokenPrompt(props.task)} size="md" />
       </p>
       <Layout {...props} payload={payload} />
     </div>

@@ -1,3 +1,5 @@
+import { Mechanics } from '@/core/game/kernel/mechanics';
+import { accusative } from '@/core/lang/uk';
 import type { TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { OCEANS, regionName } from '@/core/game/templates/worldMap';
@@ -56,9 +58,9 @@ export const FLAG_STEPS = Math.ceil(COUNTRIES.length / FLAGS_PER_STEP);
 function flagTask(country: Country, known: readonly Country[], step: number): TaskInstance<TemplatePayload> {
   return templateTask(
     `flag:${country.id}`,
-    `Знайди прапор: ${country.name}`,
+    `Знайди прапор ${country.of}.`,
     {
-      template: 'UI_GRID_CHOICE',
+      template: Mechanics.GridChoice,
       cols: 3,
       options: withDistractors(country, known, 6, byId).map((c) => card(c.id, c.flag, undefined, c.name)),
       correctId: country.id,
@@ -100,9 +102,9 @@ function continents(step: number): Tasks {
   const animals: Tasks = CONTINENT_ANIMALS.map((a) =>
     templateTask(
       `home:${a.id}`,
-      `Де живе ${a.name}? Перетягни на карту`,
+      `Де живе ${a.name}? Перетягни на карту.`,
       {
-        template: 'UI_MAP_PUZZLE',
+        template: Mechanics.MapPuzzle,
         layer: 'continents',
         mode: 'drag',
         marker: card(a.id, a.emoji),
@@ -118,9 +120,9 @@ function continents(step: number): Tasks {
   const countries: Tasks = unlocked(MAP_COUNTRIES.slice(0, 60), step, 12, 0).map((c) =>
     templateTask(
       `where:${c.id}`,
-      `На якому материку ${c.name}? Перетягни прапор`,
+      `На якому материку ${c.name}? Перетягни прапор.`,
       {
-        template: 'UI_MAP_PUZZLE',
+        template: Mechanics.MapPuzzle,
         layer: 'continents',
         mode: 'drag',
         marker: card(c.id, c.flag),
@@ -171,7 +173,7 @@ function biomes(step: number): Tasks {
       `biome:${a.id}`,
       `Де живе ${a.name}?`,
       {
-        template: 'UI_SORTER_BINS',
+        template: Mechanics.SorterBins,
         item: card(a.id, a.emoji),
         bins: zoneChoices(zoneOf(a), zones.filter((b) => b.id !== a.home && !a.also?.includes(b.id))),
         correctBinId: a.home,
@@ -193,7 +195,7 @@ function biomes(step: number): Tasks {
       `biome:who:${a.id}`,
       `Хто живе ${zone.where}?`,
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji: zone.emoji, caption: zone.name },
         options: shuffle([a, ...others]).map((o) => card(o.id, o.emoji, cap(o.name))),
@@ -213,7 +215,7 @@ function biomes(step: number): Tasks {
         `biome:zone:${zone.id}:${i}`,
         `Яка це природна зона? ${sign}`,
         {
-          template: 'UI_GRID_CHOICE',
+          template: Mechanics.GridChoice,
           cols: 2,
           options: zoneChoices(zone, zones.filter((b) => b.id !== zone.id)),
           correctId: zone.id,
@@ -252,7 +254,7 @@ function oceans(step: number): Tasks {
       key,
       prompt,
       {
-        template: 'UI_MAP_PUZZLE',
+        template: Mechanics.MapPuzzle,
         layer: 'oceans',
         mode: 'tap',
         marker: card('ship', '⛵'),
@@ -331,9 +333,9 @@ function capitals(step: number): Tasks {
   const landmarkTasks: Tasks = landmarks.map((l) =>
     templateTask(
       `capital:${l.id}`,
-      `${l.landmark}: у якій столиці це можна побачити?`,
+      `У якій столиці можна побачити ${accusative(l.landmark)}?`,
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji: l.emoji, art: l.id, caption: l.landmark },
         options: withDistractors(l, landmarks, 4, byId).map((o) => card(o.id, undefined, o.capital)),
@@ -349,9 +351,9 @@ function capitals(step: number): Tasks {
   const capitalOf: Tasks = known.map((c) =>
     templateTask(
       `capital:of:${c.id}`,
-      `Яка столиця цієї країни: ${c.name}?`,
+      `Яка столиця ${c.of}?`,
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji: c.flag, caption: c.name },
         options: withDistractors(c, known, 4, byId).map((o) => card(o.id, undefined, o.capital)),
@@ -370,7 +372,7 @@ function capitals(step: number): Tasks {
       `capital:where:${c.id}`,
       `${c.capital} — столиця якої країни?`,
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         options: withDistractors(c, known, 4, byId).map((o) => card(o.id, o.flag, o.name)),
         correctId: c.id,
@@ -386,7 +388,7 @@ function capitals(step: number): Tasks {
       `time:${q.id}`,
       `У Києві зараз ${q.kyiv === 'day' ? 'день' : 'ніч'}. А що у ${q.city}?`,
       {
-        template: 'UI_GRID_CHOICE',
+        template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji: q.kyiv === 'day' ? '🌍☀️' : '🌍🌙', caption: `Київ: ${q.kyiv === 'day' ? 'день' : 'ніч'}` },
         options: shuffle([card('day', '☀️', 'День'), card('night', '🌙', 'Ніч')]),
@@ -415,7 +417,7 @@ function capitals(step: number): Tasks {
         `time:clock:${t.id}:${hour}`,
         `У Києві ${hour}:00. ${rule}. Котра година у ${t.city}?`,
         {
-          template: 'UI_GRID_CHOICE',
+          template: Mechanics.GridChoice,
           cols: 2,
           stimulus: { emoji: '🕰️', caption: `Київ — ${hour}:00` },
           options: offered.map((h) => ({ id: String(h), glyphs: [`${h}:00`], speak: `${h} година` })),
