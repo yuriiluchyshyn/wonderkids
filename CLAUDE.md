@@ -149,6 +149,8 @@ Vercel Web Analytics (anonymous page views, no cookies) is on for the whole site
 
 ### Where accounts come from
 
+The whole of it — the Meta campaign, the ad pictures and videos, the channel links — is written up in `docs/marketing.md`; read it before touching ads or the landing page's look.
+
 A link from an ad or a profile carries `utm_source` / `utm_medium` / `utm_campaign`. The landing page's script keeps them (or, without them, the site that sent the visitor) and adds them to its `[data-portal]` links; in the app `rememberSource()` (`core/app/attribution.ts`, called in `main.tsx` before analytics cuts the query off) stores them in `localStorage` (`pulsar-source-v1`), so they survive the trip to Auth0. `POST /api/auth/login` takes them as `source` and saves them **only when it creates the account** (`wk_parents.signup_*`, cleaned by `api/_lib/source.js`). `/admin/sources` counts accounts per channel and campaign in the browser from the accounts list — no endpoint of its own — and lists a ready link for each channel. Meta's ads use `utm_source={{site_source_name}}`, which arrives as `fb` / `ig`; `channelOf` folds those, and the hosts of link shims, into one channel.
 
 ### SEO
