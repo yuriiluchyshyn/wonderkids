@@ -113,6 +113,38 @@ interface TemplateBase {
    * task that has one keeps all its answers on the board — counting is the help.
    */
   counting?: Counting;
+  /**
+   * A picture of the task's own clues, shown below the board once the child
+   * needs help (riddles): the three animals stood in their row, the week with
+   * today marked. Like `counting`, it keeps every answer on the board — the
+   * help is something to think with, not fewer answers to guess from.
+   */
+  clue?: Clue;
+}
+
+/** One thing in a clue picture. */
+export interface ClueCell {
+  /** A pictogram, a number or a short word. */
+  glyph: string;
+  /** Small text under it (a name, a place number). */
+  note?: string;
+  /** The one the story is about. */
+  mark?: boolean;
+  /** Ruled out by the story. */
+  crossed?: boolean;
+  /** A bar under the thing, this many steps tall: «вищий», «старший». */
+  level?: number;
+  /** What stands between this cell and the one before it: «+2», «→», «✂️». */
+  link?: string;
+}
+
+/** Rows of things laid out the way the story tells them. */
+export interface Clue {
+  rows: { label?: string; cells: ClueCell[] }[];
+  /** What the two ends of a row mean: [«ліворуч», «праворуч»]. */
+  ends?: [string, string];
+  /** Many small things to count (a queue, a string of beads): smaller cells. */
+  dense?: boolean;
 }
 
 /** UI_GRID_CHOICE — tap one card out of N. */

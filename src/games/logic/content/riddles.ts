@@ -1,6 +1,7 @@
 import type { Gender } from '@/core/lang/uk';
 import { num, say, type NumCase } from '@/core/lang/numbers';
 import { pick, randInt, shuffle } from '@/core/utils/random';
+import type { Clue, ClueCell } from '@/core/game/templates/types';
 
 /**
  * «Логічні задачі» — little stories that are solved by thinking, not by
@@ -29,6 +30,8 @@ export interface Riddle {
   answer: number | { options: Answer[]; correct: string };
   /** What to think about, said after mistakes. */
   how: string;
+  /** The same thought as a picture: the story's clues laid out, the answer left to the child. */
+  clue: Clue;
   /** A picture above the answers. */
   emoji?: string;
 }
@@ -43,6 +46,14 @@ const cards = (labels: readonly (string | [string, string])[], right: string) =>
   options: shuffle(labels.map((l): Answer => (typeof l === 'string' ? { id: l, label: cap(l) } : { id: l[0], label: cap(l[0]), emoji: l[1] }))),
   correct: right,
 });
+
+// Clue pictures. Numbers in them are plain digits: a picture is looked at, not read out.
+const one = (cells: ClueCell[], more: Omit<Clue, 'rows'> = {}): Clue => ({ rows: [{ cells }], ...more });
+const times = (n: number, glyph: string): ClueCell[] => Array.from({ length: n }, () => ({ glyph }));
+/** Stations of a chain: [what stands there, its caption, the step that leads to it]. */
+const line = (parts: [string | number, string?, string?][], asked = parts.length - 1): ClueCell[] =>
+  parts.map(([glyph, note, link], i) => ({ glyph: String(glyph), note, link, mark: i === asked }));
+const signed = (d: number) => (d > 0 ? `+${d}` : `−${-d}`);
 
 /** Children of a story: nominative and the form after «за» / «від» / «у». */
 const BOYS: [string, string][] = [['Тарас', 'Тараса'], ['Марко', 'Марка'], ['Остап', 'Остапа'], ['Назар', 'Назара'], ['Данило', 'Данила'], ['Максим', 'Максима'], ['Андрій', 'Андрія'], ['Василь', 'Василя']];
@@ -72,6 +83,7 @@ const oneOf = ([lies, ask, things]: (typeof ONE_OF)[number]): Make => (r) => {
     text: `${lies} ${set.slice(0, -1).map((t) => t[0]).join(', ')} або ${set[set.length - 1][0]}. Це ${out.slice(0, -1).map((t) => `не ${t[0]}`).join(', ')}${out.length > 1 ? ' і ' : ''}не ${out[out.length - 1][0]}. ${ask}`,
     answer: cards(set, right[0]),
     how: `Викресли те, чого там немає: ${out.map((t) => t[0]).join(', ')}. Лишається одне.`,
+    clue: one(set.map((t) => ({ glyph: t[1], note: t[0], crossed: out.includes(t) }))),
   };
 };
 
@@ -101,6 +113,7 @@ const rowOfThree = ([verb, what, three]: (typeof ROWS_OF_THREE)[number]): Make =
     text: `${told} ${what} ${verb} ${where}?`,
     answer: cards(three.map((t): [string, string] => [t[0], t[2]]), who),
     how: `Постав їх у ряд у думках: ліворуч — ${left[0]}, далі — ${middle[0]}, праворуч — ${right[0]}.`,
+    clue: one([left, middle, right].map((t) => ({ glyph: t[2], note: t[0] })), { ends: ['ліворуч', 'праворуч'] }),
   };
 };
 
@@ -126,6 +139,8 @@ const chain = (size: 3 | 4) => ([m, f, topM, topF, lowM, lowF]: (typeof COMPARE)
     text: `${told.slice(0, -1).join(', ')}, а ${told[told.length - 1]}. Хто ${low ? (girls ? lowF : lowM) : girls ? topF : topM}?`,
     answer: cards(row.map((w) => w[0]), low ? row[size - 1][0] : row[0][0]),
     how: `Вишикуй їх у ряд: ${row.map((w) => w[0]).join(', ')}. Перше ім’я — ${girls ? topF : topM}, останнє — ${girls ? lowF : lowM}.`,
+    // A staircase: whoever is "more" stands on the higher step.
+    clue: one(row.map((w, i) => ({ glyph: girls ? '👧' : '👦', note: w[0], level: size - i }))),
   };
 };
 
@@ -133,21 +148,25 @@ const chain = (size: 3 | 4) => ([m, f, topM, topF, lowM, lowF]: (typeof COMPARE)
 // Steps 11–20: a rule to notice, a thing to count.
 
 /** «Яке число буде наступним?» — the rule and what it does to the number before. */
-const RULES: [string, (r: number) => { row: number[]; next: number; rule: string }][] = [
+/** `by` — the step when it is not a plain plus or minus; `pairs` — two rows woven into one. */
+const RULES: [string, (r: number) => { row: number[]; next: number; rule: string; by?: string; pairs?: boolean }][] = [
   ['+k', (r) => { const k = pick([2, 5, 10].slice(0, grow(r, 2, 3))); const a = randInt(1, 9); return { row: [0, 1, 2, 3].map((i) => a + k * i), next: a + k * 4, rule: `щоразу додається ${N(k)}` }; }],
   ['-k', (r) => { const k = randInt(1, grow(r, 2, 4)); const a = randInt(20, 40); return { row: [0, 1, 2, 3].map((i) => a - k * i), next: a - k * 4, rule: `щоразу віднімається ${N(k)}` }; }],
   ['+3', () => { const k = pick([3, 4]); const a = randInt(1, 10); return { row: [0, 1, 2, 3].map((i) => a + k * i), next: a + k * 4, rule: `щоразу додається ${N(k)}` }; }],
-  ['x2', () => { const a = randInt(1, 4); return { row: [a, a * 2, a * 4, a * 8], next: a * 16, rule: 'кожне число вдвічі більше за попереднє' }; }],
+  ['x2', () => { const a = randInt(1, 4); return { row: [a, a * 2, a * 4, a * 8], next: a * 16, rule: 'кожне число вдвічі більше за попереднє', by: '×2' }; }],
   ['grow', () => { const a = randInt(1, 6); const row = [a, a + 1, a + 3, a + 6]; return { row, next: a + 10, rule: 'спочатку додається один, потім два, потім три, а далі — чотири' }; }],
   ['alt', () => { const a = randInt(1, 9); const k = randInt(2, 4); const j = randInt(5, 7); return { row: [a, a + k, a + k + j, a + 2 * k + j, a + 2 * k + 2 * j], next: a + 3 * k + 2 * j, rule: `додається то ${N(k)}, то ${N(j)} — по черзі` }; }],
-  ['half', () => { const a = pick([48, 64, 80, 96]); return { row: [a, a / 2, a / 4], next: a / 8, rule: 'кожне число вдвічі менше за попереднє' }; }],
-  ['two', () => { const a = randInt(1, 5); const b = randInt(10, 15); return { row: [a, b, a + 1, b + 1, a + 2], next: b + 2, rule: 'тут переплелися два ряди — дивись через одне число' }; }],
-  ['x3', () => { const a = randInt(1, 3); return { row: [a, a * 3, a * 9], next: a * 27, rule: 'кожне число втричі більше за попереднє' }; }],
+  ['half', () => { const a = pick([48, 64, 80, 96]); return { row: [a, a / 2, a / 4], next: a / 8, rule: 'кожне число вдвічі менше за попереднє', by: ':2' }; }],
+  ['two', () => { const a = randInt(1, 5); const b = randInt(10, 15); return { row: [a, b, a + 1, b + 1, a + 2], next: b + 2, rule: 'тут переплелися два ряди — дивись через одне число', pairs: true }; }],
+  ['x3', () => { const a = randInt(1, 3); return { row: [a, a * 3, a * 9], next: a * 27, rule: 'кожне число втричі більше за попереднє', by: '×3' }; }],
   ['-grow', () => { const a = randInt(30, 50); return { row: [a, a - 1, a - 3, a - 6], next: a - 10, rule: 'спочатку віднімається один, потім два, потім три, а далі — чотири' }; }],
 ];
 const sequence = ([, make]: (typeof RULES)[number]): Make => (r) => {
-  const { row, next, rule } = make(r);
-  return { variant: row.join(','), text: `Яке число буде наступним? ${row.join(', ')}, …`, answer: next, how: `Розгадай правило: ${rule}.` };
+  const { row, next, rule, by, pairs } = make(r);
+  // The step is written on every arrow but the last; of two woven rows, the one being asked about is lit.
+  const cells: ClueCell[] = row.map((n, i) => ({ glyph: String(n), link: i === 0 || pairs ? undefined : by ?? signed(n - row[i - 1]), mark: pairs && i % 2 === 1 }));
+  return { variant: row.join(','), text: `Яке число буде наступним? ${row.join(', ')}, …`, answer: next, how: `Розгадай правило: ${rule}.`,
+    clue: { rows: [{ cells: [...cells, { glyph: '?', mark: true, link: pairs ? undefined : '→' }] }], dense: row.length > 4 } };
 };
 
 /** Standing in a line. `both`: the place is told from both ends. */
@@ -162,11 +181,13 @@ const QUEUES: [string, string, string, boolean][] = [
 const queue = ([who, x, y, both]: (typeof QUEUES)[number]): Make => (r) => {
   // «5 людей», never «3 людей»: told as a count, there are five or more on each side.
   const a = both ? randInt(2, grow(r, 4, 8)) : randInt(5, grow(r, 6, 9)); const b = both ? randInt(2, grow(r, 4, 8)) : randInt(5, grow(r, 6, 9));
+  // The whole line as dots, the one the story is about in another colour.
+  const clue: Clue = { rows: [{ cells: [...times(a, '🔵'), { glyph: '🔴', mark: true }, ...times(b, '🔵')] }], ends: ['попереду', 'позаду'], dense: true };
   if (both) {
-    return { variant: `${a}:${b}`, text: `${who} — ${ordinal(a + 1)} спереду і ${ordinal(b + 1)} ззаду. ${x}`, answer: a + b + 1,
+    return { clue, variant: `${a}:${b}`, text: `${who} — ${ordinal(a + 1)} спереду і ${ordinal(b + 1)} ззаду. ${x}`, answer: a + b + 1,
       how: `Перед ним — ${N(a)}, за ним — ${N(b)}. Додай їх і не забудь його самого: його порахуй один раз, а не двічі.` };
   }
-  return { variant: `${a}:${b}`, text: `${who}. Попереду — ${N(a)} ${x}, позаду — ${N(b)}. ${y}`, answer: a + b + 1,
+  return { clue, variant: `${a}:${b}`, text: `${who}. Попереду — ${N(a)} ${x}, позаду — ${N(b)}. ${y}`, answer: a + b + 1,
     how: `Додай тих, хто попереду, і тих, хто позаду: ${N(a)} і ${N(b)}. І не забудь порахувати ще одного — того, про кого йдеться.` };
 };
 const ORDINALS = ['', 'перший', 'другий', 'третій', 'четвертий', 'п’ятий', 'шостий', 'сьомий', 'восьмий', 'дев’ятий', 'десятий'];
@@ -184,7 +205,9 @@ const LEGS: [string, string, number, string, number, string, string][] = [
 const legs = ([where, x, legsX, y, legsY, ask, emoji]: (typeof LEGS)[number]): Make => (r) => {
   const a = randInt(5, grow(r, 5, 6)); const b = randInt(5, grow(r, 5, 7));
   return { variant: `${a}:${b}`, emoji, text: `${where} ${N(a)} ${x} і ${N(b)} ${y}. ${ask}`, answer: a * legsX + b * legsY,
-    how: `Порахуй окремо: ${N(a)} по ${N(legsX)} і ${N(b)} по ${N(legsY)}. Потім додай.` };
+    how: `Порахуй окремо: ${N(a)} по ${N(legsX)} і ${N(b)} по ${N(legsY)}. Потім додай.`,
+    // One number a creature: how many legs (wheels) it brings.
+    clue: { rows: [{ label: cap(x), cells: times(a, String(legsX)) }, { label: cap(y), cells: times(b, String(legsY)) }], dense: true } };
 };
 
 // ====================================================================== Band 3
@@ -192,6 +215,7 @@ const legs = ([where, x, legsX, y, legsY, ask, emoji]: (typeof LEGS)[number]): M
 
 const DAYS: [string, Gender][] = [['понеділок', 'm'], ['вівторок', 'm'], ['середа', 'f'], ['четвер', 'm'], ['п’ятниця', 'f'], ['субота', 'f'], ['неділя', 'f']];
 const day = (i: number) => DAYS[((i % 7) + 7) % 7];
+const DAYS_SHORT = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
 const was = (d: [string, Gender]) => (d[1] === 'f' ? 'була' : 'був');
 /** [what is told about today (offset of the day that is named), what is asked (offset from today)]. */
 const DAY_ASKS: [number, string, number, string][] = [
@@ -206,7 +230,12 @@ const days = ([named, told, asked, ask]: (typeof DAY_ASKS)[number]): Make => () 
   const tells = named < 0 ? `${told} ${was(given)} ${given[0]}.` : `${told} ${given[0]}.`;
   const others = shuffle(DAYS.filter((d) => d[0] !== right[0])).slice(0, 5);
   return { variant: `${today}`, emoji: '📅', text: `${tells} ${ask}`, answer: cards([right, ...others].map((d) => d[0]), right[0]),
-    how: `Назви дні по порядку: ${DAYS.map((d) => d[0]).join(', ')}. Спочатку знайди, який день сьогодні, а тоді відлічи потрібний.` };
+    how: `Назви дні по порядку: ${DAYS.map((d) => d[0]).join(', ')}. Спочатку знайди, який день сьогодні, а тоді відлічи потрібний.`,
+    // Seven days in a row that hold both the day named and the day asked for; only the named one is signed.
+    clue: one(Array.from({ length: 7 }, (_, i) => {
+      const at = Math.min(named, asked, 0) + i;
+      return { glyph: DAYS_SHORT[(((today + at) % 7) + 7) % 7], ...(at === named ? { mark: true, note: told.replace(' буде', '').toLocaleLowerCase('uk') } : {}) };
+    }), { dense: true }) };
 };
 
 /** Cuts and pieces, posts and gaps: one more of one than of the other. */
@@ -220,7 +249,11 @@ const CUTS: [string, string, string, string, 'cuts' | 'pieces'][] = [
 ];
 const cuts = ([told, what, ask, emoji, find]: (typeof CUTS)[number]): Make => (r) => {
   const n = randInt(5, grow(r, 6, 12));
-  return { variant: `${n}`, emoji, text: `${told} ${N(n)} ${what}. ${ask}`, answer: find === 'cuts' ? n - 1 : n + 1,
+  // The thing itself, piece by piece, with a mark wherever it was cut (or a gap between trees and posts).
+  const gaps = emoji === '🌳' || emoji === '🚧';
+  const piece = emoji === '🌳' ? '🌳' : emoji === '🚧' ? '🪵' : '🟫';
+  const clue: Clue = { rows: [{ cells: times(find === 'cuts' ? n : n + 1, piece).map((cell, i) => ({ ...cell, link: i ? (gaps ? '↔' : '✂️') : undefined })) }], dense: true };
+  return { clue, variant: `${n}`, emoji, text: `${told} ${N(n)} ${what}. ${ask}`, answer: find === 'cuts' ? n - 1 : n + 1,
     how: `Спробуй на малому: щоб вийшло два шматки, потрібен один розріз, а щоб три — два розрізи. Так само з деревами і проміжками між ними. ${find === 'cuts' ? 'Тут відповідь на один менша.' : 'Тут відповідь на один більша.'}` };
 };
 
@@ -244,7 +277,9 @@ const repeats = ([told, thing, colours]: (typeof REPEATS)[number]): Make => (r) 
   return { variant: `${unit.map((c) => c[0]).join('-')}:${place}`, emoji: [...unit, ...unit].map((c) => c[1]).join('') + '…',
     text: `${told}: ${[...unit, ...unit].map((c) => c[0]).join(', ')} — і так далі. Якого кольору буде ${thing}, що йде ${nth}?`,
     answer: cards(colours, right[0]),
-    how: `Кольори повторюються по ${N(period)}. Рахуй по колу: ${unit.map((c) => c[0]).join(', ')} — і знову спочатку, аж до потрібного місця.` };
+    how: `Кольори повторюються по ${N(period)}. Рахуй по колу: ${unit.map((c) => c[0]).join(', ')} — і знову спочатку, аж до потрібного місця.`,
+    // Every place up to the asked one, numbered; the colours told are filled in, the rest are for the child.
+    clue: one(Array.from({ length: place }, (_, i) => ({ glyph: i < period * 2 ? unit[i % period][1] : i === place - 1 ? '?' : '▢', note: String(i + 1), mark: i === place - 1 })), { dense: true }) };
 };
 
 // ====================================================================== Band 4
@@ -262,7 +297,8 @@ const race = (did: string): Make => (r) => {
   ]);
   return { variant: `${first[0]}>${second[0]}>${third[0]}:${last}:${told.length}`, text: `${told}. Хто ${did} ${last ? 'останнім' : 'першим'}?`,
     answer: cards([first[0], second[0], third[0]], last ? third[0] : first[0]),
-    how: `Розстав їх за часом: спершу ${first[0]}, потім ${second[0]}, останнім — ${third[0]}.` };
+    how: `Розстав їх за часом: спершу ${first[0]}, потім ${second[0]}, останнім — ${third[0]}.`,
+    clue: one([first, second, third].map((k, i) => ({ glyph: '👦', note: k[0], link: i ? '→' : undefined })), { ends: ['раніше', 'пізніше'] }) };
 };
 
 /** «на 2 більше, ніж у…» twice over. */
@@ -279,23 +315,24 @@ const more = ([, many, emoji, g]: (typeof HAVE)[number]): Make => (r) => {
       ? `У Лесі ${N(c + a + b, g)} ${many}. У Тараса на ${N(b, g)} менше, ніж у Лесі, а в Олі на ${N(a, g)} менше, ніж у Тараса. Скільки ${many} в Олі?`
       : `У Лесі ${N(c, g)} ${many}. У Тараса на ${N(b, g)} більше, ніж у Лесі, а в Олі на ${N(a, g)} більше, ніж у Тараса. Скільки ${many} в Олі?`,
     answer: fewer ? c : c + b + a,
-    how: 'Іди ланцюжком: спочатку дізнайся, скільки в Тараса, а тоді — скільки в Олі.' };
+    how: 'Іди ланцюжком: спочатку дізнайся, скільки в Тараса, а тоді — скільки в Олі.',
+    clue: one(line([[fewer ? c + a + b : c, 'Леся'], ['?', 'Тарас', signed(fewer ? -b : b)], ['?', 'Оля', signed(fewer ? -a : a)]])) };
 };
 
 /** Brothers, sisters and years. */
 const FAMILY: Make[] = [
-  (r) => { const a = randInt(1, grow(r, 2, 4)); const b = randInt(1, grow(r, 2, 4)); return { variant: `${a}:${b}`, emoji: '👨‍👩‍👧‍👦', text: `У Марка ${N(a, 'f')} ${a === 1 ? 'сестра' : a < 5 ? 'сестри' : 'сестер'} і ${N(b, 'm')} ${b === 1 ? 'брат' : b < 5 ? 'брати' : 'братів'}. Скільки всього дітей у цій сім’ї?`, answer: a + b + 1, how: 'Порахуй сестер, братів — і не забудь самого Марка.' }; },
-  (r) => { const k = randInt(2, grow(r, 3, 6)); return { variant: `${k}`, emoji: '👨‍👩‍👧‍👦', text: `У сім’ї ${N(k)} ${k < 5 ? 'брати' : 'братів'}. У кожного з них є одна сестра. Скільки всього дітей у сім’ї?`, answer: k + 1, how: 'Сестра в усіх братів одна й та сама. Порахуй братів і додай її одну.' }; },
-  (r) => { const k = randInt(2, grow(r, 3, 6)); return { variant: `${k}`, emoji: '👨‍👩‍👧‍👦', text: `У сім’ї ${N(k, 'f')} ${k < 5 ? 'сестри' : 'сестер'}. У кожної з них є один брат. Скільки всього дітей у сім’ї?`, answer: k + 1, how: 'Брат у всіх сестер один і той самий. Порахуй сестер і додай його одного.' }; },
-  (r) => { const n = randInt(2, grow(r, 2, 4)); return { variant: `${n}`, emoji: '👨‍👩‍👧‍👦', text: `В Олі братів стільки само, скільки й сестер: і тих, і тих — по ${N(n)}. Скільки всього дітей у цій сім’ї?`, answer: n * 2 + 1, how: 'Порахуй братів, стільки ж сестер — і не забудь саму Олю.' }; },
-  (r) => { const k = randInt(2, grow(r, 3, 5)); return { variant: `${k}`, emoji: '👨‍👩‍👧‍👦', text: `У бабусі ${N(k, 'f')} ${k < 5 ? 'доньки' : 'доньок'}. У кожної доньки — по двоє дітей. Скільки онуків у бабусі?`, answer: k * 2, how: 'У кожної доньки двоє дітей. Порахуй по двоє стільки разів, скільки доньок.' }; },
+  (r) => { const a = randInt(1, grow(r, 2, 4)); const b = randInt(1, grow(r, 2, 4)); return { variant: `${a}:${b}`, emoji: '👨‍👩‍👧‍👦', text: `У Марка ${N(a, 'f')} ${a === 1 ? 'сестра' : a < 5 ? 'сестри' : 'сестер'} і ${N(b, 'm')} ${b === 1 ? 'брат' : b < 5 ? 'брати' : 'братів'}. Скільки всього дітей у цій сім’ї?`, answer: a + b + 1, how: 'Порахуй сестер, братів — і не забудь самого Марка.', clue: one([...times(a, '👧'), ...times(b, '👦'), { glyph: '👦', note: 'Марко', mark: true }], { dense: true }) }; },
+  (r) => { const k = randInt(2, grow(r, 3, 6)); return { variant: `${k}`, emoji: '👨‍👩‍👧‍👦', text: `У сім’ї ${N(k)} ${k < 5 ? 'брати' : 'братів'}. У кожного з них є одна сестра. Скільки всього дітей у сім’ї?`, answer: k + 1, how: 'Сестра в усіх братів одна й та сама. Порахуй братів і додай її одну.', clue: one([...times(k, '👦'), { glyph: '👧', note: 'сестра', mark: true }], { dense: true }) }; },
+  (r) => { const k = randInt(2, grow(r, 3, 6)); return { variant: `${k}`, emoji: '👨‍👩‍👧‍👦', text: `У сім’ї ${N(k, 'f')} ${k < 5 ? 'сестри' : 'сестер'}. У кожної з них є один брат. Скільки всього дітей у сім’ї?`, answer: k + 1, how: 'Брат у всіх сестер один і той самий. Порахуй сестер і додай його одного.', clue: one([...times(k, '👧'), { glyph: '👦', note: 'брат', mark: true }], { dense: true }) }; },
+  (r) => { const n = randInt(2, grow(r, 2, 4)); return { variant: `${n}`, emoji: '👨‍👩‍👧‍👦', text: `В Олі братів стільки само, скільки й сестер: і тих, і тих — по ${N(n)}. Скільки всього дітей у цій сім’ї?`, answer: n * 2 + 1, how: 'Порахуй братів, стільки ж сестер — і не забудь саму Олю.', clue: one([...times(n, '👦'), ...times(n, '👧'), { glyph: '👧', note: 'Оля', mark: true }], { dense: true }) }; },
+  (r) => { const k = randInt(2, grow(r, 3, 5)); return { variant: `${k}`, emoji: '👨‍👩‍👧‍👦', text: `У бабусі ${N(k, 'f')} ${k < 5 ? 'доньки' : 'доньок'}. У кожної доньки — по двоє дітей. Скільки онуків у бабусі?`, answer: k * 2, how: 'У кожної доньки двоє дітей. Порахуй по двоє стільки разів, скільки доньок.', clue: { rows: Array.from({ length: k }, () => ({ cells: [{ glyph: '👩' }, { glyph: '🧒', link: '→' }, { glyph: '🧒' }] })), dense: true } }; },
 ];
 const AGES: Make[] = [
-  () => { const a = randInt(5, 9); const d = randInt(2, 5); return { variant: `${a}:${d}`, emoji: '🎂', text: `Олі ${N(a)} років. Її брат на ${N(d)} ${d < 5 ? 'роки' : 'років'} старший. Скільки років братові?`, answer: a + d, how: '«Старший» — означає, що років більше. Додай.' }; },
-  () => { const a = randInt(6, 10); const d = randInt(2, 4); return { variant: `${a}:${d}`, emoji: '🎂', text: `Через ${N(d)} роки Маркові буде ${N(a + d)} років. Скільки років Маркові зараз?`, answer: a, how: 'Зараз йому менше, ніж буде потім. Відніми роки, які ще не минули.' }; },
-  () => { const a = randInt(3, 6); return { variant: `${a}`, emoji: '🎂', text: `Сестра вдвічі старша за Олю. Олі ${N(a)} ${a < 5 ? 'роки' : 'років'}. Скільки років сестрі?`, answer: a * 2, how: '«Вдвічі старша» — означає два рази по стільки.' }; },
-  () => { const a = randInt(5, 8); const d = randInt(2, 3); const e = randInt(1, 3); return { variant: `${a}:${d}:${e}`, emoji: '🎂', text: `${cap(d === 2 ? 'два' : 'три')} роки тому Данилові було ${N(a - d)} ${a - d < 5 ? 'роки' : 'років'}. Скільки років йому буде через ${N(e)} ${e === 1 ? 'рік' : 'роки'}?`, answer: a + e, how: 'Спочатку дізнайся, скільки йому зараз, а потім додай роки, які ще минуть.' }; },
-  () => { const son = randInt(4, 9); const mum = randInt(27, 36); return { variant: `${son}:${mum}`, emoji: '🎂', text: `Мамі ${N(mum)} років, а синові — ${N(son)}. Скільки років було мамі, коли народився син?`, answer: mum - son, how: 'Коли син народився, мама була молодша рівно на стільки років, скільки зараз синові. Відніми.' }; },
+  () => { const a = randInt(5, 9); const d = randInt(2, 5); return { variant: `${a}:${d}`, emoji: '🎂', text: `Олі ${N(a)} років. Її брат на ${N(d)} ${d < 5 ? 'роки' : 'років'} старший. Скільки років братові?`, answer: a + d, how: '«Старший» — означає, що років більше. Додай.', clue: one(line([[a, 'Оля'], ['?', 'брат', signed(d)]])) }; },
+  () => { const a = randInt(6, 10); const d = randInt(2, 4); return { variant: `${a}:${d}`, emoji: '🎂', text: `Через ${N(d)} роки Маркові буде ${N(a + d)} років. Скільки років Маркові зараз?`, answer: a, how: 'Зараз йому менше, ніж буде потім. Відніми роки, які ще не минули.', clue: one(line([['?', 'зараз'], [a + d, 'потім', signed(d)]], 0)) }; },
+  () => { const a = randInt(3, 6); return { variant: `${a}`, emoji: '🎂', text: `Сестра вдвічі старша за Олю. Олі ${N(a)} ${a < 5 ? 'роки' : 'років'}. Скільки років сестрі?`, answer: a * 2, how: '«Вдвічі старша» — означає два рази по стільки.', clue: { rows: [{ label: 'Оля', cells: [{ glyph: String(a) }] }, { label: 'Сестра', cells: [{ glyph: String(a) }, { glyph: String(a), link: '+' }] }] } }; },
+  () => { const a = randInt(5, 8); const d = randInt(2, 3); const e = randInt(1, 3); return { variant: `${a}:${d}:${e}`, emoji: '🎂', text: `${cap(d === 2 ? 'два' : 'три')} роки тому Данилові було ${N(a - d)} ${a - d < 5 ? 'роки' : 'років'}. Скільки років йому буде через ${N(e)} ${e === 1 ? 'рік' : 'роки'}?`, answer: a + e, how: 'Спочатку дізнайся, скільки йому зараз, а потім додай роки, які ще минуть.', clue: one(line([[a - d, 'тоді'], ['?', 'зараз', signed(d)], ['?', 'потім', signed(e)]])) }; },
+  () => { const son = randInt(4, 9); const mum = randInt(27, 36); return { variant: `${son}:${mum}`, emoji: '🎂', text: `Мамі ${N(mum)} років, а синові — ${N(son)}. Скільки років було мамі, коли народився син?`, answer: mum - son, how: 'Коли син народився, мама була молодша рівно на стільки років, скільки зараз синові. Відніми.', clue: { rows: [{ label: 'Син', cells: line([[0, 'тоді'], [son, 'зараз', signed(son)]], -1) }, { label: 'Мама', cells: line([['?', 'тоді'], [mum, 'зараз', signed(son)]], 0) }] } }; },
 ];
 
 // ====================================================================== Band 5
@@ -325,7 +362,9 @@ const owners = ([what, things]: (typeof OWNERS)[number]): Make => (r) => {
   return { variant: `${kids.map((k) => k[0]).join('+')}:${has.map((t) => t[1]).join('+')}:${asked}`,
     text: `${kids[0][0]}, ${kids[1][0]} і ${kids[2][0]} ${what}. У кожного — своє: ${things.map((t) => t[1]).join(', ')}. ${clues} Що ${at(kids[asked][1])}?`,
     answer: cards(things.map((t): [string, string] => [t[1], t[2]]), has[asked][1]),
-    how: hard ? `Спочатку знайди, що ${at(kids[0][1])}: лишається одне. Потім подивись, чого немає ${at(kids[2][1])}, — і дізнаєшся, що лишилося для ${kids[1][1]}.` : 'Викресли те, чого там точно немає. Лишається одне.' };
+    how: hard ? `Спочатку знайди, що ${at(kids[0][1])}: лишається одне. Потім подивись, чого немає ${at(kids[2][1])}, — і дізнаєшся, що лишилося для ${kids[1][1]}.` : 'Викресли те, чого там точно немає. Лишається одне.',
+    // A row a child: every thing, with a cross on what the story says is not theirs.
+    clue: { rows: kids.map((kid, k) => ({ label: kid[0], cells: things.map((t) => ({ glyph: t[2], crossed: (k === 0 && t !== has[0]) || (hard && k === 2 && t === has[1]) })) })) } };
 };
 
 /** Everyone with everyone. */
@@ -341,16 +380,22 @@ const meetings = ([who, did, ask, emoji, both]: (typeof MEETINGS)[number]): Make
   return { variant: `${n}`, emoji, text: `${who[n - 3]} ${did}. ${ask}`, answer: both ? n * (n - 1) : (n * (n - 1)) / 2,
     how: both
       ? 'Кожна дарує листівку всім, крім себе. Порахуй, скільки дарує одна, і помнож на кількість подруг.'
-      : `Перший зустрічається з усіма іншими, другий — з усіма, крім першого, і так далі. Додай: ${Array.from({ length: n - 1 }, (_, i) => n - 1 - i).join(' + ')}.` };
+      : `Перший зустрічається з усіма іншими, другий — з усіма, крім першого, і так далі. Додай: ${Array.from({ length: n - 1 }, (_, i) => n - 1 - i).join(' + ')}.`,
+    // Everyone has a number; a row lists whom that one meets (and has not met in a row above).
+    clue: { rows: Array.from({ length: both ? n : n - 1 }, (_, i) => ({ label: `${i + 1} →`, cells: Array.from({ length: n }, (_, j) => j).filter((j) => (both ? j !== i : j > i)).map((j) => ({ glyph: String(j + 1) })) })), dense: true } };
 };
+
+/** Every number from `lo` to `hi`; the two ends are crossed — the number lies between them. */
+const between = (lo: number, hi: number): Clue =>
+  one(Array.from({ length: hi - lo + 1 }, (_, i) => ({ glyph: String(lo + i), crossed: i === 0 || lo + i === hi })), { dense: hi - lo > 5 });
 
 /** A number hidden behind two conditions. */
 const HIDDEN: Make[] = [
-  () => { const even = randInt(2, 15) * 2; const lo = even - 2; const hi = even + 2; return { variant: `${lo}:${hi}`, emoji: '🔢', text: `Я задумав число. Воно більше за ${N(lo)}, але менше за ${N(hi)}, і воно парне — ділиться на два. Яке це число?`, answer: even, how: `Назви всі числа між ${N(lo)} і ${N(hi)}. Парне серед них — те, що ділиться на два.` }; },
-  () => { const odd = randInt(2, 15) * 2 + 1; return { variant: `${odd}`, emoji: '🔢', text: `Я задумав число. Воно більше за ${N(odd - 2)}, але менше за ${N(odd + 2)}, і воно непарне. Яке це число?`, answer: odd, how: `Назви всі числа між ${N(odd - 2)} і ${N(odd + 2)}. Непарне — те, що не ділиться на два порівну.` }; },
-  () => { const five = randInt(2, 9) * 5; return { variant: `${five}`, emoji: '🔢', text: `Я задумав число. Воно більше за ${N(five - 3)}, але менше за ${N(five + 4)}, і його можна поділити на п’ять. Яке це число?`, answer: five, how: 'Числа, що діляться на п’ять, закінчуються на нуль або на п’ять.' }; },
-  () => { const tens = randInt(1, 8); const ones = randInt(tens + 1, 9); return { variant: `${tens}${ones}`, emoji: '🔢', text: `У двоцифровому числі десятків — ${N(tens)}, а одиниць на ${N(ones - tens)} більше, ніж десятків. Яке це число?`, answer: tens * 10 + ones, how: `Спочатку знайди, скільки одиниць: до ${N(tens, 'm', 'gen')} додай ${N(ones - tens)}. Потім запиши десятки й одиниці поруч.` }; },
-  () => { const a = randInt(3, 9); const b = randInt(2, 9); return { variant: `${a}:${b}`, emoji: '🔢', text: `Я задумав число, додав до нього ${N(b)} і отримав стільки само, скільки буде ${N(a)} і ще ${N(a)}. Яке число я задумав?`, answer: a * 2 - b, how: `Спочатку порахуй, скільки вийшло: ${N(a)} і ще ${N(a)}. Потім відніми ${N(b)}.` }; },
+  () => { const even = randInt(2, 15) * 2; const lo = even - 2; const hi = even + 2; return { variant: `${lo}:${hi}`, emoji: '🔢', text: `Я задумав число. Воно більше за ${N(lo)}, але менше за ${N(hi)}, і воно парне — ділиться на два. Яке це число?`, answer: even, how: `Назви всі числа між ${N(lo)} і ${N(hi)}. Парне серед них — те, що ділиться на два.`, clue: between(lo, hi) }; },
+  () => { const odd = randInt(2, 15) * 2 + 1; return { variant: `${odd}`, emoji: '🔢', text: `Я задумав число. Воно більше за ${N(odd - 2)}, але менше за ${N(odd + 2)}, і воно непарне. Яке це число?`, answer: odd, how: `Назви всі числа між ${N(odd - 2)} і ${N(odd + 2)}. Непарне — те, що не ділиться на два порівну.`, clue: between(odd - 2, odd + 2) }; },
+  () => { const five = randInt(2, 9) * 5; return { variant: `${five}`, emoji: '🔢', text: `Я задумав число. Воно більше за ${N(five - 3)}, але менше за ${N(five + 4)}, і його можна поділити на п’ять. Яке це число?`, answer: five, how: 'Числа, що діляться на п’ять, закінчуються на нуль або на п’ять.', clue: between(five - 3, five + 4) }; },
+  () => { const tens = randInt(1, 8); const ones = randInt(tens + 1, 9); return { variant: `${tens}${ones}`, emoji: '🔢', text: `У двоцифровому числі десятків — ${N(tens)}, а одиниць на ${N(ones - tens)} більше, ніж десятків. Яке це число?`, answer: tens * 10 + ones, how: `Спочатку знайди, скільки одиниць: до ${N(tens, 'm', 'gen')} додай ${N(ones - tens)}. Потім запиши десятки й одиниці поруч.`, clue: one(line([[tens, 'десятки'], ['?', 'одиниці', signed(ones - tens)]])) }; },
+  () => { const a = randInt(3, 9); const b = randInt(2, 9); return { variant: `${a}:${b}`, emoji: '🔢', text: `Я задумав число, додав до нього ${N(b)} і отримав стільки само, скільки буде ${N(a)} і ще ${N(a)}. Яке число я задумав?`, answer: a * 2 - b, how: `Спочатку порахуй, скільки вийшло: ${N(a)} і ще ${N(a)}. Потім відніми ${N(b)}.`, clue: one(line([['?', 'задумав'], [`${a} + ${a}`, undefined, `+${b} =`]], 0)) }; },
 ];
 
 // ======================================================================= Path

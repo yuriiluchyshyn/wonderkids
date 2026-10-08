@@ -1,0 +1,124 @@
+.clue {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--ring) 12%, transparent);
+}
+
+.label {
+  flex: 0 0 auto;
+  max-width: 34%;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--surface-ink);
+}
+
+.cells {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cell {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 34px;
+  padding: 4px 6px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm, 10px);
+  background: var(--surface);
+  color: var(--surface-ink);
+}
+
+.glyph {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.note {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.bar {
+  width: 22px;
+  border-radius: 5px 5px 0 0;
+  background: var(--accent);
+}
+
+.mark {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+}
+
+.crossed .glyph {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+.crossed::after {
+  content: '✕';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: var(--surface-ink);
+  opacity: 0.75;
+}
+
+.link {
+  align-self: center;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-soft);
+}
+
+/* Many things to count: smaller, so a queue of nineteen takes two lines, not four. */
+.dense .cells {
+  gap: 3px;
+}
+
+.dense .cell {
+  min-width: 24px;
+  padding: 2px 3px;
+  border-width: 1.5px;
+}
+
+.dense .glyph {
+  font-size: 1.05rem;
+}
+
+.dense .note {
+  font-size: 0.62rem;
+}
+
+.dense .link {
+  font-size: 0.75rem;
+}

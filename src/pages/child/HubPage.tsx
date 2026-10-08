@@ -143,9 +143,12 @@ export function HubPage() {
         </motion.div>
       ) : (
         <>
-        {groups.length > 0 && <GroupFilter groups={groups} value={groupId} onChange={(id) => setGroup(galaxyId, id)} />}
-        <div data-tip="stars">
-          <StarFilter value={stars} onChange={setStars} />
+        {/* Small and to the right: the first game should start mid-screen, not below a wall of filters. */}
+        <div className={styles.filters}>
+          {groups.length > 0 && <GroupFilter groups={groups} value={groupId} onChange={(id) => setGroup(galaxyId, id)} />}
+          <div data-tip="stars">
+            <StarFilter value={stars} onChange={setStars} />
+          </div>
         </div>
         <TaskGrid
           entries={planets}

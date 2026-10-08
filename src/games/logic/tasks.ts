@@ -269,6 +269,7 @@ function riddleTask(kind: RiddleKind, step: number): TaskInstance<TemplatePayloa
       options,
       correctId: typeof riddle.answer === 'number' ? `n${riddle.answer}` : riddle.answer.correct,
       hint: riddle.how,
+      clue: riddle.clue,
     },
     step,
   );

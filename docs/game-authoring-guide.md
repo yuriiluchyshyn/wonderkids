@@ -444,6 +444,11 @@ Two optional fields any payload may carry, used by arithmetic:
   (cubes in towers of ten, two colours for the two numbers of a sum) or
   `{ kind: 'groups', rows, cols }` (equal rows of dots). A task with `counting`
   keeps all its answers on the board instead of narrowing to two.
+- `clue` — a riddle's clues as a picture, shown in the same helper panel:
+  `{ rows: [{ label?, cells: [{ glyph, note?, mark?, crossed?, level?, link? }] }], ends?, dense? }`.
+  Lay out what the story tells (who stands where, what is ruled out, the step
+  between two numbers) and leave the answer to the child. A task with `clue`
+  also keeps all its answers.
 - `stimulus.pie: { food, denom, filled }` — a food cut into equal slices.
 
 A number in a math line may be written `{ text: '7', tone: 'a' | 'b' }` to wear

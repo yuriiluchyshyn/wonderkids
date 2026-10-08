@@ -1,10 +1,10 @@
 .trigger {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  padding: 12px 16px;
-  border-radius: var(--radius-lg);
+  padding: 6px 14px;
+  border-radius: var(--radius);
   background: var(--surface);
   color: var(--surface-ink);
   box-shadow: var(--shadow-sm);
@@ -12,7 +12,7 @@
 }
 
 .triggerIcon {
-  font-size: 2rem;
+  font-size: 1.5rem;
   line-height: 1;
 }
 
@@ -24,16 +24,18 @@
 }
 
 .triggerKicker {
-  font-size: 0.78rem;
+  font-size: 0.62rem;
   font-weight: 700;
+  line-height: 1.1;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-soft);
 }
 
 .triggerName {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 900;
+  line-height: 1.15;
   color: var(--surface-ink);
 }
 

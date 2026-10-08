@@ -9,7 +9,8 @@ import styles from './Templates.module.css';
  * UI_GRID_CHOICE — tap one card out of N (2 or 3 columns).
  * Helper (exclusion method, PRD §5): the grid narrows to the right answer and
  * one alternative, so the second look is a real choice, not a give-away —
- * unless the task brings a counting model (`payload.counting`), shown below.
+ * unless the task brings a counting model (`payload.counting`) or a picture
+ * of its clues (`payload.clue`), shown below: then every answer stays.
  * When the task has an unknown drawn in it (the «?» of a sum, the ❓ of a word
  * problem) and the answers are plain numbers, the right one flies into it.
  */
@@ -24,8 +25,8 @@ export function GridChoiceLayout({ payload, callbacks, hintActive }: LayoutProps
   const [landed, setLanded] = useState<string | undefined>(undefined);
 
   const kept = useMemo(() => {
-    // A task with something to count keeps every answer: counting is the help.
-    if (!hintActive || payload.counting) return null;
+    // A task with something to count or a clue picture keeps every answer: that is the help.
+    if (!hintActive || payload.counting || payload.clue) return null;
     const other = options.find((o) => o.id !== correctId && !tried.includes(o.id)) ?? options.find((o) => o.id !== correctId);
     return new Set([correctId, other?.id]);
   }, [hintActive]); // eslint-disable-line react-hooks/exhaustive-deps

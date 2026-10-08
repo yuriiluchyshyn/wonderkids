@@ -1,21 +1,22 @@
 .row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  justify-content: flex-end;
+  gap: 5px;
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  min-height: 48px;
-  padding: 0 16px;
+  gap: 5px;
+  min-height: 34px;
+  padding: 0 10px;
   border: 2px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--surface-ink);
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   font-weight: 700;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
@@ -29,18 +30,18 @@
 
 .stars {
   color: #f59e0b;
-  font-size: 1.15rem;
-  letter-spacing: 1px;
+  font-size: 0.85rem;
+  letter-spacing: 0;
   line-height: 1;
 }
 
 .flag {
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   line-height: 1;
 }
 
 .ages {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   color: var(--text-soft);
 }
 
@@ -51,6 +52,6 @@
   }
 
   .chip {
-    padding: 0 14px;
+    padding: 0 9px;
   }
 }
