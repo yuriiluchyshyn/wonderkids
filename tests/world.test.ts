@@ -124,29 +124,46 @@ test('a key of knowledge is earned for every new step of any game, and stations 
   assert.equal(stationKey('k2', 3), 'know:p3:k2');
   assert.deepEqual(parseStation('know:p3:k2'), { planet: 3, id: 'k2' });
   assert.equal(parseStation('world:lego:b3'), null);
-  assert.equal(stationCost('k0'), 3);
-  assert.equal(stationCost('k0', 5), 6);
+  assert.equal(stationCost('k0'), 2);
+  assert.equal(stationCost('k9'), 16);
+  assert.equal(stationCost('k0', 5), 4);
   assert.equal(stationCost('b0'), 0);
   // Stations take keys, never artifacts — and the other way round.
   const owned = [stationKey('k0'), stationKey('k1', 5), ownedKey('lego', 'b0')];
-  assert.equal(keysSpent(owned), 3 + 10);
-  assert.equal(keyBalance(20, owned), 7);
+  assert.equal(keysSpent(owned), 2 + 6);
+  assert.equal(keyBalance(20, owned), 12);
   assert.equal(keyBalance(5, owned), 0);
   assert.equal(spentOn(owned), 30);
 });
 
 test('a planet lets the child fly on only when nearly everything on it is done', async () => {
   const { planetNeeds, frontierPlanet } = await import('../src/core/child/world/world.ts');
-  const base = { planet: 2, itemsOwned: 19, itemsTotal: 19, spaceport: true, stationsOpen: 4, gifts: 8, treasuresFound: 3, treasuresTotal: 12 };
+  const base = { planet: 2, itemsOwned: 19, itemsTotal: 19, spaceport: true, stationsOpen: 6, gifts: 8, treasuresFound: 8, treasuresTotal: 12 };
   assert.equal(planetNeeds(base).done, true);
   assert.equal(planetNeeds({ ...base, spaceport: false }).done, false, 'no spaceport');
   assert.equal(planetNeeds({ ...base, itemsOwned: 18 }).done, false, 'something not built');
-  assert.equal(planetNeeds({ ...base, stationsOpen: 3 }).done, false, 'too few stations of knowledge');
+  assert.equal(planetNeeds({ ...base, stationsOpen: 5 }).done, false, 'too few stations of knowledge');
   assert.equal(planetNeeds({ ...base, gifts: 7 }).done, false, 'too few residents');
-  assert.equal(planetNeeds({ ...base, treasuresFound: 2 }).done, false, 'too few treasures');
+  assert.equal(planetNeeds({ ...base, treasuresFound: 7 }).done, false, 'too few treasures');
   const none = Array(8).fill(false);
   assert.equal(frontierPlanet(none, none), 1);
   assert.equal(frontierPlanet([true, true, ...none.slice(2)], none), 3);
   // Something already stands on planet 2: it stays open even if planet 1 is no longer complete.
   assert.equal(frontierPlanet(none, [true, true, ...none.slice(2)]), 2);
+});
+
+test('every planet has its own ten stations of knowledge', async () => {
+  const { stationsOf } = await import('../src/core/child/world/stations.ts');
+  const { STATION_COUNT, PLANET_COUNT } = await import('../src/core/child/world/world.ts');
+  const names = new Set<string>();
+  for (let planet = 1; planet <= PLANET_COUNT; planet += 1) {
+    const stations = stationsOf(planet);
+    assert.equal(stations.length, STATION_COUNT);
+    assert.deepEqual(stations.map((s) => s.id), Array.from({ length: STATION_COUNT }, (_, i) => `k${i}`));
+    assert.equal(new Set(stations.map((s) => s.emoji)).size, STATION_COUNT, `planet ${planet} repeats a picture`);
+    for (const s of stations) {
+      assert.ok(!names.has(s.name), `«${s.name}» stands on two planets`);
+      names.add(s.name);
+    }
+  }
 });

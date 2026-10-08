@@ -4,7 +4,7 @@ import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { themeWorld, type ThemeWorld } from './themeWorlds';
 import { treasureKey } from '@/core/child/progress/treasures';
 import { gamesProgress } from './games';
-import { STATION_DEFS, type StationDef } from './stations';
+import { stationsOf, type StationDef } from './stations';
 import {
   PLANET_COUNT,
   PLANET_NAMES,
@@ -107,7 +107,7 @@ export function useWorld(viewPlanet?: number): World {
     const keys = keyBalance(keysEarned(all), treasures);
     const treasuresFound = theme.treasures.filter((t) => treasures.includes(treasureKey(theme.id, t.id))).length;
     const stationsOn = (planet: number): StationState[] =>
-      STATION_DEFS.map((station) => {
+      stationsOf(planet).map((station) => {
         const cost = stationCost(station.id, planet);
         if (treasures.includes(stationKey(station.id, planet))) return { station, cost, status: 'open', missing: 0 };
         return keys >= cost ? { station, cost, status: 'affordable', missing: 0 } : { station, cost, status: 'saving', missing: cost - keys };

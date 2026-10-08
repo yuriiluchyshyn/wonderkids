@@ -205,8 +205,8 @@ export function keysEarned(games: readonly GameProgress[]): number {
   );
 }
 
-/** What the stations of a planet cost, in keys, in order. */
-export const STATION_COSTS = [3, 5, 7, 9, 12, 15] as const;
+/** What the ten stations of a planet cost, in keys, in order. */
+export const STATION_COSTS = [2, 3, 4, 5, 6, 8, 10, 12, 14, 16] as const;
 export const STATION_COUNT = STATION_COSTS.length;
 
 export function stationId(index: number): string {
@@ -277,6 +277,13 @@ export function residentForGift<T>(all: readonly T[], giftNumber: number): T | u
 
 /** Share of a planet's stations of knowledge that must be open before leaving it. */
 export const STATIONS_SHARE = 0.6;
+/**
+ * The share of the theme's treasure collection each planet asks for. A chest
+ * waits on every third path step and always holds a treasure still missing,
+ * so treasures come quickly: three of eight on the first planet, the whole
+ * collection from the fifth on.
+ */
+export const TREASURES_SHARE = [3 / 8, 5 / 8, 6 / 8, 7 / 8, 1, 1, 1, 1] as const;
 /** Residents (gifts earned) a planet asks for, per planet travelled. */
 export const RESIDENTS_PER_PLANET = 4;
 
@@ -321,7 +328,7 @@ export function planetNeeds(input: {
   const built = need(input.itemsOwned, input.itemsTotal);
   const stations = need(input.stationsOpen, Math.ceil(STATION_COUNT * STATIONS_SHARE));
   const residentsNeed = need(input.gifts, planet * RESIDENTS_PER_PLANET);
-  const treasures = need(input.treasuresFound, Math.ceil((input.treasuresTotal * planet) / PLANET_COUNT));
+  const treasures = need(input.treasuresFound, Math.ceil(input.treasuresTotal * TREASURES_SHARE[Math.max(1, Math.min(PLANET_COUNT, planet)) - 1]));
   return {
     built,
     spaceport: input.spaceport,

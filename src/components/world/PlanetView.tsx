@@ -1,6 +1,7 @@
 import confetti from 'canvas-confetti';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { speechEngine } from '@/core/audio/SpeechEngine';
@@ -11,7 +12,6 @@ import { cn } from '@/core/utils/cn';
 import type { World } from '@/core/child/world/useWorld';
 import { DREAM_ID, GALAXY_NAME, PLANET_COUNT, SPACEPORT_ID, sellPrice, type ItemState, type Need } from '@/core/child/world/world';
 import { PlanetArt } from '@/components/templates/PlanetArt';
-import { counted } from '@/core/lang/uk';
 import { Globe } from './Globe';
 import { SolarSystem } from './SolarSystem';
 import { RAD, itemPlace, type Place } from './places';
@@ -23,8 +23,24 @@ const MAX_PITCH = 70 * RAD;
 const ZOOM_MIN = 0.7;
 /** Far enough in for the smallest decoration to be looked at closely. */
 const ZOOM_MAX = 4;
+/** How the artifacts a thing costs are earned — said whenever there are not enough of them. */
+const HOW_TO_EARN = 'Щоб зібрати, грай у будь-яку гру: за кожне виконане завдання дають нагороду.';
 /** A message with nothing to press fades out by itself after this long — long enough to be read out. */
 const NOTICE_MS = 9000;
+
+/** One thing a planet asks for before the child may fly on, with how to get it. */
+interface NeedChip {
+  id: string;
+  icon: string;
+  text: string;
+  done: boolean;
+  count?: string;
+  /** How to get it — shown and read out. */
+  how: string;
+  /** The button that leads there, and what it does. */
+  go: string;
+  act: () => void;
+}
 
 interface PlanetViewProps {
   world: World;
@@ -61,6 +77,11 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   const [justBuilt, setJustBuilt] = useState<string | null>(null);
   // The "what this planet asks for" sheet, raised by tapping a planet of the system.
   const [needsOpen, setNeedsOpen] = useState(false);
+  // The need the child tapped in that sheet: how to get it, and the way there.
+  const [needId, setNeedId] = useState<string | null>(null);
+  // A thing to choose as soon as its planet is the one on the screen.
+  const [pending, setPending] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // The window the planet is drawn in.
   const viewport = useRef<HTMLDivElement>(null);
@@ -121,7 +142,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     const port = state.item.id === SPACEPORT_ID ? ' Космопорт відкриває шлях до наступної планети.' : '';
     if (state.status === 'owned') return `${name}. Уже стоїть на твоїй планеті.${port}`;
     if (state.status === 'locked') return `${name}. Це головна мрія! Спершу збудуй усі інші будівлі та космопорт.`;
-    if (state.status === 'saving') return `${name}. Коштує ${cost}. У тебе є ${balance}. Збери ще ${state.missing} — і можна будувати.`;
+    if (state.status === 'saving') return `${name}. Коштує ${cost}. У тебе є ${balance}. Збери ще ${state.missing} — і можна будувати. ${HOW_TO_EARN}${port}`;
     return `${name}. Коштує ${cost}. Можна будувати!${port}`;
   };
 
@@ -155,7 +176,8 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
 
   // A message with nothing to press (still saving, locked) leaves by itself;
   // one with a button stays until the child chooses something else.
-  const hasAction = selected?.status === 'affordable' || selected?.status === 'owned';
+  // Still saving: the bar stays too — it tells how to earn the rest and leads to the games.
+  const hasAction = selected?.status === 'affordable' || selected?.status === 'owned' || selected?.status === 'saving';
   useEffect(() => {
     if (!selected || hasAction) return;
     const t = window.setTimeout(deselect, NOTICE_MS);
@@ -198,6 +220,14 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     return () => window.clearTimeout(t);
   }, [justBuilt]);
 
+  useEffect(() => {
+    if (!pending) return;
+    const state = items.find((i) => i.item.id === pending);
+    if (!world.open || !state) return;
+    setPending(null);
+    select(state);
+  }, [pending, world.planet, world.open]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const spin = (direction: 1 | -1) => {
     play('tap');
     cancelAnimationFrame(glide.current);
@@ -212,15 +242,81 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   // that is the planet whose list it shows.
   const gate = world.system[(world.open ? world.planet : world.frontier) - 1];
   const { needs } = gate;
-  const chip = (icon: string, text: string, n: Need, say: string) => ({ icon, text, done: n.done, count: `${n.have}/${n.need}`, say });
-  /** What the planet asks for, as a row of pictures with numbers — each can be tapped to hear it. */
-  const needChips: { icon: string; text: string; done: boolean; count?: string; say: string }[] = [
-    { icon: '🚀', text: 'Космопорт', done: needs.spaceport, say: 'Збудуй космопорт: він відкриває шлях до наступної планети.' },
-    chip('🏗️', 'Будівлі', needs.built, `Збудуй усе на планеті ${gate.name}. Уже є ${needs.built.have} з ${needs.built.need}.`),
-    chip('🛰️', 'Станції знань', needs.stations, `Відчини станції знань на планеті ${gate.name}. Для цього потрібні ключі знань: їх дають за нові кроки в будь-якій грі. Уже є ${needs.stations.have} з ${needs.stations.need}.`),
-    chip('🎁', 'Мешканці', needs.residents, `Запроси мешканців: вони приходять з подарунками на шляху. Уже є ${needs.residents.have} з ${counted(needs.residents.need, ['мешканця', 'мешканців', 'мешканців'])}.`),
-    chip('💎', 'Скарби', needs.treasures, `Знайди скарби у скринях. Уже є ${needs.treasures.have} з ${needs.treasures.need}.`),
+  // What the planet asks for, as a row of pictures with numbers. Tapping one
+  // says HOW to get it and offers the way there: a count alone left the child
+  // (and the parent) wondering where a spaceport or a treasure comes from.
+  const toGate = () => {
+    speechEngine.cancel();
+    setNeedsOpen(false);
+    setNeedId(null);
+    onPlanet(gate.planet);
+  };
+  const scrollTo = (id: string) => window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+  const play_ = () => navigate('/');
+  const port = gate.items.find((i) => i.item.id === SPACEPORT_ID);
+  const count = (n: Need) => `${n.have}/${n.need}`;
+  const needChips: NeedChip[] = [
+    {
+      id: 'port',
+      icon: '🚀',
+      text: 'Космопорт',
+      done: needs.spaceport,
+      how: `Космопорт — це будівля. Він є у списку «Будівлі» на планеті ${gate.name} і коштує ${port?.item.cost ?? ''} ${theme.artifact.emoji}. Їх дають за кожне виконане завдання в іграх.`,
+      go: 'Показати космопорт',
+      // The spaceport is chosen once the planet it stands on is on the screen.
+      act: () => {
+        toGate();
+        setPending(SPACEPORT_ID);
+      },
+    },
+    {
+      id: 'built',
+      icon: '🏗️',
+      text: 'Будівлі та прикраси',
+      done: needs.built.done,
+      count: count(needs.built),
+      how: `Збудуй усе зі списків «Будівлі» та «Прикраси» на планеті ${gate.name}: уже є ${needs.built.have} з ${needs.built.need}. Будують за ${theme.artifact.emoji} — їх дають за виконані завдання.`,
+      go: 'До будівель і прикрас',
+      act: () => {
+        toGate();
+        scrollTo('world-buildings');
+      },
+    },
+    {
+      id: 'stations',
+      icon: '🛰️',
+      text: 'Станції знань',
+      done: needs.stations.done,
+      count: count(needs.stations),
+      how: `Відчини станції знань на планеті ${gate.name}: уже є ${needs.stations.have} з ${needs.stations.need}. Їх відчиняють ключами знань 🗝️ — ключ дають за кожну нову сходинку в будь-якій грі.`,
+      go: 'До станцій',
+      act: () => {
+        toGate();
+        scrollTo('world-stations');
+      },
+    },
+    {
+      id: 'residents',
+      icon: '🎁',
+      text: 'Мешканці',
+      done: needs.residents.done,
+      count: count(needs.residents),
+      how: `Мешканці приходять із подарунками. Подарунок чекає на кожній п’ятій сходинці шляху в будь-якій грі. Уже є ${needs.residents.have} з ${needs.residents.need}.`,
+      go: 'Грати',
+      act: play_,
+    },
+    {
+      id: 'treasures',
+      icon: '💎',
+      text: 'Скарби',
+      done: needs.treasures.done,
+      count: count(needs.treasures),
+      how: `Скарби лежать у скринях на шляху: скриня чекає на кожній третій сходинці гри, і в кожній — новий скарб. Уже є ${needs.treasures.have} з ${needs.treasures.need}.`,
+      go: 'Грати',
+      act: play_,
+    },
   ];
+  const need = needChips.find((c) => c.id === needId) ?? null;
   const needsTitle = !world.open
     ? `🔒 Спершу — планета ${gate.name}`
     : needs.done
@@ -268,6 +364,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
               deselect();
               // A second tap on the planet being shown puts its list away.
               setNeedsOpen(p.planet !== world.planet || !needsOpen);
+              setNeedId(null);
               onPlanet(p.planet);
               if (!p.open) {
                 announce(`${p.name}. Сюди ще не можна. Спершу зроби все на планеті ${world.system[world.frontier - 1].name} і збудуй там космопорт.`);
@@ -417,14 +514,16 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
             </button>
             <ul className={styles.needsList}>
               {needChips.map((row) => (
-                <li key={row.text}>
+                <li key={row.id}>
                   <button
                     type="button"
-                    className={cn(styles.needChip, row.done && styles.needDone)}
+                    className={cn(styles.needChip, row.done && styles.needDone, needId === row.id && styles.needChosen)}
                     aria-label={row.text}
+                    aria-pressed={needId === row.id}
                     onClick={() => {
                       play('tap');
-                      announce(`${row.say} ${row.done ? 'Готово!' : 'Ще не готово.'}`);
+                      setNeedId(needId === row.id ? null : row.id);
+                      announce(`${row.how} ${row.done ? 'Готово!' : 'Ще не готово.'}`);
                     }}
                   >
                     <span className={cn(styles.needIcon, 'emoji')} aria-hidden>
@@ -436,6 +535,19 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                 </li>
               ))}
             </ul>
+            {/* How to get the chosen thing, and the way there. */}
+            {need ? (
+              <div className={styles.needHow}>
+                {showText && <p>{need.done ? `Готово! ${need.how}` : need.how}</p>}
+                {!need.done && (
+                  <button type="button" className={styles.buy} onClick={need.act}>
+                    {need.go} →
+                  </button>
+                )}
+              </div>
+            ) : (
+              showText && !needs.done && <p className={styles.needTip}>Торкнись картинки — розповім, як це отримати.</p>
+            )}
             {world.open && needs.done && world.planet < PLANET_COUNT && (
               <button
                 type="button"
@@ -488,6 +600,13 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                   </>
                 )}
               </span>
+              {/* Not enough yet: how the rest is earned — a price alone does not say. */}
+              {selected.status === 'saving' && (
+                <span className={styles.tradeoff}>
+                  {theme.artifact.emoji} дають за кожне виконане завдання в будь-якій грі.
+                  {selected.item.id === SPACEPORT_ID && ' Космопорт відкриває шлях до наступної планети.'}
+                </span>
+              )}
               {/* The choice, spelled out: build now, or keep saving for a goal. */}
               {selected.status === 'affordable' && nextGoal && (
                 <span className={styles.tradeoff}>
@@ -511,6 +630,11 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                 <motion.button type="button" className={styles.buy} whileTap={{ scale: 0.93 }} onClick={() => build(selected)}>
                   🔨 {showText ? 'Збудувати' : ''} {selected.item.cost} {theme.artifact.emoji}
                 </motion.button>
+              )}
+              {selected.status === 'saving' && (
+                <button type="button" className={styles.buy} onClick={() => navigate('/')}>
+                  🎮 {showText ? 'Грати й збирати' : ''} {theme.artifact.emoji}
+                </button>
               )}
               {selected.status === 'owned' &&
                 (selling === selected.item.id ? (
@@ -545,7 +669,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
 
       {/* The same things as a list: what is built, what can be added next. */}
       {(['building', 'decor'] as const).map((kind) => (
-        <div key={kind} className={styles.shelf}>
+        <div key={kind} className={styles.shelf} id={kind === 'building' ? 'world-buildings' : undefined}>
           <h3 className={styles.shelfTitle}>{kind === 'building' ? '🏗️ Будівлі' : '🌷 Прикраси'}</h3>
           <ul className={styles.items}>
             {items

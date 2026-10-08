@@ -60,7 +60,7 @@ function Stations({ world }: { world: World }) {
   };
 
   return (
-    <section className={styles.card}>
+    <section className={styles.card} id="world-stations">
       <h2 className={styles.title}>
         <span className="emoji" aria-hidden>
           🛰️
@@ -86,8 +86,15 @@ function Stations({ world }: { world: World }) {
       </h2>
       {showText && (
         <p className={styles.hint}>
-          Станції відчиняють ключами знань {KEY}. Ключ дають за кожен новий крок у будь-якій грі. Щоб летіти далі з планети «{world.planetName}», відчини
-          щонайменше {needs.stations.need}.
+          {world.open ? (
+            <>
+              Станції відчиняють ключами знань {KEY}. Ключ дають за кожну нову сходинку в будь-якій грі. Щоб летіти далі з планети «{world.planetName}»,
+              відчини щонайменше {needs.stations.need}.
+            </>
+          ) : (
+            // A planet not reached yet: its stations wait, and nothing here can be opened.
+            <>Планета «{world.planetName}» ще закрита — її станції відчиняться, коли ти долетиш сюди. Зараз відчиняй станції на планеті «{world.system[world.frontier - 1].name}».</>
+          )}
         </p>
       )}
       <ul className={styles.stations}>

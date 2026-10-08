@@ -414,3 +414,30 @@
 .needs .buy {
   flex-basis: 100%;
 }
+
+/* ---- "What this planet asks for": the chosen need, how to get it, the way there ---- */
+.needChosen {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.needHow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.needHow p,
+.needTip {
+  margin: 0;
+  width: 100%;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.needTip {
+  color: var(--text-soft);
+  text-align: center;
+}
