@@ -161,6 +161,9 @@ export function AccountsPage({ adminKey, onLogout }: { adminKey: string; onLogou
           <span>🧒 Дітей: {childCount}</span>
           <span>🗣️ Google Speech: {voiceOn}</span>
         </div>
+        <Link to="/admin/feedback" className={styles.btn}>
+          ✉️ Звернення
+        </Link>
         <Link to="/admin/games" className={styles.btn}>
           🎮 Ігри
         </Link>

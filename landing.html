@@ -567,6 +567,183 @@
         margin: 0 8px;
       }
 
+      /* ---- the letter form ---- */
+      .letter,
+      .letter-done {
+        max-width: 760px;
+        margin-top: 26px;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+      }
+      .letter {
+        display: grid;
+        gap: 18px;
+      }
+      .letter[hidden],
+      .letter-done[hidden] {
+        display: none;
+      }
+      .letter fieldset {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        min-width: 0;
+      }
+      .letter legend,
+      .letter .field > span {
+        display: block;
+        padding: 0;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      .letter small {
+        color: var(--soft);
+        font-weight: 400;
+        font-size: 0.92rem;
+      }
+      .kinds {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .kinds label {
+        cursor: pointer;
+      }
+      .kinds input,
+      .attach input,
+      .trap {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .kinds span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 44px;
+        padding: 0 16px;
+        border: 2px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--soft);
+        font-weight: 600;
+      }
+      .kinds input:checked + span {
+        border-color: var(--accent);
+        background: rgba(53, 214, 232, 0.14);
+        color: var(--ink);
+      }
+      .kinds input:focus-visible + span,
+      .attach label:focus-within {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .letter textarea,
+      .letter input[type='email'] {
+        display: block;
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid var(--line);
+        border-radius: 16px;
+        background: rgba(11, 16, 38, 0.6);
+        color: var(--ink);
+        font: inherit;
+      }
+      .letter textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+      .letter textarea:focus,
+      .letter input[type='email']:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+      .letter ::placeholder {
+        color: #7f88b5;
+      }
+      .attach {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px 14px;
+      }
+      .attach label {
+        cursor: pointer;
+      }
+      .files {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .files:empty {
+        display: none;
+      }
+      .files li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 6px 6px 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .files span {
+        min-width: 0;
+        margin-right: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .files button {
+        flex: none;
+        width: 44px;
+        height: 44px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--soft);
+        font-size: 1.1rem;
+        cursor: pointer;
+      }
+      .files button:hover {
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .letter-note:empty {
+        display: none;
+      }
+      .letter-note {
+        color: #ffb4a8;
+      }
+      .letter button.btn {
+        justify-self: start;
+        border: 0;
+        cursor: pointer;
+      }
+      .letter button.btn:disabled {
+        opacity: 0.7;
+        cursor: progress;
+        transform: none;
+      }
+      .letter-done h3 {
+        font-size: 1.5rem;
+      }
+      .letter-done p {
+        margin: 8px 0 18px;
+        color: var(--soft);
+      }
+      .letter-done button {
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
       /* ---- motion ---- */
       /* Things rise into place when scrolled to (the script adds .reveal, then .in). */
       .js .reveal {
@@ -739,6 +916,7 @@
           <a href="#games">Ігри</a>
           <a href="#world">Планета</a>
           <a href="#parents">Батькам</a>
+          <a href="#feedback">Написати нам</a>
         </nav>
         <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">Батькам</a>
         <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/">Грати</a>
@@ -1026,6 +1204,57 @@
         </div>
       </section>
 
+      <section id="feedback">
+        <div class="wrap">
+          <h2>Знайшли помилку чи маєте ідею?</h2>
+          <p class="sub">
+            Напишіть нам: що пішло не так, що зробити зручнішим або якої гри бракує. Можна додати фото чи коротке
+            відео — так легше зрозуміти, про що мова.
+          </p>
+          <form class="letter" id="letter" novalidate>
+            <fieldset>
+              <legend>Про що лист?</legend>
+              <div class="kinds">
+                <label><input type="radio" name="kind" value="bug" checked /><span><i class="emoji" aria-hidden="true">🐞</i> Помилка</span></label>
+                <label><input type="radio" name="kind" value="idea" /><span><i class="emoji" aria-hidden="true">💡</i> Ідея</span></label>
+                <label><input type="radio" name="kind" value="game" /><span><i class="emoji" aria-hidden="true">🎮</i> Нова гра</span></label>
+                <label><input type="radio" name="kind" value="other" /><span><i class="emoji" aria-hidden="true">✉️</i> Інше</span></label>
+              </div>
+            </fieldset>
+            <label class="field">
+              <span>Ваш лист</span>
+              <textarea
+                name="message"
+                rows="6"
+                maxlength="4000"
+                required
+                placeholder="Наприклад: у грі «Магазин» на 12-й сходинці не видно решти…"
+              ></textarea>
+            </label>
+            <label class="field">
+              <span>Електронна пошта <small>— якщо хочете отримати відповідь</small></span>
+              <input type="email" name="email" maxlength="200" autocomplete="email" placeholder="name@example.com" />
+            </label>
+            <input class="trap" type="text" name="topic" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <div class="attach">
+              <label class="btn btn-parent btn-small">
+                <input type="file" id="letter-pick" accept="image/*,video/*" multiple />
+                <span class="emoji" aria-hidden="true">📎</span> Додати фото чи відео
+              </label>
+              <small>До 5 файлів, разом до 18 МБ. Відео — до 15 МБ.</small>
+            </div>
+            <ul class="files" id="letter-files"></ul>
+            <p class="letter-note" id="letter-note" role="alert"></p>
+            <button class="btn btn-play" type="submit">Надіслати</button>
+          </form>
+          <div class="letter-done" id="letter-done" role="status" hidden>
+            <h3>Дякуємо, лист у нас!</h3>
+            <p id="letter-done-text"></p>
+            <button class="btn btn-parent btn-small" type="button">Написати ще</button>
+          </div>
+        </div>
+      </section>
+
       <section class="final">
         <div class="wrap band">
           <h2>Готові до пригоди?</h2>
@@ -1042,7 +1271,7 @@
       <div class="wrap">
         <p>© <span id="year">2026</span> Pulsar Kids. Навчання, схоже на пригоду.</p>
         <p>
-          <a data-portal="play" href="__PLAY_URL__/">Гра</a>·<a data-portal="parents" href="__PARENTS_URL__/">Кабінет батьків</a>
+          <a data-portal="play" href="__PLAY_URL__/">Гра</a>·<a data-portal="parents" href="__PARENTS_URL__/">Кабінет батьків</a>·<a href="#feedback">Написати нам</a>
         </p>
       </div>
     </footer>
@@ -1127,6 +1356,236 @@
           b.setAttribute('aria-label', to);
           b.textContent = '0';
           counted.observe(b);
+        });
+      })();
+    </script>
+    <script>
+      // «Написати нам»: the text goes to /api/feedback; photos and videos follow in pieces
+      // (a request may carry 4.5 MB at most) and reach us attached to an email.
+      // The limits repeat those of api/_lib/feedback.js.
+      (function () {
+        var form = document.getElementById('letter');
+        if (!form || !window.fetch || !window.FileReader) return;
+
+        var MAX_FILES = 5;
+        var MAX_FILE = 15 * 1024 * 1024;
+        var MAX_TOTAL = 18 * 1024 * 1024;
+        var PART = 3 * 524288;
+        var PHOTO_SIDE = 1920;
+        var ALLOWED = /^(image\/(jpeg|png|webp|gif|heic|heif)|video\/(mp4|quicktime|webm))$/;
+        var ERRORS = {
+          message_too_short: 'Напишіть, будь ласка, хоча б кілька слів.',
+          message_too_long: 'Лист задовгий — скоротіть його до 4000 знаків.',
+          invalid_email: 'Перевірте адресу пошти: схоже, у ній помилка.',
+          too_many: 'Ви вже надіслали кілька листів поспіль. Спробуйте, будь ласка, за годину.',
+        };
+
+        var list = document.getElementById('letter-files');
+        var note = document.getElementById('letter-note');
+        var pick = document.getElementById('letter-pick');
+        var button = form.querySelector('button[type="submit"]');
+        var done = document.getElementById('letter-done');
+        var doneText = document.getElementById('letter-done-text');
+        var files = [];
+        var sending = false;
+
+        function megabytes(size) {
+          return (size / 1024 / 1024).toFixed(1).replace('.', ',') + ' МБ';
+        }
+        function total() {
+          return files.reduce(function (sum, f) {
+            return sum + f.blob.size;
+          }, 0);
+        }
+
+        function render() {
+          list.textContent = '';
+          files.forEach(function (file, i) {
+            var li = document.createElement('li');
+            var name = document.createElement('span');
+            name.textContent = file.name;
+            var size = document.createElement('small');
+            size.textContent = megabytes(file.blob.size);
+            var remove = document.createElement('button');
+            remove.type = 'button';
+            remove.textContent = '✕';
+            remove.setAttribute('aria-label', 'Прибрати ' + file.name);
+            remove.onclick = function () {
+              if (sending) return;
+              files.splice(i, 1);
+              note.textContent = '';
+              render();
+            };
+            li.append(name, size, remove);
+            list.appendChild(li);
+          });
+        }
+
+        // A phone photo is 3–8 MB; 1920 px on the long side shows a bug just as well.
+        function shrink(file) {
+          if (!/^image\/(jpeg|png|webp)$/.test(file.type) || !window.createImageBitmap) return Promise.resolve(file);
+          return createImageBitmap(file)
+            .then(function (picture) {
+              var k = Math.min(1, PHOTO_SIDE / Math.max(picture.width, picture.height));
+              if (k === 1 && file.size < 1024 * 1024) return file;
+              var canvas = document.createElement('canvas');
+              canvas.width = Math.round(picture.width * k);
+              canvas.height = Math.round(picture.height * k);
+              var ctx = canvas.getContext('2d');
+              ctx.fillStyle = '#fff';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(picture, 0, 0, canvas.width, canvas.height);
+              return new Promise(function (resolve) {
+                canvas.toBlob(
+                  function (blob) {
+                    resolve(blob && blob.size < file.size ? blob : file);
+                  },
+                  'image/jpeg',
+                  0.82,
+                );
+              });
+            })
+            .catch(function () {
+              return file;
+            });
+        }
+
+        async function add(file) {
+          var type = (file.type || '').toLowerCase();
+          if (!ALLOWED.test(type)) return '«' + file.name + '» не схоже на фото чи відео.';
+          if (files.length >= MAX_FILES) return 'Можна додати не більше ' + MAX_FILES + ' файлів.';
+          var blob = await shrink(file);
+          var name = blob === file ? file.name : file.name.replace(/\.[^.]*$/, '') + '.jpg';
+          if (blob.size > MAX_FILE) {
+            return '«' + file.name + '» важить ' + megabytes(blob.size) + ', а можна до 15 МБ. Спробуйте коротше відео.';
+          }
+          if (total() + blob.size > MAX_TOTAL) return '«' + file.name + '» уже не вміщається: разом можна до 18 МБ.';
+          if (files.length >= MAX_FILES) return 'Можна додати не більше ' + MAX_FILES + ' файлів.';
+          files.push({ blob: blob, name: name, type: blob.type || type });
+          return '';
+        }
+
+        pick.addEventListener('change', async function () {
+          var chosen = Array.prototype.slice.call(pick.files);
+          pick.value = '';
+          var problems = [];
+          for (var i = 0; i < chosen.length; i += 1) {
+            var problem = await add(chosen[i]);
+            if (problem && problems.indexOf(problem) < 0) problems.push(problem);
+          }
+          note.textContent = problems.join(' ');
+          render();
+        });
+
+        async function call(method, body) {
+          var res = await fetch('/api/feedback', {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+          var data = await res.json().catch(function () {
+            return {};
+          });
+          if (!res.ok) throw new Error(data.error || 'http_' + res.status);
+          return data;
+        }
+
+        function base64(blob) {
+          return new Promise(function (resolve, reject) {
+            var reader = new FileReader();
+            reader.onload = function () {
+              resolve(String(reader.result).split(',')[1] || '');
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+        }
+
+        // One piece of a file; a shaky connection gets two more tries.
+        async function sendPart(body) {
+          for (var attempt = 0; ; attempt += 1) {
+            try {
+              return await call('PUT', body);
+            } catch (err) {
+              if (attempt === 2 || err.message === 'invalid_part' || err.message === 'invalid_token') throw err;
+              await new Promise(function (resolve) {
+                setTimeout(resolve, 1500 * (attempt + 1));
+              });
+            }
+          }
+        }
+
+        async function upload(letter) {
+          var all = total();
+          var sent = 0;
+          for (var f = 0; f < files.length; f += 1) {
+            var blob = files[f].blob;
+            for (var p = 0; p * PART < blob.size; p += 1) {
+              var piece = blob.slice(p * PART, (p + 1) * PART);
+              await sendPart({ id: letter.id, token: letter.token, file: f, part: p, data: await base64(piece) });
+              sent += piece.size;
+              button.textContent = 'Надсилаю файли… ' + Math.round((sent / all) * 100) + ' %';
+            }
+          }
+        }
+
+        form.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          if (sending) return;
+          var message = form.message.value.trim();
+          if (message.length < 5) {
+            note.textContent = ERRORS.message_too_short;
+            form.message.focus();
+            return;
+          }
+          sending = true;
+          button.disabled = true;
+          button.textContent = 'Надсилаю…';
+          note.textContent = '';
+          try {
+            var letter = await call('POST', {
+              kind: form.kind.value,
+              message: message,
+              email: form.email.value.trim(),
+              trap: form.topic.value,
+              files: files.map(function (f) {
+                return { name: f.name, type: f.type, size: f.blob.size };
+              }),
+            });
+            var filesLost = false;
+            if (letter.id) {
+              // The text is saved already; whatever happens to the files, the letter must still go.
+              try {
+                await upload(letter);
+              } catch (err) {
+                filesLost = true;
+              }
+              await call('POST', { id: letter.id, token: letter.token, finish: true }).catch(function () {});
+            }
+            doneText.textContent = filesLost
+              ? 'Текст ми отримали, а от не всі файли дійшли — схоже, підвів зв’язок. Якщо вони важливі, надішліть їх, будь ласка, ще раз.'
+              : form.email.value.trim()
+                ? 'Прочитаємо й відповімо на вказану пошту.'
+                : 'Ми читаємо кожен лист. Дякуємо, що допомагаєте робити гру кращою.';
+            form.reset();
+            files = [];
+            render();
+            form.hidden = true;
+            done.hidden = false;
+            done.scrollIntoView({ block: 'center' });
+          } catch (err) {
+            note.textContent = ERRORS[err.message] || 'Не вдалося надіслати. Перевірте інтернет і спробуйте ще раз.';
+          } finally {
+            sending = false;
+            button.disabled = false;
+            button.textContent = 'Надіслати';
+          }
+        });
+
+        done.querySelector('button').addEventListener('click', function () {
+          done.hidden = true;
+          form.hidden = false;
+          form.message.focus();
         });
       })();
     </script>

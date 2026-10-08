@@ -12,6 +12,10 @@ const ERRORS: Record<string, string> = {
   tts_key_rejected: 'Google відхилив ключ.',
   tts_unreachable: 'Не вдалося з’єднатися з Google.',
   no_key: 'Ключ не збережено.',
+  mail_failed: 'Лист не надіслано.',
+  no_reply_address: 'Автор не залишив пошти.',
+  invalid_reply: 'Напиши відповідь (до 4000 знаків).',
+  not_found: 'Цього звернення вже немає.',
 };
 
 export function errorText(err: unknown): string {

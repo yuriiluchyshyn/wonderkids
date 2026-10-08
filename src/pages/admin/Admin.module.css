@@ -643,3 +643,41 @@ a.btnPrimary {
 .gamesStars {
   color: #f59e0b;
 }
+
+/* ---- /admin/feedback ---- */
+.filters {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+.letterText {
+  margin: 0 0 10px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.account > .meta,
+.account > .warn {
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+
+.reply {
+  margin: 0 0 10px;
+  padding: 10px 12px 1px;
+  border-left: 3px solid var(--brand);
+  border-radius: 0 8px 8px 0;
+  background: #f5f3ff;
+}
+
+.replyBox {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 400;
+  resize: vertical;
+}

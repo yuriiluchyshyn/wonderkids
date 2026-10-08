@@ -5,6 +5,7 @@ import { adminApi } from '@/core/account/api/client';
 import { AccountsPage } from './AccountsPage';
 import { SpeechPage } from './SpeechPage';
 import { GamesPage } from './GamesPage';
+import { FeedbackPage } from './FeedbackPage';
 import { ADMIN_KEY_STORAGE, errorText } from './shared';
 import styles from './Admin.module.css';
 
@@ -12,9 +13,10 @@ import styles from './Admin.module.css';
  * Admin area (`/admin/*`), guarded by the server-side ADMIN_KEY and never
  * mounted on the kids' portal:
  *
- *   /admin         accounts, children and their progress
- *   /admin/speech  Google Speech keys and who each one serves
- *   /admin/games   live summary of every game, read from the module registry
+ *   /admin           accounts, children and their progress
+ *   /admin/speech    Google Speech keys and who each one serves
+ *   /admin/games     live summary of every game, read from the module registry
+ *   /admin/feedback  letters from the public site, and the answers to them
  */
 export function AdminPage() {
   usePageMeta({ title: 'Адмінпанель' });
@@ -75,6 +77,7 @@ export function AdminPage() {
       <Route index element={<AccountsPage adminKey={adminKey} onLogout={logout} />} />
       <Route path="speech" element={<SpeechPage adminKey={adminKey} />} />
       <Route path="games" element={<GamesPage />} />
+      <Route path="feedback" element={<FeedbackPage adminKey={adminKey} />} />
     </Routes>
   );
 }

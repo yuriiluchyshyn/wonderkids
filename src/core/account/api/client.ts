@@ -265,6 +265,35 @@ export interface SpeechKeyDraft {
   accountIds: number[];
 }
 
+export type FeedbackKind = 'bug' | 'idea' | 'game' | 'other';
+export type FeedbackStatus = 'new' | 'answered' | 'done';
+
+/** A letter from the «Написати нам» form of the public site. */
+export interface FeedbackLetter {
+  id: number;
+  kind: FeedbackKind;
+  message: string;
+  /** Empty when the sender left no address — then there is nowhere to answer. */
+  email: string;
+  /** What was attached. The files themselves exist only in the forwarded email. */
+  files: { name: string; type: string; size: number }[];
+  status: FeedbackStatus;
+  /** When the letter reached the owner's mailbox (null = it has not). */
+  mailedAt: string | null;
+  mailError: string | null;
+  /** The attached files are still on the server, waiting to be mailed. */
+  filesWaiting: boolean;
+  userAgent: string;
+  createdAt: string;
+  replies: { id: number; body: string; mailed: boolean; createdAt: string }[];
+}
+
+/** `mailReady` is false while the server has no mail key or owner address. */
+interface FeedbackList {
+  letters: FeedbackLetter[];
+  mailReady: boolean;
+}
+
 export const adminApi = {
   listAccounts(adminKey: string) {
     return request<{ accounts: AdminAccount[] }>('/api/admin/users', { adminKey });
@@ -302,10 +331,23 @@ export const adminApi = {
   },
 
   testSpeechKey(adminKey: string, keyId: number) {
-    return request<{ ok: boolean; audio?: string; error?: string; detail?: string }>('/api/admin/tts-test', {
+    return request<{ ok: boolean; audio?: string; error?: string; detail?: string }>('/api/admin/speech?test=1', {
       method: 'POST',
       adminKey,
       body: { keyId },
     });
+  },
+
+  listFeedback(adminKey: string) {
+    return request<FeedbackList>('/api/feedback', { adminKey });
+  },
+
+  /** Answer a letter by email, file it (`status`) or forward it to the mailbox again (`resend`). */
+  updateFeedback(adminKey: string, id: number, change: { reply: string } | { status: FeedbackStatus } | { resend: true }) {
+    return request<FeedbackList>('/api/feedback', { method: 'PUT', adminKey, body: { id, ...change } });
+  },
+
+  deleteFeedback(adminKey: string, id: number) {
+    return request<FeedbackList>(`/api/feedback?id=${id}`, { method: 'DELETE', adminKey });
   },
 };

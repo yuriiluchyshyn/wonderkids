@@ -13,6 +13,9 @@ const API_ENV = [
   'ADMIN_KEY',
   'SECRETS_KEY',
   'GOOGLE_TTS_ENDPOINT',
+  'RESEND_API_KEY',
+  'FEEDBACK_TO',
+  'FEEDBACK_FROM',
   // Public values shared with the frontend; the API verifies Auth0 tokens with them.
   'VITE_AUTH0_DOMAIN',
   'VITE_AUTH0_CLIENT_ID',
@@ -21,7 +24,8 @@ const API_ENV = [
 /** The Docker database from the workspace-root docker-compose.yml. */
 const LOCAL_DATABASE_URL = 'postgres://wonderkids:wonderkids@localhost:54329/wonderkids';
 
-const MAX_BODY_BYTES = 256 * 1024;
+/** Vercel's own limit for a request body — the feedback form sends files in pieces below it. */
+const MAX_BODY_BYTES = 4.5 * 1024 * 1024;
 
 /**
  * The API variables as the shell provided them, captured once per process (on

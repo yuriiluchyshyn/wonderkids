@@ -45,6 +45,8 @@ let schemaReady;
  *   wk_child_treasures  collected treasure keys
  *   wk_milestones       family goals
  *   wk_screen_time      play-time bookkeeping — server-owned, see screenTime.js
+ *   wk_feedback         letters from the public site (+ _replies, and _parts —
+ *                       attached files on their way to the mailbox)
  */
 export function ensureSchema() {
   if (!schemaReady) {
@@ -182,6 +184,38 @@ export function ensureSchema() {
       -- The short fact told after a right answer, and the money the shop game counts in.
       ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS fun_facts BOOLEAN NOT NULL DEFAULT true;
       ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS currency TEXT NOT NULL DEFAULT 'UAH';
+      -- Letters from the public site («Написати нам»). The text stays here;
+      -- photos and videos are only forwarded by email: they wait in
+      -- wk_feedback_parts (base64 pieces) until the letter has left.
+      CREATE TABLE IF NOT EXISTS wk_feedback (
+        id         SERIAL PRIMARY KEY,
+        kind       TEXT NOT NULL,
+        message    TEXT NOT NULL,
+        email      TEXT NOT NULL DEFAULT '',
+        files      JSONB NOT NULL DEFAULT '[]',
+        status     TEXT NOT NULL DEFAULT 'new',
+        closed     BOOLEAN NOT NULL DEFAULT false,
+        mailed_at  TIMESTAMPTZ,
+        mail_error TEXT,
+        ip_hash    TEXT NOT NULL DEFAULT '',
+        user_agent TEXT NOT NULL DEFAULT '',
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      );
+      CREATE TABLE IF NOT EXISTS wk_feedback_parts (
+        feedback_id INTEGER NOT NULL REFERENCES wk_feedback(id) ON DELETE CASCADE,
+        file_no     INTEGER NOT NULL,
+        part_no     INTEGER NOT NULL,
+        data        TEXT NOT NULL,
+        created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+        PRIMARY KEY (feedback_id, file_no, part_no)
+      );
+      CREATE TABLE IF NOT EXISTS wk_feedback_replies (
+        id          SERIAL PRIMARY KEY,
+        feedback_id INTEGER NOT NULL REFERENCES wk_feedback(id) ON DELETE CASCADE,
+        body        TEXT NOT NULL,
+        mailed      BOOLEAN NOT NULL DEFAULT false,
+        created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+      );
     `).catch((err) => {
       // Don't cache a failure: let the next request retry (DB may be back).
       schemaReady = undefined;
@@ -750,5 +784,120 @@ export async function saveTtsKey({ id, label, encryptedKey, voice, isGlobal, acc
 /** Remove a key; accounts that used it fall back to the global one. */
 export async function deleteTtsKey(keyId) {
   const { rowCount } = await getPool().query(`DELETE FROM wk_tts_keys WHERE id = $1`, [keyId]);
+  return rowCount > 0;
+}
+
+// ---------------------------------------------------------------------------
+// Letters from the public site
+// ---------------------------------------------------------------------------
+
+const feedbackRow = (row) => ({
+  id: row.id,
+  kind: row.kind,
+  message: row.message,
+  email: row.email,
+  files: row.files,
+  status: row.status,
+  closed: row.closed,
+  mailedAt: row.mailed_at,
+  mailError: row.mail_error,
+  userAgent: row.user_agent,
+  createdAt: row.created_at,
+});
+
+/** Letters this sender wrote within the last hour, and everybody within a day. */
+export async function countRecentFeedback(ipHash) {
+  const { rows } = await getPool().query(
+    `SELECT count(*) FILTER (WHERE ip_hash = $1 AND created_at > now() - interval '1 hour')::int AS mine,
+            count(*) FILTER (WHERE created_at > now() - interval '1 day')::int AS everyone
+       FROM wk_feedback`,
+    [ipHash],
+  );
+  return rows[0];
+}
+
+/** Store a letter. `closed: false` leaves it open for its files to arrive. */
+export async function createFeedback({ kind, message, email, files, closed, ipHash, userAgent }) {
+  const db = getPool();
+  // Files nobody came back for (a failed delivery, a closed tab).
+  await db.query(`DELETE FROM wk_feedback_parts WHERE created_at < now() - interval '1 day'`);
+  const { rows } = await db.query(
+    `INSERT INTO wk_feedback (kind, message, email, files, closed, ip_hash, user_agent)
+     VALUES ($1,$2,$3,$4::jsonb,$5,$6,$7) RETURNING *`,
+    [kind, message, email, JSON.stringify(files), closed, ipHash, userAgent],
+  );
+  return feedbackRow(rows[0]);
+}
+
+export async function getFeedback(id) {
+  const { rows } = await getPool().query(`SELECT * FROM wk_feedback WHERE id = $1`, [id]);
+  return rows[0] ? feedbackRow(rows[0]) : null;
+}
+
+/** One base64 piece of an attached file; sending a piece again replaces it. */
+export async function saveFeedbackPart(id, fileNo, partNo, data) {
+  await getPool().query(
+    `INSERT INTO wk_feedback_parts (feedback_id, file_no, part_no, data) VALUES ($1,$2,$3,$4)
+     ON CONFLICT (feedback_id, file_no, part_no) DO UPDATE SET data = EXCLUDED.data`,
+    [id, fileNo, partNo, data],
+  );
+}
+
+/** No more files will come. False when the letter was closed already. */
+export async function closeFeedback(id) {
+  const { rowCount } = await getPool().query(`UPDATE wk_feedback SET closed = true WHERE id = $1 AND NOT closed`, [id]);
+  return rowCount > 0;
+}
+
+/** The pieces of one attached file, in order (base64). */
+export async function feedbackFileParts(id, fileNo) {
+  const { rows } = await getPool().query(
+    `SELECT data FROM wk_feedback_parts WHERE feedback_id = $1 AND file_no = $2 ORDER BY part_no`,
+    [id, fileNo],
+  );
+  return rows.map((r) => r.data);
+}
+
+/** The letter reached the mailbox (its files are dropped) or did not (`error`). */
+export async function markFeedbackMailed(id, error = null) {
+  const db = getPool();
+  if (error) {
+    await db.query(`UPDATE wk_feedback SET mail_error = $2 WHERE id = $1`, [id, String(error).slice(0, 300)]);
+    return;
+  }
+  await db.query(`UPDATE wk_feedback SET mailed_at = now(), mail_error = NULL WHERE id = $1`, [id]);
+  await db.query(`DELETE FROM wk_feedback_parts WHERE feedback_id = $1`, [id]);
+}
+
+/** Every letter with its replies, newest first. */
+export async function listFeedback() {
+  const db = getPool();
+  const letters = await db.query(`SELECT * FROM wk_feedback ORDER BY id DESC LIMIT 500`);
+  const replies = await db.query(`SELECT id, feedback_id, body, mailed, created_at FROM wk_feedback_replies ORDER BY id`);
+  const waiting = await db.query(`SELECT DISTINCT feedback_id FROM wk_feedback_parts`);
+  const withFiles = new Set(waiting.rows.map((r) => r.feedback_id));
+  return letters.rows.map((row) => ({
+    ...feedbackRow(row),
+    // The attached files are still here, so the letter can be sent once more.
+    filesWaiting: withFiles.has(row.id),
+    replies: replies.rows
+      .filter((r) => r.feedback_id === row.id)
+      .map((r) => ({ id: r.id, body: r.body, mailed: r.mailed, createdAt: r.created_at })),
+  }));
+}
+
+export async function addFeedbackReply(id, body, mailed) {
+  const db = getPool();
+  await db.query(`INSERT INTO wk_feedback_replies (feedback_id, body, mailed) VALUES ($1,$2,$3)`, [id, body, mailed]);
+  await db.query(`UPDATE wk_feedback SET status = 'answered' WHERE id = $1 AND status = 'new'`, [id]);
+}
+
+export async function setFeedbackStatus(id, status) {
+  const { rowCount } = await getPool().query(`UPDATE wk_feedback SET status = $2 WHERE id = $1`, [id, status]);
+  return rowCount > 0;
+}
+
+export async function deleteFeedback(id) {
+  const { rowCount } = await getPool().query(`DELETE FROM wk_feedback WHERE id = $1`, [id]);
   return rowCount > 0;
 }
