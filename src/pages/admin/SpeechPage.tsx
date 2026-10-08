@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
 import { adminApi, type AdminAccount, type SpeechKey, type SpeechKeyDraft } from '@/core/account/api/client';
 import { SpeechSwitch } from './SpeechSwitch';
 import { errorFor, errorText, speechStatus } from './shared';
@@ -292,9 +291,6 @@ export function SpeechPage({ adminKey }: { adminKey: string }) {
       </datalist>
 
       <header className={styles.header}>
-        <Link to="/admin" className={styles.btn}>
-          ← Акаунти
-        </Link>
         <h1>🗣️ Google Speech</h1>
         <span className={styles.totals} />
         {mode === null && (

@@ -216,6 +216,11 @@ export function ensureSchema() {
         mailed      BOOLEAN NOT NULL DEFAULT false,
         created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
       );
+      -- Where a new account came from: the utm_* labels of the link that
+      -- brought the parent (see source.js). NULL = registered without one.
+      ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS signup_source TEXT;
+      ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS signup_medium TEXT;
+      ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS signup_campaign TEXT;
     `).catch((err) => {
       // Don't cache a failure: let the next request retry (DB may be back).
       schemaReady = undefined;
@@ -240,13 +245,15 @@ export async function findParentByEmail(email) {
 /**
  * Create the account for a mailbox. Safe against a double submit: if another
  * request created it a moment ago, that account is returned instead.
+ * `source` (see source.js) is where the parent came from, when the browser knew.
  */
-export async function createParent(email) {
+export async function createParent(email, source = null) {
   const { rows } = await getPool().query(
-    `INSERT INTO wk_parents (email, email_key) VALUES ($1, $2)
+    `INSERT INTO wk_parents (email, email_key, signup_source, signup_medium, signup_campaign)
+     VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT DO NOTHING
      RETURNING id, email, created_at`,
-    [normaliseEmail(email), emailKey(email)],
+    [normaliseEmail(email), emailKey(email), source?.source ?? null, source?.medium ?? null, source?.campaign ?? null],
   );
   return rows[0] ?? findParentByEmail(email);
 }
@@ -658,7 +665,8 @@ export async function cacheSpeech(hash, voice, audio) {
 export async function listAccounts() {
   const db = getPool();
   const parents = await db.query(
-    `SELECT id, email, email_key, created_at, tts_key_id, tts_off FROM wk_parents ORDER BY created_at DESC`,
+    `SELECT id, email, email_key, created_at, tts_key_id, tts_off, signup_source, signup_medium, signup_campaign
+       FROM wk_parents ORDER BY created_at DESC`,
   );
   const children = await db.query(
     `SELECT c.id, c.parent_id, c.name, c.nickname, c.gender, c.birth_year, c.birth_month, c.theme_id,
@@ -706,6 +714,8 @@ export async function listAccounts() {
     duplicateMailbox: p.email_key === null,
     speechOff: p.tts_off,
     speechKeyId: p.tts_key_id ?? null,
+    // The channel that brought the account; null for one registered without a label.
+    signup: p.signup_source ? { source: p.signup_source, medium: p.signup_medium, campaign: p.signup_campaign } : null,
     children: childrenByParent.get(p.id) ?? [],
   }));
 }

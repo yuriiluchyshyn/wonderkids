@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { inject } from '@vercel/analytics';
 import { adoptChildHandoff } from '@/core/account/auth/useAuthStore';
+import { rememberSource } from '@/core/app/attribution';
 import './styles/global.css';
 
 // Register all learning modules with the micro-kernel before the UI mounts.
@@ -11,6 +12,10 @@ import './games';
 // Opened from the parent cabinet as one of the children: sign in before the
 // first render, so the login page never flashes.
 adoptChildHandoff();
+
+// The channel that brought the visitor (utm_* in the address), kept for the
+// moment a parent account is created.
+rememberSource();
 
 // Vercel Web Analytics: anonymous page views, no cookies (a no-op outside a
 // Vercel deployment). Only the path is reported — a query string can carry a

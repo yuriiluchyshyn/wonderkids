@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
   ApiError,
   adminApi,
@@ -209,9 +208,6 @@ export function FeedbackPage({ adminKey }: { adminKey: string }) {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <Link to="/admin" className={styles.btn}>
-          ← Акаунти
-        </Link>
         <h1>✉️ Звернення</h1>
         <div className={styles.totals}>
           <span>Нових: {count('new')}</span>

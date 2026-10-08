@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { adminApi, type AdminAccount, type AdminChild, type SpeechKey } from '@/core/account/api/client';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
@@ -10,6 +9,7 @@ import type { ThemeId } from '@/core/theme/theme.types';
 import { computeAge } from '@/core/utils/age';
 import { SpeechSwitch } from './SpeechSwitch';
 import { errorText, formatDate, lookalikes, speechStatus } from './shared';
+import { channelName, channelOf } from './SourcesPage';
 import styles from './Admin.module.css';
 
 /** A child's progress grouped by subject, with every game listed. */
@@ -100,7 +100,7 @@ function ChildRow({ child }: { child: AdminChild }) {
  * child's progress in every game. Google Speech is only summarised and
  * switched on/off here — keys live on their own page (`/admin/speech`).
  */
-export function AccountsPage({ adminKey, onLogout }: { adminKey: string; onLogout: () => void }) {
+export function AccountsPage({ adminKey }: { adminKey: string }) {
   const [accounts, setAccounts] = useState<AdminAccount[]>([]);
   const [keys, setKeys] = useState<SpeechKey[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -155,26 +155,14 @@ export function AccountsPage({ adminKey, onLogout }: { adminKey: string; onLogou
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1>🛠️ Адмінпанель</h1>
+        <h1>👨‍👩‍👧 Акаунти</h1>
         <div className={styles.totals}>
           <span>👨‍👩‍👧 Батьків: {accounts.length}</span>
           <span>🧒 Дітей: {childCount}</span>
           <span>🗣️ Google Speech: {voiceOn}</span>
         </div>
-        <Link to="/admin/feedback" className={styles.btn}>
-          ✉️ Звернення
-        </Link>
-        <Link to="/admin/games" className={styles.btn}>
-          🎮 Ігри
-        </Link>
-        <Link to="/admin/speech" className={styles.btnPrimary}>
-          🗣️ Налаштувати Google Speech
-        </Link>
         <button type="button" className={styles.btn} onClick={() => void load()} disabled={loading}>
           ↻ Оновити
-        </button>
-        <button type="button" className={styles.btn} onClick={onLogout}>
-          Вийти
         </button>
       </header>
 
@@ -198,6 +186,7 @@ export function AccountsPage({ adminKey, onLogout }: { adminKey: string; onLogou
               <h2>{account.email}</h2>
               <span className={styles.meta}>
                 #{account.id} · з {formatDate(account.createdAt)} · дітей: {account.children.length}
+                {account.signup && ` · прийшов із: ${channelName(channelOf(account))}`}
               </span>
               <button type="button" className={styles.btnDanger} onClick={() => void remove(account)}>
                 Видалити акаунт

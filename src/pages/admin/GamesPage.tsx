@@ -1,6 +1,5 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { GALAXIES } from '@/core/game/galaxies';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { difficultyRange, gameStatus, isFreePlay, tasksPerLevel, toGameConfig } from '@/core/game/kernel/gameConfig';
@@ -115,9 +114,6 @@ export function GamesPage() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <Link to="/admin" className={styles.btn}>
-          ← Акаунти
-        </Link>
         <h1>🎮 Ігри</h1>
         <div className={styles.totals}>
           <span>🌌 Галактик: {galaxies.filter((g) => g.rows.length > 0).length}</span>

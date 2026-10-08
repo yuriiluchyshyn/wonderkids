@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { api, ApiError, type AuthUser } from '@/core/account/api/client';
 import { useGameStore } from '@/core/child/store/useGameStore';
+import { signupSource } from '@/core/app/attribution';
 import { auth0Enabled, auth0Logout } from './auth0';
 
 /** Human-friendly messages for the error codes the API can return on login. */
@@ -75,7 +76,7 @@ export const useAuthStore = create<AuthState>()(
       login: async (email, create = false) => {
         set({ pending: true, error: null });
         try {
-          const { token, user } = await api.login(email, create);
+          const { token, user } = await api.login(email, create, signupSource());
           // Parent session → no child auto-selected.
           set({ token, user, childId: null, pending: false, error: null });
           return { status: 'ok' };
@@ -102,7 +103,7 @@ export const useAuthStore = create<AuthState>()(
       loginWithAuth0: async (idToken) => {
         set({ pending: true, error: null });
         try {
-          const { token, user } = await api.auth0Login(idToken);
+          const { token, user } = await api.auth0Login(idToken, signupSource());
           set({ token, user: { ...user, provider: auth0Provider(idToken) }, childId: null, pending: false, error: null });
           return null;
         } catch (err) {

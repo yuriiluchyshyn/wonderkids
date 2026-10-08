@@ -2,6 +2,7 @@ import { createParent, ensureSchema, findParentByEmail } from '../_lib/db.js';
 import { isValidEmail, signToken } from '../_lib/auth.js';
 import { auth0Enabled, verifyIdToken } from '../_lib/auth0.js';
 import { normaliseEmail, suggestEmail } from '../_lib/email.js';
+import { cleanSource } from '../_lib/source.js';
 
 /**
  * Parent login → POST /api/auth/login
@@ -28,6 +29,10 @@ import { normaliseEmail, suggestEmail } from '../_lib/email.js';
  *
  * One mailbox = one account: `Name.Surname+x@googlemail.com` signs in to the
  * same account as `namesurname@gmail.com`.
+ *
+ * Both bodies may carry `source` — `{ source, medium?, campaign? }`, the utm_*
+ * labels of the link that brought the parent. It is saved only when this call
+ * creates the account, and shown in the admin's «Джерела» page.
  */
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -37,7 +42,7 @@ export default async function handler(req, res) {
 
   if (auth0Enabled()) return auth0Login(req, res);
 
-  const { email, create } = req.body ?? {};
+  const { email, create, source } = req.body ?? {};
   if (!isValidEmail(email)) {
     return res.status(400).json({ error: 'invalid_email' });
   }
@@ -58,7 +63,7 @@ export default async function handler(req, res) {
           suggestionExists: suggestion ? Boolean(await findParentByEmail(suggestion)) : false,
         });
       }
-      user = await createParent(email);
+      user = await createParent(email, cleanSource(source));
       created = true;
     }
 
@@ -71,7 +76,7 @@ export default async function handler(req, res) {
 }
 
 async function auth0Login(req, res) {
-  const { idToken } = req.body ?? {};
+  const { idToken, source } = req.body ?? {};
   // An address alone proves nothing once Auth0 is on.
   if (idToken === undefined) {
     return res.status(403).json({ error: 'auth0_required' });
@@ -99,7 +104,7 @@ async function auth0Login(req, res) {
     await ensureSchema();
     let user = await findParentByEmail(claims.email);
     const created = !user;
-    if (!user) user = await createParent(claims.email);
+    if (!user) user = await createParent(claims.email, cleanSource(source));
 
     const token = signToken(user);
     return res.status(200).json({ token, user: { id: user.id, email: user.email }, created });

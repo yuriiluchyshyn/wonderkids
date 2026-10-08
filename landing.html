@@ -1351,8 +1351,30 @@
           play: sameOrigin ? '/login' : location.protocol + '//play.' + host + '/',
           parents: sameOrigin ? '/parent-login' : location.protocol + '//parents.' + host + '/',
         };
+        // Where the visitor came from — the utm_* labels of the link, or else
+        // the site that sent them — travels on to the portals, so a new account
+        // can say which channel brought it (src/core/app/attribution.ts).
+        var from = '';
+        try {
+          var query = new URLSearchParams(location.search);
+          var source = JSON.parse(localStorage.getItem('pulsar-source-v1') || 'null');
+          if (query.get('utm_source')) {
+            source = { source: query.get('utm_source'), medium: query.get('utm_medium') || '', campaign: query.get('utm_campaign') || '' };
+          } else if (!source && document.referrer) {
+            var sender = new URL(document.referrer).hostname.toLowerCase().replace(/^www\./, '');
+            if (sender && sender.slice(-host.length) !== host) source = { source: sender, medium: 'referral', campaign: '' };
+          }
+          if (source && source.source) {
+            localStorage.setItem('pulsar-source-v1', JSON.stringify(source));
+            from = '?utm_source=' + encodeURIComponent(source.source);
+            if (source.medium) from += '&utm_medium=' + encodeURIComponent(source.medium);
+            if (source.campaign) from += '&utm_campaign=' + encodeURIComponent(source.campaign);
+          }
+        } catch (e) {
+          /* storage blocked — the links simply go without a source */
+        }
         document.querySelectorAll('[data-portal]').forEach(function (a) {
-          a.href = target[a.getAttribute('data-portal')];
+          a.href = target[a.getAttribute('data-portal')] + from;
         });
         document.getElementById('year').textContent = new Date().getFullYear();
       })();

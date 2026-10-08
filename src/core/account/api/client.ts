@@ -6,6 +6,8 @@
  * `VITE_API_URL` to call a deployed API directly instead.
  */
 
+import type { SignupSource } from '@/core/app/attribution';
+
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
 
 export interface AuthUser {
@@ -109,18 +111,21 @@ export const api = {
    * Email-only PARENT login. An unknown address fails with `account_not_found`
    * (see `ApiError.data` for a typo suggestion); pass `create` to register it.
    */
-  login(email: string, create = false) {
+  login(email: string, create = false, source?: SignupSource) {
     return request<{ token: string; user: AuthUser; created: boolean }>('/api/auth/login', {
       method: 'POST',
-      body: create ? { email, create: true } : { email },
+      body: create ? { email, create: true, source } : { email },
     });
   },
 
-  /** PARENT login with the ID token from Auth0 Universal Login. */
-  auth0Login(idToken: string) {
+  /**
+   * PARENT login with the ID token from Auth0 Universal Login. `source` — where
+   * the visitor came from — is saved only if this sign-in creates the account.
+   */
+  auth0Login(idToken: string, source?: SignupSource) {
     return request<{ token: string; user: AuthUser; created: boolean }>('/api/auth/login', {
       method: 'POST',
-      body: { idToken },
+      body: { idToken, source },
     });
   },
 
@@ -238,6 +243,8 @@ export interface AdminAccount {
   speechOff: boolean;
   /** The key assigned to this account, if any (otherwise the global key applies). */
   speechKeyId: number | null;
+  /** The channel that brought the account (utm_* labels); null when it had none. */
+  signup: { source: string; medium: string | null; campaign: string | null } | null;
   children: AdminChild[];
 }
 

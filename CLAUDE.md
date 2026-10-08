@@ -117,7 +117,7 @@ Keys live in `wk_tts_keys` (AES-GCM-encrypted, `api/_lib/secrets.js`), each with
 
 ### Admin area (`src/pages/admin/AdminPage.tsx`, `src/pages/admin/*`, `api/admin/*`)
 
-`/admin/*` is lazy-loaded and not mounted on the `play.*` portal. `/admin/games` is a live summary of every game (kind, mechanics, path length, stars, tasks per level, how many different tasks overall and per step), computed in the browser from `moduleRegistry` — exact where a module implements `tasksAt` (all template modules), sampled from `generateTask` otherwise; nothing there is hand-maintained. `/admin` lists every parent account, their children and each child's progress per game, with a one-line Google Speech status and on/off switch per account. `/admin/speech` manages the keys: add or edit, choose who each one serves (global or selected accounts), test, delete, plus the same per-account switches. `/admin/feedback` shows the letters from the site (below). It authenticates with a shared `ADMIN_KEY` env var sent as `x-admin-key` — deliberately not with parent tokens, because parent login is email-only.
+`/admin/*` is lazy-loaded and not mounted on the `play.*` portal. Every section is drawn inside `AdminShell.tsx`: a panel on the left lists the sections (`SECTIONS` — a new section is one line there plus its `<Route>` in `AdminPage.tsx`; a page brings no links to other sections and no logout of its own), the chosen one is on the right; on a phone the panel is a strip along the top. `/admin/games` is a live summary of every game (kind, mechanics, path length, stars, tasks per level, how many different tasks overall and per step), computed in the browser from `moduleRegistry` — exact where a module implements `tasksAt` (all template modules), sampled from `generateTask` otherwise; nothing there is hand-maintained. `/admin` lists every parent account, their children and each child's progress per game, with a one-line Google Speech status and on/off switch per account. `/admin/speech` manages the keys: add or edit, choose who each one serves (global or selected accounts), test, delete, plus the same per-account switches. `/admin/feedback` shows the letters from the site (below). It authenticates with a shared `ADMIN_KEY` env var sent as `x-admin-key` — deliberately not with parent tokens, because parent login is email-only.
 
 ### Letters from the site (`landing.html` `#feedback`, `api/feedback.js`, `/admin/feedback`)
 
@@ -146,6 +146,10 @@ The landing page is **static HTML** (`landing.html`, a second Vite entry — no 
 ### Analytics
 
 Vercel Web Analytics (anonymous page views, no cookies) is on for the whole site: the app calls `inject()` from `@vercel/analytics` in `main.tsx` (query strings are cut off first — they can carry an Auth0 sign-in code), and the static landing page loads `/_vercel/insights/script.js` itself. `vercel.json`'s catch-all rewrite leaves `/_vercel/` alone for that. Numbers are in the Vercel dashboard → project → Analytics.
+
+### Where accounts come from
+
+A link from an ad or a profile carries `utm_source` / `utm_medium` / `utm_campaign`. The landing page's script keeps them (or, without them, the site that sent the visitor) and adds them to its `[data-portal]` links; in the app `rememberSource()` (`core/app/attribution.ts`, called in `main.tsx` before analytics cuts the query off) stores them in `localStorage` (`pulsar-source-v1`), so they survive the trip to Auth0. `POST /api/auth/login` takes them as `source` and saves them **only when it creates the account** (`wk_parents.signup_*`, cleaned by `api/_lib/source.js`). `/admin/sources` counts accounts per channel and campaign in the browser from the accounts list — no endpoint of its own — and lists a ready link for each channel. Meta's ads use `utm_source={{site_source_name}}`, which arrives as `fb` / `ig`; `channelOf` folds those, and the hosts of link shims, into one channel.
 
 ### SEO
 
