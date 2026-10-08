@@ -568,15 +568,66 @@
       }
 
       /* ---- the letter form ---- */
-      .letter,
-      .letter-done {
-        max-width: 760px;
-        margin-top: 26px;
-        padding: 22px;
+      .letter-open {
+        margin-top: 22px;
+        border: 0;
+        cursor: pointer;
+      }
+      /* The form lives in a window of its own, opened by «Написати нам». */
+      .letter-modal {
+        width: min(100% - 24px, 720px);
+        max-height: calc(100dvh - 24px);
+        padding: 0;
         border: 1px solid var(--line);
         border-radius: var(--radius);
-        background: var(--surface);
-        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+        background: #18213f;
+        color: var(--ink);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        overscroll-behavior: contain;
+      }
+      .letter-modal::backdrop {
+        background: rgba(5, 8, 20, 0.72);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+      }
+      .letter-modal[open] {
+        animation: rise 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      html.letter-on {
+        overflow: hidden;
+      }
+      .letter-head {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 12px 14px 22px;
+        border-bottom: 1px solid var(--line);
+        background: #18213f;
+      }
+      .letter-head h2 {
+        margin-right: auto;
+        font-size: 1.5rem;
+      }
+      .letter-close {
+        flex: none;
+        width: 44px;
+        height: 44px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--ink);
+        font-size: 1.1rem;
+        cursor: pointer;
+      }
+      .letter-close:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+      .letter,
+      .letter-done {
+        padding: 22px;
       }
       .letter {
         display: grid;
@@ -885,6 +936,7 @@
           opacity: 1;
           animation: none;
         }
+        .letter-modal[open],
         .hero > div:first-child > *,
         .system,
         .sun,
@@ -916,7 +968,7 @@
           <a href="#games">Ігри</a>
           <a href="#world">Планета</a>
           <a href="#parents">Батькам</a>
-          <a href="#feedback">Написати нам</a>
+          <a href="#feedback" data-letter-open>Написати нам</a>
         </nav>
         <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">Батькам</a>
         <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/">Грати</a>
@@ -1211,47 +1263,9 @@
             Напишіть нам: що пішло не так, що зробити зручнішим або якої гри бракує. Можна додати фото чи коротке
             відео — так легше зрозуміти, про що мова.
           </p>
-          <form class="letter" id="letter" novalidate>
-            <fieldset>
-              <legend>Про що лист?</legend>
-              <div class="kinds">
-                <label><input type="radio" name="kind" value="bug" checked /><span><i class="emoji" aria-hidden="true">🐞</i> Помилка</span></label>
-                <label><input type="radio" name="kind" value="idea" /><span><i class="emoji" aria-hidden="true">💡</i> Ідея</span></label>
-                <label><input type="radio" name="kind" value="game" /><span><i class="emoji" aria-hidden="true">🎮</i> Нова гра</span></label>
-                <label><input type="radio" name="kind" value="other" /><span><i class="emoji" aria-hidden="true">✉️</i> Інше</span></label>
-              </div>
-            </fieldset>
-            <label class="field">
-              <span>Ваш лист</span>
-              <textarea
-                name="message"
-                rows="6"
-                maxlength="4000"
-                required
-                placeholder="Наприклад: у грі «Магазин» на 12-й сходинці не видно решти…"
-              ></textarea>
-            </label>
-            <label class="field">
-              <span>Електронна пошта <small>— якщо хочете отримати відповідь</small></span>
-              <input type="email" name="email" maxlength="200" autocomplete="email" placeholder="name@example.com" />
-            </label>
-            <input class="trap" type="text" name="topic" tabindex="-1" autocomplete="off" aria-hidden="true" />
-            <div class="attach">
-              <label class="btn btn-parent btn-small">
-                <input type="file" id="letter-pick" accept="image/*,video/*" multiple />
-                <span class="emoji" aria-hidden="true">📎</span> Додати фото чи відео
-              </label>
-              <small>До 5 файлів, разом до 18 МБ. Відео — до 15 МБ.</small>
-            </div>
-            <ul class="files" id="letter-files"></ul>
-            <p class="letter-note" id="letter-note" role="alert"></p>
-            <button class="btn btn-play" type="submit">Надіслати</button>
-          </form>
-          <div class="letter-done" id="letter-done" role="status" hidden>
-            <h3>Дякуємо, лист у нас!</h3>
-            <p id="letter-done-text"></p>
-            <button class="btn btn-parent btn-small" type="button">Написати ще</button>
-          </div>
+          <button class="btn btn-play letter-open" type="button" data-letter-open>
+            <span class="emoji" aria-hidden="true">✉️</span> Написати нам
+          </button>
         </div>
       </section>
 
@@ -1267,11 +1281,59 @@
       </section>
     </main>
 
+    <dialog class="letter-modal" id="letter-modal" aria-labelledby="letter-title">
+      <div class="letter-head">
+        <h2 id="letter-title">Написати нам</h2>
+        <button class="letter-close" type="button" aria-label="Закрити">✕</button>
+      </div>
+    <form class="letter" id="letter" novalidate>
+      <fieldset>
+        <legend>Про що лист?</legend>
+        <div class="kinds">
+          <label><input type="radio" name="kind" value="bug" checked /><span><i class="emoji" aria-hidden="true">🐞</i> Помилка</span></label>
+          <label><input type="radio" name="kind" value="idea" /><span><i class="emoji" aria-hidden="true">💡</i> Ідея</span></label>
+          <label><input type="radio" name="kind" value="game" /><span><i class="emoji" aria-hidden="true">🎮</i> Нова гра</span></label>
+          <label><input type="radio" name="kind" value="other" /><span><i class="emoji" aria-hidden="true">✉️</i> Інше</span></label>
+        </div>
+      </fieldset>
+      <label class="field">
+        <span>Ваш лист</span>
+        <textarea
+          name="message"
+          rows="6"
+          maxlength="4000"
+          required
+          placeholder="Наприклад: у грі «Магазин» на 12-й сходинці не видно решти…"
+        ></textarea>
+      </label>
+      <label class="field">
+        <span>Електронна пошта <small>— якщо хочете отримати відповідь</small></span>
+        <input type="email" name="email" maxlength="200" autocomplete="email" placeholder="name@example.com" />
+      </label>
+      <input class="trap" type="text" name="topic" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <div class="attach">
+        <label class="btn btn-parent btn-small">
+          <input type="file" id="letter-pick" accept="image/*,video/*" multiple />
+          <span class="emoji" aria-hidden="true">📎</span> Додати фото чи відео
+        </label>
+        <small>До 5 файлів, разом до 18 МБ. Відео — до 15 МБ.</small>
+      </div>
+      <ul class="files" id="letter-files"></ul>
+      <p class="letter-note" id="letter-note" role="alert"></p>
+      <button class="btn btn-play" type="submit">Надіслати</button>
+    </form>
+    <div class="letter-done" id="letter-done" role="status" hidden>
+      <h3>Дякуємо, лист у нас!</h3>
+      <p id="letter-done-text"></p>
+      <button class="btn btn-parent btn-small" type="button">Написати ще</button>
+    </div>
+    </dialog>
+
     <footer>
       <div class="wrap">
         <p>© <span id="year">2026</span> Pulsar Kids. Навчання, схоже на пригоду.</p>
         <p>
-          <a data-portal="play" href="__PLAY_URL__/">Гра</a>·<a data-portal="parents" href="__PARENTS_URL__/">Кабінет батьків</a>·<a href="#feedback">Написати нам</a>
+          <a data-portal="play" href="__PLAY_URL__/">Гра</a>·<a data-portal="parents" href="__PARENTS_URL__/">Кабінет батьків</a>·<a href="#feedback" data-letter-open>Написати нам</a>
         </p>
       </div>
     </footer>
@@ -1572,7 +1634,7 @@
             render();
             form.hidden = true;
             done.hidden = false;
-            done.scrollIntoView({ block: 'center' });
+            modal.scrollTop = 0;
           } catch (err) {
             note.textContent = ERRORS[err.message] || 'Не вдалося надіслати. Перевірте інтернет і спробуйте ще раз.';
           } finally {
@@ -1587,6 +1649,40 @@
           form.hidden = false;
           form.message.focus();
         });
+
+        // The window. A letter on its way keeps it open: closing would look like giving up.
+        var modal = document.getElementById('letter-modal');
+        function open(e) {
+          if (e) e.preventDefault();
+          if (modal.open) return;
+          if (!done.hidden) {
+            done.hidden = true;
+            form.hidden = false;
+          }
+          if (modal.showModal) modal.showModal();
+          else modal.setAttribute('open', '');
+          document.documentElement.classList.add('letter-on');
+        }
+        function close() {
+          if (sending) return;
+          if (modal.close) modal.close();
+          else modal.removeAttribute('open');
+        }
+        document.querySelectorAll('[data-letter-open]').forEach(function (el) {
+          el.addEventListener('click', open);
+        });
+        modal.querySelector('.letter-close').addEventListener('click', close);
+        modal.addEventListener('cancel', function (e) {
+          if (sending) e.preventDefault();
+        });
+        modal.addEventListener('close', function () {
+          document.documentElement.classList.remove('letter-on');
+        });
+        // A click on the dimmed page around the window lands on the dialog itself.
+        modal.addEventListener('mousedown', function (e) {
+          if (e.target === modal) close();
+        });
+        if (location.hash === '#feedback') open();
       })();
     </script>
     <!-- Vercel Web Analytics: anonymous page views, no cookies. -->
