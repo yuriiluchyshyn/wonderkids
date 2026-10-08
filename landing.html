@@ -10,7 +10,7 @@
     />
     <meta name="keywords" content="навчальні ігри для дітей, ігри українською, математика для дітей, прапори світу, дроби, розвивальні ігри, екранний час, Pulsar Kids, Пульсар Кідс, pulsarkids" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <meta name="theme-color" content="#0b1026" />
+    <meta name="theme-color" content="#1e0a45" />
     <link rel="canonical" href="__SITE_URL__/" />
     <link rel="alternate" hreflang="uk" href="__SITE_URL__/" />
     <link rel="alternate" hreflang="x-default" href="__SITE_URL__/" />
@@ -83,12 +83,13 @@
       if ('IntersectionObserver' in window) document.documentElement.classList.add('js');
     </script>
     <style>
-      /* The palette of the game's own «Галактика» theme (core/theme/themes.ts). */
+      /* The deep purple starry sky of the ad pictures (../scripts/ads/creative/space.css), so the
+         page a parent lands on looks like the ad they tapped. */
       :root {
-        --bg-1: #0b1026;
-        --bg-2: #2b1a52;
-        --surface: rgba(24, 33, 63, 0.82);
-        --line: rgba(139, 124, 255, 0.24);
+        --bg-1: #1e0a45;
+        --bg-2: #4c1d95;
+        --surface: rgba(46, 20, 100, 0.82);
+        --line: rgba(196, 160, 255, 0.28);
         --ink: #e8ecff;
         --soft: #aab2db;
         --brand: #7c6cff;
@@ -141,7 +142,9 @@
           radial-gradient(1px 1px at 60px 300px, #fff 50%, transparent 51%),
           radial-gradient(2px 2px at 330px 130px, #fff 50%, transparent 51%),
           radial-gradient(1px 1px at 280px 40px, #9fefff 50%, transparent 51%),
-          radial-gradient(2.5px 2.5px at 180px 420px, #fff 50%, transparent 51%);
+          radial-gradient(2.5px 2.5px at 180px 420px, #fff 50%, transparent 51%),
+          radial-gradient(3px 3px at 420px 210px, #fde68a 50%, transparent 51%),
+          radial-gradient(3.5px 3.5px at 90px 560px, #fde68a 50%, transparent 51%);
         background-size:
           230px 230px,
           230px 230px,
@@ -150,7 +153,9 @@
           410px 410px,
           410px 410px,
           530px 530px,
-          530px 530px;
+          530px 530px,
+          670px 670px,
+          790px 790px;
         opacity: 0.8;
         animation: twinkle 5s ease-in-out infinite alternate;
         pointer-events: none;
@@ -162,9 +167,9 @@
         inset: 0;
         z-index: -1;
         background:
-          radial-gradient(42% 36% at 84% 12%, rgba(53, 214, 232, 0.2), transparent 70%),
-          radial-gradient(46% 40% at 8% 80%, rgba(124, 108, 255, 0.26), transparent 72%),
-          radial-gradient(30% 26% at 22% 20%, rgba(139, 124, 255, 0.18), transparent 75%);
+          radial-gradient(46% 40% at 80% 14%, rgba(168, 85, 247, 0.42), transparent 70%),
+          radial-gradient(46% 40% at 8% 80%, rgba(99, 102, 241, 0.3), transparent 72%),
+          radial-gradient(30% 26% at 22% 20%, rgba(236, 72, 153, 0.14), transparent 75%);
         pointer-events: none;
       }
       @keyframes twinkle {
@@ -201,7 +206,7 @@
         position: sticky;
         top: 0;
         z-index: 10;
-        background: rgba(11, 16, 38, 0.78);
+        background: rgba(30, 10, 69, 0.78);
         -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
         border-bottom: 1px solid var(--line);
@@ -580,7 +585,7 @@
         padding: 0;
         border: 1px solid var(--line);
         border-radius: var(--radius);
-        background: #18213f;
+        background: #2a1464;
         color: var(--ink);
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         overscroll-behavior: contain;
@@ -605,7 +610,7 @@
         gap: 12px;
         padding: 14px 12px 14px 22px;
         border-bottom: 1px solid var(--line);
-        background: #18213f;
+        background: #2a1464;
       }
       .letter-head h2 {
         margin-right: auto;
@@ -701,7 +706,7 @@
         padding: 14px 16px;
         border: 2px solid var(--line);
         border-radius: 16px;
-        background: rgba(11, 16, 38, 0.6);
+        background: rgba(30, 10, 69, 0.6);
         color: var(--ink);
         font: inherit;
       }

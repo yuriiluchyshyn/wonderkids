@@ -154,7 +154,7 @@ A link from an ad or a profile carries `utm_source` / `utm_medium` / `utm_campai
 ### SEO
 
 - `seo-plugin.ts` (Vite) fills `__SITE_URL__` / `__PLAY_URL__` / `__PARENTS_URL__` in both HTML entries from `VITE_SITE_URL`, and emits `robots.txt` and `sitemap.xml`.
-- `landing.html` carries the full set: title, description, canonical, hreflang, Open Graph / Twitter (`public/og-image.png`), and JSON-LD (`WebSite`, `WebApplication`). It is dressed in the palette of the game's `galaxy` theme (dark sky, stars, the Solar System in the hero) and has no FAQ section.
+- `landing.html` carries the full set: title, description, canonical, hreflang, Open Graph / Twitter (`public/og-image.png`), and JSON-LD (`WebSite`, `WebApplication`). It is dressed like the ad pictures (`../scripts/ads/creative/space.css`: a deep purple starry sky; the Solar System in the hero) — a parent who taps an ad lands on a page that looks like it — and has no FAQ section.
 - The SPA is `noindex` by default; `core/app/seo/usePageMeta` sets title, description, robots and canonical per page, and only the two public login pages opt into `index`. `vercel.json` adds `X-Robots-Tag: noindex` on personal paths.
 
 ### Accounts
