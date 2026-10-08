@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { TIP_PREFIX, useGameStore } from '@/core/child/store/useGameStore';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import { speechEngine } from '@/core/audio/SpeechEngine';
+import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import styles from './CoachTips.module.css';
 
 export interface CoachTip {
@@ -52,6 +52,7 @@ function visibleRect(selector: string): DOMRect | null {
  * (they are stored with the child's save, see `store.markTipSeen`).
  */
 export function CoachTips({ tips, enabled = true, startDelayMs = 700, onOpenChange }: CoachTipsProps) {
+  useVoiceStopsOnLeave();
   const hasChild = useGameStore((s) => s.children.some((c) => c.id === s.activeChildId));
   const treasures = useGameStore((s) => s.treasures);
   const markTipSeen = useGameStore((s) => s.markTipSeen);
@@ -128,7 +129,7 @@ export function CoachTips({ tips, enabled = true, startDelayMs = 700, onOpenChan
 
   const close = useCallback(() => {
     if (!shown) return;
-    speechEngine.cancel();
+    voice.stop();
     markTipSeen(shown.tip.id);
     setShown(null);
   }, [shown, markTipSeen]);

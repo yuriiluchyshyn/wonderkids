@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, type CSSProperties } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { VoiceGuard } from '@/core/audio/voice';
 import { ThemeProvider } from '@/core/theme/ThemeProvider';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { useGameStore } from '@/core/child/store/useGameStore';
@@ -165,6 +166,7 @@ export function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <VoiceGuard />
         <div className="app-shell">
           <ThemeDecor />
           <TimeHeader />

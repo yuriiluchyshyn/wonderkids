@@ -28,12 +28,6 @@
   will-change: left;
 }
 
-/* Mirror the emoji so it faces the finish line on the right. */
-.sprite {
-  display: inline-block;
-  transform: scaleX(-1);
-}
-
 .goal {
   position: absolute;
   right: 12px;

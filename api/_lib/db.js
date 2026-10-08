@@ -234,8 +234,8 @@ function assembleChild(row, settings, stats, screen, progressRows, treasureRows,
   const sc = screen ?? {};
   const progress = {};
   for (const p of progressRows) progress[`${p.module_id}:${p.sub_id}`] = p.step;
-  // What the gauge shows before a game opens: a long enough break has already
-  // refilled the tank (the row itself is updated by the next /session/start).
+  // What the gauge shows before a game opens: the time away has already given
+  // some of the tank back (the row itself is updated by the next /session/start).
   const rested = refillIfRested(
     {
       minutesUsedToday: Number(sc.minutes_used_today ?? 0),
@@ -243,7 +243,7 @@ function assembleChild(row, settings, stats, screen, progressRows, treasureRows,
       lastSessionEndedAt: numOrNull(sc.last_session_ended_at),
       lastHeartbeatAt: numOrNull(sc.last_heartbeat_at),
     },
-    { cooldownMin: s.cooldown_min ?? 45 },
+    { sessionMin: s.session_duration_min ?? 15, cooldownMin: s.cooldown_min ?? 45 },
     Date.now(),
   );
 

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useGameStore } from '@/core/child/store/useGameStore';
-import { speechEngine } from './SpeechEngine';
+import { voice } from './voice';
 import type { VoiceChannel } from './voiceChannels';
 
 /** Returns a `speak` function that respects only the master `voiceOn` setting. */
@@ -8,14 +8,11 @@ export function useSpeech() {
   const voiceOn = useGameStore((s) => s.settings.voiceOn);
 
   const speak = useCallback(
-    (text: string) => {
-      if (!voiceOn) return;
-      speechEngine.speak(text);
-    },
-    [voiceOn],
+    (text: string) => voice.say(text),
+    [voiceOn], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  return { speak, supported: speechEngine.supported };
+  return { speak, supported: voice.supported };
 }
 
 /**
@@ -28,11 +25,8 @@ export function useVoiceSpeak(channel: VoiceChannel) {
   const enabled = useGameStore((s) => s.settings.voice[channel]);
 
   return useCallback(
-    (text: string) => {
-      if (!voiceOn || !enabled) return;
-      speechEngine.speak(text);
-    },
-    [voiceOn, enabled],
+    (text: string) => voice.say(text, channel),
+    [voiceOn, enabled, channel],
   );
 }
 

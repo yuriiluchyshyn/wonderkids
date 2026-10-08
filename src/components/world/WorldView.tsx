@@ -5,7 +5,7 @@ import { KEY, KEY_COUNTED } from '@/core/child/world/stations';
 import { PlanetView } from './PlanetView';
 import { useWorld, type StationState, type World } from '@/core/child/world/useWorld';
 import { useGameStore } from '@/core/child/store/useGameStore';
-import { speechEngine } from '@/core/audio/SpeechEngine';
+import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { counted } from '@/core/lang/uk';
 import { cn } from '@/core/utils/cn';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
@@ -52,7 +52,7 @@ function Stations({ world }: { world: World }) {
   const unlock = (state: StationState) => {
     if (!open(state.station.id, world.planet)) return;
     // Whatever was being said about the price is no longer true.
-    speechEngine.cancel();
+    voice.stop();
     setSelectedId(null);
     play('treasure');
     confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 }, scalar: 0.9 });
@@ -130,6 +130,7 @@ function Stations({ world }: { world: World }) {
  * residents that gifts bring.
  */
 export function WorldView() {
+  useVoiceStopsOnLeave();
   const showText = useShowText();
   // The planet being looked at; by default the furthest one reached.
   const [planet, setPlanet] = useState<number | undefined>(undefined);

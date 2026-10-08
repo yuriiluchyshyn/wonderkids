@@ -6,7 +6,7 @@ import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import { speechEngine } from '@/core/audio/SpeechEngine';
+import { voice } from '@/core/audio/voice';
 import { Chip } from '@/components/ui/Chip';
 import { counted } from '@/core/lang/uk';
 import { ProgressBar } from '@/components/ui/ProgressBar';
@@ -49,7 +49,7 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
   // "Mute everything" is both master switches at once: effects and the voice.
   const muted = !soundOn && !voiceOn;
   const toggleMute = () => {
-    if (!muted) speechEngine.cancel();
+    if (!muted) voice.stop();
     updateSettings({ soundOn: muted, voiceOn: muted });
   };
 
@@ -177,7 +177,7 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
                 label={voiceOn ? 'Вимкнути голос' : 'Голос вимкнено'}
                 active={!voiceOn}
                 onClick={() => {
-                  if (voiceOn) speechEngine.cancel();
+                  if (voiceOn) voice.stop();
                   updateSettings({ voiceOn: !voiceOn });
                 }}
               />

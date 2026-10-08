@@ -98,22 +98,32 @@ function endSession(state, limits, now, tzOffsetMin) {
 }
 
 /**
- * A break at least as long as the parents' cooldown is a rest, whether or not
- * the tank ran dry first: the minutes already played move to the day's total
- * and the next session starts full. Without this a few minutes played in the
- * morning stayed "used" on the gauge until midnight. The daily cap still counts
- * them. `lastHeartbeatAt` is the last beat of a session that was never paused
- * (app killed); `lastSessionEndedAt` the moment it was paused or ended.
+ * Time away from the game fills the tank back up, little by little: a rest as
+ * long as the parents' cooldown gives back a whole session, half of it — half
+ * a session, and so on. A child who played five minutes of fifteen and put the
+ * phone down does not come back to the same ten: the five are on their way
+ * back from the moment play stopped. (Before, nothing came back until the
+ * whole cooldown had passed.) What is given back moves to the day's total, so
+ * the daily cap still counts every minute played. A gap no longer than the
+ * heartbeat window is not a rest — it is the same play going on.
+ *
+ * `lastHeartbeatAt` is the last beat of a session that was never paused (app
+ * killed, phone locked); `lastSessionEndedAt` the moment it was paused. This
+ * is only ever stored by `startSession`, which opens a new heartbeat window at
+ * once — the mark a later rest is measured from — so no rest is counted twice.
  */
 export function refillIfRested(state, limits, now) {
   const lastPlay = state.lastHeartbeatAt ?? state.lastSessionEndedAt ?? null;
   if (!(state.sessionElapsedMs > 0) || lastPlay === null) return state;
-  const rest = Math.max(HEARTBEAT_MAX_GAP_MS, Math.max(0, limits.cooldownMin) * MIN);
-  if (now - lastPlay < rest) return state;
+  const rested = now - lastPlay;
+  if (rested <= HEARTBEAT_MAX_GAP_MS) return state;
+  const cooldownMs = Math.max(0, limits.cooldownMin) * MIN;
+  const sessionMs = Math.max(1, limits.sessionMin) * MIN;
+  const back = cooldownMs > 0 ? Math.min(state.sessionElapsedMs, (rested * sessionMs) / cooldownMs) : state.sessionElapsedMs;
   return {
     ...state,
-    minutesUsedToday: state.minutesUsedToday + state.sessionElapsedMs / MIN,
-    sessionElapsedMs: 0,
+    minutesUsedToday: state.minutesUsedToday + back / MIN,
+    sessionElapsedMs: state.sessionElapsedMs - back,
     lastHeartbeatAt: null,
   };
 }

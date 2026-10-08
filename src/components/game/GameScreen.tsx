@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties }
 import { spokenPrompt, type TaskCallbacks } from '@/core/game/kernel/types';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import { speechEngine } from '@/core/audio/SpeechEngine';
+import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/child/store/useGameStore';
@@ -137,7 +137,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     setBedtimeOpen(true);
     // Ends the session locally and on the server (which starts the cooldown).
     endSession();
-    speechEngine.cancel();
+    voice.stop();
   }, [endSession]);
 
   const resumePlay = useCallback(() => {
@@ -155,7 +155,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // True while the rest screen covers the game: nothing may speak or run under it.
   const blocked = bedtimeOpen || (screen.inCooldown && !midLevel);
   useEffect(() => {
-    if (blocked) speechEngine.cancel();
+    if (blocked) voice.stop();
   }, [blocked]);
 
   // Idle drift is real: every whole step the companion slides back adds one
@@ -214,10 +214,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       outroDone();
       return;
     }
-    if (outroVoice && speechEngine.supported) {
+    if (outroVoice && voice.supported) {
       // Let the "correct!" sound land first, then speak.
       const start = window.setTimeout(
-        () => speechEngine.speak(outroSpeech ?? outro, () => window.setTimeout(outroDone, 350)),
+        () => voice.speak(outroSpeech ?? outro, () => window.setTimeout(outroDone, 350)),
         450,
       );
       return () => window.clearTimeout(start);
@@ -232,7 +232,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // about a task may sound under the win screen.
   useEffect(() => {
     if (!session.finished) return;
-    speechEngine.cancel();
+    voice.stop();
     play('crunch');
   }, [session.finished]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -252,12 +252,12 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       setSummarySaid(false);
       return;
     }
-    if (blocked || !voiceOn || !speechEngine.supported) {
+    if (blocked || !voiceOn || !voice.supported) {
       setSummarySaid(true);
       return;
     }
     // Let the victory jingle ring first.
-    const t = window.setTimeout(() => speechEngine.speak(summarySpeech, () => setSummarySaid(true)), 900);
+    const t = window.setTimeout(() => voice.speak(summarySpeech, () => setSummarySaid(true)), 900);
     return () => window.clearTimeout(t);
   }, [session.finished, revealDone]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -293,8 +293,8 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     if (picked.isNew) collectTreasure(treasureKey(theme.id, picked.treasure.id));
   }, [session.finished]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Stop any lingering speech when leaving the screen.
-  useEffect(() => () => speechEngine.cancel(), []);
+  // Leaving the game takes its voice along.
+  useVoiceStopsOnLeave();
 
   // Arm the bedtime cutscene the moment the tank runs dry during play.
   useEffect(() => {
@@ -419,7 +419,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   if (phase === 'intro') {
     const startGame = () => {
       // Stop the intro voice immediately — no lingering talking in-game.
-      speechEngine.cancel();
+      voice.stop();
       play('tap');
       markActivity();
       setPhase('play');

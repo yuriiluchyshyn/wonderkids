@@ -1,3 +1,4 @@
+import { Mascot, type Heading } from '@/components/theme/Mascot';
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useSound } from '@/core/audio/useSound';
@@ -33,6 +34,8 @@ export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps
 
   // Where the mascot stands, and every tile it has stepped on so far.
   const [here, setHere] = useState(start);
+  // The way of its last step: the mascot looks where it walks.
+  const [heading, setHeading] = useState<Heading>('right');
   const [walked, setWalked] = useState<ReadonlySet<number>>(() => new Set([start]));
   const [cracked, setCracked] = useState<number | null>(null);
 
@@ -53,6 +56,7 @@ export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps
     if (walkable.has(index)) {
       // Stepping back over gold tiles (out of a dead end) is just walking.
       play('tap');
+      setHeading(index === here + 1 ? 'right' : index === here - 1 ? 'left' : index > here ? 'down' : 'up');
       setHere(index);
       setWalked((prev) => new Set(prev).add(index));
       // One step was shown — or made without help: from here the child goes alone.
@@ -97,9 +101,7 @@ export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps
             aria-label={show(value)}
           >
             {index === here ? (
-              <span className="emoji" aria-hidden>
-                {theme.mascot.emoji}
-              </span>
+              <Mascot heading={heading} />
             ) : index === finish ? (
               <span className={styles.mazeFinish}>
                 {show(value)}

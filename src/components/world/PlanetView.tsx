@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import { speechEngine } from '@/core/audio/SpeechEngine';
+import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
@@ -59,6 +59,7 @@ interface PlanetViewProps {
  * lock — and what it asks for. ⛶ opens the whole solar system.
  */
 export function PlanetView({ world, onPlanet }: PlanetViewProps) {
+  useVoiceStopsOnLeave();
   const theme = useActiveTheme();
   const showText = useShowText();
   const { play } = useSound();
@@ -164,7 +165,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     }
     // A second tap on the same thing puts it down again.
     if (selectedId === state.item.id) {
-      speechEngine.cancel();
+      voice.stop();
       deselect();
       return;
     }
@@ -196,7 +197,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   };
   const confirmSell = (state: ItemState) => {
     if (sell(theme.id, state.item.id, world.planet) <= 0) return;
-    speechEngine.cancel();
+    voice.stop();
     play('pop');
     deselect();
   };
@@ -204,7 +205,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   const build = (state: ItemState) => {
     if (!buy(theme.id, state.item.id, world.planet)) return;
     // Whatever was being said about the price is no longer true.
-    speechEngine.cancel();
+    voice.stop();
     setJustBuilt(state.item.id);
     deselect();
     turnTo(placeOf(state));
@@ -246,7 +247,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   // says HOW to get it and offers the way there: a count alone left the child
   // (and the parent) wondering where a spaceport or a treasure comes from.
   const toGate = () => {
-    speechEngine.cancel();
+    voice.stop();
     setNeedsOpen(false);
     setNeedId(null);
     onPlanet(gate.planet);
@@ -360,7 +361,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
             aria-current={p.planet === world.planet}
             onClick={() => {
               play('tap');
-              speechEngine.cancel();
+              voice.stop();
               deselect();
               // A second tap on the planet being shown puts its list away.
               setNeedsOpen(p.planet !== world.planet || !needsOpen);
@@ -448,7 +449,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
           type="button"
           onClick={() => {
             play('tap');
-            speechEngine.cancel();
+            voice.stop();
             deselect();
             setNeedsOpen(false);
             setFull(true);
@@ -505,7 +506,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
               type="button"
               className={styles.barClose}
               onClick={() => {
-                speechEngine.cancel();
+                voice.stop();
                 setNeedsOpen(false);
               }}
               aria-label="Закрити"
@@ -655,7 +656,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                 type="button"
                 className={styles.barClose}
                 onClick={() => {
-                  speechEngine.cancel();
+                  voice.stop();
                   deselect();
                 }}
                 aria-label="Закрити"

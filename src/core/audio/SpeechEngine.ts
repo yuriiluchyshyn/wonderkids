@@ -24,6 +24,10 @@ const UNLOCK_EVENTS = ['pointerdown', 'touchend', 'click'] as const;
  * Speech synthesiser otherwise, and as the automatic fallback whenever the
  * cloud voice is slow, offline or misconfigured. Callers never need to know
  * which one spoke.
+ *
+ * This is only the player. Nothing outside `core/audio` talks to it: screens
+ * use `voice` (`core/audio/voice.ts`), where the rules of when the voice
+ * speaks and when it must fall silent are kept.
  */
 export class SpeechEngine {
   private readonly synth: SpeechSynthesis | null =
@@ -51,9 +55,9 @@ export class SpeechEngine {
     if (typeof document === 'undefined') return;
     // Locking the phone or switching to another app must silence the voice —
     // browsers happily keep reading a queued utterance in the background.
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) this.cancel();
-    });
+    // And coming back must not resume one: iOS only pauses the browser voice
+    // under a locked screen and would finish the sentence on unlock.
+    document.addEventListener('visibilitychange', () => this.cancel());
     window.addEventListener('pagehide', () => this.cancel());
 
     const unlock = () => {

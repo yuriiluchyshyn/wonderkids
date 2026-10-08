@@ -8,14 +8,19 @@ import styles from './Templates.module.css';
 
 /** How close (in canvas units) a finger must come to a star to touch it. */
 const REACH = 6;
+/** The same for a labelled star: they stand further apart, so the target is bigger. */
+const LABEL_REACH = 7;
 /** Sizes of a star of the sky that is not part of the figure, and of a labelled one. */
 const DECOY_R = 1.25;
 const STAR_R = 2.1;
 
 /**
  * Dot-to-dot — the child "draws" a constellation.
- *  - By labels: tap the stars in the order of their labels (numbers, letters,
- *    counting by twos or tens); each right star is joined to the one before.
+ *  - By labels: join the stars in the order of their labels (numbers, letters,
+ *    counting by twos or tens) — by tapping them one after another, or by
+ *    drawing: a finger put down on the sky pulls a line from the last star
+ *    joined, and the line catches on the next star when the finger reaches it.
+ *    Passing over another star on the way is not a mistake; tapping one is.
  *    Helper: the next star pulses.
  *  - «Знайди сузір’я» (`payload.find`): no labels, and the figure is lost
  *    among other stars — only a little bigger than they are. The child finds
@@ -33,29 +38,39 @@ export function DotToDotLayout({ payload, callbacks, hintActive }: LayoutProps<D
   const [shake, setShake] = useState(false);
   const svg = useRef<SVGSVGElement>(null);
   const pressed = useRef(false);
+  // Drawing by labels: how many stars are joined (fresh inside a fast drag),
+  // the star the finger went down on, whether this stroke joined anything,
+  // and where the finger is now — the loose end of the line.
+  const joinedNow = useRef(0);
+  const downStar = useRef(-1);
+  const drew = useRef(false);
+  const [finger, setFinger] = useState<{ x: number; y: number } | null>(null);
 
   const done = find ? found.size === stars.length : joined === stars.length;
 
-  const tap = (index: number) => {
-    if (done || index < joined) return;
-    if (index !== joined) {
-      setShake(true);
-      callbacks.onMistake();
-      return;
+  const join = () => {
+    const at = joinedNow.current;
+    chime(at);
+    joinedNow.current = at + 1;
+    drew.current = true;
+    setJoined(at + 1);
+    if (at + 1 === stars.length) {
+      setFinger(null);
+      callbacks.onSuccess();
     }
-    chime(joined);
-    setJoined(joined + 1);
-    if (joined + 1 === stars.length) callbacks.onSuccess();
   };
 
   // ---- «Знайди сузір’я»: touch the stars, sliding or tapping ----
-  const nearest = (points: readonly { x: number; y: number }[], e: PointerEvent): number => {
+  const pointOf = (e: PointerEvent) => {
     const box = svg.current?.getBoundingClientRect();
-    if (!box) return -1;
-    const x = ((e.clientX - box.left) / box.width) * 100;
-    const y = ((e.clientY - box.top) / box.height) * 100;
+    return box ? { x: ((e.clientX - box.left) / box.width) * 100, y: ((e.clientY - box.top) / box.height) * 100 } : null;
+  };
+  const nearest = (points: readonly { x: number; y: number }[], e: PointerEvent, reach = REACH): number => {
+    const at = pointOf(e);
+    if (!at) return -1;
+    const { x, y } = at;
     let best = -1;
-    let bestGap = REACH;
+    let bestGap = reach;
     points.forEach((p, i) => {
       const gap = Math.hypot(p.x - x, p.y - y);
       if (gap < bestGap) {
@@ -89,6 +104,30 @@ export function DotToDotLayout({ payload, callbacks, hintActive }: LayoutProps<D
     callbacks.onMistake();
   };
 
+  // ---- By labels: tap the next star, or draw the line to it ----
+  const draw = (e: PointerEvent, down: boolean) => {
+    if (find || joinedNow.current >= stars.length) return;
+    const star = nearest(stars, e, LABEL_REACH);
+    if (down) {
+      downStar.current = star;
+      drew.current = false;
+    }
+    if (star === joinedNow.current) join();
+    if (joinedNow.current > 0 && joinedNow.current < stars.length) setFinger(pointOf(e));
+  };
+  const lift = (e?: PointerEvent) => {
+    pressed.current = false;
+    setFinger(null);
+    if (find || !e || drew.current || joinedNow.current >= stars.length) return;
+    // A plain tap on a star that is not the next one (and not one already joined).
+    const star = nearest(stars, e, LABEL_REACH);
+    if (star > joinedNow.current && star === downStar.current) {
+      setShake(true);
+      callbacks.onMistake();
+    }
+  };
+  const tail = !find && finger && joined > 0 && joined < stars.length ? stars[joined - 1] : null;
+
   const line = stars
     .slice(0, joined)
     .map((s) => `${s.x},${s.y}`)
@@ -109,17 +148,22 @@ export function DotToDotLayout({ payload, callbacks, hintActive }: LayoutProps<D
         <svg
           ref={svg}
           viewBox="0 0 100 100"
-          className={cn(styles.skySvg, find && styles.skyFind)}
+          className={cn(styles.skySvg, styles.skyFind)}
           role="group"
           aria-label="Зоряне небо"
           onPointerDown={(e) => {
             pressed.current = true;
             touch(e, true);
+            draw(e, true);
           }}
-          onPointerMove={(e) => pressed.current && touch(e, false)}
-          onPointerUp={() => (pressed.current = false)}
-          onPointerLeave={() => (pressed.current = false)}
-          onPointerCancel={() => (pressed.current = false)}
+          onPointerMove={(e) => {
+            if (!pressed.current) return;
+            touch(e, false);
+            draw(e, false);
+          }}
+          onPointerUp={(e) => lift(e)}
+          onPointerLeave={() => lift()}
+          onPointerCancel={() => lift()}
         >
           {done && (
             <text x="50" y="56" className={cn(styles.skyFigure, 'emoji')} textAnchor="middle" dominantBaseline="middle" aria-hidden>
@@ -148,11 +192,13 @@ export function DotToDotLayout({ payload, callbacks, hintActive }: LayoutProps<D
           ) : (
             <>
               <polyline points={line} className={cn(styles.skyLine, done && styles.skyLineDone)} />
+              {/* The loose end of the line, following the finger. */}
+              {tail && finger && <line x1={tail.x} y1={tail.y} x2={finger.x} y2={finger.y} className={cn(styles.skyLine, styles.skyLineLoose)} />}
               {stars.map((star, i) => {
                 const on = i < joined;
                 const next = hintActive && i === joined;
                 return (
-                  <g key={i} className={styles.skyStar} onClick={() => tap(i)} role="button" aria-label={`Зірка ${star.label}`}>
+                  <g key={i} className={styles.skyStar} role="button" aria-label={`Зірка ${star.label}`}>
                     {/* A generous invisible target for small fingers. */}
                     <circle cx={star.x} cy={star.y} r="7" fill="transparent" />
                     <circle cx={star.x} cy={star.y} r={on ? 2.6 : STAR_R} className={cn(styles.skyDot, on && styles.skyDotOn, next && styles.skyDotNext)} />

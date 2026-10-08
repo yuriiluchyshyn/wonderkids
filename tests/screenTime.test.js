@@ -131,14 +131,32 @@ test('maxDailyMin = 0 means no daily cap', () => {
   assert.equal(describe(startSession(s, l, T0, TZ), l, T0).remaining_time_seconds, 15 * 60);
 });
 
-test('a break as long as the cooldown refills the tank; the day still counts the minutes', () => {
+test('time away gives the tank back little by little; the day still counts the minutes', () => {
   let s = startSession(fresh(), limits, T0, TZ);
+  s = play(s, T0, 6 * MIN);
+  s = heartbeat(s, limits, T0 + 6 * MIN, TZ, 'pause');
+
+  // Back within a minute: that was no rest, the same nine minutes are left.
+  let back = startSession(s, limits, T0 + 7 * MIN, TZ);
+  assert.equal(describe(back, limits, T0 + 7 * MIN).remaining_time_seconds, 9 * 60);
+
+  // Back after nine minutes — a fifth of the 45-minute rest gives back a fifth of a session: three minutes.
+  const soon = T0 + 6 * MIN + 9 * MIN;
+  back = startSession(s, limits, soon, TZ);
+  assert.equal(describe(back, limits, soon).remaining_time_seconds, 12 * 60);
+  assert.equal(describe(back, limits, soon).daily_remaining_seconds, 54 * 60, 'the day has still lost all six minutes');
+
+  // …and the same rest is not counted again: the next one is measured from this visit.
+  const again = startSession(heartbeat(back, limits, soon + 30_000, TZ, 'pause'), limits, soon + 60_000, TZ);
+  assert.equal(describe(again, limits, soon + 60_000).remaining_time_seconds, 12 * 60 - 30);
+
+  // Never more than was played: eighteen minutes away give back all six, not seven.
+  back = startSession(s, limits, T0 + 6 * MIN + 21 * MIN, TZ);
+  assert.equal(back.sessionElapsedMs, 0);
+
+  s = startSession(fresh(), limits, T0, TZ);
   s = play(s, T0, 2 * MIN);
   s = heartbeat(s, limits, T0 + 2 * MIN, TZ, 'pause');
-
-  // Back after ten minutes: the same session goes on.
-  let back = startSession(s, limits, T0 + 12 * MIN, TZ);
-  assert.equal(describe(back, limits, T0 + 12 * MIN).remaining_time_seconds, 13 * 60);
 
   // Back after the 45-minute rest: a full session, two minutes gone from the day.
   const later = T0 + 2 * MIN + 45 * MIN;
@@ -152,6 +170,7 @@ test('a break as long as the cooldown refills the tank; the day still counts the
 test('an app that was killed without a pause also rests', () => {
   let s = startSession(fresh(), limits, T0, TZ);
   s = play(s, T0, 3 * MIN);
-  assert.equal(refillIfRested(s, limits, T0 + 4 * MIN).sessionElapsedMs, 3 * MIN);
+  assert.equal(refillIfRested(s, limits, T0 + 4 * MIN).sessionElapsedMs, 3 * MIN, 'a minute is within the heartbeat window');
+  assert.equal(refillIfRested(s, limits, T0 + 6 * MIN).sessionElapsedMs, 2 * MIN, 'three minutes away give back one');
   assert.equal(refillIfRested(s, limits, T0 + 60 * MIN).sessionElapsedMs, 0);
 });

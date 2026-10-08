@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import { speechEngine } from '@/core/audio/SpeechEngine';
+import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { PLANET_FACTS } from '@/core/child/world/planetFacts';
 import type { World } from '@/core/child/world/useWorld';
 import { PLANET_COUNT, type WorldPlanetId } from '@/core/child/world/world';
@@ -55,6 +55,7 @@ interface SolarSystemProps {
  * page.
  */
 export function SolarSystem({ world, onClose }: SolarSystemProps) {
+  useVoiceStopsOnLeave();
   const { play } = useSound();
   const announce = useVoiceSpeak('selections');
   /** The planet that is telling about itself, and the story it tells now. */
@@ -78,7 +79,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = before;
-      speechEngine.cancel();
+      voice.stop();
     };
   }, []);
 
@@ -284,7 +285,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
           disabled={!zoomed}
           onClick={() => {
             play('tap');
-            speechEngine.cancel();
+            voice.stop();
             setTold(null);
             flyTo(OVERVIEW);
           }}
@@ -301,7 +302,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
             className={styles.storyClose}
             onClick={() => {
               play('tap');
-              speechEngine.cancel();
+              voice.stop();
               setTold(null);
             }}
             aria-label="Закрити й зупинити розповідь"

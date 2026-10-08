@@ -1,3 +1,4 @@
+import { useVoiceStopsOnLeave } from '@/core/audio/voice';
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
@@ -80,6 +81,7 @@ export function Cutscene({
   onResume,
   onExit,
 }: CutsceneProps) {
+  useVoiceStopsOnLeave();
   const theme = useActiveTheme();
   const { play } = useSound();
   const { speak } = useSpeech();

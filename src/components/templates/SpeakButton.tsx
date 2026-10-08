@@ -1,7 +1,8 @@
 import { useState, type MouseEvent } from 'react';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';
-import { speechEngine, type SpeechLang } from '@/core/audio/SpeechEngine';
+import type { SpeechLang } from '@/core/audio/SpeechEngine';
+import { voice } from '@/core/audio/voice';
 import { cn } from '@/core/utils/cn';
 import styles from './Templates.module.css';
 
@@ -26,14 +27,14 @@ export function SpeakButton({ text, size = 'sm', className, lang }: SpeakButtonP
   const { playCode } = useSound();
   const [speaking, setSpeaking] = useState(false);
 
-  if (!enabled || !voiceOn || !speechEngine.supported || !text) return null;
+  if (!enabled || !voiceOn || !voice.supported || !text) return null;
 
   const speak = (e: MouseEvent) => {
     // The button often sits inside a tappable answer card — don't answer.
     e.stopPropagation();
     playCode('SND_TTS_CLICK');
     setSpeaking(true);
-    speechEngine.speak(text, () => setSpeaking(false), lang);
+    voice.speak(text, () => setSpeaking(false), lang);
   };
 
   return (

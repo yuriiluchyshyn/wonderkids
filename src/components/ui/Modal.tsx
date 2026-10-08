@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import type { ReactNode } from 'react';
+import { voice } from '@/core/audio/voice';
 import styles from './Modal.module.css';
 
 interface ModalProps {
@@ -14,6 +15,11 @@ interface ModalProps {
 
 /** Spring-animated bottom-safe modal sheet. */
 export function Modal({ open, onClose, title, icon, children, dismissible = true }: ModalProps) {
+  // Put away by the child (✕ or a tap beside it): whatever was being read out in it stops.
+  const dismiss = () => {
+    voice.stop();
+    onClose?.();
+  };
   return (
     <AnimatePresence>
       {open && (
@@ -22,7 +28,7 @@ export function Modal({ open, onClose, title, icon, children, dismissible = true
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={() => dismissible && onClose?.()}
+          onClick={() => dismissible && dismiss()}
         >
           <motion.div
             className={styles.sheet}
@@ -46,7 +52,7 @@ export function Modal({ open, onClose, title, icon, children, dismissible = true
                 </h2>
               )}
               {dismissible && onClose && (
-                <button className={styles.close} onClick={onClose} aria-label="Закрити">
+                <button className={styles.close} onClick={dismiss} aria-label="Закрити">
                   ✕
                 </button>
               )}

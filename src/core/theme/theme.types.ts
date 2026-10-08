@@ -11,7 +11,14 @@ export interface Theme {
   name: string;
   icon: string;
   /** Companion that travels across the math race track. */
-  mascot: { name: string; emoji: string };
+  /**
+   * `faces` — which way the pictogram looks when drawn in profile (most do
+   * look left); leave it out for one that looks straight at the child.
+   * `tilt` — for one that points along its nose (the rocket): the degrees
+   * that turn it to point right. `Mascot` reads both to make it look the way
+   * it is going — give them to every new theme's mascot.
+   */
+  mascot: { name: string; emoji: string; faces?: 'left' | 'right'; tilt?: number };
   /** The goal the mascot travels toward (apple → rainbow, finish flag, ...). */
   goal: { name: string; emoji: string };
   /** Collectible artifact earned per task. */

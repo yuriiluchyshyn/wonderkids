@@ -1261,6 +1261,12 @@
   stroke-linejoin: round;
 }
 
+.skyLineLoose {
+  opacity: 0.6;
+  stroke-dasharray: 1.5 1.5;
+  pointer-events: none;
+}
+
 .skyLineDone {
   stroke: #fde047;
   stroke-width: 1.2;

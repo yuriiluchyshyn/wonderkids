@@ -1,0 +1,10 @@
+.mascot {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot {
+    transition: none;
+  }
+}
