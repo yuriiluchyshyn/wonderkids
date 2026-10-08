@@ -17,7 +17,6 @@ export const SUBJECT: SubjectDef = {
 export const GAMES: GameCard[] = [
   {
     id: 'recycling',
-    landmark: { name: 'Сміттєпереробний завод', emoji: '🏭', stages: [['🗑️', 'Сміттєві баки'], ['🚛', 'Сміттєвоз'], ['♻️', 'Пункт сортування'], ['🏭', 'Сміттєпереробний завод']] },
     gameId: 'eco_recycling_patrol',
     label: 'Еко-патруль',
     icon: '♻️',
@@ -33,7 +32,6 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'why',
-    landmark: { name: 'Заповідний парк', emoji: '🌳', stages: [['🌱', 'Саджанці'], ['🐝', 'Пасіка'], ['💧', 'Чисте джерело'], ['🌳', 'Заповідний парк']] },
     gameId: 'eco_why_questions',
     label: 'Чому так?',
     icon: '🌍',

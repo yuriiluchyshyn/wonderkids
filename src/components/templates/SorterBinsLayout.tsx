@@ -60,7 +60,7 @@ export function SorterBinsLayout({ payload, callbacks, hintActive }: LayoutProps
         <AnimatePresence>{say && <Bubble>{say}</Bubble>}</AnimatePresence>
       </div>
 
-      <div className={cn(styles.bins, bins.length > 3 && styles.bins4)}>
+      <div className={cn(styles.bins, bins.length > 4 ? styles.bins6 : bins.length > 3 && styles.bins4)}>
         {bins.map((bin) => (
           <motion.div
             key={bin.id}

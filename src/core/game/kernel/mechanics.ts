@@ -18,4 +18,5 @@ export enum Mechanics {
   BubblePop = 'UI_BUBBLE_POP',
   DotToDot = 'UI_DOT_TO_DOT',
   ColorMix = 'UI_COLOR_MIX',
+  LetterGrid = 'UI_LETTER_GRID',
 }

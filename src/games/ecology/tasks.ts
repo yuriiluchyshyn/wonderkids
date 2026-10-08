@@ -6,7 +6,7 @@ import { shuffle } from '@/core/utils/random';
 import { factPool } from '../shared/facts';
 import { card, templateTask, type GameTasks } from '../shared/templateModule';
 import { RECYCLING_FACTS } from './content/facts';
-import { ECO_QUESTIONS, TOPIC_FACTS, type EcoQuestion } from './content/questions';
+import { ECO_QUESTIONS, type EcoQuestion } from './content/questions';
 import { MORE_RUBBISH } from './content/rubbish';
 
 const BINS = [
@@ -64,8 +64,13 @@ function recycling(step: number): TaskInstance<TemplatePayload>[] {
   const bins = BINS.map((b) => card(b.id, b.emoji, b.name));
   const wrongSay = Object.fromEntries(BINS.map((b) => [b.id, `${b.no} Спробуй інший бак!`]));
   const all = [...RUBBISH, ...MORE_RUBBISH.map((r) => ({ ...r, clue: CLUE[r.bin] }))];
-  return all.map((r) =>
-    templateTask(
+  // The stories about a material are dealt out among its things, one each:
+  // no story is told for two different things.
+  const dealt: Record<string, number> = {};
+  return all.map((r) => {
+    const story = RECYCLING_FACTS[r.bin][dealt[r.bin] ?? 0];
+    dealt[r.bin] = (dealt[r.bin] ?? 0) + 1;
+    return templateTask(
       `bin:${r.id}`,
       `Куди викинути ${accusative(r.name)}?`,
       {
@@ -77,10 +82,9 @@ function recycling(step: number): TaskInstance<TemplatePayload>[] {
         hint: r.clue,
       },
       step,
-      // Twelve stories per material: a replay tells the next one.
-      RECYCLING_FACTS[r.bin],
-    ),
-  );
+      factPool(`Так! ${r.name[0].toUpperCase()}${r.name.slice(1)} — у бак «${BINS.find((bin) => bin.id === r.bin)?.name}».`, story),
+    );
+  });
 }
 
 /** Answers on the board of «Чому так?» — nine, so the right one cannot be guessed. */
@@ -118,7 +122,7 @@ function whyQuestions(step: number): TaskInstance<TemplatePayload>[] {
         hint: q.why,
       },
       step,
-      factPool(q.why, TOPIC_FACTS[q.topic]),
+      q.why,
     ),
   );
 }

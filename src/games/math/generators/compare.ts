@@ -2,6 +2,7 @@ import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, GridChoicePayload } from '@/core/game/templates/types';
 import { pick, randInt, uid } from '@/core/utils/random';
+import { currencyOf, type CurrencyDef } from '@/core/game/content/currency';
 import { rewardForStep } from '../difficulty';
 
 /** One side of a comparison: how it is written, read aloud, and what it is worth. */
@@ -39,17 +40,20 @@ const UNITS = [
   { big: 'м', bigSpeak: ['метр', 'метри', 'метрів'], small: 'см', smallSpeak: 'сантиметрів', per: 100, rule: 'В одному метрі — сто сантиметрів.' },
   { big: 'кг', bigSpeak: ['кілограм', 'кілограми', 'кілограмів'], small: 'г', smallSpeak: 'грамів', per: 1000, rule: 'В одному кілограмі — тисяча грамів.' },
   { big: 'год', bigSpeak: ['година', 'години', 'годин'], small: 'хв', smallSpeak: 'хвилин', per: 60, rule: 'В одній годині — шістдесят хвилин.' },
-  { big: 'грн', bigSpeak: ['гривня', 'гривні', 'гривень'], small: 'коп', smallSpeak: 'копійок', per: 100, rule: 'В одній гривні — сто копійок.' },
   { big: 'см', bigSpeak: ['сантиметр', 'сантиметри', 'сантиметрів'], small: 'мм', smallSpeak: 'міліметрів', per: 10, rule: 'В одному сантиметрі — десять міліметрів.' },
   { big: 'л', bigSpeak: ['літр', 'літри', 'літрів'], small: 'мл', smallSpeak: 'мілілітрів', per: 1000, rule: 'В одному літрі — тисяча мілілітрів.' },
 ] as const;
+
+type Unit = { big: string; bigSpeak: readonly string[]; small: string; smallSpeak: string; per: number; rule: string };
+/** Money as a measure: the parent's currency and its small change. */
+const moneyUnit = (m: CurrencyDef): Unit => ({ big: m.short, bigSpeak: m.counted, small: m.minor.short, smallSpeak: m.minor.many, per: 100, rule: m.minor.rule });
 
 const plural = (n: number, forms: readonly [string, string, string] | readonly string[]) =>
   n === 1 ? forms[0] : n >= 2 && n <= 4 ? forms[1] : forms[2];
 
 /** A big-unit amount against a small-unit one: more, less, or exactly equal. */
-function measures(): { left: Side; right: Side; rule: string } {
-  const unit = pick(UNITS);
+function measures(money: CurrencyDef): { left: Side; right: Side; rule: string } {
+  const unit: Unit = pick([...UNITS, moneyUnit(money)]);
   const n = randInt(1, 3);
   const exact = n * unit.per;
   // Near the conversion point, so the child has to actually convert.
@@ -95,9 +99,9 @@ export function generateCompare(config: TaskConfig): TaskInstance<GridChoicePayl
   } else if (step <= 8) {
     [left, right] = Math.random() < 0.5 ? pair(() => sum(12)) : pair(() => difference(20), () => sum(8));
   } else if (step <= 10) {
-    ({ left, right, rule } = measures());
+    ({ left, right, rule } = measures(currencyOf(config.currency)));
   } else if (Math.random() < 0.5) {
-    ({ left, right, rule } = measures());
+    ({ left, right, rule } = measures(currencyOf(config.currency)));
   } else {
     [left, right] = pair(product, () => (Math.random() < 0.5 ? product() : sum(20)));
   }

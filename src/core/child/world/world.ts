@@ -1,12 +1,14 @@
 /**
  * The child's WORLD — a place that grows as they learn. Three things live in
- * it. Landmarks and residents are derived from progress; bought items are
- * remembered as keys beside the treasures — so no schema change was needed:
+ * it. Residents are derived from progress; whatever the child exchanged
+ * something for is remembered as a key beside the treasures — so no schema
+ * change was needed:
  *
  *  1. The theme's planet: buildings and decorations the child CHOOSES to
  *     exchange artifacts for, ending in the theme's "dream build".
- *  2. Lands of knowledge: every game owns a landmark that grows in four stages
- *     as the child climbs its path (or keeps playing a free-play game).
+ *  2. Stations of knowledge: the same few stations on every planet, opened
+ *     with KEYS OF KNOWLEDGE — a second currency, earned in any game. No
+ *     station belongs to a game, so the catalog can grow freely.
  *  3. Inhabitants: each path gift (every 5th step) brings a new resident.
  *
  * Pure functions only (no React, no value imports) so it runs under `node --test`.
@@ -172,11 +174,6 @@ export function shopState(items: readonly ShopItem[], owned: ReadonlySet<string>
   });
 }
 
-/** A landmark grows through this many stages. */
-export const LANDMARK_STAGES = 4;
-/** Levels a free-play game must be finished to reach each stage. */
-export const FREE_PLAY_STAGE_AT = [1, 3, 6, 10] as const;
-
 export interface GameProgress {
   /** Free-play game (no path). */
   free: boolean;
@@ -188,17 +185,71 @@ export interface GameProgress {
   plays: number;
 }
 
+// ------------------------------------------------------- Keys of knowledge —
+
 /**
- * 0 = not started … 4 = complete. A path game grows with the share of the
- * path behind the child; a free-play game with how often it has been played.
+ * Keys of knowledge («ключі знань») are the world's second currency. A key is
+ * earned for every path step passed for the first time — in ANY game — and
+ * for the first levels of a free-play game. Keys do not know which game they
+ * came from: thirty new games are simply thirty more places to earn them, and
+ * what they open (stations, later further planets and galaxies, or a share in
+ * something a group of children opens together) never has to follow the catalog.
  */
-export function landmarkStage({ free, steps, step, plays }: GameProgress): number {
-  if (free) return FREE_PLAY_STAGE_AT.filter((at) => plays >= at).length;
-  const done = Math.max(0, Math.min(steps, step) - 1);
-  if (done === 0 && plays === 0) return 0;
-  if (steps <= 1) return LANDMARK_STAGES;
-  // Finishing the first level lays the foundation; the rest follow the path.
-  return Math.min(LANDMARK_STAGES, 1 + Math.floor(((LANDMARK_STAGES - 1) * done) / (steps - 1)));
+export const KEYS_PER_FREE_GAME = 20;
+
+/** Every key the child has earned so far. Replaying a step that is already passed earns none. */
+export function keysEarned(games: readonly GameProgress[]): number {
+  return games.reduce(
+    (sum, g) => sum + (g.free ? Math.min(KEYS_PER_FREE_GAME, Math.max(0, g.plays)) : Math.max(0, Math.min(g.steps, g.step) - 1)),
+    0,
+  );
+}
+
+/** What the stations of a planet cost, in keys, in order. */
+export const STATION_COSTS = [3, 5, 7, 9, 12, 15] as const;
+export const STATION_COUNT = STATION_COSTS.length;
+
+export function stationId(index: number): string {
+  return `k${index}`;
+}
+
+/** Like buildings, a station is dearer on every next planet. */
+export function stationCost(id: string, planet = 1): number {
+  const index = Number(id.slice(1));
+  if (id[0] !== 'k' || !Number.isInteger(index)) return 0;
+  return Math.round((STATION_COSTS[index] ?? 0) * planetFactor(planet));
+}
+
+const STATION_PREFIX = 'know:';
+
+/**
+ * Key under which an opened station is remembered (beside the treasures, like
+ * purchases). It names no theme: knowledge stays with the child whatever the
+ * world is dressed as.
+ */
+export function stationKey(id: string, planet = 1): string {
+  return `${STATION_PREFIX}p${planet}:${id}`;
+}
+
+export function parseStation(key: string): { planet: number; id: string } | null {
+  if (!key.startsWith(STATION_PREFIX)) return null;
+  const [where, id, ...rest] = key.slice(STATION_PREFIX.length).split(':');
+  const planet = Number(where?.slice(1));
+  if (rest.length > 0 || where?.[0] !== 'p' || !Number.isInteger(planet) || !id) return null;
+  return { planet, id };
+}
+
+/** Keys already exchanged for stations. */
+export function keysSpent(ownedKeys: readonly string[]): number {
+  return ownedKeys.reduce((sum, key) => {
+    const station = parseStation(key);
+    return station ? sum + stationCost(station.id, station.planet) : sum;
+  }, 0);
+}
+
+/** Keys the child can still exchange. */
+export function keyBalance(earned: number, ownedKeys: readonly string[]): number {
+  return Math.max(0, Math.floor(earned) - keysSpent(ownedKeys));
 }
 
 /** A gift (and with it a new inhabitant) every 5th step of a path. */
@@ -224,25 +275,8 @@ export function residentForGift<T>(all: readonly T[], giftNumber: number): T | u
 
 // ------------------------------------------------------------ The solar system —
 
-/** Levels a free-play game must be finished to reach each of its eight levels. */
-export const FREE_PLAY_LEVEL_AT = [1, 3, 6, 10, 15, 21, 28, 36] as const;
-
-/**
- * The level of a game's landmark, 0…8 — one level per planet. Level N takes
- * the N-th part of the game: an eighth of its path for each (so the whole
- * game is all eight), or ever more finished levels of a free-play game.
- */
-export function landmarkLevel({ free, steps, step, plays }: GameProgress): number {
-  if (free || steps <= 1) return FREE_PLAY_LEVEL_AT.filter((at) => plays >= at).length;
-  const done = Math.max(0, Math.min(steps, step) - 1);
-  const whole = steps - 1;
-  let level = 0;
-  while (level < PLANET_COUNT && done >= Math.max(1, Math.ceil((whole * (level + 1)) / PLANET_COUNT))) level += 1;
-  return level;
-}
-
-/** Share of the games whose landmark must have reached a planet's level before leaving it. */
-export const LANDS_SHARE = 0.6;
+/** Share of a planet's stations of knowledge that must be open before leaving it. */
+export const STATIONS_SHARE = 0.6;
 /** Residents (gifts earned) a planet asks for, per planet travelled. */
 export const RESIDENTS_PER_PLANET = 4;
 
@@ -257,8 +291,8 @@ export interface PlanetNeeds {
   /** Everything of the planet built: buildings, the dream build, decorations. */
   built: Need;
   spaceport: boolean;
-  /** Games whose landmark has this planet's level. */
-  lands: Need;
+  /** Stations of knowledge opened on this planet. */
+  stations: Need;
   residents: Need;
   treasures: Need;
   /** All of it — the next planet (or, from the last one, the Sun) is open. */
@@ -269,32 +303,32 @@ const need = (have: number, wanted: number): Need => ({ have: Math.min(have, wan
 
 /**
  * What a planet asks for before the child may fly on: not the spaceport
- * alone, but nearly everything the planet has to give — its buildings, its
- * share of the lands of knowledge, residents and treasures.
+ * alone, but nearly everything the planet has to give — its buildings, most
+ * of its stations of knowledge, residents and treasures.
  */
 export function planetNeeds(input: {
   planet: number;
   itemsOwned: number;
   itemsTotal: number;
   spaceport: boolean;
-  /** `landmarkLevel` of every game. */
-  landLevels: readonly number[];
+  /** Stations of knowledge opened on this planet. */
+  stationsOpen: number;
   gifts: number;
   treasuresFound: number;
   treasuresTotal: number;
 }): PlanetNeeds {
   const { planet } = input;
   const built = need(input.itemsOwned, input.itemsTotal);
-  const lands = need(input.landLevels.filter((level) => level >= planet).length, Math.ceil(input.landLevels.length * LANDS_SHARE));
+  const stations = need(input.stationsOpen, Math.ceil(STATION_COUNT * STATIONS_SHARE));
   const residentsNeed = need(input.gifts, planet * RESIDENTS_PER_PLANET);
   const treasures = need(input.treasuresFound, Math.ceil((input.treasuresTotal * planet) / PLANET_COUNT));
   return {
     built,
     spaceport: input.spaceport,
-    lands,
+    stations,
     residents: residentsNeed,
     treasures,
-    done: built.done && input.spaceport && lands.done && residentsNeed.done && treasures.done,
+    done: built.done && input.spaceport && stations.done && residentsNeed.done && treasures.done,
   };
 }
 

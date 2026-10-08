@@ -217,7 +217,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   const needChips: { icon: string; text: string; done: boolean; count?: string; say: string }[] = [
     { icon: '🚀', text: 'Космопорт', done: needs.spaceport, say: 'Збудуй космопорт: він відкриває шлях до наступної планети.' },
     chip('🏗️', 'Будівлі', needs.built, `Збудуй усе на планеті ${gate.name}. Уже є ${needs.built.have} з ${needs.built.need}.`),
-    chip('🗺️', 'Землі знань', needs.lands, `Підніми землі знань до рівня ${gate.planet}: грай у різні ігри. Уже є ${needs.lands.have} з ${needs.lands.need}.`),
+    chip('🛰️', 'Станції знань', needs.stations, `Відчини станції знань на планеті ${gate.name}. Для цього потрібні ключі знань: їх дають за нові кроки в будь-якій грі. Уже є ${needs.stations.have} з ${needs.stations.need}.`),
     chip('🎁', 'Мешканці', needs.residents, `Запроси мешканців: вони приходять з подарунками на шляху. Уже є ${needs.residents.have} з ${counted(needs.residents.need, ['мешканця', 'мешканців', 'мешканців'])}.`),
     chip('💎', 'Скарби', needs.treasures, `Знайди скарби у скринях. Уже є ${needs.treasures.have} з ${needs.treasures.need}.`),
   ];

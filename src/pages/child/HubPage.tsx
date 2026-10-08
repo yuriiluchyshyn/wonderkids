@@ -1,6 +1,8 @@
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { useEffect, useMemo, useState } from 'react';
 import { StarFilter } from '@/components/hub/StarFilter';
+import { GroupFilter } from '@/components/hub/GroupFilter';
+import type { GameGroup } from '@/core/game/kernel/types';
 import { useHubState } from '@/core/app/ui/useHubState';
 import { difficultyRange } from '@/core/game/kernel/gameConfig';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -34,6 +36,8 @@ export function HubPage() {
   const setGalaxyId = useHubState((s) => s.setGalaxy);
   const stars = useHubState((s) => s.stars);
   const setStars = useHubState((s) => s.setStars);
+  const chosenGroup = useHubState((s) => s.groups[galaxyId] ?? null);
+  const setGroup = useHubState((s) => s.setGroup);
   const [pathEntry, setPathEntry] = useState<CatalogEntry | null>(null);
 
   // Back from a game: bring its card into view (the cards fly in first). The
@@ -55,9 +59,21 @@ export function HubPage() {
   const catalog = useMemo(() => buildCatalog(), []);
   const galaxy = getGalaxy(galaxyId);
   // "Planets" = the galaxy's adventures (module sub-categories).
-  const allPlanets = useMemo(
+  const galaxyPlanets = useMemo(
     () => (galaxy.moduleId ? filterCatalog(catalog, { subjectId: galaxy.moduleId }) : []),
     [catalog, galaxy.moduleId],
+  );
+  // A galaxy whose games come in sets (languages) can be narrowed to one of
+  // them. A remembered set that no longer exists simply shows everything.
+  const groups = useMemo(() => {
+    const seen = new Map<string, GameGroup>();
+    for (const { sub } of galaxyPlanets) if (sub.group && !seen.has(sub.group.id)) seen.set(sub.group.id, sub.group);
+    return seen.size >= 2 ? [...seen.values()] : [];
+  }, [galaxyPlanets]);
+  const groupId = groups.some((g) => g.id === chosenGroup) ? chosenGroup : null;
+  const allPlanets = useMemo(
+    () => (groupId ? galaxyPlanets.filter((entry) => entry.sub.group?.id === groupId) : galaxyPlanets),
+    [galaxyPlanets, groupId],
   );
   // Star filter SORTS, it never hides: games of the chosen level come first,
   // the rest follow dimmed (still playable). A game spanning ★–★★★ matches
@@ -127,6 +143,7 @@ export function HubPage() {
         </motion.div>
       ) : (
         <>
+        {groups.length > 0 && <GroupFilter groups={groups} value={groupId} onChange={(id) => setGroup(galaxyId, id)} />}
         <div data-tip="stars">
           <StarFilter value={stars} onChange={setStars} />
         </div>

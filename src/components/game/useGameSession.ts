@@ -8,6 +8,7 @@ import { LevelEngine, taskKey } from '@/core/game/engine/LevelEngine';
 import type { AnswerResult } from '@/core/game/engine/BaseGameEngine';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { subSteps } from '@/core/child/progress/path';
+import type { CurrencyId } from '@/core/game/content/currency';
 
 /**
  * Mistakes on a task before the helper appears (PRD §5). The helper is ONLY
@@ -73,7 +74,7 @@ export interface GameSession {
  */
 export function drawCandidates(
   module: LearningModule,
-  base: { subCategoryId: string; step: number; choicesCount: number },
+  base: { subCategoryId: string; step: number; choicesCount: number; currency?: CurrencyId },
   count: number,
   recall = true,
 ): TaskInstance[] {
@@ -104,6 +105,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   const levelSize = sub ? tasksPerLevel(sub) : 0;
   const free = sub ? isFreePlay(sub) : false;
   const gridSize = useGameStore((s) => s.settings.choicesGridSize);
+  const currency = useGameStore((s) => s.settings.currency);
   const awardArtifacts = useGameStore((s) => s.awardArtifacts);
   const recordTaskComplete = useGameStore((s) => s.recordTaskComplete);
   const advanceStep = useGameStore((s) => s.advanceStep);
@@ -112,7 +114,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   // One engine per level. Rebuilt only when the level itself changes.
   const engine = useMemo(() => {
     if (!module) return null;
-    const base = { subCategoryId, step, choicesCount: gridSize };
+    const base = { subCategoryId, step, choicesCount: gridSize, currency };
     return new LevelEngine<TaskInstance>({
       steps_count_default: levelSize,
       tasks: drawCandidates(module, base, levelSize, !free),

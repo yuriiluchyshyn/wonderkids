@@ -1,3 +1,5 @@
+import { voiced } from '@/core/lang/numbers';
+
 /** Fetches a phrase as base64 MP3 from the cloud voice; rejects when unavailable. */
 /** Language of a phrase. Everything is Ukrainian except the English-lesson cards. */
 export type SpeechLang = 'uk' | 'en';
@@ -90,8 +92,13 @@ export class SpeechEngine {
   }
 
   /** Speaks `text`; `onEnd` fires when it finishes, is cut off, or cannot play. */
-  speak(text: string, onEnd?: () => void, lang: SpeechLang = 'uk'): void {
+  speak(raw: string, onEnd?: () => void, lang: SpeechLang = 'uk'): void {
     this.cancel();
+    // Every Ukrainian phrase, whoever asks for it, is made ready for the voice
+    // here: numbers, years, clock times and lone letters become words in the
+    // right gender and case (`core/lang/numbers`). A digit handed to a speech
+    // engine is read as it pleases — «два машинки».
+    const text = lang === 'uk' ? voiced(raw) : raw;
     const turn = this.turn;
     this.pendingEnd = onEnd ?? (() => undefined);
     // Locked phone, another app in front: say nothing. Cutting a phrase off

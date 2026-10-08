@@ -12,8 +12,8 @@ import styles from './Templates.module.css';
 /**
  * UI_CHRONO_SEQUENCE — arrange the cards in order by dragging one onto another
  * (or tapping two) to swap them, then confirm.
- * Helper: cards take on an old→new colour gradient and the ones already in
- * the right place light up.
+ * Helper: the cards already in the right place light up, and a task that
+ * brings a `guide` shows the whole row its cards belong to.
  */
 export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<SequencePayload>) {
   const { cards, initial, orientation } = payload;
@@ -81,6 +81,24 @@ export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<S
           );
         })}
       </motion.div>
+      {/* The whole row these cards belong to — the help for a child who is stuck. */}
+      {hintActive && !solved && payload.guide && (
+        <div className={styles.seqGuide} aria-label="Підказка: уся послідовність по порядку">
+          {payload.guide.map((item, i) => (
+            <span key={item.id} className={cn(styles.seqGuideItem, order.includes(item.id) && styles.seqGuideOurs)}>
+              {i > 0 && (
+                <span className={styles.seqGuideArrow} aria-hidden>
+                  ›
+                </span>
+              )}
+              <span className={styles.seqGuideFace}>
+                <CardFace card={{ ...item, label: undefined }} speaker={false} />
+              </span>
+              <small>{item.label}</small>
+            </span>
+          ))}
+        </div>
+      )}
       <Button size="lg" icon="✅" block onClick={check} ariaLabel="Перевірити порядок">
         Готово!
       </Button>

@@ -1,4 +1,5 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
+import type { CurrencyId } from '@/core/game/content/currency';
 /**
  * Declarative task payloads for the CORE UI templates (PRD v4.0 §3.2).
  *
@@ -142,6 +143,12 @@ export interface SequencePayload extends TemplateBase {
   orientation: 'horizontal' | 'vertical';
   /** Labels of the first and last place. Default: «найдавніше» / «найновіше». */
   ends?: [string, string];
+  /**
+   * The whole row the cards are a part of, in the right order — shown as a
+   * small strip below the board once the child needs help (the Sun and all
+   * eight planets, for three planets to arrange).
+   */
+  guide?: Card[];
 }
 
 /** UI_MAP_PUZZLE — tap a region, or drag a marker onto it. */
@@ -180,8 +187,10 @@ export interface CashTrayPayload extends TemplateBase {
   template: Mechanics.CashTray;
   item: Card;
   price: number;
-  /** Coins and notes on offer, in hryvnias. */
+  /** Coins and notes on offer, in whole units of `currency`. */
   wallet: number[];
+  /** The money this till takes. Default: hryvnias. */
+  currency?: CurrencyId;
 }
 
 /** Tangram (UI_DRAG_MATCH family) — rebuild a silhouette from shapes. */
@@ -260,6 +269,12 @@ export interface DotToDotPayload extends TemplateBase {
   stars: DotStar[];
   /** What the finished drawing turns out to be. */
   figure: { name: string; emoji: string };
+  /**
+   * «Знайди сузір’я»: the stars carry no labels and are lost among `decoys` —
+   * other stars of the sky. The child finds the figure by its slightly bigger
+   * stars (`ratio` times a decoy's size) and joins them, in any order.
+   */
+  find?: { decoys: { x: number; y: number }[]; ratio: number };
 }
 
 /** A tube of paint. */
@@ -286,6 +301,25 @@ export interface ColorMixPayload extends TemplateBase {
   recipe: [string, string];
 }
 
+/**
+ * Letter table (UI_DRAG_MATCH family) — a run of the alphabet laid out in
+ * rows. Either some places are empty and their letters wait in a tray to be
+ * dragged in, or the table is full but two letters have swapped places and
+ * the child taps one of them.
+ */
+export interface LetterGridPayload extends TemplateBase {
+  template: Mechanics.LetterGrid;
+  cols: number;
+  /** The letters in the CORRECT order, row by row. */
+  cells: Card[];
+  /** Indices of the cells that start empty; their letters wait in the tray. None in a "find the mistake" task. */
+  gaps: number[];
+  /** Show a pale copy of the letter in every empty cell — the very first steps. */
+  ghosts?: boolean;
+  /** "Find the mistake": the two cells whose letters stand in each other's place. Tapping either answers. */
+  swapped?: [number, number];
+}
+
 export type TemplatePayload =
   | GridChoicePayload
   | DragMatchPayload
@@ -299,7 +333,8 @@ export type TemplatePayload =
   | NumberMazePayload
   | BubblePopPayload
   | DotToDotPayload
-  | ColorMixPayload;
+  | ColorMixPayload
+  | LetterGridPayload;
 
 /** Spoken form of a card (for the speaker button). */
 export function cardSpeech(card: Card): string {

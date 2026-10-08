@@ -1,3 +1,4 @@
+import type { CurrencyId } from '../content/currency';
 import type { ComponentType } from 'react';
 import type { Theme } from '@/core/theme/theme.types';
 import { Mechanics } from './mechanics';
@@ -37,6 +38,8 @@ export interface TaskConfig {
    * Defaults to 9 (3×3) when a module ignores it.
    */
   choicesCount?: number;
+  /** The money a shop task counts in (the parent's setting). Default: hryvnias. */
+  currency?: CurrencyId;
 }
 
 /**
@@ -125,6 +128,16 @@ export type IntroDemo =
   | { kind: 'groups'; groups: number[]; caption: string }
   | { kind: 'pie'; food: string; denom: number; filled: number };
 
+/**
+ * A set of games inside one galaxy that the hub can narrow the list to — in
+ * the Language galaxy, the games of one language. Shown as a chip with `icon`.
+ */
+export interface GameGroup {
+  id: string;
+  icon: string;
+  label: string;
+}
+
 /** A selectable card category inside a subject (shown in the Hub catalog). */
 export interface SubCategory {
   id: string;
@@ -139,20 +152,14 @@ export interface SubCategory {
   intro?: string;
   /** Animated picture shown with the intro. */
   demo?: IntroDemo;
+  /** The set this game belongs to; a galaxy with two or more sets gets a filter in the hub. */
+  group?: GameGroup;
   /**
    * How many difficulty steps this adventure's path has. Different adventures
    * can be longer or shorter (e.g. mental arithmetic has many steps, fractions
    * fewer). Defaults to DEFAULT_STEPS when omitted.
    */
   steps?: number;
-
-  /**
-   * What this game builds in the child's world («Землі знань»): a landmark
-   * that grows in four stages as the child progresses. `stages` names what
-   * appears at each stage (e.g. countries for a geography game); without it
-   * the same building simply grows.
-   */
-  landmark?: { name: string; emoji: string; stages?: [string, string][] };
 
   /**
    * How the game is entered from the Hub:

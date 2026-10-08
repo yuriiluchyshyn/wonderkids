@@ -9,6 +9,9 @@ const HOUR = ['', 'перша', 'друга', 'третя', 'четверта', 
 /** «пів на четверту», «чверть на четверту» — the hour that is coming. */
 const HOUR_TO = ['', 'першу', 'другу', 'третю', 'четверту', 'п’яту', 'шосту', 'сьому', 'восьму', 'дев’яту', 'десяту', 'одинадцяту', 'дванадцяту'];
 
+/** Answers on the board: the right time and five near misses. */
+const OPTIONS = 6;
+
 const nextHour = (h: number) => (h % 12) + 1;
 const digital = ({ h, m }: ClockTime) => `${h}:${String(m).padStart(2, '0')}`;
 const same = (a: ClockTime, b: ClockTime) => a.h === b.h && a.m === b.m;
@@ -69,11 +72,13 @@ export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayloa
     { h: ((time.h + 10) % 12) + 1, m: time.m },
     ...(minutes.includes(swapped.m) ? [swapped] : []),
     ...shuffle(minutes).map((m) => ({ h: time.h, m })),
-    ...Array.from({ length: 4 }, () => ({ h: randInt(1, 12), m: pick(minutes) })),
+    ...Array.from({ length: 12 }, () => ({ h: randInt(1, 12), m: pick(minutes) })),
+    // Whole hours alone give few near misses: any other hour will do then.
+    ...shuffle(Array.from({ length: 12 }, (_, i) => ({ h: i + 1, m: time.m }))),
   ];
   const others: ClockTime[] = [];
   for (const c of shuffle(candidates.slice(0, 3)).concat(candidates.slice(3))) {
-    if (others.length < 3 && !same(c, time) && !others.some((o) => same(o, c))) others.push(c);
+    if (others.length < OPTIONS - 1 && !same(c, time) && !others.some((o) => same(o, c))) others.push(c);
   }
   const options = shuffle([time, ...others]);
   const base = { id: uid('clk'), reward: rewardForStep(step), outro: `Так, це ${sayTime(time)}!` };

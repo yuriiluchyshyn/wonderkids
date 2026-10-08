@@ -1,14 +1,16 @@
+import confetti from 'canvas-confetti';
 import { useState } from 'react';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
-import { LANDMARK_STAGES, PLANET_COUNT } from '@/core/child/world/world';
+import { KEY, KEY_COUNTED } from '@/core/child/world/stations';
 import { PlanetView } from './PlanetView';
-import { useWorld, type Landmark } from '@/core/child/world/useWorld';
+import { useWorld, type StationState, type World } from '@/core/child/world/useWorld';
+import { useGameStore } from '@/core/child/store/useGameStore';
+import { speechEngine } from '@/core/audio/SpeechEngine';
+import { counted } from '@/core/lang/uk';
 import { cn } from '@/core/utils/cn';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { useSound } from '@/core/audio/useSound';
 import styles from './WorldView.module.css';
-
-const STAGE_NAMES = ['Ще не розпочато', 'Закладено фундамент', 'Будівництво триває', 'Майже готово', 'Збудовано!'];
 
 /** Tap a picture to hear what it is (the caption may be hidden or unreadable yet). */
 function useSayOnTap() {
@@ -20,69 +22,112 @@ function useSayOnTap() {
   };
 }
 
-function LandmarkTile({ landmark, planet }: { landmark: Landmark; planet: number }) {
+/**
+ * The stations of knowledge of the planet being looked at. Tapping one reads
+ * out what it is and what it costs; one the child has keys for then shows the
+ * button that opens it.
+ */
+function Stations({ world }: { world: World }) {
   const showText = useShowText();
-  const say = useSayOnTap();
-  const { stage, stages } = landmark;
-  // With named stages, the newest unlocked one is the face of the landmark.
-  const face = stage > 0 && stages ? stages[stage - 1] : null;
+  const announce = useVoiceSpeak('selections');
+  const { play } = useSound();
+  const open = useGameStore((s) => s.openStation);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { stations, keys, needs } = world;
+
+  const describe = ({ station, cost, status, missing }: StationState): string => {
+    if (status === 'open') return `${station.name}. Уже відчинено! ${station.about}`;
+    if (!world.open) return `${station.name}. ${station.about} Ця планета ще закрита.`;
+    const price = `Щоб відчинити, потрібно ${counted(cost, KEY_COUNTED)}.`;
+    if (status === 'saving') return `${station.name}. ${station.about} ${price} Збери ще ${missing}: ключі дають за нові кроки в будь-якій грі.`;
+    return `${station.name}. ${station.about} ${price} Можна відчиняти!`;
+  };
+
+  const select = (state: StationState) => {
+    play('tap');
+    setSelectedId(state.station.id);
+    announce(describe(state));
+  };
+
+  const unlock = (state: StationState) => {
+    if (!open(state.station.id, world.planet)) return;
+    // Whatever was being said about the price is no longer true.
+    speechEngine.cancel();
+    setSelectedId(null);
+    play('treasure');
+    confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 }, scalar: 0.9 });
+    window.setTimeout(() => announce(`${state.station.name}. Відчинено!`), 500);
+  };
+
   return (
-    <li
-      className={cn(styles.landmark, stage === 0 && styles.locked, stage === LANDMARK_STAGES && styles.built)}
-      aria-label={`${landmark.name}: ${STAGE_NAMES[stage]}`}
-      role="button"
-      tabIndex={0}
-      onClick={say(
-        stage === 0
-          ? `${landmark.name}. Грай у гру «${landmark.sub.label}», щоб це збудувати.`
-          : `${face?.[1] ?? landmark.name}. ${STAGE_NAMES[stage]}. Рівень ${landmark.level} з ${PLANET_COUNT}. ${
-              landmark.level >= planet ? 'Для цієї планети досить!' : `Для цієї планети потрібен рівень ${planet} — грай далі у гру «${landmark.sub.label}».`
-            }`,
-      )}
-    >
-      <span className={cn(styles.landmarkEmoji, 'emoji')} style={{ fontSize: `${1.7 + stage * 0.32}rem` }} aria-hidden>
-        {stage === 0 ? '🚧' : (face?.[0] ?? landmark.emoji)}
-      </span>
+    <section className={styles.card}>
+      <h2 className={styles.title}>
+        <span className="emoji" aria-hidden>
+          🛰️
+        </span>{' '}
+        Станції знань
+        <span className={styles.count}>
+          {needs.stations.have} / {needs.stations.need}
+        </span>
+        <button
+          type="button"
+          className={styles.keys}
+          aria-label={`Ключі знань: ${keys}`}
+          onClick={() => {
+            play('tap');
+            announce(`У тебе ${counted(keys, KEY_COUNTED)} знань. Ключ дають за кожен новий крок у будь-якій грі. Ключами відчиняють станції знань.`);
+          }}
+        >
+          <span className="emoji" aria-hidden>
+            {KEY}
+          </span>{' '}
+          {keys}
+        </button>
+      </h2>
       {showText && (
-        <span className={styles.landmarkText}>
-          <span className={styles.landmarkName}>{face?.[1] ?? landmark.name}</span>
-          <span className={styles.landmarkGame}>
-            {landmark.sub.icon} {stage === 0 ? `Грай «${landmark.sub.label}», щоб збудувати` : STAGE_NAMES[stage]} · рівень {landmark.level}
-            {landmark.level >= planet ? ' ✅' : ''}
-          </span>
-        </span>
+        <p className={styles.hint}>
+          Станції відчиняють ключами знань {KEY}. Ключ дають за кожен новий крок у будь-якій грі. Щоб летіти далі з планети «{world.planetName}», відчини
+          щонайменше {needs.stations.need}.
+        </p>
       )}
-      {stages ? (
-        <span className={styles.stageRow} aria-hidden>
-          {stages.map(([emoji], i) => (
-            <span key={i} className={cn(styles.stageChip, 'emoji', i < stage && styles.stageOn)}>
-              {emoji}
-            </span>
-          ))}
-        </span>
-      ) : (
-        <span className={styles.stageRow} aria-hidden>
-          {Array.from({ length: LANDMARK_STAGES }, (_, i) => (
-            <span key={i} className={cn(styles.stagePip, i < stage && styles.stageOn)} />
-          ))}
-        </span>
-      )}
-    </li>
+      <ul className={styles.stations}>
+        {stations.map((state) => {
+          const { station, cost, status } = state;
+          const ready = world.open && status === 'affordable';
+          return (
+            <li key={station.id} className={cn(styles.station, status === 'open' && styles.built, status !== 'open' && !ready && styles.locked, ready && styles.ready)}>
+              <button type="button" className={styles.stationFace} aria-label={station.name} onClick={() => select(state)}>
+                <span className={cn(styles.stationEmoji, 'emoji')} aria-hidden>
+                  {station.emoji}
+                </span>
+                {showText && <span className={styles.stationName}>{station.name}</span>}
+                <span className={styles.stationPrice}>{status === 'open' ? '✓' : !world.open ? '🔒' : `${cost} ${KEY}`}</span>
+              </button>
+              {ready && selectedId === station.id && (
+                <button type="button" className={styles.stationOpen} onClick={() => unlock(state)}>
+                  🔓 {showText ? 'Відчинити' : ''} {cost} {KEY}
+                </button>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
 
 /**
  * «Мій світ» — the world the child builds by learning: the theme's planet
- * (artifacts exchanged for buildings, ending in the dream build), the lands of knowledge
- * (one landmark per game, growing with progress) and the residents that gifts
- * bring. Everything here is earned; nothing can be lost.
+ * (artifacts exchanged for buildings, ending in the dream build), the stations
+ * of knowledge (opened with keys of knowledge, earned in any game) and the
+ * residents that gifts bring.
  */
 export function WorldView() {
   const showText = useShowText();
   // The planet being looked at; by default the furthest one reached.
   const [planet, setPlanet] = useState<number | undefined>(undefined);
   const world = useWorld(planet);
-  const { def, lands, residents } = world;
+  const { def, residents } = world;
   const say = useSayOnTap();
 
   return (
@@ -90,38 +135,8 @@ export function WorldView() {
       {/* ---- The planet: exchange artifacts for buildings and decorations ---- */}
       <PlanetView world={world} onPlanet={setPlanet} />
 
-      {/* ---- Lands of knowledge ---- */}
-      <section className={styles.card}>
-        <h2 className={styles.title}>
-          <span className="emoji" aria-hidden>
-            🗺️
-          </span>{' '}
-          Землі знань
-        </h2>
-        {showText && (
-          <p className={styles.hint}>
-            Кожна гра будує щось своє і росте рівень за рівнем — по одному на кожну планету. Для планети «{world.planetName}» потрібен рівень {world.planet}.
-          </p>
-        )}
-        {lands.map(({ module, landmarks }) => (
-          <div key={module.id} className={styles.land}>
-            <h3 className={styles.landTitle}>
-              <span className="emoji" aria-hidden>
-                {module.icon}
-              </span>{' '}
-              {module.title}
-              <span className={styles.count}>
-                {landmarks.filter((l) => l.stage > 0).length} / {landmarks.length}
-              </span>
-            </h3>
-            <ul className={styles.landmarks}>
-              {landmarks.map((landmark) => (
-                <LandmarkTile key={landmark.sub.id} landmark={landmark} planet={world.planet} />
-              ))}
-            </ul>
-          </div>
-        ))}
-      </section>
+      {/* ---- Stations of knowledge: exchange keys of knowledge ---- */}
+      <Stations world={world} />
 
       {/* ---- Residents ---- */}
       <section className={styles.card}>

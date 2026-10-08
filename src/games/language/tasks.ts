@@ -1,15 +1,11 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskInstance } from '@/core/game/kernel/types';
-import type { Card, DragMatchPayload, SpeechLang, TemplatePayload } from '@/core/game/templates/types';
-import { counted, noun } from '@/core/lang/uk';
+import type { Card, DragMatchPayload, LetterGridPayload, SpeechLang, TemplatePayload } from '@/core/game/templates/types';
+import { letterName, say } from '@/core/lang/numbers';
 import { shuffle } from '@/core/utils/random';
-import { factPool } from '../shared/facts';
 import { templateTask, type GameTasks, type TemplateGame } from '../shared/templateModule';
 
 type Tasks = TaskInstance<TemplatePayload>[];
-
-const SYLLABLE = noun('склад', 'm');
-const LETTER = noun('літера', 'f');
 
 /** A word with its picture. */
 export type Word = [word: string, emoji: string];
@@ -26,11 +22,14 @@ export interface Assoc {
 }
 
 /**
- * The content of the four language games in one language (Tech Spec v6 §2.1).
+ * The content of the language games in one language (Tech Spec v6 §2.1).
  * The mechanics are identical for every language — only this pack differs.
  */
 export interface LangPack {
   lang: SpeechLang;
+  /** How the hub's language filter names the pack («Українська мова») and its flag. */
+  name: string;
+  flag: string;
   /** Prefix of game ids: '' for the native language, 'en_' for English. */
   prefix: string;
   alphabet: string[];
@@ -44,8 +43,7 @@ export interface LangPack {
   /** Rhyme families: every word of a family rhymes with the others. `word` or `word|emoji`. */
   rhymes: string[][];
   sentences: { two: Sentence[]; three: Sentence[]; long: Sentence[] };
-  cards: Record<GameKind, Pick<TemplateGame, 'label' | 'icon' | 'blurb' | 'intro' | 'landmark' | 'difficulty'>>;
-  facts: Record<'general' | GameKind, string[]>;
+  cards: Record<GameKind, Pick<TemplateGame, 'label' | 'icon' | 'blurb' | 'intro' | 'difficulty'>>;
 }
 
 /** Path length of every language game. */
@@ -63,10 +61,15 @@ export const STAGE = {
   /** Sentence builder: three words, four and five words. */
   three: 11,
   long: 31,
+  /** Alphabet table: no more pale letters, a longer table, two swapped letters to find, the whole alphabet. */
+  abcPlain: 4,
+  abcLong: 13,
+  abcSpot: 21,
+  abcWhole: 31,
 } as const;
 
-/** The four games of a language, in catalog order. */
-export const GAME_KINDS = ['bubbles', 'chain', 'rhymes', 'sentences'] as const;
+/** The games of a language, in catalog order. */
+export const GAME_KINDS = ['alphabet', 'bubbles', 'chain', 'rhymes', 'sentences'] as const;
 export type GameKind = (typeof GAME_KINDS)[number];
 /** New questions a step opens, where the content allows (the other half of a level is recall). */
 const PER_STEP = 25;
@@ -129,16 +132,151 @@ function alphabetRuns(alphabet: string[]): string[][] {
   });
 }
 
-/** The task generators of the four games of one language, by game id. */
+/**
+ * A small seeded generator. The alphabet tables of a step are made up, not
+ * listed — and a step must make up the same ones every time it is asked, or a
+ * level could not tell this step's new tables from the recalled ones.
+ */
+function seeded(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** One alphabet table: a run of `length` letters from `start`, with empty places or two letters swapped. */
+interface AbcTable {
+  key: string;
+  start: number;
+  length: number;
+  cols: number;
+  gaps: number[];
+  ghosts: boolean;
+  swapped?: [number, number];
+}
+
+/**
+ * The alphabet tables each path step opens (index 0 = step 1), harder step by
+ * step: ten letters with one or two places empty and a pale copy of the letter
+ * in each → no pale letters, more places → eighteen letters → two letters
+ * swapped (far apart first, then neighbours, which is harder to see) → the
+ * whole alphabet, with more and more of it empty, until all of it is.
+ */
+function alphabetTables(size: number, seed: number): AbcTable[][] {
+  const seen = new Set<string>();
+  const between = (rand: () => number, min: number, max: number) => min + Math.floor(rand() * (max - min + 1));
+  /** From `from` up to `to` over the steps `first`…`last`. */
+  const grow = (step: number, first: number, last: number, from: number, to: number) => Math.round(from + ((to - from) * (step - first)) / Math.max(1, last - first));
+
+  return Array.from({ length: LANGUAGE_STEPS }, (_, at) => {
+    const step = at + 1;
+    const rand = seeded(seed * 1000 + step);
+    const tables: AbcTable[] = [];
+
+    const fill = (length: number, cols: number, count: number, ghosts: boolean): AbcTable => {
+      const start = between(rand, 0, size - length);
+      const places = Array.from({ length }, (_, i) => i);
+      // A seeded shuffle: the first `count` places are the empty ones.
+      for (let i = places.length - 1; i > 0; i -= 1) {
+        const j = between(rand, 0, i);
+        [places[i], places[j]] = [places[j], places[i]];
+      }
+      const gaps = places.slice(0, Math.max(1, Math.min(length, count))).sort((a, b) => a - b);
+      return { key: `abc:${start}:${length}:${gaps.join('.')}`, start, length, cols, gaps, ghosts };
+    };
+    const spot = (length: number, cols: number, apart: [number, number]): AbcTable => {
+      const start = between(rand, 0, size - length);
+      const gap = between(rand, apart[0], apart[1]);
+      const a = between(rand, 0, length - 1 - gap);
+      return { key: `abc:swap:${start}:${length}:${a}.${a + gap}`, start, length, cols, gaps: [], ghosts: false, swapped: [a, a + gap] };
+    };
+
+    // Up to `PER_STEP` different tables; a few spare tries, since a made-up one may repeat an earlier one.
+    for (let n = 0; tables.length < PER_STEP && n < PER_STEP * 4; n += 1) {
+      let table: AbcTable;
+      if (step < STAGE.abcPlain) table = fill(10, 5, step === 1 ? 1 : 2, true);
+      else if (step < STAGE.abcLong) table = fill(10, 5, grow(step, STAGE.abcPlain, STAGE.abcLong - 1, 2, 5), false);
+      else if (step < STAGE.abcSpot) table = fill(18, 6, grow(step, STAGE.abcLong, STAGE.abcSpot - 1, 4, 8) - (n % 2), false);
+      else if (step < STAGE.abcWhole) {
+        const late = step >= STAGE.abcSpot + 5;
+        table = spot(late ? 18 : 12, 6, late ? [1, 2] : [3, 8]);
+      } else if (n % 5 === 4) table = spot(size, 6, [1, 2]);
+      else table = fill(size, 6, grow(step, STAGE.abcWhole, LANGUAGE_STEPS, 6, size) - (n % 3), false);
+
+      if (seen.has(table.key)) continue;
+      seen.add(table.key);
+      tables.push(table);
+    }
+    return tables;
+  });
+}
+
+/** The task generators of the games of one language, by game id. */
 export function languageTasks(pack: LangPack): Record<string, GameTasks> {
   const { lang } = pack;
   const uk = lang === 'uk';
   const upper = (s: string) => s.toLocaleUpperCase(lang);
-  const outro = (game: keyof LangPack['facts'], own?: string) => factPool(own, pack.facts[game], pack.facts.general);
 
   /** A text card read aloud in the pack's language. */
   const word = (id: string, label: string, emoji?: string): Card => ({ id, label, emoji, speak: label, lang });
-  const letterCard = (id: string, letter: string): Card => ({ id, label: upper(letter), speak: letter, lang });
+  // A lone letter is read unpredictably: the Ukrainian voice gets its name («же»).
+  const letterCard = (id: string, letter: string): Card => ({ id, label: upper(letter), speak: uk ? letterName(letter) : letter, lang });
+  /** A letter inside a spoken sentence: «літера „же“». */
+  const said = (letter: string) => (uk ? say(upper(letter), letterName(letter)) : upper(letter));
+
+  // ---------------------------------------------------------------- Game 0 —
+  // Alphabet table: put the missing letters in their places; later — find the
+  // two letters that swapped places.
+  const abcSteps = alphabetTables(pack.alphabet.length, uk ? 1 : 2);
+
+  function alphabet(step: number): Tasks {
+    return abcSteps.slice(0, Math.max(1, Math.min(LANGUAGE_STEPS, step))).flatMap((tables) =>
+      tables.map(({ key, start, length, cols, gaps, ghosts, swapped }) => {
+        const letters = pack.alphabet.slice(start, start + length);
+        const payload: LetterGridPayload = {
+          template: Mechanics.LetterGrid,
+          cols,
+          cells: letters.map((l, i) => letterCard(`c${start + i}`, l)),
+          gaps,
+          ghosts,
+          swapped,
+        };
+
+        if (swapped) {
+          const [a, b] = swapped;
+          const order = `В абетці літера «${said(letters[a])}» стоїть раніше, ніж літера «${said(letters[b])}».`;
+          return templateTask(
+            key,
+            `Дві ${uk ? '' : 'англійські '}літери помінялися місцями. Торкнись літери, яка стоїть не на своєму місці.`,
+            { ...payload, hint: uk ? `${order} Ці дві літери блимають.` : 'Проспівай англійську абетку по порядку. Дві літери, що помінялися місцями, блимають.' },
+            step,
+            uk ? order : undefined,
+          );
+        }
+
+        // What the hint and the fact say about the first empty place: the letter and its neighbour.
+        const at = gaps[0];
+        const neighbour = at > 0 ? `Після літери «${said(letters[at - 1])}» в абетці стоїть літера «${said(letters[at])}».` : `Перед літерою «${said(letters[1])}» в абетці стоїть літера «${said(letters[0])}».`;
+        const prompt =
+          gaps.length === pack.alphabet.length
+            ? `Склади всю ${uk ? '' : 'англійську '}абетку: постав кожну літеру на її місце.`
+            : gaps.length === 1
+              ? `Постав ${uk ? '' : 'англійську '}літеру на її місце в абетці.`
+              : `Постав ${uk ? '' : 'англійські '}літери на свої місця в абетці.`;
+        return templateTask(
+          key,
+          prompt,
+          { ...payload, hint: uk ? `${neighbour} Її місце блимає.` : 'Згадай англійську абетку. Місце для наступної літери блимає, а в порожніх клітинках видно підказки.' },
+          step,
+          uk ? neighbour : undefined,
+        );
+      }),
+    );
+  }
 
   // ---------------------------------------------------------------- Game 1 —
   // Bubble pop: 1–10 the alphabet, 11–25 syllables / phonics, 26–50 words.
@@ -157,18 +295,16 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
     const tasks: Tasks = [];
 
     for (const run of opened(abcTier, step)) {
-      const shown = run.map(upper);
       tasks.push(
         templateTask(
           `abc:${run.join('')}`,
-          uk ? `Лопай літери за абеткою: від ${shown[0]} до ${shown[shown.length - 1]}.` : 'Лопай англійські літери за абеткою — від першої до останньої.',
+          uk ? `Лопай літери за абеткою: від ${said(run[0])} до ${said(run[run.length - 1])}.` : 'Лопай англійські літери за абеткою — від першої до останньої.',
           {
             template: Mechanics.BubblePop,
             bubbles: run.map((l, i) => letterCard(`b${i}`, l)),
-            hint: uk ? `Згадай абетку: ${shown.join(', ')}.` : 'Згадай англійську абетку. Потрібна бульбашка блимає.',
+            hint: uk ? `Згадай абетку: ${run.map(said).join(', ')}.` : 'Згадай англійську абетку. Потрібна бульбашка блимає.',
           },
           step,
-          outro('bubbles', uk ? `В абетці ці літери стоять так: ${shown.join(', ')}.` : undefined),
         ),
       );
     }
@@ -186,7 +322,6 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             hint: uk ? `Слово «${whole}» складається так: ${parts.join(' — ')}.` : 'Подивись на слово під малюнком і лопай літери зліва направо.',
           },
           step,
-          outro('bubbles', uk ? `У слові «${whole}» ${counted(parts.length, SYLLABLE)}: ${parts.join('-')}.` : undefined),
         ),
       );
     }
@@ -204,10 +339,9 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
           target: { id: 'target', emoji, label: byEar ? undefined : upper(whole), speak: whole, lang },
           bubbles: letters.map((l, i) => letterCard(`b${i}`, l)),
           extras: strays.map((l, i) => letterCard(`x${i}`, l)),
-          hint: uk ? `Вимов слово повільно: ${letters.map(upper).join(', ')}.` : 'Подивись на слово під малюнком і лопай літери зліва направо. Зайві літери не лопаються.',
+          hint: uk ? `Вимов слово повільно: ${whole}. Його літери: ${letters.map(said).join(', ')}.` : 'Подивись на слово під малюнком і лопай літери зліва направо. Зайві літери не лопаються.',
         },
         step,
-        outro('bubbles', uk ? `У слові «${whole}» ${counted(letters.length, LETTER)}.` : undefined),
       );
     };
     for (const w of opened(spellTier, step)) tasks.push(spell(w, false));
@@ -253,7 +387,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             uk ? `Вимов слово вголос і послухай перший звук. «${lead[0]}» починається на літеру «${first(lead)}».` : 'Подивись, з якої літери починається кожне слово.',
           ),
           step,
-          outro('chain', uk ? `Слово «${lead[0]}» починається на літеру «${first(lead)}».` : undefined),
+          uk ? `Слово «${lead[0]}» починається на літеру «${first(lead)}».` : undefined,
         ),
       );
     }
@@ -270,7 +404,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             uk ? `«${lead[0][0]}» і «${lead[1][0]}» починаються на однакову літеру — «${first(lead[0])}».` : 'Порівняй перші літери слів: у пари вони однакові.',
           ),
           step,
-          outro('chain', uk ? `«${lead[0][0]}» і «${lead[1][0]}» починаються на літеру «${first(lead[0])}».` : undefined),
+          uk ? `«${lead[0][0]}» і «${lead[1][0]}» починаються на літеру «${first(lead[0])}».` : undefined,
         ),
       );
     }
@@ -291,7 +425,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             uk ? `Подивись на малюнок: це «${lead[0]}${lead[1]}». Слово починається зі складу «${lead[0]}».` : 'Натисни на динамік біля малюнка, послухай слово і знайди його початок.',
           ),
           step,
-          outro('chain', uk ? `«${lead[0]}» і «${lead[1]}» — разом це слово «${lead[0]}${lead[1]}».` : undefined),
+          uk ? `«${lead[0]}» і «${lead[1]}» — разом це слово «${lead[0]}${lead[1]}».` : undefined,
         ),
       );
     }
@@ -308,7 +442,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             uk ? `Подумай, що буває разом. «${lead.a}» — «${lead.b}».` : 'Натисни на динамік, щоб почути слово. Шукай те, що буває з ним разом.',
           ),
           step,
-          outro('chain', uk ? `«${lead.a}» і «${lead.b}» — ці слова завжди поруч.` : undefined),
+          uk ? `«${lead.a}» і «${lead.b}» — ці слова завжди поруч.` : undefined,
         ),
       );
     }
@@ -359,7 +493,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             : 'Натисни на динаміки й послухай: слова, що римуються, звучать наприкінці однаково.',
         ),
         step,
-        outro('rhymes', uk ? `«${lead.a[0]}» — «${lead.b[0]}». Це рима!` : undefined),
+        uk ? `«${lead.a[0]}» — «${lead.b[0]}». Це рима!` : undefined,
       );
     });
   }
@@ -392,13 +526,14 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
               : 'Речення починається зі слова з великої літери, а закінчується словом із крапкою.',
           },
           step,
-          outro('sentences', uk ? text : undefined),
+          uk ? text : undefined,
         );
       }),
     );
   }
 
   return {
+    [`${pack.prefix}alphabet`]: { pool: alphabet },
     [`${pack.prefix}bubbles`]: { pool: bubbles },
     [`${pack.prefix}chain`]: { pool: chain },
     [`${pack.prefix}rhymes`]: { pool: rhymes },

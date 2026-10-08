@@ -1,8 +1,7 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { COUNTRIES } from './content/countries';
-import { FLAG_STEPS, BIOME_STEPS, OCEAN_STEPS, CAPITALS, CAPITAL_STEPS } from './tasks';
-import { BIOME_ANIMALS } from './content/data';
+import { FLAG_STEPS, BIOME_STEPS, OCEAN_STEPS, CAPITALS, CAPITAL_STEPS, ZONE_ANIMALS } from './tasks';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
@@ -19,7 +18,6 @@ export const SUBJECT: SubjectDef = {
 export const GAMES: GameCard[] = [
   {
     id: 'flags',
-    landmark: { name: 'Алея прапорів', emoji: '🚩', stages: [['🇺🇦', 'Україна'], ['🗼', 'Франція'], ['🗻', 'Японія'], ['🗽', 'Америка']] },
     gameId: 'geo_flags_quiz',
     label: 'Вгадай Прапор',
     icon: '🚩',
@@ -34,7 +32,6 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'continents',
-    landmark: { name: 'Материки', emoji: '🗺️', stages: [['🦘', 'Австралія'], ['🦁', 'Африка'], ['🐼', 'Азія'], ['🌍', 'Увесь світ']] },
     gameId: 'geo_continent_puzzle',
     label: 'Склади Карту',
     icon: '🗺️',
@@ -48,12 +45,11 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'biomes',
-    landmark: { name: 'Заповідник', emoji: '🏞️', stages: [['❄️', 'Арктика'], ['🌴', 'Джунглі'], ['🌾', 'Савана'], ['🏔️', 'Гори']] },
     gameId: 'geo_biomes_sorter',
     label: 'Тварини і Природні Зони',
     icon: '🐧',
-    blurb: `${BIOME_ANIMALS.length} тварин і сім природних зон — від Арктики до савани`,
-    intro: 'Кожна тваринка любить свій дім. Комусь добре серед криги, а комусь — у спекотній пустелі. Допоможи їм дістатися додому! Далі на шляху з’являться нові зони: савана, ліс і гори.',
+    blurb: `${ZONE_ANIMALS.length} тварини і сім природних зон — від Арктики до савани`,
+    intro: 'Кожна тваринка любить свій дім. Комусь добре серед криги, а комусь — у спекотній пустелі. Допоможи їм дістатися додому! Далі на шляху — нові тварини, загадки «Хто це?» і завдання «Хто тут зайвий?».',
     steps: BIOME_STEPS,
     difficulty: [1, 2],
     publishDate: V4_RELEASE,
@@ -63,12 +59,11 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'oceans',
-    landmark: { name: 'Морський порт', emoji: '⚓', stages: [['⛵', 'Причал'], ['🏝️', 'Острів'], ['🚢', 'Порт'], ['🐬', 'Океанаріум']] },
     gameId: 'geo_oceans',
     label: 'Моря та Океани',
     icon: '⛵',
-    blurb: 'П’ять океанів, сімнадцять морів і дванадцять дивовижних місць',
-    intro: 'На нашій планеті п’ять океанів. Послухай, куди пливти, і торкнись потрібного океану на карті! Далі на шляху — загадки про океани, моря та найцікавіші місця.',
+    blurb: 'П’ять океанів, півсотні морів і заток, острови, країни та річки',
+    intro: 'На нашій планеті п’ять океанів. Послухай, куди пливти, і торкнись потрібного океану на карті! Далі на шляху — загадки про океани, моря й затоки, острови, країни та річки.',
     steps: OCEAN_STEPS,
     difficulty: 2,
     publishDate: V4_RELEASE,
@@ -77,7 +72,6 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'capitals',
-    landmark: { name: 'Столиці світу', emoji: '🌐', stages: [['⛪', 'Київ'], ['🕰️', 'Лондон'], ['🗼', 'Париж'], ['🏯', 'Пекін']] },
     gameId: 'geo_timezones_capitals',
     label: 'Столиці та Часові Пояси',
     icon: '🌐',

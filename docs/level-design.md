@@ -186,5 +186,4 @@ factPool(person.fact, CALLING_FACTS[CALLING_OF[person.id]]);
 3. Обрати спосіб із розділу 3 (генератор / пул, що росте / рейтинг із `level`).
 4. Дати кожному завданню `hint` (що сказати після помилок) і пул `outro` з 10+ текстів.
 5. Якщо в грі є текст для читання — `hasText: true`.
-6. Додати `landmark` (що гра будує у «Моєму світі»).
 7. Запустити `npm test`, `npm run check:content` і `npm run build`.

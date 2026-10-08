@@ -21,14 +21,19 @@ export const SHAKE_TRANSITION = { duration: 0.3 };
 /** Pulse on an accepted drop (§3.3 SND_DROP_SLOT). */
 export const PULSE = { scale: [1, 1.14, 1] };
 
+/** How the unknown is written in a math line and drawn in a word problem's picture row. */
+export const ASK_GLYPH = '?';
+export const ASK_EMOJI = '❓';
+
 /** A math line: numbers/operators as text, fractions stacked vertically. */
-export function Glyphs({ glyphs, className }: { glyphs: Glyph[]; className?: string }) {
+export function Glyphs({ glyphs, className, answer }: { glyphs: Glyph[]; className?: string; answer?: string }) {
   return (
     <span className={cn(styles.glyphs, className)} aria-label={glyphs.map(glyphSpeech).join(' ')}>
       {glyphs.map((g, i) =>
         typeof g === 'string' ? (
-          <span key={i} aria-hidden>
-            {g}
+          // The unknown of the line: the right answer lands here (`data-ask`).
+          <span key={i} aria-hidden data-ask={g === ASK_GLYPH ? '' : undefined} className={g === ASK_GLYPH && answer ? styles.askFilled : undefined}>
+            {g === ASK_GLYPH && answer ? answer : g}
           </span>
         ) : 'text' in g ? (
           <span key={i} className={g.tone === 'a' ? styles.toneA : styles.toneB} aria-hidden>
@@ -105,10 +110,13 @@ export function Stimulus({
   payload,
   onSpeak,
   children,
+  answer,
 }: {
   payload: TemplatePayload;
   onSpeak: () => void;
   children?: ReactNode;
+  /** The solved answer, shown in place of the task's «?» (see `data-ask`). */
+  answer?: string;
 }) {
   const s = payload.stimulus;
   if (!s && !children) return null;
@@ -157,14 +165,18 @@ export function Stimulus({
       {s?.scene && (
         <span className={styles.scene} aria-hidden>
           {s.scene.map((chip, i) => (
-            <span key={i} className={styles.sceneChip}>
-              <span className={cn(styles.sceneEmoji, 'emoji')}>{chip.emoji}</span>
+            <span key={i} className={styles.sceneChip} data-ask={chip.emoji === ASK_EMOJI ? '' : undefined}>
+              {chip.emoji === ASK_EMOJI && answer ? (
+                <span className={cn(styles.sceneEmoji, styles.askFilled)}>{answer}</span>
+              ) : (
+                <span className={cn(styles.sceneEmoji, 'emoji')}>{chip.emoji}</span>
+              )}
               {chip.label && <span className={styles.sceneLabel}>{chip.label}</span>}
             </span>
           ))}
         </span>
       )}
-      {s?.glyphs && <Glyphs glyphs={s.glyphs} className={styles.stimulusGlyphs} />}
+      {s?.glyphs && <Glyphs glyphs={s.glyphs} className={styles.stimulusGlyphs} answer={answer} />}
       {s?.caption && <span className={styles.stimulusCaption}>{s.caption}</span>}
       {children}
     </motion.button>

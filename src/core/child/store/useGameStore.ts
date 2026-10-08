@@ -7,7 +7,9 @@ import {
 } from '@/core/audio/voiceChannels';
 import { clampStep, pathKey } from '@/core/child/progress/path';
 import { playsKey } from '@/core/child/progress/plays';
-import { balanceOf, itemCost, lossKey, ownedKey, sellPrice } from '@/core/child/world/world';
+import { balanceOf, itemCost, lossKey, ownedKey, sellPrice, stationCost, stationKey } from '@/core/child/world/world';
+import { keysOf } from '@/core/child/world/games';
+import { DEFAULT_CURRENCY, isCurrency, type CurrencyId } from '@/core/game/content/currency';
 import { uid } from '@/core/utils/random';
 // Note: no DEFAULT_THEME_ID import — a child's theme is `null` until chosen;
 // useActiveTheme resolves null → the neutral galaxy skin.
@@ -114,6 +116,10 @@ export interface Settings {
   ttsButtons: boolean;
   /** Anti-guessing grid size (9 = 3×3, default). */
   choicesGridSize: ChoicesGridSize;
+  /** Tell the short fact after a right answer. Off — the next task starts at once. */
+  funFacts: boolean;
+  /** The money the shop game counts in. */
+  currency: CurrencyId;
   /** Non-aggressive screen-time / fuel limits. */
   timeControl: TimeControl;
 }
@@ -214,6 +220,11 @@ export interface GameState extends ActiveChildView, PersistableState {
    */
   sellWorldItem: (themeId: string, id: string, planet?: number) => number;
   /**
+   * Exchange keys of knowledge for a station on `planet`. Returns false when
+   * there are too few keys or the station is already open.
+   */
+  openStation: (id: string, planet?: number) => boolean;
+  /**
    * The child closed an onboarding tip — never show it again. Remembered as a
    * `tip:<id>` key inside `treasures` (like world purchases), so it syncs to
    * the account and a parent can reset it from their cabinet.
@@ -310,6 +321,8 @@ const DEFAULT_SETTINGS: Settings = {
   minTasksPerLevel: 10,
   choicesGridSize: 9,
   ttsButtons: true,
+  funFacts: true,
+  currency: DEFAULT_CURRENCY,
   timeControl: { ...DEFAULT_TIME_CONTROL },
 };
 
@@ -430,6 +443,8 @@ function migrateChild(raw: Record<string, unknown>): ChildState {
     settings: {
       ...base.settings,
       ...settings,
+      funFacts: settings.funFacts ?? base.settings.funFacts,
+      currency: isCurrency(settings.currency) ? settings.currency : base.settings.currency,
       voice: { ...base.settings.voice, ...(settings.voice ?? {}) },
       timeControl: { ...base.settings.timeControl, ...(settings.timeControl ?? {}) },
     },
@@ -599,6 +614,20 @@ export const useGameStore = create<GameState>()((set) => ({
       }),
     );
     return refund;
+  },
+
+  openStation: (id, planet = 1) => {
+    let opened = false;
+    set((s) =>
+      patchActive(s, (c) => {
+        const key = stationKey(id, planet);
+        const cost = stationCost(id, planet);
+        if (cost <= 0 || c.treasures.includes(key) || keysOf(c.progress, c.treasures) < cost) return c;
+        opened = true;
+        return { ...c, treasures: [...c.treasures, key] };
+      }),
+    );
+    return opened;
   },
 
   markTipSeen: (tipId) =>

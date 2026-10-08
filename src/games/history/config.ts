@@ -17,7 +17,6 @@ export const SUBJECT: SubjectDef = {
 export const GAMES: GameCard[] = [
   {
     id: 'dinosaurs',
-    landmark: { name: 'Парк динозаврів', emoji: '🦖', stages: [['🥚', 'Яйце'], ['🦕', 'Диплодок'], ['🦖', 'Тиранозавр'], ['🌋', 'Парк динозаврів']] },
     gameId: 'hist_dino_diet',
     label: 'Динозаври',
     icon: '🦖',
@@ -33,7 +32,6 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'epochs',
-    landmark: { name: 'Місто крізь віки', emoji: '⏳', stages: [['⛰️', 'Печера'], ['🐫', 'Піраміди'], ['🏰', 'Замок'], ['🏙️', 'Сучасне місто']] },
     gameId: 'hist_time_machine',
     label: 'Часова Машина',
     icon: '⏳',
@@ -49,7 +47,6 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'world_figures',
-    landmark: { name: 'Музей великих людей', emoji: '🏛️', stages: [['🎭', 'Театр'], ['🔭', 'Обсерваторія'], ['🖼️', 'Галерея'], ['🏛️', 'Музей']] },
     gameId: 'hist_world_figures',
     label: 'Видатні Постаті Світу',
     icon: '🌟',
@@ -64,7 +61,6 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'ua_figures',
-    landmark: { name: 'Алея слави України', emoji: '🇺🇦', stages: [['📖', 'Бібліотека'], ['🔔', 'Дзвіниця'], ['🚀', 'Космодром'], ['🇺🇦', 'Алея слави']] },
     gameId: 'hist_ua_figures',
     label: 'Видатні Постаті України',
     icon: '🇺🇦',
@@ -79,7 +75,6 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'inventions',
-    landmark: { name: 'Музей винаходів', emoji: '💡', stages: [['💡', 'Лампочка'], ['☎️', 'Телефон'], ['✈️', 'Літак'], ['🏭', 'Музей винаходів']] },
     gameId: 'hist_world_inventions',
     label: 'Видатні Винаходи Світу',
     icon: '💡',
@@ -94,7 +89,6 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'ua_inventions',
-    landmark: { name: 'Конструкторське бюро', emoji: '🚁', stages: [['🪔', 'Гасова лампа'], ['🚁', 'Гелікоптер'], ['✈️', 'Літак «Мрія»'], ['🏗️', 'Конструкторське бюро']] },
     gameId: 'hist_ua_inventions',
     label: 'Видатні Винаходи України',
     icon: '🚁',

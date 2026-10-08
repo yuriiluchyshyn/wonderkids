@@ -1,3 +1,4 @@
+import { counted } from '@/core/lang/uk';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, TangramPiece, TemplatePayload } from '@/core/game/templates/types';
@@ -5,6 +6,9 @@ import { perimeter } from '@/core/game/templates/validate';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import { rewardForStep } from '../difficulty';
 import { buildNumberOptions } from './options';
+
+/** «1 клітинка», «3 клітинки», «7 клітинок». */
+const CELLS = ['клітинка', 'клітинки', 'клітинок'] as const;
 
 type Piece = Omit<TangramPiece, 'id'>;
 
@@ -165,15 +169,15 @@ function areaBuildTask(min: number, max: number, reward: number): TaskInstance<T
   return {
     id: uid('ga'),
     key: `area:${targetArea}`,
-    prompt: `Побудуй загін для ${pick(PENS)} площею ${targetArea} клітинок`,
+    prompt: `Побудуй загін для ${pick(PENS)} площею ${counted(targetArea, CELLS)}.`,
     reward,
-    outro: `Чудовий загін! Його площа — ${targetArea} клітинок.`,
+    outro: `Чудовий загін! Його площа — ${counted(targetArea, CELLS)}.`,
     payload: {
       template: Mechanics.GridArea,
       cols: 5,
       rows: 4,
       targetArea,
-      hint: `Площа — це кількість клітинок. Зафарбуй рівно ${targetArea} клітинок поруч одна з одною.`,
+      hint: `Площа — це кількість клітинок. Зафарбуй рівно ${counted(targetArea, CELLS)} поруч одна з одною.`,
     },
   };
 }

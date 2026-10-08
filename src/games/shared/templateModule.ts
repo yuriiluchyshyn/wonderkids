@@ -6,6 +6,7 @@ import { TemplateGameView } from '@/components/templates/TemplateGameView';
 import { TemplateHelper, hasHelper } from '@/components/templates/TemplateHelper';
 import { RECALL_WINDOW, composeLevel } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
+import { spoken, written } from '@/core/lang/numbers';
 
 /** Publication date of the PRD v4.0 game pack (drives the 60-day "NEW" badge). */
 export const V4_RELEASE = '2026-10-06T00:00:00Z';
@@ -28,7 +29,10 @@ export function templateTask(
   /** How the voice says the prompt, when it differs from the written one. */
   speak?: string,
 ): TaskInstance<TemplatePayload> {
-  return { id: uid('tt'), key, prompt, payload, reward: rewardFor(step), outro, speak };
+  // A prompt written with `num` / `say` (core/lang/numbers) carries both readings.
+  const shown = written(prompt);
+  const said = speak ?? (spoken(prompt) !== shown ? spoken(prompt) : undefined);
+  return { id: uid('tt'), key, prompt: shown, payload, reward: rewardFor(step), outro, speak: said };
 }
 
 /** `correct` plus `count - 1` random others from `pool`, shuffled. */
@@ -130,7 +134,7 @@ const SHARED_SCREENS: Pick<LearningModule, 'GameView' | 'VisualHelper' | 'showsH
   GameView: TemplateGameView,
   VisualHelper: TemplateHelper,
   showsHelper: hasHelper,
-  getHintSpeech: (task) => (task.payload as TemplatePayload).hint ?? '',
+  getHintSpeech: (task) => spoken((task.payload as TemplatePayload).hint ?? ''),
 };
 
 /**

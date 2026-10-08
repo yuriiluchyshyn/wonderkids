@@ -2,7 +2,7 @@ import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { SubPageHeader } from '@/components/layout/SubPageHeader';
 import { WorldView } from '@/components/world/WorldView';
 
-/** «Мій світ» — the town, lands and residents the child has earned. */
+/** «Мій світ» — the town, stations of knowledge and residents the child has earned. */
 export function WorldPage() {
   usePageMeta({ title: 'Мій світ' });
   return (

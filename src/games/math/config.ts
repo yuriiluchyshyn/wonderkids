@@ -35,7 +35,6 @@ export const GAMES: SubCategory[] = [
   {
     id: MATH_SUB.add,
     demo: { kind: 'row', items: ['*', '*', '➕', '*', '🟰', '*', '*', '*'] },
-    landmark: { name: 'Інститут додавання', emoji: '🏛️' },
     label: 'Додавання',
     icon: '➕',
     blurb: 'Збираємо все докупи',
@@ -47,7 +46,6 @@ export const GAMES: SubCategory[] = [
   {
     id: MATH_SUB.sub,
     demo: { kind: 'row', items: ['*', '*', '*', '➖', '*', '🟰', '*', '*'] },
-    landmark: { name: 'Інститут віднімання', emoji: '🏦' },
     label: 'Віднімання',
     icon: '➖',
     blurb: 'Забираємо потрошку',
@@ -59,7 +57,6 @@ export const GAMES: SubCategory[] = [
   {
     id: MATH_SUB.mul,
     demo: { kind: 'groups', groups: [2, 2], caption: '2 рази по 2' },
-    landmark: { name: 'Фабрика множення', emoji: '🏭' },
     label: 'Множення',
     icon: '✖️',
     blurb: 'Однакові купки разом',
@@ -71,7 +68,6 @@ export const GAMES: SubCategory[] = [
   {
     id: MATH_SUB.div,
     demo: { kind: 'groups', groups: [2, 2], caption: '4 порівну на 2' },
-    landmark: { name: 'Центр ділення', emoji: '🏢' },
     label: 'Ділення',
     icon: '➗',
     blurb: 'Ділимо порівну',
@@ -83,7 +79,6 @@ export const GAMES: SubCategory[] = [
   {
     id: MATH_SUB.mixed,
     demo: { kind: 'row', items: ['*', '*', '➕', '*', '🟰', '*', '*', '*'] },
-    landmark: { name: 'Академія наук', emoji: '🔬' },
     label: 'Усний Рахунок',
     icon: '🧮',
     blurb: 'Усе разом: +, −, ×, ÷',
@@ -96,7 +91,6 @@ export const GAMES: SubCategory[] = [
     // PRD v4.0, game 1: an introductory mode, shortened to 10 levels.
     id: MATH_SUB.fractions,
     demo: { kind: 'pie', food: '🍕', denom: 4, filled: 1 },
-    landmark: { name: 'Піцерія дробів', emoji: '🍕' },
     gameId: 'math_tasty_fractions',
     label: 'Смачні Дроби',
     icon: '🍕',
@@ -108,7 +102,6 @@ export const GAMES: SubCategory[] = [
   },
   {
     id: MATH_SUB.fractionOps,
-    landmark: { name: 'Кондитерська дробів', emoji: '🧁' },
     gameId: 'math_fraction_ops',
     label: 'Дроби: дії',
     icon: '🧁',
@@ -121,7 +114,6 @@ export const GAMES: SubCategory[] = [
   },
   {
     id: MATH_SUB.balance,
-    landmark: { name: 'Палата мір і ваг', emoji: '⚖️' },
     gameId: 'math_balance_scale',
     label: 'Математичні Ваги',
     icon: '⚖️',
@@ -135,7 +127,6 @@ export const GAMES: SubCategory[] = [
   },
   {
     id: MATH_SUB.geometry,
-    landmark: { name: 'Архітектурне бюро', emoji: '📐' },
     gameId: 'math_geometry_builder',
     label: 'Геометричний Конструктор',
     icon: '📐',
@@ -148,7 +139,6 @@ export const GAMES: SubCategory[] = [
   },
   {
     id: MATH_SUB.maze,
-    landmark: { name: 'Фортеця-лабіринт', emoji: '🏯' },
     gameId: 'math_number_maze',
     label: 'Числовий Лабіринт',
     icon: '🧭',
@@ -163,7 +153,6 @@ export const GAMES: SubCategory[] = [
   },
   {
     id: MATH_SUB.shop,
-    landmark: { name: 'Крамниця', emoji: '🏪' },
     gameId: 'math_shop_money',
     label: 'Магазин',
     icon: '🛒',
@@ -178,7 +167,6 @@ export const GAMES: SubCategory[] = [
   },
   {
     id: MATH_SUB.compare,
-    landmark: { name: 'Школа порівнянь', emoji: '🏫' },
     gameId: 'math_compare',
     label: 'Більше, менше, дорівнює',
     icon: '🐥',
@@ -194,7 +182,6 @@ export const GAMES: SubCategory[] = [
   },
   {
     id: MATH_SUB.clock,
-    landmark: { name: 'Годинникова вежа', emoji: '🕰️' },
     gameId: 'math_clock',
     label: 'Котра година?',
     icon: '🕰️',
@@ -202,13 +189,13 @@ export const GAMES: SubCategory[] = [
     steps: 12,
     difficulty: [1, 2],
     publishDate: COMPARE_CLOCK_RELEASE,
-    tasksPerLevel: 10,
+    // Six clocks to study on every task: five to a level.
+    tasksPerLevel: 5,
     mechanics: Mechanics.GridChoice,
     hasText: true,
   },
   {
     id: MATH_SUB.wordProblems,
-    landmark: { name: 'Ринок', emoji: '🧺' },
     gameId: 'math_word_problems',
     label: 'Задачі',
     icon: '📖',

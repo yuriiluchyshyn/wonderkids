@@ -116,6 +116,12 @@ function checkPayload(p, validate) {
       unique(p.stars.map((s) => s.label), 'star labels');
       for (const s of p.stars) assert.ok(s.label && s.x >= 8 && s.x <= 92 && s.y >= 8 && s.y <= 92, `star ${s.label} off the sky in ${p.figure.name}`);
       assert.ok(validate.minGap(p.stars) >= 12, `stars too close in ${p.figure.name}`);
+      if (p.find) {
+        assert.ok(p.find.ratio > 1.2, `the stars of ${p.figure.name} are no bigger than the rest`);
+        assert.ok(p.find.decoys.length >= 6, `too few other stars around ${p.figure.name}`);
+        // No other star so close to one of the figure that a finger could not tell them apart.
+        for (const d of p.find.decoys) assert.ok(validate.minGap([d, ...p.stars]) >= 9, `a star of the sky sits on ${p.figure.name}`);
+      }
       break;
     }
     case 'UI_COLOR_MIX': {
@@ -124,6 +130,22 @@ function checkPayload(p, validate) {
       assert.ok(p.recipe.length === 2 && p.recipe[0] !== p.recipe[1], 'recipe needs two different paints');
       for (const id of p.recipe) assert.ok(ids.includes(id), `paint ${id} is not on the table`);
       assert.ok(p.paints.length >= 3 && p.paints.length <= 6, `bad paint count ${p.paints.length}`);
+      break;
+    }
+    case 'UI_LETTER_GRID': {
+      unique(p.cells.map((c) => c.id), 'letters');
+      unique(p.cells.map((c) => c.label), 'letter faces');
+      for (const c of p.cells) assert.ok(c.label, 'letter has no face');
+      assert.ok(p.cols >= 2 && p.cols <= 7 && p.cells.length >= p.cols, `bad letter table ${p.cells.length} in ${p.cols} columns`);
+      unique(p.gaps, 'gaps');
+      for (const i of p.gaps) assert.ok(Number.isInteger(i) && i >= 0 && i < p.cells.length, `gap ${i} outside the table`);
+      if (p.swapped) {
+        const [a, b] = p.swapped;
+        assert.ok(a !== b && [a, b].every((i) => Number.isInteger(i) && i >= 0 && i < p.cells.length), `bad swap ${p.swapped}`);
+        assert.equal(p.gaps.length, 0, 'a table with swapped letters has no gaps');
+      } else {
+        assert.ok(p.gaps.length >= 1, 'letter table has nothing to do');
+      }
       break;
     }
     default:

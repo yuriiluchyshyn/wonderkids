@@ -21,10 +21,13 @@ import {
   TIME_SHIFTS,
   type Biome,
   type BiomeAnimal,
+  type BiomeId,
   type OceanPart,
 } from './content/data';
 import { ANIMAL_FACTS } from './content/animalFacts';
-import { DAY_NIGHT_FACTS, LANDMARK_FACTS, OCEAN_POOLS } from './content/facts';
+import { MORE_OCEAN_PLACES, MORE_OCEAN_RIDDLES, MORE_SEAS, RIDDLE_FACTS, RIVERS, SHORES } from './content/moreOceans';
+import { ANIMAL_CLUES, MORE_ANIMAL_FACTS, MORE_BIOME_ANIMALS, MORE_SIGNS } from './content/moreAnimals';
+import { LANDMARK_FACTS, OCEAN_POOLS } from './content/facts';
 import { RECALL_WINDOW, composeLevel } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
 import { factPool } from '../shared/facts';
@@ -139,32 +142,51 @@ function continents(step: number): Tasks {
 const cap = (text: string) => `${text[0].toUpperCase()}${text.slice(1)}`;
 
 /** Path lengths of the three games below — also what their unlocking is paced by. */
-export const BIOME_STEPS = 10;
-export const OCEAN_STEPS = 8;
+export const BIOME_STEPS = 50;
+export const OCEAN_STEPS = 50;
 export const CAPITAL_STEPS = 15;
 
-/** Animals met up to this step: the first twelve open the game, three more a step. */
-const animalsAt = (step: number) => unlocked(BIOME_ANIMALS, step, BIOME_STEPS, 12);
-/** Zones that already have a dweller the child knows. */
-const biomesFor = (animals: readonly BiomeAnimal[]) => BIOMES.filter((b) => animals.some((a) => a.home === b.id));
+/** Every dweller of the zones, in the order the path meets them. */
+export const ZONE_ANIMALS: BiomeAnimal[] = [...BIOME_ANIMALS, ...MORE_BIOME_ANIMALS];
+/** What is told about an animal once it is placed: its own facts, never its zone's. */
+const factsOf = (a: BiomeAnimal): string[] => ANIMAL_FACTS[a.id] ?? MORE_ANIMAL_FACTS[a.id] ?? [a.fact];
+/** Six ways to recognise a zone. */
+const signsOf = (zone: Biome): string[] => [...zone.signs, ...MORE_SIGNS[zone.id]];
+
+/** Answers on a board of this game: the right one and five others. */
+const ZONE_CHOICES = 6;
+/** The first twelve animals open the game; the last arrive on this step. */
+const ALL_ANIMALS_BY = 40;
+/** Steps after meeting an animal on which each further question about it opens. */
+const WHO_AFTER = 3;
+const RIDDLE_AFTER = 6;
+const ODD_AFTER = 9;
+/** The step on which each of a zone's six descriptions opens. */
+const SIGN_STEPS = [5, 12, 19, 26, 33, 40];
+
+/** Animals met up to this step. */
+const animalsAt = (step: number) => (step < 1 ? [] : unlocked(ZONE_ANIMALS, step, ALL_ANIMALS_BY, 12));
+const livesIn = (a: BiomeAnimal, zone: BiomeId) => a.home === zone || Boolean(a.also?.includes(zone));
 
 /**
- * Game 9 — «Тварини та Природні Зони». The path adds animals and zones (the
- * savanna, the forest, the mountains) and, one at a time, new kinds of question:
- *   1  where does this animal live                 UI_SORTER_BINS
- *   3  who lives in this zone                      UI_GRID_CHOICE
- *   5  which zone is this (by its description)     UI_GRID_CHOICE
- *   7  the same, by a second, harder description
+ * Game 9 — «Тварини та Природні Зони». Fifty steps: two new animals on almost
+ * every one, and four questions about each animal that open one after another
+ * (so a step always brings something new to ask, to the very end of the path):
+ *   where does this animal live                    UI_SORTER_BINS, six zones
+ *   +3 steps  who lives in this zone               UI_GRID_CHOICE, six animals
+ *   +6 steps  «Хто це?» — the animal by a riddle
+ *   +9 steps  «Хто тут зайвий?» — five neighbours and a stranger
+ * plus «Яка це природна зона?» by six descriptions of every zone.
  */
 function biomes(step: number): Tasks {
   const animals = animalsAt(step);
-  const zones = biomesFor(animals);
   const wrongSay = Object.fromEntries(BIOMES.map((b) => [b.id, b.no]));
   const zoneOf = (a: BiomeAnimal) => BIOMES.find((b) => b.id === a.home) as Biome;
   const zoneCard = (b: Biome) => card(b.id, b.emoji, b.name);
-  /** The right zone plus up to three wrong ones, always in the same order. */
+  const animalCard = (a: BiomeAnimal) => card(a.id, a.emoji, cap(a.name));
+  /** The right zone plus up to five wrong ones, always in the same order. */
   const zoneChoices = (right: Biome, wrong: readonly Biome[]) => {
-    const picked = new Set([right.id, ...shuffle(wrong).slice(0, 3).map((b) => b.id)]);
+    const picked = new Set([right.id, ...shuffle(wrong).slice(0, ZONE_CHOICES - 1).map((b) => b.id)]);
     return BIOMES.filter((b) => picked.has(b.id)).map(zoneCard);
   };
 
@@ -175,59 +197,98 @@ function biomes(step: number): Tasks {
       {
         template: Mechanics.SorterBins,
         item: card(a.id, a.emoji),
-        bins: zoneChoices(zoneOf(a), zones.filter((b) => b.id !== a.home && !a.also?.includes(b.id))),
+        // Never a zone the animal could arguably live in too.
+        bins: zoneChoices(zoneOf(a), BIOMES.filter((b) => !livesIn(a, b.id))),
         correctBinId: a.home,
         wrongSay,
         hint: `Подумай, де тваринці буде добре. ${a.fact}`,
       },
       step,
-      ANIMAL_FACTS[a.id],
+      factsOf(a),
     ),
   );
 
-  // Asked about animals the child has already placed (met two steps ago).
-  const familiar = step >= 3 ? animalsAt(step - 2) : [];
-  const whoLives: Tasks = familiar.map((a) => {
+  const whoLives: Tasks = animalsAt(step - WHO_AFTER).map((a) => {
     const zone = zoneOf(a);
-    // Never a second animal that could live there too.
-    const others = shuffle(animals.filter((o) => o.home !== zone.id && !o.also?.includes(zone.id))).slice(0, 3);
+    const others = shuffle(animals.filter((o) => !livesIn(o, zone.id))).slice(0, ZONE_CHOICES - 1);
     return templateTask(
       `biome:who:${a.id}`,
       `Хто живе ${zone.where}?`,
       {
         template: Mechanics.GridChoice,
-        cols: 2,
+        cols: 3,
         stimulus: { emoji: zone.emoji, caption: zone.name },
-        options: shuffle([a, ...others]).map((o) => card(o.id, o.emoji, cap(o.name))),
+        options: shuffle([a, ...others]).map(animalCard),
         correctId: a.id,
         hint: `Згадай, яка це природна зона. ${zone.signs[0]}`,
       },
       step,
-      ANIMAL_FACTS[a.id],
+      factsOf(a),
     );
   });
 
-  const signsKnown = step >= 7 ? 2 : step >= 5 ? 1 : 0;
-  const whichZone: Tasks = zones.flatMap((zone) =>
-    zone.signs.slice(0, signsKnown).map((sign, i) => {
-      const dwellers = animals.filter((a) => a.home === zone.id).slice(0, 3);
-      return templateTask(
-        `biome:zone:${zone.id}:${i}`,
-        `Яка це природна зона? ${sign}`,
-        {
-          template: Mechanics.GridChoice,
-          cols: 2,
-          options: zoneChoices(zone, zones.filter((b) => b.id !== zone.id)),
-          correctId: zone.id,
-          hint: `Тут живуть: ${dwellers.map((a) => a.name).join(', ')}.`,
-        },
-        step,
-        factPool(`Так, це ${zone.name.toLowerCase()}! ${sign}`, BIOME_FACTS[zone.id]),
-      );
-    }),
+  const riddles: Tasks = animalsAt(step - RIDDLE_AFTER).map((a) =>
+    templateTask(
+      `biome:riddle:${a.id}`,
+      `Хто це? ${ANIMAL_CLUES[a.id]}`,
+      {
+        template: Mechanics.GridChoice,
+        cols: 3,
+        options: withDistractors(a, animals, ZONE_CHOICES, byId).map(animalCard),
+        correctId: a.id,
+        hint: `Ця тварина живе ${zoneOf(a).where}. Її назва починається на літеру «${a.name[0].toUpperCase()}».`,
+      },
+      step,
+      factsOf(a),
+    ),
   );
 
-  return [...whereLives, ...whoLives, ...whichZone];
+  // The stranger among neighbours: asked once the zone has enough dwellers to stand beside it.
+  const oddOnes: Tasks = animalsAt(step - ODD_AFTER).flatMap((a) => {
+    const zones = shuffle(BIOMES.filter((z) => !livesIn(a, z.id) && animals.filter((o) => o.home === z.id).length >= 3));
+    if (zones.length === 0) return [];
+    const zone = zones[0];
+    const neighbours = shuffle(animals.filter((o) => o.home === zone.id)).slice(0, ZONE_CHOICES - 1);
+    return [
+      templateTask(
+        `biome:odd:${a.id}`,
+        'Хто тут зайвий? Усі інші — сусіди: вони живуть в одній природній зоні.',
+        {
+          template: Mechanics.GridChoice,
+          cols: 3,
+          options: shuffle([a, ...neighbours]).map(animalCard),
+          correctId: a.id,
+          hint: `Усі сусіди живуть ${zone.where}. Знайди того, хто живе деінде.`,
+        },
+        step,
+        factsOf(a),
+      ),
+    ];
+  });
+
+  const whichZone: Tasks = BIOMES.flatMap((zone) =>
+    signsOf(zone)
+      .filter((_, i) => step >= SIGN_STEPS[i])
+      .map((sign, i) => {
+        const dwellers = animals.filter((a) => a.home === zone.id).slice(0, 3);
+        return templateTask(
+          `biome:zone:${zone.id}:${i}`,
+          `Яка це природна зона? ${sign}`,
+          {
+            template: Mechanics.GridChoice,
+            cols: 3,
+            options: zoneChoices(zone, BIOMES.filter((b) => b.id !== zone.id)),
+            correctId: zone.id,
+            hint: dwellers.length > 0 ? `Тут живуть: ${dwellers.map((a) => a.name).join(', ')}.` : zone.signs[0],
+          },
+          step,
+          // This very description, and one more thing about the zone that no other question tells.
+          factPool(`Так, це ${zone.name.toLowerCase()}! ${sign}`, BIOME_FACTS[zone.id][i]),
+        );
+      }),
+  );
+
+  return [...whereLives, ...whoLives, ...riddles, ...oddOnes, ...whichZone];
 }
 
 /** «Пливи до …» needs the ocean's name in the genitive. */
@@ -239,17 +300,33 @@ const OCEAN_TO: Record<string, string> = {
   southern: 'Південного океану',
 };
 
+/** The step on which each of an ocean's eight riddles opens. */
+const RIDDLE_STEPS = [1, 2, 3, 6, 9, 12, 15, 18];
+/** What a list has opened by `step`, arriving evenly from its first step to its last. */
+function arriving<T>(items: readonly T[], step: number, from: number, to: number): T[] {
+  if (step < from) return [];
+  return items.slice(0, Math.ceil((items.length * (Math.min(step, to) - from + 1)) / (to - from + 1)));
+}
+/** Countries with one ocean at their shores, best-known first, with that ocean. */
+const SHORE_COUNTRIES = COUNTRIES.flatMap((c) => {
+  const ocean = Object.keys(SHORES).find((o) => SHORES[o].includes(c.id));
+  return ocean ? [{ country: c, ocean }] : [];
+});
+
 /**
- * Game 10 — «Моря та Океани Світу»: sail the ship to the right ocean. The
- * question gets harder along the path, the map stays the same:
- *   1  the ocean by its name, and by an easy riddle («до найбільшого океану»)
- *   2  a second riddle about each ocean
- *   3  a third one
- *   4–6  seas: which ocean is this sea a part of
- *   7–8  famous places: in which ocean is it
+ * Game 10 — «Моря та Океани Світу»: sail the ship to the right ocean. The map
+ * stays the same; what is asked grows over fifty steps:
+ *   1       the ocean by its name
+ *   1–18    eight riddles about each ocean («до найбільшого океану»)
+ *   4–50    seas and gulfs: which ocean is this a part of
+ *   7–50    famous places: in which ocean is it
+ *   10–50   countries: which ocean washes its shores
+ *   20–50   rivers: which ocean does its water run to
+ * What is told afterwards is always about the very thing that was asked.
  */
 function oceans(step: number): Tasks {
-  const sail = (key: string, prompt: string, oceanId: string, facts: string[], clue?: string) =>
+  const oceanName = (id: string) => OCEANS.find((o) => o.id === id)?.name ?? id;
+  const sail = (key: string, prompt: string, oceanId: string, facts: string | string[], clue?: string) =>
     templateTask(
       key,
       prompt,
@@ -268,28 +345,20 @@ function oceans(step: number): Tasks {
   const tasks: Tasks = OCEANS.map((o) => sail(`ocean:${o.id}`, `Пливи до ${OCEAN_TO[o.id]}!`, o.id, OCEAN_POOLS[o.id]));
 
   for (const o of OCEANS) {
-    OCEAN_RIDDLES[o.id].slice(0, Math.min(3, step)).forEach((riddle, i) => {
-      tasks.push(
-        sail(
-          `ocean:riddle:${o.id}:${i}`,
-          `Пливи до ${riddle}!`,
-          o.id,
-          factPool(`Так, це ${o.name}!`, OCEAN_POOLS[o.id]),
-          `Це ${o.name}.`,
-        ),
-      );
+    [...OCEAN_RIDDLES[o.id], ...MORE_OCEAN_RIDDLES[o.id]].forEach((riddle, i) => {
+      if (step >= RIDDLE_STEPS[i]) tasks.push(sail(`ocean:riddle:${o.id}:${i}`, `Пливи до ${riddle}!`, o.id, RIDDLE_FACTS[o.id][i], `Це ${o.name}.`));
     });
   }
 
-  // Six seas a step from step 4, then six places a step from step 7.
-  const part = (kind: string, prompt: (p: OceanPart) => string) => (p: OceanPart) =>
-    sail(`ocean:${kind}:${p.id}`, prompt(p), p.ocean, factPool(p.fact, OCEAN_POOLS[p.ocean]), p.fact);
-  if (step >= 4) {
-    tasks.push(...SEAS.slice(0, (step - 3) * 6).map(part('sea', (p) => `${cap(p.name)} — частина якого океану? Пливи туди!`)));
-  }
-  if (step >= 7) {
-    tasks.push(...OCEAN_PLACES.slice(0, (step - 6) * 6).map(part('place', (p) => `У якому океані ${p.name}? Пливи туди!`)));
-  }
+  const part = (kind: string, prompt: (p: OceanPart) => string) => (p: OceanPart) => sail(`ocean:${kind}:${p.id}`, prompt(p), p.ocean, p.fact, p.fact);
+  tasks.push(...arriving([...SEAS, ...MORE_SEAS], step, 4, OCEAN_STEPS).map(part('sea', (p) => `${cap(p.name)} — частина якого океану? Пливи туди!`)));
+  tasks.push(...arriving([...OCEAN_PLACES, ...MORE_OCEAN_PLACES], step, 7, OCEAN_STEPS).map(part('place', (p) => `У якому океані ${p.name}? Пливи туди!`)));
+  tasks.push(
+    ...arriving(SHORE_COUNTRIES, step, 10, OCEAN_STEPS).map(({ country, ocean }) =>
+      sail(`ocean:shore:${country.id}`, `Який океан омиває береги ${country.of}? Пливи туди!`, ocean, `Так! Береги ${country.of} омиває ${oceanName(ocean)}.`, `Це ${oceanName(ocean)}.`),
+    ),
+  );
+  tasks.push(...arriving(RIVERS, step, 20, OCEAN_STEPS).map(part('river', (p) => `У який океан несе свої води річка ${p.name}? Пливи туди!`)));
   return tasks;
 }
 
@@ -396,7 +465,7 @@ function capitals(step: number): Tasks {
         hint: 'Земля крутиться, як дзиґа. Сонце світить тільки на один її бік: там день, а на іншому боці — ніч.',
       },
       step,
-      factPool(q.why, DAY_NIGHT_FACTS),
+      q.why,
     ),
   );
 
@@ -428,7 +497,7 @@ function capitals(step: number): Tasks {
               : `«На ${by} ${hoursWord(by)} ${t.shift > 0 ? 'більше' : 'менше'}» — це ${hour} ${t.shift > 0 ? 'плюс' : 'мінус'} ${by}.`,
         },
         step,
-        factPool(`Так! Коли в Києві ${hour}:00, у ${t.city} — ${there}:00.`, DAY_NIGHT_FACTS),
+        `Так! Коли в Києві ${hour}:00, у ${t.city} — ${there}:00.`,
       );
     }),
   );

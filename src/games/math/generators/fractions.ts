@@ -15,18 +15,29 @@ const FOODS: { emoji: string; name: string }[] = [
   { emoji: '🍫', name: 'шоколадки' },
 ];
 
-/** How many answers to offer: 1/4, 2/4, 3/4, 4/4 (PRD v4.0, game 1). */
-const OPTIONS = 4;
+/** Nine answers, as on every tap-the-answer board. */
+const OPTIONS = 9;
 
 /**
- * Answers share the task's denominator, so the child compares "how many
- * slices", not unrelated fractions. Small denominators simply offer fewer.
+ * The right fraction and eight others that are never equal to it (2/4 is not
+ * offered beside 1/2). Fractions of the same denominator come first — the
+ * child compares "how many slices" — then neighbours with one slice more or
+ * fewer in the whole.
  */
-function sameDenominatorOptions(answer: FractionValue, denom: number): FractionValue[] {
-  const others = shuffle(
-    Array.from({ length: denom }, (_, i) => i + 1).filter((n) => n !== answer.n),
-  ).slice(0, OPTIONS - 1);
-  return [answer.n, ...others].sort((x, y) => x - y).map((n) => ({ n, d: denom }));
+function fractionOptions(answer: FractionValue): FractionValue[] {
+  const equal = (f: FractionValue) => f.n * answer.d === answer.n * f.d;
+  const taken = new Set([`${answer.n}/${answer.d}`]);
+  const out = [answer];
+  const offer = (f: FractionValue) => {
+    const id = `${f.n}/${f.d}`;
+    if (out.length >= OPTIONS || taken.has(id) || equal(f) || out.some((o) => o.n * f.d === f.n * o.d)) return;
+    taken.add(id);
+    out.push(f);
+  };
+  const slices = (d: number) => shuffle(Array.from({ length: d - 1 }, (_, i) => ({ n: i + 1, d })));
+  slices(answer.d).forEach(offer);
+  for (const d of [answer.d + 1, answer.d - 1, answer.d + 2, answer.d - 2, answer.d + 3]) if (d >= 2) slices(d).forEach(offer);
+  return shuffle(out);
 }
 
 /**
@@ -51,9 +62,10 @@ export function generateFraction(config: TaskConfig): TaskInstance<GridChoicePay
     reward: rewardForStep(step),
     payload: {
       template: Mechanics.GridChoice,
-      cols: 2,
+      cols: 3,
       stimulus: { pie: { food: food.emoji, denom, filled } },
-      options: sameDenominatorOptions(answer, denom).map((f) => ({ id: `${f.n}/${f.d}`, glyphs: [f] })),
+      // Written on one line, with a slash: nine stacked fractions would not fit a phone.
+      options: fractionOptions(answer).map((f) => ({ id: `${f.n}/${f.d}`, glyphs: [`${f.n}/${f.d}`] })),
       correctId: `${filled}/${denom}`,
       // Count the highlighted slices aloud: «Один, два, три — з чотирьох!»
       hint: `Полічімо зафарбовані шматочки: ${Array.from({ length: filled }, (_, i) => NUMBER_WORDS[i + 1]).join(', ')}. Усього шматочків ${denom}. Отже, це ${filled} з ${denom}!`,

@@ -20,6 +20,7 @@ import { subSteps, pathKey } from '@/core/child/progress/path';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { GALAXIES } from '@/core/game/galaxies';
+import { CURRENCIES } from '@/core/game/content/currency';
 import { portalUrl } from '@/core/app/portal';
 import { uid } from '@/core/utils/random';
 import { Chip } from '@/components/ui/Chip';
@@ -394,6 +395,32 @@ export function ParentDashboard() {
               active={settings.choicesGridSize === o.id}
               onClick={() => updateSettings({ choicesGridSize: o.id })}
             />
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>💡 Цікаві факти</h3>
+        <p className={styles.hint}>
+          Після правильної відповіді гра розповідає короткий факт про те, що дитина щойно зробила, і чекає, доки його буде прочитано. Вимкніть — і наступне
+          завдання починатиметься одразу.
+        </p>
+        <div className={styles.chipRow}>
+          <Chip
+            icon={settings.funFacts ? '💡' : '⏩'}
+            label={settings.funFacts ? 'Розповідати факти' : 'Без фактів'}
+            active={settings.funFacts}
+            onClick={() => updateSettings({ funFacts: !settings.funFacts })}
+          />
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>💰 Гроші в грі «Магазин»</h3>
+        <p className={styles.hint}>Якими монетами й купюрами дитина платить у магазині.</p>
+        <div className={styles.chipRow}>
+          {Object.values(CURRENCIES).map((c) => (
+            <Chip key={c.id} icon={c.flag} label={`${c.name}, ${c.sign}`} active={settings.currency === c.id} onClick={() => updateSettings({ currency: c.id })} />
           ))}
         </div>
       </section>

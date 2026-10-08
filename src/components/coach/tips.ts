@@ -34,6 +34,7 @@ const HOW_TO: Record<TemplatePayload['template'], string> = {
   [Mechanics.BubblePop]: 'Лопай бульбашки по порядку: торкнись тієї, що має бути наступною.',
   [Mechanics.DotToDot]: 'Торкайся зірочок по порядку — між ними з’явиться лінія.',
   [Mechanics.ColorMix]: 'Торкнись двох фарб, щоб вилити їх у казан і змішати.',
+  [Mechanics.LetterGrid]: 'Перетягни кожну літеру на її місце в таблиці. Або торкнись літери, а потім — порожньої клітинки.',
 };
 
 /** Tips for the game screen. `template` is the board of the current task. */

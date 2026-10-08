@@ -51,3 +51,15 @@ Images under a CC licence must stay credited — keep this file with them.
 | vangogh.webp | [Vincent_van_Gogh_-_Self-Portrait_-_Google_Art_Project_(454045).jpg](https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_Self-Portrait_-_Google_Art_Project_(454045).jpg) | Public domain | Vincent van Gogh |
 | wright.webp | [Orville Wilbur Wright.jpg](https://commons.wikimedia.org/wiki/File:Orville_Wilbur_Wright.jpg) | Public domain | unattributed |
 | yaroslav.webp | [Yaroslav the Wise2.jpg](https://commons.wikimedia.org/wiki/File:Yaroslav_the_Wise2.jpg) | Public domain | ? |
+| bell.webp | [Alexander_Graham_Bell_1895_NPG_77_363.jpg](https://commons.wikimedia.org/wiki/File:Alexander_Graham_Bell_1895_NPG_77_363.jpg) | CC0 | Unknown authorUnknown author |
+| benz.webp | [Carl_Benz_circa_1920.jpg](https://commons.wikimedia.org/wiki/File:Carl_Benz_circa_1920.jpg) | Public domain | Unknown (same photo credited to various stock photo agencies. The copyright is also claime |
+| berners_lee.webp | [Tim_Berners-Lee_at_the_2025_Web_Summit_(Cropped).jpg](https://commons.wikimedia.org/wiki/File:Tim_Berners-Lee_at_the_2025_Web_Summit_(Cropped).jpg) | CC BY 4.0 | Summit |
+| fleming.webp | [Synthetic_Production_of_Penicillin_TR1468.jpg](https://commons.wikimedia.org/wiki/File:Synthetic_Production_of_Penicillin_TR1468.jpg) | Public domain | Official photographer |
+| haffkine.webp | [Waldemar_Haffkine_2.jpg](https://commons.wikimedia.org/wiki/File:Waldemar_Haffkine_2.jpg) | CC BY 4.0 | Unknown author |
+| lukasiewicz.webp | [Ignacy_Lukasiewicz.jpg](https://commons.wikimedia.org/wiki/File:Ignacy_Lukasiewicz.jpg) | Public domain | Andrzej Grabowski |
+| marconi.webp | [Guglielmo_Marconi.jpg](https://commons.wikimedia.org/wiki/File:Guglielmo_Marconi.jpg) | Public domain | Pach Brothers |
+| paton.webp | [Евгений_Оскарович_Патон_1910-е.jpg](https://commons.wikimedia.org/wiki/File:%D0%95%D0%B2%D0%B3%D0%B5%D0%BD%D0%B8%D0%B9_%D0%9E%D1%81%D0%BA%D0%B0%D1%80%D0%BE%D0%B2%D0%B8%D1%87_%D0%9F%D0%B0%D1%82%D0%BE%D0%BD_1910-%D0%B5.jpg) | Public domain | Unknown authorUnknown author |
+| pirotsky.webp | [Pirotsky.jpg](https://commons.wikimedia.org/wiki/File:Pirotsky.jpg) | Public domain | Unknown authorUnknown author |
+| pulyui.webp | [Іван_Пулюй.png](https://commons.wikimedia.org/wiki/File:%D0%86%D0%B2%D0%B0%D0%BD_%D0%9F%D1%83%D0%BB%D1%8E%D0%B9.png) | Public domain | Unknown authorUnknown author |
+| stephenson.webp | [George_Stephenson_-_Project_Gutenberg_etext_13103.jpg](https://commons.wikimedia.org/wiki/File:George_Stephenson_-_Project_Gutenberg_etext_13103.jpg) | Public domain | Unknown author |
+| tymchenko.webp | [Joseph_Timchenko.jpg](https://commons.wikimedia.org/wiki/File:Joseph_Timchenko.jpg) | Public domain | Unknown authorUnknown author The original uploader was Bogdanov-62 at Russian Wikipedia. |

@@ -12,7 +12,6 @@ import {
   shopState,
   spentOn,
   giftsEarned,
-  landmarkStage,
   residentForGift,
   residents,
 } from '../src/core/child/world/world.ts';
@@ -56,22 +55,6 @@ test('the dream build stays locked until every other building stands', () => {
 test('the whole planet is a long project: thousands of artifacts', () => {
   const total = items.reduce((sum, i) => sum + i.cost, 0);
   assert.ok(total >= 2800, `only ${total}`);
-});
-
-test('a path landmark grows from foundation to complete along the path', () => {
-  const at = (step: number, plays = 1) => landmarkStage({ free: false, steps: 10, step, plays });
-  assert.equal(landmarkStage({ free: false, steps: 10, step: 1, plays: 0 }), 0);
-  assert.equal(at(1), 1, 'first finished level lays the foundation');
-  assert.equal(at(2), 1);
-  assert.equal(at(4), 2);
-  assert.equal(at(7), 3);
-  assert.equal(at(10), 4);
-  assert.equal(at(99), 4, 'a stale step beyond the path is clamped');
-});
-
-test('a free-play landmark grows with how often the game is played', () => {
-  const at = (plays: number) => landmarkStage({ free: true, steps: 1, step: 1, plays });
-  assert.deepEqual([0, 1, 2, 3, 5, 6, 9, 10, 50].map(at), [0, 1, 1, 2, 2, 3, 3, 4, 4]);
 });
 
 test('every 5th path step is a gift that brings one resident', () => {
@@ -126,25 +109,39 @@ test('the dream build waits for the spaceport too', async () => {
   assert.equal(statusOf(shopState(withPort, new Set([...allButDream, SPACEPORT_ID]), 5000), 'b9').status, 'affordable');
 });
 
-test('a landmark gains one level for every eighth of its game', async () => {
-  const { landmarkLevel } = await import('../src/core/child/world/world.ts');
-  const at = (step: number) => landmarkLevel({ free: false, steps: 41, step, plays: 1 });
-  assert.equal(at(1), 0);
-  assert.equal(at(5), 0);
-  assert.equal(at(6), 1);
-  assert.equal(at(21), 4);
-  assert.equal(at(41), 8);
-  assert.equal(landmarkLevel({ free: true, steps: 1, step: 1, plays: 3 }), 2);
-  assert.equal(landmarkLevel({ free: true, steps: 1, step: 1, plays: 40 }), 8);
+test('a key of knowledge is earned for every new step of any game, and stations are opened with them', async () => {
+  const { keysEarned, keyBalance, keysSpent, stationCost, stationKey, parseStation, KEYS_PER_FREE_GAME } = await import('../src/core/child/world/world.ts');
+  const path = (step: number, steps = 30) => ({ free: false, steps, step, plays: 99 });
+  // Never opened and still on the first step: nothing yet; replays earn nothing.
+  assert.equal(keysEarned([path(0), path(1)]), 0);
+  assert.equal(keysEarned([path(4), path(11)]), 3 + 10);
+  // The frontier never passes the end of a path.
+  assert.equal(keysEarned([path(40, 30)]), 29);
+  // A free-play game gives a key per level, up to its limit.
+  assert.equal(keysEarned([{ free: true, steps: 1, step: 1, plays: 6 }]), 6);
+  assert.equal(keysEarned([{ free: true, steps: 1, step: 1, plays: 500 }]), KEYS_PER_FREE_GAME);
+
+  assert.equal(stationKey('k2', 3), 'know:p3:k2');
+  assert.deepEqual(parseStation('know:p3:k2'), { planet: 3, id: 'k2' });
+  assert.equal(parseStation('world:lego:b3'), null);
+  assert.equal(stationCost('k0'), 3);
+  assert.equal(stationCost('k0', 5), 6);
+  assert.equal(stationCost('b0'), 0);
+  // Stations take keys, never artifacts — and the other way round.
+  const owned = [stationKey('k0'), stationKey('k1', 5), ownedKey('lego', 'b0')];
+  assert.equal(keysSpent(owned), 3 + 10);
+  assert.equal(keyBalance(20, owned), 7);
+  assert.equal(keyBalance(5, owned), 0);
+  assert.equal(spentOn(owned), 30);
 });
 
 test('a planet lets the child fly on only when nearly everything on it is done', async () => {
   const { planetNeeds, frontierPlanet } = await import('../src/core/child/world/world.ts');
-  const base = { planet: 2, itemsOwned: 19, itemsTotal: 19, spaceport: true, landLevels: [2, 2, 3, 1, 0], gifts: 8, treasuresFound: 3, treasuresTotal: 12 };
+  const base = { planet: 2, itemsOwned: 19, itemsTotal: 19, spaceport: true, stationsOpen: 4, gifts: 8, treasuresFound: 3, treasuresTotal: 12 };
   assert.equal(planetNeeds(base).done, true);
   assert.equal(planetNeeds({ ...base, spaceport: false }).done, false, 'no spaceport');
   assert.equal(planetNeeds({ ...base, itemsOwned: 18 }).done, false, 'something not built');
-  assert.equal(planetNeeds({ ...base, landLevels: [2, 2, 1, 1, 0] }).done, false, 'too few lands at level 2');
+  assert.equal(planetNeeds({ ...base, stationsOpen: 3 }).done, false, 'too few stations of knowledge');
   assert.equal(planetNeeds({ ...base, gifts: 7 }).done, false, 'too few residents');
   assert.equal(planetNeeds({ ...base, treasuresFound: 2 }).done, false, 'too few treasures');
   const none = Array(8).fill(false);

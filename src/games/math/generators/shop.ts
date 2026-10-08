@@ -1,12 +1,12 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import { counted } from '@/core/lang/uk';
+import { countWord } from '@/core/lang/uk';
+import { num, spoken, written } from '@/core/lang/numbers';
+import { currencyOf } from '@/core/game/content/currency';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import { rewardForStep } from '../difficulty';
 import { buildNumberOptions } from './options';
-
-const HRYVNIA = ['гривня', 'гривні', 'гривень'] as const;
 
 const TOYS = [
   { emoji: '🧸', name: 'ведмедик' },
@@ -21,8 +21,9 @@ const TOYS = [
   { emoji: '🪅', name: 'піньята' },
 ];
 
-/** Ukrainian coins and notes used in the tray, in hryvnias. */
-const DENOMINATIONS = [100, 50, 20, 10, 5, 2, 1];
+/** The text of a task as it is printed and as the voice reads it. */
+const texts = (text: string) => ({ prompt: written(text), speak: spoken(text) });
+
 /** How many different coins and notes lie in front of the child. */
 const WALLET_SIZE = 5;
 
@@ -31,10 +32,10 @@ const WALLET_SIZE = 5;
  * null when that cannot be done (4 would need two 2s). The wallet never holds
  * two of the same, so only such prices are asked.
  */
-function distinctChange(amount: number): number[] | null {
+function distinctChange(amount: number, values: readonly number[]): number[] | null {
   const out: number[] = [];
   let left = amount;
-  for (const d of DENOMINATIONS) {
+  for (const d of values) {
     if (left >= d) {
       out.push(d);
       left -= d;
@@ -44,12 +45,12 @@ function distinctChange(amount: number): number[] | null {
 }
 
 /** A price in the step's range that distinct coins can pay exactly. */
-function payablePrice(step: number): number {
+function payablePrice(step: number, values: readonly number[]): number {
   const low = 3 + step * 2;
   const high = Math.min(95, 9 + step * 5);
   for (let i = 0; i < 40; i += 1) {
     const price = randInt(low, high);
-    if (distinctChange(price)) return price;
+    if (distinctChange(price, values)) return price;
   }
   return 7;
 }
@@ -61,23 +62,25 @@ function payablePrice(step: number): number {
 export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> {
   const { step } = config;
   const toy = pick(TOYS);
-  const price = payablePrice(step);
+  const money = currencyOf(config.currency);
+  const price = payablePrice(step, money.values);
+  // «10 гривень» on the screen, «десять гривень» for the voice.
+  const sum = (n: number) => `${num(n, money.gender)} ${countWord(n, money.counted)}`;
   const reward = rewardForStep(step) + 1;
 
   if (step >= 7 && Math.random() < 0.5) {
-    const paid = [10, 20, 50, 100].find((note) => note > price) ?? 100;
+    const paid = [10, 20, 50, 100].find((note) => note > price && money.values.includes(note)) ?? 100;
     const change = paid - price;
     return {
       id: uid('sc'),
       key: `change:${price}:${paid}`,
-      prompt: `${toy.name[0].toUpperCase()}${toy.name.slice(1)} коштує ${price} гривень. Ти даєш ${paid} гривень. Яка решта?`,
+      ...texts(`${toy.name[0].toUpperCase()}${toy.name.slice(1)} коштує ${sum(price)}. Ти даєш ${sum(paid)}. Яка решта?`),
       reward,
-      outro: `Так, решта — ${change} гривень!`,
       payload: {
         template: Mechanics.GridChoice,
-        cols: 2,
+        cols: 3,
         stimulus: { emoji: toy.emoji, glyphs: [String(paid), '−', String(price), '=', '?'] },
-        options: buildNumberOptions(change, 4, 6).map((n) => ({ id: String(n), glyphs: [String(n), 'грн'], speak: `${n} гривень` })),
+        options: buildNumberOptions(change, 6, 6).map((n) => ({ id: String(n), glyphs: [String(n), money.short], speak: spoken(sum(n)) })),
         correctId: String(change),
         hint: `Від ${paid} відніми ${price}. Можна дорахувати від ${price} до ${paid}.`,
       },
@@ -86,23 +89,23 @@ export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> 
 
   // The exact coins are always there, plus other values to choose between —
   // every coin and note is different, so the child really has to add up.
-  const exact = distinctChange(price) ?? [];
-  const others = shuffle(DENOMINATIONS.filter((d) => !exact.includes(d)));
+  const exact = distinctChange(price, money.values) ?? [];
+  const others = shuffle(money.values.filter((d) => !exact.includes(d)));
   // Mostly values near the price: a 100 next to a 7 is no temptation.
   const near = others.filter((d) => d <= Math.max(10, price * 2));
   const extras = [...near, ...others.filter((d) => !near.includes(d))].slice(0, Math.max(2, WALLET_SIZE - exact.length));
   return {
     id: uid('sh'),
     key: `pay:${toy.name}:${price}`,
-    prompt: `Купи іграшку: ${toy.name}. Ціна — ${counted(price, HRYVNIA)}. Поклади гроші на касу.`,
+    ...texts(`Купи іграшку: ${toy.name}. Ціна — ${sum(price)}. Поклади гроші на касу.`),
     reward,
-    outro: 'Ка-чин! Дякуємо за покупку!',
     payload: {
       template: Mechanics.CashTray,
       item: { id: 'toy', emoji: toy.emoji },
       price,
       wallet: shuffle([...exact, ...extras]),
-      hint: `Почни з найбільшої купюри, яка не перевищує ${price}, а потім додавай менші.`,
+      currency: money.id,
+      hint: `Почни з найбільших грошей, які не перевищують ${price}, а потім додавай менші.`,
     },
   };
 }

@@ -179,6 +179,9 @@ export function ensureSchema() {
       );
       -- Tap-to-hear speaker buttons next to text (PRD v4.0 §2.4).
       ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS tts_buttons BOOLEAN NOT NULL DEFAULT true;
+      -- The short fact told after a right answer, and the money the shop game counts in.
+      ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS fun_facts BOOLEAN NOT NULL DEFAULT true;
+      ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS currency TEXT NOT NULL DEFAULT 'UAH';
     `).catch((err) => {
       // Don't cache a failure: let the next request retry (DB may be back).
       schemaReady = undefined;
@@ -221,6 +224,9 @@ export async function deleteParent(parentId) {
 }
 
 const numOrNull = (v) => (v === null || v === undefined ? null : Number(v));
+
+/** The money a child's shop game may count in (`core/game/content/currency.ts`). */
+const CURRENCIES = ['UAH', 'EUR', 'USD', 'GBP', 'PLN'];
 
 function assembleChild(row, settings, stats, screen, progressRows, treasureRows, milestoneRows) {
   const s = settings ?? {};
@@ -270,6 +276,8 @@ function assembleChild(row, settings, stats, screen, progressRows, treasureRows,
       minTasksPerLevel: s.min_tasks_per_level ?? 10,
       choicesGridSize: s.choices_grid_size ?? 9,
       ttsButtons: s.tts_buttons ?? true,
+      funFacts: s.fun_facts ?? true,
+      currency: s.currency ?? 'UAH',
       voice: s.voice ?? {},
       timeControl: {
         sessionDurationMinutes: s.session_duration_min ?? 15,
@@ -386,20 +394,21 @@ export async function saveState(userId, state) {
         `INSERT INTO wk_child_settings
            (child_id, sound_on, voice_on, show_text, companion_speed, celebration, game_mode,
             min_tasks_per_level, choices_grid_size, voice, session_duration_min, cooldown_min, max_daily_min,
-            tts_buttons)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+            tts_buttons, fun_facts, currency)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
          ON CONFLICT (child_id) DO UPDATE SET
            sound_on=EXCLUDED.sound_on, voice_on=EXCLUDED.voice_on, show_text=EXCLUDED.show_text,
            companion_speed=EXCLUDED.companion_speed, celebration=EXCLUDED.celebration, game_mode=EXCLUDED.game_mode,
            min_tasks_per_level=EXCLUDED.min_tasks_per_level, choices_grid_size=EXCLUDED.choices_grid_size,
            voice=EXCLUDED.voice, session_duration_min=EXCLUDED.session_duration_min,
            cooldown_min=EXCLUDED.cooldown_min, max_daily_min=EXCLUDED.max_daily_min,
-           tts_buttons=EXCLUDED.tts_buttons`,
+           tts_buttons=EXCLUDED.tts_buttons, fun_facts=EXCLUDED.fun_facts, currency=EXCLUDED.currency`,
         [
           id, s.soundOn ?? true, s.voiceOn ?? true, s.showText ?? true, s.companionSpeed ?? 'medium',
           s.celebration ?? 'balloons', s.gameMode ?? 'dynamic_task_extension', s.minTasksPerLevel ?? 10,
           s.choicesGridSize ?? 9, JSON.stringify(s.voice ?? {}), tc.sessionDurationMinutes ?? 15,
           tc.cooldownMinutes ?? 45, tc.maxDailyMinutes ?? 60, s.ttsButtons ?? true,
+          s.funFacts ?? true, CURRENCIES.includes(s.currency) ? s.currency : 'UAH',
         ],
       );
 

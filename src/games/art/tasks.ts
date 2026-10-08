@@ -1,9 +1,8 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
-import { factPool } from '../shared/facts';
 import { templateTask, type GameTasks } from '../shared/templateModule';
-import { STEPS, MIXES, PAINTS, COLOR_FACTS } from './content/data';
+import { STEPS, MIXES, PAINTS } from './content/data';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 
@@ -25,7 +24,7 @@ function mixer(step: number): Tasks {
           hint: `${mix.name} колір вийде, якщо змішати ${a.paint} і ${b.paint} фарби.`,
         },
         step,
-        factPool(`${a.name} і ${b.name.toLowerCase()} разом дають ${mix.name.toLowerCase()}!`, COLOR_FACTS),
+        `${a.name} і ${b.name.toLowerCase()} разом дають ${mix.name.toLowerCase()}!`,
       );
     }),
   );

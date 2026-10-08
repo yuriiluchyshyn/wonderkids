@@ -13,22 +13,31 @@ export const SUBJECT: SubjectDef = {
 };
 
 /**
- * Every language the galaxy teaches: the same four games are made for each
+ * Every language the galaxy teaches: the same games are made for each
  * pack. To add a language, add its pack to `content/` and list it here.
  */
 export const PACKS: LangPack[] = [UK, EN];
 
 /** What every language game has in common, whatever the language. */
-const COMMON: Record<GameKind, Pick<GameCard, 'mechanics'>> = {
-  bubbles: { mechanics: Mechanics.BubblePop },
-  chain: { mechanics: Mechanics.DragMatch },
-  rhymes: { mechanics: Mechanics.DragMatch },
-  sentences: { mechanics: Mechanics.ChronoSequence },
+const COMMON: Record<GameKind, Pick<GameCard, 'mechanics' | 'tasksPerLevel'>> = {
+  // A table with many letters to place is a long task: five to a level.
+  alphabet: { mechanics: Mechanics.LetterGrid, tasksPerLevel: 5 },
+  bubbles: { mechanics: Mechanics.BubblePop, tasksPerLevel: 10 },
+  chain: { mechanics: Mechanics.DragMatch, tasksPerLevel: 10 },
+  rhymes: { mechanics: Mechanics.DragMatch, tasksPerLevel: 10 },
+  sentences: { mechanics: Mechanics.ChronoSequence, tasksPerLevel: 10 },
 };
 
 /** What the child is told when the path reaches a new stage of a game: [step, text]. */
 function stageIntros(kind: GameKind, uk: boolean): [step: number, text: string][] {
   switch (kind) {
+    case 'alphabet':
+      return [
+        [STAGE.abcPlain, 'Тепер у порожніх клітинках немає підказок. Згадай, яка літера за якою стоїть!'],
+        [STAGE.abcLong, 'Таблиця стала більшою: тепер у ній три рядки літер.'],
+        [STAGE.abcSpot, 'Тепер усі літери на місці — але дві з них помінялися місцями. Знайди й торкнись однієї з них!'],
+        [STAGE.abcWhole, uk ? 'Перед тобою вся абетка! Постав на місця всі літери, яких бракує.' : 'Перед тобою вся англійська абетка! Постав на місця всі літери, яких бракує.'],
+      ];
     case 'bubbles':
       return [
         [STAGE.parts, uk ? 'Тепер у бульбашках — склади. Лопай їх по порядку, щоб вийшло слово!' : 'Тепер збираємо короткі англійські слова. Лопай літери так, як вони стоять у слові!'],
@@ -62,12 +71,13 @@ function cardsOf(pack: LangPack): GameCard[] {
       ...COMMON[kind],
       introFor: (step: number) => intros.find(([from]) => from === step)?.[1],
       steps: LANGUAGE_STEPS,
-      tasksPerLevel: 10,
+      // The hub's language filter: one flag per pack.
+      group: { id: pack.lang, icon: pack.flag, label: pack.name },
       publishDate: V6_RELEASE,
       hasText: true,
     };
   });
 }
 
-/** The games of this subject — four per language, in the order the hub lists them. */
+/** The games of this subject — the same set per language, in the order the hub lists them. */
 export const GAMES: GameCard[] = PACKS.flatMap(cardsOf);

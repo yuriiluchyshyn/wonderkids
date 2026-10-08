@@ -1,13 +1,10 @@
 import { useMemo } from 'react';
-import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
-import { isFreePlay } from '@/core/game/kernel/gameConfig';
-import type { LearningModule, SubCategory } from '@/core/game/kernel/types';
-import { pathKey, subSteps } from '@/core/child/progress/path';
-import { playsKey } from '@/core/child/progress/plays';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { themeWorld, type ThemeWorld } from './themeWorlds';
 import { treasureKey } from '@/core/child/progress/treasures';
+import { gamesProgress } from './games';
+import { STATION_DEFS, type StationDef } from './stations';
 import {
   PLANET_COUNT,
   PLANET_NAMES,
@@ -15,8 +12,8 @@ import {
   WORLD_PLANETS,
   frontierPlanet,
   giftsEarned,
-  landmarkLevel,
-  landmarkStage,
+  keyBalance,
+  keysEarned,
   planetNeeds,
   residentForGift,
   balanceOf,
@@ -24,24 +21,22 @@ import {
   residents,
   shopState,
   spentOn,
-  type GameProgress,
+  stationCost,
+  stationKey,
   type Inhabitant,
   type ItemState,
   type PlanetNeeds,
   type WorldPlanetId,
 } from './world';
 
-export interface Landmark {
-  module: LearningModule;
-  sub: SubCategory;
-  name: string;
-  emoji: string;
-  /** What each of the four stages adds, when the game names them. */
-  stages?: [string, string][];
-  /** 0 (not started) … 4 (complete). */
-  stage: number;
-  /** 0 … 8: one level per planet of the system (`landmarkLevel`). */
-  level: number;
+/** A station of knowledge on one planet, as it stands for this child. */
+export interface StationState {
+  station: StationDef;
+  /** Keys of knowledge it takes to open here. */
+  cost: number;
+  status: 'open' | 'affordable' | 'saving';
+  /** Keys still missing (0 unless `saving`). */
+  missing: number;
 }
 
 /** One planet of the child's solar system, outermost first. */
@@ -83,8 +78,10 @@ export interface World {
   spent: number;
   buildingsOwned: number;
   buildingsTotal: number;
-  /** Landmarks grouped by subject, in catalog order. */
-  lands: { module: LearningModule; landmarks: Landmark[] }[];
+  /** The stations of knowledge of the planet being looked at. */
+  stations: StationState[];
+  /** Keys of knowledge the child can exchange now (earned − spent on stations). */
+  keys: number;
   residents: Inhabitant[];
   gifts: number;
   /** The resident the most recent gift brought (shown on the gift screen). */
@@ -104,34 +101,17 @@ export function useWorld(viewPlanet?: number): World {
 
   return useMemo(() => {
     let def = themeWorld(theme);
-    const all: GameProgress[] = [];
-
-    const lands = moduleRegistry.getAll().map((module) => ({
-      module,
-      landmarks: module.subCategories.map((sub): Landmark => {
-        const game: GameProgress = {
-          free: isFreePlay(sub),
-          steps: subSteps(sub),
-          step: progress[pathKey(module.id, sub.id)] ?? 0,
-          plays: progress[playsKey(module.id, sub.id)] ?? 0,
-        };
-        all.push(game);
-        return {
-          module,
-          sub,
-          name: sub.landmark?.name ?? sub.label,
-          emoji: sub.landmark?.emoji ?? sub.icon,
-          stages: sub.landmark?.stages,
-          stage: landmarkStage(game),
-          level: landmarkLevel(game),
-        };
-      }),
-    }));
-
+    const all = gamesProgress(progress);
     const gifts = giftsEarned(all);
     const balance = balanceOf(artifacts, treasures);
-    const landLevels = lands.flatMap((land) => land.landmarks.map((l) => l.level));
+    const keys = keyBalance(keysEarned(all), treasures);
     const treasuresFound = theme.treasures.filter((t) => treasures.includes(treasureKey(theme.id, t.id))).length;
+    const stationsOn = (planet: number): StationState[] =>
+      STATION_DEFS.map((station) => {
+        const cost = stationCost(station.id, planet);
+        if (treasures.includes(stationKey(station.id, planet))) return { station, cost, status: 'open', missing: 0 };
+        return keys >= cost ? { station, cost, status: 'affordable', missing: 0 } : { station, cost, status: 'saving', missing: cost - keys };
+      });
 
     // Every planet: what stands on it and whether it is done.
     const planets = WORLD_PLANETS.map((id, i) => {
@@ -143,7 +123,7 @@ export function useWorld(viewPlanet?: number): World {
         itemsOwned: owned.size,
         itemsTotal: world.items.length,
         spaceport: owned.has(SPACEPORT_ID),
-        landLevels,
+        stationsOpen: stationsOn(planet).filter((st) => st.status === 'open').length,
         gifts,
         treasuresFound,
         treasuresTotal: theme.treasures.length,
@@ -180,7 +160,8 @@ export function useWorld(viewPlanet?: number): World {
       spent: spentOn(treasures),
       buildingsOwned: buildings.filter((b) => b.status === 'owned').length,
       buildingsTotal: buildings.length,
-      lands,
+      stations: stationsOn(shown.planet),
+      keys,
       residents: residents(def.residents, gifts),
       gifts,
       newestResident: residentForGift(def.residents, gifts),

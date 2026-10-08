@@ -1,3 +1,4 @@
+import { num } from '@/core/lang/numbers';
 import { shuffle } from '@/core/utils/random';
 
 /**
@@ -36,4 +37,12 @@ export function buildNumberOptions(answer: number, count = 9, spread = 5): numbe
   }
 
   return shuffle([...options]);
+}
+
+/** «2 однакові купки», «5 однакових купок», «1 купка» — the number marked feminine for the voice. */
+export function heaps(n: number): string {
+  const ones = n % 10;
+  const tens = n % 100;
+  if (ones === 1 && tens !== 11) return `${num(n, 'f')} купка`;
+  return ones >= 2 && ones <= 4 && !(tens >= 12 && tens <= 14) ? `${num(n, 'f')} однакові купки` : `${num(n, 'f')} однакових купок`;
 }

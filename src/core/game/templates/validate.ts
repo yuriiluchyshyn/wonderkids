@@ -119,3 +119,15 @@ export function minGap(points: readonly { x: number; y: number }[]): number {
   }
   return min;
 }
+
+/** Letter table: does the letter `itemId` belong in the cell at `index`? `order` are the ids in the right order. */
+export function isLetterPlace(order: readonly string[], itemId: string, index: number): boolean {
+  return order[index] === itemId;
+}
+
+/** Letter table: the ids as the child sees them — in order, with the two swapped cells exchanged. */
+export function withSwap<T>(order: readonly T[], swapped?: readonly [number, number]): T[] {
+  const shown = [...order];
+  if (swapped) [shown[swapped[0]], shown[swapped[1]]] = [shown[swapped[1]], shown[swapped[0]]];
+  return shown;
+}

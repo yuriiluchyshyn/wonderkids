@@ -21,6 +21,7 @@ import { Cutscene } from './Cutscene';
 import { CoachTips } from '@/components/coach/CoachTips';
 import { gameTips } from '@/components/coach/tips';
 import { pickOutro } from '@/core/game/content/outro';
+import { spoken, written } from '@/core/lang/numbers';
 import { IntroDemo } from '@/components/templates/IntroDemo';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
@@ -29,6 +30,8 @@ import { useScreenTime } from './useScreenTime';
 import { subSteps } from '@/core/child/progress/path';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { useWorld } from '@/core/child/world/useWorld';
+import { keysOf } from '@/core/child/world/games';
+import { KEY, KEY_COUNTED } from '@/core/child/world/stations';
 import { counted } from '@/core/lang/uk';
 import styles from './GameScreen.module.css';
 
@@ -109,7 +112,11 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   if (task && !session.finished && outroPick.current.at !== session.index) {
     outroPick.current = { at: session.index, text: pickOutro(task) };
   }
-  const outro = outroPick.current.text;
+  // A parent may switch the facts off: then nothing is told and nothing is waited for.
+  const funFacts = useGameStore((s) => s.settings.funFacts);
+  const picked = funFacts ? outroPick.current.text : undefined;
+  const outro = picked ? written(picked) : undefined;
+  const outroSpeech = picked ? spoken(picked) : undefined;
   // First-run tips: how to answer on this kind of board, then what each
   // control does (text games also get the tap-to-hear one, PRD v4.0 §2.4).
   const template = (task?.payload as Partial<TemplatePayload> | null | undefined)?.template;
@@ -210,7 +217,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     if (outroVoice && speechEngine.supported) {
       // Let the "correct!" sound land first, then speak.
       const start = window.setTimeout(
-        () => speechEngine.speak(outro, () => window.setTimeout(outroDone, 350)),
+        () => speechEngine.speak(outroSpeech ?? outro, () => window.setTimeout(outroDone, 350)),
         450,
       );
       return () => window.clearTimeout(start);
@@ -233,7 +240,13 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // buttons. `summarySaid` lets the rest screen wait for the last word.
   const voiceOn = useGameStore((s) => s.settings.voiceOn);
   const [summarySaid, setSummarySaid] = useState(false);
-  const summarySpeech = `Ти неймовірний! Зібрано ${counted(session.earned, theme.artifact.counted)}. ${tasksDone(session.total)} Чудова робота!`;
+  // Keys of knowledge this level brought: a new step passed (or a free-play
+  // level) gives one, a replay none. Counted against what there was before the win.
+  const keys = useGameStore((s) => keysOf(s.progress, s.treasures));
+  const keysBefore = useRef(keys);
+  if (!session.finished) keysBefore.current = keys;
+  const keysWon = Math.max(0, keys - keysBefore.current);
+  const summarySpeech = `Ти неймовірний! Зібрано ${counted(session.earned, theme.artifact.counted)}${keysWon > 0 ? ` і ${counted(keysWon, KEY_COUNTED)} знань` : ''}. ${tasksDone(session.total)} Чудова робота!`;
   useEffect(() => {
     if (!(session.finished && revealDone)) {
       setSummarySaid(false);
@@ -565,6 +578,12 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
           )}
           <p className={styles.summaryBig}>
             Зібрано +{session.earned} {theme.artifact.emoji}
+            {keysWon > 0 && (
+              <>
+                {' '}
+                +{keysWon} {KEY}
+              </>
+            )}
           </p>
           {reveal && (
             <p className={styles.treasureLine}>

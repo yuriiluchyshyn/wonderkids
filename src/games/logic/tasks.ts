@@ -3,6 +3,10 @@ import type { TaskInstance } from '@/core/game/kernel/types';
 import type { Card, TemplatePayload } from '@/core/game/templates/types';
 import { pick, shuffle } from '@/core/utils/random';
 import { card, templateTask, type GameTasks } from '../shared/templateModule';
+import { composeLevel, recallSteps } from '@/core/game/engine/recall';
+import { taskKey } from '@/core/game/engine/LevelEngine';
+import { buildNumberOptions } from '../math/generators/options';
+import { RIDDLE_KINDS, RIDDLE_STEPS, RIDDLES_PER_STEP, type RiddleKind } from './content/riddles';
 import { CHOICES, DRAWN, MIRROR_STEPS, PATTERN_STEPS, PER_STEP, SETS, SHADOW_STEPS, SHADOW_WORLD, type Half } from './content/data';
 
 type Tasks = TaskInstance<TemplatePayload>[];
@@ -249,9 +253,51 @@ function mirrors(step: number): Tasks {
   return tasks;
 }
 
+// --------------------------------------------------------- Logic riddles —
+
+/** One riddle of a kind, as a tap-the-answer task. A number to find gets near misses around it. */
+function riddleTask(kind: RiddleKind, step: number): TaskInstance<TemplatePayload> {
+  const riddle = kind.make(kind.r);
+  const options = typeof riddle.answer === 'number' ? buildNumberOptions(riddle.answer, 6, 4).map((n) => ({ id: `n${n}`, glyphs: [String(n)] })) : riddle.answer.options;
+  return templateTask(
+    `riddle:${kind.id}:${riddle.variant}`,
+    riddle.text,
+    {
+      template: Mechanics.GridChoice,
+      cols: options.length === 4 ? 2 : 3,
+      stimulus: riddle.emoji ? { emoji: riddle.emoji } : undefined,
+      options,
+      correctId: typeof riddle.answer === 'number' ? `n${riddle.answer}` : riddle.answer.correct,
+      hint: riddle.how,
+    },
+    step,
+  );
+}
+
+const riddleKindsAt = (step: number) => RIDDLE_KINDS.slice((step - 1) * RIDDLES_PER_STEP, step * RIDDLES_PER_STEP);
+
+/** Every kind opened so far, one draw of each (what the catalog counts). */
+function riddles(step: number): Tasks {
+  return RIDDLE_KINDS.slice(0, Math.min(RIDDLE_STEPS, step) * RIDDLES_PER_STEP).map((kind) => riddleTask(kind, step));
+}
+
+/**
+ * A level: the three kinds this step opens — one draw of each — and kinds
+ * from the steps just behind it. The very first level has nothing to recall,
+ * so its kinds are drawn again with other names and numbers.
+ */
+function riddleLevel(step: number, count: number): Tasks {
+  const at = Math.min(RIDDLE_STEPS, Math.max(1, step));
+  const draws = (kinds: RiddleKind[]) => shuffle(kinds).map((kind) => riddleTask(kind, step));
+  const fresh = draws(riddleKindsAt(at));
+  const earlier = recallSteps(at).flatMap(riddleKindsAt);
+  return composeLevel(at === 1 ? [...fresh, ...draws(riddleKindsAt(at)), ...draws(riddleKindsAt(at))] : fresh, draws(earlier), count, taskKey);
+}
+
 /** Task generators of every game, by game id (the cards are in `config.ts`). */
 export const TASKS: Record<string, GameTasks> = {
   patterns: { pool: patterns },
   shadows: { pool: shadows },
   mirror: { pool: mirrors },
+  riddles: { pool: riddles, level: riddleLevel },
 };

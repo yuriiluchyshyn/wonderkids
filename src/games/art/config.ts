@@ -27,7 +27,6 @@ export const GAMES: GameCard[] = [
       if (step === 8) return 'Найскладніші кольори виходять, коли змішати вже готовий колір з іншим. Спробуй!';
       return undefined;
     },
-    landmark: { name: 'Майстерня художника', emoji: '🎨' },
     steps: STEPS.length,
     difficulty: [1, 2],
     publishDate: V6_RELEASE,

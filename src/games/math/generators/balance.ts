@@ -1,3 +1,4 @@
+import { heaps } from './options';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { BalanceScalePayload, Card, FractionValue, Glyph } from '@/core/game/templates/types';
@@ -73,7 +74,7 @@ export function generateBalance(config: TaskConfig): TaskInstance<BalanceScalePa
     glyphs = [String(a), '×', String(b)];
     answer = a * b;
     hintDots = answer <= 24 ? Array.from({ length: a }, () => b) : undefined;
-    hint = `Це ${a} однакові купки по ${b}. Полічи всі крапки.`;
+    hint = `Це ${heaps(a)} по ${b}. Полічи всі крапки.`;
   }
 
   return {

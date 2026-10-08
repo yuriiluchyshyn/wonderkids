@@ -73,3 +73,58 @@ test('lifeless things in the accusative', async () => {
   assert.equal(from('січня'), 'із січня');
   assert.equal(from('грудня'), 'з грудня');
 });
+
+test('numbers are said as words in the gender and case the sentence asks for', async () => {
+  const { numberWords, num, say, written, spoken, hourAt, letterName } = await import('../src/core/lang/numbers.ts');
+  assert.equal(numberWords(2, 'f'), 'дві');
+  assert.equal(numberWords(2, 'm'), 'два');
+  assert.equal(numberWords(1, 'n'), 'одне');
+  assert.equal(numberWords(22, 'f'), 'двадцять дві');
+  assert.equal(numberWords(12, 'f'), 'дванадцять');
+  assert.equal(numberWords(41), 'сорок один');
+  assert.equal(numberWords(100), 'сто');
+  assert.equal(numberWords(365), 'триста шістдесят п’ять');
+  // «у трьох коробках», «між п’ятьма друзями».
+  assert.equal(numberWords(3, 'f', 'gen'), 'трьох');
+  assert.equal(numberWords(5, 'm', 'ins'), 'п’ятьма');
+  assert.equal(numberWords(24, 'm', 'gen'), 'двадцяти чотирьох');
+  // One string, two readings.
+  const text = `На столі ${num(2, 'f')} машинки, а в кошику — ще ${num(4, 'f')}. О ${say(7, hourAt(7))} годині.`;
+  assert.equal(written(text), 'На столі 2 машинки, а в кошику — ще 4. О 7 годині.');
+  assert.equal(spoken(text), 'На столі дві машинки, а в кошику — ще чотири. О сьомій годині.');
+  assert.equal(written('без чисел'), 'без чисел');
+  assert.equal(letterName('Ж'), 'же');
+  assert.equal(letterName('ь'), 'м’який знак');
+});
+
+test('a plain text with digits is read out in words, by the words around each number', async () => {
+  const { voiced, ordinalWords, num } = await import('../src/core/lang/numbers.ts');
+  assert.equal(ordinalWords(1863, 'gen'), 'тисяча вісімсот шістдесят третього');
+  assert.equal(ordinalWords(2000, 'gen'), 'двохтисячного');
+  assert.equal(ordinalWords(2011, 'gen'), 'дві тисячі одинадцятого');
+  assert.equal(ordinalWords(1991, 'loc'), 'тисяча дев’ятсот дев’яносто першому');
+  assert.equal(ordinalWords(3, 'f'), 'третя');
+  const says = (text: string, heard: string) => assert.equal(voiced(text), heard);
+  says('Скільки буде 2 плюс 4?', 'Скільки буде два плюс чотири?');
+  says('На столі лежать 2 машинки, а в кошику — ще 4.', 'На столі лежать дві машинки, а в кошику — ще чотири.');
+  says('У кошику 1 яблуко і 2 груші.', 'У кошику одне яблуко і дві груші.');
+  says('Це 2 однакові купки, у кожній по 5.', 'Це дві однакові купки, у кожній по п’ять.');
+  says('Обчисли: 3 з 4 плюс 1 з 4', 'Обчисли: три з чотирьох плюс один з чотирьох');
+  says('Леви відпочивають до 20 годин на добу.', 'Леви відпочивають до двадцяти годин на добу.');
+  says('З’єднай зорі по порядку: від 1 до 4.', 'З’єднай зорі по порядку: від одного до чотирьох.');
+  says('Нептун відкрили 1846 року, а оберт завершив аж 2011-го.', 'Нептун відкрили тисяча вісімсот сорок шостого року, а оберт завершив аж дві тисячі одинадцятого.');
+  says('День Незалежності святкують 24 серпня.', 'День Незалежності святкують двадцять четвертого серпня.');
+  says('У Києві 12:00.', 'У Києві дванадцята година.');
+  says('Потяг виїхав о 7:00.', 'Потяг виїхав о сьомій.');
+  says('перша година 40 хвилин', 'перша година сорок хвилин');
+  says('11 година', 'одинадцята година');
+  says('Рік триває 365 днів.', 'Рік триває триста шістдесят п’ять днів.');
+  says('Мороз мінус 224 градуси.', 'Мороз мінус двісті двадцять чотири градуси.');
+  // Letters: named in a sentence — by their names; a sentence that begins with «У», «З», «А» is left alone.
+  says('Назва починається на літеру «Л».', 'Назва починається на літеру «ел».');
+  says('З’єднай зорі за абеткою: від И до П.', 'З’єднай зорі за абеткою: від и до пе.');
+  says('У лісі живе білка. А в горах — орел. З неба падає дощ.', 'У лісі живе білка. А в горах — орел. З неба падає дощ.');
+  // What the author marked is said as marked.
+  says(`Скільки ${num(2, 'n')} та ${num(2, 'f')}?`, 'Скільки два та дві?');
+  says('без чисел', 'без чисел');
+});

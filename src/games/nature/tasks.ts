@@ -51,7 +51,7 @@ function seasons(step: number): Tasks {
         `Коли ${clause(what, 'present', { we: true })}?`,
         { template: Mechanics.SorterBins, item: card(`sign${i}`, emoji, capitalise(clause(what))), bins, correctBinId: season, wrongSay, hint: fact },
         step,
-        factPool(fact, SEASON_FACTS[season]),
+        fact,
       ),
     );
   }
@@ -71,7 +71,7 @@ function seasons(step: number): Tasks {
             hint: `${m.name} — це ${seasonName(m.season).toLowerCase()}. ${SEASON_FACTS[m.season][0]}`,
           },
           step,
-          factPool(m.fact, SEASON_FACTS[m.season]),
+          m.fact,
         ),
       );
     }
@@ -93,7 +93,7 @@ function seasons(step: number): Tasks {
             hint: `Згадай місяці по порядку: ${MONTHS[(i + 11) % 12].name.toLowerCase()}, ${m.name.toLowerCase()}, а далі…`,
           },
           step,
-          factPool(`Після ${m.after} настає ${next.name.toLowerCase()}.`, next.fact, SEASON_FACTS[next.season]),
+          factPool(`Після ${m.after} настає ${next.name.toLowerCase()}.`, next.fact),
         ),
       );
     }
@@ -115,7 +115,7 @@ function seasons(step: number): Tasks {
             hint: `Згадай місяці по порядку. Після якого місяця настає ${m.name.toLowerCase()}?`,
           },
           step,
-          factPool(`Перед ${m.before} був ${prev.name.toLowerCase()}.`, prev.fact, SEASON_FACTS[prev.season]),
+          factPool(`Перед ${m.before} був ${prev.name.toLowerCase()}.`, prev.fact),
         ),
       );
     }
@@ -159,7 +159,7 @@ function seasons(step: number): Tasks {
             hint: 'Рік починається із січня. Порахуй місяці по порядку: січень — перший, лютий — другий, березень — третій…',
           },
           step,
-          factPool(`${m.name} — ${ORDINAL[i]} місяць року.`, m.fact, SEASON_FACTS[m.season]),
+          factPool(`${m.name} — ${ORDINAL[i]} місяць року.`, m.fact),
         ),
       );
     }
@@ -181,7 +181,7 @@ function seasons(step: number): Tasks {
             hint: 'Пори року йдуть по колу: зима, весна, літо, осінь — і знову зима.',
           },
           step,
-          factPool('Пори року йдуть по колу: зима, весна, літо, осінь — і знову зима.', SEASON_FACTS[first.id]),
+          'Пори року йдуть по колу: зима, весна, літо, осінь — і знову зима.',
         ),
       );
     }

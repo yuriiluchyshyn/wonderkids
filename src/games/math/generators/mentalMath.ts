@@ -1,3 +1,4 @@
+import { heaps } from './options';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import { pick, randInt, uid } from '@/core/utils/random';
@@ -25,7 +26,7 @@ function countingFor(a: number, b: number, op: MathOp, answer: number): Counting
 
 /** Encouraging explanation of HOW to count this sum out, read when the helper opens. */
 function hintFor(a: number, b: number, op: MathOp): string {
-  if (op === '×') return `Це ${a} однакові купки, у кожній по ${b}. Торкайся кружечків по одному і рахуй усі разом.`;
+  if (op === '×') return `Це ${heaps(a)}, у кожній по ${b}. Торкайся кружечків по одному і рахуй усі разом.`;
   if (op === '÷') return `Розклади ${a} кружечків порівну у ${b} рядочки. Полічи, скільки опиниться в одному рядочку.`;
   if (op === '-') return `Було ${a}. Прибери ${b} — забирай по одному кружечку. Скільки лишилось?`;
   return `Полічи кружечки по одному: спочатку ${a}, а потім додай ще ${b}. Скільки вийшло разом?`;

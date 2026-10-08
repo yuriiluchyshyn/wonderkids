@@ -1,6 +1,10 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { MIRROR_STEPS, PATTERN_STEPS, SHADOW_STEPS } from './content/data';
+import { RIDDLE_STEPS } from './content/riddles';
+
+/** Publication date of «Логічні задачі» (drives the 60-day "NEW" badge). */
+const RIDDLES_RELEASE = '2026-10-08T00:00:00Z';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
@@ -28,7 +32,6 @@ export const GAMES: GameCard[] = [
       if (step === 7) return 'Обережно: тепер малюнки можуть стояти парами — два однакові поспіль.';
       return undefined;
     },
-    landmark: { name: 'Майстерня візерунків', emoji: '🧵' },
     steps: PATTERN_STEPS.length,
     difficulty: [1, 2],
     publishDate: V6_RELEASE,
@@ -49,7 +52,6 @@ export const GAMES: GameCard[] = [
       if (step === 9) return 'Найскладніше: усі тіні майже однакові, як у собаки, вовка й лисиці. Будь дуже уважним!';
       return undefined;
     },
-    landmark: { name: 'Театр тіней', emoji: '🎭' },
     steps: SHADOW_STEPS.length,
     difficulty: [1, 3],
     publishDate: V6_RELEASE,
@@ -69,12 +71,33 @@ export const GAMES: GameCard[] = [
       if (step === 7) return 'Тепер половинки дуже схожі одна на одну: відрізняються однією-двома клітинками. Перевіряй кожну!';
       return undefined;
     },
-    landmark: { name: 'Дзеркальний палац', emoji: '🏰' },
     steps: MIRROR_STEPS.length,
     difficulty: [1, 3],
     publishDate: V6_RELEASE,
     // Five, not ten: one task here is a long look (nine answers, several shadows to place).
     tasksPerLevel: 5,
     mechanics: Mechanics.GridChoice,
+  },
+  {
+    id: 'riddles',
+    gameId: 'logic_riddles',
+    label: 'Логічні Задачі',
+    icon: '🧠',
+    blurb: 'Маленькі історії, де треба не рахувати, а міркувати',
+    intro: 'Послухай коротку історію і подумай. Тут не треба довго рахувати — треба здогадатися! Якщо потрібно, натисни на динамік, і я прочитаю задачу ще раз.',
+    introFor: (step) => {
+      if (step === 11) return 'Тепер шукаємо правило: за яким законом ідуть числа? І вчимося не забувати порахувати того, про кого розповідають.';
+      if (step === 21) return 'Нові загадки — про дні тижня, про розрізи й шматки та про те, що повторюється по колу.';
+      if (step === 31) return 'Тепер до відповіді треба два кроки: спочатку дізнайся одне, а тоді — інше.';
+      if (step === 41) return 'Найскладніше: кілька підказок одразу. Викреслюй те, чого не може бути, — і лишиться відповідь.';
+      return undefined;
+    },
+    steps: RIDDLE_STEPS,
+    difficulty: [1, 3],
+    publishDate: RIDDLES_RELEASE,
+    // Five, not ten: a riddle takes a good think.
+    tasksPerLevel: 5,
+    mechanics: Mechanics.GridChoice,
+    hasText: true,
   },
 ];

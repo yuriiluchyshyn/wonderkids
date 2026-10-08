@@ -17,7 +17,6 @@ export const SUBJECT: SubjectDef = {
 export const GAMES: GameCard[] = [
   {
     id: 'seasons',
-    landmark: { name: 'Сад чотирьох пір року', emoji: '🌳', stages: [['❄️', 'Зимовий сад'], ['🌷', 'Весняний сад'], ['☀️', 'Літній сад'], ['🍂', 'Осінній сад']] },
     gameId: 'nature_seasons_months',
     label: 'Пори року і місяці',
     icon: '🍂',

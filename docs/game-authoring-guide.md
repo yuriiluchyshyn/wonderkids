@@ -125,7 +125,6 @@ defaults. **Bold = required.**
 | `tasksPerLevel` | integer 5–10 | Tasks per level — **required for every game**. 10 for a quick path game, 6 for free play (5–8), 5 when one task is long (a maze). | `10` |
 | `mechanics` | one or more `MechanicsType` | Which UI template(s) the game uses (see §4). Array if the game mixes templates. | — |
 | `hasText` | boolean | `true` if the child must read task/answer text — enables tap-to-hear speaker buttons + the first-run guide. Set it whenever any option or prompt relies on reading. | `false` |
-| `landmark` | `{ name, emoji, stages? }` | What the game builds in the child's world («Землі знань»); grows in 4 stages. See §7. | — |
 | `publishDate` | ISO 8601 UTC | Before it the card is locked («Скоро»); for 60 days after it shows a "NEW" badge. Use the shared release constant. | — |
 | **`pool`** | `(step, config) => TaskInstance[]` | **The generator**: all candidate tasks available at `step`. Must be pure (no side effects, deterministic given input). | — |
 | `level` | `(step, count) => TaskInstance[]` | Optional: compose a level yourself (ranked content). Without it, path games get `recallLevel`, free games a random draw. | — |
@@ -559,22 +558,13 @@ Three visual sources, in order of preference:
 Special drawn cards also exist via `Card.shape` (figure on a cell grid) and
 `Card.clock` (a drawn analogue clock) — used by Math.
 
-### The `landmark` (what the game builds in the child's world)
+### What a game gives the child's world
 
-Every game should define a `landmark` — the structure the child grows in «Мій
-світ» as they progress. It has a `name`, an `emoji`, and optional 4-stage
-growth:
-
-```ts
-landmark: {
-  name: 'Алея прапорів',
-  emoji: '🚩',
-  stages: [['🇺🇦','Україна'], ['🗼','Франція'], ['🗻','Японія'], ['🗽','Америка']],
-}
-```
-
-`stages` is **exactly 4** `[emoji, label]` pairs (stage 1→4). Without `stages`
-the same building simply grows larger.
+Nothing game-specific: a game has no building of its own in «Мій світ». Every
+new path step (and the first levels of a free-play game) earns a **key of
+knowledge**, and keys open the planet's «Станції знань» — the same fixed set
+on every planet (`core/child/world/stations.ts`). A new game therefore needs
+no world content at all.
 
 ---
 
@@ -663,7 +653,6 @@ Conventions:
 5. Respect the option counts in §4; distractors come from already-known content.
 6. `path` games define `steps`; every game defines `tasksPerLevel` (path 5–10, free 5–8).
 7. Only use `stimulus.art` ids that exist (§7).
-8. `landmark.stages`, when present, has exactly 4 `[emoji, label]` pairs.
 
 **Checklist (from `docs/level-design.md` §8):**
 
@@ -672,7 +661,6 @@ Conventions:
 3. Pick the authoring method: growing `pool(step)` or ranked `level(step)`.
 4. Give each task a `hint` and a 10+ `outro` pool.
 5. If the game shows readable text → `hasText: true`.
-6. Add a `landmark`.
 7. Verify: `npm test`, `npm run check:content`, `npm run build`.
 
 ---
@@ -693,7 +681,6 @@ export const GAMES: GameCard[] = [
     label: 'Вгадай Прапор', icon: '🚩',
     blurb: `Усі ${COUNTRIES.length} прапори світу — від найвідоміших`,
     intro: 'У кожної країни є свій прапор…',
-    landmark: { name: 'Алея прапорів', emoji: '🚩', stages: [/* 4 */] },
     steps: FLAG_STEPS,
     difficulty: 1,
     publishDate: V4_RELEASE,
@@ -763,7 +750,6 @@ Final wiring: add `import './<subject>';` to `src/games/index.ts`.
 - hasText:                     true | false
 - mechanics:                   <one or more of the 6 MechanicsType>
 - publishDate:                 2026-10-06T00:00:00Z   (or as directed)
-- landmark:                    { name:«…», emoji:…, stages:[[e,«…»],[e,«…»],[e,«…»],[e,«…»]] }
 - intro (UA):                  «…»   (and introFor(step) notes if task types unlock over the path)
 
 ## 2. Task types
@@ -823,8 +809,6 @@ illustrative; the live game may differ.)
 - hasText:            true
 - mechanics:          [UI_GRID_CHOICE, UI_SORTER_BINS]
 - publishDate:        2026-10-06T00:00:00Z
-- landmark:           { name:«Концертний зал», emoji:🎻,
-                        stages:[[🥁,«Барабан»],[🎸,«Гітара»],[🎻,«Скрипка»],[🎹,«Оркестр»]] }
 - intro (UA):         «Познайомся з музичними інструментами! Упізнай інструмент
                        і дізнайся, до якої родини він належить — струнні, духові
                        чи ударні.»

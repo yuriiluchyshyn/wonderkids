@@ -24,6 +24,7 @@ const MECHANICS: Record<MechanicsType, string> = {
   [Mechanics.BubblePop]: 'Бульбашки',
   [Mechanics.DotToDot]: 'З’єднай зорі',
   [Mechanics.ColorMix]: 'Змішування фарб',
+  [Mechanics.LetterGrid]: 'Таблиця літер',
 };
 
 /** Draws per step when a game can only be counted by playing its generator. */

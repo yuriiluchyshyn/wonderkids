@@ -55,20 +55,6 @@ export const FEATURES: [id: string, planet: string, emoji: string, label: string
 ];
 export const FEATURES_PER_STEP = 6;
 
-export const SOLAR_FACTS = [
-  'Навколо Сонця обертаються вісім планет.',
-  'Сонце — це зоря. Воно таке велике, що в ньому вмістився б мільйон планет Земля.',
-  'Меркурій, Венера, Земля і Марс — кам’яні планети: по них можна було б ходити.',
-  'Юпітер, Сатурн, Уран і Нептун — велетні з газу та льоду, твердої поверхні в них немає.',
-  'Світло від Сонця летить до Землі трохи більше ніж вісім хвилин.',
-  'Що далі планета від Сонця, то довше на ній триває рік.',
-  'Між Марсом і Юпітером літає пояс астероїдів — кам’яних уламків.',
-  'Планети не світяться самі — вони відбивають світло Сонця.',
-  'Земля облітає Сонце за один рік, а Нептун — за 165 земних років.',
-  'Юпітер такий великий, що всередині нього вмістилося б понад тисячу планет Земля.',
-  'Кільця Сатурна складаються з безлічі шматочків льоду й каміння.',
-];
-
 export interface Figure {
   name: string;
   emoji: string;
@@ -133,16 +119,25 @@ export const SKY_STEPS: [Figure, Labels][][] = [
   [0, 4, 5].map((i) => [MEDIUM[i], { kind: 'count', start: 20, by: 2 }]),
 ];
 
-export const SKY_FACTS = [
-  'Сузір’я — це малюнок, який люди уявили, з’єднавши зорі лініями.',
-  'На небі налічують 88 сузір’їв.',
-  'Зорі однієї фігури насправді дуже далеко одна від одної — вони лише здаються сусідами.',
-  'Давні мореплавці знаходили дорогу за зорями.',
-  'Удень зорі нікуди не зникають — їх просто затьмарює світло Сонця.',
-  'Найближча до нас зоря — це Сонце.',
-  'Зорі мерехтять, бо їхнє світло проходить крізь рухливе повітря Землі.',
-  'Чумацький Шлях — це наша галактика: у ній сотні мільярдів зір.',
-  'Узимку і влітку на вечірньому небі видно різні сузір’я.',
-  'Полярна зоря майже не рухається на небі й завжди показує на північ.',
-  'Найкраще зорі видно далеко від міських ліхтарів.',
+/** Every figure of the sky, the small ones first. */
+export const FIGURES: Figure[] = [...SMALL, ...MEDIUM, ...LARGE];
+
+/**
+ * «Знайди сузір’я» — the steps after the labelled ones. A figure is asked
+ * three times along them, each time harder to pick out: more stars around it
+ * and its own stars less and less bigger than they are.
+ */
+export const FIND_TIERS: { decoys: number; ratio: number }[] = [
+  { decoys: 10, ratio: 2 },
+  { decoys: 18, ratio: 1.7 },
+  { decoys: 28, ratio: 1.45 },
 ];
+/** Figures a step of the search opens. */
+export const FIND_PER_STEP = 3;
+/** [figure, tier] in path order: all figures at the first tier, then all at the second… trimmed to whole steps. */
+export const FIND_STEPS: [Figure, number][][] = (() => {
+  const all = FIND_TIERS.flatMap((_, tier) => FIGURES.map((figure): [Figure, number] => [figure, tier]));
+  const steps: [Figure, number][][] = [];
+  for (let i = 0; i + FIND_PER_STEP <= all.length; i += FIND_PER_STEP) steps.push(all.slice(i, i + FIND_PER_STEP));
+  return steps;
+})();

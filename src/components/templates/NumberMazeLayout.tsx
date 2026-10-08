@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useSound } from '@/core/audio/useSound';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import type { NumberMazePayload } from '@/core/game/templates/types';
@@ -7,6 +7,9 @@ import { isAdjacent, nextStepTowards } from '@/core/game/templates/validate';
 import { cn } from '@/core/utils/cn';
 import { SHAKE, SHAKE_TRANSITION, Stimulus, type LayoutProps } from './parts';
 import styles from './Templates.module.css';
+
+/** Wrong steps from one spot before the helper shows the next step again. */
+const SLIPS_FOR_HINT = 2;
 
 /** Numbers as a child reads them: a real minus sign, not a hyphen. */
 const show = (value: number) => String(value).replace('-', '−');
@@ -16,7 +19,9 @@ const show = (value: number) => String(value).replace('-', '−');
  * stepping only on numbers that fit the rule ("divisible by 3"). A right step
  * turns the tile gold; a wrong one cracks. Bigger mazes have side corridors
  * that fit the rule but end in a dead end: walking into one is not a mistake,
- * the child just walks back. The helper lights up the next step only.
+ * the child just walks back. The helper lights up ONE next step and then
+ * steps aside: the child walks on alone, and it comes back only after two
+ * more slips from where they stand.
  */
 export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps<NumberMazePayload>) {
   const { cols, cells, path, open } = payload;
@@ -31,9 +36,17 @@ export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps
   const [walked, setWalked] = useState<ReadonlySet<number>>(() => new Set([start]));
   const [cracked, setCracked] = useState<number | null>(null);
 
+  // The helper is lit for one step at a time. `slips` counts wrong steps since
+  // it last went out (or since the child last moved on).
+  const [lit, setLit] = useState(false);
+  const [slips, setSlips] = useState(0);
+  useEffect(() => {
+    if (hintActive) setLit(true);
+  }, [hintActive]);
+
   const done = here === finish;
   // The one tile the helper points at: the next step of the way out from here.
-  const next = hintActive && !done ? nextStepTowards(here, finish, walkable, cols) : null;
+  const next = hintActive && lit && !done ? nextStepTowards(here, finish, walkable, cols) : null;
 
   const step = (index: number) => {
     if (done || index === here || !isAdjacent(here, index, cols)) return;
@@ -42,10 +55,20 @@ export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps
       play('tap');
       setHere(index);
       setWalked((prev) => new Set(prev).add(index));
+      // One step was shown — or made without help: from here the child goes alone.
+      setLit(false);
+      setSlips(0);
       if (index === finish) callbacks.onSuccess();
       return;
     }
     setCracked(index);
+    // Two slips on the same spot bring the helper back for one more step.
+    if (hintActive && slips + 1 >= SLIPS_FOR_HINT) {
+      setLit(true);
+      setSlips(0);
+    } else {
+      setSlips(slips + 1);
+    }
     callbacks.onMistake();
   };
 
