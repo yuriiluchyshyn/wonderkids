@@ -22,10 +22,12 @@ export const PACKS: LangPack[] = [UK, EN];
 const COMMON: Record<GameKind, Pick<GameCard, 'mechanics' | 'tasksPerLevel'>> = {
   // A table with many letters to place is a long task: five to a level.
   alphabet: { mechanics: Mechanics.LetterGrid, tasksPerLevel: 5 },
-  bubbles: { mechanics: Mechanics.BubblePop, tasksPerLevel: 10 },
-  chain: { mechanics: Mechanics.DragMatch, tasksPerLevel: 10 },
-  rhymes: { mechanics: Mechanics.DragMatch, tasksPerLevel: 10 },
-  sentences: { mechanics: Mechanics.ChronoSequence, tasksPerLevel: 10 },
+  // Every other one is several moves a task too (a word to spell, three pairs
+  // to join, a sentence to build), so ten made a level drag: five, in both languages.
+  bubbles: { mechanics: Mechanics.BubblePop, tasksPerLevel: 5 },
+  chain: { mechanics: Mechanics.DragMatch, tasksPerLevel: 5 },
+  rhymes: { mechanics: Mechanics.DragMatch, tasksPerLevel: 5 },
+  sentences: { mechanics: Mechanics.ChronoSequence, tasksPerLevel: 5 },
 };
 
 /** What the child is told when the path reaches a new stage of a game: [step, text]. */

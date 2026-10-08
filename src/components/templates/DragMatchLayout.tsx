@@ -11,7 +11,9 @@ import styles from './Templates.module.css';
 /**
  * UI_DRAG_MATCH — drag each item from the top tray onto its slot below (or tap
  * the item, then the slot). A wrong drop sends the card gently back; the
- * helper makes the right slot for the next card pulse.
+ * helper makes ONE pair pulse — the card and its slot together: the pair the
+ * spoken hint names (`payload.lead`) while it is still waiting, then the card
+ * the child last slipped on, then the first one left.
  */
 export function DragMatchLayout({ payload, callbacks, hintActive }: LayoutProps<DragMatchPayload>) {
   const { items, slots, pairs } = payload;
@@ -19,15 +21,19 @@ export function DragMatchLayout({ payload, callbacks, hintActive }: LayoutProps<
   const [placed, setPlaced] = useState<Record<string, string>>({});
   const [shake, setShake] = useState<string | null>(null);
   const [pulse, setPulse] = useState<string | null>(null);
+  const [missed, setMissed] = useState<string | null>(null);
 
   const done = isMatchComplete(pairs, placed);
   const waiting = items.filter((item) => !placed[item.id]);
-  const hintSlot = hintActive && waiting[0] ? pairs[waiting[0].id] : null;
+  const isWaiting = (id?: string | null): id is string => Boolean(id) && waiting.some((item) => item.id === id);
+  const hintItem = !hintActive ? null : isWaiting(payload.lead) ? payload.lead : isWaiting(missed) ? missed : (waiting[0]?.id ?? null);
+  const hintSlot = hintItem ? pairs[hintItem] : null;
 
   const onDrop = (itemId: string, slotId: string) => {
     if (done || placed[itemId]) return;
     if (pairs[itemId] !== slotId) {
       setShake(itemId);
+      setMissed(itemId);
       callbacks.onMistake();
       return;
     }
@@ -53,7 +59,7 @@ export function DragMatchLayout({ payload, callbacks, hintActive }: LayoutProps<
             transition={SHAKE_TRANSITION}
             onAnimationComplete={() => shake === item.id && setShake(null)}
           >
-            <div className={styles.chipInner} style={dnd.styleFor(item.id)} {...dnd.bind(item.id)}>
+            <div className={cn(styles.chipInner, hintItem === item.id && styles.pulsing)} style={dnd.styleFor(item.id)} {...dnd.bind(item.id)}>
               <CardFace card={item} />
             </div>
           </motion.div>

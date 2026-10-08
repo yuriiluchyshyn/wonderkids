@@ -112,9 +112,11 @@ function scramble(ids: string[]): string[] {
   return [...ids].reverse();
 }
 
+/** `pairs[0]` is the pair the `hint` speaks of — the board lights that very pair. */
 function match(pairs: { item: Card; slot: Card }[], hint: string): DragMatchPayload {
   return {
     template: Mechanics.DragMatch,
+    lead: pairs[0].item.id,
     items: shuffle(pairs.map((p) => p.item)),
     slots: shuffle(pairs.map((p) => p.slot)),
     pairs: Object.fromEntries(pairs.map((p) => [p.item.id, p.slot.id])),
@@ -351,6 +353,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
   }
 
   // ---------------------------------------------------------------- Game 2 —
+  // No fact after a task: there is nothing to tell about joining three pairs.
   // Word chain: 1–8 word → its first letter, 9–15 word → a word on the same
   // letter, 16–30 two halves of a word, 31–50 words linked by meaning.
   const pictures: Word[] = [...pack.spellWords, ...pack.partWords.map((w): Word => [w.parts.join(''), w.emoji])];
@@ -387,7 +390,6 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             uk ? `Вимов слово вголос і послухай перший звук. «${lead[0]}» починається на літеру «${first(lead)}».` : 'Подивись, з якої літери починається кожне слово.',
           ),
           step,
-          uk ? `Слово «${lead[0]}» починається на літеру «${first(lead)}».` : undefined,
         ),
       );
     }
@@ -404,7 +406,6 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             uk ? `«${lead[0][0]}» і «${lead[1][0]}» починаються на однакову літеру — «${first(lead[0])}».` : 'Порівняй перші літери слів: у пари вони однакові.',
           ),
           step,
-          uk ? `«${lead[0][0]}» і «${lead[1][0]}» починаються на літеру «${first(lead[0])}».` : undefined,
         ),
       );
     }
@@ -425,7 +426,6 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             uk ? `Подивись на малюнок: це «${lead[0]}${lead[1]}». Слово починається зі складу «${lead[0]}».` : 'Натисни на динамік біля малюнка, послухай слово і знайди його початок.',
           ),
           step,
-          uk ? `«${lead[0]}» і «${lead[1]}» — разом це слово «${lead[0]}${lead[1]}».` : undefined,
         ),
       );
     }
@@ -442,7 +442,6 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             uk ? `Подумай, що буває разом. «${lead.a}» — «${lead.b}».` : 'Натисни на динамік, щоб почути слово. Шукай те, що буває з ним разом.',
           ),
           step,
-          uk ? `«${lead.a}» і «${lead.b}» — ці слова завжди поруч.` : undefined,
         ),
       );
     }

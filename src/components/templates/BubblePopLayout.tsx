@@ -14,11 +14,11 @@ const faceOf = (card: Card) => card.label ?? card.emoji ?? card.id;
 /** A wrong bubble does not pop — it springs back. */
 const SPRING = { scale: [1, 0.8, 1.14, 0.94, 1] };
 
-/** Balloon colours — content, not chrome: the same in every theme. */
-const BALLOONS = ['#ff8fa3', '#ffd166', '#8ecae6', '#b8e986', '#cdb4f6', '#ffb38a', '#7fe0d0'];
+/** The sheen of a soap bubble — content, not chrome: the same in every theme. */
+const SHEENS = ['#ff8fa3', '#ffd166', '#8ecae6', '#b8e986', '#cdb4f6', '#ffb38a', '#7fe0d0'];
 
 /**
- * Bubble pop — helium balloons on strings drift about, the child pops them in order (tap).
+ * Bubble pop — soap bubbles drift about, the child pops them in order (tap).
  * Popped faces line up in the row above, so the word grows letter by letter.
  * Helper: the bubble to pop next pulses.
  */
@@ -70,13 +70,14 @@ export function BubblePopLayout({ payload, callbacks, hintActive }: LayoutProps<
           const gone = popped.includes(bubble.id);
           return (
             // Two loops of different lengths — sideways drift and up-and-down bob —
-            // so every balloon wanders along a path of its own.
+            // so every bubble wanders along a path of its own.
             <span
               key={bubble.id}
               className={styles.popFloat}
               style={
                 {
-                  '--balloon': BALLOONS[i % BALLOONS.length],
+                  '--sheen': SHEENS[i % SHEENS.length],
+                  '--sheen2': SHEENS[(i + 3) % SHEENS.length],
                   '--drift': `${6.2 + (i % 4) * 1.3}s`,
                   '--bob': `${3.7 + (i % 3) * 0.9}s`,
                   '--delay': `${-(i * 1.1)}s`,
@@ -100,9 +101,6 @@ export function BubblePopLayout({ payload, callbacks, hintActive }: LayoutProps<
                     </span>
                   )}
                 </motion.button>
-                <svg className={cn(styles.popString, gone && styles.popStringGone)} viewBox="0 0 20 60" aria-hidden>
-                  <path d="M10 0 C 17 12, 3 24, 10 38 S 15 52, 9 60" />
-                </svg>
               </span>
             </span>
           );

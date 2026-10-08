@@ -12,8 +12,9 @@ import styles from './Templates.module.css';
 /**
  * UI_CHRONO_SEQUENCE — arrange the cards in order by dragging one onto another
  * (or tapping two) to swap them, then confirm.
- * Helper: the cards already in the right place light up, and a task that
- * brings a `guide` shows the whole row its cards belong to.
+ * Helper: the cards already in the right place light up green, and a task that
+ * brings a `guide` shows the whole row its cards belong to — there too the
+ * ones the child has already put right are lit.
  */
 export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<SequencePayload>) {
   const { cards, initial, orientation } = payload;
@@ -85,7 +86,7 @@ export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<S
       {hintActive && !solved && payload.guide && (
         <div className={styles.seqGuide} aria-label="Підказка: уся послідовність по порядку">
           {payload.guide.map((item, i) => (
-            <span key={item.id} className={cn(styles.seqGuideItem, order.includes(item.id) && styles.seqGuideOurs)}>
+            <span key={item.id} className={cn(styles.seqGuideItem, order.includes(item.id) && styles.seqGuideOurs, right[order.indexOf(item.id)] && styles.seqGuideRight)}>
               {i > 0 && (
                 <span className={styles.seqGuideArrow} aria-hidden>
                   ›

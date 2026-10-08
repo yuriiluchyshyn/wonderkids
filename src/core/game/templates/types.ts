@@ -158,6 +158,8 @@ export interface GridChoicePayload extends TemplateBase {
 
 /** UI_DRAG_MATCH — drag every item onto its slot. */
 export interface DragMatchPayload extends TemplateBase {
+  /** The item the spoken `hint` is about: the helper lights its pair first. */
+  lead?: string;
   template: Mechanics.DragMatch;
   items: Card[];
   slots: Card[];
