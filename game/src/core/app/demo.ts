@@ -161,6 +161,17 @@ export function seatGuest(): void {
   for (const tip of TIPS_SKIPPED) useGameStore.getState().markTipSeen(tip);
 }
 
+/**
+ * The guest is called «Друже» in the language of the device — and that
+ * language may only become known a moment after the guest is seated (the
+ * server says which country this is), so the name follows it.
+ */
+useDeviceLang.subscribe(({ lang }) => {
+  if (!useDemo.getState().active || useGameStore.getState().children.length === 0) return;
+  const name = tApp(lang, 'child.defaultName');
+  if (useGameStore.getState().profile.name !== name) useGameStore.getState().setProfile({ name });
+});
+
 /** Adds played time; the trial ends when it reaches the limit. */
 export function demoTick(ms: number): void {
   const { active, expired, elapsedMs, minutes, session } = useDemo.getState();

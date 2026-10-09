@@ -71,3 +71,10 @@
   padding: 0;
   list-style: none;
 }
+
+/* A language the owner does not offer in the visitor's country (`scripts/language.ts`). */
+.langs[hidden],
+.langs li[hidden],
+a[data-lang][hidden] {
+  display: none;
+}

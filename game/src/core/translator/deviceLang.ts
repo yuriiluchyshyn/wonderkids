@@ -9,7 +9,8 @@ import { isLang, offeredLang, type LangCode } from '@/core/language';
  * It is offered, in this order: what the visitor chose (on the landing page
  * or in the cabinet) → the language of the country the request came from
  * (`GET /api/health`, read from Vercel's `x-vercel-ip-country`) → the
- * browser's own language → English.
+ * browser's own language → English — within the languages the owner offers
+ * in that country (`offerDeviceLang`).
  *
  * A choice is remembered where the public site, `play.` and `parents.` all
  * read it (`@pulsar/platform`). The site keeps a list of languages of its own:
@@ -43,17 +44,16 @@ export const useDeviceLang = create<DeviceLangState>((set) => ({
 }));
 
 /**
- * Asks the server which country the visitor is in and, unless a choice was
- * made, offers that country's language. Called once at start; a failure
- * leaves the browser's language in place.
+ * The server has said which country the visitor is in and which languages the
+ * owner offers there (`core/app/availability.ts`): unless a choice was made,
+ * that country's language is offered — or, when it is not among those
+ * offered, the browser's first that is, else the first of them.
  */
-export async function offerLangByCountry(base = ''): Promise<void> {
+export function offerDeviceLang(country: string | null | undefined, offered: readonly LangCode[]): void {
   if (useDeviceLang.getState().chosen) return;
-  try {
-    const res = await fetch(`${base}/api/health`, { cache: 'no-store' });
-    const { country } = (await res.json()) as { country?: string | null };
-    if (!useDeviceLang.getState().chosen) useDeviceLang.setState({ lang: offeredLang(country, browserLangs()) });
-  } catch {
-    // Offline or no API: keep the guess.
-  }
+  const natural = offeredLang(country, browserLangs());
+  const fromBrowser = browserLangs()
+    .map((tag) => tag.toLowerCase().split('-')[0])
+    .find((code): code is LangCode => isLang(code) && offered.includes(code));
+  useDeviceLang.setState({ lang: offered.includes(natural) ? natural : (fromBrowser ?? offered[0] ?? natural) });
 }

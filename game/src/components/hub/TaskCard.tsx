@@ -8,6 +8,7 @@ import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { subSteps, pathKey } from '@/core/child/progress/path';
 import { difficultyRange, gameStatus, isFreePlay } from '@/core/game/kernel/gameConfig';
+import { gameState, useAvailability } from '@/core/app/availability';
 import { DIFFICULTY_AGES } from '@/core/game/kernel/types';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
@@ -37,8 +38,10 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
   // Clamped: a saved step may exceed a path that was shortened in a release.
   const step = Math.min(useGameStore((s) => s.progress[pathKey(module.id, sub.id)] ?? 1), totalSteps);
 
-  // Publication status comes from the game's publish date (PRD v4.0 §1.2).
-  const status = gameStatus(sub);
+  // Publication status comes from the game's publish date (PRD v4.0 §1.2) —
+  // unless the owner has marked the game «soon» here (`/admin/availability`).
+  const heldBack = useAvailability((a) => gameState(a, module.id, sub.id) === 'soon');
+  const status = heldBack ? 'soon' : gameStatus(sub);
   const locked = status === 'soon';
   // Free play: no ladder to show — the card opens straight into the game.
   const free = isFreePlay(sub);

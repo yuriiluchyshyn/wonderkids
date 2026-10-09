@@ -13,6 +13,7 @@ export const SECTIONS: { path: string; icon: string; label: string }[] = [
   { path: '/admin/sources', icon: '📊', label: 'Джерела' },
   { path: '/admin/links', icon: '🔗', label: 'Посилання' },
   { path: '/admin/games', icon: '🎮', label: 'Ігри' },
+  { path: '/admin/availability', icon: '🌍', label: 'Доступність' },
   { path: '/admin/speech', icon: '🗣️', label: 'Google Speech' },
   { path: '/admin/settings', icon: '⚙️', label: 'Налаштування' },
 ];

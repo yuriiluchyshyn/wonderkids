@@ -4,6 +4,7 @@ import { createHash, createHmac } from 'node:crypto';
 import { countRecentVisits, ensureSchema, getSetting, linkExists, markVisit, recordVisit } from './db.js';
 import { DEMO_MINUTES_DEFAULT, MAX_VISITS_PER_HOUR, VISIT_EVENTS, cleanDemoMinutes, cleanVisit, deviceOf } from './marketing.js';
 import { safeEqual } from './secrets.js';
+import { EMPTY, availabilityFor, cleanAvailability } from './availability.js';
 
 export const DEMO_MINUTES_KEY = 'demo_minutes';
 
@@ -18,7 +19,7 @@ function visitorHash(req) {
   return createHash('sha256').update(`${secret()}:visitor:${ip}`).digest('hex').slice(0, 32);
 }
 
-function countryOf(req) {
+export function countryOf(req) {
   const country = String(req.headers['x-vercel-ip-country'] ?? '').toUpperCase();
   return /^[A-Z]{2}$/.test(country) ? country : null;
 }
@@ -75,4 +76,41 @@ export async function visitGoesOn(req, res) {
   await ensureSchema();
   await markVisit(visit, event);
   return res.status(200).json({ ok: true });
+}
+
+// ---------------------------------------------------------------------------
+// What is offered to this visitor (see availability.js)
+// ---------------------------------------------------------------------------
+
+export const AVAILABILITY_KEY = 'availability';
+
+/** The owner's rules are read at most this often by one running function; a change shows within it. */
+const RULES_TTL_MS = 30_000;
+let rules = null;
+
+/** The owner's rules, clean. Throws when the database cannot be read. */
+export async function availabilityRules() {
+  if (rules && Date.now() - rules.at < RULES_TTL_MS) return rules.config;
+  await ensureSchema();
+  const config = cleanAvailability(await getSetting(AVAILABILITY_KEY));
+  rules = { at: Date.now(), config };
+  return config;
+}
+
+/** The rules were just changed: this function reads them anew at once. */
+export function forgetAvailabilityRules() {
+  rules = null;
+}
+
+/**
+ * What the site and the game offer a visitor from `country`. Never throws:
+ * with the database out of reach nothing is restricted — the game must open.
+ */
+export async function availabilityOf(country) {
+  try {
+    return availabilityFor(await availabilityRules(), country);
+  } catch (err) {
+    console.error('[availability] rules not read:', err instanceof Error ? err.message : err);
+    return availabilityFor(EMPTY, country);
+  }
 }

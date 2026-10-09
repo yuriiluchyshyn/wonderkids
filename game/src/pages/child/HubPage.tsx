@@ -16,7 +16,8 @@ import { TaskGrid } from '@/components/hub/TaskGrid';
 import { ThemeBrand, hasOwnScenery } from '@/components/theme/ThemeDecor';
 import { PathModal } from '@/components/hub/PathModal';
 import { buildCatalog, filterCatalog, type CatalogEntry } from '@/components/hub/catalog';
-import { galaxyKey, getGalaxy } from '@/core/game/galaxies';
+import { galaxyKey } from '@/core/game/galaxies';
+import { gameState, useAvailability, useGalaxies } from '@/core/app/availability';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/child/store/useGameStore';
@@ -36,7 +37,13 @@ export function HubPage() {
   const showText = useShowText();
 
   // Remembered across navigation: returning from a game keeps the section.
-  const galaxyId = useHubState((s) => s.galaxyId);
+  const rememberedGalaxy = useHubState((s) => s.galaxyId);
+  // The galaxies offered in the visitor's country; a remembered one that has
+  // since been put away gives way to the first that is there.
+  const availability = useAvailability();
+  const galaxies = useGalaxies();
+  const galaxy = galaxies.find((g) => g.id === rememberedGalaxy) ?? galaxies[0];
+  const galaxyId = galaxy.id;
   const setGalaxyId = useHubState((s) => s.setGalaxy);
   const stars = useHubState((s) => s.stars);
   const setStars = useHubState((s) => s.setStars);
@@ -63,14 +70,14 @@ export function HubPage() {
   const tips = useMemo(() => hubTips(), []);
   const lang = useLang();
   const catalog = useMemo(() => buildCatalog(lang), [lang]);
-  const galaxy = getGalaxy(galaxyId);
   // "Planets" = the galaxy's adventures (module sub-categories) — without the
-  // games the parent has put away for this child.
+  // games the parent has put away for this child, and those the owner does
+  // not offer here.
   const galaxyPlanets = useMemo(() => {
     if (!galaxy.moduleId) return [];
     const hidden = new Set(hiddenGames);
-    return filterCatalog(catalog, { subjectId: galaxy.moduleId }).filter(({ module, sub }) => !hidden.has(pathKey(module.id, sub.id)));
-  }, [catalog, galaxy.moduleId, hiddenGames]);
+    return filterCatalog(catalog, { subjectId: galaxy.moduleId }).filter(({ module, sub }) => !hidden.has(pathKey(module.id, sub.id)) && gameState(availability, module.id, sub.id) !== 'hidden');
+  }, [catalog, galaxy.moduleId, hiddenGames, availability]);
   // A galaxy whose games come in sets (languages) can be narrowed to some of
   // them. A remembered set that no longer exists is simply not counted.
   const groups = useMemo(() => {

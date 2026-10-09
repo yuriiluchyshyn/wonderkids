@@ -9,6 +9,7 @@ import { FeedbackPage } from './FeedbackPage';
 import { SourcesPage } from './SourcesPage';
 import { LinksPage } from './LinksPage';
 import { SettingsPage } from './SettingsPage';
+import { AvailabilityPage } from './AvailabilityPage';
 import { AdminShell } from './AdminShell';
 import { ADMIN_KEY_STORAGE, errorText } from './shared';
 import styles from './Admin.module.css';
@@ -24,6 +25,7 @@ import styles from './Admin.module.css';
  *   /admin/feedback  letters from the public site, and the answers to them
  *   /admin/sources   which channel (ad, Instagram, YouTube…) brings new accounts
  *   /admin/links     the owner's own links to hand out, and who came by them
+ *   /admin/availability  what is offered where: languages by country, games on / «soon» / put away
  *   /admin/settings  settings of the whole product (the trial game's length)
  */
 export function AdminPage() {
@@ -89,6 +91,7 @@ export function AdminPage() {
         <Route path="feedback" element={<FeedbackPage adminKey={adminKey} />} />
         <Route path="sources" element={<SourcesPage adminKey={adminKey} />} />
         <Route path="links" element={<LinksPage adminKey={adminKey} />} />
+        <Route path="availability" element={<AvailabilityPage adminKey={adminKey} />} />
         <Route path="settings" element={<SettingsPage adminKey={adminKey} />} />
       </Routes>
     </AdminShell>

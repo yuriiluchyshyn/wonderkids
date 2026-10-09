@@ -2,7 +2,8 @@
 // Served by /api/admin/users?part=… — the deployment has no function to spare.
 import { createLink, deleteLink, listLinks, listVisits, renameLink, setSetting } from './db.js';
 import { DEMO_MINUTES_DEFAULT, DEMO_MINUTES_MAX, DEMO_MINUTES_MIN, cleanDemoMinutes, cleanLink } from './marketing.js';
-import { DEMO_MINUTES_KEY, demoMinutes } from './visits.js';
+import { AVAILABILITY_KEY, DEMO_MINUTES_KEY, availabilityRules, demoMinutes, forgetAvailabilityRules } from './visits.js';
+import { cleanAvailability } from './availability.js';
 
 const settings = async () => ({
   demoMinutes: await demoMinutes(),
@@ -18,6 +19,8 @@ const settings = async () => ({
  *   POST   ?part=links     { name, mode, code?, note? }   a new link
  *   PUT    ?part=links     { id, name, note? }             rename one
  *   DELETE ?part=links&id=…                                its visits stay
+ *   GET    ?part=availability                    → { availability }   what is offered where
+ *   PUT    ?part=availability  { availability }  → { availability }   as it was kept (cleaned)
  */
 export async function marketingAdmin(req, res) {
   const part = req.query?.part;
@@ -59,6 +62,20 @@ export async function marketingAdmin(req, res) {
     }
     res.setHeader('Allow', 'GET, POST, PUT, DELETE');
     return res.status(405).json({ error: 'method_not_allowed' });
+  }
+
+  if (part === 'availability') {
+    if (req.method === 'PUT') {
+      const raw = req.body?.availability;
+      if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return res.status(400).json({ error: 'invalid_availability' });
+      await setSetting(AVAILABILITY_KEY, cleanAvailability(raw));
+      forgetAvailabilityRules();
+    } else if (req.method !== 'GET') {
+      res.setHeader('Allow', 'GET, PUT');
+      return res.status(405).json({ error: 'method_not_allowed' });
+    }
+    forgetAvailabilityRules();
+    return res.status(200).json({ availability: await availabilityRules() });
   }
 
   return res.status(400).json({ error: 'unknown_part' });

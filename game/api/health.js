@@ -1,11 +1,14 @@
-import { allowAnyOrigin, visitArrives, visitGoesOn } from './_lib/visits.js';
+import { allowAnyOrigin, availabilityOf, countryOf, visitArrives, visitGoesOn } from './_lib/visits.js';
 
 /**
- * Liveness probe → GET /api/health  →  { ok, country }
+ * Liveness probe → GET /api/health  →  { ok, country, availability }
  *
  * `country` (ISO 3166-1 alpha-2, or null off Vercel) is where the request came
  * from, as Vercel's edge saw it. The app offers the language of that country
  * to a visitor who has not chosen one (`src/core/translator/deviceLang.ts`).
+ * `availability` is what the owner offers there (`_lib/availability.js`): the
+ * languages of the site and of the game, the games and galaxies put away or
+ * marked «soon». The public site asks too, from another origin.
  *
  * The same address counts arrivals (the deployment has no function to spare
  * for an endpoint of their own — see `_lib/visits.js`):
@@ -16,9 +19,9 @@ import { allowAnyOrigin, visitArrives, visitGoesOn } from './_lib/visits.js';
  */
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  if (req.method === 'OPTIONS' || req.method === 'POST' || req.method === 'PUT') {
-    allowAnyOrigin(res);
-    if (req.method === 'OPTIONS') return res.status(204).end();
+  allowAnyOrigin(res);
+  if (req.method === 'OPTIONS') return res.status(204).end();
+  if (req.method === 'POST' || req.method === 'PUT') {
     try {
       return await (req.method === 'POST' ? visitArrives(req, res) : visitGoesOn(req, res));
     } catch (err) {
@@ -26,6 +29,6 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'server_error' });
     }
   }
-  const country = String(req.headers['x-vercel-ip-country'] ?? '').toUpperCase();
-  return res.status(200).json({ ok: true, country: /^[A-Z]{2}$/.test(country) ? country : null });
+  const country = countryOf(req);
+  return res.status(200).json({ ok: true, country, availability: await availabilityOf(country) });
 }

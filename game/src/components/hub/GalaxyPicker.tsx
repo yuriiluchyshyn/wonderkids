@@ -1,7 +1,8 @@
 import { useT, useVoiceLang } from '@/core/translator';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { GALAXIES, galaxyKey, getGalaxy } from '@/core/game/galaxies';
+import { galaxyKey } from '@/core/game/galaxies';
+import { useGalaxies } from '@/core/app/availability';
 import { useSound } from '@/core/audio/useSound';
 import { useSayT } from '@/core/audio/useSpeech';
 import { Modal } from '@/components/ui/Modal';
@@ -23,7 +24,9 @@ export function GalaxyPicker({ galaxyId, onChange }: GalaxyPickerProps) {
   const { play } = useSound();
   const say = useSayT('selections');
   const sayT = useT(useVoiceLang());
-  const current = getGalaxy(galaxyId);
+  // What is offered in the visitor's country: a galaxy put away is not listed.
+  const galaxies = useGalaxies();
+  const current = galaxies.find((g) => g.id === galaxyId) ?? galaxies[0];
 
   const pick = (id: string) => {
     play('tap');
@@ -57,7 +60,7 @@ export function GalaxyPicker({ galaxyId, onChange }: GalaxyPickerProps) {
 
       <Modal open={open} onClose={() => setOpen(false)} title={t('hub.galaxy.pick')} icon="🌌">
         <div className={styles.list}>
-          {GALAXIES.map((g) => (
+          {galaxies.map((g) => (
             <motion.button
               key={g.id}
               className={`${styles.item} ${g.id === galaxyId ? styles.itemActive : ''} ${

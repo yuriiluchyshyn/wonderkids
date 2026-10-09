@@ -944,3 +944,92 @@ a.btnPrimary {
   min-height: 18px;
   padding: 0;
 }
+
+/* ---- /admin/availability: rules in rows, games in folding groups ---- */
+.ruleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.ruleRow > .fields,
+.ruleBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.ruleBody {
+  display: grid;
+  gap: 10px;
+}
+
+.where {
+  display: grid;
+  gap: 6px;
+}
+
+.where .dims {
+  margin-bottom: 0;
+}
+
+.page .inline {
+  width: auto;
+  flex: 1 1 220px;
+  max-width: 320px;
+}
+
+.itemGroup {
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.itemGroup > summary {
+  padding: 12px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.itemRow {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 170px 170px;
+  align-items: center;
+  gap: 8px 10px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--line);
+}
+
+.itemRowHead {
+  background: #f8fafc;
+}
+
+.itemName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.itemWhere {
+  grid-column: 1 / -1;
+  padding: 2px 0 6px;
+}
+
+@media (max-width: 640px) {
+  .itemRow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .itemName {
+    grid-column: 1 / -1;
+  }
+
+  .ruleRow {
+    flex-direction: column;
+  }
+}

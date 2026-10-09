@@ -22,7 +22,8 @@ import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { GALAXIES, galaxyKey } from '@/core/game/galaxies';
 import { Rich, useCurrency, useDeviceLang, useGameLang, useLang, useParentLang, useT, useVoiceLang } from '@/core/translator';
 import type { GameGroup, SubCategory } from '@/core/game/kernel/types';
-import { LANG_CODES, language, type LangCode } from '@/core/language';
+import { language, type LangCode } from '@/core/language';
+import { galaxyState, gameState, useAvailability, useGameLangChoices } from '@/core/app/availability';
 import { CURRENCIES } from '@/core/game/content/currency';
 import { portalUrl } from '@/core/app/portal';
 import { uid } from '@/core/utils/random';
@@ -98,11 +99,12 @@ function setsOf(subs: SubCategory[]): { group?: GameGroup; subs: SubCategory[] }
   return [...sets.values()];
 }
 
-/** One chip per language of the app; the chosen one is lit. */
+/** One chip per language offered in the visitor's country (and the one already chosen); the chosen one is lit. */
 function LangChips({ value, onPick }: { value: LangCode; onPick: (lang: LangCode) => void }) {
+  const choices = useGameLangChoices(value);
   return (
     <div className={styles.chipRow}>
-      {LANG_CODES.map((code) => (
+      {choices.map((code) => (
         <Chip key={code} icon={language(code).flag} label={language(code).name} active={value === code} onClick={() => onPick(code)} />
       ))}
     </div>
@@ -214,17 +216,20 @@ export function ParentDashboard() {
   // Every game, to show it to the child or put it away; those with a difficulty
   // ladder also have a step to set (free play has none). One group per galaxy,
   // in the hub's order; inside it the games stay in their sets (a language).
+  // What the owner does not offer in this country is not listed at all.
+  const availability = useAvailability();
   const stepGroups = moduleRegistry
     .getAll(lang)
     .map((m) => {
       const galaxy = GALAXIES.find((g) => g.moduleId === m.id);
+      const subs = galaxy && galaxyState(availability, galaxy.id) !== 'on' ? [] : m.subCategories.filter((sub) => gameState(availability, m.id, sub.id) !== 'hidden');
       return {
         moduleId: m.id,
         name: galaxy ? t(galaxyKey(galaxy.id)) : m.id,
         icon: galaxy?.icon ?? m.icon,
         order: galaxy ? GALAXIES.indexOf(galaxy) : GALAXIES.length,
-        subs: m.subCategories,
-        sets: setsOf(m.subCategories),
+        subs,
+        sets: setsOf(subs),
       };
     })
     .filter((g) => g.subs.length > 0)

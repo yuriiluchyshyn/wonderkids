@@ -9,6 +9,7 @@ import { clampStep, pathKey, subSteps } from '@/core/child/progress/path';
 import { gameStatus } from '@/core/game/kernel/gameConfig';
 import { GALAXIES } from '@/core/game/galaxies';
 import { useHubState } from '@/core/app/ui/useHubState';
+import { gameState, useAvailability } from '@/core/app/availability';
 
 /** Hosts a learning session at the step chosen on the path (?step=). */
 export function GamePage() {
@@ -22,6 +23,8 @@ export function GamePage() {
   usePageMeta({ title: sub ? `${sub.label} · ${module?.title}` : t('page.game') });
   // Frontier step from the store (advances when a session completes).
   const hiddenGames = useGameStore((s) => s.settings.hiddenGames);
+  // Offered in the visitor's country, and not held back as «soon» (`/admin/availability`).
+  const offered = useAvailability((a) => gameState(a, moduleId, subId) === 'on');
   const storedStep = useGameStore((s) => s.progress[pathKey(moduleId, subId)] ?? 1);
 
   // The step chosen on the path (never above the frontier); falls back to it.
@@ -46,7 +49,7 @@ export function GamePage() {
   };
 
   // A game the parent has put away is not there for this child — by its address either.
-  if (!module || !sub || gameStatus(sub) === 'soon' || hiddenGames.includes(pathKey(module.id, sub.id))) {
+  if (!module || !sub || !offered || gameStatus(sub) === 'soon' || hiddenGames.includes(pathKey(module.id, sub.id))) {
     return (
       <div className="page center" style={{ minHeight: '60dvh' }}>
         <div className="stack" style={{ textAlign: 'center' }}>

@@ -1,4 +1,3 @@
-import { offerLangByCountry } from '@/core/translator';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
@@ -6,6 +5,7 @@ import { inject } from '@vercel/analytics';
 import { adoptChildHandoff } from '@/core/account/auth/useAuthStore';
 import { rememberSource } from '@/core/app/attribution';
 import { beginDemo } from '@/core/app/demo';
+import { loadAvailability } from '@/core/app/availability';
 import '@pulsar/brand/night-sky.css';
 import './styles/global.css';
 
@@ -23,8 +23,9 @@ rememberSource();
 // The trial game: an address that asks for it (`/try`), or a tab already in one.
 beginDemo();
 
-// Offer the language of the visitor's country, unless they have chosen one.
-void offerLangByCountry((import.meta.env.VITE_API_URL ?? '').replace(/\/$/, ''));
+// Where the visitor is: what the owner offers there (languages, games), and
+// the language of that country — unless they have chosen one.
+void loadAvailability((import.meta.env.VITE_API_URL ?? '').replace(/\/$/, ''));
 
 // Vercel Web Analytics: anonymous page views, no cookies (a no-op outside a
 // Vercel deployment). Only the path is reported — a query string can carry a

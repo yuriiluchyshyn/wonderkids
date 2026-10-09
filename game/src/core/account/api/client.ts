@@ -341,6 +341,21 @@ export interface ProductSettings {
   demoMinutesMax: number;
 }
 
+/** A place in a rule: a country (`US`) or a region (`@north-america`). */
+export type Place = string;
+
+/**
+ * What is offered where — the owner's rules (`api/_lib/availability.js`).
+ * `items` is keyed `game:<module>:<sub>` or `galaxy:<id>`; what is on
+ * everywhere has no entry.
+ */
+export interface AvailabilityRules {
+  regions: { id: string; name: string; countries: string[] }[];
+  /** In these places only these languages are offered; an empty list leaves that side alone. */
+  langRules: { where: Place[]; site: string[]; game: string[] }[];
+  items: Record<string, { status: 'on' | 'soon' | 'hidden'; scope: 'all' | 'only' | 'except'; where: Place[] }>;
+}
+
 interface LinksPage {
   links: MarketingLink[];
   visits: MarketingVisit[];
@@ -425,6 +440,15 @@ export const adminApi = {
 
   saveSettings(adminKey: string, change: { demoMinutes: number }) {
     return request<{ settings: ProductSettings }>('/api/admin/users?part=settings', { method: 'PUT', adminKey, body: change });
+  },
+
+  getAvailability(adminKey: string) {
+    return request<{ availability: AvailabilityRules }>('/api/admin/users?part=availability', { adminKey });
+  },
+
+  /** Answers with the rules as they were kept — cleaned of anything that says nothing. */
+  saveAvailability(adminKey: string, availability: AvailabilityRules) {
+    return request<{ availability: AvailabilityRules }>('/api/admin/users?part=availability', { method: 'PUT', adminKey, body: { availability } });
   },
 
   /** The owner's links and the arrivals of the last `days` days (0 — all time). */
