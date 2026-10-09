@@ -11,7 +11,7 @@ import { LANG_CODES, type LangCode, type Language } from './types.ts';
 import { uk } from './uk/index.ts';
 
 export { LANG_CODES, type LangCode, type Language, type LanguageConfig } from './types.ts';
-export { say, spoken, written } from './marks.ts';
+export { common, hasOwn, own, say, spoken, written } from './marks.ts';
 
 export const LANGUAGES: Record<LangCode, Language> = { uk, en, pl };
 /** The language the app was written in, and the one every other falls back to. */

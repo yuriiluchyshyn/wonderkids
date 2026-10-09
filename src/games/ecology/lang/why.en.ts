@@ -1,3 +1,4 @@
+import { own } from '@/core/lang/marks';
 import type { Lines, Rows } from './types';
 
 /**
@@ -48,7 +49,7 @@ export const ROWS: Rows = {
     ['Why do we make bird feeders in winter?', 'It is hard for birds to find food under the snow', 'So that the birds do not fly south', 'To decorate the tree', 'In winter seeds and insects are hidden under the snow. A feeder helps birds get through the frost.'],
     ['What can birds be fed in winter?', 'Seeds and unsalted fat', 'Potato chips', 'Candy', 'Salty, fried and sweet food is bad for birds. Best of all are raw sunflower seeds.'],
     ['Why are bees so important?', 'They pollinate flowers, and that is how fruit grows', 'They buzz loudly', 'They chase the clouds away', 'A bee carries pollen from flower to flower — without that no apples or cherries would set.'],
-    ['Why must we not pick snowdrops?', 'They are rare and could disappear', 'They are prickly', 'They have no scent at all', 'A picked flower gives no seeds. In many countries snowdrops are protected by law.'],
+    ['Why must we not pick snowdrops?', 'They are rare and could disappear', 'They are prickly', 'They have no scent at all', 'A picked flower gives no seeds.' + own(' In many countries snowdrops are protected by law.')],
     ['What should you do if you find a baby bird under a tree?', 'Leave it alone: its parents are near and feed it', 'Take it home', 'Carry it onto the road', 'Baby birds learn to fly from the ground while their parents watch over them. At home it would not survive.'],
     ['Why must we not destroy an anthill?', 'Ants are the forest’s cleaners: they destroy pests', 'The ants will take offense and stop saying hello', 'Squirrels keep their seeds in it', 'The ants of a single anthill gather thousands of harmful insects in a day.'],
     ['Why must we not cut down all the forests?', 'A forest is a home for animals and a source of oxygen', 'Trees get in the way of the wind', 'It is too dark in a forest', 'Without the forest, animals and birds are left without a home, and the air gets dirtier.'],
@@ -162,8 +163,8 @@ Why must the forest on riverbanks not be cut down?|Without trees the river runs 
 Who builds dams of branches on rivers?|Beavers|Beaver dams hold back the water, and many animals settle around them.
 What does water turn into in the frost?|Ice|Water freezes when the temperature drops below zero.
 What does water turn into when it boils?|Steam|Steam is light and rises up to the clouds.
-Which river is the longest in the world?|The Nile|The Nile flows across Africa for more than six thousand kilometers.
-Which sea does the Nile flow into?|The Mediterranean Sea|The Mediterranean Sea washes the north of Africa and the south of Europe.
+${own('Which river is the longest in the world?')}|The Nile|The Nile flows across Africa for more than six thousand kilometers.
+${own('Which sea does the Nile flow into?')}|The Mediterranean Sea|The Mediterranean Sea washes the north of Africa and the south of Europe.
 Why are there few plants in the desert?|Because there is very little water there|Without water seeds do not sprout.
 Why is a plastic bottle dangerous in the sea?|It does not disappear, and crumbles into microplastic|Fish and birds swallow the specks of plastic.
 Why must fishing line and nets not be left on the shore?|Birds and fish get tangled in them|An abandoned net goes on catching animals for many years.
@@ -231,7 +232,7 @@ Why should we be quiet in the forest?|So as not to frighten the animals|Loud noi
 Why must the branches of trees not be broken?|It makes the tree ill|Diseases get into a tree through a wound.
 Why must toadstools not be kicked over?|Forest animals use them as medicine|Elk eat fly agaric toadstools as medicine.
 What is the Red List?|A list of rare plants and animals that need protecting|Those of which very few are left are written into it.
-Which is the biggest land animal in Europe?|The European bison|A bison weighs almost a ton, and it is a protected animal.
+${own('Which is the biggest land animal in Europe?')}|The European bison|A bison weighs almost a ton, and it is a protected animal.
 What is a nature reserve?|A place where nature is protected and left alone|Cutting trees, hunting and picking flowers are not allowed there.
 Why does a forest need wolves?|They catch weak and sick animals|That way wolves keep diseases from spreading.
 What good does an owl do for a field?|It catches mice|Mice eat the grain, and the owl looks after the harvest.

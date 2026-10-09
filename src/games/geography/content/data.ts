@@ -1,5 +1,6 @@
 /** Content for the Geography games. Ordered easy → hard: early path steps use
  *  only the first entries, later steps unlock the rest. */
+import { own } from '@/core/lang/marks';
 
 export interface Dweller {
   id: string;
@@ -104,10 +105,11 @@ export const BIOME_FACTS: Record<BiomeId, string[]> = {
     'Ліси називають легенями планети: дерева роблять повітря чистим.',
     'У лісі багато схованок: дупла, нори, густі кущі.',
     'Восени листяний ліс стає жовтим і червоним, а хвойний лишається зеленим.',
-    'Найбільші ліси України ростуть у Карпатах і на Поліссі.',
+    // Ukraine's own: the other languages tell of their own forests and mountains here (`own`).
+    own('Найбільші ліси України ростуть у Карпатах і на Поліссі.'),
   ],
   mountains: [
-    'Найвища гора світу — Еверест. Найвища гора України — Говерла.',
+    'Найвища гора світу — Еверест.' + own(' Найвища гора України — Говерла.'),
     'На високих вершинах сніг не тане навіть улітку.',
     'Що вище в гори, то менше дерев: на вершинах — лише каміння й мох.',
     'Гірські тварини чудово лазять по скелях і мають густе хутро.',

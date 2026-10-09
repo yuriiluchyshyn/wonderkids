@@ -1,3 +1,4 @@
+import { own } from '@/core/lang/marks';
 import type { Lines, Rows } from './types';
 
 /**
@@ -48,7 +49,7 @@ export const ROWS: Rows = {
     ['Po co zimą robi się karmniki?', 'Ptakom trudno znaleźć jedzenie pod śniegiem', 'Żeby ptaki nie odleciały do ciepłych krajów', 'Żeby ozdobić drzewo', 'Zimą nasiona i owady są schowane pod śniegiem. Karmnik pomaga ptakom przetrwać mrozy.'],
     ['Czym można karmić ptaki zimą?', 'Ziarnem i niesoloną słoniną', 'Chipsami', 'Cukierkami', 'Słone, smażone i słodkie jedzenie szkodzi ptakom. Najlepsze są niesolone pestki słonecznika.'],
     ['Dlaczego pszczoły są takie ważne?', 'Zapylają kwiaty i dzięki temu rosną owoce', 'Głośno bzyczą', 'Rozpędzają chmury', 'Pszczoła przenosi pyłek z kwiatka na kwiatek — bez tego nie zawiązałyby się jabłka ani wiśnie.'],
-    ['Dlaczego nie wolno zrywać przebiśniegów?', 'Są rzadkie i mogą zniknąć', 'Kłują', 'W ogóle nie pachną', 'Zerwany kwiat nie wyda nasion. Przebiśniegi są w Polsce pod ochroną.'],
+    ['Dlaczego nie wolno zrywać przebiśniegów?', 'Są rzadkie i mogą zniknąć', 'Kłują', 'W ogóle nie pachną', 'Zerwany kwiat nie wyda nasion.' + own(' Przebiśniegi są w Polsce pod ochroną.')],
     ['Co zrobić, gdy znajdziesz pisklę pod drzewem?', 'Nie ruszać: rodzice są blisko i je karmią', 'Zabrać do domu', 'Zanieść je na drogę', 'Pisklęta uczą się latać z ziemi, a rodzice ich pilnują. W domu pisklę nie przeżyje.'],
     ['Dlaczego nie wolno niszczyć mrowiska?', 'Mrówki to sanitariusze lasu: niszczą szkodniki', 'Mrówki się obrażą i przestaną się witać', 'Wiewiórki trzymają w nim nasiona', 'Mrówki z jednego mrowiska zbierają w ciągu dnia tysiące szkodliwych owadów.'],
     ['Dlaczego nie wolno wycinać wszystkich lasów?', 'Las to dom zwierząt i źródło tlenu', 'Drzewa przeszkadzają wiatrowi', 'W lesie jest za ciemno', 'Bez lasu zwierzęta i ptaki zostają bez domu, a powietrze robi się brudniejsze.'],
@@ -162,8 +163,8 @@ Dlaczego nie wolno wycinać lasu na brzegach rzek?|Bez drzew rzeka robi się pł
 Kto buduje na rzekach tamy z gałęzi?|Bobry|Bobrowe tamy zatrzymują wodę, a wokół osiedla się wiele zwierząt.
 W co zamienia się woda na mrozie?|W lód|Woda zamarza, gdy temperatura spada poniżej zera.
 W co zamienia się woda, gdy się gotuje?|W parę|Para jest lekka i unosi się w górę, do chmur.
-Jak nazywa się najdłuższa rzeka Polski?|Wisła|Wisła płynie przez cały kraj aż do Morza Bałtyckiego.
-Do jakiego morza wpada Wisła?|Do Bałtyckiego|Morze Bałtyckie oblewa północ Polski.
+${own('Jak nazywa się najdłuższa rzeka Polski?')}|Wisła|Wisła płynie przez cały kraj aż do Morza Bałtyckiego.
+${own('Do jakiego morza wpada Wisła?')}|Do Bałtyckiego|Morze Bałtyckie oblewa północ Polski.
 Dlaczego na pustyni jest mało roślin?|Bo jest tam bardzo mało wody|Bez wody nasiona nie kiełkują.
 Dlaczego plastikowa butelka w morzu jest groźna?|Nie znika i kruszy się na mikroplastik|Drobinki plastiku połykają ryby i ptaki.
 Dlaczego nie wolno zostawiać na brzegu żyłek i sieci?|Zaplątują się w nie ptaki i ryby|Porzucona sieć łowi zwierzęta jeszcze przez wiele lat.
@@ -231,7 +232,7 @@ Dlaczego w lesie trzeba zachowywać się cicho?|Żeby nie płoszyć zwierząt|G�
 Dlaczego nie wolno łamać gałęzi drzew?|Drzewo od tego choruje|Przez ranę do drzewa dostają się choroby.
 Dlaczego nie wolno rozdeptywać muchomorów?|Leczą się nimi leśne zwierzęta|Łosie zjadają muchomory jak lekarstwo.
 Co to jest czerwona księga?|Lista rzadkich roślin i zwierząt, które trzeba chronić|Wpisuje się do niej te, których zostało bardzo mało.
-Jakie największe zwierzę żyje w polskich lasach?|Żubr|Żubr waży prawie tonę i jest w Polsce pod ochroną.
+${own('Jakie największe zwierzę żyje w polskich lasach?')}|Żubr|Żubr waży prawie tonę i jest w Polsce pod ochroną.
 Co to jest rezerwat przyrody?|Miejsce, gdzie przyrodę się chroni i zostawia w spokoju|Nie wolno tam wycinać lasu, polować ani zrywać kwiatów.
 Po co lasowi wilki?|Łapią słabe i chore zwierzęta|Dzięki temu choroby się nie rozprzestrzeniają.
 Czym sowa jest pożyteczna dla pola?|Łapie myszy|Myszy zjadają ziarno, a sowa pilnuje plonów.

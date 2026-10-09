@@ -1,3 +1,4 @@
+import { own } from '../../../lang/marks.ts';
 import type { WorldPlanetId } from '../world.ts';
 
 /** What the planets tell about themselves, in English: twenty stories each, in the order of `planetFacts.ts`. */
@@ -132,7 +133,7 @@ export const FACTS: Record<WorldPlanetId, readonly string[]> = {
     'The continents of the Earth move slowly — a few centimeters a year, about as fast as fingernails grow. Long, long ago they were all one great continent.',
     'The Earth is the only planet not named after a god. Its name simply means the ground we walk on.',
     'The space station goes around the Earth in an hour and a half. So the astronauts on it see sixteen sunrises and sixteen sunsets every day.',
-    'In 1961 a person saw the Earth from space for the first time. Since then astronauts have told us that from up there no borders between countries can be seen — only one blue home for all.',
+    own('In 1961 a person saw the Earth from space for the first time. Since then astronauts have told us that from up there no borders between countries can be seen — only one blue home for all.'),
   ],
   venus: [
     'Venus is the hottest planet, though not the closest to the Sun. The heat there reaches 465 degrees: enough to melt lead.',
@@ -164,7 +165,7 @@ export const FACTS: Record<WorldPlanetId, readonly string[]> = {
     'By day the heat on Mercury reaches 430 degrees, and at night the frost reaches 180 degrees. No other planet has a bigger swing.',
     'There is almost no air on Mercury, so the warmth does not stay. Because of this its sky is black and starry even by day.',
     'Mercury is all craters and looks very much like the Moon. They are the marks of asteroids and comets that fell on it for billions of years.',
-    'Mercury’s biggest crater is called the Caloris Basin — the plain of heat. It is one and a half thousand kilometers wide — a whole big country would fit inside it.',
+    'Mercury’s biggest crater is called the Caloris Basin — the plain of heat. It is one and a half thousand kilometers wide' + own(' — a whole big country would fit inside it') + '.',
     'Though Mercury is scorching, there is ice on it. It lies at the bottom of craters near the poles, where the Sun never looks in.',
     'Inside Mercury hides a huge iron core that takes up most of the planet. That is why Mercury is small but heavy.',
     'From Mercury the Sun looks three times as big as from the Earth. And it shines seven times as brightly there.',
@@ -174,7 +175,7 @@ export const FACTS: Record<WorldPlanetId, readonly string[]> = {
     'Only two spacecraft have reached Mercury — Mariner 10 and MESSENGER. A third, BepiColombo, set out for it in 2018.',
     'Mercury is hard to see in the sky, because it always keeps close to the Sun. It can be spotted only low over the horizon — before dawn or just after sunset.',
     'Mercury is named after the Roman messenger god, who had winged sandals. And the planet really is the swiftest of all.',
-    'The craters on Mercury are named after writers, painters and composers. Among them are craters named Shakespeare, Beethoven and Mark Twain.',
+    'The craters on Mercury are named after writers, painters and composers.' + own(' Among them are craters named Shakespeare, Beethoven and Mark Twain.'),
     'Gravity on Mercury is almost three times weaker than on Earth. A ball thrown up there would fly three times as high.',
     'Sometimes Mercury passes right between the Earth and the Sun. Then, through a telescope with a safety filter, a tiny black dot can be seen creeping across the Sun’s disk; the next time this will happen is in 2032.',
   ],

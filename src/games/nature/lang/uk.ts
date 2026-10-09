@@ -1,4 +1,4 @@
-import { capitalise, clause, from, inflect, list, phrase } from '@/core/lang/uk';
+import { capitalise, clause, from, inflect, list, own, phrase } from '@/core/lang/uk';
 import { MONTHS, MONTH_WORD, SEASONS, SEASON_FACTS, SIGNS, type SeasonId } from '../content/data';
 import type { NatureTexts } from './types';
 
@@ -21,7 +21,8 @@ export const uk: NatureTexts = {
     return undefined;
   },
   season: (id) => ({ name: seasonOf(id).name, no: seasonOf(id).no, facts: SEASON_FACTS[id] }),
-  month: (at) => ({ name: MONTHS[at].name, fact: MONTHS[at].fact }),
+  // A month's fact tells where ITS name comes from: each language has its own story (`own`).
+  month: (at) => ({ name: MONTHS[at].name, fact: own(MONTHS[at].fact) }),
   sign: (at) => ({ ask: `Коли ${clause(SIGNS[at].what, 'present', { we: true })}?`, label: capitalise(clause(SIGNS[at].what)), fact: SIGNS[at].fact }),
   monthSeason: {
     ask: (m) => `До якої пори року належить ${low(m)}?`,

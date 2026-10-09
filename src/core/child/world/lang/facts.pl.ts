@@ -1,3 +1,4 @@
+import { own } from '../../../lang/marks.ts';
 import type { WorldPlanetId } from '../world.ts';
 
 /** What the planets tell about themselves, in Polish: twenty stories each, in the order of `planetFacts.ts`. */
@@ -132,7 +133,7 @@ export const FACTS: Record<WorldPlanetId, readonly string[]> = {
     'Kontynenty Ziemi powoli się przesuwają — o kilka centymetrów na rok, mniej więcej tak szybko, jak rosną paznokcie. Kiedyś, dawno temu, wszystkie były jednym wielkim kontynentem.',
     'Ziemia to jedyna planeta, która nie nosi imienia boga. Jej nazwa znaczy po prostu grunt, po którym chodzimy.',
     'Stacja kosmiczna okrąża Ziemię w półtorej godziny. Dlatego astronauci widzą na niej szesnaście wschodów i szesnaście zachodów słońca na dobę.',
-    'W 1978 roku Ziemię z kosmosu zobaczył Mirosław Hermaszewski — pierwszy Polak w kosmosie. Spędził na orbicie prawie osiem dni i okrążył Ziemię ponad sto dwadzieścia razy.',
+    own('W 1978 roku Ziemię z kosmosu zobaczył Mirosław Hermaszewski — pierwszy Polak w kosmosie. Spędził na orbicie prawie osiem dni i okrążył Ziemię ponad sto dwadzieścia razy.'),
   ],
   venus: [
     'Wenus to najgorętsza planeta, choć nie leży najbliżej Słońca. Upał sięga tam 465 stopni: to wystarczy, żeby stopić ołów.',
@@ -164,7 +165,7 @@ export const FACTS: Record<WorldPlanetId, readonly string[]> = {
     'W dzień upał na Merkurym sięga 430 stopni, a w nocy mróz — 180 stopni. Większej różnicy nie ma na żadnej innej planecie.',
     'Na Merkurym prawie nie ma powietrza, więc ciepło się tam nie zatrzymuje. Dlatego niebo jest na nim czarne i gwiaździste nawet w dzień.',
     'Merkury jest cały w kraterach i bardzo przypomina Księżyc. To ślady po planetoidach i kometach, które spadały na niego przez miliardy lat.',
-    'Największy krater Merkurego nazywa się Równiną Upału. Ma półtora tysiąca kilometrów szerokości — Polska zmieściłaby się w nim dwa razy.',
+    'Największy krater Merkurego nazywa się Równiną Upału. Ma półtora tysiąca kilometrów szerokości' + own(' — Polska zmieściłaby się w nim kilka razy') + '.',
     'Choć Merkury jest rozpalony, jest na nim lód. Leży na dnie kraterów przy biegunach, dokąd nigdy nie zagląda Słońce.',
     'We wnętrzu Merkurego kryje się ogromne żelazne jądro, które zajmuje większą część planety. Dlatego Merkury jest mały, ale ciężki.',
     'Z Merkurego Słońce wygląda na trzy razy większe niż z Ziemi. I świeci tam siedem razy jaśniej.',
@@ -174,7 +175,7 @@ export const FACTS: Record<WorldPlanetId, readonly string[]> = {
     'Do Merkurego doleciały tylko dwie sondy — Mariner 10 i MESSENGER. Trzecia, BepiColombo, wyruszyła do niego w 2018 roku.',
     'Merkurego trudno zobaczyć na niebie, bo zawsze trzyma się blisko Słońca. Można go dostrzec tylko nisko nad horyzontem — przed świtem albo zaraz po zachodzie.',
     'Merkury nosi imię rzymskiego boga posłańca, który miał skrzydlate sandały. A planeta rzeczywiście jest najszybsza ze wszystkich.',
-    'Kratery na Merkurym noszą imiona pisarzy, malarzy i kompozytorów. Są wśród nich kratery Chopin i Mickiewicz — na cześć Fryderyka Chopina i Adama Mickiewicza.',
+    'Kratery na Merkurym noszą imiona pisarzy, malarzy i kompozytorów.' + own(' Są wśród nich kratery Chopin i Mickiewicz — na cześć Fryderyka Chopina i Adama Mickiewicza.'),
     'Grawitacja na Merkurym jest prawie trzy razy słabsza niż na Ziemi. Piłka rzucona w górę poleciałaby tam trzy razy wyżej.',
     'Czasem Merkury przechodzi dokładnie między Ziemią a Słońcem. Wtedy przez teleskop z filtrem ochronnym widać, jak maleńka czarna kropka pełznie po tarczy Słońca; następnym razem zdarzy się to w 2032 roku.',
   ],

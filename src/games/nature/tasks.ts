@@ -124,7 +124,8 @@ function seasons(step: number, config: Pick<TaskConfig, 'lang'>): Tasks {
             hint: T.orderMonths.hint(s.id, at(months[0])),
           },
           step,
-          factPool(T.orderMonths.fact(s.id, months.map(at)), [...T.season(s.id).facts]),
+          // The season's first fact names its months — what this very sentence already says.
+          factPool(T.orderMonths.fact(s.id, months.map(at)), T.season(s.id).facts.slice(1)),
         ),
       );
     }

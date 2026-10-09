@@ -1,4 +1,5 @@
 import { ordinalWords } from '@/core/lang/pl';
+import { own } from '@/core/lang/marks';
 import type { SeasonId } from '../content/data';
 import type { NatureTexts } from './types';
 
@@ -112,7 +113,7 @@ const SIGNS: [ask: string, label: string, fact: string][] = [
   ['Kiedy jeździmy na łyżwach?', 'Jeździmy na łyżwach', 'Zimą woda zamarza i po lodzie można jeździć na łyżwach.'],
   ['Kiedy kwitną słoneczniki?', 'Kwitną słoneczniki', 'Latem pola żółkną od słoneczników. Młode słoneczniki obracają główki za słońcem.'],
   ['Kiedy pojawiają się pierwsze listki?', 'Pojawiają się pierwsze listki', 'Wiosną na drzewach pękają pąki — rozwijają się z nich delikatne listki.'],
-  ['Kiedy dzieci idą do szkoły?', 'Dzieci idą do szkoły', 'Rok szkolny zaczyna się na początku września — wtedy, gdy lato ustępuje jesieni.'],
+  ['Kiedy dzieci idą do szkoły?', 'Dzieci idą do szkoły', own('Rok szkolny zaczyna się na początku września — wtedy, gdy lato ustępuje jesieni.')],
   ['Kiedy niedźwiedź śpi w gawrze?', 'Niedźwiedź śpi w gawrze', 'Zimą niedźwiedziowi trudno znaleźć jedzenie, dlatego śpi w gawrze aż do wiosny.'],
   ['Kiedy latają motyle?', 'Latają motyle', 'Latem jest dużo kwiatów, a motyle piją z nich słodki nektar.'],
   ['Kiedy topnieje śnieg i szemrzą strumyki?', 'Topnieje śnieg i szemrzą strumyki', 'Wiosną słońce roztapia śnieg, a woda z roztopów płynie strumykami do rzek.'],
@@ -146,7 +147,8 @@ export const pl: NatureTexts = {
     return undefined;
   },
   season: (id) => SEASONS[id],
-  month: (at) => ({ name: MONTHS[at][0], fact: MONTHS[at][4] }),
+  // A month's fact tells where ITS name comes from: each language has its own story (`own`).
+  month: (at) => ({ name: MONTHS[at][0], fact: own(MONTHS[at][4]) }),
   sign: (at) => ({ ask: SIGNS[at][0], label: SIGNS[at][1], fact: SIGNS[at][2] }),
   monthSeason: {
     ask: (m) => `Do jakiej pory roku należy ${low(m)}?`,

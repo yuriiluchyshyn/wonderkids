@@ -1,5 +1,5 @@
 /** Content for «Пори року і місяці». */
-import { adj, noun, verb, type Clause } from '@/core/lang/uk';
+import { adj, noun, own, verb, type Clause } from '@/core/lang/uk';
 
 /** `word` declines the name («із зими», «з осені»); `of` is «зимовий» for «зимові місяці». */
 export const SEASONS = [
@@ -94,7 +94,7 @@ export const SIGNS: Sign[] = [
   sign('⛸️', { does: DO.skate, tail: 'на ковзанах' }, 'winter', 'Узимку вода замерзає, і на льоду можна кататися на ковзанах.'),
   sign('🌻', { who: noun('соняшник', 'm', many), does: DO.flower }, 'summer', 'Улітку поля жовтіють від соняшників. Молоді соняшники повертають голівки за сонцем.'),
   sign('🌱', { who: noun('перший листочок', 'm', { ...many, pl: { nom: 'перші листочки' } }), does: DO.appear }, 'spring', 'Навесні на деревах лопаються бруньки — з них розгортаються ніжні листочки.'),
-  sign('🎒', { who: noun('дитина', 'f', { ...alive, pl: { nom: 'діти', gen: 'дітей' } }), does: DO.go, subjectFirst: true, tail: 'до школи' }, 'autumn', 'Навчальний рік починається першого вересня — у перший день осені.'),
+  sign('🎒', { who: noun('дитина', 'f', { ...alive, pl: { nom: 'діти', gen: 'дітей' } }), does: DO.go, subjectFirst: true, tail: 'до школи' }, 'autumn', own('Навчальний рік починається першого вересня — у перший день осені.')),
   sign('🐻', { who: noun('ведмідь', 'm', { animate: true }), does: DO.sleep, subjectFirst: true, tail: 'у барлозі' }, 'winter', 'Узимку ведмедеві важко знайти їжу, тому він спить у барлозі аж до весни.'),
   sign('🦋', { who: noun('метелик', 'm', alive), does: DO.fly }, 'summer', 'Улітку багато квітів, а метелики п’ють із них солодкий нектар.'),
   sign('💧', { who: noun('сніг', 'm'), does: DO.melt, tail: 'і дзюркочуть струмки' }, 'spring', 'Навесні сонце розтоплює сніг, і тала вода біжить струмками до річок.'),

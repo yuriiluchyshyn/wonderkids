@@ -1,3 +1,4 @@
+import { own } from '@/core/lang/marks';
 import type { BiomeId } from '../content/data';
 import { split } from './shared';
 
@@ -204,7 +205,7 @@ export const ZONES: Record<BiomeId, Zone> = {
       'Forests are called the lungs of the planet: trees make the air clean.',
       'There are many hiding places in a forest: hollows, burrows, thick bushes.',
       'In the fall a leafy forest turns yellow and red, while a pine forest stays green.',
-      'The biggest forest on Earth is the taiga: it stretches across the whole north.',
+      own('The biggest forest on Earth is the taiga: it stretches across the whole north.'),
     ],
   },
   mountains: {
@@ -218,7 +219,7 @@ export const ZONES: Record<BiomeId, Zone> = {
       'The road here winds in hairpin bends, and the paths run above deep drops.',
     ],
     facts: [
-      'The highest mountain in the world is Everest. The highest mountain in the Alps is Mont Blanc.',
+      'The highest mountain in the world is Everest.' + own(' The highest mountain in the Alps is Mont Blanc.'),
       'On high peaks the snow does not melt even in summer.',
       'The higher up a mountain, the fewer trees: on the peaks there are only rocks and moss.',
       'Mountain animals climb rocks wonderfully and have thick fur.',

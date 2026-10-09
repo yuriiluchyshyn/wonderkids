@@ -2,7 +2,7 @@ import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, DragMatchPayload, LetterGridPayload, SpeechLang, TemplatePayload } from '@/core/game/templates/types';
 import { DEFAULT_LANG, language } from '@/core/lang';
-import { say } from '@/core/lang/marks';
+import { own, say } from '@/core/lang/marks';
 import { shuffle } from '@/core/utils/random';
 import { templateTask, type GameTasks, type TemplateGame } from '../shared/templateModule';
 import { languageTexts } from './lang';
@@ -272,14 +272,14 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
         if (swapped) {
           const [a, b] = swapped;
           const order = T.order(said(letters[a]), said(letters[b]));
-          return templateTask(key, T.swapAsk(p), { ...payload, hint: T.swapHint(p, order) }, step, p.native ? order : undefined);
+          return templateTask(key, T.swapAsk(p), { ...payload, hint: T.swapHint(p, order) }, step, p.native ? own(order) : undefined);
         }
 
         // What the hint and the fact say about the first empty place: the letter and its neighbour.
         const at = gaps[0];
         const neighbour = at > 0 ? T.after(said(letters[at - 1]), said(letters[at])) : T.before(said(letters[1]), said(letters[0]));
         const prompt = T.fillAsk(p, gaps.length === pack.alphabet.length ? 'all' : gaps.length === 1 ? 'one' : 'many');
-        return templateTask(key, prompt, { ...payload, hint: T.fillHint(p, neighbour) }, step, p.native ? neighbour : undefined);
+        return templateTask(key, prompt, { ...payload, hint: T.fillHint(p, neighbour) }, step, p.native ? own(neighbour) : undefined);
       }),
     );
   }
@@ -497,7 +497,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
           T.rhymeHint(p, lead.a[0], lead.b[0]),
         ),
         step,
-        p.native ? T.rhymeYes(lead.a[0], lead.b[0]) : undefined,
+        p.native ? own(T.rhymeYes(lead.a[0], lead.b[0])) : undefined,
       );
     });
   }
@@ -529,7 +529,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             hint: T.sentenceHint(p, words[0]),
           },
           step,
-          p.native ? text : undefined,
+          p.native ? own(text) : undefined,
         );
       }),
     );

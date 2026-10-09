@@ -7,7 +7,7 @@ import { TemplateGameView } from '@/components/templates/TemplateGameView';
 import { TemplateHelper, hasHelper } from '@/components/templates/TemplateHelper';
 import { RECALL_WINDOW, composeLevel } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
-import { spoken, written } from '@/core/lang/uk';
+import { hasOwn, spoken, written } from '@/core/lang/uk';
 
 /** Publication date of the PRD v4.0 game pack (drives the 60-day "NEW" badge). */
 export const V4_RELEASE = '2026-10-06T00:00:00Z';
@@ -35,7 +35,10 @@ export function templateTask(
   // A prompt written with `num` / `say` (core/lang/uk) carries both readings.
   const shown = written(prompt);
   const said = speak ?? (spoken(prompt) !== shown ? spoken(prompt) : undefined);
-  return { id: uid('tt'), key, prompt: shown, payload, reward: rewardFor(step), outro, speak: said };
+  const task: TaskInstance<TemplatePayload> = { id: uid('tt'), key, prompt: shown, payload, reward: rewardFor(step), outro, speak: said };
+  // A question of this language alone (`own`) is read as it is shown, never paired with another language.
+  if (hasOwn(prompt)) task.own = true;
+  return task;
 }
 
 /** `correct` plus `count - 1` random others from `pool`, shuffled. */

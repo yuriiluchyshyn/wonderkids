@@ -75,6 +75,15 @@ export interface TaskInstance<TPayload = unknown> {
    * it (`core/game/content/outro.ts`), so a replay tells a new story.
    */
   outro?: string | string[];
+  /**
+   * The task is its language's own (a question about that language's country —
+   * the longest river of Poland in Polish, of Ukraine in Ukrainian), not a
+   * translation: it has no twin, and the voice reads it in the language on the
+   * screen. `templateTask` sets it for a prompt with an `own` piece in it.
+   * A single FACT of a language's own needs no flag — mark it `own`
+   * (`core/lang/marks.ts`, `tellFact`).
+   */
+  own?: boolean;
   /** Artifacts awarded for completing this task. */
   reward: number;
   payload: TPayload;
