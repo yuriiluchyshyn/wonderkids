@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
 import type { TangramPayload, TangramPiece } from '@/core/game/templates/types';
@@ -31,6 +32,7 @@ const fits = (a: TangramPiece, b: TangramPiece) => a.shape === b.shape && a.size
  * click; on a mismatch the outline that fits flashes a dotted guide.
  */
 export function TangramLayout({ payload, callbacks, hintActive }: LayoutProps<TangramPayload>) {
+  const t = useT();
   const { pieces, figure } = payload;
   const { playCode } = useSound();
   // outline id → the piece that filled it.
@@ -64,7 +66,7 @@ export function TangramLayout({ payload, callbacks, hintActive }: LayoutProps<Ta
   return (
     <div className="stack">
       <div className={styles.tangramWrap}>
-        <svg viewBox="0 0 100 100" className={styles.tangram} role="group" aria-label={`Силует: ${figure}`}>
+        <svg viewBox="0 0 100 100" className={styles.tangram} role="group" aria-label={t('tpl.silhouette', { figure })}>
           {pieces.map((outline) => {
             const by = pieces.find((p) => p.id === filled[outline.id]);
             return (
@@ -95,7 +97,7 @@ export function TangramLayout({ payload, callbacks, hintActive }: LayoutProps<Ta
             style={dnd.styleFor(piece.id)}
             {...dnd.bind(piece.id)}
             role="button"
-            aria-label="Фігура"
+            aria-label={t('tpl.shape')}
           >
             <svg viewBox="-16 -16 32 32" width="56" height="56">
               <g transform={`rotate(${piece.rotate ?? 0}) scale(${24 / piece.size})`}>

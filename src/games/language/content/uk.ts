@@ -359,6 +359,8 @@ export const UK: LangPack = {
   name: 'Українська мова',
   flag: '🇺🇦',
   prefix: '',
+  syllables: true,
+  byEar: true,
   alphabet: [...'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя'],
   partWords: PART_WORDS,
   spellWords: SPELL_WORDS,

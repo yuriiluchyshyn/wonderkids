@@ -39,9 +39,12 @@ export const voice = {
     return settings.voiceOn && (!channel || settings.voice[channel]);
   },
 
-  /** Says `text` if the parent's switches allow it, cutting off whatever was sounding. */
-  say(text: string, channel?: VoiceChannel): void {
-    if (voice.allowed(channel)) speechEngine.speak(text);
+  /**
+   * Says `text` if the parent's switches allow it, cutting off whatever was
+   * sounding. `lang` — the language the text is in, when it is not the voice's own.
+   */
+  say(text: string, channel?: VoiceChannel, lang?: SpeechLang): void {
+    if (voice.allowed(channel)) speechEngine.speak(text, undefined, lang);
   },
 
   /**
@@ -51,6 +54,16 @@ export const voice = {
    */
   speak(text: string, onEnd?: () => void, lang?: SpeechLang): void {
     speechEngine.speak(text, onEnd, lang);
+  },
+
+  /** The language the voice reads in (a phrase may still name its own). */
+  get language(): SpeechLang {
+    return speechEngine.language;
+  },
+
+  /** Switches the language of the voice; whatever was sounding stops. */
+  setLanguage(lang: SpeechLang): void {
+    speechEngine.setLanguage(lang);
   },
 
   /** Silence, now. Safe to call when nothing is sounding. */

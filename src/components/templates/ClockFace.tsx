@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import type { ClockTime } from '@/core/game/templates/types';
 
 /**
@@ -5,6 +6,7 @@ import type { ClockTime } from '@/core/game/templates/types';
  * The hour hand creeps between numbers as the minutes pass, like a real one.
  */
 export function ClockFace({ time, className }: { time: ClockTime; className?: string }) {
+  const t = useT();
   const minuteAngle = time.m * 6;
   const hourAngle = (time.h % 12) * 30 + time.m * 0.5;
   const hand = (angle: number, length: number) => {
@@ -13,7 +15,7 @@ export function ClockFace({ time, className }: { time: ClockTime; className?: st
   };
 
   return (
-    <svg className={className} viewBox="0 0 100 100" role="img" aria-label="Годинник">
+    <svg className={className} viewBox="0 0 100 100" role="img" aria-label={t('tpl.clock')}>
       <circle cx="50" cy="50" r="47" fill="#fff" stroke="#334155" strokeWidth="4" />
       {Array.from({ length: 60 }, (_, i) => {
         const big = i % 5 === 0;

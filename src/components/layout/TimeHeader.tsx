@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { useGameStore } from '@/core/child/store/useGameStore';
@@ -16,6 +17,7 @@ const HIDDEN_PREFIXES = ['/login', '/parent-login', '/parent', '/who', '/admin']
  * side panel — everywhere, all the time, so the child always sees it melting.
  */
 export function TimeHeader() {
+  const t = useT();
   const token = useAuthStore((s) => s.token);
   const activeChildId = useGameStore((s) => s.activeChildId);
   const children = useGameStore((s) => s.children);
@@ -29,7 +31,7 @@ export function TimeHeader() {
   if (!children.some((c) => c.id === activeChildId)) return null;
 
   return (
-    <div className={styles.bar} aria-label="Ігровий час" data-tip="time">
+    <div className={styles.bar} aria-label={t('time.label')} data-tip="time">
       <TimeBudget pct={fuelPct} resting={inCooldown} slots={10} />
     </div>
   );

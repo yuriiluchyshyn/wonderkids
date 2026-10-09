@@ -1,3 +1,5 @@
+import type { LangCode } from '@/core/lang';
+import { mathTexts } from '../lang';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { NumberMazePayload } from '@/core/game/templates/types';
@@ -26,12 +28,13 @@ export function mazeSize(step: number): number {
 }
 
 /** Child-level explanation of what is new at this point of the path. */
-export function mazeIntro(step: number, base: string | undefined): string | undefined {
+export function mazeIntro(step: number, base: string | undefined, lang?: LangCode): string | undefined {
+  const T = mathTexts(lang).maze;
   if (step >= FIRST_NEGATIVE) {
-    return `${base} Тепер тут є й від’ємні числа — зі знаком мінус. Вони діляться так само: мінус дванадцять ділиться на три, бо дванадцять ділиться на три.`;
+    return `${base}${T.negatives}`;
   }
   if (step >= FIRST_6X6) {
-    return `${base} Лабіринт став більшим, і в ньому є глухі кути: якщо далі дороги немає — повернися назад і спробуй інший шлях.`;
+    return `${base}${T.deadEnds}`;
   }
   return base;
 }
@@ -99,6 +102,7 @@ function deadEnds(route: number[], size: number, count: number): number[] {
  * table in order.
  */
 export function generateMaze(config: TaskConfig): TaskInstance<NumberMazePayload> {
+  const T = mathTexts(config.lang).maze;
   const { step } = config;
   const k = DIVISORS[(step - 1) % DIVISORS.length];
   const size = mazeSize(step);
@@ -127,9 +131,7 @@ export function generateMaze(config: TaskConfig): TaskInstance<NumberMazePayload
   return {
     id: uid('mz'),
     key: `maze:${k}:${size}:${path.join('.')}:${inOrder}`,
-    prompt: inOrder
-      ? `Біжи по таблиці множення на ${k}: ${k}, ${k * 2}, ${k * 3} і далі`
-      : `Біжи тільки по числах, які діляться на ${k}`,
+    prompt: inOrder ? T.table(k) : T.divisible(k),
     reward: rewardForStep(step) + 2,
     payload: {
       template: Mechanics.NumberMaze,
@@ -139,10 +141,7 @@ export function generateMaze(config: TaskConfig): TaskInstance<NumberMazePayload
       path,
       open,
       divisor: k,
-      hint:
-        `Шукай сусідню клітинку з числом, яке ділиться на ${k} без остачі. Я підсвічу наступний крок.` +
-        (open.length > 0 ? ' Якщо зайшов у глухий кут — повернися назад.' : '') +
-        (negative ? ' Знак мінус не заважає: дивись на саме число.' : ''),
+      hint: T.hint(k, open.length > 0, negative),
     },
   };
 }

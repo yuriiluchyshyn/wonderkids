@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useEffect, useState } from 'react';
 import type { Milestone } from '@/core/child/store/useGameStore';
 import styles from './Parent.module.css';
@@ -21,6 +22,7 @@ interface GoalRowProps {
  * under their fingers while they type.
  */
 export function GoalRow({ goal, artifact, onChange, onRemove }: GoalRowProps) {
+  const t = useT();
   const [amount, setAmount] = useState(String(goal.amount));
 
   // Follow outside changes (another goal re-sorted, values loaded from the server).
@@ -35,16 +37,16 @@ export function GoalRow({ goal, artifact, onChange, onRemove }: GoalRowProps) {
   return (
     <div className={styles.goal}>
       <label className={styles.goalReward}>
-        <span className={styles.stepLabel}>Нагорода</span>
+        <span className={styles.stepLabel}>{t('parent.goals.reward')}</span>
         <input
           className={styles.textInput}
           value={goal.reward}
-          placeholder="Напр. Спекти печиво разом 🍪"
+          placeholder={t('parent.goals.rewardPlaceholder')}
           onChange={(e) => onChange({ reward: e.target.value })}
         />
       </label>
       <label className={styles.goalAmount}>
-        <span className={styles.stepLabel}>Скільки {artifact} треба зібрати</span>
+        <span className={styles.stepLabel}>{t('parent.goals.amount', { artifact })}</span>
         <input
           className={styles.textInput}
           type="text"
@@ -56,10 +58,10 @@ export function GoalRow({ goal, artifact, onChange, onRemove }: GoalRowProps) {
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.currentTarget.blur();
           }}
-          aria-label={`Скільки артефактів треба зібрати для нагороди: ${goal.reward || 'без назви'}`}
+          aria-label={t('parent.goals.amountLabel', { reward: goal.reward || t('parent.goals.unnamed') })}
         />
       </label>
-      <button type="button" className={styles.removeBtn} onClick={onRemove} aria-label={`Видалити ціль: ${goal.reward || 'без назви'}`}>
+      <button type="button" className={styles.removeBtn} onClick={onRemove} aria-label={t('parent.goals.removeLabel', { reward: goal.reward || t('parent.goals.unnamed') })}>
         🗑️
       </button>
     </div>

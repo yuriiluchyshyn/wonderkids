@@ -1,3 +1,4 @@
+import { useT, useVoiceLang } from '@/core/i18n';
 import { useBalance } from '@/core/child/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
@@ -5,10 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
-import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useSayT } from '@/core/audio/useSpeech';
 import { voice } from '@/core/audio/voice';
 import { Chip } from '@/components/ui/Chip';
-import { counted } from '@/core/lang/uk';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { Button } from '@/components/ui/Button';
@@ -32,6 +32,7 @@ interface ChildDrawerProps {
  * own badges in the header. No parent link — the parent portal is its own domain.
  */
 export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
+  const t = useT();
   const navigate = useNavigate();
   const profile = useGameStore((s) => s.profile);
   // What is in the purse now (earned − spent on the planet).
@@ -39,7 +40,11 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
   const milestones = useGameStore((s) => s.milestones);
   const theme = useActiveTheme();
   const { play } = useSound();
-  const announce = useVoiceSpeak('selections');
+  const say = useSayT('selections');
+  // What is said aloud is in the voice's language — the parent may set it apart from the screen's.
+  const voiceLang = useVoiceLang();
+  const sayT = useT(voiceLang);
+  const voiceTheme = useActiveTheme(voiceLang);
   const logout = useAuthStore((s) => s.logout);
   const soundOn = useGameStore((s) => s.settings.soundOn);
   const voiceOn = useGameStore((s) => s.settings.voiceOn);
@@ -81,14 +86,14 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
             className={styles.panel}
             role="dialog"
             aria-modal="true"
-            aria-label="Профіль і скарбничка"
+            aria-label={t('drawer.label')}
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 320, damping: 32 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button className={styles.close} onClick={onClose} aria-label="Закрити">
+            <button className={styles.close} onClick={onClose} aria-label={t('common.close')}>
               ✕
             </button>
 
@@ -115,13 +120,13 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
               <div className={styles.artifactInfo}>
                 <div className={styles.artifactName}>{theme.artifact.name}</div>
                 <div className={styles.artifactCount}>
-                  {artifacts} <span className={styles.artifactUnit}>у скарбничці</span>
+                  {artifacts} <span className={styles.artifactUnit}>{t('drawer.inVault')}</span>
                 </div>
               </div>
             </div>
 
             {/* ---- Goals — below ---- */}
-            <h3 className={styles.sectionTitle}>🎯 Цілі</h3>
+            <h3 className={styles.sectionTitle}>{t('drawer.goals')}</h3>
             <div className={styles.goals}>
               {milestones.map((m) => {
                 const reached = artifacts >= m.amount;
@@ -135,24 +140,22 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
                     // Tap a goal to hear what it is and how far away it is.
                     onClick={() => {
                       play('tap');
-                      announce(
-                        reached
-                          ? `Ціль: ${m.reward || 'сімейна ціль'}. Досягнуто! Ти зібрав ${counted(m.amount, theme.artifact.counted)}.`
-                          : `Ціль: ${m.reward || 'сімейна ціль'}. Ще не досягнуто. Треба зібрати ще ${counted(remaining, theme.artifact.counted)}.`,
-                      );
+                      const goal = m.reward || sayT('drawer.familyGoal');
+                      if (reached) say('drawer.goalReached', { goal, amount: voiceTheme.artifact.count(m.amount) });
+                      else say('drawer.goalPending', { goal, amount: voiceTheme.artifact.count(remaining) });
                     }}
                   >
                     <span className={`${styles.goalIcon} emoji`} aria-hidden>
                       {reached ? '🎉' : theme.artifact.emoji}
                     </span>
                     <div className={styles.goalBody}>
-                      <div className={styles.goalReward}>{m.reward || 'Сімейна ціль'}</div>
+                      <div className={styles.goalReward}>{m.reward || t('drawer.familyGoalTitle')}</div>
                       <ProgressBar
                         value={artifacts / m.amount}
                         label={
                           reached
-                            ? 'Досягнуто! 🎁'
-                            : `ще ${remaining} ${theme.artifact.emoji} (${artifacts} / ${m.amount})`
+                            ? t('goal.reached')
+                            : t('drawer.goalLeft', { left: remaining, emoji: theme.artifact.emoji, have: artifacts, need: m.amount })
                         }
                       />
                     </div>
@@ -161,20 +164,20 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
               })}
             </div>
 
-            <h3 className={styles.sectionTitle}>🎨 Тема</h3>
+            <h3 className={styles.sectionTitle}>{t('drawer.theme')}</h3>
             <ThemeGrid />
 
-            <h3 className={styles.sectionTitle}>🔈 Звук</h3>
+            <h3 className={styles.sectionTitle}>{t('drawer.sound')}</h3>
             <div className={styles.sound}>
               <Chip
                 icon={muted ? '🔇' : '🔊'}
-                label={muted ? 'Звук вимкнено' : 'Вимкнути весь звук'}
+                label={muted ? t('drawer.muted') : t('drawer.mute')}
                 active={muted}
                 onClick={toggleMute}
               />
               <Chip
                 icon={voiceOn ? '🗣️' : '🤐'}
-                label={voiceOn ? 'Вимкнути голос' : 'Голос вимкнено'}
+                label={voiceOn ? t('drawer.voiceOff') : t('drawer.voiceIsOff')}
                 active={!voiceOn}
                 onClick={() => {
                   if (voiceOn) voice.stop();
@@ -183,7 +186,7 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
               />
               <Chip
                 icon={ttsButtons ? '🔈' : '📖'}
-                label={ttsButtons ? 'Сховати значки озвучення' : 'Значки озвучення сховано'}
+                label={ttsButtons ? t('drawer.hideTts') : t('drawer.ttsHidden')}
                 active={!ttsButtons}
                 onClick={() => updateSettings({ ttsButtons: !ttsButtons })}
               />
@@ -191,10 +194,10 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
 
             <div className={styles.actions}>
               <Button block icon="🔄" variant="ghost" onClick={switchPlayer}>
-                Змінити гравця
+                {t('drawer.switchPlayer')}
               </Button>
               <Button block icon="🚪" variant="ghost" onClick={doLogout}>
-                Вийти
+                {t('common.logout')}
               </Button>
             </div>
           </motion.aside>

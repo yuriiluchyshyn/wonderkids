@@ -19,7 +19,10 @@ import { computeAge } from '@/core/utils/age';
 import { subSteps, pathKey } from '@/core/child/progress/path';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
-import { GALAXIES } from '@/core/game/galaxies';
+import { GALAXIES, galaxyKey } from '@/core/game/galaxies';
+import { Rich, useCurrency, useDeviceLang, useGameLang, useLang, useParentLang, useT, useVoiceLang } from '@/core/i18n';
+import type { GameGroup, SubCategory } from '@/core/game/kernel/types';
+import { LANG_CODES, language, type LangCode } from '@/core/lang';
 import { CURRENCIES } from '@/core/game/content/currency';
 import { portalUrl } from '@/core/app/portal';
 import { uid } from '@/core/utils/random';
@@ -39,34 +42,38 @@ import styles from './Parent.module.css';
  * the last save. Play time is left out: the server owns it, and it moves by
  * itself (and with «Заправити»), which is not an edit to save.
  */
-function settingsJson(children: PersistableState['children']): string {
-  return JSON.stringify(children, (key, value) => (key === 'screenTime' ? undefined : value));
+function settingsJson({ children, parentLang }: Pick<PersistableState, 'children' | 'parentLang'>): string {
+  return JSON.stringify({ children, parentLang }, (key, value) => (key === 'screenTime' ? undefined : value));
 }
 
-const GENDER_OPTIONS: { id: Gender; label: string; icon: string }[] = [
-  { id: 'girl', label: 'Дівчинка', icon: '👧' },
-  { id: 'boy', label: 'Хлопчик', icon: '👦' },
+const GENDER_OPTIONS: { id: Gender; icon: string }[] = [
+  { id: 'girl', icon: '👧' },
+  { id: 'boy', icon: '👦' },
 ];
 
-const MONTHS = [
-  'Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень',
-  'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень',
+/** «Січень» … «Грудень» — the months as the language itself names them. */
+function monthNames(lang: LangCode): string[] {
+  const format = new Intl.DateTimeFormat(lang, { month: 'long' });
+  return Array.from({ length: 12 }, (_, i) => {
+    const name = format.format(new Date(2021, i, 1));
+    return name.charAt(0).toLocaleUpperCase(lang) + name.slice(1);
+  });
+}
+
+const SPEED_OPTIONS: { id: CompanionSpeed; icon: string }[] = [
+  { id: 'off', icon: '🛑' },
+  { id: 'verySlow', icon: '🐌' },
+  { id: 'slow', icon: '🐢' },
+  { id: 'medium', icon: '🚶' },
+  { id: 'fast', icon: '⚡' },
 ];
 
-const SPEED_OPTIONS: { id: CompanionSpeed; label: string; icon: string }[] = [
-  { id: 'off', label: 'Вимкнено', icon: '🛑' },
-  { id: 'verySlow', label: 'Дуже повільно', icon: '🐌' },
-  { id: 'slow', label: 'Повільно', icon: '🐢' },
-  { id: 'medium', label: 'Помірно', icon: '🚶' },
-  { id: 'fast', label: 'Швидко', icon: '⚡' },
-];
-
-const CELEBRATION_OPTIONS: { id: CelebrationStyle; label: string; icon: string }[] = [
-  { id: 'balloons', label: 'Кульки', icon: '🎈' },
-  { id: 'balls', label: 'М’ячики', icon: '⚽' },
-  { id: 'stars', label: 'Зірочки', icon: '🏅' },
-  { id: 'fireworks', label: 'Феєрверк', icon: '🎆' },
-  { id: 'candy', label: 'Цукерки', icon: '🍬' },
+const CELEBRATION_OPTIONS: { id: CelebrationStyle; icon: string }[] = [
+  { id: 'balloons', icon: '🎈' },
+  { id: 'balls', icon: '⚽' },
+  { id: 'stars', icon: '🏅' },
+  { id: 'fireworks', icon: '🎆' },
+  { id: 'candy', icon: '🍬' },
 ];
 
 
@@ -80,9 +87,47 @@ const SESSION_MIN_OPTIONS = [5, 10, 15, 20, 30];
 const COOLDOWN_MIN_OPTIONS = [15, 30, 45, 60, 90];
 const DAILY_MIN_OPTIONS = [20, 30, 45, 60, 90, 120];
 
+/** The games of a galaxy in their sets (the Language galaxy: one per language); a galaxy without sets is one unnamed set. */
+function setsOf(subs: SubCategory[]): { group?: GameGroup; subs: SubCategory[] }[] {
+  const sets = new Map<string, { group?: GameGroup; subs: SubCategory[] }>();
+  for (const sub of subs) {
+    const id = sub.group?.id ?? '';
+    if (!sets.has(id)) sets.set(id, { group: sub.group, subs: [] });
+    sets.get(id)?.subs.push(sub);
+  }
+  return [...sets.values()];
+}
+
+/** One chip per language of the app; the chosen one is lit. */
+function LangChips({ value, onPick }: { value: LangCode; onPick: (lang: LangCode) => void }) {
+  return (
+    <div className={styles.chipRow}>
+      {LANG_CODES.map((code) => (
+        <Chip key={code} icon={language(code).flag} label={language(code).name} active={value === code} onClick={() => onPick(code)} />
+      ))}
+    </div>
+  );
+}
+
 /** Main settings (PRD §10): profile, look & feel, pacing, goals. Audio lives
  *  on its own sub-page so the many sound options stay out of the way. */
 export function ParentDashboard() {
+  const t = useT();
+  const lang = useLang();
+  const parentLang = useParentLang();
+  const gameLang = useGameLang();
+  const voiceLang = useVoiceLang();
+  const setParentLang = useGameStore((s) => s.setParentLang);
+  const chooseDeviceLang = useDeviceLang((s) => s.choose);
+  // The cabinet's language is also what this device is offered from now on (the login page).
+  const pickParentLang = (next: LangCode) => {
+    setParentLang(next);
+    chooseDeviceLang(next);
+  };
+  // The money in effect: chosen here, or — until then — that of the game's language.
+  const currency = useCurrency();
+  const hidden = new Set(useGameStore((s) => s.settings.hiddenGames));
+  const setGamesHidden = useGameStore((s) => s.setGamesHidden);
   const navigate = useNavigate();
   const activeChildId = useGameStore((s) => s.activeChildId);
   const profile = useGameStore((s) => s.profile);
@@ -109,8 +154,8 @@ export function ParentDashboard() {
   const savedSnapshot = useRef<PersistableState | null>(null);
   // What was last saved, as text: «Зберегти» is offered only while the
   // children's settings differ from it.
-  const [savedJson, setSavedJson] = useState(() => settingsJson(useGameStore.getState().children));
-  const dirty = useGameStore((s) => settingsJson(s.children)) !== savedJson;
+  const [savedJson, setSavedJson] = useState(() => settingsJson(useGameStore.getState()));
+  const dirty = useGameStore((s) => settingsJson(s)) !== savedJson;
   // Only a password account has a password to change here.
   const hasPassword = useAuthStore((s) => s.user?.provider) === 'auth0';
   const [saving, setSaving] = useState(false);
@@ -137,7 +182,7 @@ export function ParentDashboard() {
       const data = selectPersistable(useGameStore.getState());
       await api.putState(token, data);
       savedSnapshot.current = data;
-      setSavedJson(settingsJson(data.children));
+      setSavedJson(settingsJson(data));
       setJustSaved(true);
       window.setTimeout(() => setJustSaved(false), 2500);
     } catch {
@@ -166,18 +211,20 @@ export function ParentDashboard() {
     }
   };
 
-  // Only games with a difficulty ladder have a step to set (free play has
-  // none). One group per galaxy, in the hub's order.
+  // Every game, to show it to the child or put it away; those with a difficulty
+  // ladder also have a step to set (free play has none). One group per galaxy,
+  // in the hub's order; inside it the games stay in their sets (a language).
   const stepGroups = moduleRegistry
-    .getAll()
+    .getAll(lang)
     .map((m) => {
       const galaxy = GALAXIES.find((g) => g.moduleId === m.id);
       return {
         moduleId: m.id,
-        name: galaxy?.name ?? m.id,
+        name: galaxy ? t(galaxyKey(galaxy.id)) : m.id,
         icon: galaxy?.icon ?? m.icon,
         order: galaxy ? GALAXIES.indexOf(galaxy) : GALAXIES.length,
-        subs: m.subCategories.filter((sub) => !isFreePlay(sub)),
+        subs: m.subCategories,
+        sets: setsOf(m.subCategories),
       };
     })
     .filter((g) => g.subs.length > 0)
@@ -233,79 +280,93 @@ export function ParentDashboard() {
             👤
           </span>
           {email ? (
-            <>
-              Ви увійшли як <b>{email}</b>
-            </>
+            <Rich k="parent.signedInAs" name="email" value={email} />
           ) : (
-            'Кабінет батьків'
+            t('parentLogin.title')
           )}
         </span>
         <div className={cn(styles.accountActions, styles.wideOnly)}>
           <button type="button" className={cn(styles.barButton, styles.barSave)} onClick={saveChanges} disabled={saving || !dirty}>
-            {saving ? 'Зберігаємо…' : justSaved ? '✅ Збережено' : dirty ? '💾 Зберегти зміни' : 'Усе збережено'}
+            {saving ? t('parent.saving') : justSaved ? t('parent.savedBar') : dirty ? t('parent.saveBar') : t('parent.allSaved')}
           </button>
           <button type="button" className={styles.barButton} onClick={logout}>
-            🚪 Вийти
+            {t('parent.logoutBar')}
           </button>
         </div>
       </div>
 
       <ChildManager />
 
+      {/* ---- Languages: the cabinet's own, and — for the chosen child — the game's and the voice's ---- */}
+      <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>{t('parent.lang.title')}</h3>
+        <p className={styles.hint}>{t('parent.lang.hint')}</p>
+        <label className={styles.fieldLabel}>{t('parent.lang.parent')}</label>
+        <LangChips value={parentLang} onPick={pickParentLang} />
+        {activeChildId && (
+          <>
+            <label className={styles.fieldLabel}>{t('parent.lang.game')}</label>
+            <LangChips value={gameLang} onPick={(lang) => updateSettings({ gameLang: lang })} />
+            <label className={styles.fieldLabel}>{t('parent.lang.voice')}</label>
+            <LangChips value={voiceLang} onPick={(lang) => updateSettings({ voiceLang: lang })} />
+          </>
+        )}
+      </section>
+
       {activeChildId ? (
         <>
       {/* ---- Child profile ---- */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>👤 Профіль дитини</h3>
+        <h3 className={styles.sectionTitle}>{t('parent.profile.title')}</h3>
         <Button block icon="🎮" onClick={openChildGame}>
-          Відкрити гру дитини
+          {t('parent.profile.openGame')}
         </Button>
         <p className={styles.hint}>
           {openGameError
-            ? 'Не вдалося відкрити гру. Якщо дитину щойно додано — спершу натисніть «Зберегти зміни».'
-            : 'Гра відкриється в новій вкладці вже від імені дитини — нік і PIN вводити не треба.'}
+            ? t('parent.profile.openFailed')
+            : t('parent.profile.openHint')}
         </p>
-        <label className={styles.fieldLabel}>Ім'я</label>
+        <label className={styles.fieldLabel}>{t('parent.profile.name')}</label>
         <input
           className={styles.textInput}
           value={profile.name}
           maxLength={16}
           onChange={(e) => setProfile({ name: e.target.value })}
-          aria-label="Ім'я дитини"
+          aria-label={t('parent.profile.nameLabel')}
         />
 
-        <label className={styles.fieldLabel}>Унікальний нік (@нік)</label>
+        <label className={styles.fieldLabel}>{t('parent.profile.nick')}</label>
         <input
           className={styles.textInput}
           value={profile.nickname}
           maxLength={12}
-          placeholder="напр. marko_speed"
+          placeholder={t('childLogin.nickPlaceholder')}
           onChange={(e) => setProfile({ nickname: e.target.value })}
-          aria-label="Унікальний нік дитини"
+          aria-label={t('parent.profile.nickLabel')}
         />
-        <p className={styles.hint}>Лише малі літери, цифри та «_» (3–12 символів). Показується у шторці профілю.</p>
+        <p className={styles.hint}>{t('parent.profile.nickHint')}</p>
 
-        <label className={styles.fieldLabel}>PIN для входу (3–4 цифри)</label>
+        <label className={styles.fieldLabel}>{t('parent.profile.pin')}</label>
         <input
           className={styles.textInput}
           value={profile.pin}
           inputMode="numeric"
           maxLength={4}
-          placeholder="напр. 1234"
+          placeholder={t('parent.profile.pinPlaceholder')}
           onChange={(e) => setProfile({ pin: e.target.value })}
-          aria-label="PIN дитини"
+          aria-label={t('parent.profile.pinLabel')}
         />
-        <p className={styles.hint}>Дитина входить у свій акаунт за ніком і цим PIN.</p>
+        <p className={styles.hint}>{t('parent.profile.pinHint')}</p>
 
-        <label className={styles.fieldLabel}>Дата народження</label>
+        <label className={styles.fieldLabel}>{t('parent.profile.birth')}</label>
         <div className={styles.inline}>
           <select
             className={styles.textInput}
             value={profile.birthMonth}
             onChange={(e) => setProfile({ birthMonth: Number(e.target.value) })}
-            aria-label="Місяць народження"
+            aria-label={t('parent.profile.birthMonth')}
           >
-            {MONTHS.map((m, i) => (
+            {monthNames(lang).map((m, i) => (
               <option key={m} value={i + 1}>
                 {m}
               </option>
@@ -315,7 +376,7 @@ export function ParentDashboard() {
             className={styles.textInput}
             value={profile.birthYear}
             onChange={(e) => setProfile({ birthYear: Number(e.target.value) })}
-            aria-label="Рік народження"
+            aria-label={t('parent.profile.birthYear')}
           >
             {years.map((y) => (
               <option key={y} value={y}>
@@ -324,68 +385,66 @@ export function ParentDashboard() {
             ))}
           </select>
         </div>
-        <p className={styles.hint}>Вік рахується автоматично: {age} р.</p>
+        <p className={styles.hint}>{t('parent.profile.age', { age })}</p>
 
-        <label className={styles.fieldLabel}>Стать</label>
+        <label className={styles.fieldLabel}>{t('parent.profile.gender')}</label>
         <div className={styles.chipRow}>
           {GENDER_OPTIONS.map((g) => (
-            <Chip key={g.id} icon={g.icon} label={g.label} active={profile.gender === g.id} onClick={() => setProfile({ gender: g.id })} />
+            <Chip key={g.id} icon={g.icon} label={t(`gender.${g.id}`)} active={profile.gender === g.id} onClick={() => setProfile({ gender: g.id })} />
           ))}
         </div>
       </section>
 
       {/* ---- Audio link (hidden sub-page) ---- */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🔊 Звук, голос і підписи</h3>
-        <p className={styles.hint}>Керування всіма звуками, голосовими підказками та текстовими підписами.</p>
+        <h3 className={styles.sectionTitle}>{t('parent.audio.title')}</h3>
+        <p className={styles.hint}>{t('parent.audio.hint')}</p>
         <Button block icon="🎚️" onClick={() => navigate('/parent/audio')}>
-          Відкрити налаштування звуку
+          {t('parent.audio.open')}
         </Button>
       </section>
 
       {/* ---- Appearance ---- */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🎨 Тема (світ)</h3>
+        <h3 className={styles.sectionTitle}>{t('parent.theme.title')}</h3>
         <ThemeGrid />
       </section>
 
       {/* ---- Companion & celebration ---- */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🏎️ Відкочування супутника</h3>
+        <h3 className={styles.sectionTitle}>{t('parent.rollback.title')}</h3>
         <p className={styles.hint}>
-          Якщо дитина довго не відповідає, супутник плавно котиться назад. Щойно він відкотиться на цілий крок,
-          у рівні з’являється ще одне завдання (не більше трьох додаткових).
+          {t('parent.rollback.hint')}
         </p>
         <div className={styles.chipRow}>
           {SPEED_OPTIONS.map((o) => (
-            <Chip key={o.id} icon={o.icon} label={o.label} active={settings.companionSpeed === o.id} onClick={() => updateSettings({ companionSpeed: o.id })} />
+            <Chip key={o.id} icon={o.icon} label={t(`speed.${o.id}`)} active={settings.companionSpeed === o.id} onClick={() => updateSettings({ companionSpeed: o.id })} />
           ))}
         </div>
       </section>
 
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>💡 Підказки про кнопки</h3>
+        <h3 className={styles.sectionTitle}>{t('parent.tips.title')}</h3>
         <p className={styles.hint}>
-          Під час першого знайомства гра пояснює дитині, що означає кожна кнопка. Підказка, яку дитина закрила,
-          більше не з’являється. Прочитано підказок: {tipsSeen}.
+          {t('parent.tips.hint', { count: tipsSeen })}
         </p>
         <Button variant="ghost" icon="🔄" block disabled={tipsSeen === 0} onClick={resetTips}>
-          Показати знову
+          {t('parent.tips.reset')}
         </Button>
       </section>
 
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🎉 Святкування перемоги</h3>
+        <h3 className={styles.sectionTitle}>{t('parent.celebration.title')}</h3>
         <div className={styles.chipRow}>
           {CELEBRATION_OPTIONS.map((o) => (
-            <Chip key={o.id} icon={o.icon} label={o.label} active={settings.celebration === o.id} onClick={() => updateSettings({ celebration: o.id })} />
+            <Chip key={o.id} icon={o.icon} label={t(`celebration.${o.id}`)} active={settings.celebration === o.id} onClick={() => updateSettings({ celebration: o.id })} />
           ))}
         </div>
       </section>
 
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🔢 Сітка відповідей</h3>
-        <p className={styles.hint}>Більше варіантів — важче вгадати навмання (анти-вгадування).</p>
+        <h3 className={styles.sectionTitle}>{t('parent.grid.title')}</h3>
+        <p className={styles.hint}>{t('parent.grid.hint')}</p>
         <div className={styles.chipRow}>
           {GRID_OPTIONS.map((o) => (
             <Chip
@@ -400,15 +459,14 @@ export function ParentDashboard() {
       </section>
 
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>💡 Цікаві факти</h3>
+        <h3 className={styles.sectionTitle}>{t('parent.facts.title')}</h3>
         <p className={styles.hint}>
-          Після правильної відповіді гра розповідає короткий факт про те, що дитина щойно зробила, і чекає, доки його буде прочитано. Вимкніть — і наступне
-          завдання починатиметься одразу.
+          {t('parent.facts.hint')}
         </p>
         <div className={styles.chipRow}>
           <Chip
             icon={settings.funFacts ? '💡' : '⏩'}
-            label={settings.funFacts ? 'Розповідати факти' : 'Без фактів'}
+            label={settings.funFacts ? t('parent.facts.on') : t('parent.facts.off')}
             active={settings.funFacts}
             onClick={() => updateSettings({ funFacts: !settings.funFacts })}
           />
@@ -416,85 +474,86 @@ export function ParentDashboard() {
       </section>
 
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>💰 Гроші в грі «Магазин»</h3>
-        <p className={styles.hint}>Якими монетами й купюрами дитина платить у магазині.</p>
+        <h3 className={styles.sectionTitle}>{t('parent.money.title')}</h3>
+        <p className={styles.hint}>
+          {t('parent.money.hint')} {settings.currencyChosen ? t('parent.money.chosen') : t('parent.money.auto')}
+        </p>
         <div className={styles.chipRow}>
           {Object.values(CURRENCIES).map((c) => (
-            <Chip key={c.id} icon={c.flag} label={`${c.name}, ${c.sign}`} active={settings.currency === c.id} onClick={() => updateSettings({ currency: c.id })} />
+            <Chip key={c.id} icon={c.flag} label={`${t(`currency.${c.id}`)}, ${c.sign}`} active={currency === c.id} onClick={() => updateSettings({ currency: c.id, currencyChosen: true })} />
           ))}
         </div>
       </section>
 
       {/* ---- Screen time / fuel ---- */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>⛽ Екранний час</h3>
+        <h3 className={styles.sectionTitle}>{t('parent.time.title')}</h3>
         <p className={styles.hint}>
-          Дитина бачить лише тематичну шкалу пального — без цифрових таймерів. Коли пальне закінчується,
-          грається коротка мультанімація, а далі — спокійний відпочинок.
+          {t('parent.time.hint')}
         </p>
 
-        <label className={styles.fieldLabel}>Тривалість сеансу (хв)</label>
+        <label className={styles.fieldLabel}>{t('parent.time.session')}</label>
         <select
           className={styles.textInput}
           value={settings.timeControl.sessionDurationMinutes}
           onChange={(e) => updateTimeControl({ sessionDurationMinutes: Number(e.target.value) })}
-          aria-label="Тривалість сеансу у хвилинах"
+          aria-label={t('parent.time.sessionLabel')}
         >
           {SESSION_MIN_OPTIONS.map((n) => (
             <option key={n} value={n}>
-              {n} хв
+              {t('parent.time.minutes', { n })}
             </option>
           ))}
         </select>
 
-        <label className={styles.fieldLabel}>Відпочинок між сеансами (хв)</label>
+        <label className={styles.fieldLabel}>{t('parent.time.cooldown')}</label>
         <select
           className={styles.textInput}
           value={settings.timeControl.cooldownMinutes}
           onChange={(e) => updateTimeControl({ cooldownMinutes: Number(e.target.value) })}
-          aria-label="Тривалість відпочинку у хвилинах"
+          aria-label={t('parent.time.cooldownLabel')}
         >
           {COOLDOWN_MIN_OPTIONS.map((n) => (
             <option key={n} value={n}>
-              {n} хв
+              {t('parent.time.minutes', { n })}
             </option>
           ))}
         </select>
 
-        <label className={styles.fieldLabel}>Ліміт на день (хв)</label>
+        <label className={styles.fieldLabel}>{t('parent.time.daily')}</label>
         <select
           className={styles.textInput}
           value={settings.timeControl.maxDailyMinutes}
           onChange={(e) => updateTimeControl({ maxDailyMinutes: Number(e.target.value) })}
-          aria-label="Денний ліміт у хвилинах"
+          aria-label={t('parent.time.dailyLabel')}
         >
           {DAILY_MIN_OPTIONS.map((n) => (
             <option key={n} value={n}>
-              {n} хв
+              {t('parent.time.minutes', { n })}
             </option>
           ))}
         </select>
 
-        <label className={styles.fieldLabel}>Поповнити час зараз</label>
+        <label className={styles.fieldLabel}>{t('parent.time.refill')}</label>
         <p className={styles.hint}>
-          Миттєво повертає дитині повну шкалу й знімає відпочинок — незалежно від збереження інших змін.
+          {t('parent.time.refillHint')}
         </p>
         {/* The real countdown lives here, for the parent — the child's rest screen never shows one. */}
         {budget.inCooldown && (
           <p className="muted" role="status">
-            😴 Дитина відпочиває. До наступної гри: {Math.floor(budget.cooldownRemainingSec / 60)} хв {String(budget.cooldownRemainingSec % 60).padStart(2, '0')} с
+            {t('parent.time.resting', { min: Math.floor(budget.cooldownRemainingSec / 60), sec: String(budget.cooldownRemainingSec % 60).padStart(2, '0') })}
           </p>
         )}
         <Button block icon={timeReset ? '✅' : '⛽'} onClick={resetTimeNow}>
-          {timeReset ? 'Час поповнено!' : 'Поповнити ігровий час'}
+          {timeReset ? t('parent.time.refilled') : t('parent.time.refillButton')}
         </Button>
       </section>
 
       {/* ---- Milestone goals on the path ---- */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🎯 Сімейні цілі</h3>
+        <h3 className={styles.sectionTitle}>{t('parent.goals.title')}</h3>
         <p className={styles.hint}>
-          Скільки артефактів (із будь-яких завдань) треба назбирати у спільний кошик, щоб отримати нагороду.
+          {t('parent.goals.hint')}
         </p>
         <div className="stack">
           {milestones.map((m) => (
@@ -509,16 +568,16 @@ export function ParentDashboard() {
         </div>
         <div style={{ marginTop: 14 }}>
           <Button block variant="ghost" icon="➕" onClick={addMilestone}>
-            Додати ціль
+            {t('parent.goals.add')}
           </Button>
         </div>
       </section>
 
       {/* ---- Per-task step control ---- */}
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🪜 Сходинка завдання</h3>
+        <h3 className={styles.sectionTitle}>{t('parent.games.title')}</h3>
         <p className={styles.hint}>
-          Відкрий галактику й познач, на якій сходинці зараз має бути дитина для кожного завдання.
+          {t('parent.games.hint')}
         </p>
         <div className="stack">
           {/* One galaxy at a time: all closed until the parent opens one. */}
@@ -529,30 +588,72 @@ export function ParentDashboard() {
                   {group.icon}
                 </span>
                 <span className={styles.stepGroupName}>{group.name}</span>
-                <span className={styles.stepGroupCount}>{group.subs.length}</span>
+                <span className={styles.stepGroupCount}>
+                  {group.subs.filter((sub) => !hidden.has(pathKey(group.moduleId, sub.id))).length} / {group.subs.length}
+                </span>
               </summary>
               <div className="stack">
-                {group.subs.map((sub) => {
-                  const step = progress[pathKey(group.moduleId, sub.id)] ?? 1;
-                  const maxSteps = subSteps(sub);
+                {group.sets.map((set) => {
+                  const keys = set.subs.map((sub) => pathKey(group.moduleId, sub.id));
+                  const shown = keys.filter((key) => !hidden.has(key)).length;
                   return (
-                    <div key={sub.id} className={styles.stepRow}>
-                      <span className={styles.stepName}>
-                        <span className="emoji" aria-hidden>
-                          {sub.icon || group.icon}
-                        </span>
-                        {sub.label}
-                      </span>
-                      <input
-                        className={styles.textInput}
-                        type="number"
-                        inputMode="numeric"
-                        min={1}
-                        max={maxSteps}
-                        value={step}
-                        onChange={(e) => setStep(group.moduleId, sub.id, Number(e.target.value), maxSteps)}
-                        aria-label={`Сходинка для ${sub.label} (макс ${maxSteps})`}
-                      />
+                    <div key={set.group?.id ?? 'all'} className="stack">
+                      {/* A whole set — a language — is shown or put away with one tick. */}
+                      {set.group && (
+                        <label className={styles.setHead}>
+                          <input
+                            type="checkbox"
+                            className={styles.gameCheck}
+                            checked={shown > 0}
+                            ref={(el) => {
+                              if (el) el.indeterminate = shown > 0 && shown < keys.length;
+                            }}
+                            onChange={(e) => setGamesHidden(keys, !e.target.checked)}
+                            aria-label={t('parent.games.showSet', { name: set.group.label })}
+                          />
+                          <span className="emoji" aria-hidden>
+                            {set.group.icon}
+                          </span>
+                          {set.group.label}
+                          <span className={styles.stepGroupCount}>
+                            {shown} / {keys.length}
+                          </span>
+                        </label>
+                      )}
+                      {set.subs.map((sub) => {
+                        const key = pathKey(group.moduleId, sub.id);
+                        const step = progress[key] ?? 1;
+                        const maxSteps = subSteps(sub);
+                        return (
+                          <div key={sub.id} className={cn(styles.stepRow, hidden.has(key) && styles.stepRowHidden)}>
+                            <label className={styles.stepName}>
+                              <input
+                                type="checkbox"
+                                className={styles.gameCheck}
+                                checked={!hidden.has(key)}
+                                onChange={(e) => setGamesHidden([key], !e.target.checked)}
+                                aria-label={t('parent.games.showLabel', { name: sub.label })}
+                              />
+                              <span className="emoji" aria-hidden>
+                                {sub.icon || group.icon}
+                              </span>
+                              {sub.label}
+                            </label>
+                            {!isFreePlay(sub) && (
+                              <input
+                                className={styles.textInput}
+                                type="number"
+                                inputMode="numeric"
+                                min={1}
+                                max={maxSteps}
+                                value={step}
+                                onChange={(e) => setStep(group.moduleId, sub.id, Number(e.target.value), maxSteps)}
+                                aria-label={t('parent.games.stepLabel', { name: sub.label, max: maxSteps })}
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   );
                 })}
@@ -564,14 +665,14 @@ export function ParentDashboard() {
 
       <section className={styles.section}>
         <Button block variant="ghost" icon="♻️" onClick={resetProgress}>
-          Скинути весь прогрес
+          {t('parent.games.reset')}
         </Button>
       </section>
         </>
       ) : (
         <section className={styles.section}>
           <p className={styles.hint} style={{ margin: 0, textAlign: 'center' }}>
-            Оберіть дитину вище або додайте нову, щоб налаштувати її гру.
+            {t('parent.pickChild')}
           </p>
         </section>
       )}
@@ -579,16 +680,16 @@ export function ParentDashboard() {
       {/* ---- Password ---- */}
       {auth0Enabled && email && hasPassword && (
         <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>🔑 Пароль</h3>
+          <h3 className={styles.sectionTitle}>{t('parent.password.title')}</h3>
           <p className={styles.hint}>
             {reset === 'sent'
-              ? `Лист із посиланням надіслано на ${email}. Відкрийте його й задайте новий пароль. Не бачите листа — перевірте «Спам».`
+              ? t('parent.password.sent', { email })
               : reset === 'failed'
-                ? 'Не вдалося надіслати лист. Спробуйте, будь ласка, ще раз за хвилину.'
-                : `Надішлемо на ${email} лист із посиланням, за яким можна задати новий пароль.`}
+                ? t('parent.password.failed')
+                : t('parent.password.hint', { email })}
           </p>
           <Button block variant="ghost" icon="✉️" onClick={sendPasswordReset} disabled={reset === 'sending'}>
-            {reset === 'sending' ? 'Надсилаємо…' : reset === 'sent' ? 'Надіслати ще раз' : 'Змінити пароль'}
+            {reset === 'sending' ? t('parent.password.sending') : reset === 'sent' ? t('parent.password.again') : t('parent.password.change')}
           </Button>
         </section>
       )}
@@ -596,7 +697,7 @@ export function ParentDashboard() {
       {/* ---- Sign out: the very last thing on a phone (on a wide screen it is at the top) ---- */}
       <div className={styles.narrowOnly}>
         <Button block variant="ghost" icon="🚪" onClick={logout}>
-          Вийти з акаунту
+          {t('parent.logout')}
         </Button>
       </div>
 
@@ -605,7 +706,7 @@ export function ParentDashboard() {
       {(dirty || saving || justSaved) && (
         <div className={cn(styles.saveBar, styles.narrowOnly)}>
           <Button block icon={justSaved ? '✅' : '💾'} onClick={saveChanges} disabled={saving || !dirty}>
-            {saving ? 'Зберігаємо…' : justSaved && !dirty ? 'Збережено!' : 'Зберегти зміни'}
+            {saving ? t('parent.saving') : justSaved && !dirty ? t('parent.saved') : t('parent.save')}
           </Button>
         </div>
       )}

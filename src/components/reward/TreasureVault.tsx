@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useBalance } from '@/core/child/world/useBalance';
 import { motion } from 'framer-motion';
 import { useGameStore } from '@/core/child/store/useGameStore';
@@ -7,6 +8,7 @@ import styles from './TreasureVault.module.css';
 
 /** The child's motivation hub: artifact piggy bank, milestone goals, dream build. */
 export function TreasureVault() {
+  const t = useT();
   // What is in the purse now (earned − spent on the planet).
   const artifacts = useBalance();
   const milestones = useGameStore((s) => s.milestones);
@@ -30,7 +32,7 @@ export function TreasureVault() {
         </motion.span>
         <div>
           <div className={styles.count}>{artifacts}</div>
-          <div className="muted">{theme.artifact.name} у скарбничці</div>
+          <div className="muted">{t('vault.inVault', { name: theme.artifact.name })}</div>
         </div>
       </motion.div>
 
@@ -39,10 +41,10 @@ export function TreasureVault() {
           <span className="emoji" aria-hidden>
             🎯
           </span>{' '}
-          Сімейні цілі
+          {t('vault.goals')}
         </h3>
         <p className={styles.goalHint}>
-          {theme.artifact.name} з будь-якого завдання падають у спільний кошик!
+          {t('vault.hint', { name: theme.artifact.name })}
         </p>
         <div className="stack">
           {milestones.map((m) => {
@@ -56,7 +58,7 @@ export function TreasureVault() {
                   <div className={styles.mReward}>{m.reward}</div>
                   <ProgressBar
                     value={artifacts / m.amount}
-                    label={reached ? 'Досягнуто! 🎁' : `${artifacts} / ${m.amount}`}
+                    label={reached ? t('goal.reached') : `${artifacts} / ${m.amount}`}
                   />
                 </div>
               </div>

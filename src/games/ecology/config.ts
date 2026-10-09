@@ -1,10 +1,12 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { WHY_STEPS } from './content/questions';
+import { ecologyTexts } from './lang';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'ecology',
+  texts: { en: ecologyTexts('en').cards, pl: ecologyTexts('pl').cards },
   title: 'Екологія',
   icon: '♻️',
   accent: '#22c55e',
@@ -17,6 +19,7 @@ export const SUBJECT: SubjectDef = {
 export const GAMES: GameCard[] = [
   {
     id: 'recycling',
+    langs: ecologyTexts.langs,
     gameId: 'eco_recycling_patrol',
     label: 'Еко-патруль',
     icon: '♻️',
@@ -32,6 +35,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'why',
+    langs: ecologyTexts.langs,
     gameId: 'eco_why_questions',
     label: 'Чому так?',
     icon: '🌍',

@@ -1,3 +1,4 @@
+import { tApp, useDeviceLang, type AppKey } from '@/core/i18n';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { api, ApiError, type AuthUser } from '@/core/account/api/client';
@@ -5,19 +6,11 @@ import { useGameStore } from '@/core/child/store/useGameStore';
 import { signupSource } from '@/core/app/attribution';
 import { auth0Enabled, auth0Logout } from './auth0';
 
-/** Human-friendly messages for the error codes the API can return on login. */
-const LOGIN_ERRORS: Record<string, string> = {
-  invalid_email: 'Схоже, це не схоже на електронну пошту. Перевір, будь ласка.',
-  invalid_pin: 'Невірний PIN. Спробуй ще раз або спитай у батьків.',
-  invalid_credentials: 'Перевір нік і PIN, будь ласка.',
-  child_not_found: 'Схоже, такого гравця ще немає. Попроси батьків створити тобі акаунт 👨‍👩‍👧',
-  network_error: 'Не вдалося зв’язатися із сервером. Він увімкнений?',
-  login_failed: 'Щось пішло не так на сервері. Спробуй ще раз.',
-  invalid_token: 'Не вдалося підтвердити вхід. Спробуйте увійти ще раз.',
-  email_missing: 'Цей спосіб входу не передав нам вашу пошту. Оберіть інший, будь ласка.',
-  email_not_verified: 'Спершу підтвердьте пошту: відкрийте лист, який ми надіслали, і натисніть посилання в ньому.',
-  auth0_required: 'Вхід оновлено. Оновіть сторінку й увійдіть ще раз.',
-};
+/** The error codes the API can return on login that have a message of their own (`auth.error.<code>`). */
+const LOGIN_ERRORS = new Set(['invalid_email', 'invalid_pin', 'invalid_credentials', 'child_not_found', 'network_error', 'login_failed', 'invalid_token', 'email_missing', 'email_not_verified', 'auth0_required']);
+
+/** A human-friendly message for a login error, in the language of this device — nobody has signed in yet. */
+const loginError = (code: string): string => tApp(useDeviceLang.getState().lang, `auth.error.${LOGIN_ERRORS.has(code) ? code : 'login_failed'}` as AppKey);
 
 /** `google-oauth2|123…` → `google-oauth2`: the first part of an Auth0 user id. */
 function auth0Provider(idToken: string): string | undefined {
@@ -94,7 +87,7 @@ export const useAuthStore = create<AuthState>()(
           const code = err instanceof ApiError ? err.code : 'login_failed';
           set({
             pending: false,
-            error: LOGIN_ERRORS[code] ?? LOGIN_ERRORS.login_failed,
+            error: loginError(code),
           });
           return { status: 'error' };
         }
@@ -108,7 +101,7 @@ export const useAuthStore = create<AuthState>()(
           return null;
         } catch (err) {
           const code = err instanceof ApiError ? err.code : 'login_failed';
-          set({ pending: false, error: LOGIN_ERRORS[code] ?? LOGIN_ERRORS.login_failed });
+          set({ pending: false, error: loginError(code) });
           return code;
         }
       },
@@ -123,7 +116,7 @@ export const useAuthStore = create<AuthState>()(
           const code = err instanceof ApiError ? err.code : 'login_failed';
           set({
             pending: false,
-            error: LOGIN_ERRORS[code] ?? LOGIN_ERRORS.login_failed,
+            error: loginError(code),
           });
           return false;
         }

@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import styles from './PieFood.module.css';
 
@@ -29,9 +30,10 @@ function wedge(index: number, denom: number): string {
  * highlighted. Pure presentation — the child answers via fraction tiles.
  */
 export function PieFood({ food, denom, filled }: PieFoodProps) {
+  const t = useT();
   return (
     <div className={styles.wrap}>
-      <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className={styles.pie} role="img" aria-label={`${filled} з ${denom} зафарбовано`}>
+      <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className={styles.pie} role="img" aria-label={t('tpl.pie', { filled, total: denom })}>
         {Array.from({ length: denom }, (_, i) => (
           <motion.path
             key={i}

@@ -1,10 +1,12 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { STEPS } from './content/data';
+import { artTexts } from './lang';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'art',
+  texts: { en: artTexts('en').cards, pl: artTexts('pl').cards },
   title: 'Творчість',
   icon: '🎨',
   accent: '#ec4899',
@@ -22,11 +24,8 @@ export const GAMES: GameCard[] = [
     icon: '🎨',
     blurb: 'Змішуй фарби в казані й розфарбовуй малюнки',
     intro: 'Малюнок ще сірий — його треба розфарбувати! Вилий у чарівний казан дві фарби, щоб вийшов потрібний колір.',
-    introFor: (step) => {
-      if (step === 4) return 'Тепер є біла й чорна фарби. Біла робить колір світлішим, а чорна — темнішим.';
-      if (step === 8) return 'Найскладніші кольори виходять, коли змішати вже готовий колір з іншим. Спробуй!';
-      return undefined;
-    },
+    introFor: (step, lang) => artTexts(lang).introFor(step),
+    langs: artTexts.langs,
     steps: STEPS.length,
     difficulty: [1, 2],
     publishDate: V6_RELEASE,

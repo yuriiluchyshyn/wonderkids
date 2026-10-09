@@ -1,25 +1,15 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import { countWord } from '@/core/lang/uk';
-import { num, spoken, written } from '@/core/lang/numbers';
+import { spoken, written } from '@/core/lang';
 import { currencyOf } from '@/core/game/content/currency';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import { rewardForStep } from '../difficulty';
+import { mathTexts } from '../lang';
 import { buildNumberOptions } from './options';
 
-const TOYS = [
-  { emoji: '🧸', name: 'ведмедик' },
-  { emoji: '🚗', name: 'машинка' },
-  { emoji: '🪀', name: 'йо-йо' },
-  { emoji: '⚽', name: "м'яч" },
-  { emoji: '🪁', name: 'повітряний змій' },
-  { emoji: '🎨', name: 'фарби' },
-  { emoji: '🧩', name: 'пазл' },
-  { emoji: '🦖', name: 'динозаврик' },
-  { emoji: '🚂', name: 'потяг' },
-  { emoji: '🪅', name: 'піньята' },
-];
+/** The toys on sale; their names are the language's (`shop.toys`, in this order). */
+const TOYS = ['🧸', '🚗', '🪀', '⚽', '🪁', '🎨', '🧩', '🦖', '🚂', '🪅'];
 
 /** The text of a task as it is printed and as the voice reads it. */
 const texts = (text: string) => ({ prompt: written(text), speak: spoken(text) });
@@ -61,11 +51,14 @@ function payablePrice(step: number, values: readonly number[]): number {
  */
 export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> {
   const { step } = config;
+  const T = mathTexts(config.lang);
   const toy = pick(TOYS);
+  const name = T.shop.toys[TOYS.indexOf(toy)];
   const money = currencyOf(config.currency);
+  const words = T.money(money.id);
   const price = payablePrice(step, money.values);
   // «10 гривень» on the screen, «десять гривень» for the voice.
-  const sum = (n: number) => `${num(n, money.gender)} ${countWord(n, money.counted)}`;
+  const sum = words.sum;
   const reward = rewardForStep(step) + 1;
 
   if (step >= 7 && Math.random() < 0.5) {
@@ -74,15 +67,15 @@ export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> 
     return {
       id: uid('sc'),
       key: `change:${price}:${paid}`,
-      ...texts(`${toy.name[0].toUpperCase()}${toy.name.slice(1)} коштує ${sum(price)}. Ти даєш ${sum(paid)}. Яка решта?`),
+      ...texts(T.shop.change(name, sum(price), sum(paid))),
       reward,
       payload: {
         template: Mechanics.GridChoice,
         cols: 3,
-        stimulus: { emoji: toy.emoji, glyphs: [String(paid), '−', String(price), '=', '?'] },
-        options: buildNumberOptions(change, 6, 6).map((n) => ({ id: String(n), glyphs: [String(n), money.short], speak: spoken(sum(n)) })),
+        stimulus: { emoji: toy, glyphs: [String(paid), '−', String(price), '=', '?'] },
+        options: buildNumberOptions(change, 6, 6).map((n) => ({ id: String(n), glyphs: [String(n), words.short], speak: spoken(sum(n)) })),
         correctId: String(change),
-        hint: `Від ${paid} відніми ${price}. Можна дорахувати від ${price} до ${paid}.`,
+        hint: T.shop.changeHint(paid, price),
       },
     };
   }
@@ -96,16 +89,16 @@ export function generateShop(config: TaskConfig): TaskInstance<TemplatePayload> 
   const extras = [...near, ...others.filter((d) => !near.includes(d))].slice(0, Math.max(2, WALLET_SIZE - exact.length));
   return {
     id: uid('sh'),
-    key: `pay:${toy.name}:${price}`,
-    ...texts(`Купи іграшку: ${toy.name}. Ціна — ${sum(price)}. Поклади гроші на касу.`),
+    key: `pay:${toy}:${price}`,
+    ...texts(T.shop.buy(name, sum(price))),
     reward,
     payload: {
       template: Mechanics.CashTray,
-      item: { id: 'toy', emoji: toy.emoji },
+      item: { id: 'toy', emoji: toy },
       price,
       wallet: shuffle([...exact, ...extras]),
       currency: money.id,
-      hint: `Почни з найбільших грошей, які не перевищують ${price}, а потім додавай менші.`,
+      hint: T.shop.payHint(price),
     },
   };
 }

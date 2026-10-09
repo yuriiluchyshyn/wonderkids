@@ -1,0 +1,996 @@
+{
+  "theme": {
+    "galaxy": {
+      "name": "Galaktyka",
+      "mascot": "Gwiezdny Stateczek",
+      "goal": "Daleka Planeta",
+      "artifact": "Gwiazdka",
+      "artifactCount": {
+        "one": "{count} gwiazdka",
+        "few": "{count} gwiazdki",
+        "many": "{count} gwiazdek",
+        "other": "{count} gwiazdki"
+      },
+      "timeToken": "Kryształ czasu",
+      "dreamBuild": "Stacja Kosmiczna",
+      "treasure": {
+        "star": "Gwiazda",
+        "planet": "Planeta",
+        "comet": "Kometa",
+        "moon": "Księżyc",
+        "rocket": "Rakieta",
+        "satellite": "Satelita",
+        "ufo": "UFO",
+        "galaxy": "Galaktyka"
+      }
+    },
+    "unicorns": {
+      "name": "Jednorożce",
+      "mascot": "Czarodziejski Kucyk",
+      "goal": "Tęcza",
+      "artifact": "Lśniący Kryształ",
+      "artifactCount": {
+        "one": "{count} lśniący kryształ",
+        "few": "{count} lśniące kryształy",
+        "many": "{count} lśniących kryształów",
+        "other": "{count} lśniącego kryształu"
+      },
+      "timeToken": "Klepsydra",
+      "dreamBuild": "Zamek Marzeń",
+      "treasure": {
+        "crown": "Korona",
+        "wand": "Czarodziejska różdżka",
+        "rainbow": "Tęcza",
+        "orb": "Magiczna kula",
+        "stardust": "Gwiezdny pył",
+        "ring": "Czarodziejski pierścień",
+        "fairy": "Wróżka",
+        "lolly": "Czarodziejski lizak"
+      }
+    },
+    "cars": {
+      "name": "Auta",
+      "mascot": "Sportowe Auto Błyskawica",
+      "goal": "Flaga mety",
+      "artifact": "Złota Zębatka",
+      "artifactCount": {
+        "one": "{count} złota zębatka",
+        "few": "{count} złote zębatki",
+        "many": "{count} złotych zębatek",
+        "other": "{count} złotej zębatki"
+      },
+      "timeToken": "Klepsydra",
+      "dreamBuild": "Wyścigówka",
+      "treasure": {
+        "cup": "Puchar",
+        "flag": "Flaga mety",
+        "wrench": "Klucz płaski",
+        "gear": "Zębatka",
+        "tire": "Koło",
+        "light": "Światła drogowe",
+        "medal": "Medal",
+        "fuel": "Turbopaliwo"
+      }
+    },
+    "space": {
+      "name": "Kosmos",
+      "mascot": "Robot Astronauta",
+      "goal": "Planeta",
+      "artifact": "Kosmiczny Meteor",
+      "artifactCount": {
+        "one": "{count} kosmiczny meteor",
+        "few": "{count} kosmiczne meteory",
+        "many": "{count} kosmicznych meteorów",
+        "other": "{count} kosmicznego meteoru"
+      },
+      "timeToken": "Klepsydra",
+      "dreamBuild": "Rakieta",
+      "treasure": {
+        "ufo": "Latający spodek",
+        "planet": "Planeta",
+        "comet": "Kometa",
+        "alien": "Kosmita",
+        "moon": "Księżyc",
+        "satellite": "Satelita",
+        "star": "Gwiazda",
+        "telescope": "Teleskop"
+      }
+    },
+    "dinos": {
+      "name": "Dinozaury",
+      "mascot": "Dinozaurek Rex",
+      "goal": "Wulkan",
+      "artifact": "Prastara Muszla",
+      "artifactCount": {
+        "one": "{count} prastara muszla",
+        "few": "{count} prastare muszle",
+        "many": "{count} prastarych muszli",
+        "other": "{count} prastarej muszli"
+      },
+      "timeToken": "Klepsydra",
+      "dreamBuild": "Zaginiony Świat",
+      "treasure": {
+        "trex": "T-Rex",
+        "diplo": "Diplodok",
+        "bone": "Kość",
+        "egg": "Jajo dinozaura",
+        "shell": "Prastara muszla",
+        "volcano": "Wulkan",
+        "fern": "Paproć",
+        "footprint": "Odcisk łapy"
+      }
+    },
+    "underwater": {
+      "name": "Podwodny świat",
+      "mascot": "Wesoły Krabik",
+      "goal": "Skarb",
+      "artifact": "Morska Perła",
+      "artifactCount": {
+        "one": "{count} morska perła",
+        "few": "{count} morskie perły",
+        "many": "{count} morskich pereł",
+        "other": "{count} morskiej perły"
+      },
+      "timeToken": "Kryształ czasu",
+      "dreamBuild": "Łódź Podwodna",
+      "treasure": {
+        "fish": "Rybka",
+        "dolphin": "Delfin",
+        "octopus": "Ośmiornica",
+        "crab": "Krabik",
+        "shell": "Muszla",
+        "turtle": "Żółwik",
+        "treasure": "Piracki skarb",
+        "squid": "Kałamarnica"
+      }
+    },
+    "forest": {
+      "name": "Leśna bajka",
+      "mascot": "Mądra Sówka",
+      "goal": "Dojrzałe Jabłko",
+      "artifact": "Dojrzałe Jabłko",
+      "artifactCount": {
+        "one": "{count} dojrzałe jabłko",
+        "few": "{count} dojrzałe jabłka",
+        "many": "{count} dojrzałych jabłek",
+        "other": "{count} dojrzałego jabłka"
+      },
+      "timeToken": "Klepsydra",
+      "dreamBuild": "Domek na Drzewie",
+      "treasure": {
+        "apple": "Jabłuszko",
+        "mushroom": "Grzybek",
+        "acorn": "Żołądź",
+        "hedgehog": "Jeżyk",
+        "owl": "Sówka",
+        "pear": "Gruszka",
+        "squirrel": "Wiewiórka",
+        "sunflower": "Słonecznik"
+      }
+    },
+    "lego": {
+      "name": "Lego",
+      "mascot": "Ludzik Budowniczy",
+      "goal": "Zamek z klocków",
+      "artifact": "Klocek",
+      "artifactCount": {
+        "one": "{count} klocek",
+        "few": "{count} klocki",
+        "many": "{count} klocków",
+        "other": "{count} klocka"
+      },
+      "timeToken": "Klepsydra",
+      "dreamBuild": "Wielki Zamek z Klocków",
+      "treasure": {
+        "brick": "Klocek 2×4",
+        "red": "Czerwony klocek 2×2",
+        "yellow": "Żółta płytka",
+        "blue": "Niebieski skos dachowy",
+        "green": "Zielona płytka bazowa",
+        "wheel": "Koło",
+        "builder": "Minifigurka budowniczego",
+        "crane": "Dźwig"
+      }
+    },
+    "frozen": {
+      "name": "Lodowa bajka",
+      "mascot": "Bałwanek",
+      "goal": "Lodowy zamek",
+      "artifact": "Śnieżynka",
+      "artifactCount": {
+        "one": "{count} śnieżynka",
+        "few": "{count} śnieżynki",
+        "many": "{count} śnieżynek",
+        "other": "{count} śnieżynki"
+      },
+      "timeToken": "Kryształ czasu",
+      "dreamBuild": "Lodowy Pałac",
+      "treasure": {
+        "snowflake": "Śnieżynka",
+        "snowman": "Bałwanek",
+        "ice": "Kostka lodu",
+        "crystal": "Kryształ",
+        "heart": "Lodowe serduszko",
+        "mountain": "Śnieżna góra",
+        "deer": "Renifer",
+        "spark": "Lodowa iskierka"
+      }
+    },
+    "minecraft": {
+      "name": "Minecraft",
+      "mascot": "Świnka",
+      "goal": "Diament",
+      "artifact": "Szmaragd",
+      "artifactCount": {
+        "one": "{count} szmaragd",
+        "few": "{count} szmaragdy",
+        "many": "{count} szmaragdów",
+        "other": "{count} szmaragdu"
+      },
+      "timeToken": "Klepsydra",
+      "dreamBuild": "Forteca z Bloków",
+      "treasure": {
+        "pickaxe": "Diamentowy kilof",
+        "sword": "Miecz",
+        "axe": "Siekiera",
+        "tnt": "TNT",
+        "torch": "Pochodnia",
+        "apple": "Złote jabłko",
+        "bed": "Łóżko",
+        "diamond": "Diament"
+      }
+    }
+  },
+  "common": {
+    "back": "Wstecz",
+    "close": "Zamknij",
+    "logout": "Wyloguj",
+    "retry": "Spróbuj ponownie",
+    "play": "Graj",
+    "soon": "Wkrótce",
+    "all": "Wszystkie",
+    "done": "Gotowe!",
+    "cancel": "Anuluj"
+  },
+  "app": {
+    "loading": "Wczytujemy twoją przygodę",
+    "loadFailed": "Nie udało się wczytać twoich postępów.",
+    "loadFailedHint": "Sprawdź połączenie i spróbuj jeszcze raz."
+  },
+  "childLogin": {
+    "title": "Logowanie dla dzieci",
+    "description": "Logowanie do Pulsar Kids dla dzieci: wpisz swój nick i PIN od rodziców — i ruszaj na przygodę z matematyką, geografią i historią.",
+    "parents": "Logowanie dla rodziców",
+    "hello": "Cześć! Wpisz swój nick i PIN",
+    "nick": "Nick",
+    "nickPlaceholder": "np. marko_speed",
+    "pending": "Logujemy…",
+    "submit": "Gramy!",
+    "noAccount": "Nie masz konta? Poproś rodziców, żeby założyli ci profil 👨‍👩‍👧"
+  },
+  "parentLogin": {
+    "title": "Panel rodzica",
+    "description": "Logowanie do panelu rodzica Pulsar Kids: dodawaj dzieci, ustawiaj czas gry i rodzinne cele, śledź postępy.",
+    "hintAuth0": "Masz już konto w Pulsar Kids? Zaloguj się tym samym adresem e-mail — dzieci i postępy czekają na miejscu.",
+    "hintEmail": "Hasło nie jest potrzebne — na razie logujesz się samym adresem e-mail.",
+    "childLogin": "Logowanie dla dziecka",
+    "email": "Adres e-mail",
+    "noAccount": "Nie ma jeszcze konta dla adresu {email}.",
+    "didYouMean": "Może chodziło o {email}?",
+    "suggestionExists": " Takie konto już istnieje.",
+    "loginAs": "Zaloguj jako {email}",
+    "creating": "Tworzymy…",
+    "create": "Utwórz nowe konto dla {email}",
+    "fixEmail": "Popraw adres e-mail",
+    "pending": "Logujemy…",
+    "submit": "Zaloguj się",
+    "waitingHint": "Gdy tylko potwierdzisz adres, panel otworzy się tutaj sam.",
+    "confirmed": "Adres potwierdzony — zaloguj",
+    "otherEmail": "Zaloguj się innym adresem e-mail",
+    "notFinished": "Logowanie nie zostało ukończone. Spróbuj jeszcze raz.",
+    "signInOrUp": "Zaloguj się lub zarejestruj",
+    "redirecting": "Przechodzimy na stronę logowania…"
+  },
+  "auth": {
+    "error": {
+      "invalid_email": "To nie wygląda na adres e-mail. Sprawdź go, proszę.",
+      "invalid_pin": "Ten PIN nie pasuje. Spróbuj jeszcze raz albo zapytaj rodziców.",
+      "invalid_credentials": "Sprawdź, proszę, nick i PIN.",
+      "child_not_found": "Nie ma jeszcze takiego gracza. Poproś rodziców, żeby założyli ci konto 👨‍👩‍👧",
+      "network_error": "Nie udało się połączyć z serwerem. Czy internet działa?",
+      "login_failed": "Coś poszło nie tak po naszej stronie. Spróbuj jeszcze raz.",
+      "invalid_token": "Nie udało się potwierdzić logowania. Zaloguj się ponownie.",
+      "email_missing": "Ten sposób logowania nie przekazał nam adresu e-mail. Wybierz, proszę, inny.",
+      "email_not_verified": "Najpierw potwierdź adres e-mail: otwórz wiadomość od nas i kliknij link.",
+      "auth0_required": "Logowanie zostało zaktualizowane. Odśwież stronę i zaloguj się ponownie."
+    }
+  },
+  "who": {
+    "title": "Kto gra?",
+    "empty": "Nie ma jeszcze graczy",
+    "emptyHint": "Poproś dorosłego, żeby założył ci profil w panelu rodzica.",
+    "openParents": "Otwórz panel rodzica",
+    "today": "Kto dzisiaj gra?",
+    "hello": "Cześć, {name}!",
+    "enterCode": "Wpisz swój kod",
+    "erase": "Usuń"
+  },
+  "page": {
+    "world": "Mój świat",
+    "vault": "Skarbonka",
+    "audio": "Dźwięk i głos",
+    "audioBack": "Wróć do ustawień",
+    "game": "Gra",
+    "gameNotFound": "Nie znaleziono takiej przygody.",
+    "settings": "Ustawienia"
+  },
+  "hub": {
+    "title": "Wybierz planetę",
+    "hello": "Cześć, {name}! Wybierz planetę",
+    "galaxyTitle": "Galaktyka „{name}”",
+    "galaxySoon": "Już niedługo pojawią się tu planety! 🚀",
+    "card": {
+      "comingSoon": "{name}. Ta gra pojawi się już niedługo",
+      "newLabel": "Nowa gra",
+      "new": "✨ Nowość",
+      "difficulty": "Trudność: {stars} z 3 gwiazdek, {ages}",
+      "difficultyRange": "Trudność: od {from} do {to} z 3 gwiazdek, {ages}",
+      "freeCount": {
+        "one": "{count} zadanie · graj, ile chcesz",
+        "few": "{count} zadania · graj, ile chcesz",
+        "many": "{count} zadań · graj, ile chcesz",
+        "other": "{count} zadania · graj, ile chcesz"
+      },
+      "free": "Graj, ile chcesz",
+      "step": "Krok {step} / {total}",
+      "soonLabel": "{name}: wkrótce",
+      "playLabel": "Graj: {name}",
+      "pathLabel": "Otwórz ścieżkę: {name}",
+      "myPath": "Moja ścieżka"
+    },
+    "profile": {
+      "open": "Otwórz profil i cele",
+      "treasures": "Kolekcja skarbów: {found} z {total}",
+      "purse": "{name}: {count}. Otwórz sklep swojego świata"
+    },
+    "subjects": {
+      "head": "📚 Przedmioty",
+      "all": "Wszystkie przedmioty",
+      "one": "Przedmiot: {name}"
+    },
+    "filter": {
+      "allGames": "Wszystkie gry",
+      "games": "Filtr gier",
+      "stars": "Filtr trudności",
+      "starsSay": {
+        "one": "Trudność: {count} gwiazdka z trzech, {ages}",
+        "few": "Trudność: {count} gwiazdki z trzech, {ages}",
+        "many": "Trudność: {count} gwiazdek z trzech, {ages}",
+        "other": "Trudność: {count} gwiazdki z trzech, {ages}"
+      },
+      "starsLabel": "{stars} z 3 gwiazdek, {ages}"
+    },
+    "empty": "W tej galaktyce nie ma jeszcze planet. Wybierz inną!",
+    "galaxy": {
+      "say": "Galaktyka {name}",
+      "label": "Galaktyka: {name}. Wybierz inną",
+      "kicker": "Galaktyka",
+      "pick": "Wybierz galaktykę",
+      "soon": "wkrótce"
+    },
+    "groups": {
+      "title": "Które gry pokazać?",
+      "label": "Wybierz, które gry pokazać"
+    }
+  },
+  "ages": {
+    "range": "{from}–{to} lat",
+    "said": "od {from} do {to} lat"
+  },
+  "galaxy": {
+    "math": "Matematyka",
+    "geography": "Geografia",
+    "ecology": "Ekologia",
+    "history": "Historia",
+    "language": "Język",
+    "logic": "Logika",
+    "astronomy": "Astronomia",
+    "art": "Sztuka",
+    "science": "Przyroda",
+    "music": "Muzyka"
+  },
+  "path": {
+    "caption": "To twoja ścieżka — dotknij kroku, który masz już za sobą, żeby go powtórzyć. {chests} kryją skarby!",
+    "step": "Krok {n}",
+    "current": " (obecny)",
+    "chest": " (ukryty skarb)",
+    "locked": " (zamknięty)"
+  },
+  "drawer": {
+    "label": "Profil i skarbonka",
+    "inVault": "w skarbonce",
+    "goals": "🎯 Cele",
+    "goalReached": "Cel: {goal}. Osiągnięty! W skarbonce: {amount}.",
+    "goalPending": "Cel: {goal}. Jeszcze nie osiągnięty. Brakuje: {amount}.",
+    "familyGoal": "rodzinny cel",
+    "familyGoalTitle": "Rodzinny cel",
+    "goalLeft": "jeszcze {left} {emoji} ({have} / {need})",
+    "theme": "🎨 Motyw",
+    "sound": "🔈 Dźwięk",
+    "muted": "Dźwięk wyłączony",
+    "mute": "Wyłącz cały dźwięk",
+    "voiceOff": "Wyłącz głos",
+    "voiceIsOff": "Głos wyłączony",
+    "hideTts": "Ukryj przyciski głośnika",
+    "ttsHidden": "Przyciski głośnika ukryte",
+    "switchPlayer": "Zmień gracza"
+  },
+  "goal": {
+    "reached": "Osiągnięty! 🎁",
+    "default": {
+      "cookie": "Wspólne pieczenie ciasteczek 🍪",
+      "park": "Wyjazd do parku rozrywki 🎡",
+      "trip": "Wielka rodzinna przygoda 🎉"
+    }
+  },
+  "time": {
+    "rest": "Czas na odpoczynek",
+    "left": "Pozostały czas gry: {pct}%",
+    "label": "Czas gry"
+  },
+  "voiceToggle": {
+    "off": "Wyłącz głos",
+    "offOf": "Wyłącz głos: {label}",
+    "on": "Włącz głos",
+    "onOf": "Włącz głos: {label}",
+    "masterOff": "Włącz „Głos lektora” w ustawieniach"
+  },
+  "tip": {
+    "hub": {
+      "card": "To jest gra. Dotknij jej, żeby zacząć zabawę!",
+      "galaxy": "Tutaj możesz wybrać inny przedmiot: matematykę, język, logikę, geografię albo astronomię.",
+      "stars": "Gwiazdki pokazują, jak trudna jest gra. Jedna gwiazdka to najłatwiejsze gry, trzy — najtrudniejsze.",
+      "artifacts": "To twoja skarbonka: jest tu wszystko, co udało ci się zdobyć w grach. Dotknij jej, a trafisz do swojego świata — tam kupisz za to budynki i ozdoby.",
+      "treasures": "Tutaj leżą skarby, które znajdujesz w skrzyniach na swojej ścieżce.",
+      "profile": "To ty! Dotknij, żeby zobaczyć swoje cele i zmienić motyw.",
+      "time": "To twój czas na zabawę. Kiedy się skończy, przyjdzie pora na odpoczynek."
+    },
+    "how": {
+      "UI_GRID_CHOICE": "Żeby odpowiedzieć, dotknij właściwej karty.",
+      "UI_DRAG_MATCH": "Przeciągnij każdą kartę na jej miejsce. Albo dotknij karty, a potem miejsca dla niej.",
+      "UI_CHRONO_SEQUENCE": "Dotknij dwóch kart, żeby zamienić je miejscami. Kiedy wszystko jest po kolei, naciśnij „Gotowe”.",
+      "UI_MAP_PUZZLE": "Przeciągnij na mapę albo po prostu dotknij właściwego miejsca na niej.",
+      "UI_BALANCE_SCALE": "Przeciągnij odważnik na prawą szalkę wagi.",
+      "UI_SORTER_BINS": "Przeciągnij przedmiot we właściwe miejsce — albo po prostu dotknij tego miejsca.",
+      "UI_CASH_TRAY": "Dotykaj monet i banknotów, żeby położyć je na kasie.",
+      "UI_TANGRAM": "Przeciągnij każdą figurę na jej kontur.",
+      "UI_GRID_AREA": "Dotykaj kratek, żeby je zamalować, a potem naciśnij „Gotowe”.",
+      "UI_NUMBER_MAZE": "Dotknij sąsiedniej kratki, żeby zrobić krok.",
+      "UI_BUBBLE_POP": "Przebijaj bańki po kolei: dotknij tej, która ma być następna.",
+      "UI_DOT_TO_DOT": "Dotykaj gwiazdek po kolei albo prowadź palec od gwiazdki do gwiazdki — pojawi się między nimi linia.",
+      "UI_COLOR_MIX": "Dotknij dwóch farb, żeby wlać je do kociołka i zmieszać.",
+      "UI_LETTER_GRID": "Przeciągnij każdą literę na jej miejsce w tabeli. Albo dotknij litery, a potem pustej kratki."
+    },
+    "game": {
+      "tts": "Nie wiesz, co tu jest napisane? Dotknij głośnika, a przeczytam!",
+      "track": "Twój przyjaciel biegnie do mety. Każda dobra odpowiedź to krok naprzód!",
+      "dots": "Kółeczka pokazują, ile zadań jest w poziomie. Zamalowane masz już za sobą.",
+      "home": "Domek prowadzi z powrotem do wszystkich gier."
+    }
+  },
+  "coach": {
+    "label": "Podpowiedź",
+    "gotIt": "Rozumiem 👍"
+  },
+  "treasures": {
+    "title": "Kolekcja skarbów",
+    "notFound": "Jeszcze nie znaleziono",
+    "found": "Znalezione skarby:",
+    "all": "Cała kolekcja zebrana! 🎉",
+    "hint": "Otwieraj {chests} na ścieżce, żeby znaleźć nowe skarby!"
+  },
+  "vault": {
+    "inVault": "{name} w skarbonce",
+    "goals": "Rodzinne cele",
+    "hint": "{name} z każdego zadania wpada do wspólnego koszyka!"
+  },
+  "audio": {
+    "general": "🔈 Ogólne",
+    "effects": "Efekty dźwiękowe",
+    "voice": "Głos lektora",
+    "sections": "🎙️ Podpowiedzi głosowe według sekcji",
+    "sectionsHint": "Włącz lub wyłącz głos osobno dla każdej części.",
+    "sectionsOff": "Najpierw włącz „Głos lektora” powyżej.",
+    "ttsButtons": "🔊 Przyciski czytania na głos",
+    "ttsHint": "Ikona głośnika przy zadaniach i odpowiedziach tekstowych czyta je na głos. Wyłącz ją, żeby dziecko czytało samodzielnie.",
+    "ttsOn": "Pokazuj przyciski",
+    "ttsOff": "Wyłączone — czytamy sami",
+    "captions": "🔤 Podpisy",
+    "captionsHint": "Włączone — podpisy dla czytających. Wyłączone — same obrazki.",
+    "captionsOn": "Pokazuj",
+    "captionsOff": "Ukryte"
+  },
+  "voiceChannel": {
+    "selections": "Odczytywanie wyboru (wiek, przedmiot, trudność)",
+    "taskPrompt": "Czytanie zadania (np. „sześć plus jeden”)",
+    "taskIntro": "Wyjaśnienie na początku zadania",
+    "hint": "Głosowa podpowiedź po pomyłce"
+  },
+  "gender": {
+    "girl": "Dziewczynka",
+    "boy": "Chłopiec"
+  },
+  "speed": {
+    "off": "Wyłączone",
+    "verySlow": "Bardzo wolno",
+    "slow": "Wolno",
+    "medium": "Umiarkowanie",
+    "fast": "Szybko"
+  },
+  "celebration": {
+    "balloons": "Baloniki",
+    "balls": "Piłki",
+    "stars": "Gwiazdki",
+    "fireworks": "Fajerwerki",
+    "candy": "Cukierki"
+  },
+  "currency": {
+    "UAH": "Hrywna",
+    "EUR": "Euro",
+    "USD": "Dolar",
+    "GBP": "Funt",
+    "PLN": "Złoty",
+    "short": {
+      "UAH": "hrn",
+      "EUR": "€",
+      "USD": "$",
+      "GBP": "£",
+      "PLN": "zł"
+    },
+    "count": {
+      "UAH": {
+        "one": "{count} hrywna",
+        "few": "{count} hrywny",
+        "many": "{count} hrywien",
+        "other": "{count} hrywny"
+      },
+      "EUR": {
+        "one": "{count} euro",
+        "few": "{count} euro",
+        "many": "{count} euro",
+        "other": "{count} euro"
+      },
+      "USD": {
+        "one": "{count} dolar",
+        "few": "{count} dolary",
+        "many": "{count} dolarów",
+        "other": "{count} dolara"
+      },
+      "GBP": {
+        "one": "{count} funt",
+        "few": "{count} funty",
+        "many": "{count} funtów",
+        "other": "{count} funta"
+      },
+      "PLN": {
+        "one": "{count} złoty",
+        "few": "{count} złote",
+        "many": "{count} złotych",
+        "other": "{count} złotego"
+      }
+    }
+  },
+  "child": {
+    "defaultName": "Przyjacielu"
+  },
+  "parent": {
+    "signedInAs": "Zalogowano jako {email}",
+    "saving": "Zapisujemy…",
+    "savedBar": "✅ Zapisano",
+    "saveBar": "💾 Zapisz zmiany",
+    "allSaved": "Wszystko zapisane",
+    "logoutBar": "🚪 Wyloguj",
+    "saved": "Zapisano!",
+    "save": "Zapisz zmiany",
+    "logout": "Wyloguj się z konta",
+    "pickChild": "Wybierz dziecko powyżej albo dodaj nowe, żeby ustawić jego grę.",
+    "lang": {
+      "title": "🌐 Języki",
+      "hint": "Język gry, głosu i tego panelu można wybrać osobno — na przykład gra po ukraińsku, a głos po angielsku.",
+      "parent": "Język panelu rodzica",
+      "game": "Język gry dziecka",
+      "voice": "Język głosu dla dziecka"
+    },
+    "profile": {
+      "title": "👤 Profil dziecka",
+      "openGame": "Otwórz grę dziecka",
+      "openFailed": "Nie udało się otworzyć gry. Jeśli dziecko zostało dodane przed chwilą, najpierw kliknij „Zapisz zmiany”.",
+      "openHint": "Gra otworzy się w nowej karcie, od razu na koncie dziecka — bez wpisywania nicku i PIN-u.",
+      "name": "Imię",
+      "nameLabel": "Imię dziecka",
+      "nick": "Unikalny nick (@nick)",
+      "nickLabel": "Unikalny nick dziecka",
+      "nickShort": "Unikalny nick",
+      "nickHint": "Tylko małe litery, cyfry i „_” (3–12 znaków). Widoczny w panelu profilu.",
+      "pin": "PIN do logowania (3–4 cyfry)",
+      "pinPlaceholder": "np. 1234",
+      "pinLabel": "PIN dziecka",
+      "pinHint": "Dziecko loguje się nickiem i tym PIN-em.",
+      "birth": "Data urodzenia",
+      "birthMonth": "Miesiąc urodzenia",
+      "birthYear": "Rok urodzenia",
+      "age": "Wiek liczony jest automatycznie: {age} l.",
+      "gender": "Płeć"
+    },
+    "audio": {
+      "title": "🔊 Dźwięk, głos i podpisy",
+      "hint": "Wszystkie dźwięki, podpowiedzi głosowe i podpisy w jednym miejscu.",
+      "open": "Otwórz ustawienia dźwięku"
+    },
+    "theme": {
+      "title": "🎨 Motyw (świat)"
+    },
+    "rollback": {
+      "title": "🏎️ Cofanie się towarzysza",
+      "hint": "Gdy dziecko długo nie odpowiada, towarzysz powoli się cofa. Za każdy pełny krok wstecz w poziomie pojawia się jedno dodatkowe zadanie (najwyżej trzy)."
+    },
+    "tips": {
+      "title": "💡 Podpowiedzi o przyciskach",
+      "hint": "Przy pierwszym spotkaniu gra tłumaczy dziecku, do czego służy każdy przycisk. Podpowiedź zamknięta przez dziecko już nie wraca. Przeczytane podpowiedzi: {count}.",
+      "reset": "Pokaż ponownie"
+    },
+    "celebration": {
+      "title": "🎉 Świętowanie zwycięstwa"
+    },
+    "grid": {
+      "title": "🔢 Siatka odpowiedzi",
+      "label": "Siatka odpowiedzi",
+      "hint": "Im więcej odpowiedzi, tym trudniej zgadywać na chybił trafił."
+    },
+    "facts": {
+      "title": "💡 Ciekawostki",
+      "hint": "Po dobrej odpowiedzi gra opowiada krótką ciekawostkę o tym, co dziecko właśnie zrobiło, i czeka, aż zostanie przeczytana. Po wyłączeniu następne zadanie zaczyna się od razu.",
+      "on": "Opowiadaj ciekawostki",
+      "off": "Bez ciekawostek"
+    },
+    "money": {
+      "title": "💰 Pieniądze w grze „Sklep”",
+      "hint": "Jakimi monetami i banknotami dziecko płaci w sklepie.",
+      "auto": "Dopóki nic nie wybierzesz, pieniądze odpowiadają językowi gry: hrywny, dolary albo złote.",
+      "chosen": "Pieniądze zostały wybrane ręcznie — zmiana języka już ich nie zmieni."
+    },
+    "time": {
+      "title": "⛽ Czas przed ekranem",
+      "hint": "Dziecko widzi tylko wskaźnik paliwa w stylu motywu — bez cyfrowych liczników. Gdy paliwo się kończy, pojawia się krótka animacja, a potem spokojny odpoczynek.",
+      "session": "Długość sesji (min)",
+      "sessionLabel": "Długość sesji w minutach",
+      "minutes": "{n} min",
+      "cooldown": "Przerwa między sesjami (min)",
+      "cooldownLabel": "Długość przerwy w minutach",
+      "daily": "Limit dzienny (min)",
+      "dailyLabel": "Limit dzienny w minutach",
+      "refill": "Uzupełnij czas teraz",
+      "refillHint": "Od razu przywraca dziecku pełny wskaźnik i kończy przerwę — niezależnie od zapisania innych zmian.",
+      "resting": "😴 Dziecko odpoczywa. Do następnej gry: {min} min {sec} s",
+      "refilled": "Czas uzupełniony!",
+      "refillButton": "Uzupełnij czas gry"
+    },
+    "goals": {
+      "title": "🎯 Rodzinne cele",
+      "hint": "Ile artefaktów (z dowolnych zadań) trzeba zebrać do wspólnego koszyka, żeby zdobyć nagrodę.",
+      "add": "Dodaj cel",
+      "reward": "Nagroda",
+      "rewardPlaceholder": "Np. Wspólne pieczenie ciasteczek 🍪",
+      "amount": "Ile {artifact} trzeba zebrać",
+      "amountLabel": "Ile artefaktów trzeba zebrać na nagrodę: {reward}",
+      "removeLabel": "Usuń cel: {reward}",
+      "unnamed": "bez nazwy"
+    },
+    "games": {
+      "title": "🪜 Gry i kroki",
+      "hint": "Otwórz galaktykę: pole wyboru pokazuje grę dziecku albo ją chowa, a liczba to krok, na którym dziecko teraz jest. Gry językowe są pogrupowane — cały język można wyłączyć jednym polem.",
+      "stepLabel": "Krok dla {name} (maks. {max})",
+      "showLabel": "Pokazuj grę: {name}",
+      "showSet": "Pokazuj wszystkie gry: {name}",
+      "reset": "Wyzeruj wszystkie postępy"
+    },
+    "password": {
+      "title": "🔑 Hasło",
+      "sent": "Wiadomość z linkiem została wysłana na {email}. Otwórz ją i ustaw nowe hasło. Nie widzisz jej? Sprawdź folder „Spam”.",
+      "failed": "Nie udało się wysłać wiadomości. Spróbuj ponownie za minutę.",
+      "hint": "Wyślemy na {email} wiadomość z linkiem do ustawienia nowego hasła.",
+      "sending": "Wysyłamy…",
+      "again": "Wyślij ponownie",
+      "change": "Zmień hasło"
+    }
+  },
+  "cm": {
+    "nick": {
+      "idle": "Tylko małe litery, cyfry i „_” (3–12 znaków).",
+      "invalid": "✋ Nick ma mieć 3–12 znaków: małe litery, cyfry, „_”.",
+      "checking": "⏳ Sprawdzamy, czy nick jest wolny…",
+      "available": "✅ Nick jest wolny!",
+      "taken": "🙈 Ten nick jest już zajęty. Spróbuj innego.",
+      "error": "⚠️ Nie udało się sprawdzić online — zapiszemy tak, jak jest."
+    },
+    "title": "👨‍👩‍👧 Dzieci",
+    "hint": "Do {max} dzieci na konto. Dotknij dziecka, żeby edytować jego ustawienia poniżej.",
+    "edit": "Edytuj: {name}",
+    "editing": "edytowane",
+    "remove": "Usuń: {name}",
+    "max": "Najwyżej 5 dzieci",
+    "add": "Dodaj dziecko",
+    "new": "Nowe dziecko",
+    "namePlaceholder": "np. Marek",
+    "pinOk": "Dziecko loguje się nickiem i tym PIN-em.",
+    "pinBad": "✋ PIN ma mieć 3 lub 4 cyfry.",
+    "create": "Utwórz profil",
+    "removeTitle": "Usunąć dziecko?",
+    "removeHint": "Wszystkie postępy tego profilu zostaną utracone. Tej czynności nie można cofnąć.",
+    "removeYes": "Tak, usuń"
+  },
+  "game": {
+    "tasksDone": {
+      "one": "Zadanie wykonane.",
+      "few": "Wykonano wszystkie {count} zadania.",
+      "many": "Wykonano wszystkie {count} zadań.",
+      "other": "Wykonano wszystkie {count} zadania."
+    },
+    "gift": {
+      "small": "Mały prezent!",
+      "big": "Duży prezent!",
+      "biggest": "Największy prezent!"
+    },
+    "hint": {
+      "with": "Oto podpowiedź! {how}",
+      "plain": "Oto podpowiedź! Popatrzmy razem.",
+      "label": "🧚 Podpowiedź",
+      "back": "Wróć do odpowiedzi"
+    },
+    "win": {
+      "title": {
+        "boy": "Jesteś niesamowity!",
+        "girl": "Jesteś niesamowita!"
+      },
+      "collected": "Zebrano: {amount}.",
+      "collectedWithKeys": "Zebrano: {amount} i {keys} wiedzy.",
+      "great": "Świetna robota!",
+      "earned": "Zebrano +{n} {emoji}",
+      "resident": "W twoim świecie zamieszkał nowy mieszkaniec:",
+      "newTreasure": "Nowy skarb w kolekcji: ",
+      "treasure": "Skarb: ",
+      "next": "Następny poziom!",
+      "again": "Jeszcze raz!",
+      "exit": "Do przygód"
+    },
+    "moduleNotFound": "Nie znaleziono modułu 🙈",
+    "back": "Wróć do przygód",
+    "progress": "Zadanie {n} z {total}",
+    "intro": {
+      "close": "Zamknij i zacznij",
+      "start": "Zaczynamy!"
+    }
+  },
+  "world": {
+    "keyCount": {
+      "one": "{count} klucz",
+      "few": "{count} klucze",
+      "many": "{count} kluczy",
+      "other": "{count} klucza"
+    },
+    "station": {
+      "open": "{name}. Już otwarte! {about}",
+      "closedPlanet": "{name}. {about} Ta planeta jest jeszcze zamknięta.",
+      "price": {
+        "one": "Otwarcie kosztuje {count} klucz.",
+        "few": "Otwarcie kosztuje {count} klucze.",
+        "many": "Otwarcie kosztuje {count} kluczy.",
+        "other": "Otwarcie kosztuje {count} klucza."
+      },
+      "saving": "{name}. {about} {price} Zbierz jeszcze {missing}: klucze dostaje się za nowe kroki w każdej grze.",
+      "ready": "{name}. {about} {price} Można otwierać!",
+      "opened": "{name}. Otwarte!",
+      "unlock": "Otwórz"
+    },
+    "stations": {
+      "title": "Stacje wiedzy",
+      "hint": "Stacje otwiera się kluczami wiedzy {key}. Klucz dostaje się za każdy nowy stopień w każdej grze. Żeby polecieć dalej z planety {planet}, otwórz co najmniej {need}.",
+      "closed": "Planeta {planet} jest jeszcze zamknięta — jej stacje otworzą się, gdy tu dolecisz. Na razie otwieraj stacje na planecie {frontier}."
+    },
+    "keys": {
+      "label": "Klucze wiedzy: {count}",
+      "about": {
+        "one": "Masz {count} klucz wiedzy. Klucz dostaje się za każdy nowy krok w każdej grze. Kluczami otwiera się stacje wiedzy.",
+        "few": "Masz {count} klucze wiedzy. Klucz dostaje się za każdy nowy krok w każdej grze. Kluczami otwiera się stacje wiedzy.",
+        "many": "Masz {count} kluczy wiedzy. Klucz dostaje się za każdy nowy krok w każdej grze. Kluczami otwiera się stacje wiedzy.",
+        "other": "Masz {count} klucza wiedzy. Klucz dostaje się za każdy nowy krok w każdej grze. Kluczami otwiera się stacje wiedzy."
+      }
+    },
+    "residents": {
+      "title": "Mieszkańcy",
+      "coming": "Ktoś jeszcze jest w drodze",
+      "comingSay": "Ktoś jeszcze jest w drodze do ciebie. To niespodzianka!"
+    },
+    "system": {
+      "label": "Układ Słoneczny",
+      "close": "Zamknij Układ Słoneczny",
+      "showAll": "Pokaż cały Układ Słoneczny",
+      "zoomIn": "Przybliż",
+      "zoomOut": "Oddal",
+      "closeStory": "Zamknij i zatrzymaj opowieść",
+      "builtOf": "Zbudowano {have} z {total}",
+      "notReached": "🔒 Tu jeszcze nie dotarła twoja rakieta",
+      "more": "Opowiedz jeszcze ✨"
+    },
+    "sun": {
+      "name": "Słońce",
+      "reached": "Słońce zdobyte! Cały Układ Słoneczny jest twój.",
+      "reachedNext": "Słońce zdobyte! Cały Układ Słoneczny jest twój. Dalej czeka na ciebie nowa galaktyka.",
+      "goal": "Słońce to cel twojej podróży. Żeby do niego dotrzeć, przejdź wszystkie osiem planet."
+    },
+    "item": {
+      "builtYes": "{name}. Już zbudowano!",
+      "builtNo": "{name}. Jeszcze nie zbudowano.",
+      "ariaBuilt": "{name}: zbudowano",
+      "ariaNotBuilt": "{name}: jeszcze nie zbudowano",
+      "portNote": "Kosmodrom otwiera drogę na następną planetę.",
+      "owned": "{name}. Już stoi na twojej planecie.",
+      "locked": "{name}. To największe marzenie! Najpierw zbuduj wszystkie inne budowle i kosmodrom.",
+      "saving": "{name}. Kosztuje {cost}. Masz {balance}. Zbierz jeszcze {missing} — i można budować. {how}",
+      "howToEarn": "Żeby je zebrać, graj w dowolną grę: za każde wykonane zadanie jest nagroda.",
+      "affordable": "{name}. Kosztuje {cost}. Można budować!",
+      "closedPlanet": "{name}. Ta planeta jest jeszcze zamknięta.",
+      "sellWarn": "Jeśli to sprzedasz, wróci do ciebie {back}, a nie {cost}. To mniej, niż kosztowało. Jeśli często kupować i sprzedawać, skarbów będzie coraz mniej. Dobrze się zastanów!",
+      "built": "{name}. Zbudowano!"
+    },
+    "need": {
+      "port": {
+        "text": "Kosmodrom",
+        "how": "Kosmodrom to budowla. Jest na liście „Budowle” na planecie {planet} i kosztuje {cost} {artifact}. Dostaje się je za każde wykonane zadanie w grach.",
+        "go": "Pokaż kosmodrom"
+      },
+      "built": {
+        "text": "Budowle i ozdoby",
+        "how": "Zbuduj wszystko z list „Budowle” i „Ozdoby” na planecie {planet}: jest już {have} z {need}. Buduje się za {artifact} — dostaje się je za wykonane zadania.",
+        "go": "Do budowli i ozdób"
+      },
+      "stations": {
+        "text": "Stacje wiedzy",
+        "how": "Otwórz stacje wiedzy na planecie {planet}: jest już {have} z {need}. Otwiera się je kluczami wiedzy 🗝️ — klucz dostaje się za każdy nowy stopień w każdej grze.",
+        "go": "Do stacji"
+      },
+      "residents": {
+        "text": "Mieszkańcy",
+        "how": "Mieszkańcy przychodzą z prezentami. Prezent czeka na co piątym stopniu ścieżki w każdej grze. Jest już {have} z {need}."
+      },
+      "treasures": {
+        "text": "Skarby",
+        "how": "Skarby leżą w skrzyniach na ścieżce: skrzynia czeka na co trzecim stopniu gry, a w każdej jest nowy skarb. Jest już {have} z {need}."
+      },
+      "done": "Gotowe!",
+      "notDone": "Jeszcze nie gotowe.",
+      "doneHow": "Gotowe! {how}",
+      "tip": "Dotknij obrazka — opowiem, jak to zdobyć."
+    },
+    "needs": {
+      "first": "🔒 Najpierw — planeta {planet}",
+      "open": "🚀 Droga dalej jest otwarta!",
+      "toSun": "🚀 Żeby polecieć do Słońca",
+      "to": "🚀 Żeby polecieć dalej: {planet}"
+    },
+    "hint": {
+      "closed": "Ta planeta jest jeszcze zamknięta.",
+      "canBuild": "Można już zbudować: {name}!",
+      "canBuildLead": "Można już zbudować:",
+      "tap": "Dotknij czegokolwiek na planecie albo na liście poniżej."
+    },
+    "where": "{planet} · galaktyka {galaxy}",
+    "purse": "Można wydać: {balance}",
+    "planet": {
+      "ariaDone": "{name}: wszystko zbudowano",
+      "ariaOpen": "{name}: otwarta",
+      "ariaClosed": "{name}: jeszcze zamknięta",
+      "notYet": "{name}. Tu jeszcze nie można. Najpierw zrób wszystko na planecie {frontier} i zbuduj tam kosmodrom.",
+      "done": "{name}. Tu już wszystko zbudowano!",
+      "number": "{name}. Planeta numer {n} z {total} w drodze do Słońca.",
+      "spinLeft": "Obróć planetę w lewo",
+      "spinRight": "Obróć planetę w prawo"
+    },
+    "fly": {
+      "say": "Lecimy! Następna planeta to {planet}.",
+      "button": "🚀 Lecimy: {planet}"
+    },
+    "bar": {
+      "owned": "Już stoi na twojej planecie ✓",
+      "locked": "To największe marzenie! Najpierw zbuduj wszystkie inne budowle i kosmodrom.",
+      "saving": "Kosztuje {cost} {artifact} · masz {balance} · zbierz jeszcze {missing} {artifact}",
+      "affordable": "Wymienić {cost} {artifact}?",
+      "earn": "{artifact} dostaje się za każde wykonane zadanie w każdej grze.",
+      "goal": "Albo zbieraj dalej na „{reward}”:",
+      "goalEnough": "na cel wystarczy także po zakupie",
+      "goalShortAfter": "po zakupie zabraknie {n}",
+      "goalShort": "teraz brakuje {now}, po zakupie — {after}",
+      "sellNote": "Wróci {back} {artifact}, a nie {cost} — to mniej, niż kosztowało.",
+      "build": "Zbuduj",
+      "play": "Graj i zbieraj",
+      "sellYes": "Tak, sprzedaj",
+      "sellNo": "Zostaw",
+      "sellFor": "Sprzedaj za"
+    },
+    "shelf": {
+      "buildings": "🏗️ Budowle",
+      "decor": "🌷 Ozdoby"
+    }
+  },
+  "treasure": {
+    "found": "Znaleziono skarb: {name}",
+    "new": "🎉 Nowy skarb!",
+    "one": "✨ Skarb!",
+    "collection": "Moja kolekcja"
+  },
+  "rest": {
+    "cars": {
+      "title": "Bajka: Pit stop!",
+      "message": "Nasze sportowe auto przejechało wspaniały dystans i pora, żeby odpoczęło! Czas pobiegać po pokoju albo napić się pysznego soku. Wróć za jakiś czas — bak znów będzie pełny!"
+    },
+    "space": {
+      "title": "Bajka: Lądowanie na stacji!",
+      "message": "Rakieta łagodnie przycumowała do stacji i zapaliła nocną lampkę. Odpocznij chwilę. Wróć za jakiś czas — i polecimy dalej!"
+    },
+    "unicorns": {
+      "title": "Bajka: Sen kryształu!",
+      "message": "Kryształ otulił się miękką chmurką i zasnął, żeby odnowić tęczę. Wróć za jakiś czas — i znów zabłyśnie!"
+    },
+    "default": {
+      "title": "Bajka: Czas na odpoczynek!",
+      "message": "{mascot} ma za sobą dziś mnóstwo świetnej pracy i idzie odpocząć. Czas pobiegać po pokoju albo napić się wody. Wróć za jakiś czas!"
+    },
+    "playOn": "Gramy dalej!",
+    "goRest": "Idę odpocząć"
+  },
+  "tpl": {
+    "clock": "Zegar",
+    "worldMap": "Mapa świata",
+    "rows": {
+      "one": "{count} rząd · {cols} w nim",
+      "few": "{count} rzędy · po {cols} w każdym",
+      "many": "{count} rzędów · po {cols} w każdym",
+      "other": "{count} rzędu · po {cols} w każdym"
+    },
+    "dot": "Kółeczko",
+    "oldest": "najdawniejsze",
+    "newest": "najnowsze",
+    "seqGuide": "Podpowiedź: cała kolejność po kolei",
+    "checkOrder": "Sprawdź kolejność",
+    "silhouette": "Sylwetka: {figure}",
+    "shape": "Figura",
+    "fuel": "Paliwo {pct}%",
+    "wrongBin": "Ojej, tutaj nie pasuje. Spróbuj w innym miejscu!",
+    "cell": "Kratka {n}",
+    "checkArea": "Sprawdź zagrodę",
+    "tooMuch": "To za dużo! Zabierz trochę z powrotem.",
+    "takeBack": "Zabierz {amount}",
+    "cube": "Klocek",
+    "repeat": "Powtórz zadanie",
+    "sky": "Gwiaździste niebo",
+    "star": "Gwiazda {label}",
+    "cauldron": "Kociołek",
+    "paint": "Farba: {name}",
+    "pie": "Zamalowano {filled} z {total}",
+    "readAloud": "Przeczytaj na głos: {text}"
+  },
+  "map": {
+    "north_america": "Ameryka Północna",
+    "south_america": "Ameryka Południowa",
+    "europe": "Europa",
+    "africa": "Afryka",
+    "asia": "Azja",
+    "australia": "Australia",
+    "antarctica": "Antarktyda",
+    "pacific": "Ocean Spokojny",
+    "atlantic": "Ocean Atlantycki",
+    "indian": "Ocean Indyjski",
+    "arctic": "Ocean Arktyczny",
+    "southern": "Ocean Południowy"
+  }
+}

@@ -1,24 +1,39 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import { V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
+import type { ModuleTexts } from '@/core/game/kernel/types';
+import { DEFAULT_LANG, type LangCode } from '@/core/lang';
+import { I18N_RELEASE, V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { EN } from './content/en';
+import { PL } from './content/pl';
 import { UK } from './content/uk';
+import { languageTexts } from './lang';
+import type { PackView, Stage } from './lang/types';
 import { GAME_KINDS, LANGUAGE_STEPS, STAGE, type GameKind, type LangPack } from './tasks';
+
+export const PACKS: LangPack[] = [UK, EN, PL];
+
+const view = (pack: LangPack, lang: LangCode = DEFAULT_LANG): PackView => ({ lang: pack.lang, native: pack.lang === lang, syllables: pack.syllables, byEar: pack.byEar });
+
+/** The cards of every pack in a language of the screen; a card's name stays in the pack's own language. */
+const textsIn = (lang: LangCode): ModuleTexts => {
+  const T = languageTexts(lang);
+  return {
+    title: T.title,
+    games: Object.fromEntries(
+      PACKS.flatMap((pack) => GAME_KINDS.map((kind) => [`${pack.prefix}${kind}`, { blurb: pack.cards[kind].blurb, ...T.card(view(pack, lang), kind), label: pack.cards[kind].label }])),
+    ),
+    groups: Object.fromEntries(PACKS.map((pack) => [pack.lang, T.packName(pack.lang)])),
+  };
+};
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'language',
+  texts: { en: textsIn('en'), pl: textsIn('pl') },
   title: 'Мова',
   icon: '🔤',
   accent: '#f59e0b',
 };
 
-/**
- * Every language the galaxy teaches: the same games are made for each
- * pack. To add a language, add its pack to `content/` and list it here.
- */
-export const PACKS: LangPack[] = [UK, EN];
-
-/** What every language game has in common, whatever the language. */
 const COMMON: Record<GameKind, Pick<GameCard, 'mechanics' | 'tasksPerLevel'>> = {
   // A table with many letters to place is a long task: five to a level.
   alphabet: { mechanics: Mechanics.LetterGrid, tasksPerLevel: 5 },
@@ -30,56 +45,32 @@ const COMMON: Record<GameKind, Pick<GameCard, 'mechanics' | 'tasksPerLevel'>> = 
   sentences: { mechanics: Mechanics.ChronoSequence, tasksPerLevel: 5 },
 };
 
-/** What the child is told when the path reaches a new stage of a game: [step, text]. */
-function stageIntros(kind: GameKind, uk: boolean): [step: number, text: string][] {
-  switch (kind) {
-    case 'alphabet':
-      return [
-        [STAGE.abcPlain, 'Тепер у порожніх клітинках немає підказок. Згадай, яка літера за якою стоїть!'],
-        [STAGE.abcLong, 'Таблиця стала більшою: тепер у ній три рядки літер.'],
-        [STAGE.abcSpot, 'Тепер усі літери на місці — але дві з них помінялися місцями. Знайди й торкнись однієї з них!'],
-        [STAGE.abcWhole, uk ? 'Перед тобою вся абетка! Постав на місця всі літери, яких бракує.' : 'Перед тобою вся англійська абетка! Постав на місця всі літери, яких бракує.'],
-      ];
-    case 'bubbles':
-      return [
-        [STAGE.parts, uk ? 'Тепер у бульбашках — склади. Лопай їх по порядку, щоб вийшло слово!' : 'Тепер збираємо короткі англійські слова. Лопай літери так, як вони стоять у слові!'],
-        [STAGE.spell, uk ? 'А тепер складаємо слова з окремих літер. Лопай літеру за літерою!' : 'Слова стають довшими. Лопай літеру за літерою — зліва направо!'],
-        [STAGE.strays, uk ? 'Тепер слово не написане — послухай його і склади сам. Обережно: серед бульбашок є зайві літери!' : 'Обережно: серед бульбашок тепер є зайві літери. Вони не лопаються!'],
-      ];
-    case 'chain':
-      return [
-        [STAGE.sameLetter, 'Тепер з’єднуємо два слова, які починаються на однакову літеру.'],
-        [STAGE.halves, 'Слово розпалося на дві половинки! Знайди для кожного початку його закінчення.'],
-        [STAGE.assoc, 'Тепер шукаємо слова, пов’язані за змістом: що з чим буває разом?'],
-      ];
-    case 'sentences':
-      return [
-        [STAGE.three, 'Речення стають довшими: тепер у них три слова.'],
-        [STAGE.long, 'А тепер — справжні великі речення з чотирьох і п’яти слів!'],
-      ];
-    default:
-      return [];
-  }
-}
+/** The steps of a path where a new kind of task begins, and what is said there. */
+const STAGES: Record<GameKind, Stage[]> = {
+  alphabet: ['abcPlain', 'abcLong', 'abcSpot', 'abcWhole'],
+  bubbles: ['parts', 'spell', 'strays'],
+  chain: ['sameLetter', 'halves', 'assoc'],
+  rhymes: [],
+  sentences: ['three', 'long'],
+};
 
-/** The cards of one language: its own titles and texts on top of the common settings. */
 function cardsOf(pack: LangPack): GameCard[] {
-  return GAME_KINDS.map((kind) => {
-    const intros = stageIntros(kind, pack.lang === 'uk');
-    return {
-      id: `${pack.prefix}${kind}`,
-      gameId: `language_${pack.lang}_${kind}`,
-      ...pack.cards[kind],
-      ...COMMON[kind],
-      introFor: (step: number) => intros.find(([from]) => from === step)?.[1],
-      steps: LANGUAGE_STEPS,
-      // The hub's language filter: one flag per pack.
-      group: { id: pack.lang, icon: pack.flag, label: pack.name },
-      publishDate: V6_RELEASE,
-      hasText: true,
-    };
-  });
+  return GAME_KINDS.map((kind) => ({
+    id: `${pack.prefix}${kind}`,
+    // The words about a pack are there in every language of the screen (`lang/`).
+    langs: languageTexts.langs,
+    gameId: `language_${pack.lang}_${kind}`,
+    ...pack.cards[kind],
+    ...COMMON[kind],
+    introFor: (step: number, lang?: LangCode) => {
+      const at = STAGES[kind].find((stage) => STAGE[stage] === step);
+      return at && languageTexts(lang).stage(at, view(pack, lang));
+    },
+    steps: LANGUAGE_STEPS,
+    group: { id: pack.lang, icon: pack.flag, label: pack.name },
+    publishDate: pack.lang === 'pl' ? I18N_RELEASE : V6_RELEASE,
+    hasText: true,
+  }));
 }
 
-/** The games of this subject — the same set per language, in the order the hub lists them. */
 export const GAMES: GameCard[] = PACKS.flatMap(cardsOf);

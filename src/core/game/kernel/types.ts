@@ -1,3 +1,4 @@
+import { DEFAULT_LANG, type LangCode } from '@/core/lang';
 import type { CurrencyId } from '../content/currency';
 import type { ComponentType } from 'react';
 import type { Theme } from '@/core/theme/theme.types';
@@ -17,7 +18,6 @@ import { Mechanics } from './mechanics';
 /** Shared "all" filter presentation for the subject picker. */
 export const ALL_META = {
   icon: '✨',
-  subjectLabel: 'Усі',
 } as const;
 
 /**
@@ -40,6 +40,12 @@ export interface TaskConfig {
   choicesCount?: number;
   /** The money a shop task counts in (the parent's setting). Default: hryvnias. */
   currency?: CurrencyId;
+  /**
+   * The language the task's words are in. The shell makes every task in the
+   * language of the child's game — and, when the voice speaks another one, once
+   * more in that (`core/game/kernel/languages.ts`). Default: Ukrainian.
+   */
+  lang?: LangCode;
 }
 
 /**
@@ -72,7 +78,18 @@ export interface TaskInstance<TPayload = unknown> {
   /** Artifacts awarded for completing this task. */
   reward: number;
   payload: TPayload;
+  /**
+   * The same task in the language of the VOICE, when that is not the language
+   * on the screen: what is said about a task — its prompt, its hint, its fact —
+   * is read off this one (`saidOf(task)`). Set by the shell, never by a module.
+   */
+  voice?: TaskInstance<TPayload>;
+  /** The language this task's words are in. Set by the shell. */
+  lang?: LangCode;
 }
+
+/** The task as the voice knows it: its twin in the voice's language, or the task itself. */
+export const saidOf = <T extends TaskInstance>(task: T): T => (task.voice as T | undefined) ?? task;
 
 /** What the voice says for a task: its spoken form, or the written prompt. */
 export const spokenPrompt = (task: Pick<TaskInstance, 'prompt' | 'speak'>): string => task.speak ?? task.prompt;
@@ -112,10 +129,10 @@ export { Mechanics };
 export type MechanicsType = Mechanics;
 
 /** Age band each difficulty targets. */
-export const DIFFICULTY_AGES: Record<Difficulty, string> = {
-  1: '4–6 років',
-  2: '6–8 років',
-  3: '8–10 років',
+export const DIFFICULTY_AGES: Record<Difficulty, [from: number, to: number]> = {
+  1: [4, 6],
+  2: [6, 8],
+  3: [8, 10],
 };
 
 /**
@@ -138,6 +155,26 @@ export interface GameGroup {
   label: string;
 }
 
+/** The words of one game's card in a language. What is left out stays as the card has it. */
+export interface GameTexts {
+  label: string;
+  blurb: string;
+  intro?: string;
+  /** The caption of the animated intro picture (`demo.caption`). */
+  demoCaption?: string;
+}
+
+/** The words of a module's cards in a language: `texts.en`, `texts.pl`. */
+export interface ModuleTexts {
+  title: string;
+  games: Record<string, GameTexts>;
+  /** The names of the sets its games come in, by group id. */
+  groups?: Record<string, string>;
+}
+
+/** Is this game's content there in `lang`? */
+export const speaks = (sub: Pick<SubCategory, 'langs'>, lang: LangCode): boolean => (sub.langs ?? [DEFAULT_LANG]).includes(lang);
+
 /** A selectable card category inside a subject (shown in the Hub catalog). */
 export interface SubCategory {
   id: string;
@@ -154,6 +191,12 @@ export interface SubCategory {
   demo?: IntroDemo;
   /** The set this game belongs to; a galaxy with two or more sets gets a filter in the hub. */
   group?: GameGroup;
+  /**
+   * The languages this game's content exists in. A child whose game is in
+   * another language is not shown it. Default: Ukrainian only — a game says so
+   * when it has learnt more (`speaks(sub, lang)`).
+   */
+  langs?: readonly LangCode[];
   /**
    * How many difficulty steps this adventure's path has. Different adventures
    * can be longer or shorter (e.g. mental arithmetic has many steps, fractions
@@ -253,5 +296,11 @@ export interface LearningModule {
    * (e.g. counts in apples / bricks / snowflakes). Overrides SubCategory.intro.
    * `step` lets a game explain each new task type as the path reaches it.
    */
-  getIntro?: (subCategoryId: string, theme: Theme, step: number) => string | undefined;
+  getIntro?: (subCategoryId: string, theme: Theme, step: number, lang?: LangCode) => string | undefined;
+  /**
+   * The words of the module's cards — its title, each game's name, blurb and
+   * intro — in the languages other than Ukrainian (which the cards themselves
+   * are written in). `moduleRegistry.get(id, lang)` puts them in place.
+   */
+  texts?: Partial<Record<LangCode, ModuleTexts>>;
 }

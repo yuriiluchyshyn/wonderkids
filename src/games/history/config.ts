@@ -1,10 +1,12 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import { V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
-import { worldFigures, uaFigures } from './tasks';
+import { I18N_RELEASE, V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
+import { historyTexts } from './lang';
+import { plFigures, worldFigures, uaFigures } from './tasks';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'history',
+  texts: { en: historyTexts('en').cards, pl: historyTexts('pl').cards },
   title: 'Історія',
   icon: '🏛️',
   accent: '#f59e0b',
@@ -17,6 +19,7 @@ export const SUBJECT: SubjectDef = {
 export const GAMES: GameCard[] = [
   {
     id: 'dinosaurs',
+    langs: historyTexts.langs,
     gameId: 'hist_dino_diet',
     label: 'Динозаври',
     icon: '🦖',
@@ -32,6 +35,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'epochs',
+    langs: historyTexts.langs,
     gameId: 'hist_time_machine',
     label: 'Часова Машина',
     icon: '⏳',
@@ -47,6 +51,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'world_figures',
+    langs: historyTexts.langs,
     gameId: 'hist_world_figures',
     label: 'Видатні Постаті Світу',
     icon: '🌟',
@@ -61,6 +66,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'ua_figures',
+    langs: historyTexts.langs,
     gameId: 'hist_ua_figures',
     label: 'Видатні Постаті України',
     icon: '🇺🇦',
@@ -75,6 +81,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'inventions',
+    langs: historyTexts.langs,
     gameId: 'hist_world_inventions',
     label: 'Видатні Винаходи Світу',
     icon: '💡',
@@ -89,6 +96,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'ua_inventions',
+    langs: historyTexts.langs,
     gameId: 'hist_ua_inventions',
     label: 'Видатні Винаходи України',
     icon: '🚁',
@@ -97,6 +105,37 @@ export const GAMES: GameCard[] = [
     steps: 10,
     difficulty: 2,
     publishDate: V4_RELEASE,
+    tasksPerLevel: 10,
+    mechanics: [Mechanics.GridChoice, Mechanics.DragMatch],
+    hasText: true,
+  },
+  // The history of Poland comes with the Polish language (`content/poland.ts`).
+  {
+    id: 'pl_figures',
+    langs: ['pl'],
+    gameId: 'hist_pl_figures',
+    label: 'Видатні Постаті Польщі',
+    icon: '🇵🇱',
+    blurb: 'Королі, вчені й митці Польщі',
+    intro: 'Польща має багато видатних людей: королів і лицарів, учених, поетів і музикантів. Дізнайся, чим вони прославились!',
+    steps: plFigures.steps,
+    difficulty: 2,
+    publishDate: I18N_RELEASE,
+    tasksPerLevel: 10,
+    mechanics: [Mechanics.DragMatch, Mechanics.GridChoice],
+    hasText: true,
+  },
+  {
+    id: 'pl_inventions',
+    langs: ['pl'],
+    gameId: 'hist_pl_inventions',
+    label: 'Видатні Винаходи Польщі',
+    icon: '🪔',
+    blurb: 'Що подарували світу поляки',
+    intro: 'Гасова лампа, вітаміни, рація, місячний всюдихід — усе це придумали поляки. Знайди винахідника!',
+    steps: 10,
+    difficulty: 2,
+    publishDate: I18N_RELEASE,
     tasksPerLevel: 10,
     mechanics: [Mechanics.GridChoice, Mechanics.DragMatch],
     hasText: true,

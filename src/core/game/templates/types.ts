@@ -1,5 +1,6 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { CurrencyId } from '@/core/game/content/currency';
+import { DEFAULT_LANG, language, type LangCode } from '@/core/lang';
 /**
  * Declarative task payloads for the CORE UI templates (PRD v4.0 §3.2).
  *
@@ -78,7 +79,7 @@ export interface Card {
 }
 
 /** Languages the voice can read a card in. */
-export type SpeechLang = 'uk' | 'en';
+export type SpeechLang = LangCode;
 
 interface TemplateBase {
   /** Picture / math line shown above the answers. */
@@ -370,30 +371,15 @@ export type TemplatePayload =
   | ColorMixPayload
   | LetterGridPayload;
 
-/** Spoken form of a card (for the speaker button). */
+/** Spoken form of a card (for the speaker button), in the language its words are in. */
 export function cardSpeech(card: Card): string {
   if (card.speak) return card.speak;
   if (card.label) return card.label;
-  return (card.glyphs ?? []).map(glyphSpeech).join(' ');
+  return (card.glyphs ?? []).map((g) => glyphSpeech(g, card.lang)).join(' ');
 }
 
-export function glyphSpeech(g: Glyph): string {
-  if (typeof g !== 'string') return 'text' in g ? g.text : `${g.n} з ${g.d}`;
-  switch (g) {
-    case '+':
-      return 'плюс';
-    case '−':
-    case '-':
-      return 'мінус';
-    case '×':
-      return 'помножити на';
-    case '÷':
-      return 'поділити на';
-    case '=':
-      return 'дорівнює';
-    case '?':
-      return 'скільки';
-    default:
-      return g;
-  }
+/** A sign, a number or a fraction of a math line as `lang` says it (`Language.sign` / `.fraction`). */
+export function glyphSpeech(g: Glyph, lang: LangCode = DEFAULT_LANG): string {
+  if (typeof g !== 'string') return 'text' in g ? g.text : language(lang).fraction(g.n, g.d);
+  return language(lang).sign(g);
 }

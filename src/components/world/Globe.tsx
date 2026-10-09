@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useT } from '@/core/i18n';
 import { PlanetArt } from '@/components/templates/PlanetArt';
 import { cn } from '@/core/utils/cn';
 import type { Inhabitant, ItemState, WorldPlanetId } from '@/core/child/world/world';
@@ -42,6 +43,7 @@ interface GlobeProps {
  * whatever lies under the planet.
  */
 export function Globe({ planetId, cx, cy, radius, yaw, pitch, items, residents, level, locked, detail = true, selectedId, justBuilt, onTap }: GlobeProps) {
+  const t = useT();
   /** Things on the far side are hidden; near the edge they shrink away. */
   const seen = (place: Place) => {
     const p = project(place, yaw, pitch);
@@ -87,7 +89,7 @@ export function Globe({ planetId, cx, cy, radius, yaw, pitch, items, residents, 
               }}
               tabIndex={onTap ? undefined : -1}
               onClick={() => onTap?.(state)}
-              aria-label={`${item.name}: ${built ? 'збудовано' : 'ще не збудовано'}`}
+              aria-label={t(built ? 'world.item.ariaBuilt' : 'world.item.ariaNotBuilt', { name: item.name })}
             >
               <motion.span
                 className={cn(styles.thing, 'emoji')}

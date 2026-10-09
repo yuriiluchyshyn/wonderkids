@@ -68,6 +68,178 @@
       "permanent": true
     },
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "cookie",
+          "key": "pk_lang",
+          "value": "pl"
+        }
+      ],
+      "missing": [
+        {
+          "type": "host",
+          "value": "play\\..*"
+        },
+        {
+          "type": "host",
+          "value": "parents\\..*"
+        }
+      ],
+      "destination": "/pl/",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "cookie",
+          "key": "pk_lang",
+          "value": "en"
+        }
+      ],
+      "missing": [
+        {
+          "type": "host",
+          "value": "play\\..*"
+        },
+        {
+          "type": "host",
+          "value": "parents\\..*"
+        }
+      ],
+      "destination": "/en/",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "PL"
+        }
+      ],
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "pk_lang"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Lighthouse|[Pp]review|HeadlessChrome).*"
+        },
+        {
+          "type": "host",
+          "value": "play\\..*"
+        },
+        {
+          "type": "host",
+          "value": "parents\\..*"
+        }
+      ],
+      "destination": "/pl/",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "pl.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "pk_lang"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Lighthouse|[Pp]review|HeadlessChrome).*"
+        },
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "UA"
+        },
+        {
+          "type": "host",
+          "value": "play\\..*"
+        },
+        {
+          "type": "host",
+          "value": "parents\\..*"
+        }
+      ],
+      "destination": "/pl/",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "pk_lang"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Lighthouse|[Pp]review|HeadlessChrome).*"
+        },
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "UA"
+        },
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "PL"
+        },
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "uk.*"
+        },
+        {
+          "type": "host",
+          "value": "play\\..*"
+        },
+        {
+          "type": "host",
+          "value": "parents\\..*"
+        }
+      ],
+      "destination": "/en/",
+      "permanent": false
+    },
+    {
+      "source": "/:lang(pl|en)",
+      "has": [
+        {
+          "type": "host",
+          "value": "play\\..*"
+        }
+      ],
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/:lang(pl|en)",
+      "has": [
+        {
+          "type": "host",
+          "value": "parents\\..*"
+        }
+      ],
+      "destination": "/",
+      "permanent": false
+    },
+    {
       "source": "/landing.html",
       "missing": [
         {

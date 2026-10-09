@@ -1,8 +1,9 @@
+import { useT, useVoiceLang } from '@/core/i18n';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { GALAXIES, getGalaxy } from '@/core/game/galaxies';
+import { GALAXIES, galaxyKey, getGalaxy } from '@/core/game/galaxies';
 import { useSound } from '@/core/audio/useSound';
-import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useSayT } from '@/core/audio/useSpeech';
 import { Modal } from '@/components/ui/Modal';
 import styles from './GalaxyPicker.module.css';
 
@@ -17,15 +18,17 @@ interface GalaxyPickerProps {
  * targets so a pre-reader can navigate alone.
  */
 export function GalaxyPicker({ galaxyId, onChange }: GalaxyPickerProps) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const { play } = useSound();
-  const announce = useVoiceSpeak('selections');
+  const say = useSayT('selections');
+  const sayT = useT(useVoiceLang());
   const current = getGalaxy(galaxyId);
 
   const pick = (id: string) => {
     play('tap');
     onChange(id);
-    announce(`Галактика ${getGalaxy(id).name}`);
+    say('hub.galaxy.say', { name: sayT(galaxyKey(id)) });
     setOpen(false);
   };
 
@@ -38,21 +41,21 @@ export function GalaxyPicker({ galaxyId, onChange }: GalaxyPickerProps) {
           play('tap');
           setOpen(true);
         }}
-        aria-label={`Галактика: ${current.name}. Обрати іншу`}
+        aria-label={t('hub.galaxy.label', { name: t(galaxyKey(current.id)) })}
       >
         <span className={`${styles.triggerIcon} emoji`} aria-hidden>
           {current.icon}
         </span>
         <span className={styles.triggerText}>
-          <span className={styles.triggerKicker}>Галактика</span>
-          <span className={styles.triggerName}>{current.name}</span>
+          <span className={styles.triggerKicker}>{t('hub.galaxy.kicker')}</span>
+          <span className={styles.triggerName}>{t(galaxyKey(current.id))}</span>
         </span>
         <span className={styles.caret} aria-hidden>
           ▾
         </span>
       </motion.button>
 
-      <Modal open={open} onClose={() => setOpen(false)} title="Обери галактику" icon="🌌">
+      <Modal open={open} onClose={() => setOpen(false)} title={t('hub.galaxy.pick')} icon="🌌">
         <div className={styles.list}>
           {GALAXIES.map((g) => (
             <motion.button
@@ -66,8 +69,8 @@ export function GalaxyPicker({ galaxyId, onChange }: GalaxyPickerProps) {
               <span className={`${styles.itemIcon} emoji`} aria-hidden>
                 {g.icon}
               </span>
-              <span className={styles.itemName}>{g.name}</span>
-              {g.comingSoon && <span className={styles.soonTag}>скоро</span>}
+              <span className={styles.itemName}>{t(galaxyKey(g.id))}</span>
+              {g.comingSoon && <span className={styles.soonTag}>{t('hub.galaxy.soon')}</span>}
               {g.id === galaxyId && !g.comingSoon && (
                 <span className={styles.check} aria-hidden>
                   ✓

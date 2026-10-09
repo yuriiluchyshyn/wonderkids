@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { Treasure } from '@/core/theme/theme.types';
@@ -30,6 +31,7 @@ const SPARKLES = ['✨', '⭐', '🌟', '💫'];
  * skips ahead.
  */
 export function TreasureReveal({ active, treasure, isNew, onDone }: TreasureRevealProps) {
+  const t = useT();
   const theme = useActiveTheme();
   const { play } = useSound();
   const [phase, setPhase] = useState<Phase>('shake');
@@ -65,14 +67,14 @@ export function TreasureReveal({ active, treasure, isNew, onDone }: TreasureReve
           exit={{ opacity: 0 }}
           onClick={onDone}
           role="dialog"
-          aria-label={`Знайдено скарб: ${treasure.name}`}
+          aria-label={t('treasure.found', { name: treasure.name })}
         >
           <motion.p
             className={styles.title}
             initial={{ y: -16, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
           >
-            {isNew ? '🎉 Новий скарб!' : '✨ Скарб!'}
+            {isNew ? t('treasure.new') : t('treasure.one')}
           </motion.p>
 
           <div className={styles.stage}>
@@ -178,7 +180,7 @@ export function TreasureReveal({ active, treasure, isNew, onDone }: TreasureReve
             <span className="emoji" aria-hidden>
               🧺
             </span>
-            <span>Моя колекція</span>
+            <span>{t('treasure.collection')}</span>
           </motion.div>
         </motion.div>
       )}

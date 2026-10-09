@@ -12,10 +12,10 @@ interface HubState {
   galaxyId: string;
   /** Show only games of this difficulty; null = all. */
   stars: Difficulty | null;
-  /** The set of games chosen in a galaxy that has several (a language): galaxy id → group id. */
-  groups: Record<string, string>;
+  /** The sets of games chosen in a galaxy that has several (languages): galaxy id → group ids. None — all are shown. */
+  groups: Record<string, string[]>;
   setGalaxy: (id: string) => void;
-  setGroup: (galaxyId: string, groupId: string | null) => void;
+  setGroups: (galaxyId: string, groupIds: string[]) => void;
   setStars: (stars: Difficulty | null) => void;
 }
 
@@ -27,14 +27,14 @@ export const useHubState = create<HubState>()(
       groups: {},
       setGalaxy: (galaxyId) => set({ galaxyId }),
       setStars: (stars) => set({ stars }),
-      setGroup: (galaxyId, groupId) =>
+      setGroups: (galaxyId, groupIds) =>
         set((s) => {
           const groups = { ...s.groups };
-          if (groupId) groups[galaxyId] = groupId;
+          if (groupIds.length > 0) groups[galaxyId] = groupIds;
           else delete groups[galaxyId];
           return { groups };
         }),
     }),
-    { name: 'wk-hub-v1', storage: createJSONStorage(() => sessionStorage) },
+    { name: 'wk-hub-v2', storage: createJSONStorage(() => sessionStorage) },
   ),
 );

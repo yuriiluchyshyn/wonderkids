@@ -4,6 +4,7 @@
 import pg from 'pg';
 import { emailKey, normaliseEmail } from './email.js';
 import { refillIfRested } from './screenTime.js';
+import { VOICES } from './tts.js';
 
 const { Pool } = pg;
 
@@ -184,6 +185,14 @@ export function ensureSchema() {
       -- The short fact told after a right answer, and the money the shop game counts in.
       ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS fun_facts BOOLEAN NOT NULL DEFAULT true;
       ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS currency TEXT NOT NULL DEFAULT 'UAH';
+      -- Languages (src/core/lang). NULL — not chosen: the app offers the one of the visitor's country.
+      ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS lang TEXT;
+      ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS game_lang TEXT;
+      -- The parent picked the money themselves; NULL — a save from before the flag (the client decides).
+      ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS currency_chosen BOOLEAN;
+      ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS voice_lang TEXT;
+      -- Games the parent has put away for this child: ["<moduleId>:<subId>", …].
+      ALTER TABLE wk_child_settings ADD COLUMN IF NOT EXISTS hidden_games JSONB NOT NULL DEFAULT '[]'::jsonb;
       -- Letters from the public site («Написати нам»). The text stays here;
       -- photos and videos are only forwarded by email: they wait in
       -- wk_feedback_parts (base64 pieces) until the letter has left.
@@ -319,6 +328,10 @@ function assembleChild(row, settings, stats, screen, progressRows, treasureRows,
       ttsButtons: s.tts_buttons ?? true,
       funFacts: s.fun_facts ?? true,
       currency: s.currency ?? 'UAH',
+      ...(typeof s.currency_chosen === 'boolean' ? { currencyChosen: s.currency_chosen } : {}),
+      gameLang: s.game_lang ?? null,
+      voiceLang: s.voice_lang ?? null,
+      hiddenGames: Array.isArray(s.hidden_games) ? s.hidden_games : [],
       voice: s.voice ?? {},
       timeControl: {
         sessionDurationMinutes: s.session_duration_min ?? 15,
@@ -338,17 +351,21 @@ function assembleChild(row, settings, stats, screen, progressRows, treasureRows,
   };
 }
 
+/** A language code of ours (`VOICES` in tts.js lists them), or null. */
+const lang = (value) => (typeof value === 'string' && Object.hasOwn(VOICES, value) ? value : null);
+
 /** Load a parent's whole save, reassembled into the client blob (or null). */
 export async function getState(userId) {
   const db = getPool();
-  const parent = await db.query(`SELECT id, active_child_id FROM wk_parents WHERE id = $1`, [userId]);
+  const parent = await db.query(`SELECT id, active_child_id, lang FROM wk_parents WHERE id = $1`, [userId]);
   if (parent.rowCount === 0) return null;
   const activeChildId = parent.rows[0].active_child_id ?? null;
+  const parentLang = parent.rows[0].lang ?? null;
 
   const children = (
     await db.query(`SELECT * FROM wk_children WHERE parent_id = $1 ORDER BY sort_index, created_at`, [userId])
   ).rows;
-  if (children.length === 0) return { children: [], activeChildId };
+  if (children.length === 0) return { children: [], activeChildId, parentLang };
 
   const ids = children.map((c) => c.id);
   const byChild = (rows) => {
@@ -386,7 +403,7 @@ export async function getState(userId) {
     ),
   );
 
-  return { children: assembled, activeChildId };
+  return { children: assembled, activeChildId, parentLang };
 }
 
 /** Replace a parent's whole save by decomposing the client blob into tables. */
@@ -400,6 +417,8 @@ export async function saveState(userId, state) {
     await client.query('BEGIN');
 
     await client.query(`UPDATE wk_parents SET active_child_id = $2 WHERE id = $1`, [userId, activeChildId]);
+    // Not chosen yet (null) — the column keeps what it had.
+    if (lang(state?.parentLang)) await client.query(`UPDATE wk_parents SET lang = $2 WHERE id = $1`, [userId, state.parentLang]);
 
     await client.query(
       `DELETE FROM wk_children WHERE parent_id = $1 AND NOT (id = ANY($2::text[]))`,
@@ -435,21 +454,26 @@ export async function saveState(userId, state) {
         `INSERT INTO wk_child_settings
            (child_id, sound_on, voice_on, show_text, companion_speed, celebration, game_mode,
             min_tasks_per_level, choices_grid_size, voice, session_duration_min, cooldown_min, max_daily_min,
-            tts_buttons, fun_facts, currency)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+            tts_buttons, fun_facts, currency, game_lang, voice_lang, hidden_games, currency_chosen)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
          ON CONFLICT (child_id) DO UPDATE SET
            sound_on=EXCLUDED.sound_on, voice_on=EXCLUDED.voice_on, show_text=EXCLUDED.show_text,
            companion_speed=EXCLUDED.companion_speed, celebration=EXCLUDED.celebration, game_mode=EXCLUDED.game_mode,
            min_tasks_per_level=EXCLUDED.min_tasks_per_level, choices_grid_size=EXCLUDED.choices_grid_size,
            voice=EXCLUDED.voice, session_duration_min=EXCLUDED.session_duration_min,
            cooldown_min=EXCLUDED.cooldown_min, max_daily_min=EXCLUDED.max_daily_min,
-           tts_buttons=EXCLUDED.tts_buttons, fun_facts=EXCLUDED.fun_facts, currency=EXCLUDED.currency`,
+           tts_buttons=EXCLUDED.tts_buttons, fun_facts=EXCLUDED.fun_facts, currency=EXCLUDED.currency,
+           game_lang=EXCLUDED.game_lang, voice_lang=EXCLUDED.voice_lang, hidden_games=EXCLUDED.hidden_games,
+           currency_chosen=EXCLUDED.currency_chosen`,
         [
           id, s.soundOn ?? true, s.voiceOn ?? true, s.showText ?? true, s.companionSpeed ?? 'medium',
           s.celebration ?? 'balloons', s.gameMode ?? 'dynamic_task_extension', s.minTasksPerLevel ?? 10,
           s.choicesGridSize ?? 9, JSON.stringify(s.voice ?? {}), tc.sessionDurationMinutes ?? 15,
           tc.cooldownMinutes ?? 45, tc.maxDailyMinutes ?? 60, s.ttsButtons ?? true,
           s.funFacts ?? true, CURRENCIES.includes(s.currency) ? s.currency : 'UAH',
+          lang(s.gameLang), lang(s.voiceLang),
+          JSON.stringify(Array.isArray(s.hiddenGames) ? s.hiddenGames.filter((g) => typeof g === 'string').slice(0, 500) : []),
+          typeof s.currencyChosen === 'boolean' ? s.currencyChosen : null,
         ],
       );
 

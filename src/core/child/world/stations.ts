@@ -1,3 +1,5 @@
+import type { LangCode } from '../../lang/types.ts';
+import { worldWords } from './lang/index.ts';
 import { STATION_COUNT, WORLD_PLANETS, stationId, type WorldPlanetId } from './world.ts';
 
 /** The key of knowledge as it is drawn, and its count forms («5 ключів»). */
@@ -131,8 +133,9 @@ const STATIONS: Record<WorldPlanetId, Row[]> = {
   ],
 };
 
-/** The ten stations of a planet (1-based, as everywhere in the world). */
-export function stationsOf(planet: number): StationDef[] {
+/** The stations of a planet (1-based; clamped), named in `lang` (Ukrainian when none is asked for). */
+export function stationsOf(planet: number, lang?: LangCode): StationDef[] {
   const id = WORLD_PLANETS[Math.max(1, Math.min(WORLD_PLANETS.length, Math.floor(planet))) - 1];
-  return STATIONS[id].slice(0, STATION_COUNT).map(([emoji, name, about], i) => ({ id: stationId(i), name, emoji, about }));
+  const words = worldWords(lang)?.stations[id];
+  return STATIONS[id].slice(0, STATION_COUNT).map(([emoji, name, about], i) => ({ id: stationId(i), name: words?.[i]?.[0] ?? name, emoji, about: words?.[i]?.[1] ?? about }));
 }

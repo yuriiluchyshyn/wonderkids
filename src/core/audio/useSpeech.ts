@@ -1,5 +1,8 @@
 import { useCallback } from 'react';
 import { useGameStore } from '@/core/child/store/useGameStore';
+import { useT, useVoiceLang } from '@/core/i18n';
+import type { AppKey, Params } from '@/core/i18n';
+import type { SpeechLang } from './SpeechEngine';
 import { voice } from './voice';
 import type { VoiceChannel } from './voiceChannels';
 
@@ -25,8 +28,27 @@ export function useVoiceSpeak(channel: VoiceChannel) {
   const enabled = useGameStore((s) => s.settings.voice[channel]);
 
   return useCallback(
-    (text: string) => voice.say(text, channel),
+    (text: string, lang?: SpeechLang) => voice.say(text, channel, lang),
     [voiceOn, enabled, channel],
+  );
+}
+
+/**
+ * Says a text of the app by its key — in the language of the VOICE, which the
+ * parent may set apart from the language on the screen (the screen shows «Play»,
+ * the voice says «Grać»). `inLang` names another language for the phrase —
+ * the one a task is read in (`session.langs.said`), when it carries a piece of it.
+ */
+export function useSayT(channel?: VoiceChannel, inLang?: SpeechLang) {
+  const voiceLang = useVoiceLang();
+  const lang = inLang ?? voiceLang;
+  const t = useT(lang);
+  const voiceOn = useGameStore((s) => s.settings.voiceOn);
+  const enabled = useGameStore((s) => (channel ? s.settings.voice[channel] : true));
+
+  return useCallback(
+    (key: AppKey, params?: Params) => voice.say(t(key, params), channel, lang),
+    [voiceOn, enabled, channel, lang, t], // eslint-disable-line react-hooks/exhaustive-deps
   );
 }
 

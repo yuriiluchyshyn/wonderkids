@@ -1,3 +1,4 @@
+import { useLang, useT } from '@/core/i18n';
 import { useEffect, useRef, useState } from 'react';
 import {
   useGameStore,
@@ -16,9 +17,9 @@ const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };
 const MAX_CHILDREN = 5;
 const NICKNAME_RE = /^[a-z0-9_]{3,12}$/;
 
-const GENDER_OPTIONS: { id: Gender; label: string; icon: string }[] = [
-  { id: 'girl', label: 'Дівчинка', icon: '👧' },
-  { id: 'boy', label: 'Хлопчик', icon: '👦' },
+const GENDER_OPTIONS: { id: Gender; icon: string }[] = [
+  { id: 'girl', icon: '👧' },
+  { id: 'boy', icon: '👦' },
 ];
 const GRID_OPTIONS: { id: ChoicesGridSize; label: string }[] = [
   { id: 6, label: '6' },
@@ -50,6 +51,8 @@ const BLANK: NewChild = {
  * the settings below edit that child.
  */
 export function ChildManager() {
+  const lang = useLang();
+  const t = useT();
   const children = useGameStore((s) => s.children);
   const activeChildId = useGameStore((s) => s.activeChildId);
   const addChild = useGameStore((s) => s.addChild);
@@ -116,6 +119,7 @@ export function ChildManager() {
   const save = () => {
     if (!canSave) return;
     addChild({
+      lang,
       profile: {
         name: draft.name,
         nickname: draft.nickname,
@@ -130,19 +134,19 @@ export function ChildManager() {
   };
 
   const NICK_MESSAGE: Record<NickStatus, string> = {
-    idle: 'Лише малі літери, цифри та «_» (3–12 символів).',
-    invalid: '✋ Нік має бути 3–12 символів: малі літери, цифри, «_».',
-    checking: '⏳ Перевіряємо, чи вільний нік…',
-    available: '✅ Нік вільний!',
-    taken: '🙈 Цей нік уже зайнятий. Спробуй інший.',
-    error: '⚠️ Не вдалося перевірити онлайн — збережемо як є.',
+    idle: t('cm.nick.idle'),
+    invalid: t('cm.nick.invalid'),
+    checking: t('cm.nick.checking'),
+    available: t('cm.nick.available'),
+    taken: t('cm.nick.taken'),
+    error: t('cm.nick.error'),
   };
 
   return (
     <section className={styles.section}>
-      <h3 className={styles.sectionTitle}>👨‍👩‍👧 Діти</h3>
+      <h3 className={styles.sectionTitle}>{t('cm.title')}</h3>
       <p className={styles.hint}>
-        До {MAX_CHILDREN} дітей на акаунт. Торкніться дитини, щоб редагувати її налаштування нижче.
+        {t('cm.hint', { max: MAX_CHILDREN })}
       </p>
 
       <div className={styles.childrenGrid}>
@@ -155,20 +159,20 @@ export function ChildManager() {
               type="button"
               className={styles.childPick}
               onClick={() => setActiveChild(c.id)}
-              aria-label={`Редагувати ${c.profile.name}`}
+              aria-label={t('cm.edit', { name: c.profile.name })}
             >
               <span className={`${styles.childAvatar} emoji`} aria-hidden>
                 {AVATAR[c.profile.gender] ?? AVATAR.girl}
               </span>
               <span className={styles.childName}>{c.profile.name}</span>
               {c.profile.nickname && <span className={styles.childNick}>@{c.profile.nickname}</span>}
-              {c.id === activeChildId && <span className={styles.activeTag}>редагується</span>}
+              {c.id === activeChildId && <span className={styles.activeTag}>{t('cm.editing')}</span>}
             </button>
             <button
               type="button"
               className={styles.childRemove}
               onClick={() => setConfirmRemove(c.id)}
-              aria-label={`Видалити ${c.profile.name}`}
+              aria-label={t('cm.remove', { name: c.profile.name })}
             >
               🗑️
             </button>
@@ -177,31 +181,31 @@ export function ChildManager() {
       </div>
 
       <Button block size="lg" icon="➕" onClick={openAdd} disabled={atLimit}>
-        {atLimit ? 'Максимум 5 дітей' : 'Додати дитину'}
+        {atLimit ? t('cm.max') : t('cm.add')}
       </Button>
 
       {/* ---- Add child ---- */}
-      <Modal open={adding} onClose={() => setAdding(false)} title="Нова дитина" icon="🧒">
+      <Modal open={adding} onClose={() => setAdding(false)} title={t('cm.new')} icon="🧒">
         <div className="stack">
           <div>
-            <label className={styles.fieldLabel}>Ім'я</label>
+            <label className={styles.fieldLabel}>{t('parent.profile.name')}</label>
             <input
               className={styles.textInput}
               value={draft.name}
               maxLength={16}
-              placeholder="напр. Марко"
+              placeholder={t('cm.namePlaceholder')}
               onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
-              aria-label="Ім'я дитини"
+              aria-label={t('parent.profile.nameLabel')}
             />
           </div>
 
           <div>
-            <label className={styles.fieldLabel}>Унікальний нік (@нік)</label>
+            <label className={styles.fieldLabel}>{t('parent.profile.nick')}</label>
             <input
               className={styles.textInput}
               value={draft.nickname}
               maxLength={12}
-              placeholder="напр. marko_speed"
+              placeholder={t('childLogin.nickPlaceholder')}
               autoCapitalize="none"
               autoCorrect="off"
               onChange={(e) =>
@@ -210,7 +214,7 @@ export function ChildManager() {
                   nickname: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 12),
                 }))
               }
-              aria-label="Унікальний нік"
+              aria-label={t('parent.profile.nickShort')}
             />
             <p className={`${styles.nickStatus} ${styles[`nick_${nickStatus}`] ?? ''}`}>
               {NICK_MESSAGE[nickStatus]}
@@ -218,33 +222,33 @@ export function ChildManager() {
           </div>
 
           <div>
-            <label className={styles.fieldLabel}>PIN для входу (3–4 цифри)</label>
+            <label className={styles.fieldLabel}>{t('parent.profile.pin')}</label>
             <input
               className={styles.textInput}
               value={draft.pin}
               inputMode="numeric"
               maxLength={4}
-              placeholder="напр. 1234"
+              placeholder={t('parent.profile.pinPlaceholder')}
               onChange={(e) =>
                 setDraft((d) => ({ ...d, pin: e.target.value.replace(/\D/g, '').slice(0, 4) }))
               }
-              aria-label="PIN дитини"
+              aria-label={t('parent.profile.pinLabel')}
             />
             <p className={styles.nickStatus}>
               {pinValid
-                ? 'Дитина входить за ніком і цим PIN.'
-                : '✋ PIN має бути 3 або 4 цифри.'}
+                ? t('cm.pinOk')
+                : t('cm.pinBad')}
             </p>
           </div>
 
           <div>
-            <label className={styles.fieldLabel}>Стать</label>
+            <label className={styles.fieldLabel}>{t('parent.profile.gender')}</label>
             <div className={styles.chipRow}>
               {GENDER_OPTIONS.map((g) => (
                 <Chip
                   key={g.id}
                   icon={g.icon}
-                  label={g.label}
+                  label={t(`gender.${g.id}`)}
                   active={draft.gender === g.id}
                   onClick={() => setDraft((d) => ({ ...d, gender: g.id }))}
                 />
@@ -253,7 +257,7 @@ export function ChildManager() {
           </div>
 
           <div>
-            <label className={styles.fieldLabel}>Сітка відповідей</label>
+            <label className={styles.fieldLabel}>{t('parent.grid.label')}</label>
             <div className={styles.chipRow}>
               {GRID_OPTIONS.map((o) => (
                 <Chip
@@ -267,14 +271,14 @@ export function ChildManager() {
           </div>
 
           <Button block size="lg" icon="✅" onClick={save} disabled={!canSave}>
-            Створити профіль
+            {t('cm.create')}
           </Button>
         </div>
       </Modal>
 
       {/* ---- Remove confirm ---- */}
-      <Modal open={confirmRemove !== null} onClose={() => setConfirmRemove(null)} title="Видалити дитину?" icon="🗑️">
-        <p className={styles.hint}>Увесь прогрес цього профілю буде втрачено. Цю дію не можна скасувати.</p>
+      <Modal open={confirmRemove !== null} onClose={() => setConfirmRemove(null)} title={t('cm.removeTitle')} icon="🗑️">
+        <p className={styles.hint}>{t('cm.removeHint')}</p>
         <div className="stack">
           <Button
             block
@@ -285,10 +289,10 @@ export function ChildManager() {
               setConfirmRemove(null);
             }}
           >
-            Так, видалити
+            {t('cm.removeYes')}
           </Button>
           <Button block variant="ghost" icon="↩️" onClick={() => setConfirmRemove(null)}>
-            Скасувати
+            {t('common.cancel')}
           </Button>
         </div>
       </Modal>

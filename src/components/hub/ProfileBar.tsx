@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useBalance } from '@/core/child/world/useBalance';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -22,6 +23,7 @@ type HeaderModal = 'treasures' | null;
  * opens «Мій світ», where artifacts are spent on buildings and decorations.
  */
 export function ProfileBar() {
+  const t = useT();
   const profile = useGameStore((s) => s.profile);
   // What is in the purse now (earned − spent on the planet).
   const artifacts = useBalance();
@@ -60,7 +62,7 @@ export function ProfileBar() {
         className={styles.identity}
         whileTap={{ scale: 0.96 }}
         onClick={openDrawer}
-        aria-label="Відкрити профіль і цілі"
+        aria-label={t('hub.profile.open')}
         data-tip="profile"
       >
         <span className={`${styles.avatar} emoji`} aria-hidden>
@@ -80,7 +82,7 @@ export function ProfileBar() {
           className={styles.badge}
           whileTap={{ scale: 0.9 }}
           onClick={() => openModal('treasures')}
-          aria-label={`Колекція скарбів: ${treasuresFound} з ${treasuresTotal}`}
+          aria-label={t('hub.profile.treasures', { found: treasuresFound, total: treasuresTotal })}
           data-tip="treasures"
         >
           <span className={`${styles.badgeIcon} emoji`} aria-hidden>
@@ -98,7 +100,7 @@ export function ProfileBar() {
           className={`${styles.badge} ${styles.piggy}`}
           whileTap={{ scale: 0.9 }}
           onClick={openWorld}
-          aria-label={`${theme.artifact.name}: ${artifacts}. Відкрити крамницю свого світу`}
+          aria-label={t('hub.profile.purse', { name: theme.artifact.name, count: artifacts })}
           data-tip="artifacts"
         >
           <span className={`${styles.badgeIcon} emoji`} aria-hidden>

@@ -1,3 +1,4 @@
+import { useLang, useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import type { GameViewProps } from '@/core/game/kernel/types';
@@ -27,8 +28,9 @@ export const ASK_EMOJI = '❓';
 
 /** A math line: numbers/operators as text, fractions stacked vertically. */
 export function Glyphs({ glyphs, className, answer }: { glyphs: Glyph[]; className?: string; answer?: string }) {
+  const lang = useLang();
   return (
-    <span className={cn(styles.glyphs, className)} aria-label={glyphs.map(glyphSpeech).join(' ')}>
+    <span className={cn(styles.glyphs, className)} aria-label={glyphs.map((g) => glyphSpeech(g, lang)).join(' ')}>
       {glyphs.map((g, i) =>
         typeof g === 'string' ? (
           // The unknown of the line: the right answer lands here (`data-ask`).
@@ -118,6 +120,7 @@ export function Stimulus({
   /** The solved answer, shown in place of the task's «?» (see `data-ask`). */
   answer?: string;
 }) {
+  const t = useT();
   const s = payload.stimulus;
   if (!s && !children) return null;
   return (
@@ -125,7 +128,7 @@ export function Stimulus({
       type="button"
       className={styles.stimulus}
       onClick={onSpeak}
-      aria-label="Повторити завдання"
+      aria-label={t('tpl.repeat')}
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
     >

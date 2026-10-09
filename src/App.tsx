@@ -1,4 +1,5 @@
-import { lazy, Suspense, useEffect, type CSSProperties } from 'react';
+import { LangProvider, useGameLang, useParentLang, useT } from '@/core/i18n';
+import { lazy, Suspense, useEffect, type CSSProperties, type ReactNode } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { VoiceGuard } from '@/core/audio/voice';
 import { ThemeProvider } from '@/core/theme/ThemeProvider';
@@ -37,6 +38,7 @@ const splashBtn: CSSProperties = {
 
 /** Full-screen message shown while the save loads (or fails to) after login. */
 function SyncSplash({ error }: { error?: boolean }) {
+  const t = useT();
   const logout = useAuthStore((s) => s.logout);
   return (
     <div
@@ -56,18 +58,18 @@ function SyncSplash({ error }: { error?: boolean }) {
           😿
         </span>
       ) : (
-        <SpaceLoader label="Завантажуємо твою пригоду" />
+        <SpaceLoader label={t('app.loading')} />
       )}
       {error ? (
         <>
-          <p style={{ fontWeight: 700 }}>Не вдалося завантажити твій прогрес.</p>
-          <p className="muted">Перевір, чи увімкнений сервер, і спробуй ще раз.</p>
+          <p style={{ fontWeight: 700 }}>{t('app.loadFailed')}</p>
+          <p className="muted">{t('app.loadFailedHint')}</p>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
             <button type="button" style={splashBtn} onClick={() => window.location.reload()}>
-              Спробувати ще раз
+              {t('common.retry')}
             </button>
             <button type="button" style={{ ...splashBtn, opacity: 0.7 }} onClick={logout}>
-              Вийти
+              {t('common.logout')}
             </button>
           </div>
         </>
@@ -76,26 +78,39 @@ function SyncSplash({ error }: { error?: boolean }) {
   );
 }
 
+/**
+ * The language of a part of the app. The child's screens are in the language
+ * of the child's game, the parents' in the cabinet's; before anyone has signed
+ * in (and on the login pages) it is the language offered to this device.
+ */
+function InLang({ of, children }: { of: 'game' | 'parent'; children: ReactNode }) {
+  const game = useGameLang();
+  const parent = useParentLang();
+  return <LangProvider lang={of === 'parent' ? parent : game}>{children}</LangProvider>;
+}
+
 /** Routes available only once a save is loaded for the signed-in user. */
 function SyncedRoutes() {
   const status = useRemoteSync();
   const children = useGameStore((s) => s.children);
   const activeChildId = useGameStore((s) => s.activeChildId);
 
+  const portal = getPortal();
+
   if (status === 'error') return <SyncSplash error />;
   if (status !== 'ready') return <SyncSplash />;
-
-  const portal = getPortal();
 
   // Parent portal (parents.*): ONLY the parent cabinet — never the child hub,
   // so a parent never lands on "обери пригоду".
   if (portal === 'parent') {
     return (
-      <Routes>
-        <Route path="/parent" element={<ParentPage />} />
-        <Route path="/parent/audio" element={<AudioPage />} />
-        <Route path="*" element={<Navigate to="/parent" replace />} />
-      </Routes>
+      <InLang of="parent">
+        <Routes>
+          <Route path="/parent" element={<ParentPage />} />
+          <Route path="/parent/audio" element={<AudioPage />} />
+          <Route path="*" element={<Navigate to="/parent" replace />} />
+        </Routes>
+      </InLang>
     );
   }
 
@@ -107,9 +122,10 @@ function SyncedRoutes() {
   const noActiveFallback = canReachParent && !hasChildren ? '/parent' : '/who';
 
   return (
+    <InLang of="game">
     <Routes>
-      {canReachParent && <Route path="/parent" element={<ParentPage />} />}
-      {canReachParent && <Route path="/parent/audio" element={<AudioPage />} />}
+      {canReachParent && <Route path="/parent" element={<InLang of="parent"><ParentPage /></InLang>} />}
+      {canReachParent && <Route path="/parent/audio" element={<InLang of="parent"><AudioPage /></InLang>} />}
       <Route path="/who" element={<ChildSelectPage />} />
 
       <Route path="/" element={activeOk ? <HubPage /> : <Navigate to={noActiveFallback} replace />} />
@@ -121,6 +137,7 @@ function SyncedRoutes() {
       <Route path="/vault" element={activeOk ? <VaultPage /> : <Navigate to={noActiveFallback} replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </InLang>
   );
 }
 
@@ -169,7 +186,9 @@ export function App() {
         <VoiceGuard />
         <div className="app-shell">
           <ThemeDecor />
-          <TimeHeader />
+          <InLang of="game">
+            <TimeHeader />
+          </InLang>
           <Routes>
             <Route path="/login" element={loginElement} />
             <Route path="/parent-login" element={getPortal() === 'kid' ? <ToParentLogin /> : <LoginPage />} />

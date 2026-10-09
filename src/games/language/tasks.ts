@@ -1,11 +1,15 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import type { TaskInstance } from '@/core/game/kernel/types';
+import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, DragMatchPayload, LetterGridPayload, SpeechLang, TemplatePayload } from '@/core/game/templates/types';
-import { letterName, say } from '@/core/lang/numbers';
+import { DEFAULT_LANG, language } from '@/core/lang';
+import { say } from '@/core/lang/marks';
 import { shuffle } from '@/core/utils/random';
 import { templateTask, type GameTasks, type TemplateGame } from '../shared/templateModule';
+import { languageTexts } from './lang';
+import type { PackView } from './lang/types';
 
 type Tasks = TaskInstance<TemplatePayload>[];
+type Config = Pick<TaskConfig, 'lang'>;
 
 /** A word with its picture. */
 export type Word = [word: string, emoji: string];
@@ -32,6 +36,10 @@ export interface LangPack {
   flag: string;
   /** Prefix of game ids: '' for the native language, 'en_' for English. */
   prefix: string;
+  /** Its first words are put together from syllables; letter by letter otherwise. */
+  syllables: boolean;
+  /** Its hardest words are spelled by ear: the language is written the way it sounds. */
+  byEar: boolean;
   alphabet: string[];
   /** Words built from parts — syllables (Ukrainian) or single letters (English phonics). */
   partWords: { parts: string[]; emoji: string }[];
@@ -69,6 +77,9 @@ export const STAGE = {
 } as const;
 
 /** The games of a language, in catalog order. */
+/** Each pack lays its alphabet tables out in its own (fixed) way. */
+const ABC_SEED = { uk: 1, en: 2, pl: 3 } as const;
+
 export const GAME_KINDS = ['alphabet', 'bubbles', 'chain', 'rhymes', 'sentences'] as const;
 export type GameKind = (typeof GAME_KINDS)[number];
 /** New questions a step opens, where the content allows (the other half of a level is recall). */
@@ -220,22 +231,32 @@ function alphabetTables(size: number, seed: number): AbcTable[][] {
 /** The task generators of the games of one language, by game id. */
 export function languageTasks(pack: LangPack): Record<string, GameTasks> {
   const { lang } = pack;
-  const uk = lang === 'uk';
   const upper = (s: string) => s.toLocaleUpperCase(lang);
 
   /** A text card read aloud in the pack's language. */
   const word = (id: string, label: string, emoji?: string): Card => ({ id, label, emoji, speak: label, lang });
-  // A lone letter is read unpredictably: the Ukrainian voice gets its name («же»).
-  const letterCard = (id: string, letter: string): Card => ({ id, label: upper(letter), speak: uk ? letterName(letter) : letter, lang });
-  /** A letter inside a spoken sentence: «літера „же“». */
-  const said = (letter: string) => (uk ? say(upper(letter), letterName(letter)) : upper(letter));
+  // A lone letter is read unpredictably: the voice gets its name in the pack's language («же», «ay», «żet»).
+  const letterCard = (id: string, letter: string): Card => ({ id, label: upper(letter), speak: language(lang).letterName(letter), lang });
+  /**
+   * The words ABOUT the pack are in the language of the screen (`config.lang`);
+   * the words OF the pack never change. A pack in the child's own language is
+   * talked about from the inside — see `PackView`. `said` is a letter inside
+   * such a spoken sentence: «літера „же“».
+   */
+  const told = (config: Config) => {
+    const T = languageTexts(config.lang);
+    const p: PackView = { lang, native: lang === (config.lang ?? DEFAULT_LANG), syllables: pack.syllables, byEar: pack.byEar };
+    const said = (letter: string) => (p.native ? say(upper(letter), language(lang).letterName(letter)) : upper(letter));
+    return { T, p, said };
+  };
 
   // ---------------------------------------------------------------- Game 0 —
   // Alphabet table: put the missing letters in their places; later — find the
   // two letters that swapped places.
-  const abcSteps = alphabetTables(pack.alphabet.length, uk ? 1 : 2);
+  const abcSteps = alphabetTables(pack.alphabet.length, ABC_SEED[lang]);
 
-  function alphabet(step: number): Tasks {
+  function alphabet(step: number, config: Config): Tasks {
+    const { T, p, said } = told(config);
     return abcSteps.slice(0, Math.max(1, Math.min(LANGUAGE_STEPS, step))).flatMap((tables) =>
       tables.map(({ key, start, length, cols, gaps, ghosts, swapped }) => {
         const letters = pack.alphabet.slice(start, start + length);
@@ -250,32 +271,15 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
 
         if (swapped) {
           const [a, b] = swapped;
-          const order = `В абетці літера «${said(letters[a])}» стоїть раніше, ніж літера «${said(letters[b])}».`;
-          return templateTask(
-            key,
-            `Дві ${uk ? '' : 'англійські '}літери помінялися місцями. Торкнись літери, яка стоїть не на своєму місці.`,
-            { ...payload, hint: uk ? `${order} Ці дві літери блимають.` : 'Проспівай англійську абетку по порядку. Дві літери, що помінялися місцями, блимають.' },
-            step,
-            uk ? order : undefined,
-          );
+          const order = T.order(said(letters[a]), said(letters[b]));
+          return templateTask(key, T.swapAsk(p), { ...payload, hint: T.swapHint(p, order) }, step, p.native ? order : undefined);
         }
 
         // What the hint and the fact say about the first empty place: the letter and its neighbour.
         const at = gaps[0];
-        const neighbour = at > 0 ? `Після літери «${said(letters[at - 1])}» в абетці стоїть літера «${said(letters[at])}».` : `Перед літерою «${said(letters[1])}» в абетці стоїть літера «${said(letters[0])}».`;
-        const prompt =
-          gaps.length === pack.alphabet.length
-            ? `Склади всю ${uk ? '' : 'англійську '}абетку: постав кожну літеру на її місце.`
-            : gaps.length === 1
-              ? `Постав ${uk ? '' : 'англійську '}літеру на її місце в абетці.`
-              : `Постав ${uk ? '' : 'англійські '}літери на свої місця в абетці.`;
-        return templateTask(
-          key,
-          prompt,
-          { ...payload, hint: uk ? `${neighbour} Її місце блимає.` : 'Згадай англійську абетку. Місце для наступної літери блимає, а в порожніх клітинках видно підказки.' },
-          step,
-          uk ? neighbour : undefined,
-        );
+        const neighbour = at > 0 ? T.after(said(letters[at - 1]), said(letters[at])) : T.before(said(letters[1]), said(letters[0]));
+        const prompt = T.fillAsk(p, gaps.length === pack.alphabet.length ? 'all' : gaps.length === 1 ? 'one' : 'many');
+        return templateTask(key, prompt, { ...payload, hint: T.fillHint(p, neighbour) }, step, p.native ? neighbour : undefined);
       }),
     );
   }
@@ -293,18 +297,19 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
   const spellTier: Tier<Word> = { from: STAGE.spell, to: STAGE.strays - 1, items: pack.spellWords.slice(0, shownCount) };
   const strayTier: Tier<Word> = { from: STAGE.strays, to: LANGUAGE_STEPS, items: pack.spellWords.slice(shownCount) };
 
-  function bubbles(step: number): Tasks {
+  function bubbles(step: number, config: Config): Tasks {
+    const { T, p, said } = told(config);
     const tasks: Tasks = [];
 
     for (const run of opened(abcTier, step)) {
       tasks.push(
         templateTask(
           `abc:${run.join('')}`,
-          uk ? `Лопай літери за абеткою: від ${said(run[0])} до ${said(run[run.length - 1])}.` : 'Лопай англійські літери за абеткою — від першої до останньої.',
+          T.runAsk(p, said(run[0]), said(run[run.length - 1])),
           {
             template: Mechanics.BubblePop,
             bubbles: run.map((l, i) => letterCard(`b${i}`, l)),
-            hint: uk ? `Згадай абетку: ${run.map(said).join(', ')}.` : 'Згадай англійську абетку. Потрібна бульбашка блимає.',
+            hint: T.runHint(p, run.map(said)),
           },
           step,
         ),
@@ -316,12 +321,12 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
       tasks.push(
         templateTask(
           `parts:${whole}`,
-          uk ? `Збери слово зі складів: ${whole}.` : 'Збери англійське слово з літер. Воно написане під малюнком.',
+          T.partsAsk(p, whole),
           {
             template: Mechanics.BubblePop,
             target: { id: 'target', emoji, label: upper(whole), speak: whole, lang },
             bubbles: parts.map((part, i) => ({ id: `b${i}`, label: upper(part), speak: part, lang })),
-            hint: uk ? `Слово «${whole}» складається так: ${parts.join(' — ')}.` : 'Подивись на слово під малюнком і лопай літери зліва направо.',
+            hint: T.partsHint(p, whole, parts),
           },
           step,
         ),
@@ -331,17 +336,17 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
     const spell = ([whole, emoji]: Word, hard: boolean) => {
       const letters = [...whole];
       // Ukrainian only: an English learner always needs to see the word.
-      const byEar = uk && hard;
+      const byEar = pack.byEar && hard;
       const strays = hard ? shuffle(pack.alphabet.filter((l) => !letters.includes(l))).slice(0, 2) : [];
       return templateTask(
         `spell:${whole}`,
-        uk ? (byEar ? 'Послухай слово і склади його з літер.' : `Склади слово з літер: ${whole}.`) : 'Склади англійське слово з літер. Воно написане під малюнком.',
+        T.spellAsk(p, whole, byEar),
         {
           template: Mechanics.BubblePop,
           target: { id: 'target', emoji, label: byEar ? undefined : upper(whole), speak: whole, lang },
           bubbles: letters.map((l, i) => letterCard(`b${i}`, l)),
           extras: strays.map((l, i) => letterCard(`x${i}`, l)),
-          hint: uk ? `Вимов слово повільно: ${whole}. Його літери: ${letters.map(said).join(', ')}.` : 'Подивись на слово під малюнком і лопай літери зліва направо. Зайві літери не лопаються.',
+          hint: T.spellHint(p, whole, letters.map(said), byEar),
         },
         step,
       );
@@ -375,7 +380,8 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
   const halfTier: Tier<LangPack['halves'][number]> = { from: STAGE.halves, to: STAGE.assoc - 1, items: pack.halves };
   const assocTier: Tier<Assoc> = { from: STAGE.assoc, to: LANGUAGE_STEPS, items: pack.assoc };
 
-  function chain(step: number): Tasks {
+  function chain(step: number, config: Config): Tasks {
+    const { T, p } = told(config);
     const tasks: Tasks = [];
 
     const firsts = opened(firstTier, step);
@@ -384,10 +390,10 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
       tasks.push(
         templateTask(
           `first:${lead[0]}`,
-          uk ? 'З’єднай кожне слово з літерою, на яку воно починається.' : 'З’єднай кожне англійське слово з його першою літерою.',
+          T.firstAsk(p),
           match(
             set.map((w) => ({ item: word(`w:${w[0]}`, w[0], w[1]), slot: letterCard(`l:${first(w)}`, first(w)) })),
-            uk ? `Вимов слово вголос і послухай перший звук. «${lead[0]}» починається на літеру «${first(lead)}».` : 'Подивись, з якої літери починається кожне слово.',
+            T.firstHint(p, lead[0], first(lead)),
           ),
           step,
         ),
@@ -400,10 +406,10 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
       tasks.push(
         templateTask(
           `same:${lead[0][0]}|${lead[1][0]}`,
-          uk ? 'З’єднай слова, які починаються на однакову літеру.' : 'З’єднай англійські слова, які починаються на однакову літеру.',
+          T.sameAsk(p),
           match(
             set.map(([a, b]) => ({ item: word(`a:${a[0]}`, a[0], a[1]), slot: word(`b:${b[0]}`, b[0], b[1]) })),
-            uk ? `«${lead[0][0]}» і «${lead[1][0]}» починаються на однакову літеру — «${first(lead[0])}».` : 'Порівняй перші літери слів: у пари вони однакові.',
+            T.sameHint(p, lead[0][0], lead[1][0], first(lead[0])),
           ),
           step,
         ),
@@ -416,14 +422,14 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
       tasks.push(
         templateTask(
           `half:${lead[0]}${lead[1]}`,
-          uk ? 'З’єднай початок слова з його закінченням.' : 'З’єднай початок англійського слова з його закінченням.',
+          T.halfAsk(p),
           match(
             set.map(([head, tail, emoji]) => ({
               item: { id: `h:${head}${tail}`, label: `${upper(head)}…`, speak: head, lang },
               // The picture says which word the ending belongs to.
               slot: { id: `t:${head}${tail}`, emoji, label: `…${upper(tail)}`, speak: head + tail, lang },
             })),
-            uk ? `Подивись на малюнок: це «${lead[0]}${lead[1]}». Слово починається зі складу «${lead[0]}».` : 'Натисни на динамік біля малюнка, послухай слово і знайди його початок.',
+            T.halfHint(p, lead[0], lead[1]),
           ),
           step,
         ),
@@ -436,10 +442,10 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
       tasks.push(
         templateTask(
           `assoc:${lead.a}|${lead.b}`,
-          uk ? 'З’єднай слова, які пов’язані за змістом.' : 'З’єднай англійські слова, які пов’язані за змістом.',
+          T.assocAsk(p),
           match(
             set.map((a) => ({ item: word(`a:${a.a}`, a.a, a.ea), slot: word(`b:${a.b}`, a.b, a.eb) })),
-            uk ? `Подумай, що буває разом. «${lead.a}» — «${lead.b}».` : 'Натисни на динамік, щоб почути слово. Шукай те, що буває з ним разом.',
+            T.assocHint(p, lead.a, lead.b),
           ),
           step,
         ),
@@ -478,21 +484,20 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
   })();
   const rhymeTier: Tier<Rhyme> = { from: 1, to: LANGUAGE_STEPS, items: rhymeLeads };
 
-  function rhymes(step: number): Tasks {
+  function rhymes(step: number, config: Config): Tasks {
+    const { T, p } = told(config);
     const known = opened(rhymeTier, step);
     return known.map((lead) => {
       const set = withOthers(lead, known, 3, (r) => String(r.family));
       return templateTask(
         `rhyme:${lead.a[0]}|${lead.b[0]}`,
-        uk ? 'Знайди пари слів, які римуються.' : 'Знайди пари англійських слів, які римуються.',
+        T.rhymeAsk(p),
         match(
           set.map((r) => ({ item: word(`a:${r.a[0]}`, r.a[0], r.a[1] || undefined), slot: word(`b:${r.b[0]}`, r.b[0], r.b[1] || undefined) })),
-          uk
-            ? `Слова римуються, коли закінчуються однаково: «${lead.a[0]}» — «${lead.b[0]}».`
-            : 'Натисни на динаміки й послухай: слова, що римуються, звучать наприкінці однаково.',
+          T.rhymeHint(p, lead.a[0], lead.b[0]),
         ),
         step,
-        uk ? `«${lead.a[0]}» — «${lead.b[0]}». Це рима!` : undefined,
+        p.native ? T.rhymeYes(lead.a[0], lead.b[0]) : undefined,
       );
     });
   }
@@ -505,27 +510,26 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
     { from: STAGE.long, to: LANGUAGE_STEPS, items: pack.sentences.long },
   ];
 
-  function sentences(step: number): Tasks {
+  function sentences(step: number, config: Config): Tasks {
+    const { T, p } = told(config);
     return sentenceTiers.flatMap((tier) =>
       opened(tier, step).map(([text, emoji]) => {
         const words = text.split(' ');
         const cards = words.map((w, i) => word(`w${i}`, w));
         return templateTask(
           `sentence:${text}`,
-          uk ? 'Постав слова по порядку, щоб вийшло речення.' : 'Постав англійські слова по порядку, щоб вийшло речення.',
+          T.sentenceAsk(p),
           {
             template: Mechanics.ChronoSequence,
             stimulus: { emoji },
             cards,
             initial: scramble(cards.map((c) => c.id)),
             orientation: 'horizontal',
-            ends: ['початок', 'кінець'],
-            hint: uk
-              ? `Речення починається зі слова з великої літери: «${words[0]}». Останнє слово — з крапкою.`
-              : 'Речення починається зі слова з великої літери, а закінчується словом із крапкою.',
+            ends: T.ends,
+            hint: T.sentenceHint(p, words[0]),
           },
           step,
-          uk ? text : undefined,
+          p.native ? text : undefined,
         );
       }),
     );

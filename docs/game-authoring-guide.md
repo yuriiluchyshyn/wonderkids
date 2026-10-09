@@ -495,7 +495,7 @@ The platform is built around a **Zero-Aggression, anti-guessing** philosophy
   rarely meets the same task twice.
 - **Board names are the `Mechanics` enum** (`Mechanics.GridChoice`, …), never a
   string literal — in `mechanics` and in a payload's `template` alike.
-- **Texts go through the phrase engine** (`src/core/lang/uk.ts`) whenever a word
+- **Texts go through the phrase engine** (`src/core/lang/uk/phrase.ts`) whenever a word
   changes with the task: right case, gender, number and tense — «Коли достигають
   кавуни?», never «Коли це буває: достигають кавуни?».
 - **Distractors must be *plausible and already-known*.** A wrong option is drawn

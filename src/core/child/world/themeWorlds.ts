@@ -1,4 +1,6 @@
+import type { LangCode } from '@/core/lang';
 import type { Theme, ThemeId } from '@/core/theme/theme.types';
+import { worldWords } from './lang';
 import { DREAM_ID, SPACEPORT_ID, itemCost, itemId, type Inhabitant, type ItemKind, type ShopItem } from './world';
 
 /**
@@ -107,26 +109,28 @@ export interface ThemeWorld {
 }
 
 /**
- * One planet of a theme's world (1-based; the same things on every planet,
- * dearer on each next one): nine buildings, the spaceport that opens the next
- * planet, the theme's dream build as the final building, and the decorations.
+ * The world of a theme on a planet, named in `lang` (Ukrainian when none is
+ * asked for). `theme` brings its own words — the dream build — so it must be
+ * the theme in the same language (`useActiveTheme(lang)`).
  */
-export function themeWorld(theme: Theme, planet = 1): ThemeWorld {
+export function themeWorld(theme: Theme, planet = 1, lang?: LangCode): ThemeWorld {
   const def = WORLDS[theme.id] ?? WORLDS.galaxy;
-  const make = (kind: ItemKind) => ([emoji, name]: [string, string], index: number): ShopItem => {
+  const words = worldWords(lang);
+  const own = words?.themes[WORLDS[theme.id] ? theme.id : 'galaxy'];
+  const make = (kind: ItemKind, names?: readonly string[]) => ([emoji, name]: [string, string], index: number): ShopItem => {
     const id = itemId(kind, index);
-    return { id, name, emoji, kind, cost: itemCost(id, planet) };
+    return { id, name: names?.[index] ?? name, emoji, kind, cost: itemCost(id, planet) };
   };
-  const spaceport: ShopItem = { id: SPACEPORT_ID, name: 'Космопорт', emoji: '🚀', kind: 'building', cost: itemCost(SPACEPORT_ID, planet) };
+  const spaceport: ShopItem = { id: SPACEPORT_ID, name: words?.spaceport ?? 'Космопорт', emoji: '🚀', kind: 'building', cost: itemCost(SPACEPORT_ID, planet) };
   const dream: ShopItem = { id: DREAM_ID, name: theme.dreamBuild.name, emoji: theme.dreamBuild.emoji, kind: 'building', cost: itemCost(DREAM_ID, planet) };
+  // The theme's own residents first, then the guests of every world — each with the name of its own list.
+  const residents: [emoji: string, name: string][] = [
+    ...def.residents.map(([emoji, name], i): [string, string] => [emoji, own?.residents[i] ?? name]),
+    ...VISITORS.map(([emoji, name], i): [string, string] => [emoji, words?.visitors[i] ?? name]).filter(([emoji]) => !def.residents.some(([mine]) => mine === emoji)),
+  ];
   return {
-    name: def.name,
-    items: [...def.buildings.map(make('building')), spaceport, dream, ...def.decor.map(make('decor'))],
-    // The theme's own residents first; visitors the theme already has under
-    // the same picture are skipped so nobody arrives twice.
-    residents: [
-      ...def.residents,
-      ...VISITORS.filter(([emoji]) => !def.residents.some(([own]) => own === emoji)),
-    ].map(([emoji, name], i) => ({ id: `r${i}`, name, emoji })),
+    name: own?.name ?? def.name,
+    items: [...def.buildings.map(make('building', own?.buildings)), spaceport, dream, ...def.decor.map(make('decor', own?.decor))],
+    residents: residents.map(([emoji, name], i) => ({ id: `r${i}`, name, emoji })),
   };
 }

@@ -178,18 +178,31 @@ try {
 
       const steps = config.progression === 'free' ? 1 : (sub.steps ?? 30);
       let minLevel = Infinity;
+      // Every language the game is written in is played; the voice speaks the next one of them,
+      // so each task is also made a second time — and must come out the same task (its twin).
+      const langs = sub.langs ?? ['uk'];
+      for (const [at, shown] of langs.entries()) {
+      const said = langs[(at + 1) % langs.length];
+      const game = `${config.game_id}${langs.length > 1 ? ` [${shown}]` : ''}`;
+      let twinless = 0;
       for (let step = 1; step <= steps; step += 1) {
         const base = { subCategoryId: sub.id, step, choicesCount: 9 };
         // Three independent draws per step to shake out random edge cases.
         for (let round = 0; round < 3; round += 1) {
-          const candidates = drawCandidates(module, base, size, config.progression !== 'free');
+          const candidates = drawCandidates(module, base, size, config.progression !== 'free', { shown, said });
           const engine = new LevelEngine({ steps_count_default: size, tasks: candidates });
           minLevel = Math.min(minLevel, engine.total);
-          if (engine.total < 3) problems.push(`${config.game_id} step ${step}: only ${engine.total} unique tasks`);
+          if (engine.total < 3) problems.push(`${game} step ${step}: only ${engine.total} unique tasks`);
           for (const task of candidates) {
             tasksChecked += 1;
             try {
               assert.ok(task.id && task.prompt, 'task needs id and prompt');
+              if (said !== shown && !task.voice) twinless += 1;
+              // A game in another language has no Ukrainian left in what it says.
+              if (shown !== 'uk' && !sub.group) {
+                const words = [task.prompt, task.speak, module.getHintSpeech?.(task), ...[task.outro ?? []].flat()].filter(Boolean).join(' ');
+                assert.ok(!/[А-Яа-яІіЇїЄєҐґ]/.test(words), `Ukrainian left in a ${shown} task: ${words.slice(0, 90)}`);
+              }
               assert.ok(Number.isInteger(task.reward) && task.reward >= 1, `bad reward ${task.reward}`);
               if (task.payload?.template) checkPayload(task.payload, validate);
               if (module.getHintSpeech) assert.equal(typeof module.getHintSpeech(task), 'string');
@@ -199,12 +212,14 @@ try {
                 for (const text of task.outro) assert.ok(!/undefined|null|NaN/.test(text), `broken fact text: ${text}`);
               }
             } catch (err) {
-              problems.push(`${config.game_id} step ${step}: ${err.message}`);
+              problems.push(`${game} step ${step}: ${err.message}`);
             }
           }
         }
       }
-      rows.push({ game: config.game_id, stars: `${config.difficulty}–${config.difficulty_max}`, levels: config.progression === 'free' ? '∞ free' : steps, tasks: size, minLevel, template: config.mechanics_type });
+      if (twinless > 0) problems.push(`${game}: ${twinless} task(s) came out differently in «${said}» — the voice cannot follow them`);
+      }
+      rows.push({ game: config.game_id, langs: langs.join(' '), stars: `${config.difficulty}–${config.difficulty_max}`, levels: config.progression === 'free' ? '∞ free' : steps, tasks: size, minLevel, template: config.mechanics_type });
     }
   }
   console.table(rows);

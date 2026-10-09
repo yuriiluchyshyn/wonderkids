@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
 import { TaskCard } from './TaskCard';
 import type { CatalogEntry } from './catalog';
@@ -12,6 +13,7 @@ interface TaskGridProps {
 
 /** Responsive, animated grid of task cards (mobile-first vertical → multi-col). */
 export function TaskGrid({ entries, onStart, isDimmed }: TaskGridProps) {
+  const t = useT();
   if (entries.length === 0) {
     return (
       <motion.div
@@ -22,7 +24,7 @@ export function TaskGrid({ entries, onStart, isDimmed }: TaskGridProps) {
         <span className="emoji" style={{ fontSize: '3rem' }}>
           🔍
         </span>
-        <p>У цій галактиці ще немає планет. Обери іншу!</p>
+        <p>{t('hub.empty')}</p>
       </motion.div>
     );
   }

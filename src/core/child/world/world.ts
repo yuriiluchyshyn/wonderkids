@@ -13,6 +13,8 @@
  *
  * Pure functions only (no React, no value imports) so it runs under `node --test`.
  */
+import type { LangCode } from '../../lang/types.ts';
+import { worldWords } from './lang/index.ts';
 
 export interface BuildingDef {
   id: string;
@@ -46,6 +48,11 @@ export const PLANET_NAMES: Record<WorldPlanetId, string> = {
   neptune: 'Нептун', uranus: 'Уран', saturn: 'Сатурн', jupiter: 'Юпітер', mars: 'Марс', earth: 'Земля', venus: 'Венера', mercury: 'Меркурій',
 };
 export const GALAXY_NAME = 'Чумацький Шлях';
+
+/** A planet's name in `lang` (Ukrainian when none is asked for). */
+export const planetName = (id: WorldPlanetId, lang?: LangCode): string => worldWords(lang)?.planets[id] ?? PLANET_NAMES[id];
+/** The galaxy the journey goes through, named in `lang`. */
+export const galaxyName = (lang?: LangCode): string => worldWords(lang)?.galaxy ?? GALAXY_NAME;
 
 /** The spaceport: the building that opens the way to the next planet. Not the dream build — that stays the very last. */
 export const SPACEPORT_ID = 'sp';

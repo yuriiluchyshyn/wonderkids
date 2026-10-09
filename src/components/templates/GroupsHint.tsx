@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
@@ -17,6 +18,7 @@ interface GroupsHintProps {
  * for themselves.
  */
 export function GroupsHint({ rows, cols }: GroupsHintProps) {
+  const t = useT();
   const total = rows * cols;
   const [lit, setLit] = useState<Set<string>>(() => new Set());
   const { countChime } = useSound();
@@ -35,7 +37,7 @@ export function GroupsHint({ rows, cols }: GroupsHintProps) {
   return (
     <div>
       <p className={styles.caption}>
-        {rows} рядків · по {cols} в кожному
+        {t('tpl.rows', { count: rows, cols })}
       </p>
 
       <div className={styles.grid}>
@@ -52,7 +54,7 @@ export function GroupsHint({ rows, cols }: GroupsHintProps) {
                   animate={on ? { scale: [1, 1.3, 1] } : {}}
                   transition={{ duration: 0.3 }}
                   onClick={() => tapDot(key)}
-                  aria-label="Кружечок"
+                  aria-label={t('tpl.dot')}
                 />
               );
             })}

@@ -1,10 +1,12 @@
+import { useT, useVoiceLang, type T } from '@/core/i18n';
 import { useVoiceStopsOnLeave } from '@/core/audio/voice';
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import type { Theme } from '@/core/theme/theme.types';
 import { useSound } from '@/core/audio/useSound';
-import { useSpeech } from '@/core/audio/useSpeech';
+import { voice } from '@/core/audio/voice';
+import { useGameStore } from '@/core/child/store/useGameStore';
 import { Button } from '@/components/ui/Button';
 import styles from './Cutscene.module.css';
 
@@ -23,35 +25,35 @@ interface SceneCopy {
 }
 
 /** Per-theme bedtime cutscene content — a calm, story-shaped goodbye. */
-function bedtimeScene(theme: Theme): SceneCopy {
+function bedtimeScene(theme: Theme, t: T): SceneCopy {
   switch (theme.id) {
     case 'cars':
       return {
         icon: '🏎️',
         zzz: '💤',
-        title: 'Мультфільм: Піт-стоп!',
-        message: `Наш спорткар проїхав чудову дистанцію і йому час відпочити! Час побігати в кімнаті або випити смачного соку. Повернись за деякий час — бак знову буде повний!`,
+        title: t('rest.cars.title'),
+        message: t('rest.cars.message'),
       };
     case 'space':
       return {
         icon: '🚀',
         zzz: '🌙',
-        title: 'Мультфільм: Посадка на станцію!',
-        message: `Ракета м'яко пристикувалася до станції й увімкнула нічник. Відпочинь трохи. Повернись за деякий час — і політ продовжимо!`,
+        title: t('rest.space.title'),
+        message: t('rest.space.message'),
       };
     case 'unicorns':
       return {
         icon: '🦄',
         zzz: '☁️',
-        title: 'Мультфільм: Сон кристала!',
-        message: `Кристал м'яко огорнувся хмаринкою і заснув, щоб відновити веселку. Повернись за деякий час — і він знову засяє!`,
+        title: t('rest.unicorns.title'),
+        message: t('rest.unicorns.message'),
       };
     default:
       return {
         icon: theme.mascot.emoji,
         zzz: '💤',
-        title: 'Мультфільм: Час відпочинку!',
-        message: `${theme.mascot.name} сьогодні чудово попрацював і йде відпочивати. Час побігати в кімнаті або випити водички. Повернись за деякий час!`,
+        title: t('rest.default.title'),
+        message: t('rest.default.message', { mascot: theme.mascot.name }),
       };
   }
 }
@@ -84,8 +86,16 @@ export function Cutscene({
   useVoiceStopsOnLeave();
   const theme = useActiveTheme();
   const { play } = useSound();
-  const { speak } = useSpeech();
-  const copy = useMemo(() => bedtimeScene(theme), [theme]);
+  const t = useT();
+  const voiceLang = useVoiceLang();
+  const voiceT = useT(voiceLang);
+  const voiceTheme = useActiveTheme(voiceLang);
+  const copy = useMemo(() => bedtimeScene(theme, t), [theme, t]);
+  // What is read out is in the voice's language, whatever the screen shows.
+  const voiceOn = useGameStore((s) => s.settings.voiceOn);
+  const speak = () => {
+    if (voiceOn) voice.speak(bedtimeScene(voiceTheme, voiceT).message, undefined, voiceLang);
+  };
 
   const [phase, setPhase] = useState<Phase>(playScene ? 'scene' : 'cooldown');
 
@@ -93,7 +103,7 @@ export function Cutscene({
   // scene started or straight on the rest screen. A beat later than the
   // screen itself: the game underneath silences all speech as it is covered.
   useEffect(() => {
-    const t = window.setTimeout(() => speak(copy.message), 600);
+    const t = window.setTimeout(speak, 600);
     return () => window.clearTimeout(t);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -157,11 +167,11 @@ export function Cutscene({
           {/* No locked button and no clock while resting: there is nothing to wait at. */}
           {ready && (
             <Button size="lg" block icon="⛽" onClick={onResume}>
-              Грати далі!
+              {t('rest.playOn')}
             </Button>
           )}
           <Button size="lg" variant={ready ? 'ghost' : 'primary'} block icon="🏃" onClick={onExit}>
-            Піти відпочивати
+            {t('rest.goRest')}
           </Button>
         </motion.div>
       )}

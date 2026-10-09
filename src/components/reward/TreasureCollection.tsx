@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/child/store/useGameStore';
@@ -11,6 +12,7 @@ import styles from './TreasureCollection.module.css';
  * (TreasureReveal) — this is where they live afterwards.
  */
 export function TreasureCollection() {
+  const t = useT();
   const theme = useActiveTheme();
   const collected = useGameStore((s) => s.treasures);
 
@@ -28,36 +30,36 @@ export function TreasureCollection() {
         <span className="emoji" aria-hidden style={{ fontSize: '1.8rem' }}>
           {theme.chest.closed}
         </span>
-        <h3>Колекція скарбів</h3>
+        <h3>{t('treasures.title')}</h3>
       </div>
 
       <div className={styles.grid}>
-        {theme.treasures.map((t) => {
-          const found = owned.has(treasureKey(theme.id, t.id));
+        {theme.treasures.map((treasure) => {
+          const found = owned.has(treasureKey(theme.id, treasure.id));
           return (
             <motion.div
-              key={t.id}
+              key={treasure.id}
               className={`${styles.slot} ${found ? styles.found : styles.locked}`}
               initial={false}
               animate={found ? { scale: [0.6, 1.15, 1] } : {}}
-              title={found ? t.name : 'Ще не знайдено'}
+              title={found ? treasure.name : t('treasures.notFound')}
             >
               <span className="emoji" aria-hidden>
-                {found ? t.emoji : '❓'}
+                {found ? treasure.emoji : '❓'}
               </span>
-              <span className={styles.label}>{found ? t.name : '???'}</span>
+              <span className={styles.label}>{found ? treasure.name : '???'}</span>
             </motion.div>
           );
         })}
       </div>
 
       <p className={styles.progress}>
-        Скарбів знайдено: <strong>{foundCount}</strong> / {total}
+        {t('treasures.found')} <strong>{foundCount}</strong> / {total}
       </p>
       <p className="muted">
         {complete
-          ? 'Усю колекцію зібрано! 🎉'
-          : `Відкривай ${theme.chest.closed} на шляху, щоб знайти нові скарби!`}
+          ? t('treasures.all')
+          : t('treasures.hint', { chests: theme.chest.closed })}
       </p>
     </div>
   );

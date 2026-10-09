@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
@@ -17,6 +18,7 @@ const STIR_MS = 650;
  * itself and waits for a new try. Helper: the two right tubes pulse.
  */
 export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<ColorMixPayload>) {
+  const t = useT();
   const { object, result, paints, recipe } = payload;
   const { play, playCode } = useSound();
   const [poured, setPoured] = useState<string[]>([]);
@@ -79,7 +81,7 @@ export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<C
           animate={shake ? SHAKE : { x: 0 }}
           transition={SHAKE_TRANSITION}
           onAnimationComplete={() => setShake(false)}
-          aria-label="Казан"
+          aria-label={t('tpl.cauldron')}
         >
           <div className={cn(styles.mixLiquid, liquid && styles.mixLiquidOn, solved && styles.mixLiquidDone)} style={{ background: liquid }}>
             {(solved || poured.length === 2) && (
@@ -105,7 +107,7 @@ export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<C
               onClick={() => pour(paint.id)}
               disabled={busy || used}
               whileTap={{ scale: 0.92 }}
-              aria-label={`Фарба: ${paint.name}`}
+              aria-label={t('tpl.paint', { name: paint.name })}
             >
               <span className={styles.mixBlob} style={{ background: paint.color }} />
               <span className={styles.faceLabel}>{paint.name}</span>

@@ -1,9 +1,9 @@
-import { voiced } from '@/core/lang/numbers';
+import { DEFAULT_LANG, language, type LangCode } from '@/core/lang';
+
+/** Language of a phrase — one of the languages of the app (`core/lang`). */
+export type SpeechLang = LangCode;
 
 /** Fetches a phrase as base64 MP3 from the cloud voice; rejects when unavailable. */
-/** Language of a phrase. Everything is Ukrainian except the English-lesson cards. */
-export type SpeechLang = 'uk' | 'en';
-
 export type CloudVoice = (text: string, lang: SpeechLang) => Promise<string>;
 
 /** Phrases kept in memory so repeats (prompts, hints) play instantly. */
@@ -36,6 +36,8 @@ export class SpeechEngine {
       : null;
 
   private cloud: CloudVoice | null = null;
+  /** The language a phrase is read in when its caller names none. */
+  private lang: SpeechLang = DEFAULT_LANG;
   private readonly cloudCache = new Map<string, string>();
   /**
    * The one `<audio>` element every cloud phrase plays through. iOS only lets
@@ -88,21 +90,42 @@ export class SpeechEngine {
     if (!cloud) this.cloudCache.clear();
   }
 
-  /** Picks the best available voice of the language, falling back to any voice. */
+  get language(): SpeechLang {
+    return this.lang;
+  }
+
+  /**
+   * The language of the voice from now on: which rules make a text ready to be
+   * read (`core/lang/<code>/voice.ts`) and which voice reads it. A phrase in
+   * another language — a card of a language lesson — names its own in `speak`.
+   */
+  setLanguage(lang: SpeechLang): void {
+    if (lang === this.lang) return;
+    this.cancel();
+    this.lang = lang;
+  }
+
+  /**
+   * Picks the best available voice of the language. Without one the phrase is
+   * left to the browser's default voice for the language tag — a voice of
+   * another language is never chosen: it would read the words by its own rules.
+   */
   private pickVoice(lang: SpeechLang): SpeechSynthesisVoice | undefined {
     if (!this.synth) return undefined;
-    const voices = this.synth.getVoices();
-    return voices.find((v) => v.lang?.toLowerCase().startsWith(lang)) ?? (lang === 'uk' ? voices[0] : undefined);
+    const { locale } = language(lang);
+    const voices = this.synth.getVoices().filter((v) => v.lang?.toLowerCase().replace('_', '-').startsWith(lang));
+    return voices.find((v) => v.lang.replace('_', '-').toLowerCase() === locale.toLowerCase()) ?? voices[0];
   }
 
   /** Speaks `text`; `onEnd` fires when it finishes, is cut off, or cannot play. */
-  speak(raw: string, onEnd?: () => void, lang: SpeechLang = 'uk'): void {
+  speak(raw: string, onEnd?: () => void, lang: SpeechLang = this.lang): void {
     this.cancel();
-    // Every Ukrainian phrase, whoever asks for it, is made ready for the voice
-    // here: numbers, years, clock times and lone letters become words in the
-    // right gender and case (`core/lang/numbers`). A digit handed to a speech
-    // engine is read as it pleases — «два машинки».
-    const text = lang === 'uk' ? voiced(raw) : raw;
+    // Every phrase, whoever asks for it, is made ready for the voice here, by
+    // the rules of its language: numbers, years, clock times and lone letters
+    // become words in the right gender and case (`core/lang/<code>/voice.ts`).
+    // A digit handed to a speech engine is read as it pleases — «два машинки»,
+    // «dwa gwiazdy», «one thousand eight hundred forty-six» for a year.
+    const text = language(lang).voiced(raw);
     const turn = this.turn;
     this.pendingEnd = onEnd ?? (() => undefined);
     // Locked phone, another app in front: say nothing. Cutting a phrase off
@@ -201,7 +224,7 @@ export class SpeechEngine {
     }
     this.synth.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = lang === 'en' ? 'en-US' : 'uk-UA';
+    utter.lang = language(lang).locale;
     const voice = this.pickVoice(lang);
     if (voice) utter.voice = voice;
     // Slightly slower and higher — warm and clear for small ears.

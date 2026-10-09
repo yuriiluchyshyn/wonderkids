@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Modal } from '@/components/ui/Modal';
@@ -41,6 +42,7 @@ const GIFT_EMOJI: Record<Exclude<GiftTier, null>, string> = {
  * goals are NOT shown here — they live in the shared basket (Vault).
  */
 export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
+  const t = useT();
   const theme = useActiveTheme();
   const { play, chime } = useSound();
   const current = useGameStore((s) =>
@@ -83,8 +85,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
       {entry && (
         <>
           <p className={styles.caption}>
-            Твій шлях — тисни на пройдену сходинку, щоб повторити. {theme.chest.closed} ховають
-            скарби!
+            {t('path.caption', { chests: theme.chest.closed })}
           </p>
 
           <div className={styles.path}>
@@ -124,7 +125,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                     transition={{ repeat: Infinity, duration: 1.4 }}
                     whileTap={unlocked ? { scale: 0.9 } : undefined}
                     onClick={() => selectStep(n)}
-                    aria-label={`Сходинка ${n}${isCurrent ? ' (поточна)' : chest ? ' (захований скарб)' : unlocked ? '' : ' (закрито)'}`}
+                    aria-label={`${t('path.step', { n })}${isCurrent ? t('path.current') : chest ? t('path.chest') : unlocked ? '' : t('path.locked')}`}
                   >
                     <span className="emoji" aria-hidden>
                       {content}
@@ -137,7 +138,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
           </div>
 
           <Button size="lg" icon="▶️" block onClick={() => onPlay(entry, selected)}>
-            Грати
+            {t('common.play')}
           </Button>
         </>
       )}

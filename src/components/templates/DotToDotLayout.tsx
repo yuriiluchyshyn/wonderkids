@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useRef, useState, type PointerEvent } from 'react';
 import { useSound } from '@/core/audio/useSound';
@@ -30,6 +31,7 @@ const STAR_R = 2.1;
  * The finished line reveals what the constellation is.
  */
 export function DotToDotLayout({ payload, callbacks, hintActive }: LayoutProps<DotToDotPayload>) {
+  const t = useT();
   const { stars, figure, find } = payload;
   const { chime } = useSound();
   const [joined, setJoined] = useState(0);
@@ -150,7 +152,7 @@ export function DotToDotLayout({ payload, callbacks, hintActive }: LayoutProps<D
           viewBox="0 0 100 100"
           className={cn(styles.skySvg, styles.skyFind)}
           role="group"
-          aria-label="Зоряне небо"
+          aria-label={t('tpl.sky')}
           onPointerDown={(e) => {
             pressed.current = true;
             touch(e, true);
@@ -198,7 +200,7 @@ export function DotToDotLayout({ payload, callbacks, hintActive }: LayoutProps<D
                 const on = i < joined;
                 const next = hintActive && i === joined;
                 return (
-                  <g key={i} className={styles.skyStar} role="button" aria-label={`Зірка ${star.label}`}>
+                  <g key={i} className={styles.skyStar} role="button" aria-label={t('tpl.star', { label: star.label ?? '' })}>
                     {/* A generous invisible target for small fingers. */}
                     <circle cx={star.x} cy={star.y} r="7" fill="transparent" />
                     <circle cx={star.x} cy={star.y} r={on ? 2.6 : STAR_R} className={cn(styles.skyDot, on && styles.skyDotOn, next && styles.skyDotNext)} />

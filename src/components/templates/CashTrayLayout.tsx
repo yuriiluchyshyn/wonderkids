@@ -1,16 +1,15 @@
+import { useT, type AppKey } from '@/core/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, type CSSProperties } from 'react';
 import { useSound } from '@/core/audio/useSound';
-import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useSayT } from '@/core/audio/useSpeech';
 import type { CashTrayPayload } from '@/core/game/templates/types';
 import { cn } from '@/core/utils/cn';
-import { counted } from '@/core/lang/uk';
 import { currencyOf } from '@/core/game/content/currency';
 import { Bubble, CardFace, PULSE, type LayoutProps } from './parts';
 import { useDragDrop } from './useDragDrop';
 import styles from './Templates.module.css';
 
-const TOO_MUCH = 'Це забагато! Забери трохи назад.';
 
 /** The colour (hue) of a paper note by its value — like real notes, each is its own. */
 const NOTE_HUE: Record<number, number> = { 5: 205, 10: 350, 20: 140, 50: 275, 100: 75, 200: 325 };
@@ -23,11 +22,15 @@ const NOTE_HUE: Record<number, number> = { 5: 205, 10: 350, 20: 140, 50: 275, 10
  * metal coins; everything bigger is a paper note in the colour of its value.
  */
 export function CashTrayLayout({ payload, callbacks, hintActive }: LayoutProps<CashTrayPayload>) {
+  const t = useT();
   const { item, price, wallet } = payload;
   const money = currencyOf(payload.currency);
+  /** The money in the words of the game's language: «грн» on a price tag, «5 гривень» for a screen reader. */
+  const short = t(`currency.short.${money.id}` as AppKey);
+  const sumOf = (count: number) => t(`currency.count.${money.id}` as AppKey, { count });
   const isNote = (value: number) => !money.coins.includes(value);
   const { playCode, chime } = useSound();
-  const speak = useVoiceSpeak('hint');
+  const say = useSayT('hint');
   // Indices into `wallet` that currently sit on the tray.
   const [onTray, setOnTray] = useState<number[]>([]);
   const [solved, setSolved] = useState(false);
@@ -44,7 +47,7 @@ export function CashTrayLayout({ payload, callbacks, hintActive }: LayoutProps<C
       callbacks.onSuccess();
     } else if (total > price && sum <= price) {
       // Count the overshoot once, at the moment it happens.
-      speak(TOO_MUCH);
+      say('tpl.tooMuch');
       callbacks.onMistake();
     }
   };
@@ -85,7 +88,7 @@ export function CashTrayLayout({ payload, callbacks, hintActive }: LayoutProps<C
           <CardFace card={item} speaker={false} />
         </button>
         <span className={styles.priceTag}>
-          {price} <small>{money.short}</small>
+          {price} <small>{short}</small>
         </span>
       </div>
 
@@ -96,17 +99,17 @@ export function CashTrayLayout({ payload, callbacks, hintActive }: LayoutProps<C
       >
         {onTray.length === 0 && <span className={styles.tillEmpty}>🧾</span>}
         {onTray.map((index) => (
-          <button key={index} type="button" className={styles.moneyBtn} onClick={() => remove(index)} aria-label={`Забрати ${counted(wallet[index], money.counted)}`}>
+          <button key={index} type="button" className={styles.moneyBtn} onClick={() => remove(index)} aria-label={t('tpl.takeBack', { amount: sumOf(wallet[index]) })}>
             {coin(index)}
           </button>
         ))}
         {(hintActive || over || solved) && (
           <span className={styles.tillSum}>
-            = {sum} <small>{money.short}</small>
+            = {sum} <small>{short}</small>
           </span>
         )}
       </motion.div>
-      <AnimatePresence>{over && !solved && <Bubble>{TOO_MUCH}</Bubble>}</AnimatePresence>
+      <AnimatePresence>{over && !solved && <Bubble>{t('tpl.tooMuch')}</Bubble>}</AnimatePresence>
 
       <div className={styles.tray}>
         {wallet.map((value, index) =>
@@ -118,7 +121,7 @@ export function CashTrayLayout({ payload, callbacks, hintActive }: LayoutProps<C
               {...dnd.bind(String(index))}
               onClick={() => add(index)}
               role="button"
-              aria-label={counted(value, money.counted)}
+              aria-label={sumOf(value)}
             >
               {coin(index)}
             </div>

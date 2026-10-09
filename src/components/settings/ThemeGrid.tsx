@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+import { useLang, useVoiceLang } from '@/core/i18n';
+import { localTheme } from '@/core/theme/localTheme';
 import { THEME_LIST } from '@/core/theme/themes';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';
@@ -11,10 +13,12 @@ export function ThemeGrid() {
   const setTheme = useGameStore((s) => s.setTheme);
   const { play } = useSound();
   const announce = useVoiceSpeak('selections');
+  const lang = useLang();
+  const voiceLang = useVoiceLang();
 
   return (
     <div className={styles.grid}>
-      {THEME_LIST.map((t) => (
+      {THEME_LIST.map((spec) => localTheme(spec, lang)).map((t) => (
         <motion.button
           key={t.id}
           className={`${styles.tile} ${t.id === themeId ? styles.active : ''}`}
@@ -26,7 +30,7 @@ export function ThemeGrid() {
           onClick={() => {
             play('success');
             setTheme(t.id);
-            announce(t.name);
+            announce(localTheme(t, voiceLang).name, voiceLang);
           }}
         >
           <span className={`${styles.icon} emoji`} aria-hidden>

@@ -1,9 +1,10 @@
+import { useLang, useT } from '@/core/i18n';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useGameStore } from '@/core/child/store/useGameStore';
-import { THEMES, DEFAULT_THEME_ID } from '@/core/theme/themes';
+import { themeOf } from '@/core/theme/localTheme';
 import { useSound } from '@/core/audio/useSound';
 import { Button } from '@/components/ui/Button';
 import styles from './ChildSelectPage.module.css';
@@ -17,7 +18,9 @@ const PIN_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'];
  * parent sets names, nicknames and PINs in the parent portal.
  */
 export function ChildSelectPage() {
-  usePageMeta({ title: 'Хто грає?' });
+  const t = useT();
+  const lang = useLang();
+  usePageMeta({ title: t('who.title') });
   const navigate = useNavigate();
   const children = useGameStore((s) => s.children);
   const setActiveChild = useGameStore((s) => s.setActiveChild);
@@ -79,10 +82,10 @@ export function ChildSelectPage() {
           <span className="emoji" style={{ fontSize: '3.4rem' }} aria-hidden>
             🌌
           </span>
-          <h1 className={styles.emptyTitle}>Ще немає гравців</h1>
-          <p className="muted">Попроси дорослого створити твій профіль у кабінеті батьків.</p>
+          <h1 className={styles.emptyTitle}>{t('who.empty')}</h1>
+          <p className="muted">{t('who.emptyHint')}</p>
           <Button size="lg" icon="⚙️" onClick={() => navigate('/parent')}>
-            Відкрити кабінет батьків
+            {t('who.openParents')}
           </Button>
         </div>
       </div>
@@ -91,11 +94,11 @@ export function ChildSelectPage() {
 
   return (
     <div className="page stack">
-      <h1 className={styles.title}>Хто сьогодні грає?</h1>
+      <h1 className={styles.title}>{t('who.today')}</h1>
 
       <div className={styles.grid}>
         {children.map((c) => {
-          const theme = THEMES[c.themeId ?? DEFAULT_THEME_ID];
+          const theme = themeOf(c.themeId, lang);
           return (
             <motion.button
               key={c.id}
@@ -139,8 +142,8 @@ export function ChildSelectPage() {
               <span className={`${styles.pinAvatar} emoji`} aria-hidden>
                 {AVATAR[selected.profile.gender] ?? AVATAR.girl}
               </span>
-              <p className={styles.pinName}>Привіт, {selected.profile.name}!</p>
-              <p className="muted">Введи свій код</p>
+              <p className={styles.pinName}>{t('who.hello', { name: selected.profile.name })}</p>
+              <p className="muted">{t('who.enterCode')}</p>
 
               <motion.div
                 className={styles.dots}
@@ -160,7 +163,7 @@ export function ChildSelectPage() {
                     className={`${styles.key} ${k === '' ? styles.keyGhost : ''}`}
                     disabled={k === ''}
                     onClick={() => press(k)}
-                    aria-label={k === '⌫' ? 'Стерти' : k || undefined}
+                    aria-label={k === '⌫' ? t('who.erase') : k || undefined}
                   >
                     {k}
                   </button>
@@ -168,7 +171,7 @@ export function ChildSelectPage() {
               </div>
 
               <button type="button" className={styles.pinCancel} onClick={() => setSelectedId(null)}>
-                Назад
+                {t('common.back')}
               </button>
             </motion.div>
           </motion.div>
