@@ -13,6 +13,7 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { Button } from '@/components/ui/Button';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { endDemo, goCreateAccount, useDemo } from '@/core/app/demo';
 import styles from './ChildDrawer.module.css';
 
 const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };
@@ -46,6 +47,8 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
   const sayT = useT(voiceLang);
   const voiceTheme = useActiveTheme(voiceLang);
   const logout = useAuthStore((s) => s.logout);
+  // The guest of the trial game has no account to leave and nobody to switch to.
+  const demo = useDemo((s) => s.active);
   const soundOn = useGameStore((s) => s.settings.soundOn);
   const voiceOn = useGameStore((s) => s.settings.voiceOn);
   const ttsButtons = useGameStore((s) => s.settings.ttsButtons);
@@ -67,7 +70,8 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
   const doLogout = () => {
     play('tap');
     onClose();
-    logout(); // clears the session → App redirects to /login
+    if (demo) endDemo(); // the trial is over → App shows the login
+    else logout(); // clears the session → App redirects to /login
   };
 
   // Portalled to <body>: the hub page is its own stacking context, so an
@@ -193,11 +197,17 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
             </div>
 
             <div className={styles.actions}>
-              <Button block icon="🔄" variant="ghost" onClick={switchPlayer}>
-                {t('drawer.switchPlayer')}
-              </Button>
+              {demo ? (
+                <Button block icon="👨‍👩‍👧" onClick={goCreateAccount}>
+                  {t('demo.create')}
+                </Button>
+              ) : (
+                <Button block icon="🔄" variant="ghost" onClick={switchPlayer}>
+                  {t('drawer.switchPlayer')}
+                </Button>
+              )}
               <Button block icon="🚪" variant="ghost" onClick={doLogout}>
-                {t('common.logout')}
+                {demo ? t('demo.leave') : t('common.logout')}
               </Button>
             </div>
           </motion.aside>

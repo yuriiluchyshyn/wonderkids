@@ -202,6 +202,20 @@ export const api = {
     });
   },
 
+  /**
+   * Count an arrival into the trial game (`core/app/demo.ts`). Answers with how
+   * long the trial lasts and, when the visit was counted, the ticket to report
+   * later how it ended.
+   */
+  visit(arrival: { link: string | null; mode: 'demo'; via: 'link' | 'site'; lang: string; referrer: string | null }) {
+    return request<{ ok: true; demoMinutes: number; visit?: number; token?: string }>('/api/health', { method: 'POST', body: arrival });
+  },
+
+  /** What became of a counted trial game: its time ran out, or «create an account» was pressed. */
+  visitEvent(ticket: { visit: number; token: string }, event: 'expired' | 'cta') {
+    return request<{ ok: true }>('/api/health', { method: 'PUT', body: { ...ticket, event }, keepalive: true });
+  },
+
   /** Check whether a child nickname is free (excludes the caller's account). */
   checkNickname(token: string, nick: string) {
     return request<{ available: boolean }>(
@@ -245,7 +259,7 @@ export interface AdminAccount {
   /** The key assigned to this account, if any (otherwise the global key applies). */
   speechKeyId: number | null;
   /** The channel that brought the account (utm_* labels); null when it had none. */
-  signup: { source: string; medium: string | null; campaign: string | null } | null;
+  signup: { source: string; medium: string | null; campaign: string | null; link?: string | null } | null;
   children: AdminChild[];
 }
 
@@ -271,6 +285,65 @@ export interface SpeechKeyDraft {
   voice: string;
   scope: 'global' | 'accounts';
   accountIds: number[];
+}
+
+/** Where one of the owner's links leads: the public site, or straight into the trial game. */
+export type LinkMode = 'site' | 'demo';
+
+/** A link the owner made to hand out, with what it has brought so far (all time). */
+export interface MarketingLink {
+  id: number;
+  code: string;
+  name: string;
+  mode: LinkMode;
+  note: string;
+  createdAt: string;
+  visits: number;
+  /** Different visitors among those visits. */
+  visitors: number;
+  /** Arrivals into the trial game. */
+  demos: number;
+  /** Trial games played until their time ran out. */
+  expired: number;
+  /** Presses of «create an account» in the trial game. */
+  cta: number;
+  /** Parent accounts created by a visitor of this link. */
+  accounts: number;
+  lastVisitAt: string | null;
+}
+
+/** One arrival: by a link, or into the trial game. */
+export interface MarketingVisit {
+  id: number;
+  /** The link's code; null — the trial game was opened without one. */
+  link: string | null;
+  /** Null when the link has since been deleted. */
+  linkName: string | null;
+  mode: LinkMode;
+  /** `site` — the trial game was opened with the button on our own site. */
+  via: 'link' | 'site';
+  country: string | null;
+  lang: string | null;
+  device: string | null;
+  referrer: string | null;
+  /** Tells visitors apart; says nothing about who they are. */
+  visitor: string;
+  expiredAt: string | null;
+  ctaAt: string | null;
+  createdAt: string;
+}
+
+export interface ProductSettings {
+  /** How long the trial game lasts. */
+  demoMinutes: number;
+  demoMinutesDefault: number;
+  demoMinutesMin: number;
+  demoMinutesMax: number;
+}
+
+interface LinksPage {
+  links: MarketingLink[];
+  visits: MarketingVisit[];
 }
 
 export type FeedbackKind = 'bug' | 'idea' | 'game' | 'other';
@@ -344,6 +417,32 @@ export const adminApi = {
       adminKey,
       body: { keyId },
     });
+  },
+
+  getSettings(adminKey: string) {
+    return request<{ settings: ProductSettings }>('/api/admin/users?part=settings', { adminKey });
+  },
+
+  saveSettings(adminKey: string, change: { demoMinutes: number }) {
+    return request<{ settings: ProductSettings }>('/api/admin/users?part=settings', { method: 'PUT', adminKey, body: change });
+  },
+
+  /** The owner's links and the arrivals of the last `days` days (0 — all time). */
+  listLinks(adminKey: string, days: number) {
+    return request<LinksPage>(`/api/admin/users?part=links&days=${days}`, { adminKey });
+  },
+
+  createLink(adminKey: string, days: number, link: { name: string; mode: LinkMode; code?: string; note?: string }) {
+    return request<LinksPage>(`/api/admin/users?part=links&days=${days}`, { method: 'POST', adminKey, body: link });
+  },
+
+  renameLink(adminKey: string, days: number, id: number, name: string, note: string) {
+    return request<LinksPage>(`/api/admin/users?part=links&days=${days}`, { method: 'PUT', adminKey, body: { id, name, note } });
+  },
+
+  /** The visits it brought stay in the statistics. */
+  deleteLink(adminKey: string, days: number, id: number) {
+    return request<LinksPage>(`/api/admin/users?part=links&days=${days}&id=${id}`, { method: 'DELETE', adminKey });
   },
 
   listFeedback(adminKey: string) {

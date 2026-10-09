@@ -992,5 +992,17 @@
     "indian": "Ocean Indyjski",
     "arctic": "Ocean Arktyczny",
     "southern": "Ocean Południowy"
+  },
+  "demo": {
+    "banner": "Gra próbna: to, co tu zbierzesz, nie jest zapisywane",
+    "create": "Załóż konto",
+    "leave": "Zakończ grę próbną",
+    "over": {
+      "title": "Próbna podróż dobiegła końca!",
+      "text": "Świetnie Ci idzie! To była gra próbna, dlatego wszystko, co udało się zebrać, nie jest jeszcze zapisane. Zawołaj mamę albo tatę i poproś, żeby założyli dla Ciebie konto — wtedy zagrasz dalej, a wszystko, co zbierzesz, zostanie z Tobą.",
+      "listen": "Posłuchaj jeszcze raz",
+      "parents": "Dla rodziców: w grze próbnej postępy nie są zapisywane. Załóżcie konto i dodajcie profil dziecka — będzie grać dalej, a jego postępy zostaną zapisane.",
+      "login": "Mamy już konto"
+    }
   }
 }

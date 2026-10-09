@@ -1,5 +1,5 @@
 import { dictionaryProblems, type Dict } from '@pulsar/i18n';
-import { LANG_COOKIE, publicUrls } from '@pulsar/platform';
+import { LANG_COOKIE, TRIAL_PATH, publicUrls } from '@pulsar/platform';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
@@ -73,6 +73,9 @@ test('vercel.json speaks of the same cookie, languages and portals as the code',
   // The game's paths opened on the site go to the portal that serves them.
   const toPortal = (path: string): string | undefined => redirects.find((rule) => rule.source === path)?.destination;
   assert.equal(toPortal('/login'), `${URLS.play}/login`);
+  // The trial game is the child portal's; the page's own button leads there too.
+  assert.equal(toPortal(TRIAL_PATH), `${URLS.play}${TRIAL_PATH}`);
+  assert.ok(template.includes(`data-trial href="__PLAY_URL__${TRIAL_PATH}"`));
   assert.equal(toPortal('/parent-login'), `${URLS.parents}/parent-login`);
   assert.equal(toPortal('/admin/:path*'), `${URLS.parents}/admin/:path*`);
 });

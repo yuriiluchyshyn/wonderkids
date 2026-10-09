@@ -1,5 +1,5 @@
 import { LangProvider, useGameLang, useParentLang, useT } from '@/core/translator';
-import { lazy, Suspense, useEffect, type CSSProperties, type ReactNode } from 'react';
+import { lazy, Suspense, useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { VoiceGuard } from '@/core/audio/voice';
 import { ThemeProvider } from '@/core/theme/ThemeProvider';
@@ -7,6 +7,8 @@ import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useRemoteSync } from '@/core/account/sync/useRemoteSync';
 import { getPortal, portalUrl } from '@/core/app/portal';
+import { demoTick, seatGuest, useDemo } from '@/core/app/demo';
+import { DemoOver } from '@/components/demo/DemoOver';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { ChildLoginPage } from '@/pages/auth/ChildLoginPage';
 import { HubPage } from '@/pages/child/HubPage';
@@ -141,10 +143,61 @@ function SyncedRoutes() {
   );
 }
 
-/** Gate: require a session, otherwise send the user to the login screen. */
+/** How often the trial's clock looks at the time. */
+const DEMO_TICK_MS = 1000;
+
+/**
+ * The trial game (`core/app/demo.ts`): the child's screens for a guest who
+ * lives in memory — no account, no save, no server clock. Its own clock runs
+ * while the page is on the screen; when the time is up the game is taken off
+ * the screen, wherever it was, and `DemoOver` takes its place.
+ */
+function DemoRoutes() {
+  const expired = useDemo((s) => s.expired);
+  const [seated, setSeated] = useState(false);
+
+  useEffect(() => {
+    seatGuest();
+    setSeated(true);
+  }, []);
+
+  useEffect(() => {
+    let last = Date.now();
+    const id = window.setInterval(() => {
+      const now = Date.now();
+      // A hidden page plays nothing; a long gap is a sleeping phone, not play.
+      if (!document.hidden) demoTick(Math.min(now - last, 2 * DEMO_TICK_MS));
+      last = now;
+    }, DEMO_TICK_MS);
+    return () => window.clearInterval(id);
+  }, []);
+
+  if (!seated) return null;
+  if (expired) {
+    return (
+      <InLang of="game">
+        <DemoOver />
+      </InLang>
+    );
+  }
+  return (
+    <InLang of="game">
+      <Routes>
+        <Route path="/" element={<HubPage />} />
+        <Route path="/play/:moduleId/:subId" element={<GamePage />} />
+        <Route path="/world" element={<WorldPage />} />
+        <Route path="/vault" element={<VaultPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </InLang>
+  );
+}
+
+/** Gate: require a session — or a trial game —, otherwise send the user to the login screen. */
 function ProtectedApp() {
   const token = useAuthStore((s) => s.token);
-  if (!token) return <Navigate to="/login" replace />;
+  const demo = useDemo((s) => s.active);
+  if (!token) return demo ? <DemoRoutes /> : <Navigate to="/login" replace />;
   return <SyncedRoutes />;
 }
 

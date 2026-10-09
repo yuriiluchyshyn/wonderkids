@@ -948,5 +948,17 @@
     "indian": "Indian Ocean",
     "arctic": "Arctic Ocean",
     "southern": "Southern Ocean"
+  },
+  "demo": {
+    "banner": "Trial game: nothing collected here is saved",
+    "create": "Create an account",
+    "leave": "Leave the trial game",
+    "over": {
+      "title": "Your trial trip is over!",
+      "text": "You play wonderfully! This was a trial game, so everything you collected is not saved yet. Call Mom or Dad and ask them to create an account for you — then you can keep playing, and everything you collect will stay with you.",
+      "listen": "Listen again",
+      "parents": "For parents: progress is not saved in the trial game. Create an account and add your child’s profile — they will keep playing, and their progress will be saved.",
+      "login": "We already have an account"
+    }
   }
 }

@@ -4,6 +4,7 @@ import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { getPortal } from '@/core/app/portal';
 import { useTimeBudget } from '@/core/child/time/screenTime';
+import { demoFuelPct, useDemo } from '@/core/app/demo';
 import { TimeBudget } from './TimeBudget';
 import styles from './TimeHeader.module.css';
 
@@ -23,16 +24,19 @@ export function TimeHeader() {
   const children = useGameStore((s) => s.children);
   const { fuelPct, inCooldown } = useTimeBudget();
   const { pathname } = useLocation();
+  const demo = useDemo((s) => s.active && !s.expired);
+  const demoPct = useDemo((s) => demoFuelPct(s.elapsedMs, s.minutes));
 
-  // Only for a signed-in child with an active save, on child-facing screens.
-  if (!token) return null;
+  // Only for a signed-in child with an active save, on child-facing screens —
+  // or for the guest of the trial game, whose row drains with the trial itself.
+  if (!token && !demo) return null;
   if (getPortal() === 'parent') return null;
   if (HIDDEN_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return null;
   if (!children.some((c) => c.id === activeChildId)) return null;
 
   return (
     <div className={styles.bar} aria-label={t('time.label')} data-tip="time">
-      <TimeBudget pct={fuelPct} resting={inCooldown} slots={10} />
+      <TimeBudget pct={token ? fuelPct : demoPct} resting={token ? inCooldown : false} slots={10} />
     </div>
   );
 }

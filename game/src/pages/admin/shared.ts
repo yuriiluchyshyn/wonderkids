@@ -16,6 +16,12 @@ const ERRORS: Record<string, string> = {
   no_reply_address: 'Автор не залишив пошти.',
   invalid_reply: 'Напиши відповідь (до 4000 знаків).',
   not_found: 'Цього звернення вже немає.',
+  invalid_demo_minutes: 'Тривалість пробної гри — ціле число хвилин від 1 до 60.',
+  invalid_name: 'Дай посиланню назву.',
+  invalid_mode: 'Обери, куди веде посилання.',
+  invalid_code: 'Код — від 2 до 40 знаків: латинські малі літери, цифри, дефіс.',
+  code_taken: 'Посилання з таким кодом уже є — впиши інший код.',
+  link_not_found: 'Цього посилання вже немає.',
 };
 
 export function errorText(err: unknown): string {

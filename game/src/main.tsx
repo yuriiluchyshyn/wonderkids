@@ -5,6 +5,7 @@ import { App } from './App';
 import { inject } from '@vercel/analytics';
 import { adoptChildHandoff } from '@/core/account/auth/useAuthStore';
 import { rememberSource } from '@/core/app/attribution';
+import { beginDemo } from '@/core/app/demo';
 import '@pulsar/brand/night-sky.css';
 import './styles/global.css';
 
@@ -18,6 +19,9 @@ adoptChildHandoff();
 // The channel that brought the visitor (utm_* in the address), kept for the
 // moment a parent account is created.
 rememberSource();
+
+// The trial game: an address that asks for it (`/try`), or a tab already in one.
+beginDemo();
 
 // Offer the language of the visitor's country, unless they have chosen one.
 void offerLangByCountry((import.meta.env.VITE_API_URL ?? '').replace(/\/$/, ''));

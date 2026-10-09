@@ -142,6 +142,11 @@
       "permanent": false
     },
     {
+      "source": "/try",
+      "destination": "https://play.pulsarkids.com/try",
+      "permanent": false
+    },
+    {
       "source": "/play/:path*",
       "destination": "https://play.pulsarkids.com/play/:path*",
       "permanent": false

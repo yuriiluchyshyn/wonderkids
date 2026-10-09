@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { isLocalHost, isPreviewHost, portalHost, portalOfHost, publicUrls, queryOfSource, rootHost, sharedCookieDomain, sourceOfQuery } from '../src/index.ts';
+import { linkOfQuery, isLocalHost, isPreviewHost, portalHost, portalOfHost, publicUrls, queryOfSource, rootHost, sharedCookieDomain, sourceOfQuery } from '../src/index.ts';
 
 test('hosts: the root domain, its portals, and where there are none', () => {
   assert.equal(rootHost('Play.PulsarKids.com'), 'pulsarkids.com');
@@ -32,4 +32,13 @@ test('a source travels in a link and comes out the same', () => {
   assert.deepEqual(source, { source: 'ig', medium: 'paid', campaign: 'pulsar ua' });
   assert.deepEqual(sourceOfQuery(queryOfSource(source!)), source);
   assert.equal(queryOfSource({ source: 'a b' }), '?utm_source=a+b');
+});
+
+test('the owner’s own link: its code travels with the source, and alone it is the source', () => {
+  assert.equal(linkOfQuery('?l=Insta-Bio'), 'insta-bio');
+  assert.equal(linkOfQuery('?l=<script>'), undefined);
+  assert.deepEqual(sourceOfQuery('?l=insta-bio'), { source: 'insta-bio', medium: 'link', link: 'insta-bio' });
+  const both = sourceOfQuery('?utm_source=ig&utm_medium=paid&l=spring');
+  assert.deepEqual(both, { source: 'ig', medium: 'paid', campaign: undefined, link: 'spring' });
+  assert.deepEqual(sourceOfQuery(queryOfSource(both!)), both);
 });

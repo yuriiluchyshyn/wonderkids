@@ -48,6 +48,9 @@ let schemaReady;
  *   wk_screen_time      play-time bookkeeping — server-owned, see screenTime.js
  *   wk_feedback         letters from the public site (+ _replies, and _parts —
  *                       attached files on their way to the mailbox)
+ *   wk_links            the owner's own links, handed out to tell visits apart
+ *   wk_visits           arrivals by those links and into the trial game
+ *   wk_settings         settings of the whole product (the trial game's length)
  */
 export function ensureSchema() {
   if (!schemaReady) {
@@ -230,6 +233,39 @@ export function ensureSchema() {
       ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS signup_source TEXT;
       ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS signup_medium TEXT;
       ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS signup_campaign TEXT;
+      -- The owner's own links and the visits by them (see marketing.js).
+      -- A visit keeps its link's code, not a reference: deleting a link
+      -- leaves what it brought in the statistics.
+      ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS signup_link TEXT;
+      CREATE TABLE IF NOT EXISTS wk_links (
+        id         SERIAL PRIMARY KEY,
+        code       TEXT NOT NULL UNIQUE,
+        name       TEXT NOT NULL,
+        mode       TEXT NOT NULL,
+        note       TEXT NOT NULL DEFAULT '',
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      );
+      CREATE TABLE IF NOT EXISTS wk_visits (
+        id         BIGSERIAL PRIMARY KEY,
+        link_code  TEXT,
+        mode       TEXT NOT NULL,
+        via        TEXT NOT NULL DEFAULT 'link',
+        country    TEXT,
+        lang       TEXT,
+        device     TEXT,
+        referrer   TEXT,
+        visitor    TEXT NOT NULL DEFAULT '',
+        expired_at TIMESTAMPTZ,
+        cta_at     TIMESTAMPTZ,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      );
+      CREATE INDEX IF NOT EXISTS wk_visits_created_at ON wk_visits (created_at DESC);
+      -- Settings of the whole product, set in the admin panel (one row each).
+      CREATE TABLE IF NOT EXISTS wk_settings (
+        key        TEXT PRIMARY KEY,
+        value      JSONB NOT NULL,
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      );
     `).catch((err) => {
       // Don't cache a failure: let the next request retry (DB may be back).
       schemaReady = undefined;
@@ -258,11 +294,11 @@ export async function findParentByEmail(email) {
  */
 export async function createParent(email, source = null) {
   const { rows } = await getPool().query(
-    `INSERT INTO wk_parents (email, email_key, signup_source, signup_medium, signup_campaign)
-     VALUES ($1, $2, $3, $4, $5)
+    `INSERT INTO wk_parents (email, email_key, signup_source, signup_medium, signup_campaign, signup_link)
+     VALUES ($1, $2, $3, $4, $5, $6)
      ON CONFLICT DO NOTHING
      RETURNING id, email, created_at`,
-    [normaliseEmail(email), emailKey(email), source?.source ?? null, source?.medium ?? null, source?.campaign ?? null],
+    [normaliseEmail(email), emailKey(email), source?.source ?? null, source?.medium ?? null, source?.campaign ?? null, source?.link ?? null],
   );
   return rows[0] ?? findParentByEmail(email);
 }
@@ -689,7 +725,7 @@ export async function cacheSpeech(hash, voice, audio) {
 export async function listAccounts() {
   const db = getPool();
   const parents = await db.query(
-    `SELECT id, email, email_key, created_at, tts_key_id, tts_off, signup_source, signup_medium, signup_campaign
+    `SELECT id, email, email_key, created_at, tts_key_id, tts_off, signup_source, signup_medium, signup_campaign, signup_link
        FROM wk_parents ORDER BY created_at DESC`,
   );
   const children = await db.query(
@@ -739,7 +775,7 @@ export async function listAccounts() {
     speechOff: p.tts_off,
     speechKeyId: p.tts_key_id ?? null,
     // The channel that brought the account; null for one registered without a label.
-    signup: p.signup_source ? { source: p.signup_source, medium: p.signup_medium, campaign: p.signup_campaign } : null,
+    signup: p.signup_source ? { source: p.signup_source, medium: p.signup_medium, campaign: p.signup_campaign, link: p.signup_link ?? null } : null,
     children: childrenByParent.get(p.id) ?? [],
   }));
 }
@@ -934,4 +970,144 @@ export async function setFeedbackStatus(id, status) {
 export async function deleteFeedback(id) {
   const { rowCount } = await getPool().query(`DELETE FROM wk_feedback WHERE id = $1`, [id]);
   return rowCount > 0;
+}
+
+// ---------------------------------------------------------------------------
+// The owner's links, the visits by them, and the product's settings
+// ---------------------------------------------------------------------------
+
+/** One setting of the product, or `fallback` when it was never set. */
+export async function getSetting(key, fallback = null) {
+  const { rows } = await getPool().query(`SELECT value FROM wk_settings WHERE key = $1`, [key]);
+  return rows[0] ? rows[0].value : fallback;
+}
+
+export async function setSetting(key, value) {
+  await getPool().query(
+    `INSERT INTO wk_settings (key, value) VALUES ($1, $2::jsonb)
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`,
+    [key, JSON.stringify(value)],
+  );
+}
+
+/**
+ * Every link, newest first, with what it has brought: arrivals, different
+ * visitors, trial games played to the end, «create an account» presses and
+ * the accounts created by it.
+ */
+export async function listLinks() {
+  const { rows } = await getPool().query(
+    `SELECT l.id, l.code, l.name, l.mode, l.note, l.created_at,
+            COALESCE(v.visits, 0) AS visits, COALESCE(v.visitors, 0) AS visitors,
+            COALESCE(v.demos, 0) AS demos, COALESCE(v.expired, 0) AS expired, COALESCE(v.cta, 0) AS cta,
+            v.last_visit_at, COALESCE(p.accounts, 0) AS accounts
+       FROM wk_links l
+       LEFT JOIN (
+         SELECT link_code, count(*)::int AS visits, count(DISTINCT visitor)::int AS visitors,
+                count(*) FILTER (WHERE mode = 'demo')::int AS demos,
+                count(expired_at)::int AS expired, count(cta_at)::int AS cta, max(created_at) AS last_visit_at
+           FROM wk_visits GROUP BY link_code
+       ) v ON v.link_code = l.code
+       LEFT JOIN (
+         SELECT signup_link, count(*)::int AS accounts FROM wk_parents WHERE signup_link IS NOT NULL GROUP BY signup_link
+       ) p ON p.signup_link = l.code
+      ORDER BY l.created_at DESC`,
+  );
+  return rows.map((row) => ({
+    id: row.id,
+    code: row.code,
+    name: row.name,
+    mode: row.mode,
+    note: row.note,
+    createdAt: row.created_at,
+    visits: row.visits,
+    visitors: row.visitors,
+    demos: row.demos,
+    expired: row.expired,
+    cta: row.cta,
+    accounts: row.accounts,
+    lastVisitAt: row.last_visit_at,
+  }));
+}
+
+/** Is there a link with this code? */
+export async function linkExists(code) {
+  const { rowCount } = await getPool().query(`SELECT 1 FROM wk_links WHERE code = $1`, [code]);
+  return rowCount > 0;
+}
+
+/** False when the code is already taken. */
+export async function createLink({ code, name, mode, note }) {
+  const { rowCount } = await getPool().query(
+    `INSERT INTO wk_links (code, name, mode, note) VALUES ($1, $2, $3, $4) ON CONFLICT (code) DO NOTHING`,
+    [code, name, mode, note],
+  );
+  return rowCount > 0;
+}
+
+/** A link's name and note may change; its code and mode are what was handed out. */
+export async function renameLink(id, name, note) {
+  const { rowCount } = await getPool().query(`UPDATE wk_links SET name = $2, note = $3 WHERE id = $1`, [id, name, note]);
+  return rowCount > 0;
+}
+
+/** The visits it brought stay in the statistics under its code. */
+export async function deleteLink(id) {
+  const { rowCount } = await getPool().query(`DELETE FROM wk_links WHERE id = $1`, [id]);
+  return rowCount > 0;
+}
+
+/** How many arrivals this visitor has had counted within the last hour. */
+export async function countRecentVisits(visitor) {
+  const { rows } = await getPool().query(
+    `SELECT count(*)::int AS n FROM wk_visits WHERE visitor = $1 AND created_at > now() - interval '1 hour'`,
+    [visitor],
+  );
+  return rows[0].n;
+}
+
+/** Count an arrival; returns its id. */
+export async function recordVisit({ link, mode, via, country, lang, device, referrer, visitor }) {
+  const { rows } = await getPool().query(
+    `INSERT INTO wk_visits (link_code, mode, via, country, lang, device, referrer, visitor)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+    [link, mode, via, country, lang, device, referrer, visitor],
+  );
+  return Number(rows[0].id);
+}
+
+/** What became of a trial game: its time ran out (`expired`) or «create an account» was pressed (`cta`). Kept once. */
+export async function markVisit(id, event) {
+  const column = event === 'cta' ? 'cta_at' : 'expired_at';
+  await getPool().query(`UPDATE wk_visits SET ${column} = COALESCE(${column}, now()) WHERE id = $1 AND mode = 'demo'`, [id]);
+}
+
+/** Arrivals of the last `days` days (0 — all of them), newest first, at most `limit`. */
+export async function listVisits(days, limit = 5000) {
+  const { rows } = await getPool().query(
+    `SELECT v.id, v.link_code, l.name AS link_name, v.mode, v.via, v.country, v.lang, v.device, v.referrer,
+            v.visitor, v.expired_at, v.cta_at, v.created_at
+       FROM wk_visits v
+       LEFT JOIN wk_links l ON l.code = v.link_code
+      WHERE $1::int = 0 OR v.created_at > now() - make_interval(days => $1::int)
+      ORDER BY v.created_at DESC
+      LIMIT $2`,
+    [days, limit],
+  );
+  return rows.map((row) => ({
+    id: Number(row.id),
+    link: row.link_code,
+    linkName: row.link_name,
+    mode: row.mode,
+    via: row.via,
+    country: row.country,
+    lang: row.lang,
+    device: row.device,
+    referrer: row.referrer,
+    // Only to tell visitors apart in the browser — a short piece of the hash.
+    visitor: row.visitor.slice(0, 10),
+    expiredAt: row.expired_at,
+    ctaAt: row.cta_at,
+    createdAt: row.created_at,
+  }));
 }

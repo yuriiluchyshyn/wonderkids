@@ -29,7 +29,8 @@
     "title": "Learning that feels like an <span>adventure</span>",
     "lead": "Pulsar Kids turns math, geography, history and ecology into games your child will ask to play. No ads, no losing, no scary timers — just the joy of getting it right. And you stay calmly in charge of screen time.",
     "note": "It takes a minute: a parent creates the child’s profile, and the child signs in to the game with a nickname and a PIN.",
-    "systemLabel": "The Solar System: the Sun and the eight planets your child travels through"
+    "systemLabel": "The Solar System: the Sun and the eight planets your child travels through",
+    "tryNote": "A trial game with no sign-up: a few minutes for your child to see what it’s like."
   },
   "about": {
     "title": "Why Pulsar Kids",
@@ -226,7 +227,8 @@
   },
   "cta": {
     "play": "Play",
-    "parents": "Parents’ area"
+    "parents": "Parents’ area",
+    "try": "Try the game now"
   },
   "lang": {
     "label": "Site language"

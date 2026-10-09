@@ -1,0 +1,66 @@
+/* The end of the trial game: a calm card over the whole screen, in the theme's own colours. */
+.wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  background: linear-gradient(160deg, var(--bg-1, #0b1026), var(--bg-2, #2b1a52));
+}
+
+.card {
+  width: 100%;
+  max-width: 480px;
+  padding: 26px 22px 22px;
+  text-align: center;
+  background: var(--surface);
+  color: var(--surface-ink);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.mascot {
+  display: inline-block;
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.title {
+  margin-top: 10px;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+.text {
+  margin-top: 12px;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
+.listen {
+  margin-top: 12px;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--surface-ink);
+  background: color-mix(in srgb, var(--ring) 22%, transparent);
+}
+
+/* What the parent reads when the child brings them. */
+.parents {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 2px dashed color-mix(in srgb, var(--ring) 45%, transparent);
+}
+
+.parentsText {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  opacity: 0.85;
+}

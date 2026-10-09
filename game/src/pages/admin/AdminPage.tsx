@@ -7,6 +7,8 @@ import { SpeechPage } from './SpeechPage';
 import { GamesPage } from './GamesPage';
 import { FeedbackPage } from './FeedbackPage';
 import { SourcesPage } from './SourcesPage';
+import { LinksPage } from './LinksPage';
+import { SettingsPage } from './SettingsPage';
 import { AdminShell } from './AdminShell';
 import { ADMIN_KEY_STORAGE, errorText } from './shared';
 import styles from './Admin.module.css';
@@ -21,6 +23,8 @@ import styles from './Admin.module.css';
  *   /admin/games     live summary of every game, read from the module registry
  *   /admin/feedback  letters from the public site, and the answers to them
  *   /admin/sources   which channel (ad, Instagram, YouTube…) brings new accounts
+ *   /admin/links     the owner's own links to hand out, and who came by them
+ *   /admin/settings  settings of the whole product (the trial game's length)
  */
 export function AdminPage() {
   usePageMeta({ title: 'Адмінпанель' });
@@ -84,6 +88,8 @@ export function AdminPage() {
         <Route path="games" element={<GamesPage />} />
         <Route path="feedback" element={<FeedbackPage adminKey={adminKey} />} />
         <Route path="sources" element={<SourcesPage adminKey={adminKey} />} />
+        <Route path="links" element={<LinksPage adminKey={adminKey} />} />
+        <Route path="settings" element={<SettingsPage adminKey={adminKey} />} />
       </Routes>
     </AdminShell>
   );

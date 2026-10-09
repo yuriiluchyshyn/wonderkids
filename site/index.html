@@ -83,7 +83,7 @@
     </script>
     <link rel="stylesheet" href="/src/styles/main.css" />
   </head>
-  <body>
+  <body data-visits-api="__PLAY_URL__/api/health">
     <div class="sky" aria-hidden="true"><i></i><i></i></div>
     <header>
       <div class="wrap bar">
@@ -116,6 +116,10 @@
           <p class="lead">
             {{hero.lead}}
           </p>
+          <div class="try">
+            <a class="btn btn-try" data-portal="play" data-trial href="__PLAY_URL__/try"><span class="emoji" aria-hidden="true">🚀</span> {{cta.try}}</a>
+            <p class="cta-note">{{hero.tryNote}}</p>
+          </div>
           <div class="cta">
             <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> {{cta.play}}</a>
             <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> {{cta.parents}}</a>
@@ -395,6 +399,7 @@
           <h2>{{final.title}}</h2>
           <p class="sub" style="margin-inline: auto">{{final.sub}}</p>
           <div class="cta">
+            <a class="btn btn-try" data-portal="play" data-trial href="__PLAY_URL__/try"><span class="emoji" aria-hidden="true">🚀</span> {{cta.try}}</a>
             <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> {{final.child}}</a>
             <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> {{final.adult}}</a>
           </div>

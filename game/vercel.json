@@ -56,7 +56,7 @@
   ],
   "headers": [
     {
-      "source": "/(play/.*|parent|parent/.*|admin.*|world|vault|who)",
+      "source": "/(play/.*|parent|parent/.*|admin.*|world|vault|who|try)",
       "headers": [
         {
           "key": "X-Robots-Tag",

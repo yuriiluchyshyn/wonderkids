@@ -11,8 +11,10 @@ export const SECTIONS: { path: string; icon: string; label: string }[] = [
   { path: '/admin', icon: '👨‍👩‍👧', label: 'Акаунти' },
   { path: '/admin/feedback', icon: '✉️', label: 'Звернення' },
   { path: '/admin/sources', icon: '📊', label: 'Джерела' },
+  { path: '/admin/links', icon: '🔗', label: 'Посилання' },
   { path: '/admin/games', icon: '🎮', label: 'Ігри' },
   { path: '/admin/speech', icon: '🗣️', label: 'Google Speech' },
+  { path: '/admin/settings', icon: '⚙️', label: 'Налаштування' },
 ];
 
 /** Letters nobody has answered yet — shown as a badge next to «Звернення». */

@@ -29,7 +29,8 @@
     "title": "Nauka, która wciąga jak <span>przygoda</span>",
     "lead": "Pulsar Kids zamienia matematykę, geografię, historię i ekologię w gry, do których dziecko samo chce wracać. Bez reklam, bez przegranych i bez stresujących stoperów — za to z radością z każdej dobrej odpowiedzi. A Ty spokojnie decydujesz o czasie przed ekranem.",
     "note": "To zajmuje minutę: rodzic zakłada profil dziecka, a dziecko wchodzi do gry, podając nick i PIN.",
-    "systemLabel": "Układ Słoneczny: Słońce i osiem planet, po których podróżuje dziecko"
+    "systemLabel": "Układ Słoneczny: Słońce i osiem planet, po których podróżuje dziecko",
+    "tryNote": "Gra próbna bez rejestracji: kilka minut, żeby dziecko zobaczyło, jak to jest."
   },
   "about": {
     "title": "Po co jest Pulsar Kids",
@@ -226,7 +227,8 @@
   },
   "cta": {
     "play": "Graj",
-    "parents": "Panel rodzica"
+    "parents": "Panel rodzica",
+    "try": "Wypróbuj grę teraz"
   },
   "lang": {
     "label": "Język strony"

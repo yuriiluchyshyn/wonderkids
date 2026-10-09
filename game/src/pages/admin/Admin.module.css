@@ -829,3 +829,118 @@ a.btnPrimary {
     margin-left: auto;
   }
 }
+
+/* ---- /admin/links: tables whose columns sort, and the filters above them ---- */
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.dataTable th,
+.dataTable td {
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.dataTable th {
+  padding: 0;
+  background: #f8fafc;
+}
+
+.dataTable tr:last-child td {
+  border-bottom: none;
+}
+
+.sortBtn {
+  width: 100%;
+  min-height: 38px;
+  padding: 9px 12px;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.sortBtn:hover,
+.dataTable th[aria-sort='ascending'] .sortBtn,
+.dataTable th[aria-sort='descending'] .sortBtn {
+  color: var(--brand);
+}
+
+.linkCell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 240px;
+  white-space: normal;
+}
+
+.linkCell code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rowActions .btn,
+.rowActions .btnDanger {
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 0.82rem;
+}
+
+.select {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.filterRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.dims {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin-bottom: 10px;
+}
+
+.dim {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.page .dim input {
+  width: 18px;
+  min-height: 18px;
+  padding: 0;
+}

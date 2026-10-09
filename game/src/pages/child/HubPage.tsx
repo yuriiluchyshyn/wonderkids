@@ -22,6 +22,7 @@ import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { CoachTips } from '@/components/coach/CoachTips';
+import { DemoBanner } from '@/components/demo/DemoBanner';
 import { hubTips } from '@/components/coach/tips';
 import styles from './HubPage.module.css';
 
@@ -106,6 +107,7 @@ export function HubPage() {
       {!hasOwnScenery(theme.id) && <GalaxyBackground galaxyId={galaxyId} />}
       <div className="page stack" style={{ position: 'relative', zIndex: 1 }}>
       <ProfileBar />
+      <DemoBanner />
 
       <ThemeBrand />
 

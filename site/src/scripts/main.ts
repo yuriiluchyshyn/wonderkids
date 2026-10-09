@@ -3,8 +3,10 @@ import { wireLanguageMenu } from './language.ts';
 import { wireLetterForm } from './letter/index.ts';
 import { wirePortalLinks } from './portals.ts';
 import { animateOnScroll } from './reveal.ts';
+import { countArrival } from './visit.ts';
 
 wirePortalLinks();
+countArrival();
 wireLanguageMenu();
 animateOnScroll();
 wireLetterForm();
