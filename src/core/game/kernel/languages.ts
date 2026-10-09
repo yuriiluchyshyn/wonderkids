@@ -1,4 +1,4 @@
-import { DEFAULT_LANG, type LangCode } from '@/core/lang';
+import { DEFAULT_LANG, common, hasOwn, type LangCode } from '@/core/lang';
 import { seeded } from '@/core/utils/random';
 import { speaks, type SubCategory, type TaskInstance } from './types';
 
@@ -17,6 +17,9 @@ import { speaks, type SubCategory, type TaskInstance } from './types';
  * Two makings can differ only where a module lets words decide something (a
  * sort by label, a length). Then the twin is dropped and the voice falls back
  * to the language on the screen; `npm run check:content` reports such a game.
+ * A task of one language's own (`task.own` — a question about that language's
+ * country) is never paired either: it is read in the language it is shown in.
+ * Facts are paired when they are told (`tellFact`), not here.
  */
 
 /** The languages a game is played in for a child: what is shown, what is said. */
@@ -70,6 +73,11 @@ function sameShape(shown: unknown, said: unknown): boolean {
   return Object.keys(shown).every((key) => key in said && sameShape(shown[key], said[key]));
 }
 
+/** A board whose hint has the pieces of its own language (`own`) cut out. */
+function withCommonHint<T>(payload: T): T {
+  if (!isRecord(payload) || typeof payload.hint !== 'string' || !hasOwn(payload.hint)) return payload;
+  return { ...payload, hint: common(payload.hint) };
+}
 function voiceCards(shown: unknown, said: unknown, lang: LangCode): void {
   if (Array.isArray(shown) && Array.isArray(said)) shown.forEach((item, i) => voiceCards(item, said[i], lang));
   else if (isRecord(shown) && isRecord(said)) {
@@ -99,9 +107,12 @@ export function inLanguages(langs: ContentLangs, make: (lang: LangCode) => TaskI
   shown.forEach((task, i) => {
     task.lang = langs.shown;
     task.payload = copy(task.payload);
-    const twin = same ? twins[i] : undefined;
+    // A task of the screen's language alone has no twin: it is read as it is shown.
+    const twin = same && !task.own && !twins[i].own ? twins[i] : undefined;
     if (twin && twin.id === task.id && sameShape(task.payload, twin.payload)) {
-      task.voice = { ...twin, lang: langs.said };
+      // A hint shown in one language and said in another keeps only what both say.
+      task.voice = { ...twin, lang: langs.said, payload: withCommonHint(twin.payload) };
+      task.payload = withCommonHint(task.payload);
       voiceCards(task.payload, twin.payload, langs.said);
     }
     stamp(task.payload, langs.shown);

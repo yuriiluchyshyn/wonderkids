@@ -603,6 +603,15 @@ outro: factPool(animal.fact, ANIMAL_FACTS[animal.id]);
 outro: factPool(person.fact, CALLING_FACTS[person.calling]);
 ```
 
+**A fact of one language's own** (Ukraine's highest mountain in Ukrainian,
+Poland's in Polish; where a month's name comes from) is wrapped in `own(...)`
+(`src/core/lang/marks.ts`) — a whole fact or one sentence of it, at the same
+place in every language's list. Shown and voiced in one language, it is told;
+with the voice in another language only what both say is told, paired by
+place (`tellFact`). A question that differs by language carries `own` in its
+prompt and has no voice twin. A fact only one language has can be appended
+as `own(...)` to that language's pool. See `docs/level-design.md` §6.
+
 Shared fact pools live in the subject's `content/` folder (`content/facts.ts`). A spec must therefore
 deliver, for every distinct task (or task category), **the own fact + ≥9
 category facts**.

@@ -1,4 +1,5 @@
 import { ordinalWords } from '@/core/lang/en';
+import { own } from '@/core/lang/marks';
 import type { SeasonId } from '../content/data';
 import type { NatureTexts } from './types';
 
@@ -104,7 +105,7 @@ const SIGNS: [ask: string, label: string, fact: string][] = [
   ['When do we go ice skating?', 'Ice skating', 'In winter water freezes, and you can skate on the ice.'],
   ['When do sunflowers bloom?', 'Sunflowers bloom', 'In summer the fields turn yellow with sunflowers. Young sunflowers turn their heads to follow the sun.'],
   ['When do the first little leaves appear?', 'The first little leaves appear', 'In spring the buds on the trees burst open, and tender little leaves unfold from them.'],
-  ['When do children go back to school?', 'Children go back to school', 'The school year begins as summer ends and the fall comes.'],
+  ['When do children go back to school?', 'Children go back to school', own('The school year begins as summer ends and the fall comes.')],
   ['When does the bear sleep in its den?', 'The bear sleeps in its den', 'In winter it is hard for a bear to find food, so it sleeps in its den right through to spring.'],
   ['When do butterflies fly?', 'Butterflies fly', 'In summer there are lots of flowers, and butterflies drink sweet nectar from them.'],
   ['When does the snow melt and the streams babble?', 'The snow melts and the streams babble', 'In spring the sun melts the snow, and the meltwater runs in streams down to the rivers.'],
@@ -139,7 +140,8 @@ export const en: NatureTexts = {
     return undefined;
   },
   season: (id) => SEASONS[id],
-  month: (at) => ({ name: name(at), fact: MONTHS[at][1] }),
+  // A month's fact tells where ITS name comes from: each language has its own story (`own`).
+  month: (at) => ({ name: name(at), fact: own(MONTHS[at][1]) }),
   sign: (at) => ({ ask: SIGNS[at][0], label: SIGNS[at][1], fact: SIGNS[at][2] }),
   monthSeason: {
     ask: (m) => `Which season does ${name(m)} belong to?`,

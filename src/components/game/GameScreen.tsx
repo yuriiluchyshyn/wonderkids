@@ -22,7 +22,7 @@ import { TreasureReveal } from './TreasureReveal';
 import { Cutscene } from './Cutscene';
 import { CoachTips } from '@/components/coach/CoachTips';
 import { gameTips } from '@/components/coach/tips';
-import { pickOutro } from '@/core/game/content/outro';
+import { tellFact } from '@/core/game/content/outro';
 import { IntroDemo } from '@/components/templates/IntroDemo';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
@@ -34,6 +34,7 @@ import { useWorld } from '@/core/child/world/useWorld';
 import { keysOf } from '@/core/child/world/games';
 import { KEY } from '@/core/child/world/stations';
 import { spoken, written } from '@/core/lang/uk';
+import type { LangCode } from '@/core/lang';
 import styles from './GameScreen.module.css';
 
 type GiftTier = 'small' | 'big' | 'biggest' | null;
@@ -77,15 +78,19 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const { play, playCode } = useSound();
   const speakPrompt = useVoiceSpeak('taskPrompt');
   const speakIntro = useVoiceSpeak('taskIntro');
+  const { module, task } = session;
+  // What is said about a task is said in the voice's language — unless the task
+  // has no twin there (a question of the screen's language alone, `task.own`):
+  // then it is read in the language it is shown in.
+  const taskLang = task?.voice ? session.langs.said : (task?.lang ?? session.langs.shown);
   // A hint's «how» is a piece of the task: the whole phrase is said in the language the task is read in.
-  const sayHint = useSayT('hint', session.langs.said);
+  const sayHint = useSayT('hint', taskLang);
   // The win screen is read out in the voice's language, whatever the screen shows.
   const voiceLang = useVoiceLang();
   const sayT = useT(voiceLang);
   const voiceTheme = useActiveTheme(voiceLang);
   const gender = useGameStore((s) => s.profile.gender);
 
-  const { module, task } = session;
   const sub = module?.subCategories.find((s) => s.id === config.subCategoryId);
   // Prefer the module's themed, child-level intro; fall back to the static one.
   const introText = module?.getIntro?.(config.subCategoryId, theme, config.step) ?? sub?.intro;
@@ -118,19 +123,20 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // The fact told after this task: the next one from its pool, so a replay of
   // the same task — even its repeat within this level — tells a new story.
   // Picked once per showing; the last one stays up while the level finishes.
-  const outroPick = useRef<{ at: number; text?: string; said?: string }>({ at: -1 });
+  const outroPick = useRef<{ at: number; text?: string; said?: string; lang?: LangCode }>({ at: -1 });
   if (task && !session.finished && outroPick.current.at !== session.index) {
-    const text = pickOutro(task);
-    // The voice tells the same fact — the one at the same place in its own pool.
-    const pool = saidOf(task).outro;
-    const at = Array.isArray(task.outro) && text ? task.outro.indexOf(text) : -1;
-    outroPick.current = { at: session.index, text, said: typeof pool === 'string' ? pool : ((at >= 0 ? pool?.[at] : undefined) ?? text) };
+    // The voice tells the same fact, from its twin's pool (`tellFact`: a story of
+    // the screen's language alone is not paired — it is read in that language).
+    const told = tellFact(task.outro, task.voice ? (task.voice.outro ?? []) : undefined);
+    const paired = told?.said !== undefined;
+    outroPick.current = { at: session.index, text: told?.text, said: told?.said ?? told?.text, lang: paired ? taskLang : (task.lang ?? session.langs.shown) };
   }
   // A parent may switch the facts off: then nothing is told and nothing is waited for.
   const funFacts = useGameStore((s) => s.settings.funFacts);
   const picked = funFacts ? outroPick.current.text : undefined;
   const outro = picked ? written(picked) : undefined;
   const outroSpeech = picked ? spoken(outroPick.current.said ?? picked) : undefined;
+  const outroLang = outroPick.current.lang ?? taskLang;
   // First-run tips: how to answer on this kind of board, then what each
   // control does (text games also get the tap-to-hear one, PRD v4.0 §2.4).
   const template = (task?.payload as Partial<TemplatePayload> | null | undefined)?.template;
@@ -203,7 +209,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // Keyed by queue position, not task id: the repeat of a missed task is read
   // out again like any other task.
   useEffect(() => {
-    if (phase === 'play' && task && !session.finished && !blocked) speakPrompt(spokenPrompt(saidOf(task)), session.langs.said);
+    if (phase === 'play' && task && !session.finished && !blocked) speakPrompt(spokenPrompt(saidOf(task)), taskLang);
   }, [session.index, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // When the scaffolding helper appears: scroll to it and speak the how-to.
@@ -232,7 +238,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     if (outroVoice && voice.supported) {
       // Let the "correct!" sound land first, then speak.
       const start = window.setTimeout(
-        () => voice.speak(outroSpeech ?? outro, () => window.setTimeout(outroDone, 350), session.langs.said),
+        () => voice.speak(outroSpeech ?? outro, () => window.setTimeout(outroDone, 350), outroLang),
         450,
       );
       return () => window.clearTimeout(start);
@@ -378,7 +384,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     },
     speakPrompt: () => {
       markActivity();
-      speakPrompt(spokenPrompt(saidOf(task)), session.langs.said);
+      speakPrompt(spokenPrompt(saidOf(task)), taskLang);
     },
   };
 

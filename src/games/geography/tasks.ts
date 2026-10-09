@@ -2,6 +2,7 @@ import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { OCEANS } from '@/core/game/templates/worldMap';
+import { common } from '@/core/lang/marks';
 import { shuffle } from '@/core/utils/random';
 import { card, templateTask, unlocked, withDistractors, type GameTasks } from '../shared/templateModule';
 import { COUNTRIES, MAP_COUNTRIES, type Country } from './content/countries';
@@ -304,7 +305,8 @@ function oceans(step: number, config: Config): Tasks {
 
   const part = (kind: 'sea' | 'place' | 'river') => (p: OceanPart) => {
     const words = T.seas[kind](p.id);
-    return sail(`ocean:${kind}:${p.id}`, words.ask, p.ocean, words.fact, words.fact);
+    // The hint is what every language says of the place; a sentence of one language's own stays in the fact.
+    return sail(`ocean:${kind}:${p.id}`, words.ask, p.ocean, words.fact, common(words.fact));
   };
   tasks.push(...arriving([...SEAS, ...MORE_SEAS], step, 4, OCEAN_STEPS).map(part('sea')));
   tasks.push(...arriving([...OCEAN_PLACES, ...MORE_OCEAN_PLACES], step, 7, OCEAN_STEPS).map(part('place')));

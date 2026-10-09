@@ -7,7 +7,9 @@ import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { planetFacts } from '@/core/child/world/planetFacts';
 import type { World } from '@/core/child/world/useWorld';
 import { PLANET_COUNT, type WorldPlanetId } from '@/core/child/world/world';
-import { pickOutro } from '@/core/game/content/outro';
+import { tellFact } from '@/core/game/content/outro';
+import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { spoken, written } from '@/core/lang';
 import { cn } from '@/core/utils/cn';
 import { Globe } from './Globe';
 import { RAD } from './places';
@@ -61,6 +63,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
   const t = useT();
   const gameLang = useGameLang();
   const { tell: say, lang: voiceLang } = useTell(world.planet);
+  const speakShown = useVoiceSpeak('selections');
   /** The planet that is telling about itself, and the story it tells now. */
   const [told, setTold] = useState<{ id: WorldPlanetId; fact: string } | null>(null);
 
@@ -156,13 +159,15 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
 
   /** The planet's next story, shown and read out; its pool comes round only after all twenty. */
   const tell = (id: WorldPlanetId) => {
-    const shown = planetFacts(id, gameLang);
-    const fact = pickOutro({ outro: [...shown] });
-    if (!fact) return;
-    setTold({ id, fact });
-    // The voice tells the same story in its own language: the same place in its own list.
-    const spoken = planetFacts(id, voiceLang)[shown.indexOf(fact)] ?? fact;
-    say((_, said) => `${said.system.find((p) => p.id === id)?.name ?? ''}. ${spoken}`);
+    // The voice tells the same story in its own language: the same place in its own
+    // list. A story of the screen's language alone (`own`) is not told then —
+    // unless nothing else is left, and then it is read in the screen's language.
+    const told = tellFact(planetFacts(id, gameLang), voiceLang === gameLang ? undefined : planetFacts(id, voiceLang));
+    if (!told) return;
+    setTold({ id, fact: written(told.text) });
+    const { said } = told;
+    if (said !== undefined) say((_, words) => `${words.system.find((p) => p.id === id)?.name ?? ''}. ${spoken(said)}`);
+    else speakShown(`${world.system.find((p) => p.id === id)?.name ?? ''}. ${spoken(told.text)}`, gameLang);
   };
 
   const { cam } = frame;

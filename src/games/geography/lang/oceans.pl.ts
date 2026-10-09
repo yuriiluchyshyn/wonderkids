@@ -1,3 +1,4 @@
+import { own } from '@/core/lang/marks';
 import { split } from './shared';
 
 /** Oceans, seas, islands and rivers in Polish. */
@@ -47,7 +48,7 @@ export const OCEANS: Record<string, Ocean> = {
       'Środkiem Atlantyku ciągnie się na dnie bardzo długi podwodny łańcuch górski.',
       'Nazwa „Atlantycki” pochodzi od imienia Atlasa — olbrzyma z greckich mitów.',
       'W zimnych wodach Atlantyku pływają góry lodowe.',
-      'Morze Bałtyckie, nad którym leży Polska, łączy się cieśninami właśnie z Oceanem Atlantyckim.',
+      own('Morze Bałtyckie, nad którym leży Polska, łączy się cieśninami właśnie z Oceanem Atlantyckim.'),
       'Ocean Atlantycki co roku robi się szerszy o kilka centymetrów.',
       'W Atlantyku łowi się dużo ryb: śledzie, dorsze, makrele.',
     ],
@@ -148,7 +149,7 @@ export const SEAS = split({
   black: 'Morze Czarne|Morze Czarne oblewa południe Ukrainy. Przez cieśniny i Morze Śródziemne łączy się z Oceanem Atlantyckim.',
   mediterranean: 'Morze Śródziemne|Morze Śródziemne leży między Europą, Afryką i Azją, a wąska Cieśnina Gibraltarska łączy je z Oceanem Atlantyckim.',
   red: 'Morze Czerwone|Morze Czerwone to część Oceanu Indyjskiego. Jest bardzo ciepłe i słone, a żyje w nim mnóstwo koralowców.',
-  baltic: 'Morze Bałtyckie|Morze Bałtyckie to część Oceanu Atlantyckiego na północy Europy. Leży nad nim Polska, a woda w nim jest prawie niesłona.',
+  baltic: 'Morze Bałtyckie|Morze Bałtyckie to część Oceanu Atlantyckiego na północy Europy.' + own(' Leży nad nim Polska.') + ' Woda w nim jest prawie niesłona.',
   caribbean: 'Morze Karaibskie|Morze Karaibskie to ciepła część Oceanu Atlantyckiego u brzegów Ameryki. Kiedyś pływali tam piraci.',
   japan: 'Morze Japońskie|Morze Japońskie to część Oceanu Spokojnego między Japonią a kontynentem azjatyckim.',
   north: 'Morze Północne|Morze Północne to część Oceanu Atlantyckiego między Wielką Brytanią a Norwegią.',
@@ -235,7 +236,7 @@ export const PLACES = split({
   ellesmere: 'Na którym oceanie leży Wyspa Ellesmere’a?|Wyspa Ellesmere’a leży na Oceanie Arktycznym, na północy Kanady. Stąd do bieguna jest już bardzo blisko.',
   icebergs: 'Po którym oceanie pływają największe góry lodowe świata?|Największe góry lodowe odrywają się od Antarktydy i pływają po Oceanie Południowym. Niektóre są większe niż miasto.',
   ross_shelf: 'Na którym oceanie leży Lodowiec Szelfowy Rossa?|Lodowiec Szelfowy Rossa leży na Oceanie Południowym. To lodowa płyta wielka jak cały kraj.',
-  south_shetland: 'Na którym oceanie leżą Szetlandy Południowe?|Szetlandy Południowe leżą na Oceanie Południowym przy Antarktydzie. Na jednej z wysp pracuje polska stacja badawcza imienia Arctowskiego.',
+  south_shetland: 'Na którym oceanie leżą Szetlandy Południowe?|Szetlandy Południowe leżą na Oceanie Południowym przy Antarktydzie.' + own(' Na jednej z wysp pracuje polska stacja badawcza imienia Arctowskiego.'),
 });
 
 /** A river: `its name|what is told about it`. */

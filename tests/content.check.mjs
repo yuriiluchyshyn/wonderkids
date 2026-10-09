@@ -163,6 +163,9 @@ try {
   const { regionsOf } = await server.ssrLoadModule('/src/core/game/templates/worldMap.ts');
   const { isAdjacent, minGap } = await server.ssrLoadModule('/src/core/game/templates/validate.ts');
   const validate = { regions: regionsOf, isAdjacent, minGap };
+  // Facts are paired with the voice's by place among those both languages tell (`tellFact`).
+  const { common } = await server.ssrLoadModule('/src/core/lang/marks.ts');
+  const told = (outro) => [outro ?? []].flat().map(common).filter(Boolean);
 
   const gameIds = new Set();
   const rows = [];
@@ -197,7 +200,14 @@ try {
             tasksChecked += 1;
             try {
               assert.ok(task.id && task.prompt, 'task needs id and prompt');
-              if (said !== shown && !task.voice) twinless += 1;
+              // A task of its language's own (`task.own`) has no twin by design.
+              if (said !== shown && !task.voice && !task.own) twinless += 1;
+              // The facts both languages tell must pair one to one; a story of one language alone is marked `own`.
+              if (task.voice) {
+                const ours = told(task.outro);
+                const theirs = told(task.voice.outro);
+                assert.equal(theirs.length, ours.length, `facts do not pair with «${said}» (${ours.length} vs ${theirs.length}; mark a story of one language \`own\`): ${String(ours[0] ?? theirs[0]).slice(0, 70)}`);
+              }
               // A game in another language has no Ukrainian left in what it says.
               if (shown !== 'uk' && !sub.group) {
                 const words = [task.prompt, task.speak, module.getHintSpeech?.(task), ...[task.outro ?? []].flat()].filter(Boolean).join(' ');
@@ -229,5 +239,5 @@ try {
 
 const distinct = [...new Set(problems)];
 console.log(`\n${tasksChecked} tasks checked, ${distinct.length} problem(s)`);
-for (const p of distinct.slice(0, 40)) console.log(' ✖', p);
+for (const p of distinct.slice(0, Number(process.env.SHOW_PROBLEMS ?? 40))) console.log(' ✖', p);
 process.exit(distinct.length ? 1 : 0);

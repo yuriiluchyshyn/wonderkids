@@ -1,3 +1,4 @@
+import { own } from '@/core/lang/marks';
 import type { BiomeId } from '../content/data';
 import { split } from './shared';
 
@@ -75,7 +76,7 @@ export const ANIMALS = split({
   spider: 'pająk krzyżak|Ma osiem nóg i plecie pajęczynę.|Pająk krzyżak plecie pajęczynę między gałęziami w lesie.|Pająk ma osiem nóg, więc nie jest owadem.|Pajęczyna jest mocniejsza niż stalowa nić tej samej grubości.',
   ladybug: 'biedronka|Czerwony chrząszczyk w czarne kropki na grzbiecie.|Biedronka żyje na leśnych polanach i na skraju lasu.|Biedronka zjada mszyce i tak ratuje rośliny.|Jaskrawe kropki biedronki ostrzegają ptaki, że jest niesmaczna.',
   moose: 'łoś|Największy jeleniowaty, z porożem podobnym do łopat.|Łoś żyje w gęstych północnych lasach w pobliżu bagien.|Łoś jest największy z jeleniowatych: jest wyższy od dorosłego człowieka.|Poroże łosia przypomina szerokie łopaty, a co roku je zrzuca.',
-  wisent: 'żubr|Najcięższy zwierz Europy — kudłaty leśny byk.|Żubr żyje w starych lasach Europy — także w Polsce, w Puszczy Białowieskiej.|Żubr to najcięższe zwierzę lądowe Europy.|Kiedyś żubry prawie wyginęły, ale ludzie uratowali je w rezerwatach.',
+  wisent: 'żubr|Najcięższy zwierz Europy — kudłaty leśny byk.|Żubr żyje w starych lasach Europy' + own(' — także w Polsce, w Puszczy Białowieskiej') + '.|Żubr to najcięższe zwierzę lądowe Europy.|Kiedyś żubry prawie wyginęły, ale ludzie uratowali je w rezerwatach.',
   turkey: 'dziki indyk|Wielki ptak z czerwonym „koralem”, który rozkłada ogon jak wachlarz.|Dziki indyk żyje w lasach Ameryki Północnej.|Dziki indyk umie latać i nocuje na drzewach.|Indyk samiec rozkłada ogon jak wachlarz, podobnie jak paw.',
   lobster: 'homar|Morski rak z dwiema wielkimi szczypcami i długimi wąsami.|Homar żyje na kamienistym dnie morza.|Homar ma dwie wielkie szczypce: jedną miażdży, drugą tnie.|Homar rośnie całe życie i co jakiś czas zrzuca ciasny pancerz.',
   shrimp: 'krewetka|Mały skorupiak z długimi wąsami, który pływa w ławicach.|Krewetki żyją w morzu w wielkich ławicach.|Serce krewetki znajduje się w głowie.|Krewetka pływa do tyłu, gwałtownie podginając ogon.',
@@ -206,7 +207,7 @@ export const ZONES: Record<BiomeId, Zone> = {
       'Lasy nazywa się płucami planety: drzewa oczyszczają powietrze.',
       'W lesie jest wiele kryjówek: dziuple, nory, gęste krzaki.',
       'Jesienią las liściasty robi się żółty i czerwony, a iglasty zostaje zielony.',
-      'Najstarszy las w Polsce to Puszcza Białowieska — rosną w niej dęby, które mają kilkaset lat.',
+      own('Najstarszy las w Polsce to Puszcza Białowieska — rosną w niej dęby, które mają kilkaset lat.'),
     ],
   },
   mountains: {
@@ -220,7 +221,7 @@ export const ZONES: Record<BiomeId, Zone> = {
       'Tu droga wije się serpentynami, a ścieżki biegną nad przepaściami.',
     ],
     facts: [
-      'Najwyższa góra świata to Mount Everest. Najwyższy szczyt Polski to Rysy w Tatrach.',
+      'Najwyższa góra świata to Mount Everest.' + own(' Najwyższy szczyt Polski to Rysy w Tatrach.'),
       'Na wysokich szczytach śnieg nie topnieje nawet latem.',
       'Im wyżej w górach, tym mniej drzew: na szczytach są tylko kamienie i mech.',
       'Górskie zwierzęta świetnie wspinają się po skałach i mają gęste futro.',

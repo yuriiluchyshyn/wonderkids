@@ -5,7 +5,9 @@ import type { WorldPlanetId } from '../world.ts';
  * The words of «Мій світ» in a language other than Ukrainian. The Ukrainian
  * ones are the content itself (`planetFacts.ts`, `stations.ts`,
  * `themeWorlds.ts`); a language lays its own over them by position: the n-th
- * fact, the n-th station, the n-th building of a theme.
+ * fact, the n-th station, the n-th building of a theme. A story that is the
+ * language's own rather than a translation (Kadeniuk / Hermaszewski) is marked
+ * `own` at the same place in every language (`core/lang/marks.ts`).
  *
  * Free of `@/` imports: the world is counted under `node --test`.
  */

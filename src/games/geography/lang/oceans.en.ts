@@ -1,3 +1,4 @@
+import { own } from '@/core/lang/marks';
 import { split } from './shared';
 
 /** Oceans, seas, islands and rivers in English. */
@@ -47,7 +48,7 @@ export const OCEANS: Record<string, Ocean> = {
       'Down the middle of the Atlantic, on the bottom, runs a very long chain of underwater mountains.',
       'The name “Atlantic” comes from Atlas — a giant in the myths of ancient Greece.',
       'In the cold waters of the Atlantic float icebergs — giant mountains of ice.',
-      'The Black Sea, on which Ukraine lies, is joined by straits to the Atlantic Ocean.',
+      own('The Black Sea, on which Ukraine lies, is joined by straits to the Atlantic Ocean.'),
       'Every year the Atlantic Ocean grows a few centimeters wider.',
       'Many fish are caught in the Atlantic: herring, cod, mackerel.',
     ],
@@ -235,7 +236,7 @@ export const PLACES = split({
   ellesmere: 'Which ocean is Ellesmere Island in?|Ellesmere Island lies in the Arctic Ocean in the north of Canada. From there the pole is only a short way off.',
   icebergs: 'In which ocean do the biggest icebergs in the world float?|The biggest icebergs break off from Antarctica and float in the Southern Ocean. Some of them are bigger than a city.',
   ross_shelf: 'Which ocean is the Ross Ice Shelf in?|The Ross Ice Shelf lies in the Southern Ocean. It is a slab of ice as big as a whole country.',
-  south_shetland: 'Which ocean are the South Shetland Islands in?|The South Shetland Islands lie in the Southern Ocean near Antarctica. Scientists from many countries work at research stations there.',
+  south_shetland: 'Which ocean are the South Shetland Islands in?|The South Shetland Islands lie in the Southern Ocean near Antarctica.' + own(' Scientists from many countries work at research stations there.'),
 });
 
 /** A river: `its name in a sentence|what is told about it`. */
