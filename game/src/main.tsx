@@ -1,4 +1,4 @@
-import { offerLangByCountry } from '@/core/i18n';
+import { offerLangByCountry } from '@/core/translator';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useLang, useVoiceLang } from '@/core/i18n';
+import { useLang, useVoiceLang } from '@/core/translator';
 import { localTheme } from '@/core/theme/localTheme';
 import { THEME_LIST } from '@/core/theme/themes';
 import { useGameStore } from '@/core/child/store/useGameStore';

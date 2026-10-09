@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styles from './SubPageHeader.module.css';

@@ -1,6 +1,6 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { CurrencyId } from '@/core/game/content/currency';
-import { DEFAULT_LANG, language, type LangCode } from '@/core/lang';
+import { DEFAULT_LANG, language, type LangCode } from '@/core/language';
 /**
  * Declarative task payloads for the CORE UI templates (PRD v4.0 §3.2).
  *

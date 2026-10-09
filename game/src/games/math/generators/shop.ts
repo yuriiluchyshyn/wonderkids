@@ -1,11 +1,11 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import { spoken, written } from '@/core/lang';
+import { spoken, written } from '@/core/language';
 import { currencyOf } from '@/core/game/content/currency';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import { rewardForStep } from '../difficulty';
-import { mathTexts } from '../lang';
+import { mathTexts } from '../grammar';
 import { buildNumberOptions } from './options';
 
 /** The toys on sale; their names are the language's (`shop.toys`, in this order). */

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { PlanetArt } from '@/components/templates/PlanetArt';
 import { cn } from '@/core/utils/cn';
 import type { Inhabitant, ItemState, WorldPlanetId } from '@/core/child/world/world';

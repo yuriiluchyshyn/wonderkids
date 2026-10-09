@@ -3,7 +3,7 @@ import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import type { FractionValue, GridChoicePayload } from '@/core/game/templates/types';
 import { fractionDenomMax, rewardForStep } from '../difficulty';
-import { mathTexts } from '../lang';
+import { mathTexts } from '../grammar';
 
 /** The 7 sensory foods from the PRD "Смачні Дроби" spec (§4.1). */
 /** The foods a slice is cut from; their names are the language's (`fractions.foods`, in this order). */

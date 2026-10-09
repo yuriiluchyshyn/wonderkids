@@ -1,4 +1,4 @@
-import { DEFAULT_LANG, common, hasOwn, type LangCode } from '@/core/lang';
+import { DEFAULT_LANG, common, hasOwn, type LangCode } from '@/core/language';
 import { seeded } from '@/core/utils/random';
 import { speaks, type SubCategory, type TaskInstance } from './types';
 

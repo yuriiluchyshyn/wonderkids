@@ -1,4 +1,4 @@
-import { useT, useVoiceLang } from '@/core/i18n';
+import { useT, useVoiceLang } from '@/core/translator';
 import { useBalance } from '@/core/child/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
 import { createPortal } from 'react-dom';

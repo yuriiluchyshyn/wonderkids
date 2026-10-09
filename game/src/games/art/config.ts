@@ -1,13 +1,16 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { STEPS } from './content/data';
-import { artTexts } from './lang';
+import { artTexts } from './grammar';
+import TEXTS from '@/locales/app/uk/games/art.json';
+
+const J = TEXTS.config;
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'art',
   texts: { en: artTexts('en').cards, pl: artTexts('pl').cards },
-  title: 'Творчість',
+  title: J.SUBJECT.title,
   icon: '🎨',
   accent: '#ec4899',
 };
@@ -20,10 +23,10 @@ export const GAMES: GameCard[] = [
   {
     id: 'mixer',
     gameId: 'art_color_mixer',
-    label: 'Змішувач Кольорів',
+    label: J.GAMES.mixer.label,
     icon: '🎨',
-    blurb: 'Змішуй фарби в казані й розфарбовуй малюнки',
-    intro: 'Малюнок ще сірий — його треба розфарбувати! Вилий у чарівний казан дві фарби, щоб вийшов потрібний колір.',
+    blurb: J.GAMES.mixer.blurb,
+    intro: J.GAMES.mixer.intro,
     introFor: (step, lang) => artTexts(lang).introFor(step),
     langs: artTexts.langs,
     steps: STEPS.length,

@@ -2,9 +2,9 @@ import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import { type Card, type FractionValue, type Glyph, type GridChoicePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
-import type { LangCode } from '@/core/lang';
+import type { LangCode } from '@/core/language';
 import { rewardForStep } from '../difficulty';
-import { mathTexts } from '../lang';
+import { mathTexts } from '../grammar';
 
 type Op = '+' | '−' | '×' | '÷';
 

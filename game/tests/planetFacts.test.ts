@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { common, written } from '../src/core/lang/marks.ts';
+import { common, written } from '../src/core/language/marks.ts';
 import { FACTS_PER_PLANET, PLANET_FACTS, planetFacts } from '../src/core/child/world/planetFacts.ts';
 import { PLANET_NAMES, WORLD_PLANETS } from '../src/core/child/world/world.ts';
 

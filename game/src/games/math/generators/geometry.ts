@@ -2,11 +2,11 @@ import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, TangramPiece, TemplatePayload } from '@/core/game/templates/types';
 import { perimeter } from '@/core/game/templates/validate';
-import { spoken, written } from '@/core/lang';
+import { spoken, written } from '@/core/language';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
-import type { LangCode } from '@/core/lang';
+import type { LangCode } from '@/core/language';
 import { rewardForStep } from '../difficulty';
-import { mathTexts, type MathTexts } from '../lang';
+import { mathTexts, type MathTexts } from '../grammar';
 import { buildNumberOptions } from './options';
 
 type Piece = Omit<TangramPiece, 'id'>;

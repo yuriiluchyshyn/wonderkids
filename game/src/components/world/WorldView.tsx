@@ -7,7 +7,7 @@ import { useWorld, type StationState, type World } from '@/core/child/world/useW
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { cn } from '@/core/utils/cn';
-import { useT, type T } from '@/core/i18n';
+import { useT, type T } from '@/core/translator';
 import { useTell } from './useTell';
 import { useSound } from '@/core/audio/useSound';
 import styles from './WorldView.module.css';

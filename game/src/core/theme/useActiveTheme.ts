@@ -1,6 +1,6 @@
 import { useGameStore } from '@/core/child/store/useGameStore';
-import { useLang } from '@/core/i18n';
-import type { LangCode } from '@/core/lang';
+import { useLang } from '@/core/translator';
+import type { LangCode } from '@/core/language';
 import { themeOf } from './localTheme';
 import type { Theme } from './theme.types';
 

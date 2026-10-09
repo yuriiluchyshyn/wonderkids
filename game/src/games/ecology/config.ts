@@ -1,13 +1,16 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { WHY_STEPS } from './content/questions';
-import { ecologyTexts } from './lang';
+import { ecologyTexts } from './grammar';
+import TEXTS from '@/locales/app/uk/games/ecology.json';
+
+const J = TEXTS.config;
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'ecology',
   texts: { en: ecologyTexts('en').cards, pl: ecologyTexts('pl').cards },
-  title: 'Екологія',
+  title: J.SUBJECT.title,
   icon: '♻️',
   accent: '#22c55e',
 };
@@ -21,10 +24,10 @@ export const GAMES: GameCard[] = [
     id: 'recycling',
     langs: ecologyTexts.langs,
     gameId: 'eco_recycling_patrol',
-    label: 'Еко-патруль',
+    label: J.GAMES.recycling.label,
     icon: '♻️',
-    blurb: 'Сортуємо сміття: сто предметів — скло, папір, пластик, метал і органіка',
-    intro: 'Галявину треба прибрати! Скло, папір, пластик, метал і залишки їжі кидаємо в різні баки — тоді з них зроблять нові речі.',
+    blurb: J.GAMES.recycling.blurb,
+    intro: J.GAMES.recycling.intro,
     // No difficulty to grow here — open play, unlimited replays.
     progression: 'free',
     difficulty: 1,
@@ -37,11 +40,11 @@ export const GAMES: GameCard[] = [
     id: 'why',
     langs: ecologyTexts.langs,
     gameId: 'eco_why_questions',
-    label: 'Чому так?',
+    label: J.GAMES.why.label,
     icon: '🌍',
-    blurb: 'Чому тануть льодовики і чому не можна палити листя',
+    blurb: J.GAMES.why.blurb,
     intro:
-      'Природі потрібна наша допомога. Послухай запитання і вибери відповідь — а я розповім, чому це важливо: про повітря, воду, тварин, сміття і тепло на планеті.',
+      J.GAMES.why.intro,
     steps: WHY_STEPS,
     difficulty: [1, 2],
     publishDate: V4_RELEASE,

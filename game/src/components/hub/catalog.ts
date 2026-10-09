@@ -1,6 +1,6 @@
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { speaks, type LearningModule, type SubCategory } from '@/core/game/kernel/types';
-import { DEFAULT_LANG, type LangCode } from '@/core/lang';
+import { DEFAULT_LANG, type LangCode } from '@/core/language';
 
 /** A single catalog card: one subject sub-category offered by a module. */
 export interface CatalogEntry {

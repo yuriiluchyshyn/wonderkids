@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { motion } from 'framer-motion';
 import { useRef, useState, type PointerEvent } from 'react';
 import { useSound } from '@/core/audio/useSound';

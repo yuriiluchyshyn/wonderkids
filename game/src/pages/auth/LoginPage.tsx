@@ -1,4 +1,4 @@
-import { Rich, useT } from '@/core/i18n';
+import { Rich, useT } from '@/core/translator';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { lazy, Suspense, useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';

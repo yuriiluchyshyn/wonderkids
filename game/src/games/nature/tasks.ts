@@ -5,7 +5,7 @@ import { shuffle } from '@/core/utils/random';
 import { factPool } from '../shared/facts';
 import { card, templateTask, withDistractors, type GameTasks } from '../shared/templateModule';
 import { MONTHS, SEASONS, SIGNS, type Month, type SeasonId } from './content/data';
-import { natureTexts } from './lang';
+import { natureTexts } from './grammar';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 export const RELEASE = '2026-10-06T00:00:00Z';
@@ -25,7 +25,7 @@ function scramble(ids: string[]): string[] {
 /**
  * «Пори року і місяці»: what happens when, then the twelve months — their
  * season, their neighbours, their order, their number — and the seasons in a
- * circle. Every word comes from the language of the task (`lang/`).
+ * circle. Every word comes from the language of the task (`grammar/`).
  */
 function seasons(step: number, config: Pick<TaskConfig, 'lang'>): Tasks {
   const T = natureTexts(config.lang);

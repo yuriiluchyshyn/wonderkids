@@ -1,4 +1,4 @@
-import type { AppKey } from '@/core/i18n/app';
+import type { AppKey } from '@/core/translator/app';
 
 /**
  * Galaxies = subjects (PRD). Each galaxy holds planets (adventures / learning

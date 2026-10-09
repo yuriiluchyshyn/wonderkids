@@ -3,13 +3,16 @@ import { V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateMo
 import { FIND_STEPS, SKY_STEPS } from './content/data';
 import { QUIZ_STEPS } from './content/planetQuiz';
 import { QUIZ_FROM } from './tasks';
-import { astronomyTexts } from './lang';
+import { astronomyTexts } from './grammar';
+import TEXTS from '@/locales/app/uk/games/astronomy.json';
+
+const J = TEXTS.config;
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'astronomy',
   texts: { en: astronomyTexts('en').cards, pl: astronomyTexts('pl').cards },
-  title: 'Астрономія',
+  title: J.SUBJECT.title,
   icon: '🔭',
   accent: '#6366f1',
 };
@@ -22,10 +25,10 @@ export const GAMES: GameCard[] = [
   {
     id: 'planets',
     gameId: 'astro_planet_parade',
-    label: 'Парад Планет',
+    label: J.GAMES.planets.label,
     icon: '🪐',
-    blurb: 'Розстав планети від Сонця й за розміром і дізнайся про кожну сто цікавинок',
-    intro: 'Навколо Сонця кружляють вісім планет. Розстав їх по порядку: спершу ту, що найближче до Сонця!',
+    blurb: J.GAMES.planets.blurb,
+    intro: J.GAMES.planets.intro,
     introFor: (step, lang) => astronomyTexts(lang).introFor.planets(step, QUIZ_FROM),
     langs: astronomyTexts.langs,
     steps: QUIZ_FROM - 1 + QUIZ_STEPS,
@@ -38,10 +41,10 @@ export const GAMES: GameCard[] = [
   {
     id: 'constellations',
     gameId: 'astro_space_navigator',
-    label: 'Космічний Навігатор',
+    label: J.GAMES.constellations.label,
     icon: '✨',
-    blurb: 'З’єднуй зорі по порядку, малюй сузір’я і шукай їх на зоряному небі',
-    intro: 'На небі зорі складаються в малюнки — сузір’я. Торкайся зір по порядку, від найменшого числа, — і побачиш, що вийде!',
+    blurb: J.GAMES.constellations.blurb,
+    intro: J.GAMES.constellations.intro,
     introFor: (step, lang) => astronomyTexts(lang).introFor.constellations(step, SKY_STEPS.length),
     langs: astronomyTexts.langs,
     steps: SKY_STEPS.length + FIND_STEPS.length,

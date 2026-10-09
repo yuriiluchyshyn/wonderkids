@@ -1,0 +1,322 @@
+{
+  "SEASONS": {
+    "winter": {
+      "name": "Zima",
+      "from": "zimy",
+      "of": "zimowe",
+      "no": "Brr, zimą tak się nie zdarza!",
+      "facts": [
+        "Zima to grudzień, styczeń i luty.",
+        "Zimą dni są najkrótsze, a noce najdłuższe.",
+        "Każdy płatek śniegu ma sześć ramion i nie ma dwóch takich samych.",
+        "Śnieg to kołdra dla ziemi: roślinom jest pod nim cieplej.",
+        "Zimą drzewa nie są martwe — śpią i czekają na wiosnę.",
+        "Jeż, niedźwiedź i borsuk przesypiają zimę, a zając zmienia szare futerko na białe.",
+        "Zimą ptakom trudno znaleźć jedzenie, dlatego ludzie robią dla nich karmniki.",
+        "Lód jest lżejszy od wody, więc pływa po wierzchu, a ryby zimują pod nim.",
+        "Zimą słońce wznosi się nisko nad horyzontem — dlatego słabo grzeje.",
+        "Najkrótszy dzień w roku wypada w grudniu. Potem dni powoli się wydłużają."
+      ]
+    },
+    "spring": {
+      "name": "Wiosna",
+      "from": "wiosny",
+      "of": "wiosenne",
+      "no": "Nie, wiosną przyroda dopiero się budzi.",
+      "facts": [
+        "Wiosna to marzec, kwiecień i maj.",
+        "Wiosną dni stają się dłuższe, a słońce grzeje mocniej.",
+        "Pierwsze wiosną zakwitają przebiśniegi — czasem wprost spod śniegu.",
+        "Wiosną ptaki wracają z ciepłych krajów i wiją gniazda.",
+        "Wiosną budzą się niedźwiedzie, jeże i owady.",
+        "W kwietniu i maju kwitną sady: jabłonie, wiśnie i morele.",
+        "Wiosną ludzie sieją nasiona w ogrodach i na polach.",
+        "Wiosną pszczoły wylatują z uli po pierwszy nektar.",
+        "Wiosną topnieje śnieg i rzeki wzbierają.",
+        "Pod koniec wiosny zdarza się pierwsza burza z grzmotami i błyskawicami."
+      ]
+    },
+    "summer": {
+      "name": "Lato",
+      "from": "lata",
+      "of": "letnie",
+      "no": "Latem jest na to za gorąco!",
+      "facts": [
+        "Lato to czerwiec, lipiec i sierpień.",
+        "Latem dni są najdłuższe, a noce najkrótsze.",
+        "Latem słońce wznosi się najwyżej — dlatego jest tak ciepło.",
+        "Latem dojrzewają owoce: truskawki, maliny i czereśnie.",
+        "Latem uczniowie mają najdłuższe wakacje.",
+        "Latem na polach dojrzewa pszenica — piecze się z niej chleb.",
+        "Latem pisklęta uczą się latać.",
+        "Najdłuższy dzień w roku wypada w czerwcu.",
+        "W upał trzeba pić dużo wody i nosić czapkę od słońca.",
+        "W letnie wieczory można zobaczyć świetliki, a nocą — mnóstwo gwiazd."
+      ]
+    },
+    "autumn": {
+      "name": "Jesień",
+      "from": "jesieni",
+      "of": "jesienne",
+      "no": "Jesienią widzimy coś innego.",
+      "facts": [
+        "Jesień to wrzesień, październik i listopad.",
+        "Jesienią dni stają się krótsze, a noce dłuższe.",
+        "Liście żółkną, bo znika z nich zielony barwnik — chlorofil.",
+        "Jesienią bociany, jaskółki i żurawie odlatują do ciepłych krajów.",
+        "Jesienią zbiera się plony: jabłka, gruszki, ziemniaki, dynie.",
+        "Wiewiórki, chomiki i myszy robią jesienią zapasy na zimę.",
+        "Jesienią jeż szuka sterty liści, żeby przespać w niej zimę.",
+        "Jesienią zwierzętom rośnie gęstsze futro — szykują się na chłody.",
+        "Opadłe liście to nie śmieci: okrywają ziemię i użyźniają glebę.",
+        "Pod koniec jesieni rano bywa szron — biały nalot z kryształków lodu."
+      ]
+    }
+  },
+  "MONTHS": {
+    "0": {
+      "0": "Styczeń",
+      "1": "stycznia",
+      "2": "styczniu",
+      "3": "styczniem",
+      "4": "Styczeń to pierwszy miesiąc roku. Jego nazwa pochodzi od słowa „stykać”: stary rok styka się w nim z nowym."
+    },
+    "1": {
+      "0": "Luty",
+      "1": "lutego",
+      "2": "lutym",
+      "3": "lutym",
+      "4": "Luty wziął nazwę od srogich, czyli „lutych”, mrozów. To najkrótszy miesiąc: ma 28 dni, a raz na cztery lata — 29."
+    },
+    "2": {
+      "0": "Marzec",
+      "1": "marca",
+      "2": "marcu",
+      "3": "marcem",
+      "4": "Nazwa „marzec” pochodzi od Marsa — rzymskiego boga. W marcu przyroda budzi się po zimie, a pogoda bywa bardzo zmienna."
+    },
+    "3": {
+      "0": "Kwiecień",
+      "1": "kwietnia",
+      "2": "kwietniu",
+      "3": "kwietniem",
+      "4": "Kwiecień to miesiąc pierwszych kwiatów — stąd jego nazwa. Zakwitają przebiśniegi, żonkile i tulipany."
+    },
+    "4": {
+      "0": "Maj",
+      "1": "maja",
+      "2": "maju",
+      "3": "majem",
+      "4": "Maj nosi imię Mai, rzymskiej bogini wzrostu. W maju wszystko pokrywa się gęstą, zieloną trawą."
+    },
+    "5": {
+      "0": "Czerwiec",
+      "1": "czerwca",
+      "2": "czerwcu",
+      "3": "czerwcem",
+      "4": "Nazwa „czerwiec” pochodzi od czerwca — małego owada, z którego dawniej robiono czerwony barwnik. W tym miesiącu wypada najdłuższy dzień w roku."
+    },
+    "6": {
+      "0": "Lipiec",
+      "1": "lipca",
+      "2": "lipcu",
+      "3": "lipcem",
+      "4": "W lipcu kwitną lipy — stąd nazwa miesiąca — a pszczoły zbierają z nich pachnący miód."
+    },
+    "7": {
+      "0": "Sierpień",
+      "1": "sierpnia",
+      "2": "sierpniu",
+      "3": "sierpniem",
+      "4": "Sierpień wziął nazwę od sierpa: dawniej żęto nim dojrzałe zboże."
+    },
+    "8": {
+      "0": "Wrzesień",
+      "1": "września",
+      "2": "wrześniu",
+      "3": "wrześniem",
+      "4": "We wrześniu kwitną wrzosy — niskie krzewinki o różowofioletowych kwiatach. A dzieci idą do szkoły."
+    },
+    "9": {
+      "0": "Październik",
+      "1": "października",
+      "2": "październiku",
+      "3": "październikiem",
+      "4": "Nazwa „październik” pochodzi od paździerzy — okruchów łodyg lnu, które sypały się, gdy jesienią obrabiano len. W październiku liście robią się żółte i złote."
+    },
+    "10": {
+      "0": "Listopad",
+      "1": "listopada",
+      "2": "listopadzie",
+      "3": "listopadem",
+      "4": "W listopadzie z drzew opadają ostatnie liście — tak właśnie się nazywa: liście padają."
+    },
+    "11": {
+      "0": "Grudzień",
+      "1": "grudnia",
+      "2": "grudniu",
+      "3": "grudniem",
+      "4": "W grudniu ziemia zamarza w twarde grudy — stąd nazwa miesiąca. To ostatni miesiąc roku."
+    }
+  },
+  "SIGNS": {
+    "0": {
+      "0": "Kiedy lepimy bałwana?",
+      "1": "Lepimy bałwana",
+      "2": "Bałwana lepi się zimą, kiedy śnieg jest lepki. Najlepiej się klei, gdy na dworze jest około zera stopni."
+    },
+    "1": {
+      "0": "Kiedy kąpiemy się w morzu?",
+      "1": "Kąpiemy się w morzu",
+      "2": "Latem woda w morzu i rzekach się nagrzewa — to najlepszy czas na kąpiel."
+    },
+    "2": {
+      "0": "Kiedy opadają żółte liście?",
+      "1": "Opadają żółte liście",
+      "2": "Jesienią drzewa zrzucają liście, żeby zimą nie tracić wody i nie łamać się pod śniegiem."
+    },
+    "3": {
+      "0": "Kiedy kwitną tulipany?",
+      "1": "Kwitną tulipany",
+      "2": "Wiosną słońce grzeje mocniej i z ziemi wychodzą pierwsze kwiaty."
+    },
+    "4": {
+      "0": "Kiedy ubieramy choinkę?",
+      "1": "Ubieramy choinkę",
+      "2": "Choinkę ubiera się zimą — na Boże Narodzenie i Nowy Rok."
+    },
+    "5": {
+      "0": "Kiedy dojrzewają arbuzy?",
+      "1": "Dojrzewają arbuzy",
+      "2": "Arbuzy potrzebują dużo słońca i ciepła, dlatego dojrzewają pod koniec lata."
+    },
+    "6": {
+      "0": "Kiedy ptaki wracają z ciepłych krajów?",
+      "1": "Ptaki wracają z ciepłych krajów",
+      "2": "Wiosną jaskółki, bociany i szpaki wracają do domu z ciepłych krajów."
+    },
+    "7": {
+      "0": "Kiedy zbieramy grzyby?",
+      "1": "Zbieramy grzyby",
+      "2": "Jesienią często pada deszcz, a grzyby lubią wilgoć — dlatego jest ich wtedy dużo."
+    },
+    "8": {
+      "0": "Kiedy jeździmy na łyżwach?",
+      "1": "Jeździmy na łyżwach",
+      "2": "Zimą woda zamarza i po lodzie można jeździć na łyżwach."
+    },
+    "9": {
+      "0": "Kiedy kwitną słoneczniki?",
+      "1": "Kwitną słoneczniki",
+      "2": "Latem pola żółkną od słoneczników. Młode słoneczniki obracają główki za słońcem."
+    },
+    "10": {
+      "0": "Kiedy pojawiają się pierwsze listki?",
+      "1": "Pojawiają się pierwsze listki",
+      "2": "Wiosną na drzewach pękają pąki — rozwijają się z nich delikatne listki."
+    },
+    "11": {
+      "0": "Kiedy dzieci idą do szkoły?",
+      "1": "Dzieci idą do szkoły",
+      "2": "Rok szkolny zaczyna się na początku września — wtedy, gdy lato ustępuje jesieni."
+    },
+    "12": {
+      "0": "Kiedy niedźwiedź śpi w gawrze?",
+      "1": "Niedźwiedź śpi w gawrze",
+      "2": "Zimą niedźwiedziowi trudno znaleźć jedzenie, dlatego śpi w gawrze aż do wiosny."
+    },
+    "13": {
+      "0": "Kiedy latają motyle?",
+      "1": "Latają motyle",
+      "2": "Latem jest dużo kwiatów, a motyle piją z nich słodki nektar."
+    },
+    "14": {
+      "0": "Kiedy topnieje śnieg i szemrzą strumyki?",
+      "1": "Topnieje śnieg i szemrzą strumyki",
+      "2": "Wiosną słońce roztapia śnieg, a woda z roztopów płynie strumykami do rzek."
+    },
+    "15": {
+      "0": "Kiedy dojrzewają dynie?",
+      "1": "Dojrzewają dynie",
+      "2": "Dynie zbiera się jesienią. Mogą leżeć całą zimę i się nie psują."
+    },
+    "16": {
+      "0": "Kiedy zakładamy rękawiczki i czapkę?",
+      "1": "Zakładamy rękawiczki i czapkę",
+      "2": "Zimą jest zimno, dlatego zakładamy ciepłe ubrania: zatrzymują ciepło naszego ciała."
+    },
+    "17": {
+      "0": "Kiedy dojrzewają truskawki?",
+      "1": "Dojrzewają truskawki",
+      "2": "Truskawki dojrzewają na początku lata — to jedne z pierwszych owoców w roku."
+    },
+    "18": {
+      "0": "Kiedy wykluwają się pisklęta?",
+      "1": "Wykluwają się pisklęta",
+      "2": "Wiosną ptaki wiją gniazda i wysiadują jajka — wykluwają się z nich pisklęta."
+    },
+    "19": {
+      "0": "Kiedy często padają zimne deszcze?",
+      "1": "Często padają zimne deszcze",
+      "2": "Jesienią słońce grzeje słabiej, niebo zasnuwają chmury i często pada."
+    },
+    "20": {
+      "0": "Kiedy wiewiórka robi zapasy orzechów?",
+      "1": "Wiewiórka robi zapasy orzechów",
+      "2": "Jesienią wiewiórka chowa orzechy i grzyby, żeby mieć co jeść zimą."
+    },
+    "21": {
+      "0": "Kiedy bywają burze i tęcze?",
+      "1": "Burze i tęcze",
+      "2": "Latem po ciepłej ulewie często widać tęczę: to światło słońca rozszczepia się w kroplach deszczu."
+    }
+  },
+  "cards": {
+    "title": "Przyroda",
+    "games": {
+      "seasons": {
+        "label": "Pory roku i miesiące",
+        "blurb": "Co i kiedy dzieje się w przyrodzie oraz dwanaście miesięcy po kolei",
+        "intro": "Rok ma cztery pory: zimę, wiosnę, lato i jesień, a w każdej są trzy miesiące. Spójrz na obrazek i pokaż, kiedy to się dzieje!"
+      }
+    }
+  },
+  "introFor": {
+    "1": "Teraz poznamy miesiące. W roku jest ich dwanaście, a każdy należy do swojej pory roku.",
+    "2": "Miesiące zawsze idą jeden po drugim. Przypomnij sobie, który miesiąc jest sąsiedni!",
+    "3": "Ustaw karty po kolei. Dotknij dwóch kart, żeby zamienić je miejscami.",
+    "4": "Każdy miesiąc ma swój numer: styczeń jest pierwszy, a grudzień — dwunasty."
+  },
+  "monthSeason": {
+    "ask": "Do jakiej pory roku należy {m}?",
+    "hint": "{m} to {season}. {season2}"
+  },
+  "after": {
+    "ask": "Jaki miesiąc następuje po {m}?",
+    "hint": "Przypomnij sobie miesiące po kolei: {m}, {m2}, a dalej…",
+    "fact": "Po {m} następuje {m2}."
+  },
+  "before": {
+    "ask": "Jaki miesiąc był przed {m}?",
+    "hint": "Przypomnij sobie miesiące po kolei. Po jakim miesiącu następuje {m}?",
+    "fact": "Przed {m} był {m2}."
+  },
+  "orderMonths": {
+    "ask": "Ustaw {of} miesiące po kolei. Pierwszy miesiąc — na miejsce 1.",
+    "hint": "{name} zaczyna się od {first}. Dotknij dwóch kart, żeby zamienić je miejscami.",
+    "fact": "{name} to {months}, {months2} i {months3}."
+  },
+  "ends": {
+    "0": "na początku",
+    "1": "na końcu"
+  },
+  "nth": {
+    "ask": "Który miesiąc jest {m} w roku?",
+    "hint": "Rok zaczyna się od stycznia. Policz miesiące po kolei: styczeń — pierwszy, luty — drugi, marzec — trzeci…",
+    "fact": "{m} to {m2} miesiąc roku."
+  },
+  "orderSeasons": {
+    "ask": "Ustaw pory roku po kolei. Zacznij od {from}.",
+    "circle": "Pory roku idą w kółko: zima, wiosna, lato, jesień — i znowu zima."
+  }
+}

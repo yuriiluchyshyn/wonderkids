@@ -1,0 +1,962 @@
+{
+  "planets": {
+    "neptune": "Neptune",
+    "uranus": "Uranus",
+    "saturn": "Saturn",
+    "jupiter": "Jupiter",
+    "mars": "Mars",
+    "earth": "Earth",
+    "venus": "Venus",
+    "mercury": "Mercury"
+  },
+  "galaxy": "Milky Way",
+  "spaceport": "Spaceport",
+  "stations": {
+    "neptune": {
+      "0": {
+        "0": "Observatory",
+        "1": "From here you can see stars, comets and faraway planets."
+      },
+      "1": {
+        "0": "Library",
+        "1": "Letters, words and wonderful stories live here."
+      },
+      "2": {
+        "0": "Number Lab",
+        "1": "Here they count, measure and solve puzzles."
+      },
+      "3": {
+        "0": "Travelers’ Hall",
+        "1": "Maps, flags and tales of faraway countries are kept here."
+      },
+      "4": {
+        "0": "Greenhouse",
+        "1": "Plants from every corner of the world grow here, and here you learn to take care of nature."
+      },
+      "5": {
+        "0": "Museum of Time",
+        "1": "Everything about olden times and great inventions is gathered here."
+      },
+      "6": {
+        "0": "Puzzle Club",
+        "1": "Here they solve riddles, look for patterns and sharpen their wits."
+      },
+      "7": {
+        "0": "Artists’ Workshop",
+        "1": "Here they mix paints, draw and think up new things."
+      },
+      "8": {
+        "0": "Experiment Lab",
+        "1": "Here they test how everything works: why ice melts and where a rainbow comes from."
+      },
+      "9": {
+        "0": "Music Hall",
+        "1": "Songs and tunes from all over the world sound here."
+      }
+    },
+    "uranus": {
+      "0": {
+        "0": "Ice Lab",
+        "1": "Here they study ice, snow and frost: Uranus is the coldest planet."
+      },
+      "1": {
+        "0": "Shakespeare’s Theater",
+        "1": "The moons of Uranus are named after people in plays. Here plays are put on and poems are read."
+      },
+      "2": {
+        "0": "School of Balance",
+        "1": "Uranus rolls on its side. Here they learn to keep their balance and measure angles."
+      },
+      "3": {
+        "0": "Wind Tower",
+        "1": "Here they catch the wind and find out where it blows from."
+      },
+      "4": {
+        "0": "Crystal Treasury",
+        "1": "Crystals and gems of every color and shape are gathered here."
+      },
+      "5": {
+        "0": "Weather Station",
+        "1": "Here they measure heat and cold and learn to tell what the weather will be."
+      },
+      "6": {
+        "0": "Polar Explorers’ School",
+        "1": "Here travelers are made ready for the coldest lands."
+      },
+      "7": {
+        "0": "Fairy-Tale Reading Room",
+        "1": "Here, on long polar evenings, fairy tales from all over the world are read."
+      },
+      "8": {
+        "0": "Ice Concert Hall",
+        "1": "Here they play on bells of ice and learn the notes."
+      },
+      "9": {
+        "0": "Microscope Room",
+        "1": "Here they look at snowflakes and all the tiniest things the eye cannot see."
+      }
+    },
+    "saturn": {
+      "0": {
+        "0": "Museum of Rings",
+        "1": "Here they tell what the rings of Saturn are made of, and teach everything about the circle."
+      },
+      "1": {
+        "0": "Moon Station",
+        "1": "Saturn has more than two hundred moons. Here they keep watch on every one."
+      },
+      "2": {
+        "0": "Balloon Workshop",
+        "1": "Saturn is lighter than water. Here they find out why one thing floats and another sinks."
+      },
+      "3": {
+        "0": "Tower of Time",
+        "1": "Saturn is the god of time. Here they learn hours, days, months and years."
+      },
+      "4": {
+        "0": "Farmers’ School",
+        "1": "Saturn is also the god of farming. Here they find out how bread grows."
+      },
+      "5": {
+        "0": "Magnet Lab",
+        "1": "Here they explore what pulls together and what pushes apart."
+      },
+      "6": {
+        "0": "Drawing Office",
+        "1": "Here they draw circles, triangles and squares and measure them."
+      },
+      "7": {
+        "0": "Wheel of Discoveries",
+        "1": "From up here you can see the whole ring — and every turn brings something new."
+      },
+      "8": {
+        "0": "Hall of Melodies",
+        "1": "Here they listen to how strings, pipes and drums sound."
+      },
+      "9": {
+        "0": "Room of Secrets",
+        "1": "Riddles that nobody has solved yet are kept here."
+      }
+    },
+    "jupiter": {
+      "0": {
+        "0": "Storm Watchers’ School",
+        "1": "A storm older than any person rages on Jupiter. Here they study winds and whirlwinds."
+      },
+      "1": {
+        "0": "Hall of Records",
+        "1": "Jupiter is the biggest planet. Here is everything that is “the most”: the highest, the fastest, the longest."
+      },
+      "2": {
+        "0": "Lightning Station",
+        "1": "Here they find out where lightning and electricity come from."
+      },
+      "3": {
+        "0": "Museum of Galileo’s Moons",
+        "1": "Here they tell about Io, Europa, Ganymede and Callisto."
+      },
+      "4": {
+        "0": "Strongmen’s Gym",
+        "1": "On Jupiter everything weighs two and a half times as much. Here they measure weight and strength."
+      },
+      "5": {
+        "0": "Computing Center",
+        "1": "Here they count big numbers — all the way to a million."
+      },
+      "6": {
+        "0": "Long-Distance Antenna",
+        "1": "From here messages are sent to other planets."
+      },
+      "7": {
+        "0": "Light Lab",
+        "1": "Here they split light into the colors of the rainbow."
+      },
+      "8": {
+        "0": "Navigators’ School",
+        "1": "Here they learn to plot a course by the stars and by maps."
+      },
+      "9": {
+        "0": "Stripe Workshop",
+        "1": "Jupiter is striped all over. Here they draw patterns and look for the rule in them."
+      }
+    },
+    "mars": {
+      "0": {
+        "0": "Rover Workshop",
+        "1": "Here they put together the robots that drive over the red planet."
+      },
+      "1": {
+        "0": "Volcano School",
+        "1": "The highest mountain stands on Mars — the volcano Olympus Mons. Here they study volcanoes."
+      },
+      "2": {
+        "0": "Desert Station",
+        "1": "Here they find out how to live where there is almost no water."
+      },
+      "3": {
+        "0": "First Settlers’ Base",
+        "1": "Here they get ready for life on another planet."
+      },
+      "4": {
+        "0": "Martian Greenhouse",
+        "1": "Here they grow vegetables under a dome and learn what a plant needs."
+      },
+      "5": {
+        "0": "Water Lab",
+        "1": "Here they look for water under the ground and study what it can be like."
+      },
+      "6": {
+        "0": "Museum of Stones",
+        "1": "Stones, meteorites and fossils are gathered here."
+      },
+      "7": {
+        "0": "Helicopter Hangar",
+        "1": "A helicopter from Earth flew on Mars for the first time. Here they teach why machines fly."
+      },
+      "8": {
+        "0": "Map Room",
+        "1": "Here they draw maps of canyons and craters."
+      },
+      "9": {
+        "0": "Inventors’ Forge",
+        "1": "Here they think up and build new things — from the wheel to the rocket."
+      }
+    },
+    "earth": {
+      "0": {
+        "0": "Museum of the Earth",
+        "1": "Here they tell about the continents, the oceans and everything there is on our planet."
+      },
+      "1": {
+        "0": "Aquarium",
+        "1": "Fish, jellyfish and whales from all the oceans live here."
+      },
+      "2": {
+        "0": "Forest School",
+        "1": "Here they learn to tell trees, birds and animal tracks apart."
+      },
+      "3": {
+        "0": "Museum of History",
+        "1": "Everything about how people lived long ago and how they live now is gathered here."
+      },
+      "4": {
+        "0": "School of Languages",
+        "1": "There are thousands of languages on Earth. Here they learn to understand one another."
+      },
+      "5": {
+        "0": "Music School",
+        "1": "Here they learn music and listen to an orchestra."
+      },
+      "6": {
+        "0": "Doctors’ School",
+        "1": "Here they find out how the body works and how to stay healthy."
+      },
+      "7": {
+        "0": "Eco Center",
+        "1": "Here they sort trash and learn to take care of nature."
+      },
+      "8": {
+        "0": "Transportation Museum",
+        "1": "Steam locomotives, airplanes and ships of every age stand here."
+      },
+      "9": {
+        "0": "Stadium",
+        "1": "Here they run, jump and play team games."
+      }
+    },
+    "venus": {
+      "0": {
+        "0": "Heat Lab",
+        "1": "Venus is the hottest planet. Here they study fire, warmth and heat."
+      },
+      "1": {
+        "0": "Cloud Station",
+        "1": "Venus is all in clouds. Here they find out what clouds and rain are made of."
+      },
+      "2": {
+        "0": "Gallery of Beauty",
+        "1": "Venus is the goddess of beauty. The finest paintings in the world are gathered here."
+      },
+      "3": {
+        "0": "Morning Star Tower",
+        "1": "Venus is called the Morning Star. From here they greet the dawn."
+      },
+      "4": {
+        "0": "Hall of Mirrors",
+        "1": "Here they play with reflections and learn about symmetry."
+      },
+      "5": {
+        "0": "Chemistry Lab",
+        "1": "Here they mix things together and watch what comes of it."
+      },
+      "6": {
+        "0": "Museum of Volcanoes",
+        "1": "There are more volcanoes on Venus than on any other planet."
+      },
+      "7": {
+        "0": "Hall of Slow Time",
+        "1": "A day on Venus is longer than a year. Here they learn to measure time."
+      },
+      "8": {
+        "0": "Dance School",
+        "1": "Here they dance and learn to feel the rhythm."
+      },
+      "9": {
+        "0": "Garden of Scents",
+        "1": "Flowers grow here, and each can be known by its smell."
+      }
+    },
+    "mercury": {
+      "0": {
+        "0": "Solar Observatory",
+        "1": "Mercury is closest to the Sun. From here it is seen best of all."
+      },
+      "1": {
+        "0": "Runners’ School",
+        "1": "Mercury is the fastest planet. Here they learn to measure speed."
+      },
+      "2": {
+        "0": "Messengers’ Post Office",
+        "1": "Mercury is the messenger god. Here they write letters and send them to all the planets."
+      },
+      "3": {
+        "0": "Solar Power Station",
+        "1": "Here they catch sunlight and make electricity out of it."
+      },
+      "4": {
+        "0": "Museum of Craters",
+        "1": "Mercury is all craters. Here they find out where they come from."
+      },
+      "5": {
+        "0": "Mechanics’ Workshop",
+        "1": "Here they take machines apart and put them together to see how they work."
+      },
+      "6": {
+        "0": "Ice Cave",
+        "1": "Even next to the Sun there is ice — in craters where the light never looks in."
+      },
+      "7": {
+        "0": "Space Academy",
+        "1": "Here they train the pilots who will fly to the Sun."
+      },
+      "8": {
+        "0": "Shadow Lab",
+        "1": "Here they explore light and shadow, day and night."
+      },
+      "9": {
+        "0": "Finish Tower",
+        "1": "The last station of the journey: beyond it there is only the Sun."
+      }
+    }
+  },
+  "themes": {
+    "galaxy": {
+      "name": "Star City",
+      "buildings": [
+        "Star Lantern",
+        "Moon Base",
+        "Comet Station",
+        "Observatory",
+        "Planet Home",
+        "Starship Dock",
+        "Radio Antenna",
+        "Nebula Park",
+        "Star Factory"
+      ],
+      "decor": [
+        "Shooting Stars",
+        "Asteroid",
+        "Little Moon",
+        "Pioneer’s Flag",
+        "Beacon",
+        "Space Cactus",
+        "Star Arch",
+        "Fireworks"
+      ],
+      "residents": [
+        "Alien",
+        "Robot",
+        "Astronaut",
+        "Pixel Guest",
+        "Space Dog",
+        "Flying Saucer",
+        "Star Cat",
+        "Scientist",
+        "Space Dragon",
+        "Star Unicorn"
+      ]
+    },
+    "unicorns": {
+      "name": "Fairy-Tale Kingdom",
+      "buildings": [
+        "Rainbow Bridge",
+        "Magic Fountain",
+        "Fairy’s Cottage",
+        "Sweet Bakery",
+        "Merry-Go-Round",
+        "Little Shop of Wonders",
+        "Wizard’s Tower",
+        "Ferris Wheel",
+        "Unicorn Arena"
+      ],
+      "decor": [
+        "Tulips",
+        "Magic Mushroom",
+        "Blossoming Tree",
+        "Flamingo",
+        "Wishing Star",
+        "Bow",
+        "Magic Wand",
+        "Fireworks"
+      ],
+      "residents": [
+        "Unicorn",
+        "White Horse",
+        "Fairy",
+        "Butterfly",
+        "Bunny",
+        "Swan",
+        "Sorceress",
+        "Little Dragon",
+        "Princess",
+        "Wise Owl"
+      ]
+    },
+    "cars": {
+      "name": "Racers’ City",
+      "buildings": [
+        "Gas Station",
+        "Repair Shop",
+        "Parking Lot",
+        "Crossroads",
+        "Parts Store",
+        "Car Wash",
+        "Bridge",
+        "Car Factory",
+        "Racetrack"
+      ],
+      "decor": [
+        "Barrier",
+        "Stack of Tires",
+        "Traffic Light",
+        "Finish Flag",
+        "Palm Tree",
+        "Fuel Barrel",
+        "Trophy",
+        "Fireworks"
+      ],
+      "residents": [
+        "Police Car",
+        "Fire Truck",
+        "Taxi",
+        "Tractor",
+        "Bus",
+        "Motorcycle",
+        "Truck",
+        "Mechanic",
+        "Helicopter",
+        "Ambulance"
+      ]
+    },
+    "space": {
+      "name": "Space Colony",
+      "buildings": [
+        "Satellite",
+        "Living Dome",
+        "Space Greenhouse",
+        "Power Station",
+        "Laboratory",
+        "Observatory",
+        "Radio Antenna",
+        "Hangar",
+        "Orbital Bridge"
+      ],
+      "decor": [
+        "Shooting Stars",
+        "Moon Rock",
+        "Flag",
+        "Little Moon",
+        "Searchlight",
+        "Space Cactus",
+        "Robot Gardener",
+        "Fireworks"
+      ],
+      "residents": [
+        "Astronaut",
+        "Robot Helper",
+        "Alien",
+        "Space Dog",
+        "Pixel Guest",
+        "Ship’s Cat",
+        "Scientist",
+        "Monkey Pilot",
+        "Flying Saucer",
+        "Parrot Navigator"
+      ]
+    },
+    "dinos": {
+      "name": "Dinosaur Valley",
+      "buildings": [
+        "Nest",
+        "Palm Grove",
+        "Cave",
+        "Volcano",
+        "Museum of Bones",
+        "Explorers’ Camp",
+        "Vine Bridge",
+        "Waterfall",
+        "Stone Gate"
+      ],
+      "decor": [
+        "Fern",
+        "Boulder",
+        "Big Bone",
+        "Palm Tree",
+        "Coconut",
+        "Tropical Flower",
+        "Giant Butterfly",
+        "Dinosaur’s Dinner"
+      ],
+      "residents": [
+        "Diplodocus",
+        "Tyrannosaurus",
+        "Crocodile",
+        "Lizard",
+        "Turtle",
+        "Pterodactyl",
+        "Mammoth",
+        "Snake",
+        "Dodo",
+        "Fossil Hunter"
+      ]
+    },
+    "underwater": {
+      "name": "Underwater City",
+      "buildings": [
+        "Seashell Cottage",
+        "Coral Garden",
+        "Bubble Factory",
+        "Sunken Anchor",
+        "Island",
+        "Pearl Shop",
+        "Neptune’s Temple",
+        "Lighthouse",
+        "Divers’ School"
+      ],
+      "decor": [
+        "Seaweed",
+        "Seashell",
+        "Jellyfish",
+        "Wave",
+        "Reef",
+        "Pearl",
+        "Pirate Chest",
+        "Bubble Fountain"
+      ],
+      "residents": [
+        "Clownfish",
+        "Octopus",
+        "Dolphin",
+        "Sea Turtle",
+        "Little Crab",
+        "Whale",
+        "Shark",
+        "Mermaid",
+        "Squid",
+        "Pufferfish"
+      ]
+    },
+    "forest": {
+      "name": "Forest Town",
+      "buildings": [
+        "Mushroom Hut",
+        "Woodshed",
+        "Shelter of Branches",
+        "Flower Bed",
+        "Beehives",
+        "Bridge over the Brook",
+        "Camp",
+        "Forest Spring",
+        "Giant Oak"
+      ],
+      "decor": [
+        "Daisies",
+        "Fir Tree",
+        "Stone",
+        "Wild Strawberries",
+        "Tree",
+        "Nest",
+        "Butterflies",
+        "Campfire"
+      ],
+      "residents": [
+        "Fox",
+        "Bear",
+        "Owl",
+        "Squirrel",
+        "Hedgehog",
+        "Deer",
+        "Bunny",
+        "Wolf",
+        "Badger",
+        "Little Bee"
+      ]
+    },
+    "lego": {
+      "name": "Brick City",
+      "buildings": [
+        "First Wall",
+        "Little House",
+        "Fire Station",
+        "Police Station",
+        "Store",
+        "Hospital",
+        "Train Station",
+        "Amusement Park",
+        "Skyscrapers"
+      ],
+      "decor": [
+        "Brick Flower",
+        "Fence",
+        "Brick Tree",
+        "Traffic Light",
+        "Bus Stop",
+        "Bench",
+        "Fountain",
+        "Fireworks"
+      ],
+      "residents": [
+        "Builder",
+        "Police Officer",
+        "Firefighter",
+        "Doctor",
+        "Cook",
+        "Astronaut",
+        "Robot",
+        "Pirate",
+        "Knight",
+        "Puppy"
+      ]
+    },
+    "frozen": {
+      "name": "Ice Kingdom",
+      "buildings": [
+        "Snowman",
+        "Sledding Hill",
+        "Igloo",
+        "Skating Rink",
+        "Ice Sculpture",
+        "Ski Run",
+        "Winter Forest",
+        "Mountain Tower",
+        "Snowflake Factory"
+      ],
+      "decor": [
+        "Big Snowflake",
+        "Snowy Fir Tree",
+        "Little Snowman",
+        "Warm Scarf",
+        "Bonfire",
+        "Present",
+        "Northern Lights",
+        "Fireworks"
+      ],
+      "residents": [
+        "Penguin",
+        "Polar Bear",
+        "Reindeer",
+        "Seal",
+        "Arctic Fox",
+        "Snow Wolf",
+        "Ice Elf",
+        "Snowy Owl",
+        "White Hare",
+        "Living Snowman"
+      ]
+    },
+    "minecraft": {
+      "name": "World of Blocks",
+      "buildings": [
+        "Dugout",
+        "First House",
+        "Mine",
+        "Farm",
+        "Forge",
+        "Animal Pen",
+        "Bridge",
+        "Watchtower",
+        "Portal"
+      ],
+      "decor": [
+        "Sunflower",
+        "Torch",
+        "Oak",
+        "Log",
+        "Cactus",
+        "Pumpkin",
+        "Spring",
+        "Fireworks"
+      ],
+      "residents": [
+        "Piggy",
+        "Sheep",
+        "Hen",
+        "Cow",
+        "Tame Wolf",
+        "Cat",
+        "Horse",
+        "Villager",
+        "Bee",
+        "Parrot"
+      ]
+    }
+  },
+  "visitors": [
+    "Puppy",
+    "Kitten",
+    "Hamster",
+    "Rabbit",
+    "Parrot",
+    "Turtle",
+    "Hedgehog",
+    "Squirrel",
+    "Fox",
+    "Panda",
+    "Koala",
+    "Lion",
+    "Tiger",
+    "Elephant",
+    "Giraffe",
+    "Zebra",
+    "Kangaroo",
+    "Little Monkey",
+    "Sloth",
+    "Otter",
+    "Beaver",
+    "Penguin",
+    "Flamingo",
+    "Peacock",
+    "Swan",
+    "Duck",
+    "Rooster",
+    "Owl",
+    "Eagle",
+    "Dolphin",
+    "Whale",
+    "Octopus",
+    "Crab",
+    "Little Fish",
+    "Shark",
+    "Froggy",
+    "Lizard",
+    "Little Bee",
+    "Butterfly",
+    "Ladybug",
+    "Snail",
+    "Little Dinosaur",
+    "Gardener",
+    "Cook",
+    "Artist",
+    "Firefighter",
+    "Doctor",
+    "Teacher",
+    "Handyman",
+    "Pilot",
+    "Scientist",
+    "Singer",
+    "Juggler",
+    "Wizard",
+    "Fairy",
+    "Mermaid",
+    "Superhero",
+    "Robot Helper",
+    "Guest from Space",
+    "Little Dragon"
+  ],
+  "facts": {
+    "FACTS": {
+      "neptune": [
+        "Neptune is the farthest planet from the Sun. Sunlight takes more than four hours to fly there, and only eight minutes to reach the Earth.",
+        "A year on Neptune lasts 165 Earth years. Since people discovered it, it has gone around the Sun only once — that happened in 2011.",
+        "Neptune was found not through a telescope but on paper. The Frenchman Urbain Le Verrier worked out where an unknown planet must be, and in 1846 astronomers saw it in that very place.",
+        "The fastest winds in the Solar System blow on Neptune — up to two thousand kilometers an hour. That is much faster than sound travels on Earth.",
+        "Neptune is so blue because of the gas methane in its air. Methane takes away the red light, so only the blue comes back to us.",
+        "Neptune is an ice giant. There is no solid ground on it: under the clouds hides a thick mix of water, ammonia and methane, and at the very center — a core of rock.",
+        "Neptune’s biggest moon is called Triton. It circles the opposite way to the way the planet itself spins — no other big moon does that.",
+        "Icy geysers erupt on Triton: jets of nitrogen burst from under the surface eight kilometers high. The frost there reaches 235 degrees — it is one of the coldest places we know.",
+        "Neptune has sixteen known moons. All of them are named after sea gods and nymphs of ancient myths — for Neptune itself bears the name of the god of the seas.",
+        "Only one spacecraft has ever been near Neptune — Voyager 2. It flew there for twelve years and rushed past the planet in 1989.",
+        "Voyager 2 saw the Great Dark Spot on Neptune — a storm the size of the whole Earth. When a space telescope looked there a few years later, the spot was gone, and a new one had appeared in another place.",
+        "A day on Neptune is short — about sixteen hours. But every season there lasts more than forty Earth years: a winter that began on the day you were born would end when you were already grown up.",
+        "Neptune is almost four times as wide as the Earth. Fifty-seven planets like ours would fit inside it.",
+        "Neptune is seventeen times as heavy as the Earth. It is a little smaller than Uranus but denser — that is why it weighs more than its neighbor.",
+        "Neptune has rings too, but nothing like as splendid as Saturn’s. They are thin and dark, made of dust and bits of ice, so only a spacecraft made them out.",
+        "The planet was named after Neptune — the Roman god of the seas. Its sign looks like the trident that the god always held in his hand.",
+        "In the clouds of Neptune the frost is more than two hundred degrees. But deep inside the planet it is very hot — thousands of degrees.",
+        "Neptune is the only planet that cannot be seen without a telescope or binoculars. That is why the people of old never guessed it was there.",
+        "From Neptune the Sun looks not like a disk but just like a very bright star. Nine hundred times less light reaches it than reaches the Earth, so at noon it is dusk there.",
+        "Neptune gives off more heat into space than it gets from the Sun — two and a half times as much. This heat comes from its hot depths and drives its furious winds."
+      ],
+      "uranus": [
+        "Uranus spins lying on its side. Other planets spin like tops, but it rolls around the Sun like a ball.",
+        "Scientists think Uranus fell onto its side after a terrible crash. Very long ago a body the size of the Earth slammed into it and knocked the planet over.",
+        "Uranus is the first planet discovered with a telescope. William Herschel did it in 1781; at first he thought he had found a comet.",
+        "A year on Uranus lasts eighty-four Earth years. A person who lived a long life would see only one birthday there.",
+        "Because Uranus lies on its side, the Sun shines on its poles for forty-two years on end. And then night falls — for forty-two years as well.",
+        "A day on Uranus lasts about seventeen hours. What is more, it spins backwards — only Uranus and Venus do that.",
+        "Uranus is turquoise because there is methane gas in its air. Methane swallows the red rays of the Sun and sends the blue-green ones back.",
+        "Uranus has the coldest air of all the planets — the frost there reaches 224 degrees. Even Neptune, which lies farther from the Sun, is a little warmer.",
+        "Uranus is called an ice giant. Under its clouds there is no solid ground — only a hot, thick ocean of water, ammonia and methane.",
+        "Uranus has thirteen rings. They are as dark as coal and narrow, so they were noticed only in 1977 — almost two hundred years after the planet itself was discovered.",
+        "Almost three dozen moons circle Uranus. The five biggest are Miranda, Ariel, Umbriel, Titania and Oberon.",
+        "The moons of Uranus are named not after gods but after people in books. Titania and Oberon are the king and queen of the fairies in a play by William Shakespeare.",
+        "On the moon Miranda there is the highest cliff in the Solar System — twenty kilometers high. A pebble dropped from it would fall for more than ten minutes.",
+        "Only one spacecraft has been near Uranus — Voyager 2, in 1986. It flew to the planet for almost nine years and looked at it close up for just a few hours.",
+        "Uranus is four times as wide as the Earth. Sixty-three planets like ours would fit inside it.",
+        "Uranus is fourteen times as heavy as the Earth, and still it is the lightest of the giant planets. It is bigger than Neptune but weighs less.",
+        "On a very dark, clear night Uranus can be seen even without a telescope — as a speck you can hardly make out. Astronomers saw it before Herschel too, but took it for a faint star.",
+        "Uranus is named after the ancient Greek god of the sky. All the other planets except the Earth bear the names of Roman gods — so Uranus is special among them.",
+        "Sunlight takes two hours and forty minutes to fly to Uranus. The Sun shines there almost four hundred times more weakly than on Earth.",
+        "The magnetic poles of Uranus are nowhere near the poles it spins around. Because of this its magnetic field is lopsided and wobbles as the planet turns."
+      ],
+      "saturn": [
+        "The rings of Saturn are made of countless pieces of ice and rock. Some are as small as a grain of sand, others as big as a house.",
+        "The rings of Saturn are very wide but amazingly thin. From edge to edge they are almost three hundred thousand kilometers, yet for the most part they are only as thick as a three-story house.",
+        "Saturn is the only planet lighter than water. If there were an ocean big enough, Saturn would float in it like a ball.",
+        "Saturn is the second biggest planet. It is nine times as wide as the Earth, and more than seven hundred and sixty planets like ours would fit inside it.",
+        "A year on Saturn lasts almost thirty Earth years. But a day there is short — a little more than ten hours.",
+        "Saturn spins so fast that it has been stretched sideways. It is clearly flattened at the poles and looks not like a ball but like a squashed one.",
+        "At Saturn’s north pole rages a storm in the shape of a perfect hexagon. Each of its sides is longer than the whole Earth is wide.",
+        "Saturn has more than two hundred moons — more than any other planet. Most of them are quite small, only a few kilometers across.",
+        "Titan is Saturn’s biggest moon; it is even bigger than the planet Mercury. It is the only moon in the Solar System with thick air.",
+        "On Titan there are rivers, lakes and seas — not of water but of liquid methane. It even rains there — slowly, in big drops.",
+        "The moon Enceladus is covered with ice, and under the ice hides an ocean of salt water. Through cracks near the south pole the water shoots in fountains straight out into space.",
+        "Galileo Galilei was the first to point a telescope at Saturn, in 1610. He could not make out the rings and decided the planet had “ears.” Only half a century later did Christiaan Huygens guess that it was a ring.",
+        "The spacecraft Cassini circled Saturn for thirteen years and sent back hundreds of thousands of pictures. At the end it dived into the planet’s clouds and burned up like a shooting star.",
+        "In 2005 the probe Huygens came down by parachute onto Titan. It is the farthest landing from the Earth in all of history.",
+        "Winds blow on Saturn at up to one thousand eight hundred kilometers an hour. That is five times as fast as the strongest hurricane on Earth.",
+        "Saturn is a gas giant of hydrogen and helium. You cannot stand on it: there is no solid surface, and a ship would simply sink into the clouds.",
+        "About once every fifteen years the rings of Saturn turn edge-on to the Earth. They are so thin that for a few weeks they almost vanish from sight.",
+        "Saturn is the farthest planet that can be seen well without a telescope. The ancient Romans named it after their god of farming.",
+        "Between Saturn’s two biggest rings there is a dark gap — the Cassini Division. It is almost five thousand kilometers wide — nearly as wide as the planet Mercury.",
+        "Small shepherd moons circle near Saturn’s rings. With their gravity they keep the bits of ice from flying apart, as a shepherd keeps a flock from scattering."
+      ],
+      "jupiter": [
+        "Jupiter is the biggest planet of the Solar System. It is eleven times as wide as the Earth, and one thousand three hundred planets like ours would fit inside it.",
+        "Jupiter is two and a half times as heavy as all the other planets put together. A real giant among giants.",
+        "The Great Red Spot on Jupiter is a storm bigger than the whole Earth. It has been raging for hundreds of years and still has not died down.",
+        "Jupiter spins the fastest of all the planets: a day on it lasts less than ten hours. In one Earth day the Sun rises twice and sets twice there.",
+        "A year on Jupiter lasts twelve Earth years. So a twelve-year-old child would, by Jupiter’s calendar, have only just had a first birthday.",
+        "Jupiter is made of hydrogen and helium — the same gases as the Sun. There is no solid surface on it: the deeper you go, the thicker the clouds become.",
+        "The stripes on Jupiter are clouds. In the light stripes the gas rises, in the dark ones it sinks, and the winds in neighboring stripes blow in opposite directions.",
+        "In 1610 Galileo Galilei saw four moons of Jupiter through his telescope: Io, Europa, Ganymede and Callisto. That is how people first learned that not everything in the sky goes around the Earth.",
+        "Ganymede is the biggest moon in the whole Solar System. It is bigger even than the planet Mercury.",
+        "More than four hundred volcanoes are active on the moon Io. It is the most volcanic place in the Solar System: what they throw out rises hundreds of kilometers high.",
+        "The moon Europa is covered with a thick layer of ice, and under it is an ocean. There is twice as much water in that ocean as in all the seas of the Earth.",
+        "Jupiter has more than ninety known moons. Astronomers are still finding new ones — tiny, a kilometer or two across.",
+        "Jupiter has rings too, but they are very thin and faint — made of fine dust. Only the spacecraft Voyager 1 noticed them as it flew past in 1979.",
+        "Jupiter guards the Earth. With its mighty gravity it pulls in many comets and asteroids — in 1994 astronomers watched a comet, torn to pieces, crash into it.",
+        "Jupiter has the strongest magnetic field of all the planets. Near its poles blaze northern lights bigger than our whole Earth.",
+        "Since 2016 the spacecraft Juno has been flying around Jupiter. It is powered by solar panels the size of a bus, and it peeks under the planet’s clouds.",
+        "Jupiter can be seen well without a telescope: it shines brighter than any star. And through ordinary binoculars you can make out its four biggest moons.",
+        "The Romans named the biggest planet after their chief god — Jupiter, lord of the sky and of thunder. They did not know how big it was, but they guessed right: they saw only that it sails gravely and slowly among the stars.",
+        "On Jupiter everything weighs two and a half times as much as on Earth. A backpack that weighs four kilograms at home would weigh a full ten there.",
+        "Lightning flashes in the clouds of Jupiter, many times mightier than on Earth. And deep inside the planet the pressure is so great that hydrogen gas turns liquid."
+      ],
+      "mars": [
+        "Mars is called the Red Planet. Its soil is full of iron that has rusted — it is rust that gives the planet its reddish color.",
+        "On Mars stands the highest mountain of the Solar System — the volcano Olympus Mons. It rises twenty-two kilometers, which is two and a half times as high as Everest.",
+        "On Mars there is a giant canyon — Valles Marineris. It stretches for four thousand kilometers and goes seven kilometers deep.",
+        "A day on Mars is almost the same as on Earth: twenty-four hours and thirty-seven minutes. Scientists call a Martian day a “sol.”",
+        "A year on Mars lasts 687 Earth days — almost two of our years. So a birthday there would come half as often.",
+        "On Mars, as on Earth, there are spring, summer, fall and winter. But every season lasts twice as long there.",
+        "White ice caps lie on the poles of Mars. They are made of frozen water and dry ice, and they grow in winter and melt in summer.",
+        "Rivers once flowed and lakes once lapped on Mars. They left behind dried-up riverbeds and smooth pebbles, which the rovers have found.",
+        "Mars has two tiny moons — Phobos and Deimos. They are not round but shaped like potatoes, and their names mean “fear” and “terror.”",
+        "Phobos flies around Mars so fast that it rises in the west and sets in the east. In one Martian day it goes around the planet three times.",
+        "Mars is half as wide as the Earth. Yet it has as much dry land as all our continents together — for there are no oceans there.",
+        "Gravity on Mars is almost three times weaker than on Earth. You would jump three times as high there, and a child who weighs thirty kilograms would weigh only eleven.",
+        "The air on Mars is very thin, and almost all of it is carbon dioxide. You cannot breathe it, so people will need spacesuits there.",
+        "It is cold on Mars: about sixty degrees of frost on average. Only in summer, at noon near the equator, is it as warm as our spring.",
+        "Dust storms rise on Mars. The biggest of them wrap the whole planet and last several weeks — then the surface cannot be seen even from space.",
+        "The sky on Mars is reddish pink by day, from the dust in the air. But a sunset there is blue — everything the other way around from Earth.",
+        "Robot rovers drive over Mars. One of them was meant to work for three months, but served for almost fifteen years and drove more than forty-five kilometers.",
+        "In 2021 a little helicopter took off on Mars. It was the first flight of an aircraft on another planet, and altogether it rose into the sky seventy-two times.",
+        "It takes about seven months to fly to Mars. It is best to set out when the planets are closest to each other, and that happens only once every two years.",
+        "Mars is named after the Roman god of war — for its color, like blood. It is easy to pick out in the night sky: it is a bright reddish dot that does not twinkle."
+      ],
+      "earth": {
+        "0": "The Earth is the only planet known to have life. People, animals, plants and millions of other living things live here.",
+        "1": "Almost three quarters of the Earth’s surface is covered with water. That is why our planet is blue from space, and why it is called the Blue Planet.",
+        "2": "The Earth is the third planet from the Sun. It lies just where it is not too hot and not too cold, so water can be liquid.",
+        "3": "The Earth turns on its axis once in twenty-four hours. Where the planet faces the Sun it is day, and on the other side at that time it is night.",
+        "4": "The Earth goes around the Sun in 365 days and another six hours. Once every four years those extra hours add up to an extra day — the twenty-ninth of February.",
+        "5": "The Earth’s axis is tilted a little. Because of this, for half the year the northern half of the planet leans more toward the Sun, and for half the year the southern — and so the seasons change.",
+        "6": "The Earth has one natural satellite — the Moon. It is about 384 thousand kilometers away: all the other planets of the Solar System would fit between the Earth and the Moon.",
+        "7": "The Moon pulls on the water in the oceans with its gravity. Because of this, twice a day the sea comes up the shore and draws back — these are the tides.",
+        "8": "The Earth is wrapped in air — the atmosphere. It gives us something to breathe, keeps in the warmth, and burns up most meteors before they reach the ground.",
+        "9": "The Earth has a magnetic field that shields us from harmful particles from the Sun. When those particles do get in near the poles, the northern lights flare up in the sky.",
+        "10": "The Earth is the biggest of the four rocky planets. It is also the densest planet of the Solar System.",
+        "11": "The Earth is about four and a half billion years old. If its whole history were squeezed into one day, people would appear only in the last seconds before midnight.",
+        "12": "The Earth races around the Sun at thirty kilometers a second. We do not feel it, because we fly along with it smoothly, without a jolt.",
+        "13": "The Earth is not a perfect ball. It is a little flattened at the poles and forty-three kilometers wider at the equator.",
+        "14": "The highest mountain on Earth is Everest, almost nine kilometers high. And the deepest place is the Mariana Trench in the Pacific Ocean, about eleven kilometers down.",
+        "15": "At the very center of the Earth is a core of iron and nickel. It is as hot there as on the surface of the Sun — more than five thousand degrees.",
+        "16": "The continents of the Earth move slowly — a few centimeters a year, about as fast as fingernails grow. Long, long ago they were all one great continent.",
+        "17": "The Earth is the only planet not named after a god. Its name simply means the ground we walk on.",
+        "18": "The space station goes around the Earth in an hour and a half. So the astronauts on it see sixteen sunrises and sixteen sunsets every day.",
+        "19": "In 1961 a person saw the Earth from space for the first time. Since then astronauts have told us that from up there no borders between countries can be seen — only one blue home for all."
+      },
+      "venus": [
+        "Venus is the hottest planet, though not the closest to the Sun. The heat there reaches 465 degrees: enough to melt lead.",
+        "Venus is so hot because of its air. A thick layer of carbon dioxide wraps it like a blanket and does not let the heat back out into space.",
+        "Venus spins backwards. So the Sun rises in the west there and sets in the east.",
+        "Venus spins very slowly: one turn on its axis takes 243 Earth days. And it goes around the Sun in 225 days — so a year there is shorter than one turn of the planet.",
+        "Venus is the brightest light in the sky after the Sun and the Moon. It is seen at dawn or in the evening, so it is called the Morning Star and the Evening Star.",
+        "Venus is called the Earth’s sister, because it is almost the same size. Yet nobody could live on it — it is far too hot there.",
+        "The air on Venus presses ninety times as hard as on Earth. Water in the ocean presses like that almost a whole kilometer down.",
+        "The clouds on Venus are made not of water but of biting acid. Rain even falls from them, but it never reaches the ground — it boils away in the heat.",
+        "Venus has no moons at all. There are only two such planets in the Solar System — Venus and Mercury.",
+        "There are more volcanoes on Venus than on any other planet — thousands of them. Scientists have noticed that some are erupting even now.",
+        "The highest mountains on Venus are the Maxwell Mountains, eleven kilometers high. That is higher than our Everest.",
+        "The first spacecraft that landed on Venus worked there for two hours at the most. Then the heat and the terrible pressure put them out of action.",
+        "Almost all the mountains, plains and craters of Venus are named after women — scientists, writers, goddesses. Astronomers decided so because the planet itself has a woman’s name.",
+        "Venus is the second planet from the Sun and our nearest neighbor. When it comes closest, it is about forty million kilometers away.",
+        "Through a telescope you can see that Venus, like the Moon, is sometimes full and sometimes a thin crescent. Galileo Galilei was the first to see this, and he understood that the planets go around the Sun.",
+        "There are no seasons on Venus. Its axis is hardly tilted at all, so the heat there is the same all year, by day and by night, at the poles and at the equator.",
+        "The clouds of Venus race very fast and fly around the whole planet in four Earth days. The winds high up blow at three hundred and sixty kilometers an hour.",
+        "The surface of Venus cannot be seen through its thick clouds. So its map was made with radar: the spacecraft Magellan circled the planet for four years and “felt” it with radio waves.",
+        "Venus was named after the Roman goddess of love and beauty. It is the only planet of the Solar System named after a goddess.",
+        "The sky on Venus is orange, and the Sun cannot be seen through the clouds at all. Even at noon it is as dim there as on a very gloomy day here."
+      ],
+      "mercury": {
+        "0": "Mercury is the smallest planet of the Solar System. It is only one and a half times as wide as our Moon.",
+        "1": "Mercury is the planet closest to the Sun. Sunlight reaches it in just three minutes.",
+        "2": "A year on Mercury lasts only eighty-eight days. It is the fastest planet: it races around the Sun at forty-seven kilometers a second.",
+        "3": "A day on Mercury drags on for a very long time. From one sunrise to the next, 176 Earth days go by — that is two whole Mercury years.",
+        "4": "By day the heat on Mercury reaches 430 degrees, and at night the frost reaches 180 degrees. No other planet has a bigger swing.",
+        "5": "There is almost no air on Mercury, so the warmth does not stay. Because of this its sky is black and starry even by day.",
+        "6": "Mercury is all craters and looks very much like the Moon. They are the marks of asteroids and comets that fell on it for billions of years.",
+        "7": {
+          "1": "Mercury’s biggest crater is called the Caloris Basin — the plain of heat. It is one and a half thousand kilometers wide",
+          "2": " — a whole big country would fit inside it"
+        },
+        "8": "Though Mercury is scorching, there is ice on it. It lies at the bottom of craters near the poles, where the Sun never looks in.",
+        "9": "Inside Mercury hides a huge iron core that takes up most of the planet. That is why Mercury is small but heavy.",
+        "10": "From Mercury the Sun looks three times as big as from the Earth. And it shines seven times as brightly there.",
+        "11": "Mercury has no moons and no rings. It is too small and too close to the Sun to hold anything near itself.",
+        "12": "Mercury is slowly cooling, and so it is shrinking. This has left wrinkles on its surface — cliffs hundreds of kilometers long.",
+        "13": "Mercury has a magnetic field, as the Earth does, only a hundred times weaker. This surprised scientists: they thought so small a planet had cooled inside long ago.",
+        "14": "Only two spacecraft have reached Mercury — Mariner 10 and MESSENGER. A third, BepiColombo, set out for it in 2018.",
+        "15": "Mercury is hard to see in the sky, because it always keeps close to the Sun. It can be spotted only low over the horizon — before dawn or just after sunset.",
+        "16": "Mercury is named after the Roman messenger god, who had winged sandals. And the planet really is the swiftest of all.",
+        "17": {
+          "1": "The craters on Mercury are named after writers, painters and composers.",
+          "2": " Among them are craters named Shakespeare, Beethoven and Mark Twain."
+        },
+        "18": "Gravity on Mercury is almost three times weaker than on Earth. A ball thrown up there would fly three times as high.",
+        "19": "Sometimes Mercury passes right between the Earth and the Sun. Then, through a telescope with a safety filter, a tiny black dot can be seen creeping across the Sun’s disk; the next time this will happen is in 2032."
+      }
+    }
+  }
+}

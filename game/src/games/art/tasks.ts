@@ -3,7 +3,7 @@ import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { templateTask, type GameTasks } from '../shared/templateModule';
 import { STEPS, MIXES, PAINTS } from './content/data';
-import { artTexts } from './lang';
+import { artTexts } from './grammar';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 

@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import type { ClockTime } from '@/core/game/templates/types';
 
 /**

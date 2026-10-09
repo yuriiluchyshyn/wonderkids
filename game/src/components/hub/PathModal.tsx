@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Modal } from '@/components/ui/Modal';

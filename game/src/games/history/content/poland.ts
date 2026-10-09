@@ -1,60 +1,46 @@
 import type { Achiever, Invention } from './data';
+import TEXTS from '@/locales/app/uk/games/history.json';
+
+const J = TEXTS.content.poland;
 
 /**
  * The history of Poland: the people and the inventions of the two games that
  * come with the Polish language. The words here are the Ukrainian ones, like
- * the rest of `content/`; Polish and English are in `lang/`.
+ * the rest of `content/`; Polish and English are in `grammar/`.
  *
  * `picture` borrows a portrait that is already drawn; without it a person is
  * shown by the emoji alone — there are no portraits of these people yet.
  */
 export const PL_FIGURES: Achiever[] = [
-  { id: 'mieszko', name: 'Мешко I', face: '🤴', symbol: '🦅', symbolName: 'Початок Польської держави', fact: 'Князь Мешко I понад тисячу років тому об’єднав землі й став першим правителем Польщі.' },
-  { id: 'kopernik', picture: 'copernicus', name: 'Миколай Коперник', face: '👨‍🏫', symbol: '☀️', symbolName: 'Сонце в центрі', fact: 'Миколай Коперник народився в Торуні й пояснив, що Земля обертається навколо Сонця.' },
-  { id: 'chopin', name: 'Фридерик Шопен', face: '🧑‍🎼', symbol: '🎹', symbolName: 'Мазурки і полонези', fact: 'Фридерик Шопен писав для фортепіано мазурки й полонези, у яких чути польські народні мелодії.' },
-  { id: 'sklodowska', picture: 'curie', who: 'she', name: 'Марія Склодовська-Кюрі', face: '👩‍🔬', symbol: '🧪', symbolName: 'Полоній і радій', fact: 'Марія Склодовська-Кюрі народилася у Варшаві, відкрила полоній і радій і двічі отримала Нобелівську премію.' },
-  { id: 'chrobry', name: 'Болеслав Хоробрий', face: '👑', symbol: '⚔️', symbolName: 'Перший король Польщі', fact: 'Болеслав Хоробрий став першим королем Польщі майже тисячу років тому.' },
-  { id: 'kazimierz', name: 'Казимир Великий', face: '🤴', symbol: '🏰', symbolName: 'Муровані замки й університет', fact: 'Про Казимира Великого кажуть: застав Польщу дерев’яною, а залишив мурованою. Він заснував університет у Кракові.' },
-  { id: 'jadwiga', who: 'she', name: 'Королева Ядвіга', face: '👸', symbol: '🎓', symbolName: 'Коштовності для університету', fact: 'Ядвігу коронували, коли їй було лише десять років. Свої коштовності вона заповіла Краківському університету.' },
-  { id: 'jagiello', name: 'Владислав Ягайло', face: '🧔‍♂️', symbol: '🛡️', symbolName: 'Грюнвальдська битва', fact: 'Король Владислав Ягайло 1410 року переміг лицарів-хрестоносців у Грюнвальдській битві.' },
-  { id: 'sobieski', name: 'Ян III Собеський', face: '🤴', symbol: '🐎', symbolName: 'Крилаті гусари під Віднем', fact: 'Король Ян III Собеський повів крилатих гусарів і 1683 року врятував Відень від облоги.' },
-  { id: 'kosciuszko', name: 'Тадеуш Костюшко', face: '🧑‍✈️', symbol: '🌾', symbolName: 'Повстання за свободу', fact: 'Тадеуш Костюшко боровся за свободу Польщі й Америки. До його війська йшли селяни з косами.' },
-  { id: 'mickiewicz', name: 'Адам Міцкевич', face: '🧑‍🦱', symbol: '📖', symbolName: '«Пан Тадеуш»', fact: 'Адам Міцкевич — поет. Його велику поему «Пан Тадеуш» знає кожен польський школяр.' },
-  { id: 'matejko', name: 'Ян Матейко', face: '👨‍🎨', symbol: '🖼️', symbolName: 'Картини про історію Польщі', fact: 'Ян Матейко малював величезні картини про історію Польщі. Найвідоміша — «Грюнвальдська битва».' },
-  { id: 'korczak', name: 'Януш Корчак', face: '👨‍⚕️', symbol: '🧒', symbolName: '«Король Мацюсь Перший»', fact: 'Януш Корчак — лікар і письменник. Він дбав про сиріт, обстоював права дітей і написав казку «Король Мацюсь Перший».' },
-  { id: 'hermaszewski', name: 'Мирослав Гермашевський', face: '🧑‍🚀', symbol: '🚀', symbolName: 'Політ у космос', fact: 'Мирослав Гермашевський 1978 року став першим поляком у космосі.' },
-  { id: 'szymborska', who: 'she', name: 'Віслава Шимборська', face: '👩‍🦳', symbol: '✍️', symbolName: 'Вірші й Нобелівська премія', fact: 'Віслава Шимборська писала мудрі й дотепні вірші та отримала за них Нобелівську премію.' },
-  { id: 'lem', name: 'Станіслав Лем', face: '👨‍💼', symbol: '🤖', symbolName: 'Казки про роботів', fact: 'Станіслав Лем народився у Львові й писав книжки про космос і роботів, які читають у всьому світі.' },
+  { id: 'mieszko', name: J.PL_FIGURES.mieszko.name, face: '🤴', symbol: '🦅', symbolName: J.PL_FIGURES.mieszko.symbolName, fact: J.PL_FIGURES.mieszko.fact },
+  { id: 'kopernik', picture: 'copernicus', name: J.PL_FIGURES.kopernik.name, face: '👨‍🏫', symbol: '☀️', symbolName: J.PL_FIGURES.kopernik.symbolName, fact: J.PL_FIGURES.kopernik.fact },
+  { id: 'chopin', name: J.PL_FIGURES.chopin.name, face: '🧑‍🎼', symbol: '🎹', symbolName: J.PL_FIGURES.chopin.symbolName, fact: J.PL_FIGURES.chopin.fact },
+  { id: 'sklodowska', picture: 'curie', who: 'she', name: J.PL_FIGURES.sklodowska.name, face: '👩‍🔬', symbol: '🧪', symbolName: J.PL_FIGURES.sklodowska.symbolName, fact: J.PL_FIGURES.sklodowska.fact },
+  { id: 'chrobry', name: J.PL_FIGURES.chrobry.name, face: '👑', symbol: '⚔️', symbolName: J.PL_FIGURES.chrobry.symbolName, fact: J.PL_FIGURES.chrobry.fact },
+  { id: 'kazimierz', name: J.PL_FIGURES.kazimierz.name, face: '🤴', symbol: '🏰', symbolName: J.PL_FIGURES.kazimierz.symbolName, fact: J.PL_FIGURES.kazimierz.fact },
+  { id: 'jadwiga', who: 'she', name: J.PL_FIGURES.jadwiga.name, face: '👸', symbol: '🎓', symbolName: J.PL_FIGURES.jadwiga.symbolName, fact: J.PL_FIGURES.jadwiga.fact },
+  { id: 'jagiello', name: J.PL_FIGURES.jagiello.name, face: '🧔‍♂️', symbol: '🛡️', symbolName: J.PL_FIGURES.jagiello.symbolName, fact: J.PL_FIGURES.jagiello.fact },
+  { id: 'sobieski', name: J.PL_FIGURES.sobieski.name, face: '🤴', symbol: '🐎', symbolName: J.PL_FIGURES.sobieski.symbolName, fact: J.PL_FIGURES.sobieski.fact },
+  { id: 'kosciuszko', name: J.PL_FIGURES.kosciuszko.name, face: '🧑‍✈️', symbol: '🌾', symbolName: J.PL_FIGURES.kosciuszko.symbolName, fact: J.PL_FIGURES.kosciuszko.fact },
+  { id: 'mickiewicz', name: J.PL_FIGURES.mickiewicz.name, face: '🧑‍🦱', symbol: '📖', symbolName: J.PL_FIGURES.mickiewicz.symbolName, fact: J.PL_FIGURES.mickiewicz.fact },
+  { id: 'matejko', name: J.PL_FIGURES.matejko.name, face: '👨‍🎨', symbol: '🖼️', symbolName: J.PL_FIGURES.matejko.symbolName, fact: J.PL_FIGURES.matejko.fact },
+  { id: 'korczak', name: J.PL_FIGURES.korczak.name, face: '👨‍⚕️', symbol: '🧒', symbolName: J.PL_FIGURES.korczak.symbolName, fact: J.PL_FIGURES.korczak.fact },
+  { id: 'hermaszewski', name: J.PL_FIGURES.hermaszewski.name, face: '🧑‍🚀', symbol: '🚀', symbolName: J.PL_FIGURES.hermaszewski.symbolName, fact: J.PL_FIGURES.hermaszewski.fact },
+  { id: 'szymborska', who: 'she', name: J.PL_FIGURES.szymborska.name, face: '👩‍🦳', symbol: '✍️', symbolName: J.PL_FIGURES.szymborska.symbolName, fact: J.PL_FIGURES.szymborska.fact },
+  { id: 'lem', name: J.PL_FIGURES.lem.name, face: '👨‍💼', symbol: '🤖', symbolName: J.PL_FIGURES.lem.symbolName, fact: J.PL_FIGURES.lem.fact },
 ];
 
-export const PL_WHO_ASK: Record<string, string> = {
-  mieszko: 'Хто став першим правителем Польщі?',
-  kopernik: 'Хто пояснив, що Земля обертається навколо Сонця?',
-  chopin: 'Хто писав для фортепіано мазурки й полонези?',
-  sklodowska: 'Хто відкрив полоній і радій?',
-  chrobry: 'Хто став першим королем Польщі?',
-  kazimierz: 'Хто застав Польщу дерев’яною, а залишив мурованою?',
-  jadwiga: 'Кого коронували в десять років?',
-  jagiello: 'Хто переміг хрестоносців у Грюнвальдській битві?',
-  sobieski: 'Хто повів крилатих гусарів і врятував Відень?',
-  kosciuszko: 'Хто боровся за свободу Польщі й Америки?',
-  mickiewicz: 'Хто написав поему «Пан Тадеуш»?',
-  matejko: 'Хто намалював картину «Грюнвальдська битва»?',
-  korczak: 'Хто написав казку «Король Мацюсь Перший»?',
-  hermaszewski: 'Хто став першим поляком у космосі?',
-  szymborska: 'Хто отримав Нобелівську премію за вірші?',
-  lem: 'Хто писав книжки про космос і роботів?',
-};
+export const PL_WHO_ASK: Record<string, string> = J.PL_WHO_ASK;
 
 export const PL_INVENTIONS: Invention[] = [
-  { id: 'pl_lamp', name: 'Гасова лампа', emoji: '🪔', by: 'Ігнацій Лукасевич', face: 'lukasiewicz', fact: 'Аптекар Ігнацій Лукасевич 1853 року зробив гасову лампу, а згодом відкрив першу нафтову копальню.' },
-  { id: 'pl_vitamins', name: 'Вітаміни', ask: 'Хто відкрив вітаміни й придумав для них назву?', emoji: '🍊', by: 'Казимир Функ', fact: 'Казимир Функ відкрив речовини, без яких людина хворіє, і назвав їх вітамінами.' },
-  { id: 'pl_radio', name: 'Рація', emoji: '📻', by: 'Генрик Магнуський', fact: 'Інженер Генрик Магнуський створив рацію — радіо, яке можна носити з собою й розмовляти на відстані.' },
-  { id: 'pl_detector', name: 'Металошукач', emoji: '🧲', by: 'Юзеф Косацький', fact: 'Юзеф Косацький придумав прилад, що знаходить метал під землею. Він урятував тисячі людей від мін.' },
-  { id: 'pl_crystal', name: 'Кристали для мікросхем', ask: 'Хто навчився вирощувати кристали, без яких не було б комп’ютерів?', emoji: '💎', by: 'Ян Чохральський', fact: 'Ян Чохральський навчився вирощувати кристали. З таких кристалів роблять мікросхеми для телефонів і комп’ютерів.' },
-  { id: 'pl_rover', name: 'Місячний всюдихід', emoji: '🌙', by: 'Мечислав Беккер', fact: 'Мечислав Беккер сконструював всюдихід, яким астронавти їздили по Місяцю.' },
-  { id: 'pl_vaccine', name: 'Вакцина від тифу', emoji: '💉', by: 'Рудольф Вайгль', fact: 'Рудольф Вайгль у Львові створив вакцину від висипного тифу, яка врятувала безліч людей.' },
-  { id: 'pl_esperanto', name: 'Мова есперанто', ask: 'Хто придумав мову есперанто, щоб люди з різних країн розуміли одне одного?', emoji: '💬', by: 'Людвік Заменгоф', fact: 'Лікар Людвік Заменгоф із Білостока придумав просту мову есперанто, щоб люди з різних країн розуміли одне одного.' },
-  { id: 'pl_enigma', name: 'Розгаданий шифр «Енігми»', ask: 'Хто першим розгадав таємний шифр машини «Енігма»?', emoji: '🔐', by: 'Маріан Реєвський', fact: 'Математик Маріан Реєвський першим розгадав шифр машини «Енігма», який вважали нерозгадним.' },
-  { id: 'pl_vest', name: 'Куленепробивний жилет', emoji: '🦺', by: 'Казимир Жеглень', fact: 'Казимир Жеглень зіткав із шовку жилет, якого не пробивала куля.' },
+  { id: 'pl_lamp', name: J.PL_INVENTIONS.pl_lamp.name, emoji: '🪔', by: J.PL_INVENTIONS.pl_lamp.by, face: 'lukasiewicz', fact: J.PL_INVENTIONS.pl_lamp.fact },
+  { id: 'pl_vitamins', name: J.PL_INVENTIONS.pl_vitamins.name, ask: J.PL_INVENTIONS.pl_vitamins.ask, emoji: '🍊', by: J.PL_INVENTIONS.pl_vitamins.by, fact: J.PL_INVENTIONS.pl_vitamins.fact },
+  { id: 'pl_radio', name: J.PL_INVENTIONS.pl_radio.name, emoji: '📻', by: J.PL_INVENTIONS.pl_radio.by, fact: J.PL_INVENTIONS.pl_radio.fact },
+  { id: 'pl_detector', name: J.PL_INVENTIONS.pl_detector.name, emoji: '🧲', by: J.PL_INVENTIONS.pl_detector.by, fact: J.PL_INVENTIONS.pl_detector.fact },
+  { id: 'pl_crystal', name: J.PL_INVENTIONS.pl_crystal.name, ask: J.PL_INVENTIONS.pl_crystal.ask, emoji: '💎', by: J.PL_INVENTIONS.pl_crystal.by, fact: J.PL_INVENTIONS.pl_crystal.fact },
+  { id: 'pl_rover', name: J.PL_INVENTIONS.pl_rover.name, emoji: '🌙', by: J.PL_INVENTIONS.pl_rover.by, fact: J.PL_INVENTIONS.pl_rover.fact },
+  { id: 'pl_vaccine', name: J.PL_INVENTIONS.pl_vaccine.name, emoji: '💉', by: J.PL_INVENTIONS.pl_vaccine.by, fact: J.PL_INVENTIONS.pl_vaccine.fact },
+  { id: 'pl_esperanto', name: J.PL_INVENTIONS.pl_esperanto.name, ask: J.PL_INVENTIONS.pl_esperanto.ask, emoji: '💬', by: J.PL_INVENTIONS.pl_esperanto.by, fact: J.PL_INVENTIONS.pl_esperanto.fact },
+  { id: 'pl_enigma', name: J.PL_INVENTIONS.pl_enigma.name, ask: J.PL_INVENTIONS.pl_enigma.ask, emoji: '🔐', by: J.PL_INVENTIONS.pl_enigma.by, fact: J.PL_INVENTIONS.pl_enigma.fact },
+  { id: 'pl_vest', name: J.PL_INVENTIONS.pl_vest.name, emoji: '🦺', by: J.PL_INVENTIONS.pl_vest.by, fact: J.PL_INVENTIONS.pl_vest.fact },
 ];

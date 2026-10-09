@@ -1,3 +1,7 @@
+import TEXTS from '@/locales/app/uk/games/ecology.json';
+
+const J = TEXTS.content.rubbish;
+
 /**
  * More things to sort in «Еко-патруль» — together with the hand-made ones in
  * `tasks.ts` they make a hundred. One per cell: `name|emoji`, lower-case, in
@@ -5,26 +9,7 @@
  */
 type Bin = 'glass' | 'paper' | 'plastic' | 'metal' | 'organic';
 
-const BY_BIN: Record<Bin, string> = {
-  glass: `
-пляшка від соку|🧃; банка від компоту|🍑; пляшка від мінеральної води|💧; слоїк від гірчиці|🌭; скляна банка від кави|☕; пляшечка від сиропу|🍯;
-баночка від дитячого пюре|🍼; пляшка від оцту|🍶; банка від томатного соусу|🍅; скляний флакон від ліків|💊; банка від маслин|🫒; слоїк від джему|🍇`,
-  paper: `
-журнал|📖; паперовий пакет|🛍️; коробка від пластівців|🥣; альбом для малювання|🎨; старий лист|✉️; рекламна листівка|📃; паперова обгортка|🎁;
-картонна папка|📁; коробка від цукерок|🍬; списаний аркуш|📝; старий щоденник|📔; квиток у кіно|🎟️; коробка від іграшки|🧸;
-втулка від туалетного паперу|🧻; старий підручник|📘; паперова закладка|🔖`,
-  plastic: `
-пляшка від води|💧; баночка від йогурту|🥛; пляшка від кефіру|🍼; флакон від гелю для душу|🚿; пластикова ложка|🥄; коробочка від морозива|🍨;
-пластикова пляшка від кетчупу|🍅; каністра від води|🚰; пластикова вішалка|👕; іграшковий кубик|🧱; пластикова миска|🥣;
-флакон від засобу для посуду|🧽; стаканчик від сметани|🥛; лоток від ягід|🍓; пластикова кришка від відра|🪣`,
-  metal: `
-бляшанка від лимонаду|🥤; консервна банка|🥫; кришка від слоїка|🫙; алюмінієва фольга|✨; банка від горошку|🫛; металева кришечка|🍾;
-бляшанка від кукурудзи|🌽; стара ложка|🥄; іржавий цвях|🔩; банка від тунця|🐟; банка від згущеного молока|🥛; старий ключ|🔑;
-металева коробка від печива|🍪; бляшанка від соку|🧃; шматок дроту|🧷`,
-  organic: `
-яблучний огризок|🍎; бананова шкірка|🍌; картопляне лушпиння|🥔; зів’яла квітка|🥀; шкірка від апельсина|🍊; опале листя|🍂; яєчна шкаралупа|🥚;
-качан від капусти|🥬; морквяні очистки|🥕; кавова гуща|☕; чайна заварка|🍵; шкірка від кавуна|🍉; скошена трава|🌿; засохлий хліб|🍞`,
-};
+const BY_BIN: Record<Bin, string> = J.BY_BIN;
 
 export const MORE_RUBBISH = (Object.keys(BY_BIN) as Bin[]).flatMap((bin) =>
   BY_BIN[bin]
@@ -38,53 +23,47 @@ export const MORE_RUBBISH = (Object.keys(BY_BIN) as Bin[]).flatMap((bin) =>
 );
 
 export const BINS = [
-  { id: 'glass', name: 'Скло', emoji: '🫙', no: 'Дзень! Це не скло.' },
-  { id: 'paper', name: 'Папір', emoji: '📄', no: 'Шурх! Це не папір.' },
-  { id: 'plastic', name: 'Пластик', emoji: '🧴', no: 'Ой! Це не пластик.' },
-  { id: 'metal', name: 'Метал', emoji: '🥫', no: 'Дзинь! Це не метал.' },
-  { id: 'organic', name: 'Органіка', emoji: '🍂', no: 'Хрум! Це не для компосту.' },
+  { id: 'glass', name: J.BINS.glass.name, emoji: '🫙', no: J.BINS.glass.no },
+  { id: 'paper', name: J.BINS.paper.name, emoji: '📄', no: J.BINS.paper.no },
+  { id: 'plastic', name: J.BINS.plastic.name, emoji: '🧴', no: J.BINS.plastic.no },
+  { id: 'metal', name: J.BINS.metal.name, emoji: '🥫', no: J.BINS.metal.no },
+  { id: 'organic', name: J.BINS.organic.name, emoji: '🍂', no: J.BINS.organic.no },
 ] as const;
 
 /** What gives a material away — the helper's clue for the things of `content/rubbish.ts`. */
-export const CLUE: Record<(typeof BINS)[number]['id'], string> = {
-  glass: 'Воно тверде, прозоре і дзвенить — це скло.',
-  paper: 'Його можна порвати і зім’яти — це папір.',
-  plastic: 'Воно легке, гнеться і не б’ється — це пластик.',
-  metal: 'Воно тверде, блищить і брязкає — це метал.',
-  organic: 'Це залишки рослин та їжі — вони перегниють у компості.',
-};
+export const CLUE: Record<(typeof BINS)[number]['id'], string> = J.CLUE;
 
 /** Rubbish found on the meadow, with the marker clue the helper points out. */
 export const RUBBISH = [
-  { id: 'bottle', name: 'скляна пляшка', emoji: '🍾', bin: 'glass', clue: 'Вона прозора, тверда і дзвенить — це скло.' },
-  { id: 'newspaper', name: 'газета', emoji: '📰', bin: 'paper', clue: 'Її можна порвати і зім’яти — це папір.' },
-  { id: 'cup', name: 'пластиковий стаканчик', emoji: '🥤', bin: 'plastic', clue: 'Він легкий і гнеться — це пластик.' },
-  { id: 'box', name: 'картонна коробка', emoji: '📦', bin: 'paper', clue: 'Картон — це товстий папір.' },
-  { id: 'jar', name: 'скляна банка', emoji: '🫙', bin: 'glass', clue: 'Банка прозора і важкенька — це скло.' },
-  { id: 'shampoo', name: 'пляшка від шампуню', emoji: '🧴', bin: 'plastic', clue: 'Вона м’яка і не б’ється — це пластик.' },
-  { id: 'envelope', name: 'конверт', emoji: '✉️', bin: 'paper', clue: 'Конверт зроблений з паперу.' },
-  { id: 'glass', name: 'склянка', emoji: '🥛', bin: 'glass', clue: 'Склянка тверда і прозора — це скло.' },
-  { id: 'bag', name: 'пластиковий пакет', emoji: '🛍️', bin: 'plastic', clue: 'Пакет тонкий і шелестить — це пластик.' },
-  { id: 'notebook', name: 'старий зошит', emoji: '📓', bin: 'paper', clue: 'Сторінки зошита — це папір.' },
-  { id: 'toothbrush', name: 'зубна щітка', emoji: '🪥', bin: 'plastic', clue: 'Ручка щітки зроблена з пластику.' },
-  { id: 'perfume', name: 'флакон від парфумів', emoji: '🧪', bin: 'glass', clue: 'Флакон твердий і прозорий — це скло.' },
-  { id: 'books', name: 'старі книжки', emoji: '📚', bin: 'paper', clue: 'Книжки надруковані на папері.' },
-  { id: 'bucket', name: 'пластикове відерце', emoji: '🪣', bin: 'plastic', clue: 'Відерце легке і не б’ється — це пластик.' },
-  { id: 'honey_jar', name: 'баночка від меду', emoji: '🍯', bin: 'glass', clue: 'Баночка важкенька, тверда і прозора — це скло.' },
-  { id: 'shoe_box', name: 'коробка від взуття', emoji: '👟', bin: 'paper', clue: 'Коробка з картону, а картон — це товстий папір.' },
-  { id: 'soap_bottle', name: 'флакон від рідкого мила', emoji: '🧼', bin: 'plastic', clue: 'Флакон легкий і пружний — це пластик.' },
-  { id: 'lemonade', name: 'скляна пляшка від лимонаду', emoji: '🍶', bin: 'glass', clue: 'Вона дзвенить, якщо постукати, — це скло.' },
-  { id: 'towel_roll', name: 'картонна втулка від рушників', emoji: '🧻', bin: 'paper', clue: 'Втулка з картону легко мнеться — це папір.' },
-  { id: 'container', name: 'пластиковий контейнер', emoji: '🍱', bin: 'plastic', clue: 'Контейнер легкий і не б’ється — це пластик.' },
-  { id: 'pickle_jar', name: 'банка від огірків', emoji: '🥒', bin: 'glass', clue: 'Банка прозора й тверда — це скло.' },
-  { id: 'postcard', name: 'стара листівка', emoji: '💌', bin: 'paper', clue: 'Листівку можна зігнути й порвати — це папір.' },
-  { id: 'duck', name: 'пластикова качечка', emoji: '🦆', bin: 'plastic', clue: 'Качечка легка, плаває і не б’ється — це пластик.' },
-  { id: 'jam_jar', name: 'слоїк від варення', emoji: '🍓', bin: 'glass', clue: 'Слоїк твердий, прозорий і важкенький — це скло.' },
-  { id: 'egg_tray', name: 'картонний лоток від яєць', emoji: '🥚', bin: 'paper', clue: 'Лоток зроблений із пресованого паперу.' },
-  { id: 'straw', name: 'пластикова соломинка', emoji: '🧋', bin: 'plastic', clue: 'Соломинка легка і гнеться — це пластик.' },
-  { id: 'oil_bottle', name: 'скляна пляшка від олії', emoji: '🫒', bin: 'glass', clue: 'Пляшка тверда і прозора — це скло.' },
-  { id: 'calendar', name: 'старий календар', emoji: '📅', bin: 'paper', clue: 'Сторінки календаря — це папір.' },
-  { id: 'cap', name: 'кришечка від пляшки', emoji: '🔘', bin: 'plastic', clue: 'Кришечка легка і тверда, але не б’ється — це пластик.' },
+  { id: 'bottle', name: J.RUBBISH.bottle.name, emoji: '🍾', bin: 'glass', clue: J.RUBBISH.bottle.clue },
+  { id: 'newspaper', name: J.RUBBISH.newspaper.name, emoji: '📰', bin: 'paper', clue: J.RUBBISH.newspaper.clue },
+  { id: 'cup', name: J.RUBBISH.cup.name, emoji: '🥤', bin: 'plastic', clue: J.RUBBISH.cup.clue },
+  { id: 'box', name: J.RUBBISH.box.name, emoji: '📦', bin: 'paper', clue: J.RUBBISH.box.clue },
+  { id: 'jar', name: J.RUBBISH.jar.name, emoji: '🫙', bin: 'glass', clue: J.RUBBISH.jar.clue },
+  { id: 'shampoo', name: J.RUBBISH.shampoo.name, emoji: '🧴', bin: 'plastic', clue: J.RUBBISH.shampoo.clue },
+  { id: 'envelope', name: J.RUBBISH.envelope.name, emoji: '✉️', bin: 'paper', clue: J.RUBBISH.envelope.clue },
+  { id: 'glass', name: J.RUBBISH.glass.name, emoji: '🥛', bin: 'glass', clue: J.RUBBISH.glass.clue },
+  { id: 'bag', name: J.RUBBISH.bag.name, emoji: '🛍️', bin: 'plastic', clue: J.RUBBISH.bag.clue },
+  { id: 'notebook', name: J.RUBBISH.notebook.name, emoji: '📓', bin: 'paper', clue: J.RUBBISH.notebook.clue },
+  { id: 'toothbrush', name: J.RUBBISH.toothbrush.name, emoji: '🪥', bin: 'plastic', clue: J.RUBBISH.toothbrush.clue },
+  { id: 'perfume', name: J.RUBBISH.perfume.name, emoji: '🧪', bin: 'glass', clue: J.RUBBISH.perfume.clue },
+  { id: 'books', name: J.RUBBISH.books.name, emoji: '📚', bin: 'paper', clue: J.RUBBISH.books.clue },
+  { id: 'bucket', name: J.RUBBISH.bucket.name, emoji: '🪣', bin: 'plastic', clue: J.RUBBISH.bucket.clue },
+  { id: 'honey_jar', name: J.RUBBISH.honey_jar.name, emoji: '🍯', bin: 'glass', clue: J.RUBBISH.honey_jar.clue },
+  { id: 'shoe_box', name: J.RUBBISH.shoe_box.name, emoji: '👟', bin: 'paper', clue: J.RUBBISH.shoe_box.clue },
+  { id: 'soap_bottle', name: J.RUBBISH.soap_bottle.name, emoji: '🧼', bin: 'plastic', clue: J.RUBBISH.soap_bottle.clue },
+  { id: 'lemonade', name: J.RUBBISH.lemonade.name, emoji: '🍶', bin: 'glass', clue: J.RUBBISH.lemonade.clue },
+  { id: 'towel_roll', name: J.RUBBISH.towel_roll.name, emoji: '🧻', bin: 'paper', clue: J.RUBBISH.towel_roll.clue },
+  { id: 'container', name: J.RUBBISH.container.name, emoji: '🍱', bin: 'plastic', clue: J.RUBBISH.container.clue },
+  { id: 'pickle_jar', name: J.RUBBISH.pickle_jar.name, emoji: '🥒', bin: 'glass', clue: J.RUBBISH.pickle_jar.clue },
+  { id: 'postcard', name: J.RUBBISH.postcard.name, emoji: '💌', bin: 'paper', clue: J.RUBBISH.postcard.clue },
+  { id: 'duck', name: J.RUBBISH.duck.name, emoji: '🦆', bin: 'plastic', clue: J.RUBBISH.duck.clue },
+  { id: 'jam_jar', name: J.RUBBISH.jam_jar.name, emoji: '🍓', bin: 'glass', clue: J.RUBBISH.jam_jar.clue },
+  { id: 'egg_tray', name: J.RUBBISH.egg_tray.name, emoji: '🥚', bin: 'paper', clue: J.RUBBISH.egg_tray.clue },
+  { id: 'straw', name: J.RUBBISH.straw.name, emoji: '🧋', bin: 'plastic', clue: J.RUBBISH.straw.clue },
+  { id: 'oil_bottle', name: J.RUBBISH.oil_bottle.name, emoji: '🫒', bin: 'glass', clue: J.RUBBISH.oil_bottle.clue },
+  { id: 'calendar', name: J.RUBBISH.calendar.name, emoji: '📅', bin: 'paper', clue: J.RUBBISH.calendar.clue },
+  { id: 'cap', name: J.RUBBISH.cap.name, emoji: '🔘', bin: 'plastic', clue: J.RUBBISH.cap.clue },
 ] as const;
 
 /** Game 12 — «Сортування Сміття та Еко-патруль»: five bins, a hundred things to sort. */

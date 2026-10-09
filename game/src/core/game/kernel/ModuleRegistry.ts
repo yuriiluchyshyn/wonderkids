@@ -1,4 +1,4 @@
-import { DEFAULT_LANG, type LangCode } from '@/core/lang';
+import { DEFAULT_LANG, type LangCode } from '@/core/language';
 import type { LearningModule } from './types';
 
 /**

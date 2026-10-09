@@ -1,16 +1,19 @@
 /** Content for «Пори року і місяці». */
-import { adj, noun, own, verb, type Clause } from '@/core/lang/uk';
+import { adj, noun, own, verb, type Clause } from '@/core/language/uk';
+import TEXTS from '@/locales/app/uk/games/nature.json';
+
+const J = TEXTS.content.data;
 
 /** `word` declines the name («із зими», «з осені»); `of` is «зимовий» for «зимові місяці». */
 export const SEASONS = [
-  { id: 'winter', name: 'Зима', word: noun('зима', 'f'), of: adj('зимовий'), emoji: '❄️', no: 'Бр-р-р, узимку такого не буває!' },
-  { id: 'spring', name: 'Весна', word: noun('весна', 'f'), of: adj('весняний'), emoji: '🌷', no: 'Ні, навесні природа щойно прокидається.' },
-  { id: 'summer', name: 'Літо', word: noun('літо', 'n'), of: adj('літній'), emoji: '☀️', no: 'Улітку для цього надто спекотно!' },
-  { id: 'autumn', name: 'Осінь', word: noun('осінь', 'f', { sg: { gen: 'осені', dat: 'осені', ins: 'осінню', loc: 'осені' } }), of: adj('осінній'), emoji: '🍂', no: 'Восени ми бачимо інше.' },
+  { id: 'winter', name: J.SEASONS.winter.name, word: noun(J.SEASONS.winter.word, 'f'), of: adj(J.SEASONS.winter.of), emoji: '❄️', no: J.SEASONS.winter.no },
+  { id: 'spring', name: J.SEASONS.spring.name, word: noun(J.SEASONS.spring.word, 'f'), of: adj(J.SEASONS.spring.of), emoji: '🌷', no: J.SEASONS.spring.no },
+  { id: 'summer', name: J.SEASONS.summer.name, word: noun(J.SEASONS.summer.word, 'n'), of: adj(J.SEASONS.summer.of), emoji: '☀️', no: J.SEASONS.summer.no },
+  { id: 'autumn', name: J.SEASONS.autumn.name, word: noun(J.SEASONS.autumn.word[1], 'f', J.SEASONS.autumn.word[2]), of: adj(J.SEASONS.autumn.of), emoji: '🍂', no: J.SEASONS.autumn.no },
 ] as const;
 
 /** «місяці», «місяців» — for texts that count or describe them. */
-export const MONTH_WORD = noun('місяць', 'm', { number: 'pl' });
+export const MONTH_WORD = noun(J.MONTH_WORD, 'm', { number: 'pl' });
 
 export type SeasonId = (typeof SEASONS)[number]['id'];
 
@@ -28,18 +31,18 @@ export interface Month {
 
 /** January first: the order IS the calendar. */
 export const MONTHS: Month[] = [
-  { id: 'jan', name: 'Січень', after: 'січня', before: 'січнем', season: 'winter', emoji: '⛄', fact: 'Січень — перший місяць року. Його назва походить від слова «сікти»: колись у цю пору рубали ліс, а мороз сік обличчя.' },
-  { id: 'feb', name: 'Лютий', after: 'лютого', before: 'лютим', season: 'winter', emoji: '🌨️', fact: 'Лютий названо за люті морози й хуртовини. Це найкоротший місяць: у ньому 28 днів, а раз на чотири роки — 29.' },
-  { id: 'mar', name: 'Березень', after: 'березня', before: 'березнем', season: 'spring', emoji: '🌱', fact: 'У березні береза прокидається і в ній починає текти солодкий сік — звідси й назва.' },
-  { id: 'apr', name: 'Квітень', after: 'квітня', before: 'квітнем', season: 'spring', emoji: '🌷', fact: 'Квітень — місяць перших квітів: розцвітають проліски, нарциси й тюльпани.' },
-  { id: 'may', name: 'Травень', after: 'травня', before: 'травнем', season: 'spring', emoji: '🌿', fact: 'У травні все вкривається густою зеленою травою — тому він і травень.' },
-  { id: 'jun', name: 'Червень', after: 'червня', before: 'червнем', season: 'summer', emoji: '🍓', fact: 'У червні червоніють перші ягоди — полуниці й черешні. А ще в цьому місяці найдовший день у році.' },
-  { id: 'jul', name: 'Липень', after: 'липня', before: 'липнем', season: 'summer', emoji: '🐝', fact: 'У липні цвіте липа, і бджоли збирають з неї запашний мед.' },
-  { id: 'aug', name: 'Серпень', after: 'серпня', before: 'серпнем', season: 'summer', emoji: '🌾', fact: 'Серпень названо на честь серпа: ним колись жали стиглу пшеницю.' },
-  { id: 'sep', name: 'Вересень', after: 'вересня', before: 'вереснем', season: 'autumn', emoji: '🎒', fact: 'У вересні цвіте верес — низенький кущик із рожевими квітами. А діти йдуть до школи.' },
-  { id: 'oct', name: 'Жовтень', after: 'жовтня', before: 'жовтнем', season: 'autumn', emoji: '🍁', fact: 'У жовтні листя на деревах стає жовтим і золотим.' },
-  { id: 'nov', name: 'Листопад', after: 'листопада', before: 'листопадом', season: 'autumn', emoji: '🍂', fact: 'У листопаді з дерев опадає останнє листя — так він і називається: лист падає.' },
-  { id: 'dec', name: 'Грудень', after: 'грудня', before: 'груднем', season: 'winter', emoji: '🎄', fact: 'У грудні земля замерзає твердими грудками — «груддям». Це останній місяць року.' },
+  { id: 'jan', name: J.MONTHS.jan.name, after: J.MONTHS.jan.after, before: J.MONTHS.jan.before, season: 'winter', emoji: '⛄', fact: J.MONTHS.jan.fact },
+  { id: 'feb', name: J.MONTHS.feb.name, after: J.MONTHS.feb.after, before: J.MONTHS.feb.before, season: 'winter', emoji: '🌨️', fact: J.MONTHS.feb.fact },
+  { id: 'mar', name: J.MONTHS.mar.name, after: J.MONTHS.mar.after, before: J.MONTHS.mar.before, season: 'spring', emoji: '🌱', fact: J.MONTHS.mar.fact },
+  { id: 'apr', name: J.MONTHS.apr.name, after: J.MONTHS.apr.after, before: J.MONTHS.apr.before, season: 'spring', emoji: '🌷', fact: J.MONTHS.apr.fact },
+  { id: 'may', name: J.MONTHS.may.name, after: J.MONTHS.may.after, before: J.MONTHS.may.before, season: 'spring', emoji: '🌿', fact: J.MONTHS.may.fact },
+  { id: 'jun', name: J.MONTHS.jun.name, after: J.MONTHS.jun.after, before: J.MONTHS.jun.before, season: 'summer', emoji: '🍓', fact: J.MONTHS.jun.fact },
+  { id: 'jul', name: J.MONTHS.jul.name, after: J.MONTHS.jul.after, before: J.MONTHS.jul.before, season: 'summer', emoji: '🐝', fact: J.MONTHS.jul.fact },
+  { id: 'aug', name: J.MONTHS.aug.name, after: J.MONTHS.aug.after, before: J.MONTHS.aug.before, season: 'summer', emoji: '🌾', fact: J.MONTHS.aug.fact },
+  { id: 'sep', name: J.MONTHS.sep.name, after: J.MONTHS.sep.after, before: J.MONTHS.sep.before, season: 'autumn', emoji: '🎒', fact: J.MONTHS.sep.fact },
+  { id: 'oct', name: J.MONTHS.oct.name, after: J.MONTHS.oct.after, before: J.MONTHS.oct.before, season: 'autumn', emoji: '🍁', fact: J.MONTHS.oct.fact },
+  { id: 'nov', name: J.MONTHS.nov.name, after: J.MONTHS.nov.after, before: J.MONTHS.nov.before, season: 'autumn', emoji: '🍂', fact: J.MONTHS.nov.fact },
+  { id: 'dec', name: J.MONTHS.dec.name, after: J.MONTHS.dec.after, before: J.MONTHS.dec.before, season: 'winter', emoji: '🎄', fact: J.MONTHS.dec.fact },
 ];
 
 const many = { number: 'pl' } as const;
@@ -47,25 +50,25 @@ const alive = { number: 'pl', animate: true } as const;
 
 /** What happens in the signs below. */
 const DO = {
-  build: verb('ліпити', ['ліпить', 'ліплять']),
-  bathe: verb('купатися', ['купається', 'купаються']),
-  fall: verb('опадати', ['опадає', 'опадають']),
-  bloom: verb('розцвітати', ['розцвітає', 'розцвітають']),
-  decorate: verb('прикрашати', ['прикрашає', 'прикрашають']),
-  ripen: verb('достигати', ['достигає', 'достигають']),
-  return: verb('повертатися', ['повертається', 'повертаються']),
-  gather: verb('збирати', ['збирає', 'збирають']),
-  skate: verb('кататися', ['катається', 'катаються']),
-  flower: verb('цвісти', ['цвіте', 'цвітуть'], { past: ['цвів', 'цвіла', 'цвіло', 'цвіли'] }),
-  appear: verb('з’являтися', ['з’являється', 'з’являються']),
-  go: verb('йти', ['іде', 'йдуть'], { past: ['ішов', 'ішла', 'ішло', 'йшли'] }),
-  sleep: verb('спати', ['спить', 'сплять']),
-  fly: verb('літати', ['літає', 'літають']),
-  melt: verb('танути', ['тане', 'тануть']),
-  wear: verb('вдягати', ['вдягає', 'вдягають']),
-  hatch: verb('вилуплюватися', ['вилуплюється', 'вилуплюються']),
-  store: verb('запасати', ['запасає', 'запасають']),
-  happen: verb('бувати', ['буває', 'бувають']),
+  build: verb(J.DO.build._, [J.DO.build[0], J.DO.build[1]]),
+  bathe: verb(J.DO.bathe._, [J.DO.bathe[0], J.DO.bathe[1]]),
+  fall: verb(J.DO.fall._, [J.DO.fall[0], J.DO.fall[1]]),
+  bloom: verb(J.DO.bloom._, [J.DO.bloom[0], J.DO.bloom[1]]),
+  decorate: verb(J.DO.decorate._, [J.DO.decorate[0], J.DO.decorate[1]]),
+  ripen: verb(J.DO.ripen._, [J.DO.ripen[0], J.DO.ripen[1]]),
+  return: verb(J.DO.return._, [J.DO.return[0], J.DO.return[1]]),
+  gather: verb(J.DO.gather._, [J.DO.gather[0], J.DO.gather[1]]),
+  skate: verb(J.DO.skate._, [J.DO.skate[0], J.DO.skate[1]]),
+  flower: verb(J.DO.flower[1][1], [J.DO.flower[0], J.DO.flower[1][2]], J.DO.flower[2] as { past: [string, string, string, string] }),
+  appear: verb(J.DO.appear._, [J.DO.appear[0], J.DO.appear[1]]),
+  go: verb(J.DO.go[1][1], [J.DO.go[0], J.DO.go[1][2]], J.DO.go[2] as { past: [string, string, string, string] }),
+  sleep: verb(J.DO.sleep._, [J.DO.sleep[0], J.DO.sleep[1]]),
+  fly: verb(J.DO.fly._, [J.DO.fly[0], J.DO.fly[1]]),
+  melt: verb(J.DO.melt._, [J.DO.melt[0], J.DO.melt[1]]),
+  wear: verb(J.DO.wear._, [J.DO.wear[0], J.DO.wear[1]]),
+  hatch: verb(J.DO.hatch._, [J.DO.hatch[0], J.DO.hatch[1]]),
+  store: verb(J.DO.store._, [J.DO.store[0], J.DO.store[1]]),
+  happen: verb(J.DO.happen._, [J.DO.happen[0], J.DO.happen[1]]),
 };
 
 /**
@@ -83,78 +86,29 @@ export interface Sign {
 const sign = (emoji: string, what: Clause, season: SeasonId, fact: string): Sign => ({ emoji, what, season, fact });
 
 export const SIGNS: Sign[] = [
-  sign('⛄', { does: DO.build, tail: 'сніговика' }, 'winter', 'Сніговика ліплять узимку, коли сніг липкий. Найкраще він ліпиться, коли надворі близько нуля.'),
-  sign('🏖️', { does: DO.bathe, tail: 'в морі' }, 'summer', 'Улітку вода в морі й річках прогрівається — саме час купатися.'),
-  sign('🍂', { who: noun('жовте листя', 'n'), does: DO.fall }, 'autumn', 'Восени дерева скидають листя, щоб узимку не втрачати воду й не зламатися під снігом.'),
-  sign('🌷', { who: noun('тюльпан', 'm', many), does: DO.bloom }, 'spring', 'Навесні сонце гріє сильніше, і з землі пробиваються перші квіти.'),
-  sign('🎄', { does: DO.decorate, tail: 'ялинку' }, 'winter', 'Ялинку прикрашають узимку — на Різдво і Новий рік.'),
-  sign('🍉', { who: noun('кавун', 'm', many), does: DO.ripen }, 'summer', 'Кавунам потрібно багато сонця й тепла, тому вони достигають наприкінці літа.'),
-  sign('🐦', { who: noun('птах', 'm', alive), does: DO.return, subjectFirst: true, tail: 'з вирію' }, 'spring', 'Навесні ластівки, лелеки й шпаки повертаються додому з теплих країв.'),
-  sign('🍄', { does: DO.gather, tail: 'гриби' }, 'autumn', 'Восени часто йдуть дощі, а гриби люблять вологу — тому їх стає багато.'),
-  sign('⛸️', { does: DO.skate, tail: 'на ковзанах' }, 'winter', 'Узимку вода замерзає, і на льоду можна кататися на ковзанах.'),
-  sign('🌻', { who: noun('соняшник', 'm', many), does: DO.flower }, 'summer', 'Улітку поля жовтіють від соняшників. Молоді соняшники повертають голівки за сонцем.'),
-  sign('🌱', { who: noun('перший листочок', 'm', { ...many, pl: { nom: 'перші листочки' } }), does: DO.appear }, 'spring', 'Навесні на деревах лопаються бруньки — з них розгортаються ніжні листочки.'),
-  sign('🎒', { who: noun('дитина', 'f', { ...alive, pl: { nom: 'діти', gen: 'дітей' } }), does: DO.go, subjectFirst: true, tail: 'до школи' }, 'autumn', own('Навчальний рік починається першого вересня — у перший день осені.')),
-  sign('🐻', { who: noun('ведмідь', 'm', { animate: true }), does: DO.sleep, subjectFirst: true, tail: 'у барлозі' }, 'winter', 'Узимку ведмедеві важко знайти їжу, тому він спить у барлозі аж до весни.'),
-  sign('🦋', { who: noun('метелик', 'm', alive), does: DO.fly }, 'summer', 'Улітку багато квітів, а метелики п’ють із них солодкий нектар.'),
-  sign('💧', { who: noun('сніг', 'm'), does: DO.melt, tail: 'і дзюркочуть струмки' }, 'spring', 'Навесні сонце розтоплює сніг, і тала вода біжить струмками до річок.'),
-  sign('🎃', { who: noun('гарбуз', 'm', many), does: DO.ripen }, 'autumn', 'Гарбузи збирають восени. Вони можуть лежати всю зиму й не псуватися.'),
-  sign('🧤', { does: DO.wear, tail: 'рукавички й шапку' }, 'winter', 'Узимку холодно, тому ми вдягаємо теплий одяг: він зберігає тепло нашого тіла.'),
-  sign('🍓', { who: noun('полуниця', 'f', many), does: DO.ripen }, 'summer', 'Полуниці достигають на початку літа — це одна з перших ягід року.'),
-  sign('🐣', { who: noun('пташеня', 'n', { ...alive, pl: { nom: 'пташенята', gen: 'пташенят' } }), does: DO.hatch }, 'spring', 'Навесні птахи в’ють гнізда і висиджують яйця — з них вилуплюються пташенята.'),
-  sign('🌧️', { lead: 'часто', who: noun('холодний дощ', 'm', { ...many, pl: { nom: 'холодні дощі' } }), does: DO.go }, 'autumn', 'Восени сонце гріє слабше, небо затягують хмари і часто дощить.'),
-  sign('🐿️', { who: noun('білка', 'f', { animate: true }), does: DO.store, subjectFirst: true, tail: 'горіхи' }, 'autumn', 'Восени білка ховає горіхи й гриби, щоб мати що їсти взимку.'),
-  sign('🌈', { who: noun('гроза і веселка', 'f', { ...many, pl: { nom: 'гроза і веселка' } }), does: DO.happen }, 'summer', 'Улітку після теплої зливи часто видно веселку: це сонячне світло розкладається в краплинках дощу.'),
+  sign('⛄', { does: DO.build, tail: J.SIGNS[0].tail }, 'winter', J.SIGNS[0]._),
+  sign('🏖️', { does: DO.bathe, tail: J.SIGNS[1].tail }, 'summer', J.SIGNS[1]._),
+  sign('🍂', { who: noun(J.SIGNS[2].who, 'n'), does: DO.fall }, 'autumn', J.SIGNS[2]._),
+  sign('🌷', { who: noun(J.SIGNS[3].who, 'm', many), does: DO.bloom }, 'spring', J.SIGNS[3]._),
+  sign('🎄', { does: DO.decorate, tail: J.SIGNS[4].tail }, 'winter', J.SIGNS[4]._),
+  sign('🍉', { who: noun(J.SIGNS[5].who, 'm', many), does: DO.ripen }, 'summer', J.SIGNS[5]._),
+  sign('🐦', { who: noun(J.SIGNS[6].who, 'm', alive), does: DO.return, subjectFirst: true, tail: J.SIGNS[6].tail }, 'spring', J.SIGNS[6]._),
+  sign('🍄', { does: DO.gather, tail: J.SIGNS[7].tail }, 'autumn', J.SIGNS[7]._),
+  sign('⛸️', { does: DO.skate, tail: J.SIGNS[8].tail }, 'winter', J.SIGNS[8]._),
+  sign('🌻', { who: noun(J.SIGNS[9].who, 'm', many), does: DO.flower }, 'summer', J.SIGNS[9]._),
+  sign('🌱', { who: noun(J.SIGNS[10].who._, 'm', { ...many, pl: J.SIGNS[10].who.pl }), does: DO.appear }, 'spring', J.SIGNS[10]._),
+  sign('🎒', { who: noun(J.SIGNS[11].who._, 'f', { ...alive, pl: J.SIGNS[11].who.pl }), does: DO.go, subjectFirst: true, tail: J.SIGNS[11].tail }, 'autumn', own(J.SIGNS[11]._)),
+  sign('🐻', { who: noun(J.SIGNS[12].who, 'm', { animate: true }), does: DO.sleep, subjectFirst: true, tail: J.SIGNS[12].tail }, 'winter', J.SIGNS[12]._),
+  sign('🦋', { who: noun(J.SIGNS[13].who, 'm', alive), does: DO.fly }, 'summer', J.SIGNS[13]._),
+  sign('💧', { who: noun(J.SIGNS[14].who, 'm'), does: DO.melt, tail: J.SIGNS[14].tail }, 'spring', J.SIGNS[14]._),
+  sign('🎃', { who: noun(J.SIGNS[15].who, 'm', many), does: DO.ripen }, 'autumn', J.SIGNS[15]._),
+  sign('🧤', { does: DO.wear, tail: J.SIGNS[16].tail }, 'winter', J.SIGNS[16]._),
+  sign('🍓', { who: noun(J.SIGNS[17].who, 'f', many), does: DO.ripen }, 'summer', J.SIGNS[17]._),
+  sign('🐣', { who: noun(J.SIGNS[18].who._, 'n', { ...alive, pl: J.SIGNS[18].who.pl }), does: DO.hatch }, 'spring', J.SIGNS[18]._),
+  sign('🌧️', { lead: J.SIGNS[19].lead, who: noun(J.SIGNS[19].who._, 'm', { ...many, pl: J.SIGNS[19].who.pl }), does: DO.go }, 'autumn', J.SIGNS[19]._),
+  sign('🐿️', { who: noun(J.SIGNS[20].who, 'f', { animate: true }), does: DO.store, subjectFirst: true, tail: J.SIGNS[20].tail }, 'autumn', J.SIGNS[20]._),
+  sign('🌈', { who: noun(J.SIGNS[21].who._, 'f', { ...many, pl: J.SIGNS[21].who.pl }), does: DO.happen }, 'summer', J.SIGNS[21]._),
 ];
 
 /** Ten things to tell about each season once something is sorted into it. */
-export const SEASON_FACTS: Record<SeasonId, string[]> = {
-  winter: [
-    'Зима — це грудень, січень і лютий.',
-    'Узимку дні найкоротші, а ночі найдовші.',
-    'Кожна сніжинка має шість промінчиків, і двох однакових не буває.',
-    'Сніг — це ковдра для землі: під ним рослинам тепліше.',
-    'Узимку дерева не мертві — вони сплять і чекають на весну.',
-    'Їжак, ведмідь і борсук узимку сплять, а заєць міняє сіру шубку на білу.',
-    'Узимку птахам важко знайти їжу, тому люди роблять для них годівнички.',
-    'Лід легший за воду, тому він плаває зверху, а риба зимує під ним.',
-    'Узимку сонце піднімається невисоко над обрієм — тому воно гріє слабко.',
-    'Найкоротший день у році буває у грудні. Після нього дні потроху довшають.',
-  ],
-  spring: [
-    'Весна — це березень, квітень і травень.',
-    'Навесні дні стають довшими, а сонце гріє сильніше.',
-    'Першими навесні зацвітають проліски — іноді просто з-під снігу.',
-    'Навесні птахи повертаються з теплих країв і в’ють гнізда.',
-    'Навесні прокидаються ведмеді, їжаки й комахи.',
-    'У квітні й травні цвітуть сади: яблуні, вишні, абрикоси.',
-    'Навесні люди сіють насіння на городах і в полях.',
-    'Бджоли навесні вилітають із вуликів по перший нектар.',
-    'Навесні тане сніг, і річки стають повноводими.',
-    'Наприкінці весни буває перша гроза з громом і блискавкою.',
-  ],
-  summer: [
-    'Літо — це червень, липень і серпень.',
-    'Улітку дні найдовші, а ночі найкоротші.',
-    'Улітку сонце піднімається найвище — тому так тепло.',
-    'Улітку достигають ягоди: полуниці, малина та черешні.',
-    'У школярів улітку найдовші канікули.',
-    'Улітку в полі достигає пшениця — з неї печуть хліб.',
-    'Улітку пташенята вчаться літати.',
-    'Найдовший день у році буває в червні.',
-    'У спеку треба пити багато води й носити панамку.',
-    'Улітку вечорами можна побачити світлячків, а вночі — багато зірок.',
-  ],
-  autumn: [
-    'Осінь — це вересень, жовтень і листопад.',
-    'Восени дні коротшають, а ночі довшають.',
-    'Листя жовтіє, бо в ньому зникає зелена фарба — хлорофіл.',
-    'Восени лелеки, ластівки й журавлі відлітають у теплі краї.',
-    'Восени збирають урожай: яблука, груші, картоплю, гарбузи.',
-    'Білки, хом’яки й миші восени роблять запаси на зиму.',
-    'Восени їжак шукає купу листя, щоб заснути в ній до весни.',
-    'Восени звірі вдягають густіше хутро — готуються до холодів.',
-    'Опале листя не сміття: воно вкриває землю і годує ґрунт.',
-    'Наприкінці осені вранці буває іній — білий наліт із крижинок.',
-  ],
-};
+export const SEASON_FACTS: Record<SeasonId, string[]> = J.SEASON_FACTS;

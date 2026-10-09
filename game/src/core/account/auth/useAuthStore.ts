@@ -1,4 +1,4 @@
-import { tApp, useDeviceLang, type AppKey } from '@/core/i18n';
+import { tApp, useDeviceLang, type AppKey } from '@/core/translator';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { api, ApiError, type AuthUser } from '@/core/account/api/client';

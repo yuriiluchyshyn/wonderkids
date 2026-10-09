@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 import { voice } from '@/core/audio/voice';

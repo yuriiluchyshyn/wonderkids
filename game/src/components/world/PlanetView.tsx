@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSound } from '@/core/audio/useSound';
-import { useGameLang, useT, type T } from '@/core/i18n';
+import { useGameLang, useT, type T } from '@/core/translator';
 import { useTell } from './useTell';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { useGameStore } from '@/core/child/store/useGameStore';

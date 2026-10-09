@@ -1,4 +1,4 @@
-import { DEFAULT_LANG, type LangCode } from '@/core/lang';
+import { DEFAULT_LANG, type LangCode } from '@/core/language';
 import type { CurrencyId } from '../content/currency';
 import type { ComponentType } from 'react';
 import type { Theme } from '@/core/theme/theme.types';
@@ -81,7 +81,7 @@ export interface TaskInstance<TPayload = unknown> {
    * translation: it has no twin, and the voice reads it in the language on the
    * screen. `templateTask` sets it for a prompt with an `own` piece in it.
    * A single FACT of a language's own needs no flag — mark it `own`
-   * (`core/lang/marks.ts`, `tellFact`).
+   * (`core/language/marks.ts`, `tellFact`).
    */
   own?: boolean;
   /** Artifacts awarded for completing this task. */

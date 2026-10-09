@@ -1,0 +1,962 @@
+{
+  "planets": {
+    "neptune": "Neptun",
+    "uranus": "Uran",
+    "saturn": "Saturn",
+    "jupiter": "Jowisz",
+    "mars": "Mars",
+    "earth": "Ziemia",
+    "venus": "Wenus",
+    "mercury": "Merkury"
+  },
+  "galaxy": "Droga Mleczna",
+  "spaceport": "Kosmodrom",
+  "stations": {
+    "neptune": {
+      "0": {
+        "0": "Obserwatorium",
+        "1": "Stąd widać gwiazdy, komety i dalekie planety."
+      },
+      "1": {
+        "0": "Biblioteka",
+        "1": "Tu mieszkają litery, słowa i ciekawe opowieści."
+      },
+      "2": {
+        "0": "Laboratorium liczb",
+        "1": "Tu się liczy, mierzy i rozwiązuje łamigłówki."
+      },
+      "3": {
+        "0": "Sala podróżników",
+        "1": "Tu przechowuje się mapy, flagi i opowieści o dalekich krajach."
+      },
+      "4": {
+        "0": "Oranżeria",
+        "1": "Tu rosną rośliny z każdego zakątka świata i tu uczy się dbać o przyrodę."
+      },
+      "5": {
+        "0": "Muzeum czasu",
+        "1": "Tu zebrano wszystko o dawnych czasach i wielkich wynalazkach."
+      },
+      "6": {
+        "0": "Klub łamigłówek",
+        "1": "Tu rozwiązuje się zagadki, szuka prawidłowości i ćwiczy bystrość."
+      },
+      "7": {
+        "0": "Pracownia malarzy",
+        "1": "Tu miesza się farby, rysuje i wymyśla nowe rzeczy."
+      },
+      "8": {
+        "0": "Laboratorium doświadczeń",
+        "1": "Tu sprawdza się, jak wszystko działa: dlaczego topnieje lód i skąd bierze się tęcza."
+      },
+      "9": {
+        "0": "Sala muzyczna",
+        "1": "Tu brzmią piosenki i melodie z całego świata."
+      }
+    },
+    "uranus": {
+      "0": {
+        "0": "Lodowe laboratorium",
+        "1": "Tu bada się lód, śnieg i mróz: Uran to najzimniejsza planeta."
+      },
+      "1": {
+        "0": "Teatr Szekspira",
+        "1": "Księżyce Urana noszą imiona bohaterów sztuk. Tu wystawia się przedstawienia i czyta wiersze."
+      },
+      "2": {
+        "0": "Szkoła równowagi",
+        "1": "Uran toczy się na boku. Tu uczy się utrzymywać równowagę i mierzyć kąty."
+      },
+      "3": {
+        "0": "Wieża wiatrów",
+        "1": "Tu łapie się wiatr i sprawdza, skąd wieje."
+      },
+      "4": {
+        "0": "Skarbiec kryształów",
+        "1": "Tu zebrano kryształy i kamienie szlachetne we wszystkich kolorach i kształtach."
+      },
+      "5": {
+        "0": "Stacja pogody",
+        "1": "Tu mierzy się ciepło i zimno i uczy przewidywać pogodę."
+      },
+      "6": {
+        "0": "Szkoła polarników",
+        "1": "Tu przygotowuje się podróżników do najzimniejszych krain."
+      },
+      "7": {
+        "0": "Czytelnia bajek",
+        "1": "Tu w długie polarne wieczory czyta się bajki z całego świata."
+      },
+      "8": {
+        "0": "Lodowa filharmonia",
+        "1": "Tu gra się na dzwoneczkach z lodu i uczy nut."
+      },
+      "9": {
+        "0": "Gabinet mikroskopów",
+        "1": "Tu ogląda się płatki śniegu i wszystko, co najdrobniejsze i czego nie widać gołym okiem."
+      }
+    },
+    "saturn": {
+      "0": {
+        "0": "Muzeum pierścieni",
+        "1": "Tu opowiada się, z czego zrobione są pierścienie Saturna, i uczy wszystkiego o kole."
+      },
+      "1": {
+        "0": "Stacja księżyców",
+        "1": "Saturn ma ponad dwieście księżyców. Tu obserwuje się każdy z nich."
+      },
+      "2": {
+        "0": "Pracownia balonów",
+        "1": "Saturn jest lżejszy od wody. Tu można się dowiedzieć, dlaczego jedno pływa, a drugie tonie."
+      },
+      "3": {
+        "0": "Wieża czasu",
+        "1": "Saturn to bóg czasu. Tu uczy się godzin, dni, miesięcy i lat."
+      },
+      "4": {
+        "0": "Szkoła rolników",
+        "1": "Saturn to także bóg rolnictwa. Tu można się dowiedzieć, jak rośnie chleb."
+      },
+      "5": {
+        "0": "Laboratorium magnesów",
+        "1": "Tu bada się, co się przyciąga, a co odpycha."
+      },
+      "6": {
+        "0": "Kreślarnia",
+        "1": "Tu rysuje się koła, trójkąty i kwadraty i się je mierzy."
+      },
+      "7": {
+        "0": "Koło odkryć",
+        "1": "Stąd z wysoka widać cały pierścień — a każdy obrót przynosi nową ciekawostkę."
+      },
+      "8": {
+        "0": "Sala melodii",
+        "1": "Tu słucha się, jak brzmią struny, fujarki i bębny."
+      },
+      "9": {
+        "0": "Pokój tajemnic",
+        "1": "Tu przechowuje się zagadki, których jeszcze nikt nie rozwiązał."
+      }
+    },
+    "jupiter": {
+      "0": {
+        "0": "Szkoła łowców burz",
+        "1": "Na Jowiszu szaleje burza starsza od wszystkich ludzi. Tu bada się wiatry i wiry."
+      },
+      "1": {
+        "0": "Sala rekordów",
+        "1": "Jowisz to największa planeta. Tu zebrano wszystko, co „naj”: najwyższe, najszybsze, najdłuższe."
+      },
+      "2": {
+        "0": "Stacja piorunów",
+        "1": "Tu można się dowiedzieć, skąd bierze się piorun i prąd."
+      },
+      "3": {
+        "0": "Muzeum księżyców Galileusza",
+        "1": "Tu opowiada się o Io, Europie, Ganimedesie i Kallisto."
+      },
+      "4": {
+        "0": "Siłownia siłaczy",
+        "1": "Na Jowiszu wszystko waży dwa i pół raza więcej. Tu mierzy się wagę i siłę."
+      },
+      "5": {
+        "0": "Centrum obliczeniowe",
+        "1": "Tu liczy się wielkie liczby — aż do miliona."
+      },
+      "6": {
+        "0": "Antena dalekiej łączności",
+        "1": "Stąd wysyła się wiadomości na inne planety."
+      },
+      "7": {
+        "0": "Laboratorium światła",
+        "1": "Tu rozkłada się światło na kolory tęczy."
+      },
+      "8": {
+        "0": "Szkoła nawigatorów",
+        "1": "Tu uczy się wyznaczać drogę według gwiazd i map."
+      },
+      "9": {
+        "0": "Pracownia pasków",
+        "1": "Jowisz jest cały w paski. Tu rysuje się wzory i szuka w nich reguły."
+      }
+    },
+    "mars": {
+      "0": {
+        "0": "Warsztat łazików",
+        "1": "Tu składa się roboty, które jeżdżą po czerwonej planecie."
+      },
+      "1": {
+        "0": "Szkoła wulkanologów",
+        "1": "Na Marsie stoi najwyższa góra — wulkan Olympus Mons. Tu bada się wulkany."
+      },
+      "2": {
+        "0": "Stacja pustyń",
+        "1": "Tu można się dowiedzieć, jak żyje się tam, gdzie prawie nie ma wody."
+      },
+      "3": {
+        "0": "Baza pierwszych osadników",
+        "1": "Tu przygotowuje się do życia na innej planecie."
+      },
+      "4": {
+        "0": "Marsjańska szklarnia",
+        "1": "Tu uprawia się warzywa pod kopułą i uczy, czego potrzebuje roślina."
+      },
+      "5": {
+        "0": "Laboratorium wody",
+        "1": "Tu szuka się wody pod ziemią i bada, jaka potrafi być."
+      },
+      "6": {
+        "0": "Muzeum kamieni",
+        "1": "Tu zebrano kamienie, meteoryty i skamieniałości."
+      },
+      "7": {
+        "0": "Hangar śmigłowców",
+        "1": "Na Marsie pierwszy raz latał śmigłowiec z Ziemi. Tu uczy się, dlaczego maszyny latają."
+      },
+      "8": {
+        "0": "Sala map",
+        "1": "Tu rysuje się mapy kanionów i kraterów."
+      },
+      "9": {
+        "0": "Kuźnia wynalazców",
+        "1": "Tu wymyśla się i buduje nowe rzeczy — od koła po rakietę."
+      }
+    },
+    "earth": {
+      "0": {
+        "0": "Muzeum Ziemi",
+        "1": "Tu opowiada się o kontynentach, oceanach i o wszystkim, co jest na naszej planecie."
+      },
+      "1": {
+        "0": "Oceanarium",
+        "1": "Tu mieszkają ryby, meduzy i wieloryby ze wszystkich oceanów."
+      },
+      "2": {
+        "0": "Leśna szkoła",
+        "1": "Tu uczy się rozpoznawać drzewa, ptaki i ślady zwierząt."
+      },
+      "3": {
+        "0": "Muzeum historii",
+        "1": "Tu zebrano wszystko o tym, jak ludzie żyli dawno temu i jak żyją teraz."
+      },
+      "4": {
+        "0": "Szkoła języków",
+        "1": "Na Ziemi są tysiące języków. Tu uczy się rozumieć siebie nawzajem."
+      },
+      "5": {
+        "0": "Szkoła muzyczna",
+        "1": "Tu uczy się muzyki i słucha orkiestry."
+      },
+      "6": {
+        "0": "Szkoła lekarzy",
+        "1": "Tu można się dowiedzieć, jak zbudowane jest ciało i jak być zdrowym."
+      },
+      "7": {
+        "0": "Centrum ekologiczne",
+        "1": "Tu segreguje się śmieci i uczy dbać o przyrodę."
+      },
+      "8": {
+        "0": "Muzeum transportu",
+        "1": "Tu stoją parowozy, samoloty i statki ze wszystkich czasów."
+      },
+      "9": {
+        "0": "Stadion",
+        "1": "Tu się biega, skacze i gra w gry zespołowe."
+      }
+    },
+    "venus": {
+      "0": {
+        "0": "Laboratorium ciepła",
+        "1": "Wenus to najgorętsza planeta. Tu bada się ogień, ciepło i upał."
+      },
+      "1": {
+        "0": "Stacja chmur",
+        "1": "Wenus jest cała w chmurach. Tu można się dowiedzieć, z czego zrobione są chmury i deszcz."
+      },
+      "2": {
+        "0": "Galeria piękna",
+        "1": "Wenus to bogini piękna. Tu zebrano najpiękniejsze obrazy świata."
+      },
+      "3": {
+        "0": "Wieża Gwiazdy Porannej",
+        "1": "Wenus nazywa się Gwiazdą Poranną. Stąd wita się świt."
+      },
+      "4": {
+        "0": "Sala luster",
+        "1": "Tu bawi się odbiciem i uczy symetrii."
+      },
+      "5": {
+        "0": "Laboratorium chemiczne",
+        "1": "Tu miesza się substancje i patrzy, co z tego wyjdzie."
+      },
+      "6": {
+        "0": "Muzeum wulkanów",
+        "1": "Na Wenus jest więcej wulkanów niż na jakiejkolwiek innej planecie."
+      },
+      "7": {
+        "0": "Sala powolnego czasu",
+        "1": "Dzień na Wenus jest dłuższy niż rok. Tu uczy się mierzyć czas."
+      },
+      "8": {
+        "0": "Szkoła tańca",
+        "1": "Tu się tańczy i uczy czuć rytm."
+      },
+      "9": {
+        "0": "Ogród zapachów",
+        "1": "Tu rosną kwiaty, a każdy można rozpoznać po zapachu."
+      }
+    },
+    "mercury": {
+      "0": {
+        "0": "Obserwatorium słoneczne",
+        "1": "Merkury jest najbliżej Słońca. Stąd widać je najlepiej."
+      },
+      "1": {
+        "0": "Szkoła biegaczy",
+        "1": "Merkury to najszybsza planeta. Tu uczy się mierzyć prędkość."
+      },
+      "2": {
+        "0": "Poczta posłańców",
+        "1": "Merkury to bóg posłaniec. Tu pisze się listy i wysyła je na wszystkie planety."
+      },
+      "3": {
+        "0": "Elektrownia słoneczna",
+        "1": "Tu łapie się światło słońca i robi z niego prąd."
+      },
+      "4": {
+        "0": "Muzeum kraterów",
+        "1": "Merkury jest cały w kraterach. Tu można się dowiedzieć, skąd się biorą."
+      },
+      "5": {
+        "0": "Warsztat mechaników",
+        "1": "Tu rozkłada się i składa maszyny, żeby zrozumieć, jak działają."
+      },
+      "6": {
+        "0": "Lodowa jaskinia",
+        "1": "Nawet przy Słońcu jest lód — w kraterach, dokąd nie zagląda światło."
+      },
+      "7": {
+        "0": "Akademia kosmiczna",
+        "1": "Tu szkoli się pilotów, którzy polecą do Słońca."
+      },
+      "8": {
+        "0": "Laboratorium cieni",
+        "1": "Tu bada się światło i cień, dzień i noc."
+      },
+      "9": {
+        "0": "Wieża mety",
+        "1": "Ostatnia stacja podróży: dalej jest już tylko Słońce."
+      }
+    }
+  },
+  "themes": {
+    "galaxy": {
+      "name": "Gwiezdne miasto",
+      "buildings": [
+        "Gwiezdna latarnia",
+        "Baza księżycowa",
+        "Stacja komet",
+        "Obserwatorium",
+        "Planeta-dom",
+        "Dok statków gwiezdnych",
+        "Antena łączności",
+        "Park mgławic",
+        "Fabryka gwiazd"
+      ],
+      "decor": [
+        "Deszcz gwiazd",
+        "Asteroida",
+        "Księżyc",
+        "Flaga odkrywcy",
+        "Światełko",
+        "Kosmiczny kaktus",
+        "Gwiezdny łuk",
+        "Fajerwerki"
+      ],
+      "residents": [
+        "Kosmita",
+        "Robot",
+        "Kosmonauta",
+        "Pikselowy gość",
+        "Kosmopies",
+        "Latający talerz",
+        "Gwiezdny kot",
+        "Uczona",
+        "Kosmiczny smok",
+        "Gwiezdny jednorożec"
+      ]
+    },
+    "unicorns": {
+      "name": "Bajkowe królestwo",
+      "buildings": [
+        "Tęczowy mostek",
+        "Czarodziejska fontanna",
+        "Domek wróżki",
+        "Cukiernia",
+        "Karuzela",
+        "Sklepik z cudami",
+        "Wieża czarodzieja",
+        "Diabelski młyn",
+        "Arena jednorożców"
+      ],
+      "decor": [
+        "Tulipany",
+        "Czarodziejski grzyb",
+        "Kwitnące drzewo",
+        "Flaming",
+        "Gwiazdka życzeń",
+        "Kokarda",
+        "Czarodziejska różdżka",
+        "Fajerwerki"
+      ],
+      "residents": [
+        "Jednorożec",
+        "Biały koń",
+        "Wróżka",
+        "Motyl",
+        "Zajączek",
+        "Łabędź",
+        "Czarodziejka",
+        "Smoczek",
+        "Księżniczka",
+        "Mądra sowa"
+      ]
+    },
+    "cars": {
+      "name": "Miasto rajdowców",
+      "buildings": [
+        "Stacja paliw",
+        "Warsztat",
+        "Parking",
+        "Skrzyżowanie",
+        "Sklep z częściami",
+        "Myjnia",
+        "Most",
+        "Fabryka samochodów",
+        "Tor wyścigowy"
+      ],
+      "decor": [
+        "Barierka",
+        "Stos opon",
+        "Sygnalizator",
+        "Flaga mety",
+        "Palma",
+        "Beczka paliwa",
+        "Puchar",
+        "Fajerwerki"
+      ],
+      "residents": [
+        "Radiowóz",
+        "Wóz strażacki",
+        "Taksówka",
+        "Traktor",
+        "Autobus",
+        "Motocykl",
+        "Ciężarówka",
+        "Mechanik",
+        "Śmigłowiec",
+        "Karetka"
+      ]
+    },
+    "space": {
+      "name": "Kosmiczna kolonia",
+      "buildings": [
+        "Satelita",
+        "Kopuła mieszkalna",
+        "Kosmiczna szklarnia",
+        "Elektrownia",
+        "Laboratorium",
+        "Obserwatorium",
+        "Antena łączności",
+        "Hangar",
+        "Most orbitalny"
+      ],
+      "decor": [
+        "Deszcz gwiazd",
+        "Kamień księżycowy",
+        "Flaga",
+        "Księżyc",
+        "Reflektor",
+        "Kosmiczny kaktus",
+        "Robot ogrodnik",
+        "Fajerwerki"
+      ],
+      "residents": [
+        "Kosmonauta",
+        "Robot pomocnik",
+        "Kosmita",
+        "Kosmopies",
+        "Pikselowy gość",
+        "Kot pokładowy",
+        "Uczona",
+        "Małpka pilot",
+        "Latający talerz",
+        "Papuga nawigator"
+      ]
+    },
+    "dinos": {
+      "name": "Dolina dinozaurów",
+      "buildings": [
+        "Gniazdo",
+        "Gaj palmowy",
+        "Jaskinia",
+        "Wulkan",
+        "Muzeum kości",
+        "Obóz badaczy",
+        "Most z lian",
+        "Wodospad",
+        "Kamienna brama"
+      ],
+      "decor": [
+        "Paproć",
+        "Głaz",
+        "Wielka kość",
+        "Palma",
+        "Kokos",
+        "Tropikalny kwiat",
+        "Olbrzymi motyl",
+        "Obiad dinozaura"
+      ],
+      "residents": [
+        "Diplodok",
+        "Tyranozaur",
+        "Krokodyl",
+        "Jaszczurka",
+        "Żółw",
+        "Pterodaktyl",
+        "Mamut",
+        "Wąż",
+        "Dodo",
+        "Paleontolog"
+      ]
+    },
+    "underwater": {
+      "name": "Podwodne miasto",
+      "buildings": [
+        "Domek z muszli",
+        "Koralowy ogród",
+        "Fabryka bąbelków",
+        "Zatopiona kotwica",
+        "Wyspa",
+        "Sklep z perłami",
+        "Świątynia Neptuna",
+        "Latarnia morska",
+        "Szkoła nurków"
+      ],
+      "decor": [
+        "Wodorosty",
+        "Muszla",
+        "Meduza",
+        "Fala",
+        "Rafa",
+        "Perła",
+        "Piracka skrzynia",
+        "Fontanna bąbelków"
+      ],
+      "residents": [
+        "Błazenek",
+        "Ośmiornica",
+        "Delfin",
+        "Żółw morski",
+        "Krabik",
+        "Wieloryb",
+        "Rekin",
+        "Syrenka",
+        "Kałamarnica",
+        "Rozdymka"
+      ]
+    },
+    "forest": {
+      "name": "Leśne miasteczko",
+      "buildings": [
+        "Grzybowa chatka",
+        "Drewutnia",
+        "Szałas",
+        "Kwietnik",
+        "Pasieka",
+        "Mostek nad strumykiem",
+        "Obóz",
+        "Leśne źródło",
+        "Dąb olbrzym"
+      ],
+      "decor": [
+        "Stokrotki",
+        "Choinka",
+        "Kamień",
+        "Poziomki",
+        "Drzewo",
+        "Gniazdo",
+        "Motyle",
+        "Ognisko"
+      ],
+      "residents": [
+        "Lisek",
+        "Niedźwiedź",
+        "Sowa",
+        "Wiewiórka",
+        "Jeżyk",
+        "Jeleń",
+        "Zajączek",
+        "Wilk",
+        "Borsuk",
+        "Pszczółka"
+      ]
+    },
+    "lego": {
+      "name": "Miasto z klocków",
+      "buildings": [
+        "Pierwsza ściana",
+        "Domek",
+        "Remiza strażacka",
+        "Komisariat",
+        "Sklep",
+        "Szpital",
+        "Dworzec",
+        "Wesołe miasteczko",
+        "Drapacze chmur"
+      ],
+      "decor": [
+        "Kwiatek z klocków",
+        "Płot",
+        "Drzewko z klocków",
+        "Sygnalizator",
+        "Przystanek",
+        "Ławka",
+        "Fontanna",
+        "Fajerwerki"
+      ],
+      "residents": [
+        "Budowniczy",
+        "Policjant",
+        "Strażak",
+        "Lekarka",
+        "Kucharz",
+        "Kosmonauta",
+        "Robot",
+        "Pirat",
+        "Rycerz",
+        "Piesek"
+      ]
+    },
+    "frozen": {
+      "name": "Lodowe królestwo",
+      "buildings": [
+        "Bałwan",
+        "Górka saneczkowa",
+        "Igloo",
+        "Lodowisko",
+        "Lodowa rzeźba",
+        "Trasa narciarska",
+        "Zimowy las",
+        "Górska wieża",
+        "Fabryka płatków śniegu"
+      ],
+      "decor": [
+        "Wielki płatek śniegu",
+        "Ośnieżona choinka",
+        "Bałwanek",
+        "Ciepły szalik",
+        "Ognisko",
+        "Prezent",
+        "Zorza polarna",
+        "Fajerwerki"
+      ],
+      "residents": [
+        "Pingwin",
+        "Niedźwiedź polarny",
+        "Renifer",
+        "Foka",
+        "Lis polarny",
+        "Śnieżny wilk",
+        "Lodowa elfka",
+        "Sowa śnieżna",
+        "Biały zając",
+        "Żywy bałwan"
+      ]
+    },
+    "minecraft": {
+      "name": "Świat bloków",
+      "buildings": [
+        "Ziemianka",
+        "Pierwszy dom",
+        "Kopalnia",
+        "Farma",
+        "Kuźnia",
+        "Zagroda dla zwierząt",
+        "Most",
+        "Wieża strażnicza",
+        "Portal"
+      ],
+      "decor": [
+        "Słonecznik",
+        "Pochodnia",
+        "Dąb",
+        "Kłoda",
+        "Kaktus",
+        "Dynia",
+        "Źródło",
+        "Fajerwerki"
+      ],
+      "residents": [
+        "Świnka",
+        "Owca",
+        "Kura",
+        "Krowa",
+        "Oswojony wilk",
+        "Kot",
+        "Koń",
+        "Wieśniak",
+        "Pszczoła",
+        "Papuga"
+      ]
+    }
+  },
+  "visitors": [
+    "Piesek",
+    "Kotek",
+    "Chomik",
+    "Królik",
+    "Papuga",
+    "Żółw",
+    "Jeżyk",
+    "Wiewiórka",
+    "Lisek",
+    "Panda",
+    "Koala",
+    "Lew",
+    "Tygrys",
+    "Słoń",
+    "Żyrafa",
+    "Zebra",
+    "Kangur",
+    "Małpka",
+    "Leniwiec",
+    "Wydra",
+    "Bóbr",
+    "Pingwin",
+    "Flaming",
+    "Paw",
+    "Łabędź",
+    "Kaczka",
+    "Kogucik",
+    "Sowa",
+    "Orzeł",
+    "Delfin",
+    "Wieloryb",
+    "Ośmiornica",
+    "Krab",
+    "Rybka",
+    "Rekin",
+    "Żabka",
+    "Jaszczurka",
+    "Pszczółka",
+    "Motyl",
+    "Biedronka",
+    "Ślimak",
+    "Dinozaurek",
+    "Ogrodniczka",
+    "Kucharz",
+    "Malarka",
+    "Strażak",
+    "Lekarka",
+    "Nauczyciel",
+    "Majster",
+    "Pilot",
+    "Uczona",
+    "Piosenkarka",
+    "Żongler",
+    "Czarodziej",
+    "Wróżka",
+    "Syrenka",
+    "Superbohaterka",
+    "Robot pomocnik",
+    "Gość z kosmosu",
+    "Smoczek"
+  ],
+  "facts": {
+    "FACTS": {
+      "neptune": [
+        "Neptun to planeta najdalsza od Słońca. Światło słoneczne leci do niego ponad cztery godziny, a do Ziemi — tylko osiem minut.",
+        "Rok na Neptunie trwa 165 ziemskich lat. Odkąd ludzie go odkryli, zdążył okrążyć Słońce tylko raz — stało się to w 2011 roku.",
+        "Neptuna znaleziono nie przez teleskop, lecz na papierze. Francuz Urbain Le Verrier obliczył, gdzie powinna być nieznana planeta, i w 1846 roku astronomowie zobaczyli ją właśnie tam.",
+        "Na Neptunie wieją najszybsze wiatry w Układzie Słonecznym — do dwóch tysięcy kilometrów na godzinę. To dużo szybciej, niż na Ziemi leci dźwięk.",
+        "Neptun jest tak niebieski przez gaz metan w swoim powietrzu. Metan zabiera czerwone światło, więc wraca do nas tylko niebieskie.",
+        "Neptun to lodowy olbrzym. Nie ma na nim twardego gruntu: pod chmurami kryje się gęsta mieszanina wody, amoniaku i metanu, a w samym środku — skaliste jądro.",
+        "Największy księżyc Neptuna nazywa się Tryton. Krąży w przeciwną stronę, niż obraca się sama planeta — żaden inny duży księżyc tak nie robi.",
+        "Na Trytonie tryskają lodowe gejzery: spod powierzchni wyrywają się strumienie azotu wysokie na osiem kilometrów. Mróz sięga tam 235 stopni — to jedno z najzimniejszych miejsc, jakie znamy.",
+        "Neptun ma szesnaście znanych księżyców. Wszystkie noszą imiona morskich bogów i nimf z dawnych mitów — przecież i sam Neptun nosi imię boga mórz.",
+        "Tylko jedna sonda kosmiczna była w pobliżu Neptuna — Voyager 2. Leciała tam dwanaście lat i przemknęła obok planety w 1989 roku.",
+        "Voyager 2 zobaczył na Neptunie Wielką Ciemną Plamę — burzę wielkości całej Ziemi. Kiedy po kilku latach spojrzał tam teleskop kosmiczny, plamy już nie było, a w innym miejscu pojawiła się nowa.",
+        "Doba na Neptunie jest krótka — trwa około szesnastu godzin. Za to każda pora roku trwa tam ponad czterdzieści ziemskich lat: zima, która zaczęłaby się w dniu twoich urodzin, skończyłaby się, gdy będziesz już dorosły.",
+        "Neptun jest prawie cztery razy szerszy od Ziemi. W jego wnętrzu zmieściłoby się pięćdziesiąt siedem takich planet jak nasza.",
+        "Neptun jest siedemnaście razy cięższy od Ziemi. Jest trochę mniejszy od Urana, za to gęstszy — dlatego waży więcej od swojego sąsiada.",
+        "Neptun też ma pierścienie, ale wcale nie tak okazałe jak Saturn. Są cienkie i ciemne, z pyłu i okruchów lodu, więc dostrzegła je dopiero sonda kosmiczna.",
+        "Planetę nazwano na cześć Neptuna — rzymskiego boga mórz. Jej znak przypomina trójząb, który ten bóg zawsze trzymał w ręku.",
+        "W chmurach Neptuna panuje mróz ponad dwustu stopni. A głęboko we wnętrzu planety jest odwrotnie, bardzo gorąco — tysiące stopni.",
+        "Neptun to jedyna planeta, której nie widać bez teleskopu albo lornetki. Dlatego dawni ludzie nawet się go nie domyślali.",
+        "Z Neptuna Słońce wygląda nie jak tarcza, lecz po prostu jak bardzo jasna gwiazda. Dociera tam dziewięćset razy mniej światła niż do Ziemi, więc w południe panuje tam półmrok.",
+        "Neptun oddaje w kosmos więcej ciepła, niż dostaje od Słońca — dwa i pół raza więcej. To ciepło pochodzi z jego gorących głębin i napędza szalone wiatry."
+      ],
+      "uranus": [
+        "Uran obraca się, leżąc na boku. Inne planety kręcą się jak bąki, a on toczy się wokół Słońca jak piłka.",
+        "Uczeni sądzą, że Uran położył się na bok po strasznym zderzeniu. Bardzo dawno temu uderzyło w niego ciało niebieskie wielkości Ziemi i przewróciło planetę.",
+        "Uran to pierwsza planeta odkryta za pomocą teleskopu. Dokonał tego William Herschel w 1781 roku; najpierw myślał, że znalazł kometę.",
+        "Rok na Uranie trwa osiemdziesiąt cztery ziemskie lata. Człowiek, który przeżył długie życie, obchodziłby tam urodziny tylko raz.",
+        "Ponieważ Uran leży na boku, na jego biegunach Słońce świeci przez czterdzieści dwa lata bez przerwy. A potem zapada noc — też na czterdzieści dwa lata.",
+        "Doba na Uranie trwa około siedemnastu godzin. Do tego obraca się on w przeciwną stronę — tak robią tylko Uran i Wenus.",
+        "Uran jest turkusowy, bo w jego powietrzu jest gaz metan. Metan pochłania czerwone promienie Słońca, a niebieskozielone odbija z powrotem.",
+        "Uran ma najzimniejsze powietrze ze wszystkich planet — mróz sięga tam 224 stopni. Nawet Neptun, który leży dalej od Słońca, jest trochę cieplejszy.",
+        "Urana nazywa się lodowym olbrzymem. Pod jego chmurami nie ma twardego gruntu — jest tylko gorący, gęsty ocean wody, amoniaku i metanu.",
+        "Uran ma trzynaście pierścieni. Są ciemne jak węgiel i wąskie, dlatego zauważono je dopiero w 1977 roku — prawie dwieście lat po odkryciu samej planety.",
+        "Wokół Urana krąży prawie trzydzieści księżyców. Pięć największych to Miranda, Ariel, Umbriel, Tytania i Oberon.",
+        "Księżyce Urana noszą imiona nie bogów, lecz bohaterów książek. Tytania i Oberon to królowa i król elfów ze sztuki Williama Szekspira.",
+        "Na księżycu Miranda jest najwyższe urwisko w Układzie Słonecznym — wysokie na dwadzieścia kilometrów. Kamyk, który by z niego spadł, leciałby w dół ponad dziesięć minut.",
+        "W pobliżu Urana była tylko jedna sonda — Voyager 2 w 1986 roku. Leciała do planety prawie dziewięć lat, a oglądała ją z bliska zaledwie kilka godzin.",
+        "Uran jest cztery razy szerszy od Ziemi. Zmieściłyby się w nim sześćdziesiąt trzy takie planety jak nasza.",
+        "Uran jest czternaście razy cięższy od Ziemi, a mimo to jest najlżejszy wśród planet olbrzymów. Jest większy od Neptuna, ale waży mniej.",
+        "W bardzo ciemną, pogodną noc Urana można zobaczyć nawet bez teleskopu — jako ledwie widoczny punkcik. Astronomowie widzieli go i przed Herschelem, ale brali go za słabą gwiazdę.",
+        "Uran nosi imię starogreckiego boga nieba. Wszystkie inne planety, oprócz Ziemi, mają imiona rzymskich bogów — więc Uran jest wśród nich wyjątkowy.",
+        "Światło słoneczne leci do Urana dwie godziny i czterdzieści minut. Słońce świeci tam prawie czterysta razy słabiej niż na Ziemi.",
+        "Bieguny magnetyczne Urana leżą zupełnie nie tam, gdzie bieguny, wokół których się obraca. Dlatego jego pole magnetyczne jest przekrzywione i kołysze się, gdy planeta się kręci."
+      ],
+      "saturn": [
+        "Pierścienie Saturna składają się z niezliczonych kawałków lodu i skał. Jedne są małe jak ziarnko piasku, inne wielkie jak dom.",
+        "Pierścienie Saturna są bardzo szerokie, ale zadziwiająco cienkie. Od brzegu do brzegu mają prawie trzysta tysięcy kilometrów, a grube są przeważnie tylko jak trzypiętrowy dom.",
+        "Saturn to jedyna planeta lżejsza od wody. Gdyby znalazł się ocean odpowiedniej wielkości, Saturn pływałby w nim jak piłeczka.",
+        "Saturn to druga co do wielkości planeta. Jest dziewięć razy szerszy od Ziemi, a w jego wnętrzu zmieściłoby się ponad siedemset sześćdziesiąt takich planet.",
+        "Rok na Saturnie trwa prawie trzydzieści ziemskich lat. A doba jest tam krótka — trochę ponad dziesięć godzin.",
+        "Saturn kręci się tak szybko, że rozciągnęło go na boki. Jest wyraźnie spłaszczony na biegunach i przypomina nie kulę, lecz przygniecioną piłkę.",
+        "Na północnym biegunie Saturna szaleje burza w kształcie foremnego sześciokąta. Każdy jej bok jest dłuższy, niż cała Ziemia jest szeroka.",
+        "Saturn ma ponad dwieście księżyców — więcej niż jakakolwiek inna planeta. Większość z nich jest całkiem mała, ma zaledwie kilka kilometrów.",
+        "Tytan to największy księżyc Saturna, większy nawet od planety Merkury. To jedyny księżyc w Układzie Słonecznym z gęstym powietrzem.",
+        "Na Tytanie są rzeki, jeziora i morza, ale nie z wody, tylko z ciekłego metanu. Pada tam nawet deszcz — powoli, wielkimi kroplami.",
+        "Księżyc Enceladus jest pokryty lodem, a pod lodem kryje się ocean słonej wody. Przez szczeliny przy biegunie południowym woda tryska fontannami prosto w kosmos.",
+        "Galileusz jako pierwszy skierował na Saturna teleskop w 1610 roku. Pierścieni nie rozpoznał i uznał, że planeta ma „uszy”. Dopiero pół wieku później Christiaan Huygens domyślił się, że to pierścień.",
+        "Sonda Cassini przez trzynaście lat krążyła wokół Saturna i przesłała setki tysięcy zdjęć. Na koniec zanurkowała w chmury planety i spłonęła jak spadająca gwiazda.",
+        "W 2005 roku próbnik Huygens opadł na spadochronie na Tytana. To najdalsze od Ziemi lądowanie w całej historii.",
+        "Na Saturnie wieją wiatry z prędkością do tysiąca ośmiuset kilometrów na godzinę. To pięć razy szybciej niż najsilniejszy ziemski huragan.",
+        "Saturn to gazowy olbrzym z wodoru i helu. Nie da się na nim stanąć: nie ma tam twardej powierzchni, statek po prostu zanurzałby się w chmurach.",
+        "Mniej więcej raz na piętnaście lat pierścienie Saturna ustawiają się do Ziemi krawędzią. Są tak cienkie, że na kilka tygodni prawie znikają z oczu.",
+        "Saturn to najdalsza planeta, którą dobrze widać bez teleskopu. Starożytni Rzymianie nazwali go na cześć boga rolnictwa.",
+        "Między dwoma największymi pierścieniami Saturna jest ciemna przerwa — Przerwa Cassiniego. Ma prawie pięć tysięcy kilometrów szerokości — prawie tyle co planeta Merkury.",
+        "Przy pierścieniach Saturna krążą małe księżyce pasterskie. Swoim przyciąganiem nie pozwalają okruchom lodu się rozlecieć, tak jak pasterz nie pozwala rozbiec się stadu."
+      ],
+      "jupiter": [
+        "Jowisz to największa planeta Układu Słonecznego. Jest jedenaście razy szerszy od Ziemi, a w jego wnętrzu zmieściłoby się tysiąc trzysta takich planet.",
+        "Jowisz jest dwa i pół raza cięższy od wszystkich innych planet razem wziętych. Prawdziwy olbrzym wśród olbrzymów.",
+        "Wielka Czerwona Plama na Jowiszu to burza większa od całej Ziemi. Szaleje już od setek lat i wciąż nie ucichła.",
+        "Jowisz obraca się najszybciej ze wszystkich planet: doba trwa na nim niecałe dziesięć godzin. W ciągu jednej ziemskiej doby Słońce dwa razy tam wschodzi i dwa razy zachodzi.",
+        "Rok na Jowiszu trwa dwanaście ziemskich lat. Dwunastoletnie dziecko według jowiszowego kalendarza dopiero co obchodziłoby pierwsze urodziny.",
+        "Jowisz składa się z wodoru i helu — tych samych gazów co Słońce. Nie ma na nim twardej powierzchni: im głębiej, tym gęstsze stają się chmury.",
+        "Pasy na Jowiszu to chmury. W jasnych pasach gaz unosi się w górę, w ciemnych opada, a wiatry w sąsiednich pasach wieją w przeciwne strony.",
+        "W 1610 roku Galileusz zobaczył przez teleskop cztery księżyce Jowisza: Io, Europę, Ganimedesa i Kallisto. Tak ludzie pierwszy raz dowiedzieli się, że nie wszystko na niebie krąży wokół Ziemi.",
+        "Ganimedes to największy księżyc w całym Układzie Słonecznym. Jest większy nawet od planety Merkury.",
+        "Na księżycu Io działa ponad czterysta wulkanów. To najbardziej wulkaniczne miejsce w Układzie Słonecznym: to, co wyrzucają, wznosi się na setki kilometrów w górę.",
+        "Księżyc Europa jest pokryty grubą warstwą lodu, a pod nią jest ocean. Wody w tym oceanie jest dwa razy więcej niż we wszystkich morzach Ziemi.",
+        "Jowisz ma ponad dziewięćdziesiąt znanych księżyców. Astronomowie wciąż znajdują nowe — maleńkie, o średnicy kilometra czy dwóch.",
+        "Jowisz też ma pierścienie, ale bardzo cienkie i słabo widoczne — z drobnego pyłu. Zauważyła je dopiero sonda Voyager 1, gdy przelatywała obok w 1979 roku.",
+        "Jowisz chroni Ziemię. Swoim potężnym przyciąganiem ściąga wiele komet i planetoid — w 1994 roku astronomowie widzieli, jak uderzyła w niego kometa rozerwana na kawałki.",
+        "Jowisz ma najsilniejsze pole magnetyczne wśród planet. Przy jego biegunach płoną zorze polarne większe od całej naszej Ziemi.",
+        "Wokół Jowisza od 2016 roku lata sonda Juno. Zasilają ją panele słoneczne wielkości autobusu, a ona zagląda pod chmury planety.",
+        "Jowisza dobrze widać bez teleskopu: świeci jaśniej niż jakakolwiek gwiazda. A przez zwykłą lornetkę można dostrzec cztery jego największe księżyce.",
+        "Rzymianie nazwali największą planetę na cześć swojego najważniejszego boga — Jowisza, władcy nieba i piorunów. Nie wiedzieli, jaka jest wielka, ale zgadli: widzieli tylko, że dostojnie i powoli płynie wśród gwiazd.",
+        "Na Jowiszu wszystko waży dwa i pół raza więcej niż na Ziemi. Plecak, który w domu waży cztery kilogramy, tam ważyłby całe dziesięć.",
+        "W chmurach Jowisza błyskają pioruny wiele razy potężniejsze od ziemskich. A głęboko we wnętrzu planety ciśnienie jest tak wielkie, że gazowy wodór staje się cieczą."
+      ],
+      "mars": [
+        "Marsa nazywa się Czerwoną Planetą. Jego grunt jest pełen żelaza, które zardzewiało — to właśnie rdza nadaje planecie rudy kolor.",
+        "Na Marsie stoi najwyższa góra Układu Słonecznego — wulkan Olympus Mons. Wznosi się na dwadzieścia dwa kilometry, czyli jest dwa i pół raza wyższy od Mount Everestu.",
+        "Na Marsie jest olbrzymi kanion — Valles Marineris. Ciągnie się przez cztery tysiące kilometrów i sięga siedmiu kilometrów w głąb.",
+        "Doba na Marsie jest prawie taka sama jak na Ziemi: dwadzieścia cztery godziny i trzydzieści siedem minut. Uczeni nazywają marsjańską dobę słowem „sol”.",
+        "Rok na Marsie trwa 687 ziemskich dni — prawie dwa nasze lata. Urodziny obchodziłoby się tam więc dwa razy rzadziej.",
+        "Na Marsie, tak jak na Ziemi, jest wiosna, lato, jesień i zima. Ale każda pora roku trwa tam dwa razy dłużej.",
+        "Na biegunach Marsa leżą białe czapy lodowe. Składają się z zamarzniętej wody i suchego lodu, zimą rosną, a latem topnieją.",
+        "Kiedyś na Marsie płynęły rzeki i pluskały jeziora. Zostały po nich wyschnięte koryta i gładkie kamyki, które znalazły łaziki.",
+        "Mars ma dwa maleńkie księżyce — Fobosa i Deimosa. Nie są okrągłe, lecz podobne do ziemniaków, a ich imiona znaczą „strach” i „trwoga”.",
+        "Fobos leci wokół Marsa tak szybko, że wschodzi na zachodzie, a zachodzi na wschodzie. W ciągu jednej marsjańskiej doby zdąży okrążyć planetę trzy razy.",
+        "Mars jest dwa razy węższy od Ziemi. A jednak lądu jest na nim tyle samo, ile na wszystkich naszych kontynentach razem — bo nie ma tam oceanów.",
+        "Grawitacja na Marsie jest prawie trzy razy słabsza niż na Ziemi. Skakałoby się tam trzy razy wyżej, a dziecko, które waży trzydzieści kilogramów, ważyłoby tylko jedenaście.",
+        "Powietrze na Marsie jest bardzo rzadkie i prawie całe składa się z dwutlenku węgla. Nie można nim oddychać, dlatego ludziom będą tam potrzebne skafandry.",
+        "Na Marsie jest zimno: średnio około sześćdziesięciu stopni mrozu. Tylko latem w południe przy równiku bywa ciepło jak u nas wiosną.",
+        "Na Marsie zrywają się burze pyłowe. Największe z nich ogarniają całą planetę i trwają kilka tygodni — wtedy powierzchni nie widać nawet z kosmosu.",
+        "Niebo na Marsie jest w dzień rudoróżowe od pyłu w powietrzu. Za to zachód słońca jest tam niebieski — wszystko odwrotnie niż na Ziemi.",
+        "Po Marsie jeżdżą roboty — łaziki. Jeden z nich miał pracować trzy miesiące, a służył prawie piętnaście lat i przejechał ponad czterdzieści pięć kilometrów.",
+        "W 2021 roku na Marsie wzbił się w powietrze mały śmigłowiec. Był to pierwszy lot statku powietrznego na innej planecie, a w sumie wzniósł się on w niebo siedemdziesiąt dwa razy.",
+        "Lot na Marsa trwa około siedmiu miesięcy. Najlepiej wyruszyć wtedy, gdy planety są najbliżej siebie, a zdarza się to tylko raz na dwa lata.",
+        "Mars nosi imię rzymskiego boga wojny — przez kolor podobny do krwi. Na nocnym niebie łatwo go rozpoznać: to jasny rudawy punkcik, który nie migocze."
+      ],
+      "earth": {
+        "0": "Ziemia to jedyna znana planeta, na której jest życie. Mieszkają tu ludzie, zwierzęta, rośliny i miliony innych istot.",
+        "1": "Prawie trzy czwarte powierzchni Ziemi pokrywa woda. Dlatego z kosmosu nasza planeta jest niebieska i nazywa się ją Błękitną Planetą.",
+        "2": "Ziemia to trzecia planeta od Słońca. Leży akurat tam, gdzie nie jest ani za gorąco, ani za zimno, więc woda może być ciekła.",
+        "3": "Ziemia obraca się wokół własnej osi w ciągu dwudziestu czterech godzin. Tam, gdzie planeta jest zwrócona do Słońca, jest dzień, a po drugiej stronie w tym czasie noc.",
+        "4": "Ziemia okrąża Słońce w ciągu 365 dni i jeszcze sześciu godzin. Z tych dodatkowych godzin raz na cztery lata składa się dodatkowy dzień — dwudziesty dziewiąty lutego.",
+        "5": "Oś Ziemi jest trochę pochylona. Dlatego przez pół roku ku Słońcu bardziej zwrócona jest północna połowa planety, a przez pół roku — południowa, i tak zmieniają się pory roku.",
+        "6": "Ziemia ma jednego naturalnego satelitę — Księżyc. Jest do niego około 384 tysięcy kilometrów: między Ziemią a Księżycem zmieściłyby się wszystkie inne planety Układu Słonecznego.",
+        "7": "Księżyc swoim przyciąganiem pociąga wodę w oceanach. Dlatego dwa razy na dobę morze podchodzi do brzegu i się cofa — to przypływy i odpływy.",
+        "8": "Ziemię otula powietrze — atmosfera. Daje nam czym oddychać, zatrzymuje ciepło, a do tego spala większość meteorów, zanim dolecą do powierzchni.",
+        "9": "Ziemia ma pole magnetyczne, które chroni nas przed szkodliwymi cząstkami ze Słońca. Kiedy te cząstki mimo wszystko wpadają przy biegunach, na niebie rozbłyska zorza polarna.",
+        "10": "Ziemia jest największa z czterech planet skalistych. Jest też najgęstszą planetą Układu Słonecznego.",
+        "11": "Ziemia ma około czterech i pół miliarda lat. Gdyby całą jej historię ścisnąć w jedną dobę, ludzie pojawiliby się dopiero w ostatnich sekundach przed północą.",
+        "12": "Ziemia pędzi wokół Słońca z prędkością trzydziestu kilometrów na sekundę. Nie czujemy tego, bo lecimy razem z nią równo i bez szarpnięć.",
+        "13": "Ziemia nie jest idealną kulą. Jest trochę spłaszczona na biegunach i na równiku szersza o czterdzieści trzy kilometry.",
+        "14": "Najwyższa góra Ziemi to Mount Everest, ma prawie dziewięć kilometrów wysokości. A najgłębsze miejsce to Rów Mariański na Oceanie Spokojnym, około jedenastu kilometrów w głąb.",
+        "15": "W samym środku Ziemi jest jądro z żelaza i niklu. Jest tam gorąco jak na powierzchni Słońca — ponad pięć tysięcy stopni.",
+        "16": "Kontynenty Ziemi powoli się przesuwają — o kilka centymetrów na rok, mniej więcej tak szybko, jak rosną paznokcie. Kiedyś, dawno temu, wszystkie były jednym wielkim kontynentem.",
+        "17": "Ziemia to jedyna planeta, która nie nosi imienia boga. Jej nazwa znaczy po prostu grunt, po którym chodzimy.",
+        "18": "Stacja kosmiczna okrąża Ziemię w półtorej godziny. Dlatego astronauci widzą na niej szesnaście wschodów i szesnaście zachodów słońca na dobę.",
+        "19": "W 1978 roku Ziemię z kosmosu zobaczył Mirosław Hermaszewski — pierwszy Polak w kosmosie. Spędził na orbicie prawie osiem dni i okrążył Ziemię ponad sto dwadzieścia razy."
+      },
+      "venus": [
+        "Wenus to najgorętsza planeta, choć nie leży najbliżej Słońca. Upał sięga tam 465 stopni: to wystarczy, żeby stopić ołów.",
+        "Wenus jest tak gorąca przez swoje powietrze. Gęsta warstwa dwutlenku węgla otula ją jak kołdra i nie wypuszcza ciepła z powrotem w kosmos.",
+        "Wenus obraca się w przeciwną stronę. Dlatego Słońce wschodzi tam na zachodzie, a zachodzi na wschodzie.",
+        "Wenus obraca się bardzo powoli: jeden obrót wokół osi trwa 243 ziemskie dni. A Słońce okrąża w 225 dni — więc rok jest tam krótszy niż obrót planety wokół samej siebie.",
+        "Wenus to najjaśniejsze światło na niebie po Słońcu i Księżycu. Widać ją o świcie albo wieczorem, dlatego nazywa się ją Gwiazdą Poranną i Gwiazdą Wieczorną.",
+        "Wenus nazywa się siostrą Ziemi, bo jest prawie tej samej wielkości. Nie da się jednak na niej żyć — jest tam o wiele za gorąco.",
+        "Powietrze na Wenus naciska dziewięćdziesiąt razy mocniej niż na Ziemi. Tak samo naciska woda w oceanie na głębokości prawie całego kilometra.",
+        "Chmury na Wenus składają się nie z wody, lecz z żrącego kwasu. Pada z nich nawet deszcz, ale nie dolatuje do powierzchni — wyparowuje od upału.",
+        "Wenus nie ma ani jednego księżyca. Takich planet jest w Układzie Słonecznym tylko dwie — Wenus i Merkury.",
+        "Na Wenus jest więcej wulkanów niż na jakiejkolwiek innej planecie — są ich tysiące. Uczeni zauważyli, że niektóre z nich wybuchają także teraz.",
+        "Najwyższe góry Wenus to Góry Maxwella, wysokie na jedenaście kilometrów. To wyżej niż nasz Mount Everest.",
+        "Pierwsze sondy, które wylądowały na Wenus, pracowały tam najwyżej dwie godziny. Potem upał i straszne ciśnienie wyłączały je z działania.",
+        "Prawie wszystkie góry, równiny i kratery Wenus noszą imiona kobiet — uczonych, pisarek, bogiń. Tak postanowili astronomowie, bo i sama planeta ma kobiece imię.",
+        "Wenus to druga planeta od Słońca i nasza najbliższa sąsiadka. Kiedy podchodzi najbliżej, jest do niej około czterdziestu milionów kilometrów.",
+        "Przez teleskop widać, że Wenus, tak jak Księżyc, bywa raz w pełni, a raz jak wąski sierp. Pierwszy zobaczył to Galileusz i zrozumiał, że planety krążą wokół Słońca.",
+        "Na Wenus nie ma pór roku. Jej oś prawie nie jest pochylona, więc i upał jest tam taki sam przez cały rok, w dzień i w nocy, na biegunach i na równiku.",
+        "Chmury Wenus pędzą bardzo szybko i oblatują całą planetę w cztery ziemskie dni. Wiatry na dużej wysokości wieją tam z prędkością trzystu sześćdziesięciu kilometrów na godzinę.",
+        "Przez gęste chmury nie widać powierzchni Wenus. Dlatego jej mapę sporządzono za pomocą radaru: sonda Magellan przez cztery lata okrążała planetę i „obmacywała” ją falami radiowymi.",
+        "Wenus nazwano na cześć rzymskiej bogini miłości i piękna. To jedyna planeta Układu Słonecznego nazwana na cześć bogini.",
+        "Niebo na Wenus jest pomarańczowe, a Słońca przez chmury wcale nie widać. Nawet w południe jest tam ciemnawo jak u nas w bardzo pochmurny dzień."
+      ],
+      "mercury": {
+        "0": "Merkury to najmniejsza planeta Układu Słonecznego. Jest tylko półtora raza szerszy od naszego Księżyca.",
+        "1": "Merkury to planeta najbliższa Słońca. Światło słoneczne dolatuje do niego w zaledwie trzy minuty.",
+        "2": "Rok na Merkurym trwa tylko osiemdziesiąt osiem dni. To najszybsza planeta: pędzi wokół Słońca z prędkością czterdziestu siedmiu kilometrów na sekundę.",
+        "3": "Dzień na Merkurym ciągnie się bardzo długo. Od jednego wschodu Słońca do następnego mija 176 ziemskich dni — to całe dwa merkuriańskie lata.",
+        "4": "W dzień upał na Merkurym sięga 430 stopni, a w nocy mróz — 180 stopni. Większej różnicy nie ma na żadnej innej planecie.",
+        "5": "Na Merkurym prawie nie ma powietrza, więc ciepło się tam nie zatrzymuje. Dlatego niebo jest na nim czarne i gwiaździste nawet w dzień.",
+        "6": "Merkury jest cały w kraterach i bardzo przypomina Księżyc. To ślady po planetoidach i kometach, które spadały na niego przez miliardy lat.",
+        "7": {
+          "1": "Największy krater Merkurego nazywa się Równiną Upału. Ma półtora tysiąca kilometrów szerokości",
+          "2": " — Polska zmieściłaby się w nim kilka razy"
+        },
+        "8": "Choć Merkury jest rozpalony, jest na nim lód. Leży na dnie kraterów przy biegunach, dokąd nigdy nie zagląda Słońce.",
+        "9": "We wnętrzu Merkurego kryje się ogromne żelazne jądro, które zajmuje większą część planety. Dlatego Merkury jest mały, ale ciężki.",
+        "10": "Z Merkurego Słońce wygląda na trzy razy większe niż z Ziemi. I świeci tam siedem razy jaśniej.",
+        "11": "Merkury nie ma ani księżyców, ani pierścieni. Jest za mały i za blisko Słońca, żeby utrzymać coś przy sobie.",
+        "12": "Merkury powoli stygnie i przez to się kurczy. Na jego powierzchni pojawiły się od tego zmarszczki — urwiska długie na setki kilometrów.",
+        "13": "Merkury ma pole magnetyczne, tak jak Ziemia, tylko sto razy słabsze. Zdziwiło to uczonych: myśleli, że tak mała planeta dawno ostygła w środku.",
+        "14": "Do Merkurego doleciały tylko dwie sondy — Mariner 10 i MESSENGER. Trzecia, BepiColombo, wyruszyła do niego w 2018 roku.",
+        "15": "Merkurego trudno zobaczyć na niebie, bo zawsze trzyma się blisko Słońca. Można go dostrzec tylko nisko nad horyzontem — przed świtem albo zaraz po zachodzie.",
+        "16": "Merkury nosi imię rzymskiego boga posłańca, który miał skrzydlate sandały. A planeta rzeczywiście jest najszybsza ze wszystkich.",
+        "17": {
+          "1": "Kratery na Merkurym noszą imiona pisarzy, malarzy i kompozytorów.",
+          "2": " Są wśród nich kratery Chopin i Mickiewicz — na cześć Fryderyka Chopina i Adama Mickiewicza."
+        },
+        "18": "Grawitacja na Merkurym jest prawie trzy razy słabsza niż na Ziemi. Piłka rzucona w górę poleciałaby tam trzy razy wyżej.",
+        "19": "Czasem Merkury przechodzi dokładnie między Ziemią a Słońcem. Wtedy przez teleskop z filtrem ochronnym widać, jak maleńka czarna kropka pełznie po tarczy Słońca; następnym razem zdarzy się to w 2032 roku."
+      }
+    }
+  }
+}

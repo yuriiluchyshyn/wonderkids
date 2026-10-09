@@ -1,0 +1,75 @@
+{
+  "PAINTS": {
+    "red": "Red",
+    "yellow": "Yellow",
+    "blue": "Blue",
+    "white": "White",
+    "black": "Black",
+    "green": "Green",
+    "orange": "Orange"
+  },
+  "MIXES": {
+    "green": "Green",
+    "orange": "Orange",
+    "purple": "Purple",
+    "pink": "Pink",
+    "grey": "Gray",
+    "sky": "Sky blue",
+    "navy": "Navy blue",
+    "peach": "Peach",
+    "brown": "Brown",
+    "lime": "Lime green",
+    "forest": "Dark green"
+  },
+  "THINGS": [
+    "Frog",
+    "Orange",
+    "Leaf",
+    "Carrot",
+    "Grapes",
+    "Eggplant",
+    "Crocodile",
+    "Pumpkin",
+    "Cucumber",
+    "Fox",
+    "Umbrella",
+    "Pig",
+    "Elephant",
+    "Flower",
+    "Mouse",
+    "Whale",
+    "Flamingo",
+    "Blueberry",
+    "Jeans",
+    "Wolf",
+    "Peach",
+    "Butterfly",
+    "Bow",
+    "Bear",
+    "Chestnut",
+    "Chocolate",
+    "Apple",
+    "Pear",
+    "Lettuce",
+    "Fir tree",
+    "Broccoli",
+    "Potato"
+  ],
+  "cards": {
+    "title": "Art",
+    "games": {
+      "mixer": {
+        "label": "Color Mixer",
+        "blurb": "Mix paints in the cauldron and color the pictures",
+        "intro": "The picture is still gray — it needs coloring! Pour two paints into the magic cauldron to get the color you need."
+      }
+    }
+  },
+  "introFor": {
+    "1": "Now there are white and black paints. White makes a color lighter, and black makes it darker.",
+    "2": "The trickiest colors come when you mix a ready-made color with another one. Have a go!"
+  },
+  "prompt": "The {at} must turn {mix}. Which two paints should you mix?",
+  "hint": "You get {mix} if you mix {a} and {b} paint.",
+  "outro": "{a} and {b} together make {mix}!"
+}

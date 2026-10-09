@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { adj, agree, clause, conjugate, counted, inflect, list, noun, phrase, verb } from '../src/core/lang/uk/index.ts';
+import { adj, agree, clause, conjugate, counted, inflect, list, noun, phrase, verb } from '../src/core/language/uk/index.ts';
 
 test('nouns decline by rule', () => {
   const brick = noun('цеглинка', 'f');
@@ -64,7 +64,7 @@ test('phrases and clauses', () => {
 });
 
 test('lifeless things in the accusative', async () => {
-  const { accusative, from } = await import('../src/core/lang/uk/index.ts');
+  const { accusative, from } = await import('../src/core/language/uk/index.ts');
   assert.equal(accusative('зубна щітка'), 'зубну щітку');
   assert.equal(accusative('кришечка від пляшки'), 'кришечку від пляшки');
   assert.equal(accusative('Бранденбурзькі ворота'), 'Бранденбурзькі ворота');
@@ -75,7 +75,7 @@ test('lifeless things in the accusative', async () => {
 });
 
 test('numbers are said as words in the gender and case the sentence asks for', async () => {
-  const { numberWords, num, say, written, spoken, hourAt, letterName } = await import('../src/core/lang/uk/index.ts');
+  const { numberWords, num, say, written, spoken, hourAt, letterName } = await import('../src/core/language/uk/index.ts');
   assert.equal(numberWords(2, 'f'), 'дві');
   assert.equal(numberWords(2, 'm'), 'два');
   assert.equal(numberWords(1, 'n'), 'одне');
@@ -98,7 +98,7 @@ test('numbers are said as words in the gender and case the sentence asks for', a
 });
 
 test('a plain text with digits is read out in words, by the words around each number', async () => {
-  const { voiced, ordinalWords, num } = await import('../src/core/lang/uk/index.ts');
+  const { voiced, ordinalWords, num } = await import('../src/core/language/uk/index.ts');
   assert.equal(ordinalWords(1863, 'gen'), 'тисяча вісімсот шістдесят третього');
   assert.equal(ordinalWords(2000, 'gen'), 'двохтисячного');
   assert.equal(ordinalWords(2011, 'gen'), 'дві тисячі одинадцятого');
@@ -132,8 +132,8 @@ test('a plain text with digits is read out in words, by the words around each nu
 // ---- English -------------------------------------------------------------------
 
 test('English numbers, ordinals and years in words', async () => {
-  const { numberWords, ordinalWords, yearWords, num, ord, year } = await import('../src/core/lang/en/index.ts');
-  const { written, spoken } = await import('../src/core/lang/marks.ts');
+  const { numberWords, ordinalWords, yearWords, num, ord, year } = await import('../src/core/language/en/index.ts');
+  const { written, spoken } = await import('../src/core/language/marks.ts');
   assert.equal(numberWords(0), 'zero');
   assert.equal(numberWords(21), 'twenty-one');
   assert.equal(numberWords(105), 'one hundred five');
@@ -157,7 +157,7 @@ test('English numbers, ordinals and years in words', async () => {
 });
 
 test('an English text is read aloud as a person would read it', async () => {
-  const { voiced } = await import('../src/core/lang/index.ts');
+  const { voiced } = await import('../src/core/language/index.ts');
   const en = (text: string) => voiced(text, 'en');
   assert.equal(en('I have 2 cats and 1 dog.'), 'I have two cats and one dog.');
   assert.equal(en('Wake up at 7:00.'), 'Wake up at seven o’clock.');
@@ -185,8 +185,8 @@ test('an English text is read aloud as a person would read it', async () => {
 // ---- Polish --------------------------------------------------------------------
 
 test('Polish numbers answer to gender, case and the kind of noun', async () => {
-  const { numberWords, collectiveWords, ordinalWords, num, year } = await import('../src/core/lang/pl/index.ts');
-  const { written, spoken } = await import('../src/core/lang/marks.ts');
+  const { numberWords, collectiveWords, ordinalWords, num, year } = await import('../src/core/language/pl/index.ts');
+  const { written, spoken } = await import('../src/core/language/marks.ts');
   assert.equal(numberWords(1, 'f'), 'jedna');
   assert.equal(numberWords(1, 'n'), 'jedno');
   assert.equal(numberWords(2, 'f'), 'dwie');
@@ -220,7 +220,7 @@ test('Polish numbers answer to gender, case and the kind of noun', async () => {
 });
 
 test('a Polish text is read aloud as a person would read it', async () => {
-  const { voiced } = await import('../src/core/lang/index.ts');
+  const { voiced } = await import('../src/core/language/index.ts');
   const pl = (text: string) => voiced(text, 'pl');
   assert.equal(pl('Mam 2 gwiazdy, 1 jabłko, 2 koty i 1 książkę.'), 'Mam dwie gwiazdy, jedno jabłko, dwa koty i jedną książkę.');
   assert.equal(pl('Grają 2 chłopcy, a 5 chłopców śpi.'), 'Grają dwaj chłopcy, a pięciu chłopców śpi.');
@@ -243,7 +243,7 @@ test('a Polish text is read aloud as a person would read it', async () => {
 });
 
 test('every language makes a text ready for its own voice', async () => {
-  const { LANGUAGES, langOfCountry, isLang } = await import('../src/core/lang/index.ts');
+  const { LANGUAGES, langOfCountry, isLang } = await import('../src/core/language/index.ts');
   assert.equal(LANGUAGES.uk.voiced('2 машинки'), 'дві машинки');
   assert.equal(LANGUAGES.en.voiced('2 cars'), 'two cars');
   assert.equal(LANGUAGES.pl.voiced('2 gwiazdy'), 'dwie gwiazdy');

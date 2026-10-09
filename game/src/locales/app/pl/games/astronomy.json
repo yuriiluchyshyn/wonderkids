@@ -1,0 +1,625 @@
+{
+  "PLANETS": {
+    "mercury": "Merkury",
+    "venus": "Wenus",
+    "earth": "Ziemia",
+    "mars": "Mars",
+    "jupiter": "Jowisz",
+    "saturn": "Saturn",
+    "uranus": "Uran",
+    "neptune": "Neptun"
+  },
+  "FEATURES": {
+    "red": "Czerwona Planeta",
+    "rings": "Ma wielkie pierścienie",
+    "home": "Tutaj mieszkamy my",
+    "biggest": "Największa planeta",
+    "nearest": "Najbliższa Słońca",
+    "farthest": "Najdalsza od Słońca",
+    "hottest": "Najgorętsza planeta",
+    "sideways": "Obraca się, leżąc na boku",
+    "moon": "Ma jeden księżyc — Księżyc",
+    "smallest": "Najmniejsza planeta",
+    "spot": "Ma Wielką Czerwoną Plamę — olbrzymi wir",
+    "winds": "Tutaj wieją najszybsze wiatry",
+    "olympus": "Ma najwyższą górę — Olympus Mons",
+    "morning": "Nazywają ją Gwiazdą Poranną",
+    "year": "Rok trwa tu tylko 88 dni",
+    "light": "Lżejsza od wody",
+    "oceans": "Błękitna planeta z oceanami",
+    "day": "Doba trwa tu tylko 10 godzin",
+    "icy": "Lodowy olbrzym w turkusowym kolorze",
+    "math": "Odkryto ją dzięki matematyce",
+    "moons": "Ma dwa maleńkie księżyce — Fobosa i Deimosa",
+    "backwards": "Obraca się w przeciwną stronę",
+    "titan": "Ma księżyc Tytan z własną atmosferą",
+    "ganymede": "Ma największy księżyc — Ganimedesa"
+  },
+  "FIGURES": {
+    "0": {
+      "0": "Kasjopeja",
+      "1": "Kasjopeję",
+      "2": "Kasjopeja przypomina literę W. Nosi imię królowej z mitu."
+    },
+    "1": {
+      "0": "Krzyż Południa",
+      "1": "Krzyż Południa",
+      "2": "Krzyż Południa widać tylko z południowej połowy Ziemi — jest na fladze Australii."
+    },
+    "2": {
+      "0": "Strzała",
+      "1": "Strzałę",
+      "2": "Strzała to jeden z najmniejszych gwiazdozbiorów na niebie."
+    },
+    "3": {
+      "0": "Delfin",
+      "1": "Delfina",
+      "2": "Gwiazdozbiór Delfina jest mały, ale dobrze widoczny na letnim niebie."
+    },
+    "4": {
+      "0": "Baran",
+      "1": "Barana",
+      "2": "Baran to baran o złotym runie z greckiego mitu."
+    },
+    "5": {
+      "0": "Kruk",
+      "1": "Kruka",
+      "2": "Cztery jasne gwiazdy Kruka tworzą na niebie czworokąt."
+    },
+    "6": {
+      "0": "Wielki Wóz",
+      "1": "Wielki Wóz",
+      "2": "Wielki Wóz to siedem gwiazd gwiazdozbioru Wielkiej Niedźwiedzicy. Przypomina wóz z dyszlem."
+    },
+    "7": {
+      "0": "Mała Niedźwiedzica",
+      "1": "Małą Niedźwiedzicę",
+      "2": "Na końcu „ogona” Małej Niedźwiedzicy świeci Gwiazda Polarna — zawsze wskazuje północ."
+    },
+    "8": {
+      "0": "Cefeusz",
+      "1": "Cefeusza",
+      "2": "Gwiazdozbiór Cefeusza przypomina domek ze spiczastym dachem."
+    },
+    "9": {
+      "0": "Lutnia",
+      "1": "Lutnię",
+      "2": "W gwiazdozbiorze Lutni świeci Wega — jedna z najjaśniejszych gwiazd naszego nieba."
+    },
+    "10": {
+      "0": "Bliźnięta",
+      "1": "Bliźnięta",
+      "2": "Dwie najjaśniejsze gwiazdy Bliźniąt nazywają się Kastor i Polluks — jak bracia z mitu."
+    },
+    "11": {
+      "0": "Korona Północna",
+      "1": "Koronę Północną",
+      "2": "Gwiazdy Korony Północnej tworzą półkole — jak prawdziwa korona."
+    },
+    "12": {
+      "0": "Skorpion",
+      "1": "Skorpiona",
+      "2": "W sercu Skorpiona płonie czerwona gwiazda Antares."
+    },
+    "13": {
+      "0": "Smok",
+      "1": "Smoka",
+      "2": "Smok wije się między Wielką a Małą Niedźwiedzicą."
+    },
+    "14": {
+      "0": "Orion",
+      "1": "Oriona",
+      "2": "Orion to niebieski myśliwy. Trzy gwiazdy pośrodku to jego pas."
+    },
+    "15": {
+      "0": "Lew",
+      "1": "Lwa",
+      "2": "Najjaśniejsza gwiazda Lwa nazywa się Regulus — „mały król”."
+    },
+    "16": {
+      "0": "Hydra",
+      "1": "Hydrę",
+      "2": "Hydra to najdłuższy gwiazdozbiór na całym niebie."
+    }
+  },
+  "QUIZ": {
+    "mercury": {
+      "0": {
+        "0": "Która planeta okrąża Słońce najszybciej?",
+        "1": "Merkury pędzi wokół Słońca najszybciej ze wszystkich planet — prawie 50 kilometrów na sekundę."
+      },
+      "1": {
+        "0": "Na której planecie w dzień jest ponad 400 stopni, a w nocy minus 170?",
+        "1": "Na Merkurym prawie nie ma powietrza, które zatrzymałoby ciepło: w dzień jest tam skwar, a w nocy siarczysty mróz."
+      },
+      "2": {
+        "0": "Która planeta jest tylko trochę większa od naszego Księżyca?",
+        "1": "Merkury jest tylko trochę większy od Księżyca — i tak samo pokryty kraterami."
+      },
+      "3": {
+        "0": "Która planeta jest cała w kraterach i bardzo przypomina Księżyc?",
+        "1": "Powierzchnia Merkurego jest cała podziurawiona kraterami: przez miliardy lat uderzały w nią meteoryty."
+      },
+      "4": {
+        "0": "Która planeta nie ma ani księżyców, ani powietrza?",
+        "1": "Merkury nie ma ani jednego księżyca i prawie nie ma atmosfery."
+      },
+      "5": {
+        "0": "Do której planety światło Słońca dociera najszybciej — w zaledwie trzy minuty?",
+        "1": "Do Merkurego światło ze Słońca leci około trzech minut, a do Ziemi — ponad osiem."
+      },
+      "6": {
+        "0": "Na której planecie Słońce wygląda na niebie trzy razy większe niż z Ziemi?",
+        "1": "Z Merkurego Słońce wydaje się trzy razy większe niż z Ziemi — tak blisko niego leży ta planeta."
+      },
+      "7": {
+        "0": "Którą planetę nazwano na cześć szybkiego rzymskiego boga posłańca?",
+        "1": "Merkury był u Rzymian bogiem posłańcem w skrzydlatych sandałach. Planetę nazwano tak, bo jest najszybsza."
+      },
+      "8": {
+        "0": "Którą planetę najtrudniej zobaczyć z Ziemi, bo chowa się w blasku Słońca?",
+        "1": "Merkurego widać tylko krótko o świcie albo tuż po zachodzie — zawsze jest blisko Słońca."
+      },
+      "9": {
+        "0": "Przy której planecie pracowała sonda kosmiczna MESSENGER?",
+        "1": "Sonda MESSENGER przez cztery lata krążyła wokół Merkurego i sfotografowała całą jego powierzchnię."
+      },
+      "10": {
+        "0": "Na której planecie w ciemnych kraterach przy biegunach kryje się lód, choć jest najbliżej Słońca?",
+        "1": "Do kraterów na biegunach Merkurego nigdy nie zagląda Słońce, dlatego leży tam lód."
+      },
+      "11": {
+        "0": "W której planecie żelazne jądro zajmuje prawie cały środek?",
+        "1": "Merkury jest jak żelazna kula w cienkiej kamiennej skorupie: jądro zajmuje większą jego część."
+      }
+    },
+    "venus": {
+      "0": {
+        "0": "Na której planecie jest 460 stopni i w dzień, i w nocy?",
+        "1": "Na Wenus jest goręcej niż w piecu: gęste chmury nie wypuszczają ciepła ani w dzień, ani w nocy."
+      },
+      "1": {
+        "0": "Którą planetę okrywają gęste żółte chmury z kwasu?",
+        "1": "Chmury Wenus są z żrącego kwasu. Nie widać przez nie powierzchni planety."
+      },
+      "2": {
+        "0": "Którą planetę nazywa się siostrą Ziemi, bo jest prawie tej samej wielkości?",
+        "1": "Wenus jest prawie tak duża jak Ziemia, ale nie da się na niej żyć."
+      },
+      "3": {
+        "0": "Na której planecie Słońce wschodzi na zachodzie, a zachodzi na wschodzie?",
+        "1": "Wenus obraca się w przeciwną stronę, dlatego Słońce wschodzi tam na zachodzie."
+      },
+      "4": {
+        "0": "Która planeta obraca się wokół siebie najwolniej — jeden obrót trwa 243 ziemskie dni?",
+        "1": "Wenus kręci się tak wolno, że jeden jej obrót trwa dłużej niż jej rok."
+      },
+      "5": {
+        "0": "Która planeta jest najjaśniejsza na naszym nocnym niebie?",
+        "1": "Po Słońcu i Księżycu najjaśniejsza na niebie jest Wenus: jej chmury świetnie odbijają światło."
+      },
+      "6": {
+        "0": "Na której planecie powietrze naciska tak mocno, jakby było się na dnie oceanu?",
+        "1": "Powietrze na Wenus naciska dziewięćdziesiąt razy mocniej niż na Ziemi — jak woda na głębokości kilometra."
+      },
+      "7": {
+        "0": "Którą planetę nazwano na cześć rzymskiej bogini piękna?",
+        "1": "Wenus to rzymska bogini piękna i miłości. Planetę nazwano tak za jej jasny blask."
+      },
+      "8": {
+        "0": "Na której planecie jest najwięcej wulkanów?",
+        "1": "Na Wenus jest ponad tysiąc wielkich wulkanów — więcej niż na jakiejkolwiek innej planecie."
+      },
+      "9": {
+        "0": "Która planeta podchodzi do Ziemi najbliżej?",
+        "1": "Najbliżej Ziemi podlatuje Wenus — ale i wtedy dzieli nas od niej czterdzieści milionów kilometrów."
+      },
+      "10": {
+        "0": "Która planeta jest druga od Słońca?",
+        "1": "Wenus to druga planeta od Słońca, między Merkurym a Ziemią."
+      },
+      "11": {
+        "0": "Na której planecie padają kwaśne deszcze, które wyparowują, zanim dolecą do powierzchni?",
+        "1": "Na Wenus jest tak gorąco, że krople kwaśnego deszczu wyparowują jeszcze w powietrzu."
+      }
+    },
+    "earth": {
+      "0": {
+        "0": "Na której planecie jest ciekła woda — rzeki, morza i oceany?",
+        "1": "Tylko na Ziemi woda płynie rzekami i wypełnia oceany: nie jest tu ani za gorąco, ani za zimno."
+      },
+      "1": {
+        "0": "Na której jedynej planecie na pewno jest życie?",
+        "1": "Ziemia to jedyna znana planeta, na której jest życie: rośliny, zwierzęta i ludzie."
+      },
+      "2": {
+        "0": "Na której planecie doba trwa równo 24 godziny?",
+        "1": "Ziemia obraca się wokół siebie w 24 godziny — dlatego po nocy przychodzi dzień."
+      },
+      "3": {
+        "0": "Na której planecie rok trwa 365 dni?",
+        "1": "W 365 dni Ziemia okrąża Słońce jeden raz — to właśnie jest rok."
+      },
+      "4": {
+        "0": "Która planeta jest trzecia od Słońca?",
+        "1": "Ziemia to trzecia planeta od Słońca, między Wenus a Marsem."
+      },
+      "5": {
+        "0": "Na której planecie jest powietrze, którym mogą oddychać ludzie?",
+        "1": "Tylko w powietrzu Ziemi jest dość tlenu, żeby mogli oddychać ludzie i zwierzęta."
+      },
+      "6": {
+        "0": "Którą planetę widać z kosmosu jako niebieską, z białymi chmurami i zielonymi lądami?",
+        "1": "Z kosmosu Ziemia wygląda jak niebieska kulka: większą jej część pokrywa woda."
+      },
+      "7": {
+        "0": "Do której planety światło Słońca leci trochę ponad osiem minut?",
+        "1": "Promień słońca dociera do Ziemi w osiem minut i dwadzieścia sekund."
+      },
+      "8": {
+        "0": "Która planeta jest największa z czterech skalistych?",
+        "1": "Ziemia jest największą ze skalistych planet: większą od Wenus, Marsa i Merkurego."
+      },
+      "9": {
+        "0": "Wokół której planety lata Międzynarodowa Stacja Kosmiczna?",
+        "1": "Międzynarodowa Stacja Kosmiczna okrąża Ziemię w półtorej godziny."
+      },
+      "10": {
+        "0": "Z której planety startowały wszystkie rakiety kosmiczne?",
+        "1": "Wszystkie rakiety, satelity i kosmonauci wyruszali w kosmos z Ziemi."
+      },
+      "11": {
+        "0": "Na której planecie ważysz dokładnie tyle, ile pokazuje domowa waga?",
+        "1": "Domowa waga pokazuje, ile ważysz na Ziemi. Na innych planetach byłoby to inaczej."
+      },
+      "12": {
+        "0": "Na której planecie zdarza się całkowite zaćmienie Słońca, gdy Księżyc dokładnie je zasłania?",
+        "1": "Z Ziemi Księżyc i Słońce wydają się tej samej wielkości, dlatego Księżyc może zasłonić Słońce całkowicie."
+      }
+    },
+    "mars": {
+      "0": {
+        "0": "Po której planecie jeżdżą łaziki?",
+        "1": "Po Marsie jeżdżą roboty łaziki: robią zdjęcia, wiercą w skałach i szukają śladów wody."
+      },
+      "1": {
+        "0": "Na której planecie niebo w dzień jest różoworude, a zachód Słońca — niebieski?",
+        "1": "Przez rudy pył niebo na Marsie jest w dzień różowe, a o zachodzie Słońca — niebieskie. Na Ziemi jest odwrotnie."
+      },
+      "2": {
+        "0": "Na której planecie jest największy kanion Układu Słonecznego?",
+        "1": "Dolina Marinera na Marsie jest tak długa, że sięgnęłaby przez całą Europę."
+      },
+      "3": {
+        "0": "Na której planecie doba jest tylko trochę dłuższa od ziemskiej — 24 godziny 37 minut?",
+        "1": "Doba na Marsie jest prawie taka sama jak na Ziemi: dłuższa tylko o trzydzieści siedem minut."
+      },
+      "4": {
+        "0": "Na której planecie rok trwa prawie dwa ziemskie lata?",
+        "1": "Mars okrąża Słońce w 687 dni — to prawie dwa ziemskie lata."
+      },
+      "5": {
+        "0": "Na której planecie ludzie marzą o zbudowaniu pierwszej bazy?",
+        "1": "Naukowcy przygotowują lot ludzi na Marsa: ze wszystkich planet jest najbardziej podobny do Ziemi."
+      },
+      "6": {
+        "0": "Na której planecie burze pyłowe mogą okryć ją całą?",
+        "1": "Burza pyłowa na Marsie potrafi na kilka miesięcy zasłonić pyłem całą planetę."
+      },
+      "7": {
+        "0": "Na której planecie są czapy lodowe na biegunach i suche koryta dawnych rzek?",
+        "1": "Kiedyś na Marsie płynęły rzeki. Dziś woda została tam tylko jako lód."
+      },
+      "8": {
+        "0": "Którą planetę nazwano na cześć rzymskiego boga wojny?",
+        "1": "Mars to rzymski bóg wojny. Planetę nazwano tak za jej czerwony kolor."
+      },
+      "9": {
+        "0": "Która planeta jest czwarta od Słońca?",
+        "1": "Mars to czwarta planeta od Słońca, zaraz za Ziemią."
+      },
+      "10": {
+        "0": "Która planeta jest mniej więcej dwa razy węższa od Ziemi?",
+        "1": "Mars ma dwa razy mniejszą średnicę niż Ziemia — i jest dziesięć razy lżejszy."
+      },
+      "11": {
+        "0": "Na której planecie po raz pierwszy latał śmigłowiec z Ziemi?",
+        "1": "Mały śmigłowiec Ingenuity wzbił się nad Marsem — był to pierwszy lot na innej planecie."
+      },
+      "12": {
+        "0": "Na której planecie pod gruntem znaleziono lód i szuka się śladów dawnego życia?",
+        "1": "Pod gruntem Marsa jest lód. Naukowcy sprawdzają, czy nie żyły tam kiedyś mikroby."
+      }
+    },
+    "jupiter": {
+      "0": {
+        "0": "Na której planecie ważyłoby się najwięcej — dwa i pół raza więcej niż na Ziemi?",
+        "1": "Jowisz przyciąga najmocniej: dziecko, które waży trzydzieści kilogramów, ważyłoby tam siedemdziesiąt pięć."
+      },
+      "1": {
+        "0": "Która planeta obraca się wokół siebie najszybciej?",
+        "1": "Jowisz robi pełny obrót w niecałe dziesięć godzin — szybciej niż wszystkie planety."
+      },
+      "2": {
+        "0": "Która planeta jest piąta od Słońca — pierwsza wśród olbrzymów?",
+        "1": "Jowisz to piąta planeta od Słońca i pierwszy z czterech olbrzymów."
+      },
+      "3": {
+        "0": "Która planeta jest cięższa niż wszystkie pozostałe planety razem wzięte?",
+        "1": "Jowisz jest dwa i pół raza cięższy niż wszystkie pozostałe planety razem."
+      },
+      "4": {
+        "0": "Która planeta ma księżyc Europę z oceanem pod lodem?",
+        "1": "Pod lodową skorupą Europy, księżyca Jowisza, kryje się ocean słonej wody."
+      },
+      "5": {
+        "0": "Która planeta ma księżyc Io z setkami czynnych wulkanów?",
+        "1": "Io, księżyc Jowisza, to najbardziej wulkaniczne miejsce w Układzie Słonecznym."
+      },
+      "6": {
+        "0": "Cztery wielkie księżyce której planety odkrył Galileusz?",
+        "1": "Galileusz zobaczył przez lunetę cztery księżyce Jowisza: Io, Europę, Ganimedesa i Kallisto."
+      },
+      "7": {
+        "0": "Na której planecie rok trwa prawie dwanaście ziemskich lat?",
+        "1": "Jowisz okrąża Słońce w prawie dwanaście ziemskich lat."
+      },
+      "8": {
+        "0": "Która planeta jest pasiasta — w brązowe i białe pasy chmur?",
+        "1": "Pasy Jowisza to pasma chmur, które wiatr pędzi w różne strony."
+      },
+      "9": {
+        "0": "Którą planetę nazwano na cześć najważniejszego rzymskiego boga?",
+        "1": "Jowisz to król rzymskich bogów. Największej planecie nadano jego imię."
+      },
+      "10": {
+        "0": "Przy której planecie pracuje sonda kosmiczna Juno?",
+        "1": "Sonda Juno krąży wokół Jowisza i zagląda pod jego chmury."
+      },
+      "11": {
+        "0": "Która planeta chroni Ziemię, przyciągając do siebie komety i planetoidy?",
+        "1": "Jowisz swoim przyciąganiem przechwytuje wiele komet i planetoid, które mogłyby lecieć ku Ziemi."
+      },
+      "12": {
+        "0": "Na której planecie świecą najpotężniejsze zorze polarne?",
+        "1": "Zorze polarne na Jowiszu są setki razy potężniejsze od ziemskich i nigdy nie gasną."
+      }
+    },
+    "saturn": {
+      "0": {
+        "0": "Która planeta ma najwięcej księżyców — ponad sto czterdzieści?",
+        "1": "Wokół Saturna odkryto ponad sto czterdzieści księżyców — więcej niż wokół jakiejkolwiek innej planety."
+      },
+      "1": {
+        "0": "Która planeta jest druga pod względem wielkości?",
+        "1": "Saturn to druga co do wielkości planeta: większy od niego jest tylko Jowisz."
+      },
+      "2": {
+        "0": "Która planeta jest szósta od Słońca?",
+        "1": "Saturn to szósta planeta od Słońca, między Jowiszem a Uranem."
+      },
+      "3": {
+        "0": "Na której planecie rok trwa prawie trzydzieści ziemskich lat?",
+        "1": "Saturn okrąża Słońce w dwadzieścia dziewięć i pół ziemskiego roku."
+      },
+      "4": {
+        "0": "Pierścienie której planety składają się z kawałków lodu i skał?",
+        "1": "Pierścienie Saturna to miliardy okruchów lodu i kamyków: od ziarenka piasku po wielkość domu."
+      },
+      "5": {
+        "0": "Na biegunie której planety kręci się niezwykły sześciokątny wir?",
+        "1": "Na północnym biegunie Saturna szaleje burza w kształcie foremnego sześciokąta."
+      },
+      "6": {
+        "0": "Która planeta ma księżyc Enceladus, który wyrzuca w kosmos fontanny wody?",
+        "1": "Enceladus, księżyc Saturna, tryska w kosmos gejzerami spod swojej lodowej skorupy."
+      },
+      "7": {
+        "0": "Którą planetę przez trzynaście lat badała sonda Cassini?",
+        "1": "Sonda Cassini przez trzynaście lat badała Saturna, jego pierścienie i księżyce."
+      },
+      "8": {
+        "0": "Którą planetę nazwano na cześć rzymskiego boga rolnictwa i czasu?",
+        "1": "Saturn był u Rzymian bogiem rolnictwa i czasu, ojcem Jowisza."
+      },
+      "9": {
+        "0": "Która planeta jest najdalszą z tych, które dobrze widać bez teleskopu?",
+        "1": "Saturn to najdalsza planeta, którą ludzie od dawna widzieli gołym okiem."
+      },
+      "10": {
+        "0": "Która planeta jest najbardziej spłaszczona — jak przygnieciona piłka?",
+        "1": "Saturn obraca się tak szybko, że wyraźnie spłaszczył się na biegunach."
+      },
+      "11": {
+        "0": "Pierścienie której planety widać nawet przez mały teleskop?",
+        "1": "Pierścienie Saturna są tak szerokie i jasne, że widać je nawet przez amatorski teleskop."
+      },
+      "12": {
+        "0": "Na księżycu której planety są jeziora i deszcze z ciekłego gazu?",
+        "1": "Na Tytanie, księżycu Saturna, są jeziora i rzeki — ale nie z wody, tylko z ciekłego metanu."
+      }
+    },
+    "uranus": {
+      "0": {
+        "0": "Która planeta jest najzimniejsza — bywa tam minus 224 stopnie?",
+        "1": "Najniższą temperaturę wśród planet zmierzono na Uranie: minus 224 stopnie."
+      },
+      "1": {
+        "0": "Która planeta jest siódma od Słońca?",
+        "1": "Uran to siódma planeta od Słońca, między Saturnem a Neptunem."
+      },
+      "2": {
+        "0": "Na której planecie rok trwa 84 ziemskie lata?",
+        "1": "Uran okrąża Słońce w osiemdziesiąt cztery ziemskie lata — tyle, ile trwa długie ludzkie życie."
+      },
+      "3": {
+        "0": "Na której planecie zima i lato trwają po dwadzieścia jeden lat?",
+        "1": "Uran leży na boku, dlatego każda pora roku trwa tam dwadzieścia jeden lat."
+      },
+      "4": {
+        "0": "Którą planetę jako pierwszą odkryto za pomocą teleskopu?",
+        "1": "Uran był pierwszą planetą odkrytą przez teleskop — dokonał tego William Herschel."
+      },
+      "5": {
+        "0": "Księżyce której planety noszą imiona bohaterów Szekspira?",
+        "1": "Księżyce Urana nazywają się jak bohaterowie sztuk Szekspira: Tytania, Oberon, Miranda, Ariel."
+      },
+      "6": {
+        "0": "Którą planetę nazwano na cześć greckiego boga nieba?",
+        "1": "Uran to starogrecki bóg nieba. To jedyna planeta o greckim, a nie rzymskim imieniu."
+      },
+      "7": {
+        "0": "Do której planety światło Słońca leci prawie trzy godziny?",
+        "1": "Do Urana promień słońca leci dwie godziny i czterdzieści minut."
+      },
+      "8": {
+        "0": "Która planeta jest trzecia pod względem wielkości?",
+        "1": "Uran to trzecia co do wielkości planeta, po Jowiszu i Saturnie."
+      },
+      "9": {
+        "0": "Na której planecie biegun może być oświetlony przez Słońce czterdzieści dwa lata z rzędu?",
+        "1": "Na biegunach Urana dzień trwa czterdzieści dwa lata, a potem tyle samo trwa noc."
+      },
+      "10": {
+        "0": "Która planeta toczy się po orbicie na boku jak piłka i ma trzynaście ciemnych pierścieni?",
+        "1": "Uran ma trzynaście cienkich, ciemnych pierścieni, a stoją one prawie pionowo, bo planeta leży na boku."
+      }
+    },
+    "neptune": {
+      "0": {
+        "0": "Która planeta jest ósma — ostatnia — od Słońca?",
+        "1": "Neptun to ósma i ostatnia planeta Układu Słonecznego."
+      },
+      "1": {
+        "0": "Na której planecie rok trwa 165 ziemskich lat?",
+        "1": "Neptun okrąża Słońce w sto sześćdziesiąt pięć ziemskich lat."
+      },
+      "2": {
+        "0": "Do której planety światło Słońca leci ponad cztery godziny?",
+        "1": "Do Neptuna promień słońca leci cztery godziny i dziesięć minut."
+      },
+      "3": {
+        "0": "Która planeta jest ciemnoniebieska jak głębokie morze?",
+        "1": "Neptun jest ciemnoniebieski: gaz metan w jego powietrzu pochłania czerwone światło."
+      },
+      "4": {
+        "0": "Którą planetę nazwano na cześć rzymskiego boga mórz?",
+        "1": "Neptun to rzymski bóg mórz. Niebieskiej planecie nadano jego imię."
+      },
+      "5": {
+        "0": "Która planeta ma księżyc Tryton, który krąży „tyłem”?",
+        "1": "Tryton, księżyc Neptuna, krąży w przeciwną stronę — nie tak, jak obraca się sama planeta."
+      },
+      "6": {
+        "0": "Której planety nigdy nie widać bez teleskopu — nawet w najciemniejszą noc?",
+        "1": "Neptun jest tak daleko, że można go zobaczyć tylko przez teleskop."
+      },
+      "7": {
+        "0": "Na której planecie od dnia jej odkrycia minął dopiero jeden rok?",
+        "1": "Neptuna odkryto w 1846 roku, a pierwsze pełne okrążenie Słońca zakończył dopiero w 2011 roku."
+      },
+      "8": {
+        "0": "Która planeta jest czwarta pod względem wielkości, ale cięższa od Urana?",
+        "1": "Neptun jest trochę węższy od Urana, za to cięższy od niego."
+      },
+      "9": {
+        "0": "Która planeta jest najdalej od Ziemi?",
+        "1": "Neptun to najdalsza od nas planeta: dzieli nas od niego ponad cztery miliardy kilometrów."
+      },
+      "10": {
+        "0": "Na której planecie zauważono Wielką Ciemną Plamę — burzę wielkości Ziemi?",
+        "1": "Wielka Ciemna Plama na Neptunie to olbrzymia burza. To znika, to pojawia się znowu."
+      },
+      "11": {
+        "0": "Obok której planety Voyager 2 przeleciał na końcu, zanim opuścił Układ Słoneczny?",
+        "1": "Voyager 2 to jedyna sonda, która odwiedziła Neptuna. Potem poleciała ku gwiazdom."
+      },
+      "12": {
+        "0": "Na której planecie pory roku trwają po czterdzieści lat?",
+        "1": "Rok na Neptunie jest tak długi, że każda pora roku trwa tam ponad czterdzieści ziemskich lat."
+      }
+    }
+  },
+  "cards": {
+    "title": "Astronomia",
+    "games": {
+      "planets": {
+        "label": "Parada planet",
+        "blurb": "Ustaw planety od Słońca i według wielkości, a o każdej poznaj mnóstwo ciekawostek",
+        "intro": "Wokół Słońca krąży osiem planet. Ustaw je po kolei: najpierw tę, która jest najbliżej Słońca!"
+      },
+      "constellations": {
+        "label": "Kosmiczny nawigator",
+        "blurb": "Łącz gwiazdy po kolei, rysuj gwiazdozbiory i szukaj ich na gwiaździstym niebie",
+        "intro": "Gwiazdy na niebie układają się w obrazki — gwiazdozbiory. Dotykaj gwiazd po kolei, od najmniejszej liczby, a zobaczysz, co powstanie!"
+      }
+    }
+  },
+  "introFor": {
+    "planets": {
+      "1": "Teraz dalekie planety olbrzymy: Jowisz, Saturn, Uran i Neptun.",
+      "2": "Planety bywają malutkie i olbrzymie. Ustaw je według wielkości: od najmniejszej do największej!",
+      "3": "Każda planeta jest w czymś wyjątkowa. Połącz wskazówkę z planetą, o której opowiada.",
+      "4": "Teraz pytania o planety: gdzie jest gorąco, a gdzie zimno, gdzie jest woda, ile trwa dzień i rok. Dotknij planety, o którą chodzi!"
+    },
+    "constellations": {
+      "1": "Teraz liczenie nie zaczyna się od jedynki. Znajdź najmniejszą liczbę i idź dalej po kolei.",
+      "2": "Gwiazdozbiory są coraz większe, a na gwiazdach są teraz litery. Łącz je według alfabetu!",
+      "3": "Teraz liczymy co dwa: dwa, cztery, sześć, osiem…",
+      "4": "A teraz dziesiątkami: dziesięć, dwadzieścia, trzydzieści…",
+      "5": "Teraz na niebie jest dużo gwiazd i nie ma na nich liczb. Gwiazdy gwiazdozbioru są trochę większe od pozostałych. Znajdź je i połącz palcem!",
+      "6": "Gwiazd na niebie jest więcej, a gwiazdy gwiazdozbioru nie są już takie duże. Patrz uważnie!",
+      "7": "Najtrudniejsze niebo: gwiazdy gwiazdozbioru są tylko odrobinę większe od pozostałych."
+    }
+  },
+  "sun": "Słońce",
+  "lineUp": {
+    "sun": {
+      "ask": "Ustaw planety: od najbliższej Słońca do najdalszej.",
+      "ends": {
+        "0": "przy Słońcu",
+        "1": "najdalej"
+      },
+      "hint": "Pierwsza stoi planeta najbliższa Słońca: {first}. Wszystkie planety po kolei: {all}.",
+      "fact": "Od Słońca te planety stoją tak: {names}."
+    },
+    "size": {
+      "ask": "Ustaw planety według wielkości: od najmniejszej do największej.",
+      "ends": {
+        "0": "najmniejsza",
+        "1": "największa"
+      },
+      "hint": "Najmniejszą planetą jest tutaj {smallest}, a największą — {biggest}.",
+      "fact": "Od najmniejszej do największej: {names}."
+    }
+  },
+  "features": {
+    "ask": "Połącz każdą wskazówkę z jej planetą.",
+    "hint": "„{feature}” — to {planet}.",
+    "fact": "{feature} — to {planet}."
+  },
+  "quizHint": "Nazwa tej planety zaczyna się na literę „{planet}”. Od Słońca jest {place}.",
+  "alphabet": {
+    "0": "AĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUWYZŹŻ"
+  },
+  "sky": {
+    "abc": "Połącz gwiazdy według alfabetu: od {first} do {last}.",
+    "order": "Połącz gwiazdy po kolei: od {first} do {last}.",
+    "skip": {
+      "1": "Połącz gwiazdy, licząc {by}: {firstThree} — i dalej aż do {last}.",
+      "2": "co dwa",
+      "3": "dziesiątkami"
+    },
+    "hintAbc": "Zacznij od litery {first}. Dalej idź według alfabetu: {firstFour}…",
+    "hint": "Zacznij od gwiazdy z liczbą {first}. Dalej: {nextThree}…",
+    "is": "To {at}!"
+  },
+  "find": {
+    "ask": "Znajdź na niebie {at}. Te gwiazdy są trochę większe od pozostałych — połącz je palcem.",
+    "hint": {
+      "1": "W tym gwiazdozbiorze {stars}. Migoczą — dotknij każdej.",
+      "2": "są {stars} gwiazdy",
+      "3": "jest {stars} gwiazd"
+    }
+  }
+}

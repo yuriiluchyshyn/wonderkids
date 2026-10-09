@@ -1,4 +1,4 @@
-import { mathTexts } from '../lang';
+import { mathTexts } from '../grammar';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { BalanceScalePayload, Card, FractionValue, Glyph } from '@/core/game/templates/types';

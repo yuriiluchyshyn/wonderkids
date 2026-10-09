@@ -13,8 +13,11 @@
  *
  * Pure functions only (no React, no value imports) so it runs under `node --test`.
  */
-import type { LangCode } from '../../lang/types.ts';
-import { worldWords } from './lang/index.ts';
+import type { LangCode } from '../../language/types.ts';
+import { worldWords } from './words/index.ts';
+import TEXTS from '../../../locales/app/uk/world.json' with { type: 'json' };
+
+const J = TEXTS.world;
 
 export interface BuildingDef {
   id: string;
@@ -44,10 +47,8 @@ export type ItemKind = 'building' | 'decor';
 export const WORLD_PLANETS = ['neptune', 'uranus', 'saturn', 'jupiter', 'mars', 'earth', 'venus', 'mercury'] as const;
 export type WorldPlanetId = (typeof WORLD_PLANETS)[number];
 export const PLANET_COUNT = WORLD_PLANETS.length;
-export const PLANET_NAMES: Record<WorldPlanetId, string> = {
-  neptune: 'Нептун', uranus: 'Уран', saturn: 'Сатурн', jupiter: 'Юпітер', mars: 'Марс', earth: 'Земля', venus: 'Венера', mercury: 'Меркурій',
-};
-export const GALAXY_NAME = 'Чумацький Шлях';
+export const PLANET_NAMES: Record<WorldPlanetId, string> = J.PLANET_NAMES;
+export const GALAXY_NAME = J.GALAXY_NAME;
 
 /** A planet's name in `lang` (Ukrainian when none is asked for). */
 export const planetName = (id: WorldPlanetId, lang?: LangCode): string => worldWords(lang)?.planets[id] ?? PLANET_NAMES[id];

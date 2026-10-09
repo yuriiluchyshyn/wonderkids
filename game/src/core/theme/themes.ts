@@ -7,7 +7,7 @@ import type { ThemeId, ThemeSpec } from './theme.types';
  *
  * Only looks are listed here. A theme's words — its name, its mascot, what its
  * treasures are called — are texts of the app like any other and live in the
- * dictionary (`src/locales/app/<lang>.json`, `theme.<id>.…`); `localTheme`
+ * dictionary (`src/locales/app/<lang>/common.json`, `theme.<id>.…`); `localTheme`
  * puts the two together in the language of the screen.
  */
 export const THEMES: Record<ThemeId, ThemeSpec> = {

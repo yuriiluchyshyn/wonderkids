@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { AnimatePresence, motion } from 'framer-motion';
 import { TaskCard } from './TaskCard';
 import type { CatalogEntry } from './catalog';

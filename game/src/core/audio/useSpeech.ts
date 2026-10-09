@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useGameStore } from '@/core/child/store/useGameStore';
-import { useT, useVoiceLang } from '@/core/i18n';
-import type { AppKey, Params } from '@/core/i18n';
+import { useT, useVoiceLang } from '@/core/translator';
+import type { AppKey, Params } from '@/core/translator';
 import type { SpeechLang } from './SpeechEngine';
 import { voice } from './voice';
 import type { VoiceChannel } from './voiceChannels';

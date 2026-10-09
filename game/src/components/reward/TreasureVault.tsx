@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { useBalance } from '@/core/child/world/useBalance';
 import { motion } from 'framer-motion';
 import { useGameStore } from '@/core/child/store/useGameStore';

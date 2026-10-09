@@ -1,0 +1,1709 @@
+{
+  "stories": {
+    "it": "{one}s",
+    "I": {
+      "apple": "apple",
+      "pear": "pear",
+      "candy": {
+        "1": "candy",
+        "2": "candies"
+      },
+      "pencil": "pencil",
+      "marker": "marker",
+      "book": "book",
+      "ball": "ball",
+      "balloon": "balloon",
+      "sticker": "sticker",
+      "nut": "nut",
+      "car": "toy car",
+      "auto": "car",
+      "cube": "block",
+      "shell": "shell",
+      "bird": "bird",
+      "duck": "duck",
+      "rabbit": "rabbit",
+      "butterfly": {
+        "1": "butterfly",
+        "2": "butterflies"
+      },
+      "kitten": "kitten",
+      "bee": "bee",
+      "star": "star",
+      "cake": "cupcake",
+      "page": "page",
+      "fish": {
+        "1": "little fish",
+        "2": "little fish"
+      },
+      "bigFish": {
+        "1": "fish",
+        "2": "fish"
+      },
+      "flower": "flower",
+      "coin": "coin",
+      "stamp": "stamp",
+      "tomato": {
+        "1": "tomato",
+        "2": "tomatoes"
+      },
+      "cucumber": "cucumber",
+      "carrot": "carrot",
+      "egg": "egg",
+      "mushroom": "mushroom",
+      "tree": "tree",
+      "appleTree": "apple tree",
+      "pearTree": "pear tree",
+      "bush": {
+        "1": "bush",
+        "2": "bushes"
+      },
+      "cup": "cup",
+      "plate": "plate",
+      "notebook": "notebook",
+      "bun": "roll",
+      "pie": "little pie",
+      "ticket": "ticket",
+      "postcard": "postcard",
+      "chair": "chair",
+      "desk": "desk",
+      "doll": "doll",
+      "robot": "robot",
+      "puzzle": "puzzle",
+      "bike": "bicycle",
+      "card": "card",
+      "photo": "photo",
+      "goal": "goal",
+      "lap": "lap",
+      "passenger": "passenger",
+      "pupil": "student",
+      "visitor": "visitor",
+      "athlete": "athlete",
+      "boy": "boy",
+      "girl": "girl",
+      "cow": "cow",
+      "horse": "horse",
+      "monkey": "monkey",
+      "parrot": "parrot",
+      "km": "kilometer",
+      "hour": "hour"
+    },
+    "grammar": {
+      "howMany": "How many",
+      "names": {
+        "boys": [
+          "Victor",
+          "Andrew",
+          "Tom",
+          "Max",
+          "Oscar",
+          "Nate",
+          "Daniel",
+          "Mark"
+        ],
+        "girls": [
+          "Olivia",
+          "Sophie",
+          "Mary",
+          "Zoe",
+          "Stella",
+          "Daria",
+          "Hannah",
+          "Lucy"
+        ]
+      },
+      "heroWords": {
+        "he": {
+          "0": "he",
+          "1": "she"
+        },
+        "He": {
+          "0": "He",
+          "1": "She"
+        },
+        "him": {
+          "0": "him",
+          "1": "her"
+        },
+        "his": {
+          "0": "his",
+          "1": "her"
+        }
+      }
+    },
+    "JOIN": {
+      "0": {
+        "0": "on the table",
+        "1": "in the basket"
+      },
+      "1": {
+        "0": "on the shelf",
+        "1": "in the drawer"
+      },
+      "2": {
+        "0": "in the bowl",
+        "1": "on the plate"
+      },
+      "3": {
+        "0": "on the branch",
+        "1": "on the roof"
+      },
+      "4": {
+        "0": "in the aquarium",
+        "1": "in the jar"
+      },
+      "5": {
+        "0": "in the flower bed",
+        "1": "in the flowerpot"
+      },
+      "6": {
+        "0": "in the pencil case",
+        "1": "on the desk"
+      },
+      "7": {
+        "0": "in the garage",
+        "1": "in the yard"
+      }
+    },
+    "THOUGHT": {
+      "0": {
+        "0": "added {b} to it",
+        "1": "take away {b}"
+      },
+      "1": {
+        "0": "took {b} away from it",
+        "1": "add {b}"
+      },
+      "2": {
+        "0": "multiplied it by {b}",
+        "1": "divide by {b}"
+      },
+      "3": {
+        "0": "divided it by {b}",
+        "1": "multiply by {b}"
+      },
+      "4": {
+        "0": "added {b} to it, and then {c} more",
+        "1": "take away {c}, and then {b} more"
+      },
+      "5": {
+        "0": "multiplied it by {b} and added {c}",
+        "1": "take away {c}, and then divide by {b}"
+      },
+      "6": {
+        "0": "took {b} away from it, and then added {c}",
+        "1": "take away {c}, and then add {b}"
+      },
+      "7": {
+        "0": "doubled it and took away {b}",
+        "1": "add {b}, and then divide by two"
+      }
+    },
+    "FRAMES": {
+      "join": {
+        "line": "There are {A} {here}, and {b} more {there}. How many {many} are there altogether?",
+        "how": "The word “altogether” is a clue: put both piles together. Add."
+      },
+      "gotMore": {
+        "line": "{N} had {A}. {gave} {him} {b} more. How many {many} does {he} have now?",
+        "how": "There were {a}, and then {b} more. When more are given — we add.",
+        "skins": {
+          "0": {
+            "0": {
+              "gave": "Mom gave"
+            }
+          },
+          "1": {
+            "0": {
+              "gave": "Dad bought"
+            }
+          },
+          "2": {
+            "0": {
+              "gave": "Grandma gave"
+            }
+          },
+          "3": {
+            "0": {
+              "gave": "Grandpa brought"
+            }
+          },
+          "4": {
+            "0": {
+              "gave": "A friend gave"
+            }
+          },
+          "5": {
+            "0": {
+              "gave": "A sister gave"
+            }
+          },
+          "6": {
+            "0": {
+              "gave": "A brother brought"
+            }
+          },
+          "7": {
+            "0": {
+              "gave": "An aunt sent"
+            }
+          }
+        }
+      },
+      "cameIn": {
+        "line": "There were {A} {doing}. Then {b} more {came}. How many {many} are {where} now?",
+        "how": "There are more {many} now. Add the ones that were there and the ones that came.",
+        "skins": {
+          "0": {
+            "0": {
+              "doing": "sitting on the branch",
+              "came": "flew in",
+              "where": "on the branch"
+            }
+          },
+          "1": {
+            "0": {
+              "doing": "swimming on the pond",
+              "came": "swam up",
+              "where": "on the pond"
+            }
+          },
+          "2": {
+            "0": {
+              "doing": "playing in the clearing",
+              "came": "ran up",
+              "where": "in the clearing"
+            }
+          },
+          "3": {
+            "0": {
+              "doing": "sitting on the flower",
+              "came": "flew in",
+              "where": "on the flower"
+            }
+          },
+          "4": {
+            "0": {
+              "doing": "playing in the yard",
+              "came": "ran up",
+              "where": "in the yard"
+            }
+          },
+          "5": {
+            "0": {
+              "doing": "flying by the hive",
+              "came": "flew in",
+              "where": "by the hive"
+            }
+          },
+          "6": {
+            "0": {
+              "doing": "parked in the lot",
+              "came": "drove up",
+              "where": "in the lot"
+            }
+          },
+          "7": {
+            "0": {
+              "doing": "shining in the sky",
+              "came": "lit up",
+              "where": "in the sky"
+            }
+          }
+        }
+      },
+      "gave": {
+        "line": "{N} had {A}. {He} {did} {b} of them{whom}. How many {many} are left?",
+        "how": "There were {a}, and now there are {b} fewer. When there are fewer — we subtract.",
+        "skins": {
+          "0": {
+            "0": {
+              "did": "gave",
+              "whom": " to a friend"
+            }
+          },
+          "1": {
+            "0": {
+              "did": "gave",
+              "whom": " to a sister"
+            }
+          },
+          "2": {
+            "0": {
+              "did": "ate",
+              "whom": ""
+            }
+          },
+          "3": {
+            "0": {
+              "did": "lost",
+              "whom": ""
+            }
+          },
+          "4": {
+            "0": {
+              "did": "gave out",
+              "whom": " to friends"
+            }
+          },
+          "5": {
+            "0": {
+              "did": "put",
+              "whom": " in a drawer"
+            }
+          },
+          "6": {
+            "0": {
+              "did": "planted",
+              "whom": " in the flower bed"
+            }
+          },
+          "7": {
+            "0": {
+              "did": "gave",
+              "whom": " to a brother"
+            }
+          }
+        }
+      },
+      "wentAway": {
+        "line": "There were {A} {doing}. {b} of them {gone}. How many {many} are left {where}?",
+        "how": "There are fewer {many} now. From all of them take away the ones that are gone.",
+        "skins": {
+          "0": {
+            "0": {
+              "doing": "sitting on the branch",
+              "gone": "flew away",
+              "where": "on the branch"
+            }
+          },
+          "1": {
+            "0": {
+              "doing": "on the plate",
+              "gone": "were eaten",
+              "where": "on the plate"
+            }
+          },
+          "2": {
+            "0": {
+              "doing": "in the basket",
+              "gone": "were taken",
+              "where": "in the basket"
+            }
+          },
+          "3": {
+            "0": {
+              "doing": "swimming on the pond",
+              "gone": "swam away",
+              "where": "on the pond"
+            }
+          },
+          "4": {
+            "0": {
+              "doing": "parked in the lot",
+              "gone": "drove away",
+              "where": "in the lot"
+            }
+          },
+          "5": {
+            "0": {
+              "doing": "on the shelf",
+              "gone": "were taken to be read",
+              "where": "on the shelf"
+            }
+          },
+          "6": {
+            "0": {
+              "doing": "flying in the sky",
+              "gone": "popped",
+              "where": "in the sky"
+            }
+          },
+          "7": {
+            "0": {
+              "doing": "on the table",
+              "gone": "were taken to be washed",
+              "where": "on the table"
+            }
+          }
+        }
+      },
+      "twoKinds": {
+        "line": "{lead} {A} and {Bu}. {ask}",
+        "how": "This asks about all of them together. Add both numbers.",
+        "skins": {
+          "0": {
+            "0": {
+              "lead": "In the class there are",
+              "ask": "How many children are in the class?"
+            }
+          },
+          "1": {
+            "0": {
+              "lead": "In the orchard there are",
+              "ask": "How many trees are in the orchard altogether?"
+            }
+          },
+          "2": {
+            "0": {
+              "lead": "On the farm there are",
+              "ask": "How many animals are on the farm altogether?"
+            }
+          },
+          "3": {
+            "0": {
+              "lead": "In the bowl there are",
+              "ask": "How many pieces of fruit are in the bowl altogether?"
+            }
+          },
+          "4": {
+            "0": {
+              "lead": "Ripe in the garden bed are",
+              "ask": "How many vegetables are ripe altogether?"
+            }
+          },
+          "5": {
+            "0": {
+              "lead": "In the box there are",
+              "ask": "How many toys are in the box altogether?"
+            }
+          },
+          "6": {
+            "0": {
+              "lead": "In the enclosure there are",
+              "ask": "How many animals are in the enclosure altogether?"
+            }
+          },
+          "7": {
+            "0": {
+              "lead": "On the table there are",
+              "ask": "How many dishes are on the table altogether?"
+            }
+          }
+        }
+      },
+      "left20": {
+        "how": "From all of them take away {b} — that many are gone.",
+        "skins": {
+          "0": {
+            "0": "There were {A} riding in the bus. {b} got off at the stop. How many passengers are left in the bus?"
+          },
+          "1": {
+            "0": "The book has {A}. {b} have been read already. How many pages are still left to read?"
+          },
+          "2": {
+            "0": "There were {A} in the set. {b} have been stuck on already. How many stickers are still left in the set?"
+          },
+          "3": {
+            "0": "There were {A} hanging on the tree. The wind shook down {b}. How many apples are left on the tree?"
+          },
+          "4": {
+            "0": "There were {A} in the bag. The children ate {b}. How many candies are left in the bag?"
+          },
+          "5": {
+            "0": "There were {A} in the garage. In the morning {b} drove out. How many cars are left in the garage?"
+          },
+          "6": {
+            "0": "There were {A} in the basket. {b} were taken for breakfast. How many eggs are left in the basket?"
+          },
+          "7": {
+            "0": "There were {A} grazing in the meadow. {b} went to the barn. How many cows are left in the meadow?"
+          }
+        }
+      },
+      "howManyMore": {
+        "how": "To find how much bigger one number is than another, take the smaller from the bigger.",
+        "skins": {
+          "0": {
+            "0": "Olivia has {A}, and Tom has {b}. How many more {many} does Olivia have?"
+          },
+          "1": {
+            "0": "Mark has {A}, and Sophie has {b}. How many more {many} does Mark have?"
+          },
+          "2": {
+            "0": "There are {A} in the first basket, and {b} in the second. How many more {many} are in the first basket?"
+          },
+          "3": {
+            "0": "There are {A} on the top shelf, and {b} on the bottom one. How many more {many} are on the top shelf?"
+          },
+          "4": {
+            "0": "There are {A} in the red box, and {b} in the blue one. How many more {many} are in the red box?"
+          },
+          "5": {
+            "0": "Grandma has {A}, and Grandpa has {b}. How many more {many} does Grandma have?"
+          },
+          "6": {
+            "0": "There are {A} in the first aquarium, and {b} in the second. How many more {many} are in the first aquarium?"
+          },
+          "7": {
+            "0": "There are {A} in the left flower bed, and {b} in the right one. How many more {many} are in the left flower bed?"
+          }
+        }
+      },
+      "howManyFewer": {
+        "how": "To find how much smaller one number is than another, take the smaller from the bigger.",
+        "skins": {
+          "0": {
+            "0": "Daniel has {A}, and Zoe has {b}. How many fewer {many} does Zoe have?"
+          },
+          "1": {
+            "0": "Lucy has {A}, and Nate has {b}. How many fewer {many} does Nate have?"
+          },
+          "2": {
+            "0": "There are {A} in the big bowl, and {b} in the little one. How many fewer {many} are in the little bowl?"
+          },
+          "3": {
+            "0": "There are {A} in the first tree, and {b} in the second. How many fewer {many} are in the second tree?"
+          },
+          "4": {
+            "0": "There are {A} in the green pencil case, and {b} in the yellow one. How many fewer {many} are in the yellow pencil case?"
+          },
+          "5": {
+            "0": "Mom has {A}, and Dad has {b}. How many fewer {many} does Dad have?"
+          },
+          "6": {
+            "0": "There are {A} on the first plate, and {b} on the second. How many fewer {many} are on the second plate?"
+          },
+          "7": {
+            "0": "The big brother has {A}, and the little brother has {b}. How many fewer {many} does the little brother have?"
+          }
+        }
+      },
+      "missing": {
+        "how": "From what there is now, take away what there was: take {a} from {a+b}.",
+        "skins": {
+          "0": {
+            "0": "There were {A} in the bowl. Mom added a few more, and then there were {a+b}. How many {many} did Mom add?"
+          },
+          "1": {
+            "0": "There were {A} on the shelf. Dad put a few more there, and then there were {a+b}. How many {many} did Dad put there?"
+          },
+          "2": {
+            "0": "There were {A} in the basket. Grandpa found a few more, and then there were {a+b}. How many {many} did Grandpa find?"
+          },
+          "3": {
+            "0": "There were {A} sitting on the branch. A few more flew in, and then there were {a+b}. How many {many} flew in?"
+          },
+          "4": {
+            "0": "There were {A} in the pencil case. Olivia put in a few more, and then there were {a+b}. How many {many} did Olivia put in?"
+          },
+          "5": {
+            "0": "There were {A} parked in the lot. A few more drove up, and then there were {a+b}. How many {many} drove up?"
+          },
+          "6": {
+            "0": "There were {A} in the piggy bank. Mark dropped in a few more, and then there were {a+b}. How many {many} did Mark drop in?"
+          },
+          "7": {
+            "0": "There were {A} in the album. A sister stuck in a few more, and then there were {a+b}. How many {many} did the sister stick in?"
+          }
+        }
+      },
+      "totalPrice": {
+        "line": "{x} costs {$a}, and {y} costs {$b}. How many {coins} do {both} cost together?",
+        "how": "To find how much everything costs together, add the prices.",
+        "skins": {
+          "0": {
+            "0": {
+              "x": "Juice",
+              "y": "a roll",
+              "both": "the juice and the roll"
+            }
+          },
+          "1": {
+            "0": {
+              "x": "A notebook",
+              "y": "a pen",
+              "both": "the notebook and the pen"
+            }
+          },
+          "2": {
+            "0": {
+              "x": "Ice cream",
+              "y": "water",
+              "both": "the ice cream and the water"
+            }
+          },
+          "3": {
+            "0": {
+              "x": "A movie ticket",
+              "y": "popcorn",
+              "both": "the ticket and the popcorn"
+            }
+          },
+          "4": {
+            "0": {
+              "x": "A doll",
+              "y": "a ball",
+              "both": "the doll and the ball"
+            }
+          },
+          "5": {
+            "0": {
+              "x": "Bread",
+              "y": "milk",
+              "both": "the bread and the milk"
+            }
+          },
+          "6": {
+            "0": {
+              "x": "A pencil",
+              "y": "an eraser",
+              "both": "the pencil and the eraser"
+            }
+          },
+          "7": {
+            "0": {
+              "x": "An apple",
+              "y": "a banana",
+              "both": "the apple and the banana"
+            }
+          }
+        }
+      },
+      "change": {
+        "line": "{N} is buying {thing} for {$a} and gives the saleswoman {$b}. How many {coins} of change will {he} get?",
+        "how": "Change is the money that is left. From {b} take away the price of what was bought.",
+        "skins": [
+          "a book",
+          "a toy",
+          "a ball",
+          "an album",
+          "ice cream",
+          "flowers",
+          "a postcard",
+          "paints"
+        ]
+      },
+      "notEnough": {
+        "line": "{N} has {$a}. {thing} costs {$b}. How many {coins} is {he} short?",
+        "how": "From the price take away the money there already is.",
+        "skins": [
+          "Ice cream",
+          "A building set",
+          "A book",
+          "A scooter",
+          "A doll",
+          "A ticket",
+          "A ball",
+          "A puzzle"
+        ]
+      },
+      "repriced": {
+        "line": "{thing} cost {$a}, and then the price went {way} by {$b}. How many {coins} does it cost now?",
+        "how": {
+          "1": "“The price went up” means it got bigger. Add.",
+          "2": "“The price went down” means it got smaller. Subtract."
+        },
+        "skins": {
+          "0": {
+            "way": {
+              "1": "up",
+              "2": "down"
+            }
+          },
+          "_": [
+            "A toy",
+            "A ticket",
+            "A book",
+            "Juice",
+            "A cake",
+            "A doll",
+            "A ball",
+            "Ice cream"
+          ]
+        }
+      },
+      "threeAdd": {
+        "how": "Add all three numbers one after another: first {a} and {b}, then {c} more.",
+        "skins": {
+          "0": {
+            "0": "There are {A} in the first basket, {b} in the second, and {c} in the third. How many {many} are in the three baskets together?"
+          },
+          "1": {
+            "0": "On Monday Olivia read {A}, on Tuesday {b}, and on Wednesday {c}. How many {many} did she read in the three days?"
+          },
+          "2": {
+            "0": "There are {A} on the first shelf, {b} on the second, and {c} on the third. How many {many} are on the three shelves together?"
+          },
+          "3": {
+            "0": "In the morning {A} were sold, in the afternoon {b}, and in the evening {c}. How many {many} were sold that day?"
+          },
+          "4": {
+            "0": "The first grade planted {A}, the second {b}, and the third {c}. How many {many} did the three grades plant together?"
+          },
+          "5": {
+            "0": "There are {A} riding in the first train car, {b} in the second, and {c} in the third. How many {many} are riding in the three cars?"
+          },
+          "6": {
+            "0": "Mark scored {A}, Daniel {b}, and Oscar {c}. How many {many} did the boys score together?"
+          },
+          "7": {
+            "0": "There are {A} in the red box, {b} in the blue one, and {c} in the green one. How many {many} are in the three boxes together?"
+          }
+        }
+      },
+      "groups": {
+        "how": "These are equal groups — {a} in each. Equal groups are multiplied: multiply {a} by {b}.",
+        "skins": {
+          "0": {
+            "0": "There are {A} in each box. How many {many} are in {b} boxes?"
+          },
+          "1": {
+            "0": "There are {A} in each basket. How many {many} are in {b} baskets?"
+          },
+          "2": {
+            "0": "There are {A} on each plate. How many {many} are on {b} plates?"
+          },
+          "3": {
+            "0": "There are {A} in each bag. How many {many} are in {b} bags?"
+          },
+          "4": {
+            "0": "There are {A} in each vase. How many {many} are in {b} vases?"
+          },
+          "5": {
+            "0": "There are {A} on each shelf. How many {many} are on {b} shelves?"
+          },
+          "6": {
+            "0": "There are {A} in each nest. How many {many} are in {b} nests?"
+          },
+          "7": {
+            "0": "There are {A} in each train car. How many {many} are in {b} train cars?"
+          }
+        }
+      },
+      "priceTimes": {
+        "line": "One {one} costs {$a}. How many {coins} do {B} cost?",
+        "how": "Each one costs the same. Multiply the price by how many there are: {a} times {b}."
+      },
+      "rows": {
+        "line": "{where} there are {a} {rows} with {Bu} in each. How many {umany} are there altogether?",
+        "how": "Every row has the same — {b}. Multiply by the number of rows.",
+        "skins": {
+          "0": {
+            "0": {
+              "where": "In the classroom",
+              "rows": "rows"
+            }
+          },
+          "1": {
+            "0": {
+              "where": "In the garden bed",
+              "rows": "rows"
+            }
+          },
+          "2": {
+            "0": {
+              "where": "In the hall",
+              "rows": "rows"
+            }
+          },
+          "3": {
+            "0": {
+              "where": "In the box",
+              "rows": "rows"
+            }
+          },
+          "4": {
+            "0": {
+              "where": "In the parade",
+              "rows": "lines"
+            }
+          },
+          "5": {
+            "0": {
+              "where": "In the orchard",
+              "rows": "rows"
+            }
+          },
+          "6": {
+            "0": {
+              "where": "On the sheet",
+              "rows": "rows"
+            }
+          },
+          "7": {
+            "0": {
+              "where": "In the parking lot",
+              "rows": "rows"
+            }
+          }
+        }
+      },
+      "share": {
+        "line": "{A} were shared equally among {b} {whom}. How many {many} did each {one} get?",
+        "how": "“Equally” means to divide. Divide {a} by {b}.",
+        "skins": {
+          "0": {
+            "0": {
+              "whom": "friends",
+              "one": "friend"
+            }
+          },
+          "1": {
+            "0": {
+              "whom": "children",
+              "one": "child"
+            }
+          },
+          "2": {
+            "0": {
+              "whom": "squirrels",
+              "one": "squirrel"
+            }
+          },
+          "3": {
+            "0": {
+              "whom": "sisters",
+              "one": "sister"
+            }
+          },
+          "4": {
+            "0": {
+              "whom": "guests",
+              "one": "guest"
+            }
+          },
+          "5": {
+            "0": {
+              "whom": "rabbits",
+              "one": "rabbit"
+            }
+          },
+          "6": {
+            "0": {
+              "whom": "little ones",
+              "one": "little one"
+            }
+          },
+          "7": {
+            "0": {
+              "whom": "cats",
+              "one": "cat"
+            }
+          }
+        }
+      },
+      "pack": {
+        "how": "To put things out equally is to divide. Divide {a} by {b}.",
+        "skins": {
+          "0": {
+            "0": "{A} were put {b} into each box. How many boxes were needed?"
+          },
+          "1": {
+            "0": "{A} were put {b} into each tray. How many trays were needed?"
+          },
+          "2": {
+            "0": "{A} were put {b} into each bag. How many bags were needed?"
+          },
+          "3": {
+            "0": "{A} were put {b} on each shelf. How many shelves were needed?"
+          },
+          "4": {
+            "0": "{A} were put {b} into each bouquet. How many bouquets came out?"
+          },
+          "5": {
+            "0": "{A} were put {b} into each present. How many presents came out?"
+          },
+          "6": {
+            "0": "{A} were put {b} on each page of the album. How many pages were filled?"
+          },
+          "7": {
+            "0": "{A} were put {b} on each plate. How many plates were needed?"
+          }
+        }
+      },
+      "timesPlus": {
+        "line": "There are {B} in each of {a} {boxes}, and {c} more {loose}. How many {many} are there altogether?",
+        "how": "First count the ones that lie in equal groups: multiply {b} by {a}. Then add {c} more.",
+        "skins": {
+          "0": {
+            "0": {
+              "boxes": "boxes",
+              "loose": "lie loose"
+            }
+          },
+          "1": {
+            "0": {
+              "boxes": "baskets",
+              "loose": "lie on the table"
+            }
+          },
+          "2": {
+            "0": {
+              "boxes": "bags",
+              "loose": "are in the bowl"
+            }
+          },
+          "3": {
+            "0": {
+              "boxes": "albums",
+              "loose": "are not stuck in yet"
+            }
+          },
+          "4": {
+            "0": {
+              "boxes": "vases",
+              "loose": "stand apart"
+            }
+          },
+          "5": {
+            "0": {
+              "boxes": "crates",
+              "loose": "lie beside them"
+            }
+          },
+          "6": {
+            "0": {
+              "boxes": "aquariums",
+              "loose": "swim in a jar"
+            }
+          },
+          "7": {
+            "0": {
+              "boxes": "pencil cases",
+              "loose": "lie on the desk"
+            }
+          }
+        }
+      },
+      "timesChange": {
+        "line": "{N} bought {A} for {$b} each and gave the saleswoman {$c}. How many {coins} of change will {he} get?",
+        "how": "First find out how much was spent: multiply {b} by {a}. Then take that away from {c}."
+      },
+      "shareMinus": {
+        "line": "{A} were shared equally among {b} {whom}. Each {one} {did} {c} right away. How many {many} does each {one} have left?",
+        "how": "First divide: {a} by {b}. Then take away {c}.",
+        "skins": {
+          "0": {
+            "0": {
+              "whom": "children",
+              "one": "child",
+              "did": "ate"
+            }
+          },
+          "1": {
+            "0": {
+              "whom": "friends",
+              "one": "friend",
+              "did": "ate"
+            }
+          },
+          "2": {
+            "0": {
+              "whom": "sisters",
+              "one": "sister",
+              "did": "stuck on"
+            }
+          },
+          "3": {
+            "0": {
+              "whom": "squirrels",
+              "one": "squirrel",
+              "did": "hid"
+            }
+          },
+          "4": {
+            "0": {
+              "whom": "little ones",
+              "one": "little one",
+              "did": "let go of"
+            }
+          },
+          "5": {
+            "0": {
+              "whom": "guests",
+              "one": "guest",
+              "did": "ate"
+            }
+          },
+          "6": {
+            "0": {
+              "whom": "rabbits",
+              "one": "rabbit",
+              "did": "ate"
+            }
+          },
+          "7": {
+            "0": {
+              "whom": "players",
+              "one": "player",
+              "did": "laid down"
+            }
+          }
+        }
+      },
+      "timesMore": {
+        "how": "“{b} times as many” is multiplication: multiply {a} by {b}.",
+        "skins": {
+          "0": {
+            "0": "There are {A} growing in the first garden bed, and {b} times as many in the second. How many {many} are in the second garden bed?"
+          },
+          "1": {
+            "0": "Mark has {A}, and Olivia has {b} times as many. How many {many} does Olivia have?"
+          },
+          "2": {
+            "0": "There are {A} in the little aquarium, and {b} times as many in the big one. How many {many} are in the big aquarium?"
+          },
+          "3": {
+            "0": "There are {A} in the first class, and {b} times as many in the second. How many {many} are in the second class?"
+          },
+          "4": {
+            "0": "There are {A} on the bottom shelf, and {b} times as many on the top one. How many {many} are on the top shelf?"
+          },
+          "5": {
+            "0": "On Saturday {A} came to the museum, and on Sunday {b} times as many. How many {many} came on Sunday?"
+          },
+          "6": {
+            "0": "There are {A} in the first basket, and {b} times as many in the second. How many {many} are in the second basket?"
+          },
+          "7": {
+            "0": "Dad caught {A}, and Grandpa caught {b} times as many. How many {many} did Grandpa catch?"
+          }
+        }
+      },
+      "timesFewer": {
+        "how": "“{b} times fewer” is division: divide {a} by {b}.",
+        "skins": {
+          "0": {
+            "0": "There are {A} in the big box, and {b} times fewer in the little one. How many {many} are in the little box?"
+          },
+          "1": {
+            "0": "The big brother has {A}, and the little brother has {b} times fewer. How many {many} does the little brother have?"
+          },
+          "2": {
+            "0": "There are {A} on the first tree, and {b} times fewer on the second. How many {many} are on the second tree?"
+          },
+          "3": {
+            "0": "There are {A} on the first shelf, and {b} times fewer on the second. How many {many} are on the second shelf?"
+          },
+          "4": {
+            "0": "In the summer Sophie found {A}, and in the fall {b} times fewer. How many {many} did she find in the fall?"
+          },
+          "5": {
+            "0": "There are {A} in the first bouquet, and {b} times fewer in the second. How many {many} are in the second bouquet?"
+          },
+          "6": {
+            "0": "In the morning the baker baked {A}, and in the evening {b} times fewer. How many {many} did he bake in the evening?"
+          },
+          "7": {
+            "0": "There are {A} on the big pond, and {b} times fewer on the little one. How many {many} are on the little pond?"
+          }
+        }
+      },
+      "moreTotal": {
+        "how": "First find out how many there are where there are more: add {b} to {a}. Then add the two numbers together.",
+        "skins": {
+          "0": {
+            "0": "There are {A} on the first shelf, and {b} more on the second. How many {many} are on the two shelves together?"
+          },
+          "1": {
+            "0": "There are {A} in the first basket, and {b} more in the second. How many {many} are in the two baskets together?"
+          },
+          "2": {
+            "0": "Tom has {A}, and Lucy has {b} more. How many {many} do they have together?"
+          },
+          "3": {
+            "0": "There are {A} in the first train car, and {b} more in the second. How many {many} are in the two cars together?"
+          },
+          "4": {
+            "0": "In the morning {A} were sold, and in the evening {b} more. How many {many} were sold that day?"
+          },
+          "5": {
+            "0": "There are {A} in the first class, and {b} more in the second. How many {many} are in the two classes together?"
+          },
+          "6": {
+            "0": "There are {A} in the first flower bed, and {b} more in the second. How many {many} are in the two flower beds together?"
+          },
+          "7": {
+            "0": "On Saturday Daniel ran {A}, and on Sunday {b} more. How many {many} did he run in the two days?"
+          }
+        }
+      },
+      "timed": {
+        "how": "Add how much time went by to the starting hour: {a} and {b} more.",
+        "skins": [
+          "The train left at {a}:00 and was on its way for {B}. At what time did it arrive?",
+          "The show began at {a}:00 and lasted {B}. At what time did it end?",
+          "The tour began at {a}:00 and lasted {B}. At what time did it end?",
+          "The plane took off at {a}:00 and flew for {B}. At what time did it land?",
+          "The contest began at {a}:00 and lasted {B}. At what time did it end?",
+          "Dad went to work at {a}:00 and worked for {B}. At what time did he finish work?",
+          "The hikers set out at {a}:00 and walked for {B}. At what time did they reach the camp?",
+          "The ship set sail at {a}:00 and sailed for {B}. At what time did it arrive?"
+        ]
+      },
+      "speed": {
+        "line": "In one hour {mover} {A}. How many kilometers will {it} in {Bu}?",
+        "how": "Every hour it is the same — {a} kilometers. Multiply by the number of hours: by {b}.",
+        "skins": [
+          [
+            "a cyclist rides",
+            "he ride"
+          ],
+          [
+            "a hiker walks",
+            "he walk"
+          ],
+          [
+            "a boat sails",
+            "it sail"
+          ],
+          [
+            "a train travels",
+            "it travel"
+          ],
+          [
+            "a bus travels",
+            "it travel"
+          ],
+          [
+            "a horseman rides",
+            "he ride"
+          ],
+          [
+            "a skier skis",
+            "he ski"
+          ],
+          [
+            "a ship sails",
+            "it sail"
+          ]
+        ]
+      },
+      "thought": {
+        "line": "{N} thought of a number, {did}, and got {a}. What number did {N} think of?",
+        "how": "Go backwards, from the end to the start: take {a} and {undo}."
+      },
+      "twoBuys": {
+        "line": "{N} bought {A} for {$b} each and {other} for {$c}. How many {coins} did {he} pay?",
+        "how": "First count the things that cost the same: multiply {b} by {a}. Then add {c} more.",
+        "skins": {
+          "0": {
+            "0": {
+              "other": "a notebook"
+            }
+          },
+          "1": {
+            "0": {
+              "other": "juice"
+            }
+          },
+          "2": {
+            "0": {
+              "other": "an album"
+            }
+          },
+          "3": {
+            "0": {
+              "other": "a cake"
+            }
+          },
+          "4": {
+            "0": {
+              "other": "popcorn"
+            }
+          },
+          "5": {
+            "0": {
+              "other": "an envelope"
+            }
+          },
+          "6": {
+            "0": {
+              "other": "a pencil case"
+            }
+          },
+          "7": {
+            "0": {
+              "other": "tea"
+            }
+          },
+          "8": {
+            "0": {
+              "other": "a chocolate bar"
+            }
+          }
+        }
+      },
+      "halves": {
+        "how": "Half means to divide by two: {a} are left. Then take away {b} more.",
+        "skins": {
+          "0": {
+            "0": "Olivia had {T}. She gave half to a friend, and then gave {b} more to her brother. How many {many} are left?"
+          },
+          "1": {
+            "0": "There were {T} on the shelf. Half were taken to be read, and then {b} more were given to the library. How many {many} are left?"
+          },
+          "2": {
+            "0": "There were {T} in the basket. Half were eaten for lunch, and then {b} more for dinner. How many {many} are left?"
+          },
+          "3": {
+            "0": "There were {T} in the pack. Half were stuck in the album, and then {b} more were given away. How many {many} are left?"
+          },
+          "4": {
+            "0": "There were {T} hanging on the tree. Half were picked in the morning, and then {b} more in the evening. How many {many} are left?"
+          },
+          "5": {
+            "0": "There were {T} in the shop. Half were sold before lunch, and then {b} more after lunch. How many {many} are left?"
+          },
+          "6": {
+            "0": "There were {T} in the piggy bank. Half were spent on a book, and then {b} more on ice cream. How many {many} are left?"
+          },
+          "7": {
+            "0": "There were {T} growing in the garden bed. Half were picked on Saturday, and then {b} more on Sunday. How many {many} are left?"
+          },
+          "8": {
+            "0": "There were {T} on the tray. Half were handed out to the guests, and then the children ate {b} more. How many {many} are left?"
+          }
+        }
+      }
+    },
+    "chips": {
+      "howManyMore": "how many more",
+      "howManyFewer": "how many fewer",
+      "change": "change",
+      "lack": "short by",
+      "half": "half",
+      "when": "at what time",
+      "eachPrice": "{n} each",
+      "by": "by {n}",
+      "each": "{n} each",
+      "extra": "{n} more",
+      "timesMore": "{n} times as many",
+      "timesFewer": "{n} times fewer",
+      "moreBy": "{n} more",
+      "at": "at {hour}:00",
+      "speed": "{km} km an hour"
+    }
+  },
+  "s": "{one}s",
+  "measure": "{bigOne}s",
+  "SHAPES": {
+    "triangle": "triangles",
+    "square": "squares",
+    "circle": "circles",
+    "rect": "rectangles"
+  },
+  "OPS": {
+    "+": "plus",
+    "-": "minus",
+    "×": "times",
+    "÷": "divided by"
+  },
+  "heaps": {
+    "1": "1 heap",
+    "2": "{n} equal heaps"
+  },
+  "MONEY": {
+    "UAH": {
+      "short": "UAH",
+      "one": "hryvnia",
+      "many": "hryvnias",
+      "small": "kop.",
+      "smallMany": "kopiykas",
+      "rule": "One hryvnia is one hundred kopiykas."
+    },
+    "EUR": {
+      "short": "€",
+      "one": "euro",
+      "many": "euros",
+      "small": "ct",
+      "smallMany": "cents",
+      "rule": "One euro is one hundred cents."
+    },
+    "USD": {
+      "short": "$",
+      "one": "dollar",
+      "many": "dollars",
+      "small": "¢",
+      "smallMany": "cents",
+      "rule": "One dollar is one hundred cents."
+    },
+    "GBP": {
+      "short": "£",
+      "one": "pound",
+      "many": "pounds",
+      "small": "p",
+      "smallMany": "pence",
+      "rule": "One pound is one hundred pence."
+    },
+    "PLN": {
+      "short": "zł",
+      "one": "zloty",
+      "many": "zlotys",
+      "small": "gr",
+      "smallMany": "groszy",
+      "rule": "One zloty is one hundred groszy."
+    }
+  },
+  "cards": {
+    "title": "Math",
+    "games": {
+      "add": {
+        "label": "Addition",
+        "blurb": "Putting it all together"
+      },
+      "sub": {
+        "label": "Subtraction",
+        "blurb": "Taking away bit by bit"
+      },
+      "mul": {
+        "label": "Multiplication",
+        "blurb": "Equal heaps together",
+        "demoCaption": "2 times 2"
+      },
+      "div": {
+        "label": "Division",
+        "blurb": "Sharing equally",
+        "demoCaption": "4 shared equally by 2"
+      },
+      "mixed": {
+        "label": "Mental Math",
+        "blurb": "All together: +, −, ×, ÷"
+      },
+      "fractions": {
+        "label": "Tasty Fractions",
+        "blurb": "Finding a piece of a treat"
+      },
+      "fraction_ops": {
+        "label": "Fractions: Operations",
+        "blurb": "Adding, subtracting, multiplying and dividing fractions"
+      },
+      "balance": {
+        "label": "Math Scales",
+        "blurb": "Find the weight that balances",
+        "intro": "Scales love balance! There is a sum on the left. Drag onto the right pan the weight that weighs just as much."
+      },
+      "geometry": {
+        "label": "Shape Builder",
+        "blurb": "Building shapes, counting area and perimeter"
+      },
+      "maze": {
+        "label": "Number Maze",
+        "blurb": "Run only on the right numbers",
+        "intro": "Help your friend run through the maze! You may only step on numbers that fit the rule. Take a step onto a neighboring square."
+      },
+      "shop": {
+        "label": "The Shop",
+        "blurb": "Counting pocket money",
+        "intro": "Welcome to the shop! Look at the price tag and put on the counter as much money as the toy costs."
+      },
+      "word_problems": {
+        "label": "Story Problems",
+        "blurb": "Stories from life: the shop, friends, the road",
+        "intro": "Listen to a little story and answer the question. The pictures show what we know and what is asked. If you need to, tap the speaker and I will read the problem again."
+      },
+      "compare": {
+        "label": "Greater, Less, Equal",
+        "blurb": "Comparing numbers, sums and measures",
+        "intro": "Let’s compare! The “greater than” and “less than” sign looks like a bird’s beak: it is always open toward the bigger number. And if both sides are the same, we put “equals”."
+      },
+      "clock": {
+        "label": "What Time Is It?",
+        "blurb": "Learning to read a clock with hands"
+      }
+    }
+  },
+  "intro": {
+    "add": "Adding means putting things together! Take {it}{it} and one more {it}. Count: one, two, three. That makes three {it}!",
+    "sub": "Subtracting means taking away. There were {it}{it}{it}, one {it} was taken — two are left. Count how many are left!",
+    "mul": "Multiplying means taking equal heaps. We take {it}{it} two times: {it}{it} and {it}{it} again — four {it} altogether!",
+    "div": "Dividing means sharing equally. We have {it}{it}{it}{it} and put them into two baskets equally — two in each. How many are in one?",
+    "mixed": "Here the sums are mixed. Look at the sign: “plus” means we put together, “minus” means we take away. Count carefully!",
+    "fractions": "Fractions are equal slices. Picture a pizza 🍕: it was cut into four slices and one was taken — that is one quarter. Find the colored slice!",
+    "other": "Ready for an adventure? Let’s count together!"
+  },
+  "mental": {
+    "prompt": "What is {a} {op} {b}?",
+    "hint": {
+      "1": "That is {a}, with {b} in each. Tap the dots one by one and count them all.",
+      "2": "Share {a} dots equally into {b}. Count how many end up in one row.",
+      "3": "row",
+      "4": "There were {a}. Take away {b} — remove the dots one at a time. How many are left?",
+      "5": "Count the dots one by one: first {a}, then add {b} more. How many are there altogether?"
+    }
+  },
+  "balance": {
+    "prompt": "Balance the scales! Which weight weighs the same?",
+    "reduce": "Simplify the fraction: divide the top and the bottom by the same number. {n} out of {d} is the same as {simpleN} out of {simpleD}.",
+    "add": "Count all the dots together: {a} and {b} more.",
+    "sub": "There were {a}, and {b} were taken away. Count how many dots are left.",
+    "mul": "That is {a} of {b}. Count all the dots."
+  },
+  "fractions": {
+    "foods": [
+      "the pizza",
+      "the cake",
+      "the apple",
+      "the watermelon",
+      "the orange",
+      "the pie",
+      "the chocolate bar"
+    ],
+    "prompt": "What part of {food} is colored in?",
+    "hint": "Let’s count the colored slices: {length}. There are {denom} slices in all. So it is {filled} out of {denom}!"
+  },
+  "fractionOps": {
+    "intro": {
+      "addSame": "When the bottom numbers are the same, the slices are the same size. Just add the top numbers and keep the bottom one as it is: one quarter plus two quarters is three quarters.",
+      "subSame": "We subtract the same way: the slices are equal, so we take the top number away from the top number and leave the bottom one alone. Three quarters minus one quarter is two quarters.",
+      "unlike": "Now the bottom numbers are different — the slices are different sizes. First make them the same: find a common denominator, then add or subtract the top numbers. One half is the same as two quarters!",
+      "mul": "To multiply fractions, multiply top by top and bottom by bottom. One half of one third is one sixth.",
+      "div": "To divide by a fraction, flip the second fraction and multiply. Dividing by one half is the same as multiplying by two.",
+      "mixed": "All the operations are here together. Look carefully at the sign and remember the rule for each one!"
+    },
+    "prompt": "Work it out: {a} {op} {b}"
+  },
+  "compare": {
+    "plus": "{a} plus {b}",
+    "minus": "{a} minus {b}",
+    "times": "{a} times {b}",
+    "units": {
+      "0": {
+        "1": "m",
+        "2": "meter",
+        "3": "cm",
+        "4": "centimeters",
+        "5": "One meter is one hundred centimeters."
+      },
+      "1": {
+        "1": "kg",
+        "2": "kilogram",
+        "3": "g",
+        "4": "grams",
+        "5": "One kilogram is one thousand grams."
+      },
+      "2": {
+        "1": "h",
+        "2": "hour",
+        "3": "min",
+        "4": "minutes",
+        "5": "One hour is sixty minutes."
+      },
+      "3": {
+        "1": "cm",
+        "2": "centimeter",
+        "3": "mm",
+        "4": "millimeters",
+        "5": "One centimeter is ten millimeters."
+      },
+      "4": {
+        "1": "l",
+        "2": "liter",
+        "3": "ml",
+        "4": "milliliters",
+        "5": "One liter is one thousand milliliters."
+      }
+    },
+    "signs": {
+      "lt": "less",
+      "eq": "equal",
+      "gt": "greater"
+    },
+    "rule": "The sign looks like a bird’s beak: it is always open toward the bigger number.",
+    "verdict": {
+      "1": "{left} equals {right}",
+      "2": "{left} is {sign} than {right}",
+      "3": "less",
+      "4": "greater"
+    },
+    "prompt": "Compare {left} and {right}. Which sign goes between them?",
+    "yes": "Yes! {verdict}{verdict2}.",
+    "hint": "{rule} Work out how much is on the left and how much on the right: {left} on the left, {right} on the right."
+  },
+  "clock": {
+    "say": {
+      "1": "{h} o’clock",
+      "2": "half past {h}",
+      "3": "a quarter past {h}",
+      "4": "a quarter to {next}",
+      "5": "oh {m}"
+    },
+    "intro": {
+      "hours": "A clock has two hands. The short one shows the hours. When the long hand points straight up, at twelve, it is exactly on the hour. Look where the short hand is pointing!",
+      "half": "When the long hand points down, at six, half an hour has passed. The short hand is then between two numbers.",
+      "quarter": "The long hand on three means a quarter of an hour has passed. And when it is on nine, there is a quarter left until the next hour.",
+      "minutes": "The long hand shows the minutes. Each number on the clock is five more minutes: one is five, two is ten, three is fifteen."
+    },
+    "hint": {
+      "long": {
+        "1": "points up, at twelve",
+        "2": "points at {m}"
+      },
+      "short": {
+        "1": "points at {h}",
+        "2": "has already passed {h}"
+      },
+      "_": "The short hand {short}, and the long hand {long}. The short one is for hours, the long one for minutes."
+    },
+    "yes": "Yes, it is {time}!",
+    "find": "Find the clock that shows {time}.",
+    "read": "What time is it on the clock?"
+  },
+  "maze": {
+    "negatives": " Now there are negative numbers here too — with a minus sign. They divide in just the same way: minus twelve can be divided by three, because twelve can be divided by three.",
+    "deadEnds": " The maze has grown, and it has dead ends: if the road stops, go back and try another way.",
+    "table": "Run along the {k} times table: {k}, {k2}, {k3} and so on",
+    "divisible": "Step only on numbers that can be divided by {k}",
+    "hint": {
+      "1": "Look for a neighboring square with a number that divides by {k} with nothing left over. I will light up the next step.",
+      "2": " If you walk into a dead end, go back.",
+      "3": " The minus sign does not matter: look at the number itself."
+    }
+  },
+  "shop": {
+    "toys": [
+      "teddy bear",
+      "toy car",
+      "yo-yo",
+      "ball",
+      "kite",
+      "paint set",
+      "jigsaw puzzle",
+      "dinosaur",
+      "train",
+      "piñata"
+    ],
+    "change": "The {toy} costs {price}. You pay {paid}. What is the change?",
+    "buy": "Buy a toy: the {toy}. The price is {price}. Put the money on the counter.",
+    "changeHint": "Take {price} away from {paid}. You can count on from {price} up to {paid}.",
+    "payHint": "Start with the biggest money that is not more than {price}, then add smaller ones."
+  },
+  "geometry": {
+    "figures": {
+      "0": {
+        "0": "an ice cream",
+        "1": "This is an ice cream: a round scoop and a triangle cone."
+      },
+      "1": {
+        "0": "a mushroom",
+        "1": "This is a mushroom: a triangle cap and a square stem."
+      },
+      "2": {
+        "0": "a lollipop",
+        "1": "This is a lollipop: a round treat on a stick."
+      },
+      "3": {
+        "0": "a house",
+        "1": "This is a house: square walls and a triangle roof."
+      },
+      "4": {
+        "0": "a snowman",
+        "1": "This is a snowman: three circles — a small one, a middle one and a big one."
+      },
+      "5": {
+        "0": "a candy",
+        "1": "This is a candy: a round middle and two little triangle tails."
+      },
+      "6": {
+        "0": "a fir tree",
+        "1": "This is a fir tree: two triangles and a small trunk."
+      },
+      "7": {
+        "0": "a fish",
+        "1": "This is a fish: a round body and a triangle tail."
+      },
+      "8": {
+        "0": "a boat",
+        "1": "This is a boat: a rectangle hull and a triangle sail."
+      },
+      "9": {
+        "0": "a cat",
+        "1": "This is a cat: a round head, triangle ears and a square body."
+      },
+      "10": {
+        "0": "a truck",
+        "1": "This is a truck: a long trailer, a square cab and two wheels."
+      },
+      "11": {
+        "0": "a flower",
+        "1": "This is a flower: three round petals on a stem."
+      },
+      "12": {
+        "0": "a rocket",
+        "1": "This is a rocket: a pointed nose, two squares and triangle wings."
+      },
+      "13": {
+        "0": "a train",
+        "1": "This is a train: a long car, a cab and three wheels."
+      },
+      "14": {
+        "0": "a butterfly",
+        "1": "This is a butterfly: a round body, a little head and two triangle wings."
+      },
+      "15": {
+        "0": "a robot",
+        "1": "This is a robot: a square head, a body, two arms and two legs."
+      },
+      "16": {
+        "0": "a castle",
+        "1": "This is a castle: a long wall, three towers and two pointed roofs."
+      },
+      "17": {
+        "0": "a teddy bear",
+        "1": "This is a teddy bear — it is made of circles all over: head, ears, body and paws."
+      },
+      "18": {
+        "0": "a duckling",
+        "1": "This is a duckling: a round body and head, a beak, a tail and feet."
+      },
+      "19": {
+        "0": "a bus",
+        "1": "This is a bus: a long body, three wheels and two suitcases on the roof."
+      },
+      "20": {
+        "0": "a little man",
+        "1": "This is a little man: a round head, a square body, arms and legs."
+      },
+      "21": {
+        "0": "a palace",
+        "1": "This is a palace: a wall, three towers, two roofs and a flag on top."
+      },
+      "22": {
+        "0": "a steam engine",
+        "1": "This is a steam engine: a car, a cab, three wheels, a funnel and a puff of smoke."
+      },
+      "23": {
+        "0": "a dinosaur",
+        "1": "This is a dinosaur: a long body, a neck, a head, a tail, legs and spikes on its back."
+      }
+    },
+    "build": "Build this from the shapes: {name}",
+    "buildHint": "Find the outline of the same shape and the same size.",
+    "count": "Look at the picture: {name}. How many {shape} are there?",
+    "countHint": "Look only for the {shape}. Touch each one with your finger and count out loud.",
+    "areaRead": "What is the area of this shape? Count the colored squares.",
+    "areaIs": "Yes! The area of the shape is {area}: it has exactly that many squares.",
+    "areaHint": "Area is the number of squares a shape takes up. Touch each colored square and count.",
+    "pens": [
+      "the sheep",
+      "the rabbit",
+      "the chicks",
+      "the piglet",
+      "the little goat",
+      "the foal"
+    ],
+    "pen": {
+      "1": "Build a pen for {animal} with an area of {area}.",
+      "2": "square"
+    },
+    "penDone": {
+      "1": "A great pen! Its area is {area}.",
+      "2": "square"
+    },
+    "penHint": {
+      "1": "Area is the number of squares. Color in exactly {area} next to one another.",
+      "2": "square"
+    },
+    "perimeterRead": "What is the perimeter of this shape? Go around its edge and count the sides of the squares.",
+    "perimeterIs": "Yes! The perimeter is {length}: that is how many square sides there are along the edge of the shape.",
+    "perimeterHint": "Perimeter is the length of a fence around the shape. Run your finger along the edge and count each side of a square.",
+    "longest": "Find the shape with the biggest perimeter",
+    "longestIs": "Yes! Its perimeter is {length}: that is how many square sides you have to walk around.",
+    "longestHint": "Perimeter is the length of a fence around the shape. Go around each shape with your finger and count the square sides along the edge.",
+    "intro": {
+      "figures": "Build a picture from shapes! Drag each shape onto the outline of the same form. And we will also count which shapes the picture is made of.",
+      "area": "Area is how many squares a shape takes up. Count the colored squares, or color in as many as you are asked.",
+      "perimeter": "Perimeter is the length of a fence around a shape. Go around the edge of the shape and count the sides of the squares."
+    }
+  }
+}

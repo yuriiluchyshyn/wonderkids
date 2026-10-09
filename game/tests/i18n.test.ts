@@ -2,10 +2,10 @@ import { dictionaryProblems, type Dict } from '@pulsar/i18n';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { DEFAULT_LANG, LANG_CODES, offeredLang, type LangCode } from '../src/core/lang/index.ts';
+import { DEFAULT_LANG, LANG_CODES, offeredLang, type LangCode } from '../src/core/language/index.ts';
 
 const dictionaries = Object.fromEntries(
-  LANG_CODES.map((lang) => [lang, JSON.parse(readFileSync(new URL(`../src/locales/app/${lang}.json`, import.meta.url), 'utf8'))]),
+  LANG_CODES.map((lang) => [lang, JSON.parse(readFileSync(new URL(`../src/locales/app/${lang}/common.json`, import.meta.url), 'utf8'))]),
 ) as Record<LangCode, Dict>;
 
 test('the game’s dictionary says the same things in every language', () => {

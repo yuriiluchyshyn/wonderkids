@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { cn } from '@/core/utils/cn';
 import styles from './TimeBudget.module.css';

@@ -1,6 +1,6 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { LearningModule, SubCategory } from '@/core/game/kernel/types';
-import type { LangCode } from '@/core/lang';
+import type { LangCode } from '@/core/language';
 import type { Theme } from '@/core/theme/theme.types';
 import { fractionOpsIntro } from './generators/fractionOps';
 import { GEOMETRY_STEPS, geometryIntro } from './generators/geometry';
@@ -9,12 +9,15 @@ import { clockIntro } from './generators/clock';
 import { WORD_PROBLEM_STEPS } from './generators/wordProblems';
 import type { SubjectDef } from '../shared/templateModule';
 import { MATH_SUB } from './ids';
-import { MATH_LANGS, mathTexts } from './lang';
+import { MATH_LANGS, mathTexts } from './grammar';
+import WORDS from '@/locales/app/uk/games/math.json';
+
+const J = WORDS.config;
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'math',
-  title: 'Математика',
+  title: J.SUBJECT.title,
   icon: '🧮',
   accent: '#a855f7',
 };
@@ -37,9 +40,9 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.add,
     demo: { kind: 'row', items: ['*', '*', '➕', '*', '🟰', '*', '*', '*'] },
-    label: 'Додавання',
+    label: J.CARDS[0].label,
     icon: '➕',
-    blurb: 'Збираємо все докупи',
+    blurb: J.CARDS[0].blurb,
     steps: 40,
     difficulty: [1, 3],
     tasksPerLevel: 10,
@@ -48,9 +51,9 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.sub,
     demo: { kind: 'row', items: ['*', '*', '*', '➖', '*', '🟰', '*', '*'] },
-    label: 'Віднімання',
+    label: J.CARDS[1].label,
     icon: '➖',
-    blurb: 'Забираємо потрошку',
+    blurb: J.CARDS[1].blurb,
     steps: 40,
     difficulty: [1, 3],
     tasksPerLevel: 10,
@@ -58,10 +61,10 @@ const CARDS: SubCategory[] = [
   },
   {
     id: MATH_SUB.mul,
-    demo: { kind: 'groups', groups: [2, 2], caption: '2 рази по 2' },
-    label: 'Множення',
+    demo: { kind: 'groups', groups: [2, 2], caption: J.CARDS[2].demo.caption },
+    label: J.CARDS[2].label,
     icon: '✖️',
-    blurb: 'Однакові купки разом',
+    blurb: J.CARDS[2].blurb,
     steps: 30,
     difficulty: [2, 3],
     tasksPerLevel: 10,
@@ -69,10 +72,10 @@ const CARDS: SubCategory[] = [
   },
   {
     id: MATH_SUB.div,
-    demo: { kind: 'groups', groups: [2, 2], caption: '4 порівну на 2' },
-    label: 'Ділення',
+    demo: { kind: 'groups', groups: [2, 2], caption: J.CARDS[3].demo.caption },
+    label: J.CARDS[3].label,
     icon: '➗',
-    blurb: 'Ділимо порівну',
+    blurb: J.CARDS[3].blurb,
     steps: 25,
     difficulty: [2, 3],
     tasksPerLevel: 10,
@@ -81,9 +84,9 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.mixed,
     demo: { kind: 'row', items: ['*', '*', '➕', '*', '🟰', '*', '*', '*'] },
-    label: 'Усний Рахунок',
+    label: J.CARDS[4].label,
     icon: '🧮',
-    blurb: 'Усе разом: +, −, ×, ÷',
+    blurb: J.CARDS[4].blurb,
     steps: 60,
     difficulty: [1, 3],
     tasksPerLevel: 10,
@@ -94,9 +97,9 @@ const CARDS: SubCategory[] = [
     id: MATH_SUB.fractions,
     demo: { kind: 'pie', food: '🍕', denom: 4, filled: 1 },
     gameId: 'math_tasty_fractions',
-    label: 'Смачні Дроби',
+    label: J.CARDS[5].label,
     icon: '🍕',
-    blurb: 'Шукаємо частинку смаколика',
+    blurb: J.CARDS[5].blurb,
     steps: 10,
     difficulty: 1,
     tasksPerLevel: 10,
@@ -105,9 +108,9 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.fractionOps,
     gameId: 'math_fraction_ops',
-    label: 'Дроби: дії',
+    label: J.CARDS[6].label,
     icon: '🧁',
-    blurb: 'Додаємо, віднімаємо, множимо й ділимо дроби',
+    blurb: J.CARDS[6].blurb,
     steps: 20,
     difficulty: [2, 3],
     publishDate: V4_RELEASE,
@@ -117,10 +120,10 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.balance,
     gameId: 'math_balance_scale',
-    label: 'Математичні Ваги',
+    label: J.CARDS[7].label,
     icon: '⚖️',
-    blurb: 'Знайди гирю, що врівноважить',
-    intro: 'Ваги люблять рівновагу! Зліва лежить приклад. Перетягни на праву шальку гирю, яка важить стільки ж.',
+    blurb: J.CARDS[7].blurb,
+    intro: J.CARDS[7].intro,
     steps: 15,
     difficulty: 2,
     publishDate: V4_RELEASE,
@@ -130,9 +133,9 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.geometry,
     gameId: 'math_geometry_builder',
-    label: 'Геометричний Конструктор',
+    label: J.CARDS[8].label,
     icon: '📐',
-    blurb: 'Складаємо фігури, рахуємо площу і периметр',
+    blurb: J.CARDS[8].blurb,
     steps: GEOMETRY_STEPS,
     difficulty: [1, 3],
     publishDate: V4_RELEASE,
@@ -142,10 +145,10 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.maze,
     gameId: 'math_number_maze',
-    label: 'Числовий Лабіринт',
+    label: J.CARDS[9].label,
     icon: '🧭',
-    blurb: 'Біжи тільки по правильних числах',
-    intro: 'Допоможи другові перебігти лабіринт! Ставати можна тільки на числа, які підходять під правило. Роби крок на сусідню клітинку.',
+    blurb: J.CARDS[9].blurb,
+    intro: J.CARDS[9].intro,
     steps: MAZE_STEPS,
     difficulty: 3,
     publishDate: V4_RELEASE,
@@ -156,10 +159,10 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.shop,
     gameId: 'math_shop_money',
-    label: 'Магазин',
+    label: J.CARDS[10].label,
     icon: '🛒',
-    blurb: 'Рахуємо кишенькові гроші',
-    intro: 'Ласкаво просимо до магазину! Подивись на цінник і поклади на касу стільки грошей, скільки коштує іграшка.',
+    blurb: J.CARDS[10].blurb,
+    intro: J.CARDS[10].intro,
     steps: 12,
     difficulty: 2,
     publishDate: V4_RELEASE,
@@ -170,11 +173,11 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.compare,
     gameId: 'math_compare',
-    label: 'Більше, менше, дорівнює',
+    label: J.CARDS[11].label,
     icon: '🐥',
-    blurb: 'Порівнюємо числа, приклади й величини',
+    blurb: J.CARDS[11].blurb,
     intro:
-      'Порівнюймо! Знак «більше» і «менше» схожий на дзьобик пташки: він завжди відкритий до більшого числа. А якщо з обох боків однаково — ставимо «дорівнює».',
+      J.CARDS[11].intro,
     steps: 12,
     difficulty: [1, 2],
     publishDate: COMPARE_CLOCK_RELEASE,
@@ -185,9 +188,9 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.clock,
     gameId: 'math_clock',
-    label: 'Котра година?',
+    label: J.CARDS[12].label,
     icon: '🕰️',
-    blurb: 'Вчимося розуміти годинник зі стрілками',
+    blurb: J.CARDS[12].blurb,
     steps: 12,
     difficulty: [1, 2],
     publishDate: COMPARE_CLOCK_RELEASE,
@@ -199,11 +202,11 @@ const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.wordProblems,
     gameId: 'math_word_problems',
-    label: 'Задачі',
+    label: J.CARDS[13].label,
     icon: '📖',
-    blurb: 'Історії з життя: магазин, друзі, дорога',
+    blurb: J.CARDS[13].blurb,
     intro:
-      'Послухай маленьку історію і дай відповідь на запитання. Картинки підкажуть, що ми знаємо і про що питають. Якщо треба — натисни на динамік, і я прочитаю задачу ще раз.',
+      J.CARDS[13].intro,
     steps: WORD_PROBLEM_STEPS,
     difficulty: [1, 3],
     publishDate: COMPARE_CLOCK_RELEASE,
@@ -213,7 +216,7 @@ const CARDS: SubCategory[] = [
   },
 ];
 
-/** The games of the galaxy: every one is written in every language of `lang/`. */
+/** The games of the galaxy: every one is written in every language of `grammar/`. */
 export const GAMES: SubCategory[] = CARDS.map((game) => ({ ...game, langs: MATH_LANGS }));
 
 /**

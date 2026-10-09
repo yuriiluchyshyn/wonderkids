@@ -4,8 +4,8 @@ import type { GridChoicePayload } from '@/core/game/templates/types';
 import { pick, randInt, uid } from '@/core/utils/random';
 import { currencyOf, type CurrencyId } from '@/core/game/content/currency';
 import { rewardForStep } from '../difficulty';
-import { mathTexts, type MathTexts } from '../lang';
-import type { MeasureWords } from '../lang/types';
+import { mathTexts, type MathTexts } from '../grammar';
+import type { MeasureWords } from '../grammar/types';
 
 /** One side of a comparison: how it is written, read aloud, and what it is worth. */
 interface Side {

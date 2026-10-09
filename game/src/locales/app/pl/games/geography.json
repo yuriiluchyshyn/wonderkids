@@ -1,0 +1,2555 @@
+{
+  "hours": {
+    "1": "godzinę",
+    "2": "godziny",
+    "3": "godzin"
+  },
+  "cards": {
+    "title": "Geografia",
+    "games": {
+      "flags": {
+        "label": "Zgadnij flagę",
+        "blurb": "Wszystkie flagi świata — jest ich {length}, zaczynamy od najbardziej znanych",
+        "intro": "Każdy kraj ma swoją flagę. Posłuchaj nazwy kraju i znajdź jego flagę wśród sześciu! Na każdym stopniu czeka pięć nowych flag, a znajome wracają, żeby nie wyleciały ci z głowy."
+      },
+      "continents": {
+        "label": "Ułóż mapę",
+        "blurb": "Rozstaw zwierzęta i flagi na kontynentach",
+        "intro": "Na Ziemi jest siedem kontynentów. Przeciągnij zwierzątko albo flagę na ten kontynent, na którym jest ich dom."
+      },
+      "biomes": {
+        "label": "Zwierzęta i strefy przyrodnicze",
+        "blurb": "Zwierzęta z siedmiu stref przyrodniczych — od Arktyki po sawannę (jest ich {length})",
+        "intro": "Każde zwierzątko lubi swój dom. Jednym jest dobrze wśród lodu, a innym — na gorącej pustyni. Pomóż im wrócić do domu! Dalej na drodze czekają nowe zwierzęta, zagadki „Kto to?” i zadania „Kto tu nie pasuje?”."
+      },
+      "oceans": {
+        "label": "Morza i oceany",
+        "blurb": "Pięć oceanów, pół setki mórz i zatok, wyspy, kraje i rzeki",
+        "intro": "Na naszej planecie jest pięć oceanów. Posłuchaj, dokąd płynąć, i dotknij właściwego oceanu na mapie! Dalej na drodze czekają zagadki o oceanach, morzach i zatokach, wyspach, krajach i rzekach."
+      },
+      "capitals": {
+        "label": "Stolice i strefy czasowe",
+        "blurb": "Stolice świata (jest ich {length}), dzień i noc oraz różnica czasu",
+        "intro": "Rozpoznaj stolicę po jej najsłynniejszej budowli i po nazwie kraju. A jeszcze dowiemy się, dlaczego w jednych miastach jest dzień, kiedy w innych noc, i która jest tam godzina!"
+      }
+    }
+  },
+  "flags": {
+    "ask": "Znajdź flagę {id}.",
+    "hint": "{id} to kraj w {id2}. Przyjrzyj się kolorom i rysunkom na flagach.",
+    "stories": {
+      "0": "Tak, to flaga {id}!",
+      "2": "Właśnie tak! {id} to kraj w {id2}.",
+      "3": "Świetnie! Znasz flagę {id}.",
+      "4": "Brawo! To {id}.",
+      "5": "Trafione! Flagi {id} już nie zapomnisz.",
+      "6": "Świetna pamięć! To flaga {id}.",
+      "7": "Tak trzymaj! To {id}. Szukaj tego kraju na mapie w {id2}.",
+      "8": "Jest! To flaga {id}.",
+      "9": "Dokładnie! {id}. Zapamiętaj kolory tej flagi.",
+      "10": "Tak! Jeśli zobaczysz tę flagę na zawodach — to {id}."
+    }
+  },
+  "map": {
+    "animalAsk": "Gdzie mieszka {id}? Przeciągnij na mapę.",
+    "animalHint": "Szukaj kontynentu, który mruga. {id} mieszka {homeOf}.",
+    "countryAsk": "{id} — na którym to kontynencie? Przeciągnij flagę.",
+    "countryHint": "Szukaj na mapie: {continentOf} — ten kontynent mruga.",
+    "countryYes": {
+      "0": "Tak! {id} to kraj w {id2}.",
+      "1": "Właśnie tak: {id} znajdziesz {continentOf}."
+    }
+  },
+  "zones": {
+    "whereAsk": "Gdzie mieszka {id}?",
+    "whereHint": "Pomyśl, gdzie zwierzątku będzie dobrze. {id}",
+    "whoAsk": "Kto mieszka {where}?",
+    "whoHint": "Przypomnij sobie, jaka to strefa przyrodnicza. {id}",
+    "riddleAsk": "Kto to? {id}",
+    "riddleHint": "To zwierzę mieszka {where}. Jego nazwa zaczyna się na literę „{id}”.",
+    "oddAsk": "Kto tu nie pasuje? Wszyscy pozostali to sąsiedzi: mieszkają w tej samej strefie przyrodniczej.",
+    "oddHint": "Wszyscy sąsiedzi mieszkają {where}. Znajdź tego, kto mieszka gdzie indziej.",
+    "zoneAsk": "Jaka to strefa przyrodnicza? {id}",
+    "zoneHint": "Tu mieszkają: {dwellers}.",
+    "zoneYes": "Tak, to {it}! {id}"
+  },
+  "seas": {
+    "sailTo": "Płyń do {id}!",
+    "riddleAsk": "Płyń do {id}!",
+    "hint": "Szukaj wody, która mieni się falami. {clue}",
+    "itIs": "To {id}.",
+    "sea": {
+      "ask": "{id} to część którego oceanu? Płyń tam!"
+    },
+    "place": {
+      "ask": "{id} Płyń tam!"
+    },
+    "river": {
+      "ask": "Do którego oceanu niesie swoje wody rzeka {id}? Płyń tam!"
+    },
+    "shoreAsk": "Który ocean oblewa brzegi {id}? Płyń tam!",
+    "shoreYes": "Tak! Brzegi {id} oblewa {ocean}."
+  },
+  "capitals": {
+    "landmark": {
+      "ask": "W której stolicy można zobaczyć {seen}?",
+      "hint": "{caption} to symbol {country}. Przypomnij sobie stolicę tego kraju."
+    },
+    "ask": "Jaka jest stolica {id}?",
+    "hint": "Nazwa tej stolicy zaczyna się na literę „{id}”.",
+    "stories": {
+      "0": "Tak! {pair}.",
+      "1": "Właśnie tak! Stolica {id} to {id2}.",
+      "2": "Świetnie! {id} to najważniejsze miasto {id2}.",
+      "3": "Brawo! {pair}. To w {id}.",
+      "4": "Trafione! {id} i {id2} — zapamiętaj tę parę.",
+      "5": "Świetna pamięć! {pair}.",
+      "6": "Tak trzymaj! Szukaj na mapie miasta {id} w {id2}.",
+      "7": "Jest! {pair}.",
+      "8": "Dokładnie! {id}: kiedy odwiedzisz ten kraj, zobaczysz jego stolicę — {id2}.",
+      "9": "Dobrze! {pair}. Teraz już to wiesz.",
+      "pair": "{id} to stolica {id2}"
+    },
+    "countryAsk": "{id} to stolica którego kraju?",
+    "countryHint": "Ten kraj leży w {id}. Jego nazwa zaczyna się na literę „{id2}”.",
+    "day": "Dzień",
+    "night": "Noc",
+    "dayNight": {
+      "now": {
+        "1": "dzień",
+        "2": "noc"
+      },
+      "ask": "W Kijowie jest teraz {now}. A co w {id}?",
+      "caption": "Kijów: {now}"
+    },
+    "dayNightHint": "Ziemia kręci się jak bączek. Słońce oświetla tylko jedną jej stronę: tam jest dzień, a po drugiej stronie — noc.",
+    "clock": {
+      "side": {
+        "1": "później",
+        "2": "wcześniej"
+      },
+      "rule": {
+        "1": "W {city} jest ta sama godzina co w Kijowie",
+        "2": "{t} {city} jest o {by} {side} niż w Kijowie",
+        "3": "Zimą w",
+        "4": "W"
+      },
+      "ask": "W Kijowie jest {hour}:00. {rule}. Która godzina jest w {city}?",
+      "caption": "Kijów — {hour}:00",
+      "hint": {
+        "1": "To miasto leży w tej samej strefie czasowej co Kijów — zegary pokazują to samo.",
+        "2": "„O {by} {side}” — to {hour} {t} {by2}.",
+        "3": "plus",
+        "4": "minus"
+      },
+      "yes": "Tak! Kiedy w Kijowie jest {hour}:00, w {city} jest {hour2}:00."
+    }
+  },
+  "data": {
+    "animalFacts": {
+      "ANIMAL_FACTS": {
+        "giraffe": [
+          "Żyrafa to najwyższe zwierzę na Ziemi: jest wyższa od piętrowego domu.",
+          "Żyrafy żyją na afrykańskiej sawannie — równinie porośniętej trawą i pojedynczymi drzewami.",
+          "W szyi żyrafy jest tyle samo kości co w szyi człowieka — siedem.",
+          "Język żyrafy jest ciemnoniebieski i ma prawie pół metra długości.",
+          "Żyrafa śpi tylko kilka godzin na dobę, często na stojąco.",
+          "Każda żyrafa ma własny wzór z plam, tak jak ludzie mają odciski palców.",
+          "Żyrafa sięga po liście z czubków akacji, dokąd nie dosięgnie żadne inne zwierzę.",
+          "Żeby się napić, żyrafa musi szeroko rozstawić przednie nogi.",
+          "Mała żyrafa rodzi się wysoka na dwa metry i już po godzinie staje na nogi.",
+          "Serce żyrafy jest bardzo silne: pompuje krew aż do głowy."
+        ],
+        "lion": [
+          "Lwa nazywa się królem zwierząt, a mieszka on na afrykańskiej sawannie.",
+          "Lwy żyją w dużych rodzinach — stadach.",
+          "Grzywę mają tylko samce lwów.",
+          "Ryk lwa słychać z odległości kilku kilometrów.",
+          "W stadzie polują przeważnie lwice.",
+          "Lwy odpoczywają nawet dwadzieścia godzin na dobę.",
+          "Lwiątka rodzą się z plamkami na sierści, które później znikają.",
+          "Lew to drugi co do wielkości kot na świecie, po tygrysie.",
+          "Na końcu ogona lew ma ciemny pędzelek.",
+          "Lwy dobrze widzą w ciemności i często polują nocą."
+        ],
+        "kangaroo": [
+          "Kangury żyją w Australii i są przedstawione w herbie tego kraju.",
+          "Mama kangurzyca nosi malucha w torbie na brzuchu.",
+          "Nowo narodzony kangurek jest wielkości fasolki.",
+          "Duży kangur potrafi skoczyć na osiem metrów w dal.",
+          "Kangur nie umie chodzić do tyłu.",
+          "Długi, silny ogon pomaga kangurowi utrzymać równowagę.",
+          "Kangury jedzą trawę i liście.",
+          "Kangury mogą długo obywać się bez wody.",
+          "Kangury żyją w grupach.",
+          "Kangur pędzi skokami tak szybko, jak samochód jedzie w mieście."
+        ],
+        "penguin": [
+          "Pingwiny to ptaki, które nie latają, za to świetnie pływają.",
+          "Pod wodą pingwin wiosłuje skrzydłami jak płetwami.",
+          "Przed zimnem chronią pingwiny gęste pióra i warstwa tłuszczu.",
+          "Pingwin cesarski jest największy: wzrostem dorównuje pierwszoklasiście.",
+          "U pingwinów cesarskich jajo ogrzewa tata: trzyma je na łapach.",
+          "Żeby się ogrzać, pingwiny stają w ciasnej gromadzie i po kolei zamieniają się miejscami.",
+          "Pingwiny jedzą ryby, kałamarnice i małe skorupiaki.",
+          "Czarny grzbiet i biały brzuch ukrywają pingwina w wodzie przed drapieżnikami.",
+          "Pingwiny żyją na południu Ziemi; w Arktyce ich nie ma.",
+          "Po śniegu pingwiny ślizgają się na brzuchu jak na sankach."
+        ],
+        "panda": [
+          "Panda wielka żyje w górskich lasach Chin.",
+          "Panda je bambus ponad dziesięć godzin dziennie.",
+          "W ciągu dnia panda zjada ponad dziesięć kilogramów bambusa.",
+          "Nowo narodzona panda jest różowa i maleńka — wielkości kostki masła.",
+          "Panda to niedźwiedź, ale nie zapada w sen zimowy.",
+          "Na przednich łapach panda ma „szósty palec”, którym trzyma bambus.",
+          "Pandy dobrze wspinają się na drzewa.",
+          "Panda jest symbolem ochrony przyrody na całym świecie.",
+          "Pandy lubią żyć samotnie.",
+          "Czarne plamy wokół oczu są u każdej pandy trochę inne."
+        ],
+        "llama": [
+          "Lama żyje w Andach — górach Ameryki Południowej.",
+          "Lamy to krewne wielbłądów, tylko bez garbów.",
+          "Ludzie oswoili lamy tysiące lat temu, żeby nosiły ładunki.",
+          "Rozzłoszczona lama potrafi splunąć.",
+          "Z wełny lamy robi się na drutach ciepłe swetry i koce.",
+          "Lamy dobrze czują się wysoko w górach, gdzie jest mało powietrza.",
+          "Lamy jedzą trawę.",
+          "Lamy porozumiewają się cichym buczeniem.",
+          "Jeśli ładunek jest za ciężki, lama kładzie się i nie chce iść.",
+          "Lamy trzyma się razem ze stadami owiec: odpędzają drapieżniki."
+        ],
+        "bison": [
+          "Bizon to największe zwierzę Ameryki Północnej.",
+          "Bizon waży tyle co mały samochód.",
+          "Mimo dużej wagi bizon biega bardzo szybko.",
+          "Kiedyś po amerykańskich preriach wędrowały miliony bizonów.",
+          "Zimą bizon odgarnia śnieg głową, żeby dostać się do trawy.",
+          "Gęsta sierść chroni bizona przed mrozem i zamiecią.",
+          "Bizony żyją w stadach.",
+          "Cielę bizona jest rude, a gdy dorasta — ciemnieje.",
+          "Europejski krewny bizona to żubr⟪, który żyje także w Polsce⟫.",
+          "Garb na grzbiecie bizona to silne mięśnie, które dźwigają ciężką głowę."
+        ],
+        "hedgehog": [
+          "Jeż żyje w lasach i ogrodach Europy⟪, także w Polsce⟫.",
+          "Na grzbiecie jeża jest kilka tysięcy kolców.",
+          "W razie niebezpieczeństwa jeż zwija się w kolczastą kulkę.",
+          "Jeże wychodzą na spacer nocą.",
+          "Jeż je chrząszcze, gąsienice, ślimaki i dżdżownice.",
+          "Zimą jeż śpi w stercie liści aż do wiosny.",
+          "Jeże nie noszą jabłek i grzybów na kolcach — to wymysł z bajek.",
+          "Małe jeże rodzą się z miękkimi białymi kolcami.",
+          "Jeż ma świetny węch i słuch, ale słabo widzi.",
+          "Jeżom nie wolno dawać mleka — boli je od niego brzuch."
+        ],
+        "koala": [
+          "Koala żyje na eukaliptusach w Australii.",
+          "Koala je tylko liście eukaliptusa.",
+          "Koala śpi nawet dwadzieścia godzin na dobę.",
+          "Koala to nie niedźwiedź, tylko torbacz, jak kangur.",
+          "Mały koala przez pół roku rośnie w torbie mamy.",
+          "Koala prawie nie pije: wody wystarcza mu z liści.",
+          "Odciski palców koali są bardzo podobne do ludzkich.",
+          "Podrośniętego malucha mama koala nosi na grzbiecie.",
+          "Koale rzadko schodzą na ziemię.",
+          "Liście eukaliptusa są trujące dla większości zwierząt, a koali nie szkodzą."
+        ],
+        "tiger": [
+          "Tygrys to największy kot na świecie.",
+          "Każdy tygrys ma własne paski, tak jak ludzie mają odciski palców.",
+          "Tygrysy żyją w Azji: w Indiach, Chinach i na Dalekim Wschodzie.",
+          "Tygrysy lubią wodę i dobrze pływają.",
+          "Tygrys poluje sam i zwykle nocą.",
+          "Skóra pod sierścią tygrysa też jest w paski.",
+          "Tygrys potrafi skoczyć na ponad sześć metrów w dal.",
+          "Paski ukrywają tygrysa w wysokiej trawie i zaroślach.",
+          "Tygrysiątka zostają z mamą około dwóch lat.",
+          "Tygrysów na wolności zostało mało, dlatego się je chroni."
+        ],
+        "polar_bear": [
+          "Niedźwiedź polarny to największy drapieżnik na lądzie.",
+          "Skóra niedźwiedzia polarnego jest czarna, a włosy przezroczyste.",
+          "Niedźwiedź polarny świetnie pływa i potrafi przepłynąć dziesiątki kilometrów.",
+          "Niedźwiedzie polarne polują na foki z lodu.",
+          "Gruba warstwa tłuszczu grzeje niedźwiedzia polarnego w mróz.",
+          "Niedźwiadki rodzą się zimą w śnieżnej gawrze.",
+          "Niedźwiedź polarny czuje zapach foki z odległości wielu kilometrów.",
+          "Szerokie łapy nie pozwalają niedźwiedziowi polarnemu zapadać się w śnieg.",
+          "Niedźwiedzie polarne żyją tylko na północy, wokół bieguna północnego.",
+          "Niedźwiedziom polarnym potrzebny jest lód: bez niego trudno im polować."
+        ],
+        "camel": [
+          "Wielbłąd może obyć się bez wody ponad tydzień.",
+          "W garbach wielbłąda nie ma wody, tylko tłuszcz — zapas jedzenia.",
+          "Za jednym razem wielbłąd potrafi wypić ponad sto litrów wody.",
+          "Długie rzęsy i zamykane nozdrza chronią wielbłąda przed piaskiem.",
+          "Szerokie stopy nie pozwalają wielbłądowi zapadać się w piasek.",
+          "Wielbłąda nazywa się okrętem pustyni.",
+          "Bywają wielbłądy z jednym garbem i z dwoma.",
+          "Wielbłądy jedzą nawet kolczaste rośliny.",
+          "Ludzie jeżdżą na wielbłądach i przewożą na nich ładunki od tysięcy lat.",
+          "Wielbłąd dobrze znosi i dzienny upał, i nocny chłód pustyni."
+        ],
+        "monkey": [
+          "Małpy żyją w ciepłych lasach i zwinnie wspinają się po drzewach.",
+          "Wiele małp trzyma się gałęzi ogonem jak piątą ręką.",
+          "Małpy żyją w dużych grupach.",
+          "Małpy jedzą owoce, liście, orzechy i owady.",
+          "Małpy czyszczą sobie nawzajem sierść — tak się przyjaźnią.",
+          "Małpy są bardzo bystre i potrafią używać patyków i kamieni.",
+          "Mała małpka trzyma się sierści mamy.",
+          "Małpy ostrzegają się nawzajem przed niebezpieczeństwem krzykiem.",
+          "Najmniejsza małpka — marmozeta — mieści się na dłoni.",
+          "Małpy to najbliżsi krewni człowieka wśród zwierząt."
+        ],
+        "dolphin": [
+          "Delfin to nie ryba: oddycha powietrzem.",
+          "Delfin oddycha przez otwór na czubku głowy — nozdrze.",
+          "Delfiny „rozmawiają” gwizdami i klikaniem.",
+          "Delfin znajduje zdobycz dzięki echu.",
+          "Kiedy delfin śpi, połowa jego mózgu czuwa i pilnuje oddychania.",
+          "Delfiny żyją w stadach i pomagają sobie nawzajem.",
+          "Małe delfiny piją mleko mamy.",
+          "Delfiny lubią się bawić i wyskakiwać z wody.",
+          "Delfiny należą do najmądrzejszych zwierząt.",
+          "Każdy delfin ma swój własny gwizd — jak imię."
+        ],
+        "seal": [
+          "Foka świetnie pływa, a na lądzie porusza się niezgrabnie.",
+          "Gruba warstwa tłuszczu grzeje fokę w lodowatej wodzie.",
+          "Foka może nie oddychać pod wodą pół godziny i dłużej.",
+          "Wąsami foka wyczuwa ruch ryb w wodzie.",
+          "Foki jedzą ryby, kałamarnice i skorupiaki.",
+          "Małe foki rodzą się na lodzie w białym, puszystym futerku.",
+          "Foki odpoczywają na krach i skałach.",
+          "Żeby oddychać pod lodem, foka robi w nim otwory.",
+          "Głównymi wrogami fok są niedźwiedzie polarne i orki.",
+          "Zamiast łap foka ma płetwy."
+        ],
+        "parrot": [
+          "Papugi żyją w ciepłych lasach tropikalnych.",
+          "Niektóre papugi potrafią powtarzać ludzkie słowa.",
+          "Mocnym dziobem papuga rozłupuje orzechy.",
+          "Papuga bierze jedzenie łapą jak ręką.",
+          "Duże papugi mogą żyć ponad pięćdziesiąt lat.",
+          "Jaskrawe pióra ukrywają papugi wśród kwiatów i liści.",
+          "Papugi żyją w hałaśliwych stadach.",
+          "Papugi gniazdują w dziuplach drzew.",
+          "Na łapie papugi dwa palce są skierowane do przodu, a dwa do tyłu.",
+          "Papugi są bardzo mądre i potrafią rozwiązywać łamigłówki."
+        ],
+        "scorpion": [
+          "Skorpion to krewny pająków: ma osiem nóg.",
+          "Na końcu ogona skorpion ma kolec z jadem.",
+          "W dzień skorpion chowa się pod kamieniami, a poluje nocą.",
+          "Skorpiony świecą w świetle latarki ultrafioletowej.",
+          "Skorpiony żyły na Ziemi jeszcze przed dinozaurami.",
+          "Mama skorpionica nosi młode na grzbiecie.",
+          "Skorpion może nie jeść przez wiele miesięcy.",
+          "Szczypcami skorpion chwyta owady.",
+          "Większość skorpionów nie jest groźna dla człowieka, ale nie wolno ich dotykać.",
+          "Skorpion wyczuwa kroki zdobyczy po drganiach piasku."
+        ],
+        "octopus": [
+          "Ośmiornica ma osiem ramion i trzy serca.",
+          "Krew ośmiornicy jest niebieska.",
+          "Ośmiornica potrafi zmieniać kolor i stawać się niewidoczna.",
+          "Ośmiornica nie ma kości, dlatego wciska się w wąskie szczeliny.",
+          "W razie niebezpieczeństwa ośmiornica wypuszcza chmurkę atramentu.",
+          "Ośmiornice są bardzo mądre i potrafią otwierać słoiki.",
+          "Na ramionach ośmiornicy są setki przyssawek.",
+          "Jeśli ośmiornica straci ramię, ono odrośnie.",
+          "Ośmiornica żyje na dnie morza wśród kamieni.",
+          "Przyssawkami ośmiornica czuje smak."
+        ],
+        "arctic_hare": [
+          "Zając polarny jest zimą biały, żeby nie było go widać na śniegu.",
+          "Uszy zająca polarnego są krótsze niż u zwykłego zająca — dzięki temu mniej marznie.",
+          "Zając polarny rozpędza się do sześćdziesięciu kilometrów na godzinę.",
+          "Zimą zające polarne zbierają się w duże gromady.",
+          "Zając polarny wygrzebuje spod śniegu mech i gałązki.",
+          "Gęste futro na łapach zająca polarnego działa jak rakiety śnieżne.",
+          "Zając polarny staje na tylnych łapach, żeby się rozejrzeć.",
+          "Przed wiatrem zając polarny chowa się w dołku w śniegu.",
+          "Zajączki rodzą się z futerkiem i otwartymi oczami.",
+          "Na zające polarne polują lisy polarne, wilki i sowy śnieżne."
+        ],
+        "lizard": [
+          "Jaszczurka wygrzewa się na słońcu, bo jej ciało samo nie wytwarza ciepła.",
+          "W razie niebezpieczeństwa jaszczurka może odrzucić ogon — potem wyrośnie nowy.",
+          "Jaszczurki jedzą owady.",
+          "Skóra jaszczurki jest pokryta łuskami.",
+          "Jaszczurki składają jaja w piasku.",
+          "Pustynne jaszczurki na zmianę podnoszą łapki, żeby nie poparzyć się o piasek.",
+          "Niektóre jaszczurki biegają po ścianach i suficie.",
+          "Jaszczurki, węże i krokodyle to gady.",
+          "Największa jaszczurka na świecie to waran z Komodo.",
+          "Jaszczurka wysuwa język, żeby „powąchać” powietrze."
+        ],
+        "whale": [
+          "Płetwal błękitny to największe zwierzę, jakie kiedykolwiek żyło na Ziemi.",
+          "Wieloryb to nie ryba: oddycha powietrzem i karmi młode mlekiem.",
+          "Serce płetwala błękitnego jest wielkości małego samochodu.",
+          "Wieloryby „śpiewają” pod wodą, a ich pieśni słychać bardzo daleko.",
+          "Fontanna wieloryba to powietrze, które wydycha.",
+          "Płetwal błękitny je maleńkie skorupiaki.",
+          "Wieloryby co roku przepływają tysiące kilometrów.",
+          "Młody wieloryb wypija dziennie setki litrów mleka.",
+          "Zamiast zębów wiele wielorybów ma rogowe płyty — fiszbiny.",
+          "Wieloryby mogą żyć ponad osiemdziesiąt lat."
+        ],
+        "shark": [
+          "Rekiny żyły w oceanie jeszcze przed dinozaurami.",
+          "Rekin nie ma kości — jego szkielet jest zbudowany z chrząstki.",
+          "Zęby rekina rosną rzędami i wymieniają się przez całe życie.",
+          "Rekin wyczuwa zapach zdobyczy z bardzo daleka.",
+          "Największy rekin — wielorybi — je tylko plankton i nie jest groźny dla ludzi.",
+          "Skóra rekina jest szorstka jak papier ścierny.",
+          "Większość rekinów musi stale płynąć, żeby oddychać.",
+          "Rekiny wyczuwają słabe sygnały elektryczne innych zwierząt.",
+          "Rekiny bardzo rzadko atakują ludzi.",
+          "Rekiny są ważne dla oceanu: utrzymują w nim równowagę."
+        ],
+        "gorilla": [
+          "Goryl to największa małpa na świecie.",
+          "Goryle żyją w lasach Afryki.",
+          "Goryle jedzą liście, łodygi i owoce.",
+          "Rodzinę goryli prowadzi duży samiec ze srebrzystym grzbietem.",
+          "Co wieczór goryle budują sobie gniazdo do spania.",
+          "Goryle chodzą, podpierając się na knykciach.",
+          "Goryle są bardzo silne, ale łagodne.",
+          "Goryle potrafią nauczyć się języka migowego.",
+          "Mały goryl jeździ na grzbiecie mamy.",
+          "Goryli zostało mało, dlatego się je chroni."
+        ],
+        "snake": [
+          "Wąż nie ma nóg: pełza, wyginając ciało.",
+          "Wąż „wącha” językiem.",
+          "Wąż połyka zdobycz w całości.",
+          "Węże zrzucają starą skórę, gdy rosną.",
+          "Węże nie mają powiek — nie mrugają.",
+          "Pustynne węże w dzień chowają się w piasku przed upałem.",
+          "Węże wyczuwają kroki po drganiach ziemi.",
+          "Nie wszystkie węże są jadowite.",
+          "Po sytym posiłku wąż może nie jeść przez kilka tygodni.",
+          "Niektóre pustynne węże pełzają bokiem, żeby mniej dotykać gorącego piasku."
+        ],
+        "arctic_fox": [
+          "Lis polarny jest zimą biały, a latem szarobrązowy.",
+          "Futro lisa polarnego należy do najcieplejszych wśród zwierząt.",
+          "Lis polarny nie marznie nawet przy pięćdziesięciu stopniach mrozu.",
+          "Lis polarny słyszy lemingi pod śniegiem i nurkuje za nimi w zaspę.",
+          "Puszystym ogonem lis polarny okrywa się jak kołdrą.",
+          "Łapy lisa polarnego są pokryte futrem nawet od spodu.",
+          "Lisy polarne żyją w norach z wieloma wyjściami.",
+          "Lisy polarne często chodzą za niedźwiedziami polarnymi i dojadają resztki.",
+          "Lis polarny ma małe uszy i krótki nos — dzięki temu traci mniej ciepła.",
+          "W rodzinie lisów polarnych bywa ponad dziesięcioro młodych."
+        ],
+        "zebra": [
+          "Każda zebra ma własny wzór z pasków — jak ludzie odciski palców.",
+          "Zebry żyją na sawannie w dużych stadach — tak łatwiej zauważyć drapieżnika.",
+          "Zebra to krewna konia, ale prawie nie da się jej oswoić.",
+          "Zebry śpią na stojąco, a ktoś ze stada zawsze stoi na straży.",
+          "Źrebię zebry staje na nogi już kilka minut po urodzeniu.",
+          "Paski zebry mylą gryzące muchy — rzadziej na niej siadają."
+        ],
+        "elephant": [
+          "Słoń to największe zwierzę na lądzie.",
+          "Trąbą słoń oddycha, pije, zrywa liście, a nawet się przytula.",
+          "Wielkimi uszami słoń się wachluje, żeby nie było mu gorąco.",
+          "Słonie mają świetną pamięć i latami pamiętają drogę do wody.",
+          "Stado słoni prowadzi najstarsza i najmądrzejsza słonica.",
+          "Słoniątko rodzi się z wagą około stu kilogramów i od razu umie chodzić."
+        ],
+        "rhino": [
+          "Róg nosorożca jest zbudowany z tego samego co nasze paznokcie.",
+          "Nosorożec słabo widzi, za to świetnie słyszy i czuje zapachy.",
+          "Nosorożce lubią tarzać się w błocie — chroni ono skórę przed słońcem i owadami.",
+          "Mimo dużej wagi nosorożec biega szybciej niż człowiek.",
+          "Nosorożce jedzą tylko rośliny: trawę, liście i gałązki.",
+          "Na grzbiecie nosorożca często siedzą ptaszki — wydziobują owady z jego skóry."
+        ],
+        "brown_bear": [
+          "Niedźwiedź brunatny zimą śpi w gawrze i nie je przez kilka miesięcy.",
+          "Niedźwiedź brunatny je prawie wszystko: jagody, orzechy, ryby, miód.",
+          "Niedźwiadki rodzą się zimą w gawrze — maleńkie jak kocięta.",
+          "Niedźwiedź brunatny świetnie wspina się na drzewa i dobrze pływa.",
+          "Węch niedźwiedzia jest o wiele lepszy niż węch psa.",
+          "⟪Niedźwiedzie brunatne żyją także w polskich Tatrach i Bieszczadach.⟫"
+        ],
+        "wolf": [
+          "Wilki żyją w watasze — dużej, zgodnej rodzinie.",
+          "Wilki wyją, żeby przywołać swoich i powiedzieć obcym: to nasza ziemia.",
+          "Wilk jest przodkiem wszystkich psów.",
+          "W ciągu nocy wilcza wataha może przebiec dziesiątki kilometrów.",
+          "O wilczęta w watasze dbają wszystkie dorosłe wilki.",
+          "Wilki słyszą dźwięki z odległości kilku kilometrów."
+        ],
+        "squirrel": [
+          "Wiewiórka robi zapasy na zimę: chowa orzechy i żołędzie.",
+          "Wiewiórka często zapomina o swoich kryjówkach — i wyrastają z nich nowe drzewa.",
+          "Puszysty ogon pomaga wiewiórce utrzymać równowagę podczas skoków.",
+          "Gniazdo wiewiórki jest okrągłe i ciepłe.",
+          "Zęby wiewiórki rosną przez całe życie, dlatego ciągle coś gryzie.",
+          "Zimą futerko wiewiórki robi się gęstsze i bardziej szare."
+        ],
+        "owl": [
+          "Sowa poluje nocą: świetnie widzi w ciemności.",
+          "Sowa lata prawie bezgłośnie dzięki miękkim piórom.",
+          "Sowa nie może poruszać oczami, za to obraca głowę daleko do tyłu.",
+          "Słuch sowy jest tak czuły, że słyszy mysz pod śniegiem.",
+          "W dzień sowa śpi w dziupli albo wśród gęstych gałęzi.",
+          "Pisklęta sowy są pokryte białym puchem."
+        ],
+        "deer": [
+          "Poroże jelenia co roku odpada i wyrasta nowe.",
+          "Jelonki rodzą się z białymi plamkami — tak trudniej je zauważyć w trawie.",
+          "U leśnych jeleni poroże noszą tylko samce.",
+          "Jeleń je trawę, liście, korę i żołędzie.",
+          "Jesienią jelenie głośno ryczą — słychać to w całym lesie.",
+          "Jeleń jest bardzo płochliwy i ucieka wielkimi skokami."
+        ],
+        "boar": [
+          "Dzik ryje ziemię ryjem, szukając korzonków, żołędzi i chrząszczy.",
+          "Młode dzika są pasiaste — paski ukrywają je wśród liści.",
+          "Dzik jest przodkiem świni domowej.",
+          "Dziki lubią kąpać się w błocie, żeby pozbyć się owadów.",
+          "Dzik ma ostre kły, którymi się broni.",
+          "Dziki dobrze pływają i szybko biegają."
+        ],
+        "sea_turtle": [
+          "Żółw morski może żyć dłużej niż pół wieku.",
+          "Żółwie morskie składają jaja na tej samej plaży, na której same się wykluły.",
+          "Zamiast łap żółw morski ma płetwy.",
+          "Żółw morski przepływa przez ocean tysiące kilometrów.",
+          "Małe żółwiki zaraz po wykluciu biegną do morza.",
+          "Żółwie morskie żyły już w czasach dinozaurów."
+        ],
+        "orangutan": [
+          "Orangutan prawie całe życie spędza na drzewach.",
+          "Nazwa „orangutan” znaczy „leśny człowiek”.",
+          "Co wieczór orangutan buduje sobie na drzewie nowe gniazdo z gałęzi.",
+          "Ręce orangutana są dłuższe niż nogi — wygodnie się nimi chwytać gałęzi.",
+          "Orangutan jest bardzo mądry: używa patyczków jak narzędzi.",
+          "Przed deszczem orangutan chowa się pod wielkim liściem jak pod parasolem."
+        ],
+        "crab": [
+          "Krab chodzi bokiem.",
+          "Krab ma dziesięć nóg, a dwie z nich to szczypce.",
+          "Pancerz kraba nie rośnie, dlatego krab go zrzuca i hoduje nowy.",
+          "Krab potrafi odtworzyć utracone szczypce.",
+          "Oczy kraba siedzą na słupkach i patrzą w różne strony.",
+          "Największy krab na świecie ma rozpiętość nóg prawie czterech metrów."
+        ],
+        "sloth": [
+          "Leniwiec to najpowolniejsze zwierzę na świecie.",
+          "Leniwiec śpi, wisząc na gałęzi grzbietem w dół.",
+          "W sierści leniwca rosną glony — przez nie jest zielonkawy.",
+          "Na ziemię leniwiec schodzi mniej więcej raz w tygodniu.",
+          "Leniwiec pływa lepiej, niż chodzi.",
+          "Leniwiec je liście i trawi je przez wiele dni."
+        ],
+        "jellyfish": [
+          "Meduza prawie w całości składa się z wody.",
+          "Meduza nie ma ani mózgu, ani serca, ani kości.",
+          "Meduzy żyły w oceanie jeszcze przed dinozaurami.",
+          "Niektóre meduzy świecą w ciemności.",
+          "Czułki meduzy parzą, dlatego nie wolno jej dotykać.",
+          "Meduza porusza się, ściskając swój dzwon jak parasol."
+        ],
+        "clownfish": [
+          "Błazenek żyje wśród czułków ukwiału, które parzą inne ryby, ale nie jego.",
+          "Błazenek jest jaskrawopomarańczowy w białe paski.",
+          "Błazenek czyści ukwiał, a ten go chroni.",
+          "Błazenki żyją na ciepłych rafach koralowych.",
+          "Błazenek nigdy nie odpływa daleko od swojego domu.",
+          "Ikry błazenka pilnuje tata."
+        ],
+        "squid": [
+          "Kałamarnica pływa, wypychając wodę — jak mała rakieta.",
+          "Kałamarnica ma osiem ramion i dwie długie macki.",
+          "W razie niebezpieczeństwa kałamarnica wypuszcza chmurę atramentu.",
+          "Kałamarnica potrafi błyskawicznie zmieniać kolor.",
+          "Kałamarnica olbrzymia ma oczy wielkości dużego talerza.",
+          "Kałamarnica ma trzy serca."
+        ],
+        "mountain_goat": [
+          "Kozica skacze po prawie pionowych skałach i nie spada.",
+          "Racice kozicy są czepne jak buty alpinisty.",
+          "Gęsta sierść grzeje kozicę na zimnych szczytach.",
+          "Koźlęta już dzień po urodzeniu wspinają się po skałach.",
+          "Wysoko w górach kozice chowają się przed drapieżnikami.",
+          "Kozice jedzą trawę, mech i porosty."
+        ],
+        "eagle": [
+          "Orzeł widzi zdobycz z bardzo dużej wysokości.",
+          "Orzeł buduje gniazdo na wysokich skałach i korzysta z niego przez wiele lat.",
+          "Rozpiętość skrzydeł orła jest większa niż wzrost dorosłego człowieka.",
+          "Orzeł szybuje w powietrzu, prawie nie machając skrzydłami.",
+          "Orzeł ma mocne szpony i haczykowaty dziób.",
+          "Para orłów zostaje razem na całe życie."
+        ],
+        "mountain_ram": [
+          "Muflon ma wielkie, zakręcone rogi.",
+          "Po rogach muflona można poznać jego wiek — jak po słojach drzewa.",
+          "Muflony żyją wysoko w górach, gdzie jest mało drapieżników.",
+          "Barany sprawdzają, kto jest silniejszy, zderzając się rogami.",
+          "Muflon łatwo skacze z kamienia na kamień.",
+          "Zimą muflony schodzą niżej, gdzie jest mniej śniegu."
+        ]
+      }
+    },
+    "capitals": {
+      "LANDMARKS": {
+        "paris": [
+          "Wieża Eiffla",
+          "wieżę Eiffla",
+          "Paryż",
+          "Francji"
+        ],
+        "kyiv": [
+          "Sobór Sofijski",
+          "sobór Sofijski",
+          "Kijów",
+          "Ukrainy"
+        ],
+        "london": [
+          "Big Ben",
+          "Big Bena",
+          "Londyn",
+          "Wielkiej Brytanii"
+        ],
+        "rome": [
+          "Koloseum",
+          "Koloseum",
+          "Rzym",
+          "Włoch"
+        ],
+        "cairo": [
+          "Piramidy",
+          "piramidy",
+          "Kair",
+          "Egiptu"
+        ],
+        "washington": [
+          "Biały Dom",
+          "Biały Dom",
+          "Waszyngton",
+          "Stanów Zjednoczonych"
+        ],
+        "athens": [
+          "Akropol",
+          "Akropol",
+          "Ateny",
+          "Grecji"
+        ],
+        "tokyo": [
+          "Wieża Tokijska",
+          "Wieżę Tokijską",
+          "Tokio",
+          "Japonii"
+        ],
+        "berlin": [
+          "Brama Brandenburska",
+          "Bramę Brandenburską",
+          "Berlin",
+          "Niemiec"
+        ],
+        "beijing": [
+          "Zakazane Miasto",
+          "Zakazane Miasto",
+          "Pekin",
+          "Chin"
+        ],
+        "copenhagen": [
+          "Pomnik Małej Syrenki",
+          "pomnik Małej Syrenki",
+          "Kopenhaga",
+          "Danii"
+        ],
+        "warsaw": [
+          "Zamek Królewski",
+          "Zamek Królewski",
+          "Warszawa",
+          "Polski"
+        ]
+      },
+      "LANDMARK_FACTS": {
+        "paris": [
+          "Wieża Eiffla stoi w Paryżu — stolicy Francji.",
+          "Wieżę Eiffla zbudowano w 1889 roku na Wystawę Światową.",
+          "Wieża Eiffla ma ponad trzysta metrów wysokości.",
+          "Przez czterdzieści lat wieża Eiffla była najwyższą budowlą świata.",
+          "Wieżę nazwano na cześć inżyniera Gustave’a Eiffla.",
+          "Wieżę Eiffla złożono z osiemnastu tysięcy metalowych części.",
+          "Najpierw wieżę chciano rozebrać po dwudziestu latach, ale przydała się jako antena radiowa.",
+          "Żeby pomalować wieżę Eiffla, potrzeba sześćdziesięciu ton farby.",
+          "Latem w słońcu wieża robi się o kilka centymetrów wyższa: metal rozszerza się od ciepła.",
+          "Co wieczór wieża Eiffla migocze tysiącami światełek."
+        ],
+        "kyiv": [
+          "Sobór Sofijski stoi w Kijowie — stolicy Ukrainy.",
+          "Sobór Sofijski zbudowano za księcia Jarosława Mądrego prawie tysiąc lat temu.",
+          "W soborze Sofijskim zachowały się mozaiki i freski, które mają setki lat.",
+          "Najsłynniejsza mozaika soboru przedstawia Matkę Bożą z rękami wzniesionymi do modlitwy.",
+          "W soborze Sofijskim była pierwsza biblioteka Rusi Kijowskiej.",
+          "W soborze Sofijskim pochowano księcia Jarosława Mądrego.",
+          "Sobór Sofijski ma trzynaście kopuł.",
+          "Dzwonnica soboru jest błękitna i widać ją z daleka.",
+          "Sobór Sofijski w Kijowie jest wpisany na listę światowego dziedzictwa UNESCO.",
+          "Na ścianach soboru zachowały się napisy, które ludzie wydrapali setki lat temu."
+        ],
+        "london": [
+          "Big Ben stoi w Londynie — stolicy Wielkiej Brytanii.",
+          "Big Ben to tak naprawdę nazwa wielkiego dzwonu wewnątrz wieży.",
+          "Sama wieża z zegarem nazywa się Wieżą Elżbiety.",
+          "Dzwon Big Ben waży ponad trzynaście ton.",
+          "Zegar na wieży ma cztery tarcze.",
+          "Wskazówka minutowa tego zegara ma ponad cztery metry długości.",
+          "Zegar na wieży chodzi od 1859 roku.",
+          "Dokładność zegara poprawia się starymi monetami kładzionymi na wahadle.",
+          "Żeby wejść na wieżę, trzeba pokonać ponad trzysta schodów.",
+          "Bicia Big Bena Brytyjczycy słuchają w noc sylwestrową."
+        ],
+        "rome": [
+          "Koloseum stoi w Rzymie — stolicy Włoch.",
+          "Koloseum ma prawie dwa tysiące lat.",
+          "Koloseum mieściło pięćdziesiąt tysięcy widzów.",
+          "Na arenie Koloseum walczyli gladiatorzy.",
+          "Koloseum zbudowano w niecałe dziesięć lat.",
+          "W upał nad widzami Koloseum rozpinano ogromny daszek z płótna.",
+          "Pod areną Koloseum były korytarze i klatki dla zwierząt.",
+          "Koloseum miało osiemdziesiąt wejść, więc widzowie wchodzili bardzo szybko.",
+          "Część kamieni z Koloseum zabrano później na inne budowle.",
+          "Koloseum to największy amfiteatr zbudowany w starożytności."
+        ],
+        "cairo": [
+          "Piramidy stoją pod Kairem — stolicą Egiptu.",
+          "Egipskie piramidy mają ponad cztery i pół tysiąca lat.",
+          "Piramidy to grobowce faraonów.",
+          "Największa piramida to piramida Cheopsa.",
+          "Piramidę Cheopsa zbudowano z ponad dwóch milionów kamiennych bloków.",
+          "Przez prawie cztery tysiące lat piramida Cheopsa była najwyższą budowlą świata.",
+          "Piramidy to jedyny z siedmiu cudów świata starożytnego, który przetrwał.",
+          "Obok piramid leży Wielki Sfinks — lew z głową człowieka.",
+          "Kiedyś piramidy były pokryte gładkim białym kamieniem i lśniły w słońcu.",
+          "Piramidy budowano bez dźwigów i maszyn — tylko rękami i prostymi narzędziami."
+        ],
+        "washington": [
+          "Biały Dom stoi w Waszyngtonie — stolicy Stanów Zjednoczonych.",
+          "W Białym Domu mieszka i pracuje prezydent Stanów Zjednoczonych.",
+          "Biały Dom ma ponad sto trzydzieści pokoi.",
+          "Pierwszy prezydent zamieszkał w Białym Domu w 1800 roku.",
+          "Miasto Waszyngton nazwano na cześć pierwszego prezydenta Stanów Zjednoczonych.",
+          "Gabinet prezydenta w Białym Domu ma owalny kształt i nazywa się Gabinetem Owalnym.",
+          "Żeby pomalować Biały Dom, potrzeba ponad dwóch tysięcy litrów białej farby.",
+          "W Białym Domu jest sala kinowa, basen i kręgielnia.",
+          "Co roku wiosną na trawniku Białego Domu dzieci toczą wielkanocne jajka.",
+          "Biały Dom jest narysowany na banknocie dwudziestodolarowym."
+        ],
+        "athens": [
+          "Akropol stoi w Atenach — stolicy Grecji.",
+          "Akropol to wzgórze ze starożytnymi świątyniami nad miastem.",
+          "Najsłynniejsza świątynia Akropolu to Partenon.",
+          "Partenon ma prawie dwa i pół tysiąca lat.",
+          "Partenon zbudowano na cześć bogini Ateny.",
+          "Świątynie Akropolu zbudowano z białego marmuru.",
+          "Według legendy bogini Atena podarowała miastu drzewo oliwne.",
+          "Słowo „akropol” znaczy „górne miasto”.",
+          "W Atenach narodziły się teatr i demokracja.",
+          "Pierwsze nowożytne igrzyska olimpijskie odbyły się w Atenach w 1896 roku."
+        ],
+        "tokyo": [
+          "Wieża Tokijska stoi w Tokio — stolicy Japonii.",
+          "Wieża Tokijska przypomina wieżę Eiffla, ale jest trochę wyższa.",
+          "Wieżę Tokijską pomalowano na biało i pomarańczowo, żeby dobrze widziały ją samoloty.",
+          "Wieżę Tokijską zbudowano w 1958 roku.",
+          "Z Wieży Tokijskiej w pogodny dzień widać górę Fudżi.",
+          "Wieża Tokijska nadaje sygnały telewizyjne i radiowe.",
+          "Tokio to jedno z największych miast świata.",
+          "W Japonii często zdarzają się trzęsienia ziemi, dlatego Wieżę Tokijską zbudowano bardzo mocną.",
+          "Wieczorem Wieża Tokijska świeci ciepłym pomarańczowym światłem.",
+          "Japonię, gdzie stoi Wieża Tokijska, nazywa się Krajem Kwitnącej Wiśni."
+        ],
+        "berlin": [
+          "Brama Brandenburska stoi w Berlinie — stolicy Niemiec.",
+          "Brama Brandenburska ma ponad dwieście lat.",
+          "Na szczycie bramy stoi rydwan zaprzężony w cztery konie.",
+          "Rydwanem na bramie powozi bogini zwycięstwa.",
+          "Brama Brandenburska ma pięć przejazdów między kolumnami.",
+          "Kiedyś Brama Brandenburska była wjazdem do miasta.",
+          "Przez wiele lat obok bramy stał mur, który dzielił Berlin na dwie części.",
+          "Kiedy mur runął, Brama Brandenburska stała się symbolem jedności Niemiec.",
+          "Brama Brandenburska jest przedstawiona na niemieckich monetach euro.",
+          "Przy Bramie Brandenburskiej berlińczycy witają Nowy Rok."
+        ],
+        "beijing": [
+          "Zakazane Miasto leży w Pekinie — stolicy Chin.",
+          "Zakazane Miasto to pałac chińskich cesarzy.",
+          "Zakazane Miasto ma ponad sześćset lat.",
+          "W Zakazanym Mieście jest prawie tysiąc budynków.",
+          "Zwykłym ludziom nie wolno było kiedyś tu wchodzić — dlatego miasto nazwano Zakazanym.",
+          "Dachy Zakazanego Miasta są pokryte żółtą dachówką: żółty był kolorem cesarza.",
+          "Zakazane Miasto otaczają wysoki mur i fosa z wodą.",
+          "W Zakazanym Mieście mieszkało dwudziestu czterech cesarzy.",
+          "Dziś w Zakazanym Mieście jest muzeum.",
+          "Zakazane Miasto to największy zespół pałacowy na świecie."
+        ],
+        "copenhagen": [
+          "Pomnik Małej Syrenki stoi w Kopenhadze — stolicy Danii.",
+          "Mała Syrenka to bohaterka baśni Hansa Christiana Andersena.",
+          "Pomnik Małej Syrenki siedzi na kamieniu tuż nad morzem.",
+          "Pomnik Małej Syrenki ma ponad sto lat.",
+          "Pomnik Małej Syrenki jest nieduży — ma trochę ponad metr wysokości.",
+          "Pomnik Małej Syrenki zrobiono z brązu.",
+          "Mała Syrenka jest symbolem Kopenhagi.",
+          "Andersen, który wymyślił Małą Syrenkę, mieszkał i pisał baśnie w Kopenhadze.",
+          "W Danii, gdzie siedzi Mała Syrenka, wymyślono klocki Lego.",
+          "W Kopenhadze jest więcej rowerów niż samochodów."
+        ],
+        "warsaw": [
+          "Zamek Królewski stoi w Warszawie — stolicy Polski.",
+          "W Zamku Królewskim mieszkali polscy królowie.",
+          "Zamek Królewski stoi przy placu Zamkowym na Starym Mieście.",
+          "Podczas wojny zamek zburzono, a potem odbudowano od nowa.",
+          "Zamek Królewski odbudowano za pieniądze ofiarowane przez ludzi z całej Polski.",
+          "Przed zamkiem stoi wysoka kolumna króla Zygmunta.",
+          "Na wieży Zamku Królewskiego jest zegar.",
+          "Dziś w Zamku Królewskim jest muzeum.",
+          "Stare Miasto w Warszawie jest wpisane na listę dziedzictwa UNESCO.",
+          "Symbolem Warszawy jest Syrenka z mieczem i tarczą."
+        ]
+      },
+      "DAY_NIGHT": {
+        "la": [
+          "Los Angeles",
+          "Los Angeles leży po drugiej stronie Ziemi i słońce jeszcze tam nie dotarło."
+        ],
+        "london": [
+          "Londynie",
+          "Londyn jest całkiem blisko Kijowa, więc tam też jest dzień."
+        ],
+        "delhi": [
+          "Delhi",
+          "Indie leżą trochę dalej na wschód, tam też świeci słońce."
+        ],
+        "honolulu": [
+          "Honolulu na Hawajach",
+          "Hawaje leżą daleko na Oceanie Spokojnym — tam jest teraz głęboka noc."
+        ],
+        "sydney_n": [
+          "Sydney",
+          "Kiedy w Kijowie jest północ, w Australii jest już ranek nowego dnia."
+        ],
+        "la_n": [
+          "Los Angeles",
+          "Kiedy w Kijowie jest północ, w Los Angeles trwa jeszcze dzień."
+        ],
+        "london_n": [
+          "Londynie",
+          "Londyn jest niedaleko, więc tam też jest teraz noc."
+        ],
+        "warsaw_n": [
+          "Warszawie",
+          "Warszawa leży blisko Kijowa, tam też jest noc."
+        ],
+        "paris": [
+          "Paryżu",
+          "Paryż leży niedaleko Kijowa, w Europie — tam też jest dzień."
+        ],
+        "sydney": [
+          "Sydney",
+          "Kiedy w Kijowie jest południe, w Australii jest już późny wieczór i ciemno."
+        ],
+        "ny_n": [
+          "Nowym Jorku",
+          "Kiedy w Kijowie jest północ, w Nowym Jorku jest dopiero piąta po południu."
+        ],
+        "tokyo_n": [
+          "Tokio",
+          "Kiedy w Kijowie jest północ, w Japonii jest już siódma rano — słońce wzeszło."
+        ],
+        "mexico": [
+          "mieście Meksyk",
+          "Kiedy w Kijowie jest południe, w Meksyku jest dopiero czwarta rano — wszyscy śpią."
+        ],
+        "mexico_n": [
+          "mieście Meksyk",
+          "Kiedy w Kijowie jest północ, w Meksyku jest jeszcze dzień — czwarta po południu."
+        ],
+        "vancouver": [
+          "Vancouver w Kanadzie",
+          "Vancouver leży po drugiej stronie Ziemi: kiedy w Kijowie jest południe, tam jest druga w nocy."
+        ],
+        "wellington": [
+          "Wellington w Nowej Zelandii",
+          "Nowa Zelandia leży najdalej od Kijowa: kiedy tam jest południe, w Nowej Zelandii jest już prawie północ."
+        ],
+        "wellington_n": [
+          "Wellington w Nowej Zelandii",
+          "Kiedy w Kijowie jest północ, w Nowej Zelandii jest już prawie południe następnego dnia."
+        ]
+      },
+      "CITIES": {
+        "warsaw": "Warszawie",
+        "london": "Londynie",
+        "athens": "Atenach",
+        "paris": "Paryżu",
+        "lisbon": "Lizbonie",
+        "new_york": "Nowym Jorku",
+        "vilnius": "Wilnie",
+        "rome": "Rzymie",
+        "dubai": "Dubaju",
+        "beijing": "Pekinie",
+        "tokyo": "Tokio",
+        "sydney": "Sydney"
+      }
+    },
+    "nature": {
+      "MAP_ANIMALS": {
+        "kangaroo": "kangur",
+        "penguin": "pingwin",
+        "lion": "lew",
+        "panda": "panda",
+        "llama": "lama",
+        "bison": "bizon",
+        "hedgehog": "jeż",
+        "giraffe": "żyrafa",
+        "koala": "koala",
+        "tiger": "tygrys"
+      },
+      "ANIMALS": {
+        "polar_bear": [
+          "niedźwiedź polarny",
+          "Wielki biały zwierz, który chodzi po krach i łowi foki.",
+          "Niedźwiedź polarny żyje wśród lodu, a gęste futro go grzeje."
+        ],
+        "camel": [
+          "wielbłąd",
+          "Ma jeden garb i potrafi długo iść przez piaski bez wody.",
+          "Wielbłąd może długo nie pić, dlatego dobrze mu na pustyni."
+        ],
+        "monkey": [
+          "małpa",
+          "Zwinnie skacze z gałęzi na gałąź i lubi banany.",
+          "Małpa zwinnie skacze po gałęziach w dżungli."
+        ],
+        "dolphin": [
+          "delfin",
+          "Mądry morski zwierz, który wyskakuje z wody i oddycha powietrzem.",
+          "Delfin żyje w oceanie, ale oddycha powietrzem."
+        ],
+        "seal": [
+          "foka",
+          "Ma płetwy zamiast łap i odpoczywa na krach.",
+          "Foka nie marznie w lodowatej wodzie dzięki grubej warstwie tłuszczu."
+        ],
+        "parrot": [
+          "papuga",
+          "Kolorowy ptak z zakrzywionym dziobem, który umie powtarzać słowa.",
+          "Kolorowe papugi żyją na drzewach w lesie tropikalnym."
+        ],
+        "scorpion": [
+          "skorpion",
+          "Ma szczypce i zagięty ogon z kolcem na końcu.",
+          "Skorpion w dzień chowa się przed upałem pod kamieniami."
+        ],
+        "octopus": [
+          "ośmiornica",
+          "Ma osiem ramion i trzy serca.",
+          "Ośmiornica ma osiem ramion i trzy serca!"
+        ],
+        "arctic_hare": [
+          "zając polarny",
+          "Uszatek w białym futerku, którego nie widać na śniegu.",
+          "Zając polarny jest biały, żeby chować się na śniegu."
+        ],
+        "tiger": [
+          "tygrys",
+          "Największy kot na świecie — rudy w czarne paski.",
+          "Pręgowany tygrys chowa się wśród gęstych zarośli."
+        ],
+        "lizard": [
+          "jaszczurka",
+          "Mały gad, który potrafi odrzucić własny ogon.",
+          "Jaszczurka lubi wygrzewać się na gorącym piasku."
+        ],
+        "whale": [
+          "wieloryb",
+          "Największe zwierzę na Ziemi, które wypuszcza fontannę wody.",
+          "Wieloryb to największe zwierzę na Ziemi."
+        ],
+        "shark": [
+          "rekin",
+          "Morski drapieżnik z ostrą płetwą na grzbiecie i wieloma rzędami zębów.",
+          "Rekiny żyły w oceanie jeszcze przed dinozaurami."
+        ],
+        "gorilla": [
+          "goryl",
+          "Największa małpa, która bije się pięściami w pierś.",
+          "Goryl to największa małpa, żyje w afrykańskich lasach."
+        ],
+        "snake": [
+          "wąż",
+          "Nie ma nóg, pełza i syczy.",
+          "Pustynne węże szybko suną po piasku."
+        ],
+        "arctic_fox": [
+          "lis polarny",
+          "Lisek z dalekiej północy: zimą biały, a latem szarobrązowy.",
+          "Lis polarny ma bardzo ciepłe białe futro."
+        ],
+        "lion": [
+          "lew",
+          "Król zwierząt z bujną grzywą.",
+          "Lew żyje na otwartych trawiastych równinach Afryki i poluje na stada."
+        ],
+        "zebra": [
+          "zebra",
+          "Podobna do konia, ale cała w czarno-białe paski.",
+          "Zebry pasą się stadami na trawiastych równinach."
+        ],
+        "giraffe": [
+          "żyrafa",
+          "Najwyższe zwierzę z długą szyją i w plamy.",
+          "Żyrafa sięga po liście z czubków pojedynczych drzew wśród traw."
+        ],
+        "elephant": [
+          "słoń",
+          "Największe zwierzę lądowe z trąbą i wielkimi uszami.",
+          "Słonie wędrują po trawiastych równinach od wodopoju do wodopoju."
+        ],
+        "rhino": [
+          "nosorożec",
+          "Ciężki zwierz o grubej skórze i z rogiem na nosie.",
+          "Nosorożec pasie się na równinach, gdzie jest dużo trawy."
+        ],
+        "brown_bear": [
+          "niedźwiedź brunatny",
+          "Wielki brązowy zwierz, który lubi miód i zimą śpi w gawrze.",
+          "Niedźwiedź brunatny znajduje w lesie jagody, orzechy i zaciszną gawrę."
+        ],
+        "squirrel": [
+          "wiewiórka",
+          "Ruda skoczka z puszystym ogonem, która chowa orzechy.",
+          "Wiewiórka mieszka na drzewach i je orzechy oraz szyszki."
+        ],
+        "wolf": [
+          "wilk",
+          "Szary drapieżnik, który żyje w watasze i wyje do księżyca.",
+          "Wilcza wataha żyje i poluje wśród lasów."
+        ],
+        "hedgehog": [
+          "jeż",
+          "Mały zwierzak w kolczastym futerku, który zwija się w kulkę.",
+          "Jeż szuka chrząszczy w leśnej ściółce i zimuje pod stertą liści."
+        ],
+        "owl": [
+          "sowa",
+          "Nocny ptak z wielkimi oczami, który woła „hu-hu”.",
+          "Sowa mieszka w dziupli starego drzewa."
+        ],
+        "deer": [
+          "jeleń",
+          "Smukły zwierz z rozgałęzionym porożem.",
+          "Jeleń chowa się wśród drzew i je liście oraz korę."
+        ],
+        "boar": [
+          "dzik",
+          "Dzika świnia z kłami, która ryje ziemię w poszukiwaniu żołędzi.",
+          "Dzik ryje ziemię pod dębami, szukając żołędzi."
+        ],
+        "sea_turtle": [
+          "żółw morski",
+          "Ma pancerz i płetwy, a jaja składa w piasku na plaży.",
+          "Żółw morski ma płetwy zamiast łap i całe życie pływa."
+        ],
+        "orangutan": [
+          "orangutan",
+          "Wielka ruda małpa z bardzo długimi rękami.",
+          "Orangutan prawie nigdy nie schodzi z drzew lasu tropikalnego."
+        ],
+        "crab": [
+          "krab",
+          "Ma szczypce i pancerz i chodzi bokiem.",
+          "Krab żyje na dnie morza i na wybrzeżu."
+        ],
+        "sloth": [
+          "leniwiec",
+          "Najpowolniejszy zwierz: wisi na gałęzi głową w dół i prawie cały czas śpi.",
+          "Leniwiec całe życie wisi na gałęziach w wilgotnym lesie tropikalnym."
+        ],
+        "jellyfish": [
+          "meduza",
+          "Przezroczysta, podobna do parasolki, z parzącymi czułkami.",
+          "Meduza prawie cała składa się z wody i płynie z prądem."
+        ],
+        "clownfish": [
+          "błazenek",
+          "Pomarańczowa rybka w białe paski, która chowa się w ukwiale.",
+          "Błazenek żyje na ciepłych rafach koralowych."
+        ],
+        "squid": [
+          "kałamarnica",
+          "Ma dziesięć ramion i ucieka, wypuszczając chmurkę atramentu.",
+          "Kałamarnica pływa w morskiej toni jak mała rakieta."
+        ],
+        "mountain_goat": [
+          "kozica",
+          "Rogata skoczka, która wspina się po stromych skałach.",
+          "Kozica skacze po prawie pionowych skałach."
+        ],
+        "eagle": [
+          "orzeł",
+          "Wielki drapieżny ptak o bystrym wzroku, który szybuje wysoko na niebie.",
+          "Orzeł buduje gniazdo na wysokich skałach."
+        ],
+        "llama": [
+          "lama",
+          "Puszysta krewna wielbłąda bez garbu, która nosi ładunki w Andach.",
+          "Lama żyje wysoko w górach Ameryki Południowej — Andach."
+        ],
+        "mountain_ram": [
+          "muflon",
+          "Ma wielkie zakręcone rogi i skacze z kamienia na kamień.",
+          "Muflon łatwo skacze z kamienia na kamień."
+        ],
+        "crocodile": [
+          "krokodyl",
+          "Zielony zębaty gad, który leży w rzece jak kłoda.",
+          "Krokodyl żyje w ciepłych rzekach i bagnach lasu tropikalnego.",
+          "Krokodyl może godzinę leżeć pod wodą bez oddychania.",
+          "Krokodyle żyły na Ziemi już w czasach dinozaurów."
+        ],
+        "tree_frog": [
+          "rzekotka",
+          "Mała kolorowa skoczka z lepkimi palcami, która mieszka na liściach.",
+          "Rzekotka mieszka na liściach wysoko w koronach lasu tropikalnego.",
+          "Na palcach rzekotki są lepkie poduszeczki — trzyma się nimi liści.",
+          "Najbarwniejsze żaby tropików są trujące: kolor ostrzega, że nie wolno ich dotykać."
+        ],
+        "morpho": [
+          "motyl morfo",
+          "Ma wielkie niebieskie skrzydła, które błyszczą w słońcu.",
+          "Motyl morfo lata wśród drzew lasu tropikalnego.",
+          "Skrzydła motyla morfo są niebieskie i błyszczą jak metal.",
+          "Rozpiętość skrzydeł morfo jest jak dłoń dorosłego człowieka."
+        ],
+        "bat": [
+          "nietoperz",
+          "Lata nocą, a śpi, zwisając głową w dół.",
+          "Największe nietoperze — rudawki — żyją w lasach tropikalnych i jedzą owoce.",
+          "Nietoperz to jedyny ssak, który potrafi naprawdę latać.",
+          "Nietoperze śpią w dzień, zwisając głową w dół."
+        ],
+        "peacock": [
+          "paw",
+          "Ptak, który rozkłada ogon w ogromny barwny wachlarz.",
+          "Paw żyje w gęstych lasach gorących Indii.",
+          "Wspaniały ogon z „oczami” mają tylko samce pawi.",
+          "Paw rozkłada ogon jak wachlarz, żeby spodobać się pawicy."
+        ],
+        "leafcutter": [
+          "mrówka grzybiarka",
+          "Maleńka robotnica, która niesie nad głową kawałek liścia.",
+          "Mrówki grzybiarki żyją w lasach tropikalnych Ameryki.",
+          "Mrówki grzybiarki noszą kawałki liści wiele razy cięższe od siebie.",
+          "Na liściach te mrówki hodują pod ziemią grzyby — i nimi się żywią."
+        ],
+        "hippo": [
+          "hipopotam",
+          "Gruby zwierz z ogromną paszczą, który cały dzień siedzi w wodzie.",
+          "Hipopotam żyje w rzekach i jeziorach afrykańskiej sawanny.",
+          "W dzień hipopotam siedzi w wodzie, a nocą wychodzi paść się na trawie.",
+          "Hipopotam potrafi otworzyć paszczę szerzej niż jakiekolwiek inne zwierzę lądowe."
+        ],
+        "buffalo": [
+          "bawół",
+          "Potężny czarny byk z szerokimi wygiętymi rogami.",
+          "Bawół afrykański pasie się w wielkich stadach na sawannie.",
+          "Bawoły trzymają się razem: takiego stada boi się zaatakować nawet lew.",
+          "Bawół lubi leżeć w błocie — tak ratuje się przed upałem i owadami."
+        ],
+        "kangaroo": [
+          "kangur",
+          "Skacze na tylnych łapach i nosi malucha w torbie.",
+          "Kangur żyje na trawiastych równinach Australii.",
+          "Mama kangurzyca nosi malucha w torbie na brzuchu.",
+          "Kangur nie umie chodzić do tyłu."
+        ],
+        "grasshopper": [
+          "konik polny",
+          "Zielony skoczek, który cyka w trawie.",
+          "Konik polny żyje w wysokiej trawie otwartych równin.",
+          "Konik polny skacze na odległość dwadzieścia razy większą niż jego ciało.",
+          "Konik polny „śpiewa”, pocierając skrzydełkiem o skrzydełko."
+        ],
+        "flamingo": [
+          "flaming",
+          "Różowy ptak na długich nogach, który lubi stać na jednej.",
+          "Flamingi żyją na płytkich słonych jeziorach wśród afrykańskiej sawanny.",
+          "Flamingi różowieją od skorupiaków i glonów, które jedzą.",
+          "Flaming często stoi na jednej nodze — tak mniej marznie."
+        ],
+        "panda": [
+          "panda",
+          "Czarno-biały niedźwiedź, który cały dzień żuje bambus.",
+          "Panda żyje w lasach bambusowych na zboczach gór w Chinach.",
+          "Panda je bambus prawie cały dzień.",
+          "Nowo narodzona panda jest różowa i waży tyle co jabłko."
+        ],
+        "koala": [
+          "koala",
+          "Szary puszysty zwierzak, który siedzi na eukaliptusie i prawie cały czas śpi.",
+          "Koala żyje na eukaliptusach w lasach Australii.",
+          "Koala je tylko liście eukaliptusa i prawie nigdy nie pije.",
+          "Koala śpi nawet dwadzieścia godzin na dobę."
+        ],
+        "otter": [
+          "wydra",
+          "Zwinna pływaczka z gęstym futrem, która łowi ryby w rzece.",
+          "Wydra żyje nad leśnymi rzekami i jeziorami.",
+          "Wydra świetnie pływa i łowi ryby pod wodą.",
+          "Futro wydry jest tak gęste, że skóra pod nim nie moknie."
+        ],
+        "beaver": [
+          "bóbr",
+          "Budowniczy tam z płaskim ogonem i mocnymi zębami.",
+          "Bóbr żyje na leśnych rzekach i buduje tam tamy.",
+          "Bóbr przegryza zębami pień drzewa.",
+          "Wejście do bobrowego żeremia jest ukryte pod wodą."
+        ],
+        "badger": [
+          "borsuk",
+          "Ma biały pyszczek z dwoma czarnymi pasami i mieszka w norze.",
+          "Borsuk żyje w lesie, w głębokiej norze z wieloma korytarzami.",
+          "Borsuk to wielki czyścioch: regularnie zmienia ściółkę w swojej norze.",
+          "Zimą borsuk śpi w norze, choć w ciepłe dni może się budzić."
+        ],
+        "skunk": [
+          "skunks",
+          "Czarno-biały zwierzak, który broni się bardzo nieprzyjemnym zapachem.",
+          "Skunks żyje w lasach Ameryki Północnej.",
+          "Kiedy skunks się boi, pryska bardzo śmierdzącą cieczą.",
+          "Czarno-białe ubarwienie skunksa ostrzega: „Nie podchodź!”"
+        ],
+        "raccoon": [
+          "szop pracz",
+          "Ma czarną „maskę” na pyszczku i ogon w paski.",
+          "Szop pracz żyje w lesie blisko wody i śpi w dziuplach.",
+          "Szop pracz płucze jedzenie w wodzie, zanim je zje.",
+          "Na pyszczku szopa jest czarna „maska” jak u rozbójnika."
+        ],
+        "forest_mouse": [
+          "mysz leśna",
+          "Maleńki gryzoń z długim ogonkiem, który gromadzi nasiona.",
+          "Mysz leśna mieszka w norce pod korzeniami drzew.",
+          "Mysz leśna gromadzi na zimę nasiona i orzeszki.",
+          "Mysz leśna dobrze się wspina i potrafi wejść na drzewo."
+        ],
+        "raven": [
+          "kruk",
+          "Wielki czarny ptak, który woła „kra” i jest bardzo mądry.",
+          "Kruk buduje gniazdo na wysokich drzewach w głębi lasu.",
+          "Kruk należy do najmądrzejszych ptaków: potrafi rozwiązywać łamigłówki.",
+          "Kruki żyją w parach i nie rozstają się przez całe życie."
+        ],
+        "snail": [
+          "ślimak",
+          "Pełznie bardzo powoli i nosi domek na grzbiecie.",
+          "Ślimak żyje w wilgotnej leśnej trawie i pod liśćmi.",
+          "Ślimak nosi swój domek na grzbiecie.",
+          "Oczy ślimaka są na końcach długich czułków."
+        ],
+        "bee": [
+          "dzika pszczoła",
+          "Pasiasta robotnica, która zbiera nektar i robi miód.",
+          "Dzikie pszczoły mieszkają w dziuplach leśnych drzew.",
+          "Żeby zrobić łyżkę miodu, pszczoły odwiedzają tysiące kwiatów.",
+          "Pszczoła opowiada siostrom, gdzie są kwiaty, specjalnym tańcem."
+        ],
+        "spider": [
+          "pająk krzyżak",
+          "Ma osiem nóg i plecie pajęczynę.",
+          "Pająk krzyżak plecie pajęczynę między gałęziami w lesie.",
+          "Pająk ma osiem nóg, więc nie jest owadem.",
+          "Pajęczyna jest mocniejsza niż stalowa nić tej samej grubości."
+        ],
+        "ladybug": [
+          "biedronka",
+          "Czerwony chrząszczyk w czarne kropki na grzbiecie.",
+          "Biedronka żyje na leśnych polanach i na skraju lasu.",
+          "Biedronka zjada mszyce i tak ratuje rośliny.",
+          "Jaskrawe kropki biedronki ostrzegają ptaki, że jest niesmaczna."
+        ],
+        "moose": [
+          "łoś",
+          "Największy jeleniowaty, z porożem podobnym do łopat.",
+          "Łoś żyje w gęstych północnych lasach w pobliżu bagien.",
+          "Łoś jest największy z jeleniowatych: jest wyższy od dorosłego człowieka.",
+          "Poroże łosia przypomina szerokie łopaty, a co roku je zrzuca."
+        ],
+        "wisent": [
+          "żubr",
+          "Najcięższy zwierz Europy — kudłaty leśny byk.",
+          "Żubr żyje w starych lasach Europy⟪ — także w Polsce, w Puszczy Białowieskiej⟫.",
+          "Żubr to najcięższe zwierzę lądowe Europy.",
+          "Kiedyś żubry prawie wyginęły, ale ludzie uratowali je w rezerwatach."
+        ],
+        "turkey": [
+          "dziki indyk",
+          "Wielki ptak z czerwonym „koralem”, który rozkłada ogon jak wachlarz.",
+          "Dziki indyk żyje w lasach Ameryki Północnej.",
+          "Dziki indyk umie latać i nocuje na drzewach.",
+          "Indyk samiec rozkłada ogon jak wachlarz, podobnie jak paw."
+        ],
+        "lobster": [
+          "homar",
+          "Morski rak z dwiema wielkimi szczypcami i długimi wąsami.",
+          "Homar żyje na kamienistym dnie morza.",
+          "Homar ma dwie wielkie szczypce: jedną miażdży, drugą tnie.",
+          "Homar rośnie całe życie i co jakiś czas zrzuca ciasny pancerz."
+        ],
+        "shrimp": [
+          "krewetka",
+          "Mały skorupiak z długimi wąsami, który pływa w ławicach.",
+          "Krewetki żyją w morzu w wielkich ławicach.",
+          "Serce krewetki znajduje się w głowie.",
+          "Krewetka pływa do tyłu, gwałtownie podginając ogon."
+        ],
+        "puffer": [
+          "rozdymka",
+          "Ryba, która ze strachu nadyma się jak kolczasta piłka.",
+          "Rozdymka żyje w ciepłych morzach wśród korali.",
+          "Kiedy rozdymka się boi, nadyma się jak kolczasta piłka.",
+          "Rozdymka jest bardzo trująca, dlatego drapieżniki jej nie ruszają."
+        ],
+        "tuna": [
+          "tuńczyk",
+          "Wielka srebrzysta ryba — jedna z najszybszych w oceanie.",
+          "Tuńczyk całe życie pływa po otwartym oceanie.",
+          "Tuńczyk to jeden z najszybszych pływaków oceanu.",
+          "Tuńczyk nigdy się nie zatrzymuje: płynie nawet we śnie."
+        ],
+        "sperm_whale": [
+          "kaszalot",
+          "Olbrzymi zębaty wieloryb z ogromną kanciastą głową.",
+          "Kaszalot żyje w oceanie i nurkuje w najciemniejsze głębiny.",
+          "Kaszalot nurkuje na głębokość ponad kilometra — po olbrzymie kałamarnice.",
+          "Kaszalot ma największy mózg ze wszystkich zwierząt na Ziemi."
+        ],
+        "penguin": [
+          "pingwin",
+          "Ptak w czarnym „fraku”, który nie lata, za to świetnie pływa.",
+          "Pingwiny żyją na wybrzeżu Antarktydy i żywią się w zimnym oceanie.",
+          "Pingwin to ptak, który nie lata, za to świetnie pływa.",
+          "Tata pingwin ogrzewa jajo na łapach, pod fałdą skóry."
+        ],
+        "oyster": [
+          "ostryga",
+          "Mieszka w muszli z dwóch połówek i nigdzie się nie rusza.",
+          "Ostryga żyje na dnie morza, przyrośnięta muszlą do kamienia.",
+          "Jeśli do muszli wpadnie ziarenko piasku, niektóre małże hodują wokół niego perłę.",
+          "Ostryga przecedza przez siebie morską wodę i tak ją oczyszcza."
+        ],
+        "hermit": [
+          "krab pustelnik",
+          "Nosi na sobie cudzą muszlę zamiast domku.",
+          "Krab pustelnik żyje na dnie morza w cudzej pustej muszli.",
+          "Kiedy krab pustelnik podrośnie, szuka sobie większej muszli.",
+          "Swoją muszlę krab pustelnik wszędzie nosi na sobie."
+        ],
+        "coral": [
+          "koralowiec",
+          "Wygląda jak kamienny krzaczek, a naprawdę to mnóstwo maleńkich zwierzątek.",
+          "Koralowce żyją w ciepłych, przejrzystych morzach i budują rafy.",
+          "Koralowiec przypomina kamień albo roślinę, ale to maleńkie zwierzątka.",
+          "Na rafie koralowej żyje więcej różnych ryb niż gdziekolwiek indziej w oceanie."
+        ],
+        "lemming": [
+          "leming",
+          "Mały puszysty gryzoń tundry, podobny do chomika.",
+          "Leming żyje w zimnej tundrze nad Oceanem Arktycznym.",
+          "Zimą leming drąży korytarze pod śniegiem, gdzie jest cieplej.",
+          "Lemingami żywią się lisy polarne i sowy śnieżne."
+        ],
+        "snow_goose": [
+          "gęś śnieżna",
+          "Biały wędrowny ptak, który leci kluczem i gęga.",
+          "Gęś śnieżna wychowuje pisklęta w zimnej tundrze na dalekiej północy.",
+          "Na zimę gęsi śnieżne odlatują daleko na południe ogromnymi stadami.",
+          "W locie gęsi ustawiają się w klucz — tak łatwiej lecieć."
+        ],
+        "bactrian": [
+          "wielbłąd dwugarbny",
+          "Ma dwa garby i gęstą sierść.",
+          "Wielbłąd dwugarbny żyje na zimnych pustyniach Azji.",
+          "W garbach wielbłąda nie ma wody, tylko zapas tłuszczu.",
+          "Gęsta sierść chroni wielbłąda dwugarbnego i przed upałem, i przed mrozem."
+        ],
+        "scarab": [
+          "skarabeusz",
+          "Chrząszcz, który toczy przed sobą wielką kulkę.",
+          "Skarabeusz żyje w gorących piaskach.",
+          "Skarabeusz toczy przed sobą kulkę o wiele większą od siebie.",
+          "W starożytnym Egipcie skarabeusza uważano za świętego chrząszcza."
+        ],
+        "jerboa": [
+          "skoczek pustynny",
+          "Maleńki skoczek z długimi tylnymi łapkami i pędzelkiem na ogonie.",
+          "Skoczek pustynny żyje na pustyni i w dzień chowa się w chłodnej norze.",
+          "Skoczek pustynny skacze na długich tylnych łapkach jak mały kangur.",
+          "Skoczek pustynny może wcale nie pić: wystarcza mu wilgoć z jedzenia."
+        ],
+        "yak": [
+          "jak",
+          "Kudłaty górski byk z sierścią aż do ziemi.",
+          "Jak żyje bardzo wysoko w górach Tybetu.",
+          "Długa gęsta sierść jaka zwisa prawie do ziemi i grzeje w mróz.",
+          "Jaki pomagają ludziom nosić ładunki górskimi ścieżkami."
+        ],
+        "snow_leopard": [
+          "pantera śnieżna",
+          "Cętkowany górski kot z bardzo długim puszystym ogonem.",
+          "Pantera śnieżna żyje wśród skał i śniegów najwyższych gór Azji.",
+          "Długim puszystym ogonem pantera śnieżna okrywa się jak kołdrą.",
+          "Pantera śnieżna skacze przez przepaście szerokie jak pokój."
+        ]
+      },
+      "ZONES": {
+        "arctic": {
+          "name": "Arktyka",
+          "it": "Arktyka",
+          "where": "w Arktyce",
+          "no": "Brr, tu jest za zimno!",
+          "signs": [
+            "Tu prawie zawsze jest zima: śnieg, lód i siarczysty mróz.",
+            "Tu latem słońce nie zachodzi, a zimą trwa długa noc polarna.",
+            "Tu ziemia nie rozmarza nawet latem, a drzewa nie rosną wcale.",
+            "Tu po morzu pływają kry, a na niebie świeci zorza polarna.",
+            "Tu najcieplejszy miesiąc jest zimniejszy niż nasza wiosna.",
+            "Tu ludzie jeżdżą saniami zaprzężonymi w psy albo renifery."
+          ],
+          "facts": [
+            "Arktyka leży wokół bieguna północnego — na samym „czubku” Ziemi.",
+            "W Arktyce pod biegunem nie ma lądu: jest tam ocean pokryty grubym lodem.",
+            "Arktyczne zwierzęta mają białe futro, żeby chować się na śniegu.",
+            "Latem w Arktyce słońce nie zachodzi przez kilka miesięcy — to dzień polarny."
+          ]
+        },
+        "jungle": {
+          "name": "Dżungla",
+          "it": "dżungla",
+          "where": "w dżungli",
+          "no": "Oj, tu jest za wilgotno i za ciasno!",
+          "signs": [
+            "Tu zawsze jest ciepło i codziennie pada deszcz, a drzewa rosną tak gęsto, że na dole panuje półmrok.",
+            "Tu z gałęzi zwisają liany, a na drzewach żyje więcej zwierząt niż na ziemi.",
+            "Tu nie ma zimy: cały rok jest gorąco i wilgotno jak w szklarni.",
+            "Tu drzewa są tak wysokie, że ich korony tworzą zielony dach.",
+            "Tu rośnie kakaowiec, z którego robi się czekoladę, i banany.",
+            "Tu po południu prawie codziennie grzmi burza."
+          ],
+          "facts": [
+            "Dżungla to las tropikalny. Żyje w nim ponad połowa wszystkich gatunków zwierząt na Ziemi.",
+            "W dżungli drzewa rosną piętrami: na dole jest ciemno, a u góry — słońce i ptaki.",
+            "Największy las tropikalny rośnie wzdłuż rzeki Amazonki w Ameryce Południowej.",
+            "W dżungli deszcz pada prawie codziennie, dlatego zawsze jest tam wilgotno."
+          ]
+        },
+        "desert": {
+          "name": "Pustynia",
+          "it": "pustynia",
+          "where": "na pustyni",
+          "no": "Uff, tu jest za gorąco i za sucho!",
+          "signs": [
+            "Tu w dzień panuje straszny upał, prawie nie ma wody, a dookoła jest piasek i kamienie.",
+            "Tu deszcz może nie padać latami, a z roślin rosną tylko kolczaste kaktusy.",
+            "Tu w dzień piasek jest gorący jak patelnia, a nocą bywa mróz.",
+            "Tu wiatr usypuje wysokie piaszczyste wzgórza — wydmy.",
+            "Tu wodę można znaleźć tylko w oazie.",
+            "Tu rośliny gromadzą wodę w grubych łodygach i mają kolce zamiast liści."
+          ],
+          "facts": [
+            "Największa gorąca pustynia świata to Sahara w Afryce.",
+            "W dzień na pustyni jest bardzo gorąco, a nocą bywa naprawdę zimno.",
+            "Miejsce na pustyni, gdzie jest woda i rosną palmy, nazywa się oazą.",
+            "Pustynne zwierzęta wychodzą przeważnie nocą, gdy upał słabnie."
+          ]
+        },
+        "ocean": {
+          "name": "Ocean",
+          "it": "ocean",
+          "where": "w oceanie",
+          "no": "Bul-bul! Ja tak nie umiem pływać!",
+          "signs": [
+            "Tu wszędzie jest słona woda — głęboka, z falami i prądami.",
+            "Tu są rafy koralowe, a na dnie — prawdziwe podwodne góry.",
+            "Tu nie ma ziemi pod nogami — tylko woda aż po horyzont.",
+            "Tu dwa razy na dobę woda podchodzi do brzegu i cofa się z powrotem.",
+            "Tu podczas sztormu wznoszą się fale wysokie jak dom.",
+            "Tu w głębinie zawsze jest ciemno i zimno, a niektóre ryby same świecą."
+          ],
+          "facts": [
+            "Oceany pokrywają większą część naszej planety — dlatego Ziemia z kosmosu jest niebieska.",
+            "Woda w oceanie jest słona, nie można jej pić.",
+            "Najgłębsze miejsca oceanu są ciemne i zimne — nie dociera tam słońce.",
+            "W oceanie żyją i największe zwierzęta Ziemi — wieloryby, i całkiem maleńki plankton."
+          ]
+        },
+        "savanna": {
+          "name": "Sawanna",
+          "it": "sawanna",
+          "where": "na sawannie",
+          "no": "Oj, tu są same trawy — i wcale nie ma gdzie się schować!",
+          "signs": [
+            "Tu są bezkresne równiny z wysoką trawą, na których gdzieniegdzie stoją pojedyncze drzewa.",
+            "Tu przez pół roku leją deszcze, a przez pół roku trwa susza, i wielkie stada wędrują w poszukiwaniu wody.",
+            "Tu jest gorąco cały rok, a drzewa rosną daleko od siebie.",
+            "Tu w porze suchej trawa żółknie i często wybuchają pożary.",
+            "Tu rośnie baobab — drzewo z bardzo grubym pniem.",
+            "Tu przy wodopoju zbierają się razem słonie, zebry i antylopy."
+          ],
+          "facts": [
+            "Sawanna to trawiasta równina w ciepłych krajach. Najbardziej znane sawanny są w Afryce.",
+            "Na sawannie żyją największe zwierzęta lądowe: słonie, żyrafy, nosorożce.",
+            "W porze suchej trawa na sawannie żółknie, a rzeki robią się płytkie.",
+            "Drzewa sawanny — baobaby i akacje — gromadzą wodę na suchą porę."
+          ]
+        },
+        "forest": {
+          "name": "Las",
+          "it": "las",
+          "where": "w lesie",
+          "no": "Oj, tu jest tyle drzew, że się zgubię!",
+          "signs": [
+            "Tu rosną dęby, sosny i świerki, jesienią opadają liście, a zimą leży śnieg.",
+            "Tu są wszystkie cztery pory roku, a do tego grzyby, jagody i szyszki.",
+            "Tu wiosną rozwijają się liście, a jesienią żółkną i opadają.",
+            "Tu pod nogami jest miękki mech, a w górze szumią korony drzew.",
+            "Tu zimą niedźwiedzie i jeże śpią, a wiosną się budzą.",
+            "Tu można usłyszeć dzięcioła i kukułkę."
+          ],
+          "facts": [
+            "Lasy nazywa się płucami planety: drzewa oczyszczają powietrze.",
+            "W lesie jest wiele kryjówek: dziuple, nory, gęste krzaki.",
+            "Jesienią las liściasty robi się żółty i czerwony, a iglasty zostaje zielony.",
+            "⟪Najstarszy las w Polsce to Puszcza Białowieska — rosną w niej dęby, które mają kilkaset lat.⟫"
+          ]
+        },
+        "mountains": {
+          "name": "Góry",
+          "it": "góry",
+          "where": "w górach",
+          "no": "Och, tu jest za wysoko i strasznie stromo!",
+          "signs": [
+            "Tu są strome skały, na szczytach cały rok leży śnieg, a powietrze jest zimne.",
+            "Tu im wyżej się wchodzi, tym jest zimniej, a zamiast drzew są same kamienie.",
+            "Tu powietrze jest tak rzadkie, że bez przyzwyczajenia trudno oddychać.",
+            "Tu ze zboczy płyną szybkie zimne strumienie i spadają wodospady.",
+            "Tu ze zbocza może zejść lawina śnieżna.",
+            "Tu droga wije się serpentynami, a ścieżki biegną nad przepaściami."
+          ],
+          "facts": [
+            "Najwyższa góra świata to Mount Everest.⟪ Najwyższy szczyt Polski to Rysy w Tatrach.⟫",
+            "Na wysokich szczytach śnieg nie topnieje nawet latem.",
+            "Im wyżej w górach, tym mniej drzew: na szczytach są tylko kamienie i mech.",
+            "Górskie zwierzęta świetnie wspinają się po skałach i mają gęste futro."
+          ]
+        }
+      }
+    },
+    "oceans": {
+      "OCEANS": {
+        "pacific": {
+          "fact": "Ocean Spokojny jest największy i najgłębszy na Ziemi.",
+          "pool": [
+            "Ocean Spokojny jest największy i najgłębszy na Ziemi.",
+            "Ocean Spokojny jest tak wielki, że zmieściłyby się w nim wszystkie kontynenty razem.",
+            "W Oceanie Spokojnym leży Rów Mariański — najgłębsze miejsce na planecie.",
+            "Nazwę „Spokojny” nadał oceanowi podróżnik Magellan: kiedy go przepływał, nie było ani jednej burzy.",
+            "Na Oceanie Spokojnym jest ponad dwadzieścia tysięcy wysp — więcej niż na wszystkich innych oceanach razem.",
+            "Ocean Spokojny oblewa Azję, Australię i obie Ameryki.",
+            "W Oceanie Spokojnym leży Wielka Rafa Koralowa — największa rafa koralowa na świecie.",
+            "Na dnie Oceanu Spokojnego jest wiele wulkanów. Hawaje to ich wierzchołki.",
+            "Ocean Spokojny zajmuje prawie jedną trzecią całej powierzchni Ziemi.",
+            "Mimo nazwy na Oceanie Spokojnym bywają silne sztormy — tajfuny."
+          ],
+          "riddles": [
+            "największego oceanu na Ziemi",
+            "najgłębszego oceanu",
+            "oceanu, który leży między Azją a Ameryką",
+            "oceanu, na którym jest najwięcej wysp",
+            "oceanu, w którym leży Wielka Rafa Koralowa",
+            "oceanu, któremu nazwę nadał Magellan",
+            "oceanu, który oblewa brzegi Japonii",
+            "oceanu, na którym bywają tajfuny"
+          ],
+          "riddleFacts": [
+            "Największy ocean na Ziemi to Ocean Spokojny: zajmuje prawie jedną trzecią planety.",
+            "Najgłębszy ocean to Ocean Spokojny: leży w nim Rów Mariański.",
+            "Między Azją a Ameryką leży Ocean Spokojny.",
+            "Najwięcej wysp jest na Oceanie Spokojnym: ponad dwadzieścia tysięcy.",
+            "Wielka Rafa Koralowa leży w Oceanie Spokojnym u wybrzeży Australii.",
+            "Nazwę „Spokojny” nadał oceanowi Magellan: kiedy płynął, nie było ani jednej burzy.",
+            "Brzegi Japonii oblewa Ocean Spokojny.",
+            "Tajfuny to silne burze Oceanu Spokojnego."
+          ]
+        },
+        "atlantic": {
+          "fact": "Ocean Atlantycki leży między Ameryką, Europą i Afryką.",
+          "pool": [
+            "Ocean Atlantycki leży między Ameryką, Europą i Afryką.",
+            "Ocean Atlantycki jest drugi co do wielkości na Ziemi.",
+            "To właśnie Ocean Atlantycki przepłynął Kolumb, gdy szukał drogi do Indii.",
+            "W Oceanie Atlantyckim płynie ciepły prąd Golfsztrom — ogrzewa on Europę.",
+            "Środkiem Atlantyku ciągnie się na dnie bardzo długi podwodny łańcuch górski.",
+            "Nazwa „Atlantycki” pochodzi od imienia Atlasa — olbrzyma z greckich mitów.",
+            "W zimnych wodach Atlantyku pływają góry lodowe.",
+            "⟪Morze Bałtyckie, nad którym leży Polska, łączy się cieśninami właśnie z Oceanem Atlantyckim.⟫",
+            "Ocean Atlantycki co roku robi się szerszy o kilka centymetrów.",
+            "W Atlantyku łowi się dużo ryb: śledzie, dorsze, makrele."
+          ],
+          "riddles": [
+            "oceanu między Ameryką a Europą",
+            "oceanu, który przepłynął Kolumb",
+            "oceanu, w którym płynie ciepły prąd Golfsztrom",
+            "oceanu, w którym zatonął „Titanic”",
+            "oceanu, z którym łączy się Morze Czarne",
+            "drugiego co do wielkości oceanu",
+            "oceanu nazwanego na cześć olbrzyma Atlasa",
+            "oceanu, który oblewa brzegi Brazylii"
+          ],
+          "riddleFacts": [
+            "Między Ameryką a Europą leży Ocean Atlantycki.",
+            "Kolumb przepłynął Ocean Atlantycki na trzech żaglowcach.",
+            "Ciepły prąd Golfsztrom płynie w Oceanie Atlantyckim i ogrzewa Europę.",
+            "Statek „Titanic” zatonął w Oceanie Atlantyckim.",
+            "Morze Czarne łączy się cieśninami z Oceanem Atlantyckim.",
+            "Drugi co do wielkości ocean to Ocean Atlantycki.",
+            "Ocean Atlantycki nazwano na cześć Atlasa — olbrzyma z greckich mitów.",
+            "Brzegi Brazylii oblewa Ocean Atlantycki."
+          ]
+        },
+        "indian": {
+          "fact": "Ocean Indyjski jest najcieplejszy.",
+          "pool": [
+            "Ocean Indyjski jest najcieplejszy.",
+            "Ocean Indyjski jest trzeci co do wielkości na Ziemi.",
+            "Ocean Indyjski oblewa Afrykę, Azję i Australię.",
+            "Ocean nazwano na cześć Indii, których brzegi oblewa.",
+            "Na Oceanie Indyjskim leżą Malediwy — wyspy z białym piaskiem i rafami koralowymi.",
+            "W ciepłych wodach Oceanu Indyjskiego żyją żółwie morskie, płaszczki i rekiny wielorybie.",
+            "Nad Oceanem Indyjskim wieją monsuny — wiatry, które przynoszą porę deszczową.",
+            "Na Oceanie Indyjskim leży wielka wyspa Madagaskar, gdzie żyją lemury.",
+            "Dawni żeglarze wozili Oceanem Indyjskim przyprawy: pieprz, cynamon, goździki.",
+            "Woda na północy Oceanu Indyjskiego bywa ciepła jak w wannie."
+          ],
+          "riddles": [
+            "najcieplejszego oceanu",
+            "oceanu między Afryką a Australią",
+            "oceanu nazwanego na cześć Indii",
+            "oceanu, na którym leżą Malediwy",
+            "oceanu, nad którym wieją monsuny",
+            "trzeciego co do wielkości oceanu",
+            "oceanu, na którym leży wyspa Madagaskar",
+            "oceanu, którym wożono przyprawy z Indii"
+          ],
+          "riddleFacts": [
+            "Najcieplejszy ocean to Ocean Indyjski.",
+            "Między Afryką a Australią leży Ocean Indyjski.",
+            "Ocean Indyjski nazwano na cześć Indii.",
+            "Malediwy leżą na Oceanie Indyjskim.",
+            "Monsuny to wiatry Oceanu Indyjskiego, które przynoszą porę deszczową.",
+            "Trzeci co do wielkości ocean to Ocean Indyjski.",
+            "Wyspa Madagaskar leży na Oceanie Indyjskim.",
+            "Oceanem Indyjskim wożono kiedyś do Europy pieprz i cynamon."
+          ]
+        },
+        "arctic": {
+          "fact": "Ocean Arktyczny jest najmniejszy i pokryty lodem.",
+          "pool": [
+            "Ocean Arktyczny jest najmniejszy i pokryty lodem.",
+            "Ocean Arktyczny leży wokół bieguna północnego.",
+            "Zimą prawie cały Ocean Arktyczny zamarza.",
+            "Na krach Oceanu Arktycznego żyją niedźwiedzie polarne i foki.",
+            "W Oceanie Arktycznym żyje narwal — wieloryb z długim ciosem podobnym do rogu.",
+            "Żeby przejść przez lód tego oceanu, statkom pomagają lodołamacze.",
+            "Ocean Arktyczny jest najpłytszy ze wszystkich oceanów.",
+            "Latem nad tym oceanem słońce nie zachodzi przez całą dobę.",
+            "Pod lodem bieguna północnego nie ma lądu — jest tylko woda oceanu.",
+            "Morsy w tym oceanie nurkują na dno po małże i odpoczywają na krach."
+          ],
+          "riddles": [
+            "oceanu pokrytego lodem, gdzie żyją niedźwiedzie polarne",
+            "najmniejszego oceanu",
+            "oceanu, na którym leży biegun północny",
+            "oceanu, po którym pływają lodołamacze",
+            "oceanu, w którym żyją narwale i morsy",
+            "najpłytszego oceanu",
+            "oceanu na samej północy Ziemi",
+            "oceanu, nad którym latem słońce nie zachodzi"
+          ],
+          "riddleFacts": [
+            "Niedźwiedzie polarne żyją na krach Oceanu Arktycznego.",
+            "Najmniejszy ocean to Ocean Arktyczny.",
+            "Biegun północny leży na Oceanie Arktycznym.",
+            "Przez lód Oceanu Arktycznego statki prowadzą lodołamacze.",
+            "Narwale i morsy żyją w Oceanie Arktycznym.",
+            "Najpłytszy ocean to Ocean Arktyczny.",
+            "Na samej północy Ziemi leży Ocean Arktyczny.",
+            "Latem nad Oceanem Arktycznym słońce nie zachodzi — to dzień polarny."
+          ]
+        },
+        "southern": {
+          "fact": "Ocean Południowy otacza Antarktydę.",
+          "pool": [
+            "Ocean Południowy otacza Antarktydę.",
+            "Ocean Południowy ma najmłodszą nazwę: zaczęto go wyróżniać całkiem niedawno.",
+            "W Oceanie Południowym żyją pingwiny, foki i olbrzymie płetwale błękitne.",
+            "Wokół Antarktydy płynie najpotężniejszy prąd na planecie.",
+            "Po Oceanie Południowym pływają największe góry lodowe — wielkie jak całe miasto.",
+            "Wody Oceanu Południowego są bardzo zimne, ale jest w nich mnóstwo kryla — pokarmu wielorybów.",
+            "Na Oceanie Południowym wieją najsilniejsze wiatry i wznoszą się najwyższe fale.",
+            "Ocean Południowy oblewa tylko jeden kontynent — Antarktydę.",
+            "Zimą Ocean Południowy wokół Antarktydy pokrywa się lodem.",
+            "Nad Oceanem Południowym lata albatros — ptak o największej rozpiętości skrzydeł."
+          ],
+          "riddles": [
+            "oceanu, który otacza Antarktydę",
+            "oceanu, nad którym żyją pingwiny",
+            "oceanu przy biegunie południowym",
+            "oceanu o najmłodszej nazwie",
+            "oceanu, po którym pływają największe góry lodowe",
+            "oceanu z najpotężniejszym prądem",
+            "oceanu na samym południu Ziemi",
+            "oceanu, nad którym żyją pingwiny cesarskie"
+          ],
+          "riddleFacts": [
+            "Antarktydę ze wszystkich stron otacza Ocean Południowy.",
+            "Pingwiny żyją na brzegach Oceanu Południowego.",
+            "Przy biegunie południowym leży Ocean Południowy.",
+            "Ocean Południowy ma najmłodszą nazwę: wyróżniono go całkiem niedawno.",
+            "Największe góry lodowe świata pływają po Oceanie Południowym.",
+            "W Oceanie Południowym płynie najpotężniejszy prąd planety.",
+            "Na samym południu Ziemi leży Ocean Południowy.",
+            "Pingwiny cesarskie żyją na lodzie Oceanu Południowego."
+          ]
+        }
+      },
+      "SEAS": {
+        "black": [
+          "Morze Czarne",
+          "Morze Czarne oblewa południe Ukrainy. Przez cieśniny i Morze Śródziemne łączy się z Oceanem Atlantyckim."
+        ],
+        "mediterranean": [
+          "Morze Śródziemne",
+          "Morze Śródziemne leży między Europą, Afryką i Azją, a wąska Cieśnina Gibraltarska łączy je z Oceanem Atlantyckim."
+        ],
+        "red": [
+          "Morze Czerwone",
+          "Morze Czerwone to część Oceanu Indyjskiego. Jest bardzo ciepłe i słone, a żyje w nim mnóstwo koralowców."
+        ],
+        "baltic": [
+          "Morze Bałtyckie",
+          "Morze Bałtyckie to część Oceanu Atlantyckiego na północy Europy.⟪ Leży nad nim Polska.⟫ Woda w nim jest prawie niesłona."
+        ],
+        "caribbean": [
+          "Morze Karaibskie",
+          "Morze Karaibskie to ciepła część Oceanu Atlantyckiego u brzegów Ameryki. Kiedyś pływali tam piraci."
+        ],
+        "japan": [
+          "Morze Japońskie",
+          "Morze Japońskie to część Oceanu Spokojnego między Japonią a kontynentem azjatyckim."
+        ],
+        "north": [
+          "Morze Północne",
+          "Morze Północne to część Oceanu Atlantyckiego między Wielką Brytanią a Norwegią."
+        ],
+        "arabian": [
+          "Morze Arabskie",
+          "Morze Arabskie to część Oceanu Indyjskiego u brzegów Indii i Arabii."
+        ],
+        "coral": [
+          "Morze Koralowe",
+          "Morze Koralowe to część Oceanu Spokojnego u brzegów Australii. Właśnie tu leży Wielka Rafa Koralowa."
+        ],
+        "barents": [
+          "Morze Barentsa",
+          "Morze Barentsa to część Oceanu Arktycznego na północy Europy."
+        ],
+        "bering": [
+          "Morze Beringa",
+          "Morze Beringa to zimna północna część Oceanu Spokojnego między Azją a Ameryką."
+        ],
+        "ross": [
+          "Morze Rossa",
+          "Morze Rossa to część Oceanu Południowego u brzegów Antarktydy. Żyją tam pingwiny i foki."
+        ],
+        "south_china": [
+          "Morze Południowochińskie",
+          "Morze Południowochińskie to ciepła część Oceanu Spokojnego u brzegów Azji."
+        ],
+        "andaman": [
+          "Morze Andamańskie",
+          "Morze Andamańskie to część Oceanu Indyjskiego u brzegów Tajlandii."
+        ],
+        "greenland": [
+          "Morze Grenlandzkie",
+          "Morze Grenlandzkie to część Oceanu Arktycznego przy największej wyspie świata, Grenlandii."
+        ],
+        "beaufort": [
+          "Morze Beauforta",
+          "Morze Beauforta to część Oceanu Arktycznego na północy Kanady. Prawie cały rok jest pokryte lodem."
+        ],
+        "weddell": [
+          "Morze Weddella",
+          "Morze Weddella to część Oceanu Południowego przy Antarktydzie. Woda w nim należy do najbardziej przejrzystych na świecie."
+        ],
+        "azov": [
+          "Morze Azowskie",
+          "Morze Azowskie oblewa południe Ukrainy. To najpłytsze morze na świecie, a łączy się z Oceanem Atlantyckim."
+        ],
+        "adriatic": [
+          "Morze Adriatyckie",
+          "Morze Adriatyckie leży między Włochami a Chorwacją i należy do Oceanu Atlantyckiego."
+        ],
+        "aegean": [
+          "Morze Egejskie",
+          "Morze Egejskie oblewa Grecję. Jest na nim ponad tysiąc wysp, a należy do Oceanu Atlantyckiego."
+        ],
+        "marmara": [
+          "Morze Marmara",
+          "Morze Marmara to małe morze między Morzem Czarnym a Śródziemnym. Na jego brzegu leży Stambuł."
+        ],
+        "irish": [
+          "Morze Irlandzkie",
+          "Morze Irlandzkie leży między Irlandią a Wielką Brytanią — to część Oceanu Atlantyckiego."
+        ],
+        "sargasso": [
+          "Morze Sargassowe",
+          "Morze Sargassowe to jedyne morze bez brzegów: leży pośrodku Oceanu Atlantyckiego i jest pokryte wodorostami."
+        ],
+        "labrador": [
+          "Morze Labradorskie",
+          "Morze Labradorskie to zimna część Oceanu Atlantyckiego między Kanadą a Grenlandią."
+        ],
+        "mexico": [
+          "Zatoka Meksykańska",
+          "Zatoka Meksykańska to część Oceanu Atlantyckiego. Właśnie tu rodzi się ciepły prąd Golfsztrom."
+        ],
+        "biscay": [
+          "Zatoka Biskajska",
+          "Zatoka Biskajska to część Oceanu Atlantyckiego u brzegów Francji i Hiszpanii. Słynie z silnych sztormów."
+        ],
+        "guinea": [
+          "Zatoka Gwinejska",
+          "Zatoka Gwinejska to część Oceanu Atlantyckiego u brzegów Afryki. Tu równik przecina południk zerowy."
+        ],
+        "okhotsk": [
+          "Morze Ochockie",
+          "Morze Ochockie to zimna część Oceanu Spokojnego. Zimą pokrywa się lodem."
+        ],
+        "yellow": [
+          "Morze Żółte",
+          "Morze Żółte to część Oceanu Spokojnego u brzegów Chin. Rzeki niosą do niego żółty muł, dlatego woda jest żółtawa."
+        ],
+        "east_china": [
+          "Morze Wschodniochińskie",
+          "Morze Wschodniochińskie to część Oceanu Spokojnego między Chinami a Japonią."
+        ],
+        "philippine": [
+          "Morze Filipińskie",
+          "Morze Filipińskie to część Oceanu Spokojnego. Właśnie w nim leży najgłębszy Rów Mariański."
+        ],
+        "tasman": [
+          "Morze Tasmana",
+          "Morze Tasmana to część Oceanu Spokojnego między Australią a Nową Zelandią."
+        ],
+        "java": [
+          "Morze Jawajskie",
+          "Morze Jawajskie to ciepła, płytka część Oceanu Spokojnego wśród wysp Indonezji."
+        ],
+        "fiji": [
+          "Morze Fidżi",
+          "Morze Fidżi to część Oceanu Spokojnego wokół koralowych wysp Fidżi."
+        ],
+        "california": [
+          "Zatoka Kalifornijska",
+          "Zatoka Kalifornijska to część Oceanu Spokojnego u brzegów Meksyku. Przypływają tu rodzić młode wieloryby szare."
+        ],
+        "bengal": [
+          "Zatoka Bengalska",
+          "Zatoka Bengalska to największa zatoka świata. Jest częścią Oceanu Indyjskiego u brzegów Indii."
+        ],
+        "persian": [
+          "Zatoka Perska",
+          "Zatoka Perska to ciepła część Oceanu Indyjskiego. Dawniej nurkowano tu po perły."
+        ],
+        "timor": [
+          "Morze Timor",
+          "Morze Timor to część Oceanu Indyjskiego między Australią a wyspą Timor."
+        ],
+        "laccadive": [
+          "Morze Lakkadiwskie",
+          "Morze Lakkadiwskie to część Oceanu Indyjskiego na południe od Indii. Leżą na nim Malediwy."
+        ],
+        "aden": [
+          "Zatoka Adeńska",
+          "Zatoka Adeńska to część Oceanu Indyjskiego między Afryką a Arabią. Prowadzi do Morza Czerwonego."
+        ],
+        "mozambique": [
+          "Kanał Mozambicki",
+          "Kanał Mozambicki to najdłuższa cieśnina świata. Oddziela Madagaskar od Afryki na Oceanie Indyjskim."
+        ],
+        "kara": [
+          "Morze Karskie",
+          "Morze Karskie to część Oceanu Arktycznego. Prawie cały rok jest pokryte lodem."
+        ],
+        "laptev": [
+          "Morze Łaptiewów",
+          "Morze Łaptiewów to jedno z najzimniejszych mórz świata, część Oceanu Arktycznego."
+        ],
+        "white": [
+          "Morze Białe",
+          "Morze Białe to część Oceanu Arktycznego. Zimą zamarza i robi się naprawdę białe."
+        ],
+        "chukchi": [
+          "Morze Czukockie",
+          "Morze Czukockie to część Oceanu Arktycznego między Azją a Ameryką. Żyją tu morsy."
+        ],
+        "amundsen": [
+          "Morze Amundsena",
+          "Morze Amundsena to część Oceanu Południowego. Nazwano je na cześć podróżnika, który pierwszy dotarł do bieguna południowego."
+        ],
+        "bellingshausen": [
+          "Morze Bellingshausena",
+          "Morze Bellingshausena to część Oceanu Południowego u brzegów Antarktydy, prawie zawsze pod lodem."
+        ]
+      },
+      "PLACES": {
+        "mariana": [
+          "W którym oceanie leży Rów Mariański — najgłębsze miejsce na Ziemi?",
+          "Rów Mariański leży w Oceanie Spokojnym. Jest tak głęboki, że schowałaby się w nim najwyższa góra świata."
+        ],
+        "titanic": [
+          "W którym oceanie zatonął statek „Titanic”?",
+          "Statek „Titanic” zatonął w Oceanie Atlantyckim, gdy płynął z Europy do Ameryki i zderzył się z górą lodową."
+        ],
+        "madagascar": [
+          "Na którym oceanie leży wyspa Madagaskar?",
+          "Wyspa Madagaskar leży na Oceanie Indyjskim u brzegów Afryki. Tylko tam żyją lemury."
+        ],
+        "svalbard": [
+          "Na którym oceanie leży archipelag Svalbard, gdzie niedźwiedzi polarnych jest więcej niż ludzi?",
+          "Archipelag Svalbard leży na Oceanie Arktycznym, całkiem blisko bieguna północnego."
+        ],
+        "reef": [
+          "W którym oceanie leży Wielka Rafa Koralowa?",
+          "Wielka Rafa Koralowa leży w Oceanie Spokojnym u brzegów Australii. Widać ją nawet z kosmosu."
+        ],
+        "hawaii": [
+          "Na którym oceanie leżą Hawaje?",
+          "Hawaje leżą pośrodku Oceanu Spokojnego. To wierzchołki podwodnych wulkanów."
+        ],
+        "iceland": [
+          "Na którym oceanie leży wyspa Islandia?",
+          "Wyspa Islandia leży na północy Oceanu Atlantyckiego. Są tam wulkany, gejzery i lodowce."
+        ],
+        "maldives": [
+          "Na którym oceanie leżą Malediwy?",
+          "Malediwy to ponad tysiąc koralowych wysepek na Oceanie Indyjskim."
+        ],
+        "bermuda": [
+          "Na którym oceanie leży Trójkąt Bermudzki?",
+          "Trójkąt Bermudzki to część Oceanu Atlantyckiego, o której opowiada się wiele zagadkowych historii."
+        ],
+        "galapagos": [
+          "Na którym oceanie leżą wyspy Galapagos z olbrzymimi żółwiami?",
+          "Wyspy Galapagos leżą na Oceanie Spokojnym. Żyją tam olbrzymie żółwie, które ważą tyle co kilku dorosłych ludzi."
+        ],
+        "sri_lanka": [
+          "Na którym oceanie leży wyspa Sri Lanka?",
+          "Wyspa Sri Lanka leży na Oceanie Indyjskim w pobliżu Indii. Uprawia się tam słynną herbatę."
+        ],
+        "easter": [
+          "Na którym oceanie leży Wyspa Wielkanocna z kamiennymi olbrzymami?",
+          "Wyspa Wielkanocna leży na Oceanie Spokojnym. Stoją na niej setki olbrzymich kamiennych posągów."
+        ],
+        "japan_isles": [
+          "Na którym oceanie leży Japonia?",
+          "Japonia to kraj na wyspach Oceanu Spokojnego. Nazywa się ją Krajem Kwitnącej Wiśni."
+        ],
+        "new_zealand": [
+          "Na którym oceanie leży Nowa Zelandia?",
+          "Nowa Zelandia leży na Oceanie Spokojnym. Żyje tu ptak kiwi, który nie umie latać."
+        ],
+        "philippines": [
+          "Na którym oceanie leżą Filipiny?",
+          "Filipiny to ponad siedem tysięcy wysp na Oceanie Spokojnym."
+        ],
+        "tahiti": [
+          "Na którym oceanie leży wyspa Tahiti?",
+          "Wyspa Tahiti leży pośrodku Oceanu Spokojnego. Piasek na jej plażach jest czarny — z wulkanicznej lawy."
+        ],
+        "new_guinea": [
+          "Na którym oceanie leży Nowa Gwinea — druga co do wielkości wyspa świata?",
+          "Wyspa Nowa Gwinea leży na Oceanie Spokojnym. Żyją tu rajskie ptaki z niezwykłymi ogonami."
+        ],
+        "ring_of_fire": [
+          "Wokół którego oceanu ciągnie się „Pierścień Ognia” wulkanów?",
+          "„Pierścień Ognia” to łańcuch wulkanów wokół Oceanu Spokojnego. Jest tu większość wulkanów planety."
+        ],
+        "kamchatka": [
+          "Nad którym oceanem leży półwysep Kamczatka z gejzerami?",
+          "Półwysep Kamczatka oblewa Ocean Spokojny. Jest tam Dolina Gejzerów i trzydzieści czynnych wulkanów."
+        ],
+        "britain": [
+          "Na którym oceanie leży wyspa Wielka Brytania?",
+          "Wyspa Wielka Brytania leży na Oceanie Atlantyckim. Od kontynentu oddziela ją kanał La Manche."
+        ],
+        "cuba_isle": [
+          "Na którym oceanie leży wyspa Kuba?",
+          "Wyspa Kuba leży na Morzu Karaibskim — części Oceanu Atlantyckiego."
+        ],
+        "canary": [
+          "Na którym oceanie leżą Wyspy Kanaryjskie?",
+          "Wyspy Kanaryjskie leżą na Oceanie Atlantyckim u brzegów Afryki. Cały rok jest tam ciepło jak wiosną."
+        ],
+        "bahamas": [
+          "Na którym oceanie leżą wyspy Bahama?",
+          "Wyspy Bahama leżą na Oceanie Atlantyckim. Jako pierwszy Europejczyk zobaczył je Kolumb."
+        ],
+        "azores": [
+          "Na którym oceanie leżą Azory?",
+          "Azory leżą pośrodku Oceanu Atlantyckiego. To wierzchołki podwodnych wulkanów."
+        ],
+        "st_helena": [
+          "Na którym oceanie leży Wyspa Świętej Heleny?",
+          "Wyspa Świętej Heleny leży daleko na Oceanie Atlantyckim. Zesłano tu cesarza Napoleona."
+        ],
+        "falklands": [
+          "Na którym oceanie leżą Falklandy?",
+          "Falklandy leżą na południu Oceanu Atlantyckiego. Pingwinów jest tam więcej niż ludzi."
+        ],
+        "ireland": [
+          "Na którym oceanie leży wyspa Irlandia?",
+          "Wyspa Irlandia leży na Oceanie Atlantyckim. Przez częste deszcze jest zawsze zielona — nazywa się ją Szmaragdową Wyspą."
+        ],
+        "seychelles": [
+          "Na którym oceanie leżą Seszele?",
+          "Seszele leżą na Oceanie Indyjskim. Rośnie tu palma z największym orzechem na świecie."
+        ],
+        "mauritius": [
+          "Na którym oceanie leży wyspa Mauritius?",
+          "Wyspa Mauritius leży na Oceanie Indyjskim. Kiedyś żył tu ptak dodo, który nie umiał latać."
+        ],
+        "zanzibar": [
+          "Na którym oceanie leży wyspa Zanzibar?",
+          "Wyspa Zanzibar leży na Oceanie Indyjskim u brzegów Afryki. Nazywa się ją wyspą przypraw."
+        ],
+        "comoros": [
+          "Na którym oceanie leżą Komory?",
+          "Komory leżą na Oceanie Indyjskim między Afryką a Madagaskarem."
+        ],
+        "socotra": [
+          "Na którym oceanie leży wyspa Sokotra ze smoczymi drzewami?",
+          "Wyspa Sokotra leży na Oceanie Indyjskim. Rosną tam smocze drzewa podobne do olbrzymich parasoli."
+        ],
+        "andaman_isles": [
+          "Na którym oceanie leżą Andamany?",
+          "Andamany leżą na Oceanie Indyjskim. Wokół nich są rafy koralowe i przejrzysta woda."
+        ],
+        "north_pole": [
+          "Na którym oceanie leży biegun północny?",
+          "Biegun północny leży na Oceanie Arktycznym. Nie ma pod nim lądu, tylko woda pod lodem."
+        ],
+        "novaya_zemlya": [
+          "Na którym oceanie leży archipelag Nowa Ziemia?",
+          "Nowa Ziemia to dwie wielkie wyspy na Oceanie Arktycznym, pokryte lodowcami."
+        ],
+        "wrangel": [
+          "Na którym oceanie leży Wyspa Wrangla — rezerwat niedźwiedzi polarnych?",
+          "Wyspa Wrangla leży na Oceanie Arktycznym. Niedźwiedzice polarne rodzą tu młode."
+        ],
+        "ellesmere": [
+          "Na którym oceanie leży Wyspa Ellesmere’a?",
+          "Wyspa Ellesmere’a leży na Oceanie Arktycznym, na północy Kanady. Stąd do bieguna jest już bardzo blisko."
+        ],
+        "icebergs": [
+          "Po którym oceanie pływają największe góry lodowe świata?",
+          "Największe góry lodowe odrywają się od Antarktydy i pływają po Oceanie Południowym. Niektóre są większe niż miasto."
+        ],
+        "ross_shelf": [
+          "Na którym oceanie leży Lodowiec Szelfowy Rossa?",
+          "Lodowiec Szelfowy Rossa leży na Oceanie Południowym. To lodowa płyta wielka jak cały kraj."
+        ],
+        "south_shetland": [
+          "Na którym oceanie leżą Szetlandy Południowe?",
+          "Szetlandy Południowe leżą na Oceanie Południowym przy Antarktydzie.⟪ Na jednej z wysp pracuje polska stacja badawcza imienia Arctowskiego.⟫"
+        ]
+      },
+      "RIVERS": {
+        "dnipro": [
+          "Dniepr",
+          "Dniepr wpada do Morza Czarnego, a ono łączy się z Oceanem Atlantyckim. To największa rzeka Ukrainy."
+        ],
+        "amazon": [
+          "Amazonka",
+          "Amazonka wpada do Oceanu Atlantyckiego. To rzeka, która niesie najwięcej wody na świecie."
+        ],
+        "nile": [
+          "Nil",
+          "Nil wpada do Morza Śródziemnego — części Oceanu Atlantyckiego. To jedna z najdłuższych rzek świata."
+        ],
+        "danube": [
+          "Dunaj",
+          "Dunaj płynie przez dziesięć krajów i wpada do Morza Czarnego — części Oceanu Atlantyckiego."
+        ],
+        "mississippi": [
+          "Missisipi",
+          "Missisipi wpada do Zatoki Meksykańskiej Oceanu Atlantyckiego. To główna rzeka Ameryki Północnej."
+        ],
+        "congo": [
+          "Kongo",
+          "Rzeka Kongo wpada do Oceanu Atlantyckiego. Jest najgłębsza na świecie i dwa razy przecina równik."
+        ],
+        "rhine": [
+          "Ren",
+          "Ren wpada do Morza Północnego — części Oceanu Atlantyckiego. Na jego brzegach stoją stare zamki."
+        ],
+        "thames": [
+          "Tamiza",
+          "Tamiza płynie przez Londyn i wpada do Morza Północnego — części Oceanu Atlantyckiego."
+        ],
+        "yangtze": [
+          "Jangcy",
+          "Jangcy wpada do Oceanu Spokojnego. To najdłuższa rzeka Azji."
+        ],
+        "huanghe": [
+          "Huang He",
+          "Huang He wpada do Morza Żółtego Oceanu Spokojnego. Jej nazwa znaczy „Żółta Rzeka”."
+        ],
+        "mekong": [
+          "Mekong",
+          "Mekong wpada do Morza Południowochińskiego Oceanu Spokojnego. Są na nim pływające targi."
+        ],
+        "amur": [
+          "Amur",
+          "Amur wpada do Morza Ochockiego — części Oceanu Spokojnego."
+        ],
+        "colorado": [
+          "Kolorado",
+          "Rzeka Kolorado płynie do Zatoki Kalifornijskiej Oceanu Spokojnego. To ona wyżłobiła Wielki Kanion."
+        ],
+        "yukon": [
+          "Jukon",
+          "Jukon płynie przez Alaskę i wpada do Morza Beringa Oceanu Spokojnego."
+        ],
+        "ganges": [
+          "Ganges",
+          "Ganges wpada do Zatoki Bengalskiej Oceanu Indyjskiego. Dla mieszkańców Indii to święta rzeka."
+        ],
+        "indus": [
+          "Indus",
+          "Indus wpada do Morza Arabskiego Oceanu Indyjskiego. Od nazwy tej rzeki pochodzi nazwa Indii."
+        ],
+        "zambezi": [
+          "Zambezi",
+          "Zambezi wpada do Oceanu Indyjskiego. Huczą na niej olbrzymie Wodospady Wiktorii."
+        ],
+        "ob": [
+          "Ob",
+          "Ob wpada do Morza Karskiego Oceanu Arktycznego."
+        ],
+        "yenisei": [
+          "Jenisej",
+          "Jenisej niesie wody na północ, do Oceanu Arktycznego. Przez większą część roku jest skuty lodem."
+        ],
+        "lena": [
+          "Lena",
+          "Lena wpada do Morza Łaptiewów Oceanu Arktycznego. Zimą na jej brzegach panują najsroższe mrozy."
+        ],
+        "mackenzie": [
+          "Mackenzie",
+          "Mackenzie to najdłuższa rzeka Kanady. Wpada do Oceanu Arktycznego."
+        ]
+      }
+    },
+    "places": {
+      "COUNTRIES": {
+        "ua": "Ukraina|Ukrainy",
+        "us": "Stany Zjednoczone|Stanów Zjednoczonych",
+        "gb": "Wielka Brytania|Wielkiej Brytanii",
+        "fr": "Francja|Francji",
+        "de": "Niemcy|Niemiec",
+        "it": "Włochy|Włoch",
+        "pl": "Polska|Polski",
+        "jp": "Japonia|Japonii",
+        "ca": "Kanada|Kanady",
+        "es": "Hiszpania|Hiszpanii",
+        "cn": "Chiny|Chin",
+        "br": "Brazylia|Brazylii",
+        "tr": "Turcja|Turcji",
+        "gr": "Grecja|Grecji",
+        "eg": "Egipt|Egiptu",
+        "in": "Indie|Indii",
+        "au": "Australia|Australii",
+        "mx": "Meksyk|Meksyku",
+        "ar": "Argentyna|Argentyny",
+        "ch": "Szwajcaria|Szwajcarii",
+        "se": "Szwecja|Szwecji",
+        "no": "Norwegia|Norwegii",
+        "nl": "Holandia|Holandii",
+        "pt": "Portugalia|Portugalii",
+        "kr": "Korea Południowa|Korei Południowej",
+        "il": "Izrael|Izraela",
+        "at": "Austria|Austrii",
+        "cz": "Czechy|Czech",
+        "be": "Belgia|Belgii",
+        "dk": "Dania|Danii",
+        "fi": "Finlandia|Finlandii",
+        "ie": "Irlandia|Irlandii",
+        "hu": "Węgry|Węgier",
+        "ro": "Rumunia|Rumunii",
+        "bg": "Bułgaria|Bułgarii",
+        "hr": "Chorwacja|Chorwacji",
+        "sk": "Słowacja|Słowacji",
+        "lt": "Litwa|Litwy",
+        "lv": "Łotwa|Łotwy",
+        "ee": "Estonia|Estonii",
+        "md": "Mołdawia|Mołdawii",
+        "ge": "Gruzja|Gruzji",
+        "sa": "Arabia Saudyjska|Arabii Saudyjskiej",
+        "ae": "Zjednoczone Emiraty Arabskie|Zjednoczonych Emiratów Arabskich",
+        "th": "Tajlandia|Tajlandii",
+        "vn": "Wietnam|Wietnamu",
+        "za": "Republika Południowej Afryki|Republiki Południowej Afryki",
+        "nz": "Nowa Zelandia|Nowej Zelandii",
+        "cu": "Kuba|Kuby",
+        "jm": "Jamajka|Jamajki",
+        "cl": "Chile|Chile",
+        "co": "Kolumbia|Kolumbii",
+        "pe": "Peru|Peru",
+        "is": "Islandia|Islandii",
+        "rs": "Serbia|Serbii",
+        "si": "Słowenia|Słowenii",
+        "cy": "Cypr|Cypru",
+        "mt": "Malta|Malty",
+        "lu": "Luksemburg|Luksemburga",
+        "mc": "Monako|Monako",
+        "kz": "Kazachstan|Kazachstanu",
+        "am": "Armenia|Armenii",
+        "az": "Azerbejdżan|Azerbejdżanu",
+        "uz": "Uzbekistan|Uzbekistanu",
+        "mn": "Mongolia|Mongolii",
+        "pk": "Pakistan|Pakistanu",
+        "id": "Indonezja|Indonezji",
+        "ph": "Filipiny|Filipin",
+        "my": "Malezja|Malezji",
+        "sg": "Singapur|Singapuru",
+        "np": "Nepal|Nepalu",
+        "ir": "Iran|Iranu",
+        "iq": "Irak|Iraku",
+        "qa": "Katar|Kataru",
+        "jo": "Jordania|Jordanii",
+        "lb": "Liban|Libanu",
+        "ma": "Maroko|Maroka",
+        "tn": "Tunezja|Tunezji",
+        "dz": "Algieria|Algierii",
+        "ke": "Kenia|Kenii",
+        "ng": "Nigeria|Nigerii",
+        "et": "Etiopia|Etiopii",
+        "gh": "Ghana|Ghany",
+        "tz": "Tanzania|Tanzanii",
+        "ve": "Wenezuela|Wenezueli",
+        "uy": "Urugwaj|Urugwaju",
+        "py": "Paragwaj|Paragwaju",
+        "bo": "Boliwia|Boliwii",
+        "ec": "Ekwador|Ekwadoru",
+        "cr": "Kostaryka|Kostaryki",
+        "pa": "Panama|Panamy",
+        "do": "Dominikana|Dominikany",
+        "ht": "Haiti|Haiti",
+        "bs": "Bahamy|Bahamów",
+        "gt": "Gwatemala|Gwatemali",
+        "hn": "Honduras|Hondurasu",
+        "me": "Czarnogóra|Czarnogóry",
+        "mk": "Macedonia Północna|Macedonii Północnej",
+        "al": "Albania|Albanii",
+        "ba": "Bośnia i Hercegowina|Bośni i Hercegowiny",
+        "ad": "Andora|Andory",
+        "li": "Liechtenstein|Liechtensteinu",
+        "sm": "San Marino|San Marino",
+        "va": "Watykan|Watykanu",
+        "kp": "Korea Północna|Korei Północnej",
+        "af": "Afganistan|Afganistanu",
+        "bd": "Bangladesz|Bangladeszu",
+        "lk": "Sri Lanka|Sri Lanki",
+        "mm": "Mjanma|Mjanmy",
+        "kh": "Kambodża|Kambodży",
+        "la": "Laos|Laosu",
+        "bt": "Bhutan|Bhutanu",
+        "mv": "Malediwy|Malediwów",
+        "kw": "Kuwejt|Kuwejtu",
+        "bh": "Bahrajn|Bahrajnu",
+        "om": "Oman|Omanu",
+        "ye": "Jemen|Jemenu",
+        "sy": "Syria|Syrii",
+        "tj": "Tadżykistan|Tadżykistanu",
+        "tm": "Turkmenistan|Turkmenistanu",
+        "kg": "Kirgistan|Kirgistanu",
+        "bn": "Brunei|Brunei",
+        "tl": "Timor Wschodni|Timoru Wschodniego",
+        "ly": "Libia|Libii",
+        "sd": "Sudan|Sudanu",
+        "ss": "Sudan Południowy|Sudanu Południowego",
+        "sn": "Senegal|Senegalu",
+        "ci": "Wybrzeże Kości Słoniowej|Wybrzeża Kości Słoniowej",
+        "cm": "Kamerun|Kamerunu",
+        "ug": "Uganda|Ugandy",
+        "rw": "Rwanda|Rwandy",
+        "zw": "Zimbabwe|Zimbabwe",
+        "zm": "Zambia|Zambii",
+        "ao": "Angola|Angoli",
+        "mz": "Mozambik|Mozambiku",
+        "mg": "Madagaskar|Madagaskaru",
+        "na": "Namibia|Namibii",
+        "bw": "Botswana|Botswany",
+        "ml": "Mali|Mali",
+        "ne": "Niger|Nigru",
+        "td": "Czad|Czadu",
+        "bf": "Burkina Faso|Burkina Faso",
+        "gn": "Gwinea|Gwinei",
+        "sl": "Sierra Leone|Sierra Leone",
+        "lr": "Liberia|Liberii",
+        "tg": "Togo|Togo",
+        "bj": "Benin|Beninu",
+        "ga": "Gabon|Gabonu",
+        "cg": "Republika Konga|Republiki Konga",
+        "cd": "Demokratyczna Republika Konga|Demokratycznej Republiki Konga",
+        "cf": "Republika Środkowoafrykańska|Republiki Środkowoafrykańskiej",
+        "gq": "Gwinea Równikowa|Gwinei Równikowej",
+        "er": "Erytrea|Erytrei",
+        "dj": "Dżibuti|Dżibuti",
+        "so": "Somalia|Somalii",
+        "bi": "Burundi|Burundi",
+        "mw": "Malawi|Malawi",
+        "ls": "Lesotho|Lesotho",
+        "sz": "Eswatini|Eswatini",
+        "mr": "Mauretania|Mauretanii",
+        "gm": "Gambia|Gambii",
+        "gw": "Gwinea Bissau|Gwinei Bissau",
+        "cv": "Republika Zielonego Przylądka|Republiki Zielonego Przylądka",
+        "st": "Wyspy Świętego Tomasza i Książęca|Wysp Świętego Tomasza i Książęcej",
+        "km": "Komory|Komorów",
+        "sc": "Seszele|Seszeli",
+        "mu": "Mauritius|Mauritiusa",
+        "ni": "Nikaragua|Nikaragui",
+        "sv": "Salwador|Salwadoru",
+        "bz": "Belize|Belize",
+        "gy": "Gujana|Gujany",
+        "sr": "Surinam|Surinamu",
+        "tt": "Trynidad i Tobago|Trynidadu i Tobago",
+        "bb": "Barbados|Barbadosu",
+        "lc": "Saint Lucia|Saint Lucii",
+        "vc": "Saint Vincent i Grenadyny|Saint Vincent i Grenadyn",
+        "gd": "Grenada|Grenady",
+        "ag": "Antigua i Barbuda|Antigui i Barbudy",
+        "dm": "Dominika|Dominiki",
+        "kn": "Saint Kitts i Nevis|Saint Kitts i Nevis",
+        "fj": "Fidżi|Fidżi",
+        "pg": "Papua-Nowa Gwinea|Papui-Nowej Gwinei",
+        "ws": "Samoa|Samoa",
+        "to": "Tonga|Tonga",
+        "vu": "Vanuatu|Vanuatu",
+        "sb": "Wyspy Salomona|Wysp Salomona",
+        "ki": "Kiribati|Kiribati",
+        "tv": "Tuvalu|Tuvalu",
+        "nr": "Nauru|Nauru",
+        "pw": "Palau|Palau",
+        "fm": "Mikronezja|Mikronezji",
+        "mh": "Wyspy Marshalla|Wysp Marshalla"
+      },
+      "LOOKS": {
+        "ua": "Ta flaga ma dwa pasy: niebieski jak niebo i żółty jak pole pszenicy.",
+        "jp": "Ta flaga ma czerwone koło pośrodku białego tła.",
+        "fr": "Trzy pionowe pasy: niebieski, biały i czerwony.",
+        "us": "Czerwone i białe pasy oraz niebieski narożnik z gwiazdkami.",
+        "ca": "Czerwony liść klonu pośrodku.",
+        "br": "Zielona flaga z żółtym rombem i niebieskim kołem.",
+        "it": "Trzy pionowe pasy: zielony, biały i czerwony.",
+        "de": "Trzy poziome pasy: czarny, czerwony i złoty.",
+        "gb": "Niebieska flaga z czerwonymi i białymi krzyżami.",
+        "pl": "Dwa pasy: biały na górze i czerwony na dole.",
+        "cn": "Czerwona flaga z żółtymi gwiazdami w rogu.",
+        "in": "Pomarańczowy, biały i zielony pas oraz niebieskie koło pośrodku.",
+        "au": "Niebieska flaga z gwiazdami i małą brytyjską flagą w rogu.",
+        "eg": "Czerwony, biały i czarny pas oraz złoty orzeł pośrodku.",
+        "es": "Pas czerwony, szeroki żółty i znów czerwony.",
+        "gr": "Niebieskie i białe pasy oraz biały krzyż w rogu.",
+        "se": "Niebieska flaga z żółtym krzyżem.",
+        "ch": "Czerwony kwadrat z białym krzyżem.",
+        "tr": "Czerwona flaga z białym półksiężycem i gwiazdą.",
+        "mx": "Zielony, biały i czerwony pas oraz orzeł pośrodku.",
+        "ar": "Błękitny, biały i błękitny pas oraz słoneczko pośrodku.",
+        "kr": "Biała flaga z czerwono-niebieskim kołem pośrodku."
+      },
+      "CAPITALS": {
+        "ua": "Kijów",
+        "us": "Waszyngton",
+        "gb": "Londyn",
+        "fr": "Paryż",
+        "de": "Berlin",
+        "it": "Rzym",
+        "pl": "Warszawa",
+        "jp": "Tokio",
+        "ca": "Ottawa",
+        "es": "Madryt",
+        "cn": "Pekin",
+        "br": "Brasília",
+        "tr": "Ankara",
+        "gr": "Ateny",
+        "eg": "Kair",
+        "in": "Nowe Delhi",
+        "au": "Canberra",
+        "mx": "Meksyk",
+        "ar": "Buenos Aires",
+        "ch": "Berno",
+        "se": "Sztokholm",
+        "no": "Oslo",
+        "nl": "Amsterdam",
+        "pt": "Lizbona",
+        "kr": "Seul",
+        "at": "Wiedeń",
+        "cz": "Praga",
+        "be": "Bruksela",
+        "dk": "Kopenhaga",
+        "fi": "Helsinki",
+        "ie": "Dublin",
+        "hu": "Budapeszt",
+        "ro": "Bukareszt",
+        "bg": "Sofia",
+        "hr": "Zagrzeb",
+        "sk": "Bratysława",
+        "lt": "Wilno",
+        "lv": "Ryga",
+        "ee": "Tallinn",
+        "md": "Kiszyniów",
+        "ge": "Tbilisi",
+        "sa": "Rijad",
+        "ae": "Abu Zabi",
+        "th": "Bangkok",
+        "vn": "Hanoi",
+        "nz": "Wellington",
+        "cu": "Hawana",
+        "jm": "Kingston",
+        "cl": "Santiago",
+        "co": "Bogota",
+        "pe": "Lima",
+        "is": "Reykjavík",
+        "rs": "Belgrad",
+        "si": "Lublana",
+        "cy": "Nikozja",
+        "mt": "Valletta",
+        "kz": "Astana",
+        "am": "Erywań",
+        "az": "Baku",
+        "uz": "Taszkent",
+        "mn": "Ułan Bator",
+        "pk": "Islamabad",
+        "ph": "Manila",
+        "my": "Kuala Lumpur",
+        "np": "Katmandu",
+        "ir": "Teheran",
+        "iq": "Bagdad",
+        "qa": "Doha",
+        "jo": "Amman",
+        "lb": "Bejrut",
+        "ma": "Rabat",
+        "ke": "Nairobi",
+        "ng": "Abudża",
+        "et": "Addis Abeba",
+        "gh": "Akra",
+        "ve": "Caracas",
+        "uy": "Montevideo",
+        "py": "Asunción",
+        "ec": "Quito",
+        "cr": "San José"
+      },
+      "REGIONS": {
+        "north_america": [
+          "Ameryka Północna",
+          "Ameryki Północnej",
+          "w Ameryce Północnej"
+        ],
+        "south_america": [
+          "Ameryka Południowa",
+          "Ameryki Południowej",
+          "w Ameryce Południowej"
+        ],
+        "europe": [
+          "Europa",
+          "Europy",
+          "w Europie"
+        ],
+        "africa": [
+          "Afryka",
+          "Afryki",
+          "w Afryce"
+        ],
+        "asia": [
+          "Azja",
+          "Azji",
+          "w Azji"
+        ],
+        "australia": [
+          "Australia",
+          "Australii",
+          "w Australii"
+        ],
+        "antarctica": [
+          "Antarktyda",
+          "Antarktydy",
+          "na Antarktydzie"
+        ],
+        "pacific": [
+          "Ocean Spokojny",
+          "Oceanu Spokojnego",
+          "w Oceanie Spokojnym"
+        ],
+        "atlantic": [
+          "Ocean Atlantycki",
+          "Oceanu Atlantyckiego",
+          "w Oceanie Atlantyckim"
+        ],
+        "indian": [
+          "Ocean Indyjski",
+          "Oceanu Indyjskiego",
+          "w Oceanie Indyjskim"
+        ],
+        "arctic": [
+          "Ocean Arktyczny",
+          "Oceanu Arktycznego",
+          "w Oceanie Arktycznym"
+        ],
+        "southern": [
+          "Ocean Południowy",
+          "Oceanu Południowego",
+          "w Oceanie Południowym"
+        ]
+      },
+      "IN_CONTINENT": {
+        "europe": "Europie",
+        "asia": "Azji",
+        "africa": "Afryce",
+        "north_america": "Ameryce Północnej",
+        "south_america": "Ameryce Południowej",
+        "australia": "Australii i Oceanii"
+      }
+    }
+  }
+}

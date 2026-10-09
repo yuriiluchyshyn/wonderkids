@@ -1,5 +1,5 @@
-import type { LangCode } from '@/core/lang';
-import { mathTexts } from '../lang';
+import type { LangCode } from '@/core/language';
+import { mathTexts } from '../grammar';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { NumberMazePayload } from '@/core/game/templates/types';

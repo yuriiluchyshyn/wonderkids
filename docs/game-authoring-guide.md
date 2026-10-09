@@ -495,7 +495,7 @@ The platform is built around a **Zero-Aggression, anti-guessing** philosophy
   rarely meets the same task twice.
 - **Board names are the `Mechanics` enum** (`Mechanics.GridChoice`, …), never a
   string literal — in `mechanics` and in a payload's `template` alike.
-- **Texts go through the phrase engine** (`src/core/lang/uk/phrase.ts`) whenever a word
+- **Texts go through the phrase engine** (`src/core/language/uk/phrase.ts`) whenever a word
   changes with the task: right case, gender, number and tense — «Коли достигають
   кавуни?», never «Коли це буває: достигають кавуни?».
 - **Distractors must be *plausible and already-known*.** A wrong option is drawn
@@ -605,7 +605,7 @@ outro: factPool(person.fact, CALLING_FACTS[person.calling]);
 
 **A fact of one language's own** (Ukraine's highest mountain in Ukrainian,
 Poland's in Polish; where a month's name comes from) is wrapped in `own(...)`
-(`src/core/lang/marks.ts`) — a whole fact or one sentence of it, at the same
+(`src/core/language/marks.ts`) — a whole fact or one sentence of it, at the same
 place in every language's list. Shown and voiced in one language, it is told;
 with the voice in another language only what both say is told, paired by
 place (`tellFact`). A question that differs by language carries `own` in its

@@ -1,4 +1,4 @@
-import { useLang, useT } from '@/core/i18n';
+import { useLang, useT } from '@/core/translator';
 import { useSayT } from '@/core/audio/useSpeech';
 import { forwardRef } from 'react';
 import { motion } from 'framer-motion';

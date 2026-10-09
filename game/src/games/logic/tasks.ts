@@ -1,13 +1,13 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, TemplatePayload } from '@/core/game/templates/types';
-import type { LangCode } from '@/core/lang';
+import type { LangCode } from '@/core/language';
 import { pick, shuffle } from '@/core/utils/random';
 import { card, templateTask, type GameTasks } from '../shared/templateModule';
 import { composeLevel, recallSteps } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
 import { buildNumberOptions } from '../math/generators/options';
-import { logicTexts } from './lang';
+import { logicTexts } from './grammar';
 import { RIDDLE_KINDS, RIDDLE_STEPS, RIDDLES_PER_STEP, type RiddleKind } from './content/riddles';
 import { CHOICES, DRAWN, MIRROR_STEPS, PATTERN_STEPS, PER_STEP, SETS, SHADOW_STEPS, SHADOW_WORLD, type Half } from './content/data';
 

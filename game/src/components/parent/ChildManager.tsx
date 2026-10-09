@@ -1,4 +1,4 @@
-import { useLang, useT } from '@/core/i18n';
+import { useLang, useT } from '@/core/translator';
 import { useEffect, useRef, useState } from 'react';
 import {
   useGameStore,

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useSound } from '@/core/audio/useSound';
-import { useGameLang, useT } from '@/core/i18n';
+import { useGameLang, useT } from '@/core/translator';
 import { useTell } from './useTell';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { planetFacts } from '@/core/child/world/planetFacts';
@@ -9,7 +9,7 @@ import type { World } from '@/core/child/world/useWorld';
 import { PLANET_COUNT, type WorldPlanetId } from '@/core/child/world/world';
 import { tellFact } from '@/core/game/content/outro';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
-import { spoken, written } from '@/core/lang';
+import { spoken, written } from '@/core/language';
 import { cn } from '@/core/utils/cn';
 import { Globe } from './Globe';
 import { RAD } from './places';

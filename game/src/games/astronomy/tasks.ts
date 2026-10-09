@@ -6,8 +6,8 @@ import { factPool } from '../shared/facts';
 import { card, templateTask, withDistractors, type GameTasks } from '../shared/templateModule';
 import { type Planet, PLANETS, LINE_UPS, BY_SIZE, FEATURES, FEATURES_PER_STEP, planet, type Figure, type Labels, SKY_STEPS, FIND_STEPS, FIND_TIERS, FIGURES } from './content/data';
 import { PLANET_QUIZ, QUIZ_PER_STEP } from './content/planetQuiz';
-import { astronomyTexts } from './lang';
-import type { AstronomyTexts } from './lang/types';
+import { astronomyTexts } from './grammar';
+import type { AstronomyTexts } from './grammar/types';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 

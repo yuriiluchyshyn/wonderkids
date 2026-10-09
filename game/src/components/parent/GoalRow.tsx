@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { useEffect, useState } from 'react';
 import type { Milestone } from '@/core/child/store/useGameStore';
 import styles from './Parent.module.css';

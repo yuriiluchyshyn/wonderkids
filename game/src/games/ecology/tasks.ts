@@ -6,8 +6,8 @@ import { factPool } from '../shared/facts';
 import { card, templateTask, type GameTasks } from '../shared/templateModule';
 import { ECO_QUESTIONS, type EcoQuestion } from './content/questions';
 import { BINS, MORE_RUBBISH, RUBBISH } from './content/rubbish';
-import { ecologyTexts } from './lang';
-import type { EcologyTexts } from './lang/types';
+import { ecologyTexts } from './grammar';
+import type { EcologyTexts } from './grammar/types';
 
 function recycling(step: number, config: Pick<TaskConfig, 'lang'>): TaskInstance<TemplatePayload>[] {
   const T = ecologyTexts(config.lang);

@@ -1,4 +1,4 @@
-import { useT, useVoiceLang } from '@/core/i18n';
+import { useT, useVoiceLang } from '@/core/translator';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { GALAXIES, galaxyKey, getGalaxy } from '@/core/game/galaxies';

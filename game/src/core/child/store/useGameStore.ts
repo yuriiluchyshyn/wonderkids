@@ -10,8 +10,8 @@ import { playsKey } from '@/core/child/progress/plays';
 import { balanceOf, itemCost, lossKey, ownedKey, sellPrice, stationCost, stationKey } from '@/core/child/world/world';
 import { keysOf } from '@/core/child/world/games';
 import { DEFAULT_CURRENCY, isCurrency, type CurrencyId } from '@/core/game/content/currency';
-import { tApp } from '@/core/i18n/app';
-import { DEFAULT_LANG, isLang, type LangCode } from '@/core/lang';
+import { tApp } from '@/core/translator/app';
+import { DEFAULT_LANG, isLang, type LangCode } from '@/core/language';
 import { uid } from '@/core/utils/random';
 // Note: no DEFAULT_THEME_ID import — a child's theme is `null` until chosen;
 // useActiveTheme resolves null → the neutral galaxy skin.
@@ -129,7 +129,7 @@ export interface Settings {
   currencyChosen: boolean;
   /**
    * The language of the child's game — its texts. `null` — not chosen: the
-   * language offered to this device is used (`core/i18n`).
+   * language offered to this device is used (`core/translator`).
    */
   gameLang: LangCode | null;
   /** The language the voice speaks to the child. `null` — the same as the game's. */

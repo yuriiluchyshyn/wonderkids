@@ -1,6 +1,6 @@
-import { DEFAULT_LANG, language, type LangCode } from '@/core/lang';
+import { DEFAULT_LANG, language, type LangCode } from '@/core/language';
 
-/** Language of a phrase — one of the languages of the app (`core/lang`). */
+/** Language of a phrase — one of the languages of the app (`core/language`). */
 export type SpeechLang = LangCode;
 
 /** Fetches a phrase as base64 MP3 from the cloud voice; rejects when unavailable. */
@@ -96,7 +96,7 @@ export class SpeechEngine {
 
   /**
    * The language of the voice from now on: which rules make a text ready to be
-   * read (`core/lang/<code>/voice.ts`) and which voice reads it. A phrase in
+   * read (`core/language/<code>/voice.ts`) and which voice reads it. A phrase in
    * another language — a card of a language lesson — names its own in `speak`.
    */
   setLanguage(lang: SpeechLang): void {
@@ -122,7 +122,7 @@ export class SpeechEngine {
     this.cancel();
     // Every phrase, whoever asks for it, is made ready for the voice here, by
     // the rules of its language: numbers, years, clock times and lone letters
-    // become words in the right gender and case (`core/lang/<code>/voice.ts`).
+    // become words in the right gender and case (`core/language/<code>/voice.ts`).
     // A digit handed to a speech engine is read as it pleases — «два машинки»,
     // «dwa gwiazdy», «one thousand eight hundred forty-six» for a year.
     const text = language(lang).voiced(raw);

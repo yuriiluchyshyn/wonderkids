@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { VOICE_CHANNELS } from '@/core/audio/voiceChannels';
 import { Chip } from '@/components/ui/Chip';

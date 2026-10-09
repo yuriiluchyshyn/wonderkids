@@ -1,12 +1,12 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { GridChoicePayload } from '@/core/game/templates/types';
-import { spoken, written } from '@/core/lang/marks';
+import { spoken, written } from '@/core/language/marks';
 import { currencyOf, type CurrencyId } from '@/core/game/content/currency';
 import { pick, randInt, uid } from '@/core/utils/random';
 import { rewardForStep } from '../difficulty';
-import { storyWords } from '../lang/stories';
-import type { Frame, StoryHero, StoryWords } from '../lang/stories/types';
+import { storyWords } from '../grammar/stories';
+import type { Frame, StoryHero, StoryWords } from '../grammar/stories/types';
 import { buildNumberOptions } from './options';
 
 /**
@@ -15,7 +15,7 @@ import { buildNumberOptions } from './options';
  * one kind, dealt out to a step.
  *
  * This file only DRAWS a problem — the numbers, the hero, the pictures — and
- * holds no words: a problem is told by `lang/stories/<language>.ts`. Every
+ * holds no words: a problem is told by `grammar/stories/<language>.ts`. Every
  * roll of the dice is made here, in the same order whatever the language, so
  * one draw can be told on the screen in one language and by the voice in
  * another (`core/game/kernel/languages.ts`) and stay one problem.

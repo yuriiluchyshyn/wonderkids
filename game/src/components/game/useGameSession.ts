@@ -1,6 +1,6 @@
-import { useCurrency, useGameLang, useVoiceLang } from '@/core/i18n';
+import { useCurrency, useGameLang, useVoiceLang } from '@/core/translator';
 import { contentLangs, inLanguages, type ContentLangs } from '@/core/game/kernel/languages';
-import { DEFAULT_LANG } from '@/core/lang';
+import { DEFAULT_LANG } from '@/core/language';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import type { LearningModule, TaskInstance } from '@/core/game/kernel/types';

@@ -3,7 +3,10 @@
  * they say otherwise). Only whole units: coins for the small values, paper
  * notes for the big ones, as in the country's real money.
  */
-import { language, type LangCode } from '@/core/lang';
+import { language, type LangCode } from '@/core/language';
+import TEXTS from '../../../locales/app/uk/content.json' with { type: 'json' };
+
+const J = TEXTS.currency;
 
 export enum Currency {
   UAH = 'UAH',
@@ -35,11 +38,11 @@ export interface CurrencyDef {
 }
 
 export const CURRENCIES: Record<CurrencyId, CurrencyDef> = {
-  UAH: { id: 'UAH', name: 'Гривня', flag: '🇺🇦', sign: '₴', short: 'грн', counted: ['гривня', 'гривні', 'гривень'], gender: 'f', minor: { short: 'коп', many: 'копійок', rule: 'В одній гривні — сто копійок.' }, coins: [1, 2, 5, 10], values: [100, 50, 20, 10, 5, 2, 1] },
-  EUR: { id: 'EUR', name: 'Євро', flag: '🇪🇺', sign: '€', short: '€', counted: ['євро', 'євро', 'євро'], gender: 'n', minor: { short: 'ц', many: 'центів', rule: 'В одному євро — сто центів.' }, coins: [1, 2], values: [100, 50, 20, 10, 5, 2, 1] },
-  USD: { id: 'USD', name: 'Долар', flag: '🇺🇸', sign: '$', short: '$', counted: ['долар', 'долари', 'доларів'], gender: 'm', minor: { short: '¢', many: 'центів', rule: 'В одному доларі — сто центів.' }, coins: [1], values: [100, 50, 20, 10, 5, 2, 1] },
-  GBP: { id: 'GBP', name: 'Фунт', flag: '🇬🇧', sign: '£', short: '£', counted: ['фунт', 'фунти', 'фунтів'], gender: 'm', minor: { short: 'п', many: 'пенсів', rule: 'В одному фунті — сто пенсів.' }, coins: [1, 2], values: [50, 20, 10, 5, 2, 1] },
-  PLN: { id: 'PLN', name: 'Злотий', flag: '🇵🇱', sign: 'zł', short: 'zł', counted: ['злотий', 'злоті', 'злотих'], gender: 'm', minor: { short: 'гр', many: 'грошів', rule: 'В одному злотому — сто грошів.' }, coins: [1, 2, 5], values: [100, 50, 20, 10, 5, 2, 1] },
+  UAH: { id: 'UAH', name: J.CURRENCIES.UAH.name, flag: '🇺🇦', sign: '₴', short: J.CURRENCIES.UAH.short, counted: [J.CURRENCIES.UAH.counted[0], J.CURRENCIES.UAH.counted[1], J.CURRENCIES.UAH.counted[2]], gender: 'f', minor: J.CURRENCIES.UAH.minor, coins: [1, 2, 5, 10], values: [100, 50, 20, 10, 5, 2, 1] },
+  EUR: { id: 'EUR', name: J.CURRENCIES.EUR.name, flag: '🇪🇺', sign: '€', short: '€', counted: [J.CURRENCIES.EUR.counted[0], J.CURRENCIES.EUR.counted[1], J.CURRENCIES.EUR.counted[2]], gender: 'n', minor: J.CURRENCIES.EUR.minor, coins: [1, 2], values: [100, 50, 20, 10, 5, 2, 1] },
+  USD: { id: 'USD', name: J.CURRENCIES.USD.name, flag: '🇺🇸', sign: '$', short: '$', counted: [J.CURRENCIES.USD.counted[0], J.CURRENCIES.USD.counted[1], J.CURRENCIES.USD.counted[2]], gender: 'm', minor: { short: '¢', many: J.CURRENCIES.USD.minor.many, rule: J.CURRENCIES.USD.minor.rule }, coins: [1], values: [100, 50, 20, 10, 5, 2, 1] },
+  GBP: { id: 'GBP', name: J.CURRENCIES.GBP.name, flag: '🇬🇧', sign: '£', short: '£', counted: [J.CURRENCIES.GBP.counted[0], J.CURRENCIES.GBP.counted[1], J.CURRENCIES.GBP.counted[2]], gender: 'm', minor: J.CURRENCIES.GBP.minor, coins: [1, 2], values: [50, 20, 10, 5, 2, 1] },
+  PLN: { id: 'PLN', name: J.CURRENCIES.PLN.name, flag: '🇵🇱', sign: 'zł', short: 'zł', counted: [J.CURRENCIES.PLN.counted[0], J.CURRENCIES.PLN.counted[1], J.CURRENCIES.PLN.counted[2]], gender: 'm', minor: J.CURRENCIES.PLN.minor, coins: [1, 2, 5], values: [100, 50, 20, 10, 5, 2, 1] },
 };
 
 export const DEFAULT_CURRENCY: CurrencyId = Currency.UAH;

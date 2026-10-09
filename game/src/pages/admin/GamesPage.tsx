@@ -1,7 +1,7 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { useMemo } from 'react';
 import { GALAXIES, galaxyKey } from '@/core/game/galaxies';
-import { tApp } from '@/core/i18n';
+import { tApp } from '@/core/translator';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { difficultyRange, gameStatus, isFreePlay, tasksPerLevel, toGameConfig } from '@/core/game/kernel/gameConfig';
 import type { LearningModule, MechanicsType, SubCategory } from '@/core/game/kernel/types';

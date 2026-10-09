@@ -1,0 +1,2498 @@
+{
+  "hours": {
+    "1": "hour",
+    "2": "hours"
+  },
+  "cards": {
+    "title": "Geography",
+    "games": {
+      "flags": {
+        "label": "Guess the Flag",
+        "blurb": "All {length} flags of the world — starting with the best known",
+        "intro": "Every country has a flag of its own. Listen to the name of the country and find its flag among six! On every step there are five new flags, and the ones you know come back so that you don’t forget them."
+      },
+      "continents": {
+        "label": "Put the Map Together",
+        "blurb": "Put animals and flags on the continents",
+        "intro": "There are seven continents on Earth. Drag the animal or the flag onto the continent where it belongs."
+      },
+      "biomes": {
+        "label": "Animals and Natural Zones",
+        "blurb": "{length} animals and seven natural zones — from the Arctic to the savanna",
+        "intro": "Every animal loves its own home. Some are happy among the ice, and some in the hot desert. Help them get home! Farther along the way there are new animals, “Who is it?” riddles and “Who is the odd one out?” puzzles."
+      },
+      "oceans": {
+        "label": "Seas and Oceans",
+        "blurb": "Five oceans, half a hundred seas and gulfs, islands, countries and rivers",
+        "intro": "There are five oceans on our planet. Listen to where to sail, and tap the right ocean on the map! Farther along the way there are riddles about oceans, seas and gulfs, islands, countries and rivers."
+      },
+      "capitals": {
+        "label": "Capitals and Time Zones",
+        "blurb": "{length} capitals of the world, day and night, and the difference in time",
+        "intro": "Know a capital by its most famous building and by the name of its country. And we will also find out why it is day in some cities when it is night in others, and what time it is there!"
+      }
+    }
+  },
+  "flags": {
+    "ask": "Find the flag of {id}.",
+    "hint": "{id} is a country in {id2}. Look closely at the colors and the picture on the flags.",
+    "stories": {
+      "0": "Yes, this is the flag of {id}!",
+      "2": "That’s right! {id} is a country in {id2}.",
+      "3": "Wonderful! You know the flag of {id}.",
+      "4": "Well done! This is {id}.",
+      "5": "Spot on! You won’t forget the flag of {id} now.",
+      "6": "What a memory! This is the flag of {id}.",
+      "7": "Keep it up! This is {id}. Look for this country on the map in {id2}.",
+      "8": "Got it! This is the flag of {id}.",
+      "9": "Exactly! {id}. Remember the colors of this flag.",
+      "10": "Yes! If you see this flag at a sports contest — it is {id}."
+    }
+  },
+  "map": {
+    "animalAsk": "Where does the {id} live? Drag it onto the map.",
+    "animalHint": "Look for the continent that is blinking. The {id} lives in {homeOf}.",
+    "countryAsk": "Which continent is {id} on? Drag the flag.",
+    "countryHint": "Look for {continentOf} — it is blinking.",
+    "countryYes": {
+      "0": "Yes! {id} is a country in {id2}.",
+      "1": "That’s right: {id} is on the continent of {continentOf}."
+    }
+  },
+  "zones": {
+    "whereAsk": "Where does the {id} live?",
+    "whereHint": "Think where the animal would be happy. {id}",
+    "whoAsk": "Who lives {where}?",
+    "whoHint": "Remember what natural zone this is. {id}",
+    "riddleAsk": "Who is it? {id}",
+    "riddleHint": "This animal lives {where}. Its name begins with the letter “{id}.”",
+    "oddAsk": "Who is the odd one out? All the others are neighbors: they live in the same natural zone.",
+    "oddHint": "All the neighbors live {where}. Find the one that lives somewhere else.",
+    "zoneAsk": "Which natural zone is this? {id}",
+    "zoneHint": {
+      "1": "Living here: the {dwellers}.",
+      "2": ", the "
+    },
+    "zoneYes": "Yes, it’s {id}! {id2}"
+  },
+  "seas": {
+    "sailTo": "Sail to {id}!",
+    "riddleAsk": "Sail to {id}!",
+    "hint": "Look for the water that ripples with waves. {clue}",
+    "itIs": "It is {id}.",
+    "sea": {
+      "ask": "{id} is a part of which ocean? Sail there!"
+    },
+    "place": {
+      "ask": "{id} Sail there!"
+    },
+    "river": {
+      "ask": "Which ocean do the waters of {id} flow to? Sail there!"
+    },
+    "shoreAsk": "Which ocean washes the shores of {id}? Sail there!",
+    "shoreYes": "Yes! The shores of {id} are washed by {ocean}."
+  },
+  "capitals": {
+    "landmark": {
+      "ask": "In which capital can you see {inSentence}?",
+      "hint": "{inSentence} is a symbol of {country}. Remember the capital of that country."
+    },
+    "ask": "What is the capital of {id}?",
+    "hint": "The name of this capital begins with the letter “{id}.”",
+    "stories": {
+      "0": "Yes! {pair}.",
+      "1": "That’s right! The capital of {id} is {id2}.",
+      "2": "Wonderful! {id} is the chief city of {id2}.",
+      "3": "Well done! {pair}. It is in {id}.",
+      "4": "Spot on! {id} and {id2} — remember this pair.",
+      "5": "What a memory! {pair}.",
+      "6": "Keep it up! Look for the city of {id} on the map in {id2}.",
+      "7": "Got it! {pair}.",
+      "8": "Exactly! If you go to {id}, you will see its capital — {id2}.",
+      "9": "Correct! {pair}. Now you know.",
+      "pair": "{id} is the capital of {id2}"
+    },
+    "countryAsk": "{id} is the capital of which country?",
+    "countryHint": "This country is in {id}. Its name begins with the letter “{id2}.”",
+    "day": "Day",
+    "night": "Night",
+    "dayNight": {
+      "ask": "It is {now} in Kyiv now. What about {id}?",
+      "caption": "Kyiv: {now}"
+    },
+    "dayNightHint": "The Earth spins like a top. The sun shines on only one side of it: there it is day, and on the other side it is night.",
+    "clock": {
+      "side": {
+        "1": "later",
+        "2": "earlier"
+      },
+      "rule": {
+        "1": "The time in {city} is the same as in Kyiv",
+        "2": "{t} is {by} {side} in {city} than in Kyiv",
+        "3": "In winter it",
+        "4": "It"
+      },
+      "ask": "It is {hour}:00 in Kyiv. {rule}. What time is it in {city}?",
+      "caption": "Kyiv — {hour}:00",
+      "hint": {
+        "1": "This city is in the same time zone as Kyiv — the clocks show the same time.",
+        "2": "“{by} {side}” means {hour} {t} {by2}.",
+        "3": "plus",
+        "4": "minus"
+      },
+      "yes": "Yes! When it is {hour}:00 in Kyiv, it is {hour2}:00 in {city}."
+    }
+  },
+  "data": {
+    "animalFacts": {
+      "ANIMAL_FACTS": {
+        "giraffe": [
+          "The giraffe is the tallest animal on Earth: it is taller than a two-story house.",
+          "Giraffes live in the African savanna — a plain of grass with trees here and there.",
+          "A giraffe has as many bones in its neck as a person does — seven.",
+          "A giraffe’s tongue is dark blue and almost half a meter long.",
+          "A giraffe sleeps only a few hours a day, often standing up.",
+          "Every giraffe has its own pattern of spots, like people’s fingerprints.",
+          "A giraffe reaches leaves at the tops of acacia trees, where no other animal can stretch.",
+          "To have a drink, a giraffe has to spread its front legs wide apart.",
+          "A baby giraffe is born two meters tall and is on its feet within an hour.",
+          "A giraffe’s heart is very strong: it pumps blood all the way up to its head."
+        ],
+        "lion": [
+          "The lion is called the king of beasts, and it lives in the African savanna.",
+          "Lions live in big families called prides.",
+          "Only male lions have a mane.",
+          "A lion’s roar can be heard several kilometers away.",
+          "In a pride it is mostly the lionesses that hunt.",
+          "Lions rest for up to twenty hours a day.",
+          "Lion cubs are born with spots on their fur, which fade away later.",
+          "The lion is the second biggest cat in the world, after the tiger.",
+          "A lion has a dark tuft at the tip of its tail.",
+          "Lions see well in the dark and often hunt at night."
+        ],
+        "kangaroo": [
+          "Kangaroos live in Australia and are shown on that country’s coat of arms.",
+          "A mother kangaroo carries her baby in a pouch on her belly.",
+          "A newborn kangaroo is the size of a bean.",
+          "A big kangaroo can jump eight meters in one leap.",
+          "A kangaroo cannot walk backwards.",
+          "Its long, strong tail helps a kangaroo keep its balance.",
+          "Kangaroos eat grass and leaves.",
+          "Kangaroos can go without water for a long time.",
+          "Kangaroos live in groups.",
+          "A kangaroo bounds along as fast as a car drives in town."
+        ],
+        "penguin": [
+          "Penguins are birds that cannot fly, but they swim wonderfully.",
+          "Under water a penguin paddles with its wings, like flippers.",
+          "Thick feathers and a layer of fat protect penguins from the cold.",
+          "The emperor penguin is the biggest: it is as tall as a first grader.",
+          "Among emperor penguins it is the father who keeps the egg warm: he holds it on his feet.",
+          "To keep warm, penguins huddle close together and take turns changing places.",
+          "Penguins eat fish, squid and tiny shrimp.",
+          "A black back and a white belly hide a penguin in the water from hunters.",
+          "Penguins live in the south of the Earth; there are none in the Arctic.",
+          "Penguins slide over the snow on their bellies, as if on a sled."
+        ],
+        "panda": [
+          "The giant panda lives in the mountain forests of China.",
+          "A panda eats bamboo for more than ten hours a day.",
+          "In a day a panda eats more than ten kilograms of bamboo.",
+          "A newborn panda is pink and tiny — the size of a stick of butter.",
+          "A panda is a bear, but it does not sleep through the winter.",
+          "On its front paws a panda has a “sixth finger” for holding bamboo.",
+          "Pandas are good at climbing trees.",
+          "The panda is a symbol of protecting nature all over the world.",
+          "Pandas like to live alone.",
+          "The black patches around the eyes are a little different on every panda."
+        ],
+        "llama": [
+          "The llama lives in the Andes — the mountains of South America.",
+          "Llamas are relatives of camels, only without humps.",
+          "People tamed llamas thousands of years ago to carry loads.",
+          "If you make a llama angry, it may spit.",
+          "Warm sweaters and blankets are knitted from llama wool.",
+          "Llamas feel fine high in the mountains, where the air is thin.",
+          "Llamas eat grass.",
+          "Llamas talk to one another with a quiet hum.",
+          "If its load is too heavy, a llama lies down and refuses to go.",
+          "Llamas are kept with flocks of sheep: they drive hunters away."
+        ],
+        "bison": [
+          "The bison is the biggest animal of North America.",
+          "A bison weighs as much as a small car.",
+          "For all its weight, a bison runs very fast.",
+          "Millions of bison once roamed the prairies of America.",
+          "In winter a bison sweeps the snow aside with its head to get at the grass.",
+          "Thick fur protects a bison from frost and blizzards.",
+          "Bison live in herds.",
+          "A bison calf is reddish, and it turns darker as it grows up.",
+          "The bison’s European relative is the wisent, which lives in the forests of Europe.",
+          "The hump on a bison’s back is strong muscle that holds up its heavy head."
+        ],
+        "hedgehog": [
+          "The hedgehog lives in the forests and gardens of Europe.",
+          "There are several thousand spines on a hedgehog’s back.",
+          "In danger a hedgehog rolls up into a prickly ball.",
+          "Hedgehogs go out walking at night.",
+          "A hedgehog eats beetles, caterpillars, slugs and worms.",
+          "In winter a hedgehog sleeps in a pile of leaves right through to spring.",
+          "Hedgehogs do not carry apples and mushrooms on their spines — that is a story from fairy tales.",
+          "Baby hedgehogs are born with soft white spines.",
+          "A hedgehog has a wonderful sense of smell and hearing, but it sees poorly.",
+          "Hedgehogs must not be given milk — it gives them a stomachache."
+        ],
+        "koala": [
+          "The koala lives in the eucalyptus trees of Australia.",
+          "A koala eats nothing but eucalyptus leaves.",
+          "A koala sleeps for up to twenty hours a day.",
+          "A koala is not a bear but a pouched animal, like a kangaroo.",
+          "A baby koala grows in its mother’s pouch for half a year.",
+          "A koala hardly ever drinks: it gets enough water from the leaves.",
+          "A koala’s fingerprints are very like a person’s.",
+          "A mother koala carries her older baby on her back.",
+          "Koalas seldom come down to the ground.",
+          "Eucalyptus leaves are poisonous for most animals, but they do a koala no harm."
+        ],
+        "tiger": [
+          "The tiger is the biggest cat in the world.",
+          "Every tiger has its own stripes, like people’s fingerprints.",
+          "Tigers live in Asia: in India, in China and in the Far East.",
+          "Tigers love water and swim well.",
+          "A tiger hunts alone, and usually at night.",
+          "The skin under a tiger’s fur is striped too.",
+          "A tiger can leap more than six meters.",
+          "Its stripes hide a tiger in tall grass and thickets.",
+          "Tiger cubs stay with their mother for about two years.",
+          "Few tigers are left in the wild, so they are protected."
+        ],
+        "polar_bear": [
+          "The polar bear is the biggest hunter on land.",
+          "A polar bear’s skin is black, and its hairs are see-through.",
+          "A polar bear swims wonderfully and can cover dozens of kilometers.",
+          "Polar bears hunt seals from the ice.",
+          "A thick layer of fat keeps a polar bear warm in the frost.",
+          "Cubs are born in winter in a den of snow.",
+          "A polar bear can smell a seal from many kilometers away.",
+          "Wide paws keep a polar bear from sinking into the snow.",
+          "Polar bears live only in the north, around the North Pole.",
+          "Polar bears need ice: without it they find it hard to hunt."
+        ],
+        "camel": [
+          "A camel can go without water for more than a week.",
+          "A camel’s humps hold not water but fat — a store of food.",
+          "A camel can drink more than a hundred liters of water at one go.",
+          "Long eyelashes and nostrils that close protect a camel from the sand.",
+          "Wide feet keep a camel from sinking into the sand.",
+          "The camel is called the ship of the desert.",
+          "There are camels with one hump and camels with two.",
+          "Camels eat even thorns.",
+          "People have ridden camels and carried loads on them for thousands of years.",
+          "A camel easily stands both the heat of the day and the cold of the desert night."
+        ],
+        "monkey": [
+          "Monkeys live in warm forests and climb trees nimbly.",
+          "Many monkeys hold on to branches with their tail, as with a fifth hand.",
+          "Monkeys live in big groups.",
+          "Monkeys eat fruit, leaves, nuts and insects.",
+          "Monkeys clean one another’s fur — that is how they make friends.",
+          "Monkeys are very clever and can use sticks and stones.",
+          "A baby monkey clings to its mother’s fur.",
+          "Monkeys warn one another of danger with cries.",
+          "The smallest monkey — the marmoset — fits on the palm of a hand.",
+          "Monkeys are the closest relatives of people among the animals."
+        ],
+        "dolphin": [
+          "A dolphin is not a fish: it breathes air.",
+          "A dolphin breathes through a hole on the top of its head — the blowhole.",
+          "Dolphins “talk” in whistles and clicks.",
+          "A dolphin finds its prey by echoes.",
+          "When a dolphin sleeps, half of its brain stays awake and minds its breathing.",
+          "Dolphins live in pods and help one another.",
+          "Baby dolphins drink their mother’s milk.",
+          "Dolphins love to play and leap out of the water.",
+          "Dolphins are among the cleverest of animals.",
+          "Every dolphin has a special whistle of its own — like a name."
+        ],
+        "seal": [
+          "A seal swims wonderfully, but moves clumsily on land.",
+          "A thick layer of fat keeps a seal warm in icy water.",
+          "A seal can hold its breath under water for half an hour and more.",
+          "With its whiskers a seal feels fish moving in the water.",
+          "Seals eat fish, squid and shrimp.",
+          "Seal pups are born on the ice in a fluffy white coat.",
+          "Seals rest on ice floes and rocks.",
+          "To breathe under the ice, a seal makes holes in it.",
+          "The seals’ main enemies are polar bears and killer whales.",
+          "Instead of paws a seal has flippers."
+        ],
+        "parrot": [
+          "Parrots live in warm tropical forests.",
+          "Some parrots can repeat people’s words.",
+          "With its strong beak a parrot cracks nuts.",
+          "A parrot picks up food with its foot, as with a hand.",
+          "Big parrots can live for more than fifty years.",
+          "Bright feathers hide parrots among flowers and leaves.",
+          "Parrots live in noisy flocks.",
+          "Parrots nest in the hollows of trees.",
+          "On a parrot’s foot two toes point forward and two point back.",
+          "Parrots are very clever and can solve puzzles."
+        ],
+        "scorpion": [
+          "A scorpion is a relative of spiders: it has eight legs.",
+          "At the end of its tail a scorpion has a sting with poison.",
+          "By day a scorpion hides under stones, and it hunts at night.",
+          "Scorpions glow under an ultraviolet flashlight.",
+          "Scorpions lived on Earth even before the dinosaurs.",
+          "A mother scorpion carries her babies on her back.",
+          "A scorpion can go without eating for many months.",
+          "With its pincers a scorpion grabs insects.",
+          "Most scorpions are not dangerous to people, but they must not be touched.",
+          "A scorpion feels the steps of its prey by the trembling of the sand."
+        ],
+        "octopus": [
+          "An octopus has eight arms and three hearts.",
+          "An octopus’s blood is blue.",
+          "An octopus can change color and become hard to see.",
+          "An octopus has no bones, so it squeezes into narrow cracks.",
+          "In danger an octopus squirts out a little cloud of ink.",
+          "Octopuses are very clever and can open jars.",
+          "There are hundreds of suckers on an octopus’s arms.",
+          "If an octopus loses an arm, it grows back.",
+          "An octopus lives on the seabed among the stones.",
+          "An octopus tastes with its suckers."
+        ],
+        "arctic_hare": [
+          "The arctic hare is white in winter, so that it cannot be seen on the snow.",
+          "An arctic hare’s ears are shorter than an ordinary hare’s — that way it gets less cold.",
+          "An arctic hare can speed up to sixty kilometers an hour.",
+          "In winter arctic hares gather in big groups.",
+          "An arctic hare digs moss and twigs out from under the snow.",
+          "The thick fur on an arctic hare’s paws works like snowshoes.",
+          "An arctic hare stands up on its hind legs to look around.",
+          "An arctic hare hides from the wind in a hollow in the snow.",
+          "Baby hares are born with fur and with their eyes open.",
+          "Arctic hares are hunted by arctic foxes, wolves and snowy owls."
+        ],
+        "lizard": [
+          "A lizard basks in the sun, because its body makes no warmth of its own.",
+          "In danger a lizard can drop its tail — a new one will grow later.",
+          "Lizards eat insects.",
+          "A lizard’s skin is covered with little scales.",
+          "Lizards lay their eggs in the sand.",
+          "Desert lizards lift their feet in turn, so as not to burn them on the sand.",
+          "Some lizards run on walls and ceilings.",
+          "Lizards, snakes and crocodiles are reptiles.",
+          "The biggest lizard in the world is the Komodo dragon.",
+          "A lizard flicks out its tongue to “smell” the air."
+        ],
+        "whale": [
+          "The blue whale is the biggest animal that has ever lived on Earth.",
+          "A whale is not a fish: it breathes air and feeds its young with milk.",
+          "The heart of a blue whale is the size of a small car.",
+          "Whales “sing” under water, and their songs can be heard very far away.",
+          "A whale’s fountain is the air it breathes out.",
+          "The blue whale eats tiny shrimp.",
+          "Every year whales swim thousands of kilometers.",
+          "A whale calf drinks hundreds of liters of milk a day.",
+          "Instead of teeth many whales have horny plates called baleen.",
+          "Whales can live for more than eighty years."
+        ],
+        "shark": [
+          "Sharks lived in the ocean even before the dinosaurs.",
+          "A shark has no bones — its skeleton is made of gristle.",
+          "A shark’s teeth grow in rows and are replaced all its life.",
+          "A shark can smell its prey from very far away.",
+          "The biggest shark — the whale shark — eats only plankton and is harmless to people.",
+          "A shark’s skin is rough, like sandpaper.",
+          "Most sharks have to keep swimming all the time in order to breathe.",
+          "Sharks feel the faint electric signals of other animals.",
+          "Sharks very seldom attack people.",
+          "Sharks matter to the ocean: they keep it in balance."
+        ],
+        "gorilla": [
+          "The gorilla is the biggest ape in the world.",
+          "Gorillas live in the forests of Africa.",
+          "Gorillas eat leaves, stems and fruit.",
+          "A gorilla family is led by a big male with a silver back.",
+          "Every evening gorillas build themselves a nest to sleep in.",
+          "Gorillas walk leaning on their knuckles.",
+          "Gorillas are very strong, but peaceful.",
+          "Gorillas can learn sign language.",
+          "A baby gorilla rides on its mother’s back.",
+          "Few gorillas are left, so they are protected."
+        ],
+        "snake": [
+          "A snake has no legs: it crawls by bending its body.",
+          "A snake “smells” with its tongue.",
+          "A snake swallows its prey whole.",
+          "Snakes shed their old skin as they grow.",
+          "Snakes have no eyelids — they do not blink.",
+          "By day desert snakes hide in the sand from the heat.",
+          "Snakes feel footsteps by the trembling of the ground.",
+          "Not all snakes are poisonous.",
+          "After a hearty meal a snake may not eat for several weeks.",
+          "Some desert snakes crawl sideways, to touch the hot sand less."
+        ],
+        "arctic_fox": [
+          "The arctic fox is white in winter and gray-brown in summer.",
+          "The fur of the arctic fox is among the warmest of any animal.",
+          "An arctic fox does not freeze even in fifty degrees of frost.",
+          "An arctic fox hears lemmings under the snow and dives into the drift after them.",
+          "An arctic fox covers itself with its fluffy tail, as with a blanket.",
+          "An arctic fox’s paws are furry even underneath.",
+          "Arctic foxes live in burrows with many ways out.",
+          "Arctic foxes often follow polar bears and finish what they leave.",
+          "An arctic fox has small ears and a short nose — that way it loses less warmth.",
+          "A family of arctic foxes may have more than ten cubs."
+        ],
+        "zebra": [
+          "Every zebra has its own pattern of stripes — like people’s fingerprints.",
+          "Zebras live in the savanna in big herds — that makes it easier to spot a hunter.",
+          "The zebra is a relative of the horse, but it is almost impossible to tame.",
+          "Zebras sleep standing up, and one of the herd always keeps watch.",
+          "A zebra foal gets to its feet just a few minutes after it is born.",
+          "A zebra’s stripes confuse biting flies — they land on it less often."
+        ],
+        "elephant": [
+          "The elephant is the biggest animal on land.",
+          "With its trunk an elephant breathes, drinks, picks leaves and even hugs.",
+          "An elephant fans itself with its big ears to keep cool.",
+          "Elephants have a wonderful memory and remember the way to water for years.",
+          "A herd of elephants is led by the oldest and wisest female.",
+          "A baby elephant is born weighing about a hundred kilograms and can walk right away."
+        ],
+        "rhino": [
+          "A rhino’s horn is made of the same stuff as our fingernails.",
+          "A rhino sees poorly, but it hears and smells wonderfully.",
+          "Rhinos love to roll in mud — it protects their skin from the sun and from insects.",
+          "For all its weight, a rhino runs faster than a person.",
+          "Rhinos eat only plants: grass, leaves and twigs.",
+          "Little birds often sit on a rhino’s back — they peck insects out of its skin."
+        ],
+        "brown_bear": [
+          "In winter the brown bear sleeps in its den and does not eat for several months.",
+          "A brown bear eats almost everything: berries, nuts, fish, honey.",
+          "Bear cubs are born in winter in the den — tiny, like kittens.",
+          "A brown bear climbs trees wonderfully and swims well.",
+          "A bear’s sense of smell is far better than a dog’s.",
+          "⟪Brown bears live in the Carpathian Mountains of Europe too.⟫"
+        ],
+        "wolf": [
+          "Wolves live in a pack — a big, close family.",
+          "Wolves howl to call their own and to tell strangers: this is our land.",
+          "The wolf is the ancestor of all dogs.",
+          "In one night a wolf pack can run dozens of kilometers.",
+          "All the grown wolves in a pack look after the cubs.",
+          "Wolves hear sounds several kilometers away."
+        ],
+        "squirrel": [
+          "A squirrel lays in stores for the winter: it hides nuts and acorns.",
+          "A squirrel often forgets its hiding places — and new trees grow from them.",
+          "Its fluffy tail helps a squirrel keep its balance when it jumps.",
+          "A squirrel’s nest is called a drey — it is round and warm.",
+          "A squirrel’s teeth grow all its life, so it is always gnawing something.",
+          "In winter a squirrel’s coat grows thicker and grayer."
+        ],
+        "owl": [
+          "An owl hunts at night: it sees wonderfully in the dark.",
+          "An owl flies almost without a sound, thanks to its soft feathers.",
+          "An owl cannot move its eyes, but it turns its head far around.",
+          "An owl’s hearing is so sharp that it hears a mouse under the snow.",
+          "By day an owl sleeps in a hollow or among thick branches.",
+          "Baby owls are called owlets — they are covered in white down."
+        ],
+        "deer": [
+          "A deer’s antlers fall off every year, and new ones grow.",
+          "Fawns are born with white spots — that makes them harder to see in the grass.",
+          "Among forest deer only the males carry antlers.",
+          "A deer eats grass, leaves, bark and acorns.",
+          "In the fall deer bellow loudly — it can be heard all through the forest.",
+          "A deer is very shy and runs away in great leaps."
+        ],
+        "boar": [
+          "A wild boar digs up the ground with its snout, looking for roots, acorns and beetles.",
+          "A boar’s young are striped — the stripes hide them among the leaves.",
+          "The wild boar is the ancestor of the farm pig.",
+          "Boars love to bathe in mud to get rid of insects.",
+          "A boar has sharp tusks, which it defends itself with.",
+          "Boars swim well and run fast."
+        ],
+        "sea_turtle": [
+          "A sea turtle can live for more than half a century.",
+          "Sea turtles lay their eggs on the very beach where they hatched themselves.",
+          "Instead of paws a sea turtle has flippers.",
+          "A sea turtle swims thousands of kilometers across the ocean.",
+          "Little turtles run to the sea as soon as they hatch.",
+          "Sea turtles lived back in the time of the dinosaurs."
+        ],
+        "orangutan": [
+          "An orangutan spends almost all its life in the trees.",
+          "The name “orangutan” means “person of the forest.”",
+          "Every evening an orangutan builds itself a new nest of branches in a tree.",
+          "An orangutan’s arms are longer than its legs — they are handy for holding on to branches.",
+          "An orangutan is very clever: it uses little sticks as tools.",
+          "An orangutan hides from the rain under a big leaf, as under an umbrella."
+        ],
+        "crab": [
+          "A crab walks sideways.",
+          "A crab has ten legs, and two of them are pincers.",
+          "A crab’s shell does not grow, so the crab sheds it and grows a new one.",
+          "A crab can grow back a pincer it has lost.",
+          "A crab’s eyes sit on little stalks and look in different directions.",
+          "The biggest crab in the world measures almost four meters from leg tip to leg tip."
+        ],
+        "sloth": [
+          "The sloth is the slowest animal in the world.",
+          "A sloth sleeps hanging from a branch with its back down.",
+          "Tiny green plants grow in a sloth’s fur — they make it look greenish.",
+          "A sloth comes down to the ground about once a week.",
+          "A sloth swims better than it walks.",
+          "A sloth eats leaves and takes many days to digest them."
+        ],
+        "jellyfish": [
+          "A jellyfish is made almost entirely of water.",
+          "A jellyfish has no brain, no heart and no bones.",
+          "Jellyfish lived in the ocean even before the dinosaurs.",
+          "Some jellyfish glow in the dark.",
+          "A jellyfish’s tentacles sting, so you must not touch it.",
+          "A jellyfish moves by squeezing its bell, like an umbrella."
+        ],
+        "clownfish": [
+          "A clownfish lives among the tentacles of a sea anemone, which sting other fish but not it.",
+          "A clownfish is bright orange with white stripes.",
+          "A clownfish cleans its anemone, and the anemone protects it.",
+          "Clownfish live on warm coral reefs.",
+          "A clownfish never swims far from its home.",
+          "A clownfish’s eggs are guarded by the father."
+        ],
+        "squid": [
+          "A squid swims by pushing water out — like a little rocket.",
+          "A squid has eight arms and two long tentacles.",
+          "In danger a squid squirts out a cloud of ink.",
+          "A squid can change color in an instant.",
+          "A giant squid has eyes the size of a big plate.",
+          "A squid has three hearts."
+        ],
+        "mountain_goat": [
+          "A mountain goat leaps about on almost sheer cliffs and does not fall.",
+          "A mountain goat’s hooves grip like a climber’s boots.",
+          "Thick fur keeps a mountain goat warm on the cold peaks.",
+          "Kids are climbing the rocks just a day after they are born.",
+          "High in the mountains, mountain goats hide from hunters.",
+          "Mountain goats eat grass, moss and lichen."
+        ],
+        "eagle": [
+          "An eagle sees its prey from a very great height.",
+          "An eagle builds its nest on high cliffs and uses it for many years.",
+          "An eagle’s wingspan is greater than the height of a grown person.",
+          "An eagle soars in the air, hardly flapping its wings.",
+          "An eagle has strong claws and a hooked beak.",
+          "A pair of eagles stays together for life."
+        ],
+        "mountain_ram": [
+          "A mountain ram has big curling horns.",
+          "You can tell a mountain ram’s age by its horns — as by the rings of a tree.",
+          "Mountain rams live high in the mountains, where there are few hunters.",
+          "Rams find out who is stronger by knocking horns.",
+          "A mountain ram leaps easily from rock to rock.",
+          "In winter mountain rams come down lower, where there is less snow."
+        ]
+      }
+    },
+    "capitals": {
+      "LANDMARKS": {
+        "paris": [
+          "Eiffel Tower",
+          "the Eiffel Tower",
+          "Paris",
+          "France"
+        ],
+        "kyiv": [
+          "Saint Sophia Cathedral",
+          "Saint Sophia Cathedral",
+          "Kyiv",
+          "Ukraine"
+        ],
+        "london": [
+          "Big Ben",
+          "Big Ben",
+          "London",
+          "the United Kingdom"
+        ],
+        "rome": [
+          "Colosseum",
+          "the Colosseum",
+          "Rome",
+          "Italy"
+        ],
+        "cairo": [
+          "Pyramids",
+          "the Pyramids",
+          "Cairo",
+          "Egypt"
+        ],
+        "washington": [
+          "White House",
+          "the White House",
+          "Washington",
+          "the United States"
+        ],
+        "athens": [
+          "Acropolis",
+          "the Acropolis",
+          "Athens",
+          "Greece"
+        ],
+        "tokyo": [
+          "Tokyo Tower",
+          "Tokyo Tower",
+          "Tokyo",
+          "Japan"
+        ],
+        "berlin": [
+          "Brandenburg Gate",
+          "the Brandenburg Gate",
+          "Berlin",
+          "Germany"
+        ],
+        "beijing": [
+          "Forbidden City",
+          "the Forbidden City",
+          "Beijing",
+          "China"
+        ],
+        "copenhagen": [
+          "Little Mermaid statue",
+          "the statue of the Little Mermaid",
+          "Copenhagen",
+          "Denmark"
+        ],
+        "warsaw": [
+          "Royal Castle",
+          "the Royal Castle",
+          "Warsaw",
+          "Poland"
+        ]
+      },
+      "LANDMARK_FACTS": {
+        "paris": [
+          "The Eiffel Tower stands in Paris — the capital of France.",
+          "The Eiffel Tower was built in 1889 for the World’s Fair.",
+          "The Eiffel Tower is more than three hundred meters high.",
+          "For forty years the Eiffel Tower was the tallest structure in the world.",
+          "The tower is named after the engineer Gustave Eiffel.",
+          "The Eiffel Tower is put together from eighteen thousand metal parts.",
+          "At first the tower was to be taken down after twenty years, but it came in useful as a radio antenna.",
+          "It takes sixty tons of paint to paint the Eiffel Tower.",
+          "In the summer sun the tower grows a few centimeters taller: metal swells in the heat.",
+          "Every evening the Eiffel Tower sparkles with thousands of little lights."
+        ],
+        "kyiv": [
+          "Saint Sophia Cathedral stands in Kyiv — the capital of Ukraine.",
+          "Saint Sophia Cathedral was built under Prince Yaroslav the Wise almost a thousand years ago.",
+          "In Saint Sophia there are mosaics and wall paintings hundreds of years old.",
+          "The best-known mosaic of the cathedral shows the Virgin Mary with her hands raised in prayer.",
+          "Saint Sophia held the first library of Kyivan Rus.",
+          "Prince Yaroslav the Wise is buried in Saint Sophia Cathedral.",
+          "Saint Sophia Cathedral has thirteen domes.",
+          "The bell tower of Saint Sophia is sky blue, and it can be seen from far away.",
+          "Saint Sophia of Kyiv is on the UNESCO World Heritage List.",
+          "On the walls of the cathedral there are still words that people scratched hundreds of years ago."
+        ],
+        "london": [
+          "Big Ben stands in London — the capital of the United Kingdom.",
+          "Big Ben is really the name of the great bell inside the tower.",
+          "The clock tower itself is called the Elizabeth Tower.",
+          "The bell Big Ben weighs more than thirteen tons.",
+          "The clock on the tower has four faces.",
+          "The minute hand of this clock is more than four meters long.",
+          "The clock on the tower has been running since 1859.",
+          "The clock is kept exact with old coins laid on its pendulum.",
+          "To climb the tower you have to get up more than three hundred steps.",
+          "The British listen to the chimes of Big Ben on New Year’s Eve."
+        ],
+        "rome": [
+          "The Colosseum stands in Rome — the capital of Italy.",
+          "The Colosseum is almost two thousand years old.",
+          "The Colosseum held fifty thousand people.",
+          "Gladiators fought in the arena of the Colosseum.",
+          "The Colosseum was built in less than ten years.",
+          "In the heat a huge awning was stretched over the people in the Colosseum.",
+          "Under the arena of the Colosseum there were passages and cages for wild animals.",
+          "The Colosseum had eighty entrances, so people got in very quickly.",
+          "Some of the stone of the Colosseum was later carried off for other buildings.",
+          "The Colosseum is the biggest amphitheater built in ancient times."
+        ],
+        "cairo": [
+          "The Pyramids stand near Cairo — the capital of Egypt.",
+          "The pyramids of Egypt are more than four and a half thousand years old.",
+          "The pyramids are the tombs of the pharaohs.",
+          "The biggest pyramid is the Great Pyramid of Khufu.",
+          "The Great Pyramid is built of more than two million blocks of stone.",
+          "For almost four thousand years the Great Pyramid was the tallest structure in the world.",
+          "The pyramids are the only one of the seven wonders of the ancient world still standing.",
+          "Beside the pyramids lies the Great Sphinx — a lion with a human head.",
+          "The pyramids were once covered in smooth white stone and shone in the sun.",
+          "The pyramids were built without cranes or machines — only with hands and simple tools."
+        ],
+        "washington": [
+          "The White House stands in Washington — the capital of the United States.",
+          "The president of the United States lives and works in the White House.",
+          "The White House has more than a hundred and thirty rooms.",
+          "The first president to live in the White House moved in in 1800.",
+          "The city of Washington is named after the first president of the United States.",
+          "The president’s office in the White House is oval, and it is called the Oval Office.",
+          "It takes more than two thousand liters of white paint to paint the White House.",
+          "The White House has a movie theater, a swimming pool and a bowling alley.",
+          "Every spring children roll Easter eggs on the White House lawn.",
+          "The White House is pictured on the twenty-dollar bill."
+        ],
+        "athens": [
+          "The Acropolis stands in Athens — the capital of Greece.",
+          "The Acropolis is a hill with ancient temples above the city.",
+          "The best-known temple of the Acropolis is the Parthenon.",
+          "The Parthenon is almost two and a half thousand years old.",
+          "The Parthenon was built in honor of the goddess Athena.",
+          "The temples of the Acropolis are built of white marble.",
+          "The story goes that the goddess Athena gave the city an olive tree.",
+          "The word “acropolis” means “upper city.”",
+          "Theater and democracy were born in Athens.",
+          "The first modern Olympic Games were held in Athens in 1896."
+        ],
+        "tokyo": [
+          "Tokyo Tower stands in Tokyo — the capital of Japan.",
+          "Tokyo Tower looks like the Eiffel Tower, but it is a little taller.",
+          "Tokyo Tower is painted white and orange so that airplanes can see it well.",
+          "Tokyo Tower was built in 1958.",
+          "From Tokyo Tower in clear weather you can see Mount Fuji.",
+          "Tokyo Tower sends out television and radio signals.",
+          "Tokyo is one of the biggest cities in the world.",
+          "Japan often has earthquakes, so Tokyo Tower was built very strong.",
+          "In the evening Tokyo Tower glows with a warm orange light.",
+          "Japan, where Tokyo Tower stands, is called the Land of the Rising Sun."
+        ],
+        "berlin": [
+          "The Brandenburg Gate stands in Berlin — the capital of Germany.",
+          "The Brandenburg Gate is more than two hundred years old.",
+          "On top of the gate stands a chariot with four horses.",
+          "The chariot on the gate is driven by the goddess of victory.",
+          "The Brandenburg Gate has five passages between its columns.",
+          "The Brandenburg Gate was once a way into the city.",
+          "For many years a wall stood beside the gate, dividing Berlin into two parts.",
+          "When the wall fell, the Brandenburg Gate became a symbol of Germany’s unity.",
+          "The Brandenburg Gate is shown on German euro coins.",
+          "Berliners welcome the New Year at the Brandenburg Gate."
+        ],
+        "beijing": [
+          "The Forbidden City is in Beijing — the capital of China.",
+          "The Forbidden City is the palace of the emperors of China.",
+          "The Forbidden City is more than six hundred years old.",
+          "There are almost a thousand buildings in the Forbidden City.",
+          "Ordinary people were once not allowed in — that is why the city was called Forbidden.",
+          "The roofs of the Forbidden City are covered with yellow tiles: yellow was the emperor’s color.",
+          "The Forbidden City is surrounded by a high wall and a moat of water.",
+          "Twenty-four emperors lived in the Forbidden City.",
+          "Today the Forbidden City is a museum.",
+          "The Forbidden City is the biggest palace complex in the world."
+        ],
+        "copenhagen": [
+          "The statue of the Little Mermaid is in Copenhagen — the capital of Denmark.",
+          "The Little Mermaid is the heroine of a fairy tale by Hans Christian Andersen.",
+          "The statue of the Little Mermaid sits on a rock right by the sea.",
+          "The statue of the Little Mermaid is more than a hundred years old.",
+          "The statue of the Little Mermaid is small — a little over a meter high.",
+          "The statue of the Little Mermaid is made of bronze.",
+          "The Little Mermaid is the symbol of Copenhagen.",
+          "Andersen, who thought up the Little Mermaid, lived and wrote his fairy tales in Copenhagen.",
+          "In Denmark, where the Little Mermaid sits, Lego bricks were invented.",
+          "In Copenhagen there are more bicycles than cars."
+        ],
+        "warsaw": [
+          "The Royal Castle stands in Warsaw — the capital of Poland.",
+          "The kings of Poland lived in the Royal Castle.",
+          "The Royal Castle stands on Castle Square in the Old Town.",
+          "In the war the castle was destroyed, and afterwards it was built again.",
+          "The Royal Castle was rebuilt with gifts of money from people all over Poland.",
+          "In front of the castle stands the tall column of King Sigismund.",
+          "There is a clock on the tower of the Royal Castle.",
+          "Today the Royal Castle is a museum.",
+          "The Old Town of Warsaw is on the UNESCO World Heritage List.",
+          "The symbol of Warsaw is a mermaid with a sword and a shield."
+        ]
+      },
+      "DAY_NIGHT": {
+        "la": [
+          "Los Angeles",
+          "Los Angeles is on the other side of the Earth, and the sun has not reached it yet."
+        ],
+        "london": [
+          "London",
+          "London is quite near Kyiv, so it is day there too."
+        ],
+        "delhi": [
+          "Delhi",
+          "India is a little farther east, and the sun is shining there too."
+        ],
+        "honolulu": [
+          "Honolulu in Hawaii",
+          "Hawaii is far away in the Pacific Ocean — it is the dead of night there now."
+        ],
+        "sydney_n": [
+          "Sydney",
+          "When it is midnight in Kyiv, it is already the morning of a new day in Australia."
+        ],
+        "la_n": [
+          "Los Angeles",
+          "When it is midnight in Kyiv, it is still daytime in Los Angeles."
+        ],
+        "london_n": [
+          "London",
+          "London is nearby, so it is night there too."
+        ],
+        "warsaw_n": [
+          "Warsaw",
+          "Warsaw is Kyiv’s neighbor, and it is night there too."
+        ],
+        "paris": [
+          "Paris",
+          "Paris is not far from Kyiv, in Europe — it is day there too."
+        ],
+        "sydney": [
+          "Sydney",
+          "When it is noon in Kyiv, it is already late evening in Australia, and dark."
+        ],
+        "ny_n": [
+          "New York",
+          "When it is midnight in Kyiv, it is still only five in the afternoon in New York."
+        ],
+        "tokyo_n": [
+          "Tokyo",
+          "When it is midnight in Kyiv, it is already seven in the morning in Japan — the sun is up."
+        ],
+        "mexico": [
+          "Mexico City",
+          "When it is noon in Kyiv, it is still four in the morning in Mexico — everyone is asleep."
+        ],
+        "mexico_n": [
+          "Mexico City",
+          "When it is midnight in Kyiv, it is still day in Mexico — four in the afternoon."
+        ],
+        "vancouver": [
+          "Vancouver in Canada",
+          "Vancouver is on the other side of the Earth: when it is noon in Kyiv, it is two in the morning there."
+        ],
+        "wellington": [
+          "Wellington in New Zealand",
+          "New Zealand is as far from Kyiv as can be: when it is noon in Kyiv, it is almost midnight there."
+        ],
+        "wellington_n": [
+          "Wellington in New Zealand",
+          "When it is midnight in Kyiv, it is almost noon of the next day in New Zealand."
+        ]
+      },
+      "CITIES": {
+        "warsaw": "Warsaw",
+        "london": "London",
+        "athens": "Athens",
+        "paris": "Paris",
+        "lisbon": "Lisbon",
+        "new_york": "New York",
+        "vilnius": "Vilnius",
+        "rome": "Rome",
+        "dubai": "Dubai",
+        "beijing": "Beijing",
+        "tokyo": "Tokyo",
+        "sydney": "Sydney"
+      }
+    },
+    "nature": {
+      "MAP_ANIMALS": {
+        "kangaroo": "kangaroo",
+        "penguin": "penguin",
+        "lion": "lion",
+        "panda": "panda",
+        "llama": "llama",
+        "bison": "bison",
+        "hedgehog": "hedgehog",
+        "giraffe": "giraffe",
+        "koala": "koala",
+        "tiger": "tiger"
+      },
+      "ANIMALS": {
+        "polar_bear": [
+          "polar bear",
+          "A big white animal that walks on ice floes and catches seals.",
+          "The polar bear lives among the ice, and its thick fur keeps it warm."
+        ],
+        "camel": [
+          "camel",
+          "It has one hump and can walk a long way over the sands without water.",
+          "A camel can go a long time without drinking, so it does well in the desert."
+        ],
+        "monkey": [
+          "monkey",
+          "It leaps nimbly from branch to branch and loves bananas.",
+          "A monkey leaps nimbly along the branches in the jungle."
+        ],
+        "dolphin": [
+          "dolphin",
+          "A clever sea animal that leaps out of the water and breathes air.",
+          "The dolphin lives in the ocean, but it breathes air."
+        ],
+        "seal": [
+          "seal",
+          "It has flippers instead of paws and rests on ice floes.",
+          "A seal does not freeze in icy water, thanks to a thick layer of fat."
+        ],
+        "parrot": [
+          "parrot",
+          "A bright bird with a hooked beak that can repeat words.",
+          "Bright parrots live in the trees of the tropical forest."
+        ],
+        "scorpion": [
+          "scorpion",
+          "It has pincers and a curved tail with a sting at the end.",
+          "By day a scorpion hides from the heat under stones."
+        ],
+        "octopus": [
+          "octopus",
+          "It has eight arms and three hearts.",
+          "An octopus has eight arms and three hearts!"
+        ],
+        "arctic_hare": [
+          "arctic hare",
+          "A long-eared animal in a white coat that cannot be seen on the snow.",
+          "The arctic hare is white, to hide on the snow."
+        ],
+        "tiger": [
+          "tiger",
+          "The biggest cat in the world — orange with black stripes.",
+          "The striped tiger hides among thick undergrowth."
+        ],
+        "lizard": [
+          "lizard",
+          "A small reptile that can drop its own tail.",
+          "A lizard loves to bask on the hot sand."
+        ],
+        "whale": [
+          "whale",
+          "The biggest animal on Earth, which blows a fountain of water.",
+          "The whale is the biggest animal on Earth."
+        ],
+        "shark": [
+          "shark",
+          "A sea hunter with a sharp fin on its back and many rows of teeth.",
+          "Sharks lived in the ocean even before the dinosaurs."
+        ],
+        "gorilla": [
+          "gorilla",
+          "The biggest ape, which beats its chest with its fists.",
+          "The gorilla is the biggest ape; it lives in the forests of Africa."
+        ],
+        "snake": [
+          "snake",
+          "It has no legs, it crawls and it hisses.",
+          "Desert snakes glide quickly over the sand."
+        ],
+        "arctic_fox": [
+          "arctic fox",
+          "A little fox of the far north: white in winter and gray-brown in summer.",
+          "The arctic fox is a little polar fox with very warm white fur."
+        ],
+        "lion": [
+          "lion",
+          "The king of beasts, with a splendid mane.",
+          "The lion lives on the open grassy plains of Africa and hunts the herds."
+        ],
+        "zebra": [
+          "zebra",
+          "It looks like a horse, but is all in black and white stripes.",
+          "Zebras graze in herds on the grassy plains."
+        ],
+        "giraffe": [
+          "giraffe",
+          "The tallest animal, with a very long neck and spots.",
+          "A giraffe reaches leaves at the tops of the lone trees among the grass."
+        ],
+        "elephant": [
+          "elephant",
+          "The biggest land animal, with a trunk and big ears.",
+          "Elephants wander the grassy plains from one watering hole to the next."
+        ],
+        "rhino": [
+          "rhinoceros",
+          "A heavy, thick-skinned animal with a horn on its nose.",
+          "A rhino grazes on the plains, where there is plenty of grass."
+        ],
+        "brown_bear": [
+          "brown bear",
+          "A big brown animal that loves honey and sleeps in a den in winter.",
+          "A brown bear finds berries, nuts and a snug den in the forest."
+        ],
+        "squirrel": [
+          "squirrel",
+          "A red-furred jumper with a fluffy tail that hides nuts.",
+          "A squirrel lives in the trees and eats nuts and cones."
+        ],
+        "wolf": [
+          "wolf",
+          "A gray hunter that lives in a pack and howls at the moon.",
+          "A wolf pack lives and hunts among the forests."
+        ],
+        "hedgehog": [
+          "hedgehog",
+          "A little animal in a prickly coat that rolls up into a ball.",
+          "A hedgehog looks for beetles among the fallen leaves and winters under a pile of them."
+        ],
+        "owl": [
+          "owl",
+          "A night bird with big eyes that says “hoo-hoo.”",
+          "An owl lives in the hollow of an old tree."
+        ],
+        "deer": [
+          "deer",
+          "A slender animal with branching antlers.",
+          "A deer hides among the trees and eats leaves and bark."
+        ],
+        "boar": [
+          "wild boar",
+          "A wild pig with tusks that digs up the ground looking for acorns.",
+          "A wild boar digs up the ground under the oaks, looking for acorns."
+        ],
+        "sea_turtle": [
+          "sea turtle",
+          "It has a shell and flippers, and it lays its eggs in the sand on the beach.",
+          "A sea turtle has flippers instead of paws and swims all its life."
+        ],
+        "orangutan": [
+          "orangutan",
+          "A big red-haired ape with very long arms.",
+          "An orangutan hardly ever comes down from the trees of the tropical forest."
+        ],
+        "crab": [
+          "crab",
+          "It has pincers and a shell and walks sideways.",
+          "A crab lives on the seabed and on the shore."
+        ],
+        "sloth": [
+          "sloth",
+          "The slowest animal: it hangs upside down from a branch and sleeps almost all the time.",
+          "A sloth hangs from the branches of the damp tropical forest all its life."
+        ],
+        "jellyfish": [
+          "jellyfish",
+          "See-through, shaped like an umbrella, with stinging tentacles.",
+          "A jellyfish is made almost entirely of water and drifts with the current."
+        ],
+        "clownfish": [
+          "clownfish",
+          "A little orange fish with white stripes that hides in a sea anemone.",
+          "The clownfish lives on warm coral reefs."
+        ],
+        "squid": [
+          "squid",
+          "It has ten arms and escapes by squirting out a little cloud of ink.",
+          "A squid swims through the deep sea water like a little rocket."
+        ],
+        "mountain_goat": [
+          "mountain goat",
+          "A horned jumper that climbs sheer cliffs.",
+          "A mountain goat leaps about on almost sheer cliffs."
+        ],
+        "eagle": [
+          "eagle",
+          "A big bird of prey with sharp eyes that soars high in the sky.",
+          "An eagle builds its nest on high cliffs."
+        ],
+        "llama": [
+          "llama",
+          "A fluffy relative of the camel without a hump, which carries loads in the Andes.",
+          "The llama lives high in the mountains of South America — the Andes."
+        ],
+        "mountain_ram": [
+          "mountain ram",
+          "It has big curling horns and leaps from rock to rock.",
+          "A mountain ram leaps easily from rock to rock."
+        ],
+        "crocodile": [
+          "crocodile",
+          "A green, toothy reptile that lies in the river like a log.",
+          "The crocodile lives in the warm rivers and swamps of the tropical forest.",
+          "A crocodile can lie under water for an hour without breathing.",
+          "Crocodiles lived on Earth back in the time of the dinosaurs."
+        ],
+        "tree_frog": [
+          "tree frog",
+          "A little bright jumper with sticky toes that lives on the leaves.",
+          "The tree frog lives on the leaves high in the treetops of the tropical forest.",
+          "A tree frog has sticky pads on its toes — it holds on to the leaves with them.",
+          "The brightest frogs of the tropics are poisonous: their color warns that they must not be touched."
+        ],
+        "morpho": [
+          "morpho butterfly",
+          "It has big blue wings that shine in the sun.",
+          "The morpho butterfly flies among the trees of the tropical forest.",
+          "The wings of the morpho butterfly are blue and shine like metal.",
+          "A morpho’s wingspan is as wide as a grown person’s hand."
+        ],
+        "bat": [
+          "bat",
+          "It flies at night and sleeps hanging upside down.",
+          "The biggest bats — flying foxes — live in tropical forests and eat fruit.",
+          "The bat is the only furry animal that can truly fly.",
+          "Bats sleep by day, hanging upside down."
+        ],
+        "peacock": [
+          "peacock",
+          "A bird that spreads its tail into a huge colorful fan.",
+          "The peacock lives in the thick forests of hot India.",
+          "Only male peacocks have the splendid tail with “eyes.”",
+          "A peacock spreads its tail like a fan to please the peahen."
+        ],
+        "leafcutter": [
+          "leafcutter ant",
+          "A tiny worker that carries a piece of leaf above its head.",
+          "Leafcutter ants live in the tropical forests of America.",
+          "Leafcutter ants carry pieces of leaf many times heavier than themselves.",
+          "From the leaves these ants grow mushrooms under the ground — and feed on them."
+        ],
+        "hippo": [
+          "hippopotamus",
+          "A fat animal with a huge mouth that sits in the water all day.",
+          "The hippo lives in the rivers and lakes of the African savanna.",
+          "By day a hippo sits in the water, and at night it comes out to graze on grass.",
+          "A hippo can open its mouth wider than any other land animal."
+        ],
+        "buffalo": [
+          "buffalo",
+          "A mighty black bull with wide curved horns.",
+          "The African buffalo grazes in big herds in the savanna.",
+          "Buffalo keep together: even a lion is afraid to attack such a herd.",
+          "A buffalo loves to lie in the mud — that is how it escapes the heat and the insects."
+        ],
+        "kangaroo": [
+          "kangaroo",
+          "It hops on its hind legs and carries its baby in a pouch.",
+          "The kangaroo lives on the grassy plains of Australia.",
+          "A mother kangaroo carries her baby in a pouch on her belly.",
+          "A kangaroo cannot walk backwards."
+        ],
+        "grasshopper": [
+          "grasshopper",
+          "A green jumper that chirps in the grass.",
+          "The grasshopper lives in the tall grass of the open plains.",
+          "A grasshopper jumps twenty times the length of its body.",
+          "A grasshopper “sings” by rubbing one wing against the other."
+        ],
+        "flamingo": [
+          "flamingo",
+          "A pink bird on long legs that likes to stand on one of them.",
+          "Flamingos live on shallow salt lakes in the African savanna.",
+          "Flamingos turn pink from the shrimp and algae they eat.",
+          "A flamingo often stands on one leg — that way it gets less cold."
+        ],
+        "panda": [
+          "panda",
+          "A black-and-white bear that chews bamboo all day.",
+          "The panda lives in the bamboo forests on the mountain slopes of China.",
+          "A panda eats bamboo almost all day long.",
+          "A newborn panda is pink and weighs as much as an apple."
+        ],
+        "koala": [
+          "koala",
+          "A gray fluffy animal that sits in a eucalyptus tree and sleeps almost all the time.",
+          "The koala lives in the eucalyptus trees of Australia’s forests.",
+          "A koala eats nothing but eucalyptus leaves and hardly ever drinks.",
+          "A koala sleeps for up to twenty hours a day."
+        ],
+        "otter": [
+          "otter",
+          "A nimble swimmer with thick fur that catches fish in the river.",
+          "The otter lives by forest rivers and lakes.",
+          "An otter swims wonderfully and catches fish under water.",
+          "An otter’s fur is so thick that the skin under it does not get wet."
+        ],
+        "beaver": [
+          "beaver",
+          "A builder of dams with a flat tail and strong teeth.",
+          "The beaver lives on forest rivers and builds dams there.",
+          "A beaver gnaws through a tree trunk with its teeth.",
+          "The way into a beaver’s lodge is hidden under water."
+        ],
+        "badger": [
+          "badger",
+          "It has a white face with two black stripes and lives in a burrow.",
+          "The badger lives in the forest, in a deep burrow with many passages.",
+          "A badger is very tidy: it changes the bedding in its burrow regularly.",
+          "In winter a badger sleeps in its burrow, though on warm days it may wake up."
+        ],
+        "skunk": [
+          "skunk",
+          "A black-and-white animal that defends itself with a very nasty smell.",
+          "The skunk lives in the forests of North America.",
+          "When a skunk is frightened, it sprays a very smelly liquid.",
+          "A skunk’s black-and-white coat warns: “Keep away!”"
+        ],
+        "raccoon": [
+          "raccoon",
+          "It has a black “mask” on its face and a striped tail.",
+          "The raccoon lives in the forest near water and sleeps in hollow trees.",
+          "A raccoon rinses its food in water before eating it.",
+          "On a raccoon’s face there is a black “mask,” like a robber’s."
+        ],
+        "forest_mouse": [
+          "wood mouse",
+          "A tiny gnawing animal with a long tail that stores seeds.",
+          "The wood mouse lives in a little burrow under the roots of trees.",
+          "A wood mouse stores seeds and nuts for the winter.",
+          "A wood mouse climbs well and can get up a tree."
+        ],
+        "raven": [
+          "raven",
+          "A big black bird that croaks and is very clever.",
+          "The raven builds its nest in tall trees deep in the forest.",
+          "The raven is one of the cleverest birds: it can solve puzzles.",
+          "Ravens live in pairs and stay together all their lives."
+        ],
+        "snail": [
+          "snail",
+          "It crawls very slowly and carries its house on its back.",
+          "The snail lives in damp forest grass and under leaves.",
+          "A snail carries its little house on its back.",
+          "A snail’s eyes are at the tips of its long feelers."
+        ],
+        "bee": [
+          "wild bee",
+          "A striped worker that gathers nectar and makes honey.",
+          "Wild bees live in the hollows of forest trees.",
+          "To make a spoonful of honey, bees visit thousands of flowers.",
+          "A bee tells her sisters where the flowers are with a special dance."
+        ],
+        "spider": [
+          "garden spider",
+          "It has eight legs and spins a web.",
+          "The garden spider spins its web between branches in the forest.",
+          "A spider has eight legs, so it is not an insect.",
+          "A spider’s thread is stronger than a steel thread of the same thickness."
+        ],
+        "ladybug": [
+          "ladybug",
+          "A little red beetle with black dots on its back.",
+          "The ladybug lives in forest clearings and at the forest’s edge.",
+          "A ladybug eats aphids, and so it saves plants.",
+          "A ladybug’s bright dots warn birds that it tastes bad."
+        ],
+        "moose": [
+          "moose",
+          "The biggest deer, with antlers like shovels.",
+          "The moose lives in thick northern forests near swamps.",
+          "The moose is the biggest of the deer: it is taller than a grown person.",
+          "A moose’s antlers look like wide shovels, and it sheds them every year."
+        ],
+        "wisent": [
+          "European bison",
+          "The heaviest animal of Europe — a shaggy forest bull.",
+          "The European bison lives in the old forests of Europe.",
+          "The European bison is the heaviest land animal of Europe.",
+          "European bison once almost vanished, but people saved them in nature reserves."
+        ],
+        "turkey": [
+          "wild turkey",
+          "A big bird with a red “beard” that spreads its tail like a fan.",
+          "The wild turkey lives in the forests of North America.",
+          "A wild turkey can fly, and it spends the night in trees.",
+          "A male turkey spreads its tail like a fan, as a peacock does."
+        ],
+        "lobster": [
+          "lobster",
+          "A sea animal with two big claws and long feelers.",
+          "The lobster lives on the rocky seabed.",
+          "A lobster has two big claws: with one it crushes, with the other it cuts.",
+          "A lobster grows all its life and sheds its tight shell from time to time."
+        ],
+        "shrimp": [
+          "shrimp",
+          "A little sea animal with long feelers that swims in swarms.",
+          "Shrimp live in the sea in big swarms.",
+          "A shrimp’s heart is in its head.",
+          "A shrimp swims backwards with a sharp flick of its tail."
+        ],
+        "puffer": [
+          "pufferfish",
+          "A fish that blows itself up like a prickly ball when it is scared.",
+          "The pufferfish lives in warm seas among the corals.",
+          "When a pufferfish is scared, it blows itself up like a prickly ball.",
+          "A pufferfish is very poisonous, so hunters leave it alone."
+        ],
+        "tuna": [
+          "tuna",
+          "A big silvery fish — one of the fastest in the ocean.",
+          "The tuna swims in the open ocean all its life.",
+          "The tuna is one of the fastest swimmers in the ocean.",
+          "A tuna never stops: it swims even in its sleep."
+        ],
+        "sperm_whale": [
+          "sperm whale",
+          "A giant toothed whale with a huge square head.",
+          "The sperm whale lives in the ocean and dives into the darkest depths.",
+          "A sperm whale dives more than a kilometer deep — after giant squid.",
+          "The sperm whale has the biggest brain of any animal on Earth."
+        ],
+        "penguin": [
+          "penguin",
+          "A bird in a black “tailcoat” that cannot fly, but swims wonderfully.",
+          "Penguins live on the coast of Antarctica and feed in the cold ocean.",
+          "The penguin is a bird that cannot fly, but it swims wonderfully.",
+          "A father penguin keeps the egg warm on his feet, under a fold of skin."
+        ],
+        "oyster": [
+          "oyster",
+          "It lives in a two-part shell and never moves anywhere.",
+          "An oyster lives on the seabed, its shell grown fast to a stone.",
+          "If a grain of sand gets into the shell, some shellfish grow a pearl around it.",
+          "An oyster strains sea water through itself, and so it cleans it."
+        ],
+        "hermit": [
+          "hermit crab",
+          "It carries someone else’s shell on its back for a house.",
+          "The hermit crab lives on the seabed in someone else’s empty shell.",
+          "When a hermit crab grows, it looks for a bigger shell.",
+          "A hermit crab carries its shell everywhere it goes."
+        ],
+        "coral": [
+          "coral",
+          "It looks like a little stone bush, but really it is a great many tiny animals.",
+          "Corals live in warm clear seas and build reefs.",
+          "A coral looks like a stone or a plant, but it is tiny animals.",
+          "More kinds of fish live on a coral reef than anywhere else in the ocean."
+        ],
+        "lemming": [
+          "lemming",
+          "A little fluffy gnawing animal of the tundra that looks like a hamster.",
+          "The lemming lives in the cold tundra by the Arctic Ocean.",
+          "In winter a lemming digs tunnels under the snow, where it is warmer.",
+          "Arctic foxes and snowy owls feed on lemmings."
+        ],
+        "snow_goose": [
+          "snow goose",
+          "A white bird that flies far in a V and honks.",
+          "The snow goose raises its chicks in the cold tundra of the far north.",
+          "For the winter snow geese fly far to the south in enormous flocks.",
+          "In flight geese line up in a V — it is easier to fly that way."
+        ],
+        "bactrian": [
+          "two-humped camel",
+          "It has two humps and thick fur.",
+          "The two-humped camel lives in the cold deserts of Asia.",
+          "A camel’s humps hold not water but a store of fat.",
+          "Thick fur saves the two-humped camel from both heat and frost."
+        ],
+        "scarab": [
+          "scarab beetle",
+          "A beetle that rolls a big ball in front of itself.",
+          "The scarab beetle lives in the hot sands.",
+          "A scarab rolls a ball much bigger than itself.",
+          "In Ancient Egypt the scarab was thought a sacred beetle."
+        ],
+        "jerboa": [
+          "jerboa",
+          "A tiny jumper with long hind legs and a tuft on its tail.",
+          "The jerboa lives in the desert and hides in a cool burrow by day.",
+          "A jerboa hops on its long hind legs, like a little kangaroo.",
+          "A jerboa may not drink at all: it gets enough water from its food."
+        ],
+        "yak": [
+          "yak",
+          "A shaggy mountain bull with fur right down to the ground.",
+          "The yak lives very high in the mountains of Tibet.",
+          "A yak’s long thick fur hangs almost to the ground and keeps it warm in the frost.",
+          "Yaks help people carry loads along mountain paths."
+        ],
+        "snow_leopard": [
+          "snow leopard",
+          "A spotted mountain cat with a very long fluffy tail.",
+          "The snow leopard lives among the rocks and snows of the highest mountains of Asia.",
+          "A snow leopard covers itself with its long fluffy tail, as with a blanket.",
+          "A snow leopard leaps across chasms as wide as a room."
+        ]
+      },
+      "ZONES": {
+        "arctic": {
+          "name": "The Arctic",
+          "where": "in the Arctic",
+          "no": "Brrr, it is too cold here!",
+          "signs": [
+            "It is winter here almost always: snow, ice and bitter frost.",
+            "In summer the sun does not set here, and in winter there is a long polar night.",
+            "The ground here does not thaw even in summer, and no trees grow at all.",
+            "Ice floes drift on the sea here, and the northern lights shine in the sky.",
+            "The warmest month here is colder than our spring.",
+            "People here ride on sleds pulled by dogs or reindeer."
+          ],
+          "facts": [
+            "The Arctic lies around the North Pole — at the very top of the Earth.",
+            "There is no land under the pole in the Arctic: there is an ocean there, covered with thick ice.",
+            "Arctic animals have white fur, to hide on the snow.",
+            "In summer the sun does not set in the Arctic for several months — that is the polar day."
+          ]
+        },
+        "jungle": {
+          "name": "Jungle",
+          "where": "in the jungle",
+          "no": "Oh, it is too damp and crowded here!",
+          "signs": [
+            "It is always warm here and it rains every day, and the trees grow so thickly that it is dusk below.",
+            "Vines hang from the branches here, and more animals live in the trees than on the ground.",
+            "There is no winter here: all year it is hot and damp, as in a greenhouse.",
+            "The trees here are so tall that their tops make a green roof.",
+            "Cocoa, which chocolate is made from, grows here, and so do bananas.",
+            "Almost every afternoon there is a thunderstorm here."
+          ],
+          "facts": [
+            "The jungle is a tropical forest. More than half of all the kinds of animals on Earth live in it.",
+            "In the jungle the trees grow in layers: below it is dark, and up above there is sun and birds.",
+            "The biggest tropical forest grows along the Amazon River in South America.",
+            "In the jungle it rains almost every day, so it is always damp there."
+          ]
+        },
+        "desert": {
+          "name": "Desert",
+          "where": "in the desert",
+          "no": "Phew, it is too hot and dry here!",
+          "signs": [
+            "By day it is terribly hot here, there is almost no water, and all around are sand and stones.",
+            "Here it may not rain for years, and the only plants are prickly cactuses.",
+            "By day the sand here is as hot as a frying pan, and at night it can freeze.",
+            "The wind here piles up tall hills of sand — dunes.",
+            "Water can be found here only in an oasis.",
+            "The plants here store water in thick stems and have spines instead of leaves."
+          ],
+          "facts": [
+            "The biggest hot desert in the world is the Sahara in Africa.",
+            "By day it is very hot in the desert, and at night it can be truly cold.",
+            "A place in the desert where there is water and palm trees grow is called an oasis.",
+            "Desert animals mostly come out at night, when the heat dies down."
+          ]
+        },
+        "ocean": {
+          "name": "Ocean",
+          "where": "in the ocean",
+          "no": "Glug-glug! I can’t swim like that!",
+          "signs": [
+            "There is salt water everywhere here — deep, with waves and currents.",
+            "There are coral reefs here, and real underwater mountains on the bottom.",
+            "There is no ground under your feet here — only water as far as you can see.",
+            "Twice a day the water here comes up to the shore and goes back again.",
+            "In a storm, waves as high as a house rise here.",
+            "Down in the deep here it is always dark and cold, and some fish make their own light."
+          ],
+          "facts": [
+            "Oceans cover most of our planet — that is why the Earth is blue from space.",
+            "The water in the ocean is salty, and you cannot drink it.",
+            "The deepest parts of the ocean are dark and cold — the sun does not reach there.",
+            "In the ocean live both the biggest animals on Earth — whales — and the tiniest plankton."
+          ]
+        },
+        "savanna": {
+          "name": "Savanna",
+          "where": "in the savanna",
+          "no": "Oh, there is nothing but grass here — and nowhere at all to hide!",
+          "signs": [
+            "There are endless plains of tall grass here, with a lone tree here and there.",
+            "For half the year it pours with rain here, and for half the year it is dry, and great herds wander in search of water.",
+            "It is hot here all year, and the trees grow far apart.",
+            "In the dry season the grass here turns yellow, and fires often break out.",
+            "The baobab grows here — a tree with an enormously thick trunk.",
+            "Elephants, zebras and antelopes gather together at the watering hole here."
+          ],
+          "facts": [
+            "The savanna is a grassy plain in warm lands. The best-known savannas are in Africa.",
+            "The biggest land animals live in the savanna: elephants, giraffes, rhinos.",
+            "In the dry season the grass in the savanna turns yellow, and the rivers run low.",
+            "The trees of the savanna — baobabs and acacias — store water for the dry season."
+          ]
+        },
+        "forest": {
+          "name": "Forest",
+          "where": "in the forest",
+          "no": "Oh, there are so many trees here that I’ll get lost!",
+          "signs": [
+            "Oaks, pines and firs grow here, the leaves fall in the fall, and snow lies in winter.",
+            "There are all four seasons here, and mushrooms, berries and cones as well.",
+            "In spring the leaves come out here, and in the fall they turn yellow and drop.",
+            "Under your feet here is soft moss, and overhead the treetops rustle.",
+            "In winter bears and hedgehogs sleep here, and in spring they wake up.",
+            "You can hear a woodpecker and a cuckoo here."
+          ],
+          "facts": [
+            "Forests are called the lungs of the planet: trees make the air clean.",
+            "There are many hiding places in a forest: hollows, burrows, thick bushes.",
+            "In the fall a leafy forest turns yellow and red, while a pine forest stays green.",
+            "⟪The biggest forest on Earth is the taiga: it stretches across the whole north.⟫"
+          ]
+        },
+        "mountains": {
+          "name": "Mountains",
+          "where": "in the mountains",
+          "no": "Oh, it is too high here and terribly steep!",
+          "signs": [
+            "There are steep cliffs here, snow lies on the peaks all year, and the air is cold.",
+            "The higher you climb here, the colder it gets, and instead of trees there is bare rock.",
+            "The air here is so thin that it is hard to breathe until you are used to it.",
+            "Fast cold streams run down the slopes here, and waterfalls tumble.",
+            "An avalanche of snow may come down the slope here.",
+            "The road here winds in hairpin bends, and the paths run above deep drops."
+          ],
+          "facts": [
+            "The highest mountain in the world is Everest.⟪ The highest mountain in the Alps is Mont Blanc.⟫",
+            "On high peaks the snow does not melt even in summer.",
+            "The higher up a mountain, the fewer trees: on the peaks there are only rocks and moss.",
+            "Mountain animals climb rocks wonderfully and have thick fur."
+          ]
+        }
+      }
+    },
+    "oceans": {
+      "OCEANS": {
+        "pacific": {
+          "fact": "The Pacific Ocean is the biggest and the deepest on Earth.",
+          "pool": [
+            "The Pacific Ocean is the biggest and the deepest on Earth.",
+            "The Pacific Ocean is so big that all the continents together would fit into it.",
+            "In the Pacific Ocean lies the Mariana Trench — the deepest place on the planet.",
+            "The name “Pacific” — peaceful — was given by the explorer Magellan: while he was crossing it, there was not a single storm.",
+            "There are more than twenty thousand islands in the Pacific Ocean — more than in all the other oceans together.",
+            "The Pacific Ocean washes Asia, Australia and both Americas.",
+            "In the Pacific Ocean lies the Great Barrier Reef — the biggest coral reef in the world.",
+            "There are many volcanoes on the floor of the Pacific Ocean. The Hawaiian Islands are their tops.",
+            "The Pacific Ocean covers almost a third of the whole surface of the Earth.",
+            "For all its peaceful name, the Pacific Ocean has mighty storms — typhoons."
+          ],
+          "riddles": [
+            "the biggest ocean on Earth",
+            "the deepest ocean",
+            "the ocean that lies between Asia and America",
+            "the ocean with the most islands",
+            "the ocean where the Great Barrier Reef lies",
+            "the ocean that Magellan named",
+            "the ocean that washes the shores of Japan",
+            "the ocean where typhoons blow"
+          ],
+          "riddleFacts": [
+            "The biggest ocean on Earth is the Pacific: it covers almost a third of the planet.",
+            "The deepest ocean is the Pacific: the Mariana Trench lies in it.",
+            "Between Asia and America lies the Pacific Ocean.",
+            "The most islands are in the Pacific Ocean: more than twenty thousand.",
+            "The Great Barrier Reef lies in the Pacific Ocean near Australia.",
+            "The name “Pacific” — peaceful — was given by Magellan: while he sailed, there was not a single storm.",
+            "The shores of Japan are washed by the Pacific Ocean.",
+            "Typhoons are the mighty storms of the Pacific Ocean."
+          ]
+        },
+        "atlantic": {
+          "fact": "The Atlantic Ocean lies between America, Europe and Africa.",
+          "pool": [
+            "The Atlantic Ocean lies between America, Europe and Africa.",
+            "The Atlantic Ocean is the second biggest on Earth.",
+            "It was the Atlantic Ocean that Columbus crossed when he was looking for a way to India.",
+            "A warm current, the Gulf Stream, flows in the Atlantic Ocean — it warms Europe.",
+            "Down the middle of the Atlantic, on the bottom, runs a very long chain of underwater mountains.",
+            "The name “Atlantic” comes from Atlas — a giant in the myths of ancient Greece.",
+            "In the cold waters of the Atlantic float icebergs — giant mountains of ice.",
+            "⟪The Black Sea, on which Ukraine lies, is joined by straits to the Atlantic Ocean.⟫",
+            "Every year the Atlantic Ocean grows a few centimeters wider.",
+            "Many fish are caught in the Atlantic: herring, cod, mackerel."
+          ],
+          "riddles": [
+            "the ocean between America and Europe",
+            "the ocean that Columbus crossed",
+            "the ocean where the warm Gulf Stream flows",
+            "the ocean where the Titanic sank",
+            "the ocean that the Black Sea is joined to",
+            "the second biggest ocean",
+            "the ocean named after the giant Atlas",
+            "the ocean that washes the shores of Brazil"
+          ],
+          "riddleFacts": [
+            "Between America and Europe lies the Atlantic Ocean.",
+            "Columbus crossed the Atlantic Ocean in three sailing ships.",
+            "The warm Gulf Stream flows in the Atlantic Ocean and warms Europe.",
+            "The ship Titanic sank in the Atlantic Ocean.",
+            "The Black Sea is joined by straits to the Atlantic Ocean.",
+            "The second biggest ocean is the Atlantic.",
+            "The Atlantic Ocean is named after Atlas — a giant in Greek myths.",
+            "The shores of Brazil are washed by the Atlantic Ocean."
+          ]
+        },
+        "indian": {
+          "fact": "The Indian Ocean is the warmest.",
+          "pool": [
+            "The Indian Ocean is the warmest.",
+            "The Indian Ocean is the third biggest on Earth.",
+            "The Indian Ocean washes Africa, Asia and Australia.",
+            "The ocean was named after India, whose shores it washes.",
+            "In the Indian Ocean lie the Maldives — islands with white sand and coral reefs.",
+            "Sea turtles, rays and whale sharks live in the warm waters of the Indian Ocean.",
+            "Monsoons blow over the Indian Ocean — winds that bring the rainy season.",
+            "In the Indian Ocean lies the big island of Madagascar, where lemurs live.",
+            "Sailors of old carried spices across the Indian Ocean: pepper, cinnamon, cloves.",
+            "The water in the north of the Indian Ocean can be as warm as a bath."
+          ],
+          "riddles": [
+            "the warmest ocean",
+            "the ocean between Africa and Australia",
+            "the ocean named after India",
+            "the ocean where the Maldives lie",
+            "the ocean that the monsoons blow over",
+            "the third biggest ocean",
+            "the ocean where the island of Madagascar lies",
+            "the ocean that spices from India were carried across"
+          ],
+          "riddleFacts": [
+            "The warmest ocean is the Indian.",
+            "Between Africa and Australia lies the Indian Ocean.",
+            "The Indian Ocean is named after India.",
+            "The Maldives lie in the Indian Ocean.",
+            "Monsoons are winds of the Indian Ocean that bring the rainy season.",
+            "The third biggest ocean is the Indian.",
+            "The island of Madagascar lies in the Indian Ocean.",
+            "Pepper and cinnamon were once carried to Europe across the Indian Ocean."
+          ]
+        },
+        "arctic": {
+          "fact": "The Arctic Ocean is the smallest, and it is covered with ice.",
+          "pool": [
+            "The Arctic Ocean is the smallest, and it is covered with ice.",
+            "The Arctic Ocean lies around the North Pole.",
+            "In winter almost the whole Arctic Ocean freezes over.",
+            "Polar bears and seals live on the ice floes of the Arctic Ocean.",
+            "In the Arctic Ocean lives the narwhal — a whale with a long tusk like a horn.",
+            "To get through the ice of this ocean, ships are helped by icebreakers.",
+            "The Arctic Ocean is the shallowest of all the oceans.",
+            "In summer the sun does not set over this ocean day or night.",
+            "There is no land under the ice of the North Pole — only the water of the ocean.",
+            "Walruses in this ocean dive to the bottom for shellfish and rest on the ice floes."
+          ],
+          "riddles": [
+            "the ocean covered with ice, where polar bears live",
+            "the smallest ocean",
+            "the ocean where the North Pole is",
+            "the ocean where icebreakers sail",
+            "the ocean where narwhals and walruses live",
+            "the shallowest ocean",
+            "the ocean at the very north of the Earth",
+            "the ocean where the sun does not set in summer"
+          ],
+          "riddleFacts": [
+            "Polar bears live on the ice floes of the Arctic Ocean.",
+            "The smallest ocean is the Arctic.",
+            "The North Pole is in the Arctic Ocean.",
+            "Icebreakers lead ships through the ice of the Arctic Ocean.",
+            "Narwhals and walruses live in the Arctic Ocean.",
+            "The shallowest ocean is the Arctic.",
+            "At the very north of the Earth lies the Arctic Ocean.",
+            "In summer the sun does not set over the Arctic Ocean — that is the polar day."
+          ]
+        },
+        "southern": {
+          "fact": "The Southern Ocean surrounds Antarctica.",
+          "pool": [
+            "The Southern Ocean surrounds Antarctica.",
+            "The Southern Ocean has the youngest name: it was set apart only a short while ago.",
+            "Penguins, seals and giant blue whales live in the Southern Ocean.",
+            "Around Antarctica flows the mightiest current on the planet.",
+            "The biggest icebergs float in the Southern Ocean — as big as a whole city.",
+            "The waters of the Southern Ocean are very cold, but they are full of krill — food for whales.",
+            "The Southern Ocean has the strongest winds and the highest waves.",
+            "The Southern Ocean washes only one continent — Antarctica.",
+            "In winter the Southern Ocean around Antarctica is covered with ice.",
+            "Over the Southern Ocean flies the albatross — the bird with the widest wingspan."
+          ],
+          "riddles": [
+            "the ocean that surrounds Antarctica",
+            "the ocean that penguins live beside",
+            "the ocean by the South Pole",
+            "the ocean with the youngest name",
+            "the ocean where the biggest icebergs float",
+            "the ocean with the mightiest current",
+            "the ocean at the very south of the Earth",
+            "the ocean where emperor penguins live"
+          ],
+          "riddleFacts": [
+            "Antarctica is surrounded on all sides by the Southern Ocean.",
+            "Penguins live on the shores of the Southern Ocean.",
+            "By the South Pole lies the Southern Ocean.",
+            "The Southern Ocean has the youngest name: it was set apart only a short while ago.",
+            "The biggest icebergs in the world float in the Southern Ocean.",
+            "The mightiest current on the planet flows in the Southern Ocean.",
+            "At the very south of the Earth lies the Southern Ocean.",
+            "Emperor penguins live on the ice of the Southern Ocean."
+          ]
+        }
+      },
+      "SEAS": {
+        "black": [
+          "The Black Sea",
+          "The Black Sea washes the south of Ukraine. Through straits and the Mediterranean Sea it is joined to the Atlantic Ocean."
+        ],
+        "mediterranean": [
+          "The Mediterranean Sea",
+          "The Mediterranean Sea lies between Europe, Africa and Asia, and the narrow Strait of Gibraltar joins it to the Atlantic Ocean."
+        ],
+        "red": [
+          "The Red Sea",
+          "The Red Sea is a part of the Indian Ocean. It is very warm and salty, and it is full of corals."
+        ],
+        "baltic": [
+          "The Baltic Sea",
+          "The Baltic Sea is a part of the Atlantic Ocean in the north of Europe. Its water is hardly salty at all."
+        ],
+        "caribbean": [
+          "The Caribbean Sea",
+          "The Caribbean Sea is a warm part of the Atlantic Ocean off the shores of America. Pirates once sailed there."
+        ],
+        "japan": [
+          "The Sea of Japan",
+          "The Sea of Japan is a part of the Pacific Ocean between Japan and the mainland of Asia."
+        ],
+        "north": [
+          "The North Sea",
+          "The North Sea is a part of the Atlantic Ocean between Great Britain and Norway."
+        ],
+        "arabian": [
+          "The Arabian Sea",
+          "The Arabian Sea is a part of the Indian Ocean off the shores of India and Arabia."
+        ],
+        "coral": [
+          "The Coral Sea",
+          "The Coral Sea is a part of the Pacific Ocean near Australia. This is where the Great Barrier Reef lies."
+        ],
+        "barents": [
+          "The Barents Sea",
+          "The Barents Sea is a part of the Arctic Ocean in the north of Europe."
+        ],
+        "bering": [
+          "The Bering Sea",
+          "The Bering Sea is a cold northern part of the Pacific Ocean between Asia and America."
+        ],
+        "ross": [
+          "The Ross Sea",
+          "The Ross Sea is a part of the Southern Ocean off the shores of Antarctica. Penguins and seals live there."
+        ],
+        "south_china": [
+          "The South China Sea",
+          "The South China Sea is a warm part of the Pacific Ocean off the shores of Asia."
+        ],
+        "andaman": [
+          "The Andaman Sea",
+          "The Andaman Sea is a part of the Indian Ocean near Thailand."
+        ],
+        "greenland": [
+          "The Greenland Sea",
+          "The Greenland Sea is a part of the Arctic Ocean beside the biggest island in the world, Greenland."
+        ],
+        "beaufort": [
+          "The Beaufort Sea",
+          "The Beaufort Sea is a part of the Arctic Ocean off the north of Canada. It is covered with ice almost all year."
+        ],
+        "weddell": [
+          "The Weddell Sea",
+          "The Weddell Sea is a part of the Southern Ocean near Antarctica. Its water is some of the clearest in the world."
+        ],
+        "azov": [
+          "The Sea of Azov",
+          "The Sea of Azov washes the south of Ukraine. It is the shallowest sea in the world, and it is joined to the Atlantic Ocean."
+        ],
+        "adriatic": [
+          "The Adriatic Sea",
+          "The Adriatic Sea lies between Italy and Croatia and belongs to the Atlantic Ocean."
+        ],
+        "aegean": [
+          "The Aegean Sea",
+          "The Aegean Sea washes Greece. There are more than a thousand islands in it, and it belongs to the Atlantic Ocean."
+        ],
+        "marmara": [
+          "The Sea of Marmara",
+          "The Sea of Marmara is a small sea between the Black Sea and the Mediterranean. Istanbul stands on its shore."
+        ],
+        "irish": [
+          "The Irish Sea",
+          "The Irish Sea lies between Ireland and Great Britain — it is a part of the Atlantic Ocean."
+        ],
+        "sargasso": [
+          "The Sargasso Sea",
+          "The Sargasso Sea is the only sea without shores: it lies in the middle of the Atlantic Ocean and is covered with seaweed."
+        ],
+        "labrador": [
+          "The Labrador Sea",
+          "The Labrador Sea is a cold part of the Atlantic Ocean between Canada and Greenland."
+        ],
+        "mexico": [
+          "The Gulf of Mexico",
+          "The Gulf of Mexico is a part of the Atlantic Ocean. This is where the warm Gulf Stream is born."
+        ],
+        "biscay": [
+          "The Bay of Biscay",
+          "The Bay of Biscay is a part of the Atlantic Ocean off France and Spain. It is known for its fierce storms."
+        ],
+        "guinea": [
+          "The Gulf of Guinea",
+          "The Gulf of Guinea is a part of the Atlantic Ocean off Africa. Here the equator crosses the prime meridian."
+        ],
+        "okhotsk": [
+          "The Sea of Okhotsk",
+          "The Sea of Okhotsk is a cold part of the Pacific Ocean. In winter it is covered with ice."
+        ],
+        "yellow": [
+          "The Yellow Sea",
+          "The Yellow Sea is a part of the Pacific Ocean near China. Rivers carry yellow mud into it, so the water is yellowish."
+        ],
+        "east_china": [
+          "The East China Sea",
+          "The East China Sea is a part of the Pacific Ocean between China and Japan."
+        ],
+        "philippine": [
+          "The Philippine Sea",
+          "The Philippine Sea is a part of the Pacific Ocean. The deepest place of all, the Mariana Trench, lies in it."
+        ],
+        "tasman": [
+          "The Tasman Sea",
+          "The Tasman Sea is a part of the Pacific Ocean between Australia and New Zealand."
+        ],
+        "java": [
+          "The Java Sea",
+          "The Java Sea is a warm, shallow part of the Pacific Ocean among the islands of Indonesia."
+        ],
+        "fiji": [
+          "The Fiji Sea",
+          "The Fiji Sea is a part of the Pacific Ocean around the coral islands of Fiji."
+        ],
+        "california": [
+          "The Gulf of California",
+          "The Gulf of California is a part of the Pacific Ocean off Mexico. Gray whales swim here to have their young."
+        ],
+        "bengal": [
+          "The Bay of Bengal",
+          "The Bay of Bengal is the biggest bay in the world. It is a part of the Indian Ocean off the shores of India."
+        ],
+        "persian": [
+          "The Persian Gulf",
+          "The Persian Gulf is a warm part of the Indian Ocean. In olden times people dived for pearls here."
+        ],
+        "timor": [
+          "The Timor Sea",
+          "The Timor Sea is a part of the Indian Ocean between Australia and the island of Timor."
+        ],
+        "laccadive": [
+          "The Laccadive Sea",
+          "The Laccadive Sea is a part of the Indian Ocean off the south of India. The Maldives lie in it."
+        ],
+        "aden": [
+          "The Gulf of Aden",
+          "The Gulf of Aden is a part of the Indian Ocean between Africa and Arabia. It leads to the Red Sea."
+        ],
+        "mozambique": [
+          "The Mozambique Channel",
+          "The Mozambique Channel is the longest strait in the world. It parts Madagascar from Africa in the Indian Ocean."
+        ],
+        "kara": [
+          "The Kara Sea",
+          "The Kara Sea is a part of the Arctic Ocean. It is covered with ice almost all year."
+        ],
+        "laptev": [
+          "The Laptev Sea",
+          "The Laptev Sea is one of the coldest seas in the world, a part of the Arctic Ocean."
+        ],
+        "white": [
+          "The White Sea",
+          "The White Sea is a part of the Arctic Ocean. In winter it freezes and turns truly white."
+        ],
+        "chukchi": [
+          "The Chukchi Sea",
+          "The Chukchi Sea is a part of the Arctic Ocean between Asia and America. Walruses live here."
+        ],
+        "amundsen": [
+          "The Amundsen Sea",
+          "The Amundsen Sea is a part of the Southern Ocean. It is named after the explorer who was the first to reach the South Pole."
+        ],
+        "bellingshausen": [
+          "The Bellingshausen Sea",
+          "The Bellingshausen Sea is a part of the Southern Ocean off the shores of Antarctica, almost always under ice."
+        ]
+      },
+      "PLACES": {
+        "mariana": [
+          "Which ocean is the Mariana Trench — the deepest place on Earth — in?",
+          "The Mariana Trench is in the Pacific Ocean. It is so deep that the highest mountain in the world would be hidden in it."
+        ],
+        "titanic": [
+          "In which ocean did the ship Titanic sink?",
+          "The ship Titanic sank in the Atlantic Ocean, when it was sailing from Europe to America and struck an iceberg."
+        ],
+        "madagascar": [
+          "Which ocean is the island of Madagascar in?",
+          "The island of Madagascar lies in the Indian Ocean off the shores of Africa. Lemurs live only there."
+        ],
+        "svalbard": [
+          "In which ocean are the islands of Svalbard, where there are more polar bears than people?",
+          "The islands of Svalbard lie in the Arctic Ocean, quite close to the North Pole."
+        ],
+        "reef": [
+          "Which ocean is the Great Barrier Reef in?",
+          "The Great Barrier Reef is in the Pacific Ocean near Australia. It can be seen even from space."
+        ],
+        "hawaii": [
+          "Which ocean are the Hawaiian Islands in?",
+          "The Hawaiian Islands lie in the middle of the Pacific Ocean. They are the tops of underwater volcanoes."
+        ],
+        "iceland": [
+          "Which ocean is the island of Iceland in?",
+          "The island of Iceland lies in the north of the Atlantic Ocean. It has volcanoes, geysers and glaciers."
+        ],
+        "maldives": [
+          "Which ocean are the Maldives in?",
+          "The Maldives are more than a thousand little coral islands in the Indian Ocean."
+        ],
+        "bermuda": [
+          "Which ocean is the Bermuda Triangle in?",
+          "The Bermuda Triangle is a part of the Atlantic Ocean that many mysterious stories are told about."
+        ],
+        "galapagos": [
+          "In which ocean are the Galápagos Islands, with their giant tortoises?",
+          "The Galápagos Islands lie in the Pacific Ocean. Giant tortoises live there that weigh as much as several grown people."
+        ],
+        "sri_lanka": [
+          "Which ocean is the island of Sri Lanka in?",
+          "The island of Sri Lanka lies in the Indian Ocean near India. Famous tea is grown there."
+        ],
+        "easter": [
+          "In which ocean is Easter Island, with its stone giants?",
+          "Easter Island lies in the Pacific Ocean. Hundreds of giant stone statues stand on it."
+        ],
+        "japan_isles": [
+          "Which ocean is Japan in?",
+          "Japan is a country on islands in the Pacific Ocean. It is called the Land of the Rising Sun."
+        ],
+        "new_zealand": [
+          "Which ocean is New Zealand in?",
+          "New Zealand lies in the Pacific Ocean. The kiwi lives here — a bird that cannot fly."
+        ],
+        "philippines": [
+          "Which ocean are the Philippines in?",
+          "The Philippines are more than seven thousand islands in the Pacific Ocean."
+        ],
+        "tahiti": [
+          "Which ocean is the island of Tahiti in?",
+          "The island of Tahiti lies in the middle of the Pacific Ocean. The sand on its beaches is black — it comes from volcanic lava."
+        ],
+        "new_guinea": [
+          "In which ocean is New Guinea — the second biggest island in the world?",
+          "The island of New Guinea lies in the Pacific Ocean. Birds of paradise with amazing tails live here."
+        ],
+        "ring_of_fire": [
+          "Around which ocean does the “Ring of Fire” of volcanoes run?",
+          "The “Ring of Fire” is a chain of volcanoes around the Pacific Ocean. Most of the planet’s volcanoes are here."
+        ],
+        "kamchatka": [
+          "In which ocean is the Kamchatka Peninsula, with its geysers?",
+          "The Kamchatka Peninsula is washed by the Pacific Ocean. It has a Valley of Geysers and some thirty active volcanoes."
+        ],
+        "britain": [
+          "Which ocean is the island of Great Britain in?",
+          "The island of Great Britain lies in the Atlantic Ocean. The English Channel parts it from the mainland."
+        ],
+        "cuba_isle": [
+          "Which ocean is the island of Cuba in?",
+          "The island of Cuba lies in the Caribbean Sea — a part of the Atlantic Ocean."
+        ],
+        "canary": [
+          "Which ocean are the Canary Islands in?",
+          "The Canary Islands lie in the Atlantic Ocean off Africa. It is warm there all year, as in spring."
+        ],
+        "bahamas": [
+          "Which ocean are the Bahamas in?",
+          "The Bahamas lie in the Atlantic Ocean. Columbus was the first European to see them."
+        ],
+        "azores": [
+          "Which ocean are the Azores in?",
+          "The Azores lie in the middle of the Atlantic Ocean. They are the tops of underwater volcanoes."
+        ],
+        "st_helena": [
+          "Which ocean is the island of Saint Helena in?",
+          "The island of Saint Helena lies far out in the Atlantic Ocean. The emperor Napoleon was sent away to live here."
+        ],
+        "falklands": [
+          "Which ocean are the Falkland Islands in?",
+          "The Falkland Islands lie in the south of the Atlantic Ocean. There are more penguins there than people."
+        ],
+        "ireland": [
+          "Which ocean is the island of Ireland in?",
+          "The island of Ireland lies in the Atlantic Ocean. With all its rain it is always green — it is called the Emerald Isle."
+        ],
+        "seychelles": [
+          "Which ocean are the Seychelles in?",
+          "The Seychelles lie in the Indian Ocean. A palm with the biggest nut in the world grows here."
+        ],
+        "mauritius": [
+          "Which ocean is the island of Mauritius in?",
+          "The island of Mauritius lies in the Indian Ocean. The dodo once lived here — a bird that could not fly."
+        ],
+        "zanzibar": [
+          "Which ocean is the island of Zanzibar in?",
+          "The island of Zanzibar lies in the Indian Ocean off Africa. It is called the island of spices."
+        ],
+        "comoros": [
+          "Which ocean are the Comoro Islands in?",
+          "The Comoro Islands lie in the Indian Ocean between Africa and Madagascar."
+        ],
+        "socotra": [
+          "In which ocean is the island of Socotra, with its dragon trees?",
+          "The island of Socotra lies in the Indian Ocean. Dragon trees grow there, shaped like giant umbrellas."
+        ],
+        "andaman_isles": [
+          "Which ocean are the Andaman Islands in?",
+          "The Andaman Islands lie in the Indian Ocean. Around them are coral reefs and clear water."
+        ],
+        "north_pole": [
+          "Which ocean is the North Pole in?",
+          "The North Pole is in the Arctic Ocean. There is no land under it, only water under the ice."
+        ],
+        "novaya_zemlya": [
+          "Which ocean are the islands of Novaya Zemlya in?",
+          "Novaya Zemlya is two big islands in the Arctic Ocean, covered with glaciers."
+        ],
+        "wrangel": [
+          "In which ocean is Wrangel Island — a nature reserve for polar bears?",
+          "Wrangel Island lies in the Arctic Ocean. Mother polar bears have their cubs here."
+        ],
+        "ellesmere": [
+          "Which ocean is Ellesmere Island in?",
+          "Ellesmere Island lies in the Arctic Ocean in the north of Canada. From there the pole is only a short way off."
+        ],
+        "icebergs": [
+          "In which ocean do the biggest icebergs in the world float?",
+          "The biggest icebergs break off from Antarctica and float in the Southern Ocean. Some of them are bigger than a city."
+        ],
+        "ross_shelf": [
+          "Which ocean is the Ross Ice Shelf in?",
+          "The Ross Ice Shelf lies in the Southern Ocean. It is a slab of ice as big as a whole country."
+        ],
+        "south_shetland": [
+          "Which ocean are the South Shetland Islands in?",
+          "The South Shetland Islands lie in the Southern Ocean near Antarctica.⟪ Scientists from many countries work at research stations there.⟫"
+        ]
+      },
+      "RIVERS": {
+        "dnipro": [
+          "the Dnipro",
+          "The Dnipro flows into the Black Sea, which is joined to the Atlantic Ocean. It is the biggest river of Ukraine."
+        ],
+        "amazon": [
+          "the Amazon",
+          "The Amazon flows into the Atlantic Ocean. It carries more water than any other river in the world."
+        ],
+        "nile": [
+          "the Nile",
+          "The Nile flows into the Mediterranean Sea — a part of the Atlantic Ocean. It is one of the longest rivers in the world."
+        ],
+        "danube": [
+          "the Danube",
+          "The Danube flows through ten countries and into the Black Sea — a part of the Atlantic Ocean."
+        ],
+        "mississippi": [
+          "the Mississippi",
+          "The Mississippi flows into the Gulf of Mexico in the Atlantic Ocean. It is the chief river of North America."
+        ],
+        "congo": [
+          "the Congo",
+          "The Congo River flows into the Atlantic Ocean. It is the deepest in the world, and it crosses the equator twice."
+        ],
+        "rhine": [
+          "the Rhine",
+          "The Rhine flows into the North Sea — a part of the Atlantic Ocean. Old castles stand on its banks."
+        ],
+        "thames": [
+          "the Thames",
+          "The Thames flows through London and into the North Sea — a part of the Atlantic Ocean."
+        ],
+        "yangtze": [
+          "the Yangtze",
+          "The Yangtze flows into the Pacific Ocean. It is the longest river of Asia."
+        ],
+        "huanghe": [
+          "the Yellow River",
+          "The Yellow River flows into the Yellow Sea of the Pacific Ocean. Its Chinese name, Huang He, means just that — “Yellow River.”"
+        ],
+        "mekong": [
+          "the Mekong",
+          "The Mekong flows into the South China Sea of the Pacific Ocean. There are floating markets on it."
+        ],
+        "amur": [
+          "the Amur",
+          "The Amur flows into the Sea of Okhotsk — a part of the Pacific Ocean."
+        ],
+        "colorado": [
+          "the Colorado",
+          "The Colorado River runs to the Gulf of California in the Pacific Ocean. It was this river that carved the Grand Canyon."
+        ],
+        "yukon": [
+          "the Yukon",
+          "The Yukon flows through Alaska and into the Bering Sea of the Pacific Ocean."
+        ],
+        "ganges": [
+          "the Ganges",
+          "The Ganges flows into the Bay of Bengal in the Indian Ocean. For the people of India it is a holy river."
+        ],
+        "indus": [
+          "the Indus",
+          "The Indus flows into the Arabian Sea of the Indian Ocean. The name of India comes from the name of this river."
+        ],
+        "zambezi": [
+          "the Zambezi",
+          "The Zambezi flows into the Indian Ocean. The giant Victoria Falls thunder on it."
+        ],
+        "ob": [
+          "the Ob",
+          "The Ob flows into the Kara Sea of the Arctic Ocean."
+        ],
+        "yenisei": [
+          "the Yenisei",
+          "The Yenisei carries its waters north, into the Arctic Ocean. For most of the year it is locked in ice."
+        ],
+        "lena": [
+          "the Lena",
+          "The Lena flows into the Laptev Sea of the Arctic Ocean. In winter its banks have the bitterest frosts."
+        ],
+        "mackenzie": [
+          "the Mackenzie",
+          "The Mackenzie is the longest river of Canada. It flows into the Arctic Ocean."
+        ]
+      }
+    },
+    "places": {
+      "COUNTRIES": {
+        "ua": "Ukraine",
+        "us": "the United States",
+        "gb": "the United Kingdom",
+        "fr": "France",
+        "de": "Germany",
+        "it": "Italy",
+        "pl": "Poland",
+        "jp": "Japan",
+        "ca": "Canada",
+        "es": "Spain",
+        "cn": "China",
+        "br": "Brazil",
+        "tr": "Turkey",
+        "gr": "Greece",
+        "eg": "Egypt",
+        "in": "India",
+        "au": "Australia",
+        "mx": "Mexico",
+        "ar": "Argentina",
+        "ch": "Switzerland",
+        "se": "Sweden",
+        "no": "Norway",
+        "nl": "the Netherlands",
+        "pt": "Portugal",
+        "kr": "South Korea",
+        "il": "Israel",
+        "at": "Austria",
+        "cz": "Czechia",
+        "be": "Belgium",
+        "dk": "Denmark",
+        "fi": "Finland",
+        "ie": "Ireland",
+        "hu": "Hungary",
+        "ro": "Romania",
+        "bg": "Bulgaria",
+        "hr": "Croatia",
+        "sk": "Slovakia",
+        "lt": "Lithuania",
+        "lv": "Latvia",
+        "ee": "Estonia",
+        "md": "Moldova",
+        "ge": "Georgia",
+        "sa": "Saudi Arabia",
+        "ae": "the United Arab Emirates",
+        "th": "Thailand",
+        "vn": "Vietnam",
+        "za": "South Africa",
+        "nz": "New Zealand",
+        "cu": "Cuba",
+        "jm": "Jamaica",
+        "cl": "Chile",
+        "co": "Colombia",
+        "pe": "Peru",
+        "is": "Iceland",
+        "rs": "Serbia",
+        "si": "Slovenia",
+        "cy": "Cyprus",
+        "mt": "Malta",
+        "lu": "Luxembourg",
+        "mc": "Monaco",
+        "kz": "Kazakhstan",
+        "am": "Armenia",
+        "az": "Azerbaijan",
+        "uz": "Uzbekistan",
+        "mn": "Mongolia",
+        "pk": "Pakistan",
+        "id": "Indonesia",
+        "ph": "the Philippines",
+        "my": "Malaysia",
+        "sg": "Singapore",
+        "np": "Nepal",
+        "ir": "Iran",
+        "iq": "Iraq",
+        "qa": "Qatar",
+        "jo": "Jordan",
+        "lb": "Lebanon",
+        "ma": "Morocco",
+        "tn": "Tunisia",
+        "dz": "Algeria",
+        "ke": "Kenya",
+        "ng": "Nigeria",
+        "et": "Ethiopia",
+        "gh": "Ghana",
+        "tz": "Tanzania",
+        "ve": "Venezuela",
+        "uy": "Uruguay",
+        "py": "Paraguay",
+        "bo": "Bolivia",
+        "ec": "Ecuador",
+        "cr": "Costa Rica",
+        "pa": "Panama",
+        "do": "the Dominican Republic",
+        "ht": "Haiti",
+        "bs": "the Bahamas",
+        "gt": "Guatemala",
+        "hn": "Honduras",
+        "me": "Montenegro",
+        "mk": "North Macedonia",
+        "al": "Albania",
+        "ba": "Bosnia and Herzegovina",
+        "ad": "Andorra",
+        "li": "Liechtenstein",
+        "sm": "San Marino",
+        "va": "Vatican City",
+        "kp": "North Korea",
+        "af": "Afghanistan",
+        "bd": "Bangladesh",
+        "lk": "Sri Lanka",
+        "mm": "Myanmar",
+        "kh": "Cambodia",
+        "la": "Laos",
+        "bt": "Bhutan",
+        "mv": "the Maldives",
+        "kw": "Kuwait",
+        "bh": "Bahrain",
+        "om": "Oman",
+        "ye": "Yemen",
+        "sy": "Syria",
+        "tj": "Tajikistan",
+        "tm": "Turkmenistan",
+        "kg": "Kyrgyzstan",
+        "bn": "Brunei",
+        "tl": "East Timor",
+        "ly": "Libya",
+        "sd": "Sudan",
+        "ss": "South Sudan",
+        "sn": "Senegal",
+        "ci": "Côte d’Ivoire",
+        "cm": "Cameroon",
+        "ug": "Uganda",
+        "rw": "Rwanda",
+        "zw": "Zimbabwe",
+        "zm": "Zambia",
+        "ao": "Angola",
+        "mz": "Mozambique",
+        "mg": "Madagascar",
+        "na": "Namibia",
+        "bw": "Botswana",
+        "ml": "Mali",
+        "ne": "Niger",
+        "td": "Chad",
+        "bf": "Burkina Faso",
+        "gn": "Guinea",
+        "sl": "Sierra Leone",
+        "lr": "Liberia",
+        "tg": "Togo",
+        "bj": "Benin",
+        "ga": "Gabon",
+        "cg": "the Republic of the Congo",
+        "cd": "the Democratic Republic of the Congo",
+        "cf": "the Central African Republic",
+        "gq": "Equatorial Guinea",
+        "er": "Eritrea",
+        "dj": "Djibouti",
+        "so": "Somalia",
+        "bi": "Burundi",
+        "mw": "Malawi",
+        "ls": "Lesotho",
+        "sz": "Eswatini",
+        "mr": "Mauritania",
+        "gm": "the Gambia",
+        "gw": "Guinea-Bissau",
+        "cv": "Cape Verde",
+        "st": "São Tomé and Príncipe",
+        "km": "the Comoros",
+        "sc": "the Seychelles",
+        "mu": "Mauritius",
+        "ni": "Nicaragua",
+        "sv": "El Salvador",
+        "bz": "Belize",
+        "gy": "Guyana",
+        "sr": "Suriname",
+        "tt": "Trinidad and Tobago",
+        "bb": "Barbados",
+        "lc": "Saint Lucia",
+        "vc": "Saint Vincent and the Grenadines",
+        "gd": "Grenada",
+        "ag": "Antigua and Barbuda",
+        "dm": "Dominica",
+        "kn": "Saint Kitts and Nevis",
+        "fj": "Fiji",
+        "pg": "Papua New Guinea",
+        "ws": "Samoa",
+        "to": "Tonga",
+        "vu": "Vanuatu",
+        "sb": "the Solomon Islands",
+        "ki": "Kiribati",
+        "tv": "Tuvalu",
+        "nr": "Nauru",
+        "pw": "Palau",
+        "fm": "Micronesia",
+        "mh": "the Marshall Islands"
+      },
+      "LOOKS": {
+        "ua": "This flag has two stripes: blue like the sky, and yellow like a field of wheat.",
+        "jp": "This flag has a red circle in the middle of a white field.",
+        "fr": "Three upright stripes: blue, white and red.",
+        "us": "Red and white stripes, and a blue corner with little stars.",
+        "ca": "A red maple leaf in the middle.",
+        "br": "A green flag with a yellow diamond and a blue circle.",
+        "it": "Three upright stripes: green, white and red.",
+        "de": "Three stripes lying flat: black, red and gold.",
+        "gb": "A blue flag with red and white crosses.",
+        "pl": "Two stripes: white on top and red below.",
+        "cn": "A red flag with yellow stars in the corner.",
+        "in": "Orange, white and green stripes, and a blue wheel in the middle.",
+        "au": "A blue flag with stars and a little British flag in the corner.",
+        "eg": "Red, white and black stripes, and a golden eagle in the middle.",
+        "es": "A red stripe, a wide yellow one, and red again.",
+        "gr": "Blue and white stripes, and a white cross in the corner.",
+        "se": "A blue flag with a yellow cross.",
+        "ch": "A red square with a white cross.",
+        "tr": "A red flag with a white crescent moon and a star.",
+        "mx": "Green, white and red stripes, and an eagle in the middle.",
+        "ar": "Light blue, white and light blue stripes, and a little sun in the middle.",
+        "kr": "A white flag with a red-and-blue circle in the middle."
+      },
+      "CAPITALS": {
+        "ua": "Kyiv",
+        "us": "Washington",
+        "gb": "London",
+        "fr": "Paris",
+        "de": "Berlin",
+        "it": "Rome",
+        "pl": "Warsaw",
+        "jp": "Tokyo",
+        "ca": "Ottawa",
+        "es": "Madrid",
+        "cn": "Beijing",
+        "br": "Brasília",
+        "tr": "Ankara",
+        "gr": "Athens",
+        "eg": "Cairo",
+        "in": "New Delhi",
+        "au": "Canberra",
+        "mx": "Mexico City",
+        "ar": "Buenos Aires",
+        "ch": "Bern",
+        "se": "Stockholm",
+        "no": "Oslo",
+        "nl": "Amsterdam",
+        "pt": "Lisbon",
+        "kr": "Seoul",
+        "at": "Vienna",
+        "cz": "Prague",
+        "be": "Brussels",
+        "dk": "Copenhagen",
+        "fi": "Helsinki",
+        "ie": "Dublin",
+        "hu": "Budapest",
+        "ro": "Bucharest",
+        "bg": "Sofia",
+        "hr": "Zagreb",
+        "sk": "Bratislava",
+        "lt": "Vilnius",
+        "lv": "Riga",
+        "ee": "Tallinn",
+        "md": "Chișinău",
+        "ge": "Tbilisi",
+        "sa": "Riyadh",
+        "ae": "Abu Dhabi",
+        "th": "Bangkok",
+        "vn": "Hanoi",
+        "nz": "Wellington",
+        "cu": "Havana",
+        "jm": "Kingston",
+        "cl": "Santiago",
+        "co": "Bogotá",
+        "pe": "Lima",
+        "is": "Reykjavík",
+        "rs": "Belgrade",
+        "si": "Ljubljana",
+        "cy": "Nicosia",
+        "mt": "Valletta",
+        "kz": "Astana",
+        "am": "Yerevan",
+        "az": "Baku",
+        "uz": "Tashkent",
+        "mn": "Ulaanbaatar",
+        "pk": "Islamabad",
+        "ph": "Manila",
+        "my": "Kuala Lumpur",
+        "np": "Kathmandu",
+        "ir": "Tehran",
+        "iq": "Baghdad",
+        "qa": "Doha",
+        "jo": "Amman",
+        "lb": "Beirut",
+        "ma": "Rabat",
+        "ke": "Nairobi",
+        "ng": "Abuja",
+        "et": "Addis Ababa",
+        "gh": "Accra",
+        "ve": "Caracas",
+        "uy": "Montevideo",
+        "py": "Asunción",
+        "ec": "Quito",
+        "cr": "San José"
+      },
+      "REGIONS": {
+        "north_america": "North America",
+        "south_america": "South America",
+        "europe": "Europe",
+        "africa": "Africa",
+        "asia": "Asia",
+        "australia": "Australia",
+        "antarctica": "Antarctica",
+        "pacific": "the Pacific Ocean",
+        "atlantic": "the Atlantic Ocean",
+        "indian": "the Indian Ocean",
+        "arctic": "the Arctic Ocean",
+        "southern": "the Southern Ocean"
+      },
+      "IN_CONTINENT": {
+        "europe": "Europe",
+        "asia": "Asia",
+        "africa": "Africa",
+        "north_america": "North America",
+        "south_america": "South America",
+        "australia": "Australia and Oceania"
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { useLang, useT } from '@/core/i18n';
+import { useLang, useT } from '@/core/translator';
 import { motion } from 'framer-motion';
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import type { GameViewProps } from '@/core/game/kernel/types';

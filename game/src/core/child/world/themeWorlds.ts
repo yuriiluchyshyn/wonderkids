@@ -1,7 +1,10 @@
-import type { LangCode } from '@/core/lang';
+import type { LangCode } from '@/core/language';
 import type { Theme, ThemeId } from '@/core/theme/theme.types';
-import { worldWords } from './lang';
+import { worldWords } from './words';
 import { DREAM_ID, SPACEPORT_ID, itemCost, itemId, type Inhabitant, type ItemKind, type ShopItem } from './world';
+import TEXTS from '../../../locales/app/uk/world.json' with { type: 'json' };
+
+const J = TEXTS.themeWorlds;
 
 /**
  * What each theme's world is made of: its name, nine buildings, eight small
@@ -21,64 +24,64 @@ interface ThemeWorldDef {
 
 const WORLDS: Record<ThemeId, ThemeWorldDef> = {
   galaxy: {
-    name: 'Зоряне місто',
-    buildings: [['🌟', 'Зоряний ліхтар'], ['🌙', 'Місячна база'], ['☄️', 'Кометна станція'], ['🔭', 'Обсерваторія'], ['🪐', 'Планета-дім'], ['🛸', 'Док зорельотів'], ['📡', 'Антена зв’язку'], ['🌌', 'Парк туманностей'], ['🌠', 'Фабрика зірок']],
-    decor: [['🌠', 'Зорепад'], ['🪨', 'Астероїд'], ['🌙', 'Місяць-супутник'], ['🚩', 'Прапор першопрохідця'], ['🔦', 'Маячок'], ['🌵', 'Космічний кактус'], ['💫', 'Зоряна арка'], ['🎆', 'Салют']],
-    residents: [['👽', 'Прибулець'], ['🤖', 'Робот'], ['👨‍🚀', 'Космонавт'], ['👾', 'Піксельний гість'], ['🐕', 'Космопес'], ['🛸', 'Літаюча тарілка'], ['🐈', 'Зоряний кіт'], ['🧑‍🔬', 'Науковиця'], ['🐉', 'Космічний дракон'], ['🦄', 'Зоряний єдиноріг']],
+    name: J.WORLDS.galaxy.name,
+    buildings: [['🌟', J.WORLDS.galaxy.buildings[0][1]], ['🌙', J.WORLDS.galaxy.buildings[1][1]], ['☄️', J.WORLDS.galaxy.buildings[2][1]], ['🔭', J.WORLDS.galaxy.buildings[3][1]], ['🪐', J.WORLDS.galaxy.buildings[4][1]], ['🛸', J.WORLDS.galaxy.buildings[5][1]], ['📡', J.WORLDS.galaxy.buildings[6][1]], ['🌌', J.WORLDS.galaxy.buildings[7][1]], ['🌠', J.WORLDS.galaxy.buildings[8][1]]],
+    decor: [['🌠', J.WORLDS.galaxy.decor[0][1]], ['🪨', J.WORLDS.galaxy.decor[1][1]], ['🌙', J.WORLDS.galaxy.decor[2][1]], ['🚩', J.WORLDS.galaxy.decor[3][1]], ['🔦', J.WORLDS.galaxy.decor[4][1]], ['🌵', J.WORLDS.galaxy.decor[5][1]], ['💫', J.WORLDS.galaxy.decor[6][1]], ['🎆', J.WORLDS.galaxy.decor[7][1]]],
+    residents: [['👽', J.WORLDS.galaxy.residents[0][1]], ['🤖', J.WORLDS.galaxy.residents[1][1]], ['👨‍🚀', J.WORLDS.galaxy.residents[2][1]], ['👾', J.WORLDS.galaxy.residents[3][1]], ['🐕', J.WORLDS.galaxy.residents[4][1]], ['🛸', J.WORLDS.galaxy.residents[5][1]], ['🐈', J.WORLDS.galaxy.residents[6][1]], ['🧑‍🔬', J.WORLDS.galaxy.residents[7][1]], ['🐉', J.WORLDS.galaxy.residents[8][1]], ['🦄', J.WORLDS.galaxy.residents[9][1]]],
   },
   unicorns: {
-    name: 'Казкове королівство',
-    buildings: [['🌈', 'Райдужний місток'], ['⛲', 'Чарівний фонтан'], ['🏡', 'Хатинка феї'], ['🧁', 'Пекарня солодощів'], ['🎠', 'Карусель'], ['🏪', 'Крамничка чудес'], ['🗼', 'Вежа чарівника'], ['🎡', 'Оглядове колесо'], ['🏟️', 'Арена єдинорогів']],
-    decor: [['🌷', 'Тюльпани'], ['🍄', 'Чарівний гриб'], ['🌸', 'Квітуче дерево'], ['🦩', 'Фламінго'], ['⭐', 'Зірка бажань'], ['🎀', 'Бант'], ['🪄', 'Чарівна паличка'], ['🎆', 'Салют']],
-    residents: [['🦄', 'Єдиноріг'], ['🐎', 'Білий кінь'], ['🧚', 'Фея'], ['🦋', 'Метелик'], ['🐇', 'Зайчик'], ['🦢', 'Лебідь'], ['🧙‍♀️', 'Чарівниця'], ['🐉', 'Дракончик'], ['👸', 'Принцеса'], ['🦉', 'Мудра сова']],
+    name: J.WORLDS.unicorns.name,
+    buildings: [['🌈', J.WORLDS.unicorns.buildings[0][1]], ['⛲', J.WORLDS.unicorns.buildings[1][1]], ['🏡', J.WORLDS.unicorns.buildings[2][1]], ['🧁', J.WORLDS.unicorns.buildings[3][1]], ['🎠', J.WORLDS.unicorns.buildings[4][1]], ['🏪', J.WORLDS.unicorns.buildings[5][1]], ['🗼', J.WORLDS.unicorns.buildings[6][1]], ['🎡', J.WORLDS.unicorns.buildings[7][1]], ['🏟️', J.WORLDS.unicorns.buildings[8][1]]],
+    decor: [['🌷', J.WORLDS.unicorns.decor[0][1]], ['🍄', J.WORLDS.unicorns.decor[1][1]], ['🌸', J.WORLDS.unicorns.decor[2][1]], ['🦩', J.WORLDS.unicorns.decor[3][1]], ['⭐', J.WORLDS.unicorns.decor[4][1]], ['🎀', J.WORLDS.unicorns.decor[5][1]], ['🪄', J.WORLDS.unicorns.decor[6][1]], ['🎆', J.WORLDS.unicorns.decor[7][1]]],
+    residents: [['🦄', J.WORLDS.unicorns.residents[0][1]], ['🐎', J.WORLDS.unicorns.residents[1][1]], ['🧚', J.WORLDS.unicorns.residents[2][1]], ['🦋', J.WORLDS.unicorns.residents[3][1]], ['🐇', J.WORLDS.unicorns.residents[4][1]], ['🦢', J.WORLDS.unicorns.residents[5][1]], ['🧙‍♀️', J.WORLDS.unicorns.residents[6][1]], ['🐉', J.WORLDS.unicorns.residents[7][1]], ['👸', J.WORLDS.unicorns.residents[8][1]], ['🦉', J.WORLDS.unicorns.residents[9][1]]],
   },
   cars: {
-    name: 'Місто гонщиків',
-    buildings: [['⛽', 'Заправка'], ['🔧', 'Майстерня'], ['🅿️', 'Паркінг'], ['🚦', 'Перехрестя'], ['🏪', 'Магазин запчастин'], ['🚿', 'Автомийка'], ['🌉', 'Міст'], ['🏭', 'Автозавод'], ['🏟️', 'Автодром']],
-    decor: [['🚧', 'Бар’єр'], ['🛞', 'Стос шин'], ['🚥', 'Світлофор'], ['🏁', 'Фінішний прапор'], ['🌴', 'Пальма'], ['🛢️', 'Бочка пального'], ['🏆', 'Кубок'], ['🎆', 'Салют']],
-    residents: [['🚓', 'Поліцейське авто'], ['🚒', 'Пожежна машина'], ['🚕', 'Таксі'], ['🚜', 'Трактор'], ['🚌', 'Автобус'], ['🏍️', 'Мотоцикл'], ['🚚', 'Вантажівка'], ['👨‍🔧', 'Механік'], ['🚁', 'Гелікоптер'], ['🚑', 'Швидка']],
+    name: J.WORLDS.cars.name,
+    buildings: [['⛽', J.WORLDS.cars.buildings[0][1]], ['🔧', J.WORLDS.cars.buildings[1][1]], ['🅿️', J.WORLDS.cars.buildings[2][1]], ['🚦', J.WORLDS.cars.buildings[3][1]], ['🏪', J.WORLDS.cars.buildings[4][1]], ['🚿', J.WORLDS.cars.buildings[5][1]], ['🌉', J.WORLDS.cars.buildings[6][1]], ['🏭', J.WORLDS.cars.buildings[7][1]], ['🏟️', J.WORLDS.cars.buildings[8][1]]],
+    decor: [['🚧', J.WORLDS.cars.decor[0][1]], ['🛞', J.WORLDS.cars.decor[1][1]], ['🚥', J.WORLDS.cars.decor[2][1]], ['🏁', J.WORLDS.cars.decor[3][1]], ['🌴', J.WORLDS.cars.decor[4][1]], ['🛢️', J.WORLDS.cars.decor[5][1]], ['🏆', J.WORLDS.cars.decor[6][1]], ['🎆', J.WORLDS.cars.decor[7][1]]],
+    residents: [['🚓', J.WORLDS.cars.residents[0][1]], ['🚒', J.WORLDS.cars.residents[1][1]], ['🚕', J.WORLDS.cars.residents[2][1]], ['🚜', J.WORLDS.cars.residents[3][1]], ['🚌', J.WORLDS.cars.residents[4][1]], ['🏍️', J.WORLDS.cars.residents[5][1]], ['🚚', J.WORLDS.cars.residents[6][1]], ['👨‍🔧', J.WORLDS.cars.residents[7][1]], ['🚁', J.WORLDS.cars.residents[8][1]], ['🚑', J.WORLDS.cars.residents[9][1]]],
   },
   space: {
-    name: 'Космічна колонія',
-    buildings: [['🛰️', 'Супутник'], ['🏠', 'Житловий купол'], ['🌱', 'Космічна теплиця'], ['🔋', 'Енергостанція'], ['🧪', 'Лабораторія'], ['🔭', 'Обсерваторія'], ['📡', 'Антена зв’язку'], ['🛸', 'Ангар'], ['🌉', 'Орбітальний міст']],
-    decor: [['🌠', 'Зорепад'], ['🪨', 'Місячний камінь'], ['🚩', 'Прапор'], ['🌙', 'Місяць-супутник'], ['🔦', 'Прожектор'], ['🌵', 'Космічний кактус'], ['🤖', 'Робот-садівник'], ['🎆', 'Салют']],
-    residents: [['👨‍🚀', 'Космонавт'], ['🤖', 'Робот-помічник'], ['👽', 'Прибулець'], ['🐕', 'Космопес'], ['👾', 'Піксельний гість'], ['🐈', 'Корабельний кіт'], ['🧑‍🔬', 'Науковиця'], ['🐒', 'Мавпочка-пілот'], ['🛸', 'Літаюча тарілка'], ['🦜', 'Папуга-штурман']],
+    name: J.WORLDS.space.name,
+    buildings: [['🛰️', J.WORLDS.space.buildings[0][1]], ['🏠', J.WORLDS.space.buildings[1][1]], ['🌱', J.WORLDS.space.buildings[2][1]], ['🔋', J.WORLDS.space.buildings[3][1]], ['🧪', J.WORLDS.space.buildings[4][1]], ['🔭', J.WORLDS.space.buildings[5][1]], ['📡', J.WORLDS.space.buildings[6][1]], ['🛸', J.WORLDS.space.buildings[7][1]], ['🌉', J.WORLDS.space.buildings[8][1]]],
+    decor: [['🌠', J.WORLDS.space.decor[0][1]], ['🪨', J.WORLDS.space.decor[1][1]], ['🚩', J.WORLDS.space.decor[2][1]], ['🌙', J.WORLDS.space.decor[3][1]], ['🔦', J.WORLDS.space.decor[4][1]], ['🌵', J.WORLDS.space.decor[5][1]], ['🤖', J.WORLDS.space.decor[6][1]], ['🎆', J.WORLDS.space.decor[7][1]]],
+    residents: [['👨‍🚀', J.WORLDS.space.residents[0][1]], ['🤖', J.WORLDS.space.residents[1][1]], ['👽', J.WORLDS.space.residents[2][1]], ['🐕', J.WORLDS.space.residents[3][1]], ['👾', J.WORLDS.space.residents[4][1]], ['🐈', J.WORLDS.space.residents[5][1]], ['🧑‍🔬', J.WORLDS.space.residents[6][1]], ['🐒', J.WORLDS.space.residents[7][1]], ['🛸', J.WORLDS.space.residents[8][1]], ['🦜', J.WORLDS.space.residents[9][1]]],
   },
   dinos: {
-    name: 'Долина динозаврів',
-    buildings: [['🥚', 'Гніздо'], ['🌴', 'Пальмовий гай'], ['⛰️', 'Печера'], ['🌋', 'Вулкан'], ['🦴', 'Музей кісток'], ['🏕️', 'Табір дослідників'], ['🌉', 'Ліановий міст'], ['🏞️', 'Водоспад'], ['🗿', 'Кам’яні ворота']],
-    decor: [['🌿', 'Папороть'], ['🪨', 'Валун'], ['🦴', 'Велика кістка'], ['🌴', 'Пальма'], ['🥥', 'Кокос'], ['🌺', 'Тропічна квітка'], ['🦋', 'Велетенський метелик'], ['🍖', 'Обід динозавра']],
-    residents: [['🦕', 'Диплодок'], ['🦖', 'Тиранозавр'], ['🐊', 'Крокодил'], ['🦎', 'Ящірка'], ['🐢', 'Черепаха'], ['🦅', 'Птеродактиль'], ['🦣', 'Мамонт'], ['🐍', 'Змія'], ['🦤', 'Дронт'], ['🧑‍🔬', 'Палеонтолог']],
+    name: J.WORLDS.dinos.name,
+    buildings: [['🥚', J.WORLDS.dinos.buildings[0][1]], ['🌴', J.WORLDS.dinos.buildings[1][1]], ['⛰️', J.WORLDS.dinos.buildings[2][1]], ['🌋', J.WORLDS.dinos.buildings[3][1]], ['🦴', J.WORLDS.dinos.buildings[4][1]], ['🏕️', J.WORLDS.dinos.buildings[5][1]], ['🌉', J.WORLDS.dinos.buildings[6][1]], ['🏞️', J.WORLDS.dinos.buildings[7][1]], ['🗿', J.WORLDS.dinos.buildings[8][1]]],
+    decor: [['🌿', J.WORLDS.dinos.decor[0][1]], ['🪨', J.WORLDS.dinos.decor[1][1]], ['🦴', J.WORLDS.dinos.decor[2][1]], ['🌴', J.WORLDS.dinos.decor[3][1]], ['🥥', J.WORLDS.dinos.decor[4][1]], ['🌺', J.WORLDS.dinos.decor[5][1]], ['🦋', J.WORLDS.dinos.decor[6][1]], ['🍖', J.WORLDS.dinos.decor[7][1]]],
+    residents: [['🦕', J.WORLDS.dinos.residents[0][1]], ['🦖', J.WORLDS.dinos.residents[1][1]], ['🐊', J.WORLDS.dinos.residents[2][1]], ['🦎', J.WORLDS.dinos.residents[3][1]], ['🐢', J.WORLDS.dinos.residents[4][1]], ['🦅', J.WORLDS.dinos.residents[5][1]], ['🦣', J.WORLDS.dinos.residents[6][1]], ['🐍', J.WORLDS.dinos.residents[7][1]], ['🦤', J.WORLDS.dinos.residents[8][1]], ['🧑‍🔬', J.WORLDS.dinos.residents[9][1]]],
   },
   underwater: {
-    name: 'Підводне місто',
-    buildings: [['🐚', 'Мушля-хатинка'], ['🪸', 'Кораловий сад'], ['🫧', 'Фабрика бульбашок'], ['⚓', 'Затонулий якір'], ['🏝️', 'Острів'], ['🏪', 'Перлинна крамниця'], ['🔱', 'Храм Нептуна'], ['🗼', 'Маяк'], ['🤿', 'Школа дайверів']],
-    decor: [['🌿', 'Водорості'], ['🐚', 'Мушля'], ['🪼', 'Медуза'], ['🌊', 'Хвиля'], ['🪨', 'Риф'], ['💎', 'Перлина'], ['🧰', 'Піратська скриня'], ['🫧', 'Фонтан бульбашок']],
-    residents: [['🐠', 'Рибка-клоун'], ['🐙', 'Восьминіг'], ['🐬', 'Дельфін'], ['🐢', 'Морська черепаха'], ['🦀', 'Крабик'], ['🐳', 'Кит'], ['🦈', 'Акула'], ['🧜‍♀️', 'Русалка'], ['🦑', 'Кальмар'], ['🐡', 'Риба-куля']],
+    name: J.WORLDS.underwater.name,
+    buildings: [['🐚', J.WORLDS.underwater.buildings[0][1]], ['🪸', J.WORLDS.underwater.buildings[1][1]], ['🫧', J.WORLDS.underwater.buildings[2][1]], ['⚓', J.WORLDS.underwater.buildings[3][1]], ['🏝️', J.WORLDS.underwater.buildings[4][1]], ['🏪', J.WORLDS.underwater.buildings[5][1]], ['🔱', J.WORLDS.underwater.buildings[6][1]], ['🗼', J.WORLDS.underwater.buildings[7][1]], ['🤿', J.WORLDS.underwater.buildings[8][1]]],
+    decor: [['🌿', J.WORLDS.underwater.decor[0][1]], ['🐚', J.WORLDS.underwater.decor[1][1]], ['🪼', J.WORLDS.underwater.decor[2][1]], ['🌊', J.WORLDS.underwater.decor[3][1]], ['🪨', J.WORLDS.underwater.decor[4][1]], ['💎', J.WORLDS.underwater.decor[5][1]], ['🧰', J.WORLDS.underwater.decor[6][1]], ['🫧', J.WORLDS.underwater.decor[7][1]]],
+    residents: [['🐠', J.WORLDS.underwater.residents[0][1]], ['🐙', J.WORLDS.underwater.residents[1][1]], ['🐬', J.WORLDS.underwater.residents[2][1]], ['🐢', J.WORLDS.underwater.residents[3][1]], ['🦀', J.WORLDS.underwater.residents[4][1]], ['🐳', J.WORLDS.underwater.residents[5][1]], ['🦈', J.WORLDS.underwater.residents[6][1]], ['🧜‍♀️', J.WORLDS.underwater.residents[7][1]], ['🦑', J.WORLDS.underwater.residents[8][1]], ['🐡', J.WORLDS.underwater.residents[9][1]]],
   },
   forest: {
-    name: 'Лісове містечко',
-    buildings: [['🍄', 'Грибна хатка'], ['🪵', 'Дровітня'], ['🛖', 'Курінь'], ['🌻', 'Квітник'], ['🐝', 'Пасіка'], ['🌉', 'Місток через струмок'], ['🏕️', 'Табір'], ['⛲', 'Лісове джерело'], ['🌳', 'Дуб-велетень']],
-    decor: [['🌼', 'Ромашки'], ['🌲', 'Ялинка'], ['🪨', 'Камінь'], ['🍓', 'Суничник'], ['🌳', 'Дерево'], ['🪺', 'Гніздо'], ['🦋', 'Метелики'], ['🔥', 'Вогнище']],
-    residents: [['🦊', 'Лисичка'], ['🐻', 'Ведмідь'], ['🦉', 'Сова'], ['🐿️', 'Білочка'], ['🦔', 'Їжачок'], ['🦌', 'Олень'], ['🐇', 'Зайчик'], ['🐺', 'Вовк'], ['🦡', 'Борсук'], ['🐝', 'Бджілка']],
+    name: J.WORLDS.forest.name,
+    buildings: [['🍄', J.WORLDS.forest.buildings[0][1]], ['🪵', J.WORLDS.forest.buildings[1][1]], ['🛖', J.WORLDS.forest.buildings[2][1]], ['🌻', J.WORLDS.forest.buildings[3][1]], ['🐝', J.WORLDS.forest.buildings[4][1]], ['🌉', J.WORLDS.forest.buildings[5][1]], ['🏕️', J.WORLDS.forest.buildings[6][1]], ['⛲', J.WORLDS.forest.buildings[7][1]], ['🌳', J.WORLDS.forest.buildings[8][1]]],
+    decor: [['🌼', J.WORLDS.forest.decor[0][1]], ['🌲', J.WORLDS.forest.decor[1][1]], ['🪨', J.WORLDS.forest.decor[2][1]], ['🍓', J.WORLDS.forest.decor[3][1]], ['🌳', J.WORLDS.forest.decor[4][1]], ['🪺', J.WORLDS.forest.decor[5][1]], ['🦋', J.WORLDS.forest.decor[6][1]], ['🔥', J.WORLDS.forest.decor[7][1]]],
+    residents: [['🦊', J.WORLDS.forest.residents[0][1]], ['🐻', J.WORLDS.forest.residents[1][1]], ['🦉', J.WORLDS.forest.residents[2][1]], ['🐿️', J.WORLDS.forest.residents[3][1]], ['🦔', J.WORLDS.forest.residents[4][1]], ['🦌', J.WORLDS.forest.residents[5][1]], ['🐇', J.WORLDS.forest.residents[6][1]], ['🐺', J.WORLDS.forest.residents[7][1]], ['🦡', J.WORLDS.forest.residents[8][1]], ['🐝', J.WORLDS.forest.residents[9][1]]],
   },
   lego: {
-    name: 'Місто з кубиків',
-    buildings: [['🧱', 'Перша стіна'], ['🏠', 'Будиночок'], ['🚒', 'Пожежна станція'], ['🚓', 'Поліцейський відділок'], ['🏪', 'Магазин'], ['🏥', 'Лікарня'], ['🚉', 'Вокзал'], ['🎢', 'Парк атракціонів'], ['🏙️', 'Хмарочоси']],
-    decor: [['🌼', 'Квітка з кубиків'], ['🚧', 'Паркан'], ['🌳', 'Деревце з кубиків'], ['🚦', 'Світлофор'], ['🚏', 'Зупинка'], ['🪑', 'Лавка'], ['⛲', 'Фонтан'], ['🎆', 'Салют']],
-    residents: [['👷', 'Будівельник'], ['👮', 'Поліцейський'], ['🧑‍🚒', 'Пожежник'], ['🧑‍⚕️', 'Лікарка'], ['🧑‍🍳', 'Кухар'], ['🧑‍🚀', 'Космонавт'], ['🤖', 'Робот'], ['🏴‍☠️', 'Пірат'], ['🤴', 'Лицар'], ['🐕', 'Песик']],
+    name: J.WORLDS.lego.name,
+    buildings: [['🧱', J.WORLDS.lego.buildings[0][1]], ['🏠', J.WORLDS.lego.buildings[1][1]], ['🚒', J.WORLDS.lego.buildings[2][1]], ['🚓', J.WORLDS.lego.buildings[3][1]], ['🏪', J.WORLDS.lego.buildings[4][1]], ['🏥', J.WORLDS.lego.buildings[5][1]], ['🚉', J.WORLDS.lego.buildings[6][1]], ['🎢', J.WORLDS.lego.buildings[7][1]], ['🏙️', J.WORLDS.lego.buildings[8][1]]],
+    decor: [['🌼', J.WORLDS.lego.decor[0][1]], ['🚧', J.WORLDS.lego.decor[1][1]], ['🌳', J.WORLDS.lego.decor[2][1]], ['🚦', J.WORLDS.lego.decor[3][1]], ['🚏', J.WORLDS.lego.decor[4][1]], ['🪑', J.WORLDS.lego.decor[5][1]], ['⛲', J.WORLDS.lego.decor[6][1]], ['🎆', J.WORLDS.lego.decor[7][1]]],
+    residents: [['👷', J.WORLDS.lego.residents[0][1]], ['👮', J.WORLDS.lego.residents[1][1]], ['🧑‍🚒', J.WORLDS.lego.residents[2][1]], ['🧑‍⚕️', J.WORLDS.lego.residents[3][1]], ['🧑‍🍳', J.WORLDS.lego.residents[4][1]], ['🧑‍🚀', J.WORLDS.lego.residents[5][1]], ['🤖', J.WORLDS.lego.residents[6][1]], ['🏴‍☠️', J.WORLDS.lego.residents[7][1]], ['🤴', J.WORLDS.lego.residents[8][1]], ['🐕', J.WORLDS.lego.residents[9][1]]],
   },
   frozen: {
-    name: 'Крижане королівство',
-    buildings: [['⛄', 'Сніговик'], ['🛷', 'Гірка'], ['🛖', 'Іглу'], ['⛸️', 'Ковзанка'], ['🧊', 'Крижана скульптура'], ['🎿', 'Лижна траса'], ['🌲', 'Зимовий ліс'], ['🏔️', 'Гірська вежа'], ['❄️', 'Фабрика сніжинок']],
-    decor: [['❄️', 'Велика сніжинка'], ['🌲', 'Засніжена ялинка'], ['☃️', 'Сніговичок'], ['🧣', 'Теплий шарф'], ['🔥', 'Багаття'], ['🎁', 'Подарунок'], ['🌟', 'Північне сяйво'], ['🎆', 'Салют']],
-    residents: [['🐧', 'Пінгвін'], ['🐻‍❄️', 'Білий ведмідь'], ['🦌', 'Північний олень'], ['🦭', 'Тюлень'], ['🦊', 'Песець'], ['🐺', 'Сніжний вовк'], ['🧝‍♀️', 'Крижана ельфійка'], ['🦉', 'Полярна сова'], ['🐇', 'Білий заєць'], ['⛄', 'Живий сніговик']],
+    name: J.WORLDS.frozen.name,
+    buildings: [['⛄', J.WORLDS.frozen.buildings[0][1]], ['🛷', J.WORLDS.frozen.buildings[1][1]], ['🛖', J.WORLDS.frozen.buildings[2][1]], ['⛸️', J.WORLDS.frozen.buildings[3][1]], ['🧊', J.WORLDS.frozen.buildings[4][1]], ['🎿', J.WORLDS.frozen.buildings[5][1]], ['🌲', J.WORLDS.frozen.buildings[6][1]], ['🏔️', J.WORLDS.frozen.buildings[7][1]], ['❄️', J.WORLDS.frozen.buildings[8][1]]],
+    decor: [['❄️', J.WORLDS.frozen.decor[0][1]], ['🌲', J.WORLDS.frozen.decor[1][1]], ['☃️', J.WORLDS.frozen.decor[2][1]], ['🧣', J.WORLDS.frozen.decor[3][1]], ['🔥', J.WORLDS.frozen.decor[4][1]], ['🎁', J.WORLDS.frozen.decor[5][1]], ['🌟', J.WORLDS.frozen.decor[6][1]], ['🎆', J.WORLDS.frozen.decor[7][1]]],
+    residents: [['🐧', J.WORLDS.frozen.residents[0][1]], ['🐻‍❄️', J.WORLDS.frozen.residents[1][1]], ['🦌', J.WORLDS.frozen.residents[2][1]], ['🦭', J.WORLDS.frozen.residents[3][1]], ['🦊', J.WORLDS.frozen.residents[4][1]], ['🐺', J.WORLDS.frozen.residents[5][1]], ['🧝‍♀️', J.WORLDS.frozen.residents[6][1]], ['🦉', J.WORLDS.frozen.residents[7][1]], ['🐇', J.WORLDS.frozen.residents[8][1]], ['⛄', J.WORLDS.frozen.residents[9][1]]],
   },
   minecraft: {
-    name: 'Світ блоків',
-    buildings: [['🟫', 'Землянка'], ['🛏️', 'Перший дім'], ['⛏️', 'Шахта'], ['🌾', 'Ферма'], ['⚒️', 'Кузня'], ['🐑', 'Загін для тварин'], ['🌉', 'Міст'], ['🗼', 'Вартова вежа'], ['🟪', 'Портал']],
-    decor: [['🌻', 'Соняшник'], ['🔥', 'Смолоскип'], ['🌳', 'Дуб'], ['🪵', 'Колода'], ['🌵', 'Кактус'], ['🎃', 'Гарбуз'], ['💧', 'Джерело'], ['🧨', 'Феєрверк']],
-    residents: [['🐷', 'Свинка'], ['🐑', 'Вівця'], ['🐔', 'Курка'], ['🐄', 'Корова'], ['🐺', 'Приручений вовк'], ['🐈', 'Кіт'], ['🐴', 'Кінь'], ['🧑‍🌾', 'Селянин'], ['🐝', 'Бджола'], ['🦜', 'Папуга']],
+    name: J.WORLDS.minecraft.name,
+    buildings: [['🟫', J.WORLDS.minecraft.buildings[0][1]], ['🛏️', J.WORLDS.minecraft.buildings[1][1]], ['⛏️', J.WORLDS.minecraft.buildings[2][1]], ['🌾', J.WORLDS.minecraft.buildings[3][1]], ['⚒️', J.WORLDS.minecraft.buildings[4][1]], ['🐑', J.WORLDS.minecraft.buildings[5][1]], ['🌉', J.WORLDS.minecraft.buildings[6][1]], ['🗼', J.WORLDS.minecraft.buildings[7][1]], ['🟪', J.WORLDS.minecraft.buildings[8][1]]],
+    decor: [['🌻', J.WORLDS.minecraft.decor[0][1]], ['🔥', J.WORLDS.minecraft.decor[1][1]], ['🌳', J.WORLDS.minecraft.decor[2][1]], ['🪵', J.WORLDS.minecraft.decor[3][1]], ['🌵', J.WORLDS.minecraft.decor[4][1]], ['🎃', J.WORLDS.minecraft.decor[5][1]], ['💧', J.WORLDS.minecraft.decor[6][1]], ['🧨', J.WORLDS.minecraft.decor[7][1]]],
+    residents: [['🐷', J.WORLDS.minecraft.residents[0][1]], ['🐑', J.WORLDS.minecraft.residents[1][1]], ['🐔', J.WORLDS.minecraft.residents[2][1]], ['🐄', J.WORLDS.minecraft.residents[3][1]], ['🐺', J.WORLDS.minecraft.residents[4][1]], ['🐈', J.WORLDS.minecraft.residents[5][1]], ['🐴', J.WORLDS.minecraft.residents[6][1]], ['🧑‍🌾', J.WORLDS.minecraft.residents[7][1]], ['🐝', J.WORLDS.minecraft.residents[8][1]], ['🦜', J.WORLDS.minecraft.residents[9][1]]],
   },
 };
 
@@ -89,16 +92,16 @@ const WORLDS: Record<ThemeId, ThemeWorldDef> = {
  */
 // prettier-ignore
 const VISITORS: [string, string][] = [
-  ['🐶', 'Песик'], ['🐱', 'Кошеня'], ['🐹', 'Хом’ячок'], ['🐰', 'Кролик'], ['🦜', 'Папуга'], ['🐢', 'Черепаха'],
-  ['🦔', 'Їжачок'], ['🐿️', 'Білочка'], ['🦊', 'Лисичка'], ['🐼', 'Панда'], ['🐨', 'Коала'], ['🦁', 'Лев'],
-  ['🐯', 'Тигр'], ['🐘', 'Слон'], ['🦒', 'Жирафа'], ['🦓', 'Зебра'], ['🦘', 'Кенгуру'], ['🐵', 'Мавпочка'],
-  ['🦥', 'Лінивець'], ['🦦', 'Видра'], ['🦫', 'Бобер'], ['🐧', 'Пінгвін'], ['🦩', 'Фламінго'], ['🦚', 'Павич'],
-  ['🦢', 'Лебідь'], ['🦆', 'Качка'], ['🐓', 'Півник'], ['🦉', 'Сова'], ['🦅', 'Орел'], ['🐬', 'Дельфін'],
-  ['🐳', 'Кит'], ['🐙', 'Восьминіг'], ['🦀', 'Краб'], ['🐠', 'Рибка'], ['🦈', 'Акула'], ['🐸', 'Жабка'],
-  ['🦎', 'Ящірка'], ['🐝', 'Бджілка'], ['🦋', 'Метелик'], ['🐞', 'Сонечко'], ['🐌', 'Равлик'], ['🦖', 'Динозаврик'],
-  ['🧑‍🌾', 'Садівниця'], ['🧑‍🍳', 'Кухар'], ['🧑‍🎨', 'Художниця'], ['🧑‍🚒', 'Пожежник'], ['🧑‍⚕️', 'Лікарка'], ['🧑‍🏫', 'Учитель'],
-  ['🧑‍🔧', 'Майстер'], ['🧑‍✈️', 'Пілот'], ['🧑‍🔬', 'Науковиця'], ['🧑‍🎤', 'Співачка'], ['🤹', 'Жонглер'], ['🧙', 'Чарівник'],
-  ['🧚', 'Фея'], ['🧜‍♀️', 'Русалка'], ['🦸', 'Супергероїня'], ['🤖', 'Робот-помічник'], ['👽', 'Гість із космосу'], ['🐉', 'Дракончик'],
+  ['🐶', J.VISITORS[0][1]], ['🐱', J.VISITORS[1][1]], ['🐹', J.VISITORS[2][1]], ['🐰', J.VISITORS[3][1]], ['🦜', J.VISITORS[4][1]], ['🐢', J.VISITORS[5][1]],
+  ['🦔', J.VISITORS[6][1]], ['🐿️', J.VISITORS[7][1]], ['🦊', J.VISITORS[8][1]], ['🐼', J.VISITORS[9][1]], ['🐨', J.VISITORS[10][1]], ['🦁', J.VISITORS[11][1]],
+  ['🐯', J.VISITORS[12][1]], ['🐘', J.VISITORS[13][1]], ['🦒', J.VISITORS[14][1]], ['🦓', J.VISITORS[15][1]], ['🦘', J.VISITORS[16][1]], ['🐵', J.VISITORS[17][1]],
+  ['🦥', J.VISITORS[18][1]], ['🦦', J.VISITORS[19][1]], ['🦫', J.VISITORS[20][1]], ['🐧', J.VISITORS[21][1]], ['🦩', J.VISITORS[22][1]], ['🦚', J.VISITORS[23][1]],
+  ['🦢', J.VISITORS[24][1]], ['🦆', J.VISITORS[25][1]], ['🐓', J.VISITORS[26][1]], ['🦉', J.VISITORS[27][1]], ['🦅', J.VISITORS[28][1]], ['🐬', J.VISITORS[29][1]],
+  ['🐳', J.VISITORS[30][1]], ['🐙', J.VISITORS[31][1]], ['🦀', J.VISITORS[32][1]], ['🐠', J.VISITORS[33][1]], ['🦈', J.VISITORS[34][1]], ['🐸', J.VISITORS[35][1]],
+  ['🦎', J.VISITORS[36][1]], ['🐝', J.VISITORS[37][1]], ['🦋', J.VISITORS[38][1]], ['🐞', J.VISITORS[39][1]], ['🐌', J.VISITORS[40][1]], ['🦖', J.VISITORS[41][1]],
+  ['🧑‍🌾', J.VISITORS[42][1]], ['🧑‍🍳', J.VISITORS[43][1]], ['🧑‍🎨', J.VISITORS[44][1]], ['🧑‍🚒', J.VISITORS[45][1]], ['🧑‍⚕️', J.VISITORS[46][1]], ['🧑‍🏫', J.VISITORS[47][1]],
+  ['🧑‍🔧', J.VISITORS[48][1]], ['🧑‍✈️', J.VISITORS[49][1]], ['🧑‍🔬', J.VISITORS[50][1]], ['🧑‍🎤', J.VISITORS[51][1]], ['🤹', J.VISITORS[52][1]], ['🧙', J.VISITORS[53][1]],
+  ['🧚', J.VISITORS[54][1]], ['🧜‍♀️', J.VISITORS[55][1]], ['🦸', J.VISITORS[56][1]], ['🤖', J.VISITORS[57][1]], ['👽', J.VISITORS[58][1]], ['🐉', J.VISITORS[59][1]],
 ];
 
 export interface ThemeWorld {
@@ -121,7 +124,7 @@ export function themeWorld(theme: Theme, planet = 1, lang?: LangCode): ThemeWorl
     const id = itemId(kind, index);
     return { id, name: names?.[index] ?? name, emoji, kind, cost: itemCost(id, planet) };
   };
-  const spaceport: ShopItem = { id: SPACEPORT_ID, name: words?.spaceport ?? 'Космопорт', emoji: '🚀', kind: 'building', cost: itemCost(SPACEPORT_ID, planet) };
+  const spaceport: ShopItem = { id: SPACEPORT_ID, name: words?.spaceport ?? J.themeWorld.spaceport.name, emoji: '🚀', kind: 'building', cost: itemCost(SPACEPORT_ID, planet) };
   const dream: ShopItem = { id: DREAM_ID, name: theme.dreamBuild.name, emoji: theme.dreamBuild.emoji, kind: 'building', cost: itemCost(DREAM_ID, planet) };
   // The theme's own residents first, then the guests of every world — each with the name of its own list.
   const residents: [emoji: string, name: string][] = [

@@ -1,0 +1,1060 @@
+{
+  "riddles": {
+    "list": "and",
+    "BOYS": [
+      "Tom",
+      "Mark",
+      "Oscar",
+      "Nate",
+      "Daniel",
+      "Max",
+      "Andrew",
+      "Victor"
+    ],
+    "GIRLS": [
+      "Olivia",
+      "Sophie",
+      "Zoe",
+      "Lucy",
+      "Mary",
+      "Stella",
+      "Hannah",
+      "Daria"
+    ],
+    "ORDINALS": [
+      "",
+      "first",
+      "second",
+      "third",
+      "fourth",
+      "fifth",
+      "sixth",
+      "seventh",
+      "eighth",
+      "ninth",
+      "tenth",
+      "eleventh",
+      "twelfth",
+      "thirteenth",
+      "fourteenth",
+      "fifteenth"
+    ],
+    "ordinal": {
+      "1": "st",
+      "2": "nd",
+      "3": "rd",
+      "4": "th"
+    },
+    "ONE_OF": {
+      "0": {
+        "0": "In the box there is",
+        "1": "What is in the box?",
+        "2": [
+          "a ball",
+          "a doll",
+          "a block",
+          "a toy car"
+        ]
+      },
+      "1": {
+        "0": "In the basket there is",
+        "1": "What is in the basket?",
+        "2": [
+          "an apple",
+          "a pear",
+          "a banana",
+          "a lemon"
+        ]
+      },
+      "2": {
+        "0": "Hiding in the doghouse is",
+        "1": "Who is hiding in the doghouse?",
+        "2": [
+          "a cat",
+          "a dog",
+          "a hedgehog",
+          "a rabbit"
+        ]
+      },
+      "3": {
+        "0": "On the plate there is",
+        "1": "What is on the plate?",
+        "2": [
+          "a croissant",
+          "a dumpling",
+          "a pancake",
+          "a bagel"
+        ]
+      },
+      "4": {
+        "0": "In the pencil case there is",
+        "1": "What is in the pencil case?",
+        "2": [
+          "a pencil",
+          "a pen",
+          "a paintbrush",
+          "a ruler"
+        ]
+      },
+      "5": {
+        "0": "Standing behind the door is",
+        "1": "Who is standing behind the door?",
+        "2": [
+          "Dad",
+          "Mom",
+          "Grandpa",
+          "Grandma"
+        ]
+      },
+      "6": {
+        "0": "Hanging in the closet is",
+        "1": "What is hanging in the closet?",
+        "2": [
+          "a jacket",
+          "a dress",
+          "a shirt",
+          "a scarf"
+        ]
+      },
+      "7": {
+        "0": "In the garage there is",
+        "1": "What is in the garage?",
+        "2": [
+          "a bicycle",
+          "a scooter",
+          "a motorcycle",
+          "a tractor"
+        ]
+      },
+      "8": {
+        "0": "Sitting on the branch is",
+        "1": "Who is sitting on the branch?",
+        "2": [
+          "an owl",
+          "a parrot",
+          "a squirrel",
+          "a crow"
+        ]
+      },
+      "9": {
+        "0": "In the present there is",
+        "1": "What is in the present?",
+        "2": [
+          "a book",
+          "a robot",
+          "a puzzle",
+          "a teddy bear"
+        ]
+      }
+    },
+    "ROWS_OF_THREE": {
+      "0": {
+        "0": "is sitting",
+        "1": "Who",
+        "2": [
+          "cat",
+          "dog",
+          "mouse"
+        ]
+      },
+      "1": {
+        "0": "is standing",
+        "1": "Who",
+        "2": [
+          "elephant",
+          "giraffe",
+          "zebra"
+        ]
+      },
+      "2": {
+        "0": "is sitting",
+        "1": "Who",
+        "2": [
+          "owl",
+          "parrot",
+          "dove"
+        ]
+      },
+      "3": {
+        "0": "is swimming",
+        "1": "Who",
+        "2": [
+          "duck",
+          "swan",
+          "frog"
+        ]
+      },
+      "4": {
+        "0": "is lying",
+        "1": "Who",
+        "2": [
+          "lion",
+          "tiger",
+          "bear"
+        ]
+      },
+      "5": {
+        "0": "is standing",
+        "1": "Who",
+        "2": [
+          "cow",
+          "horse",
+          "sheep"
+        ]
+      },
+      "6": {
+        "0": "is sitting",
+        "1": "Who",
+        "2": [
+          "hedgehog",
+          "squirrel",
+          "hare"
+        ]
+      },
+      "7": {
+        "0": "is standing",
+        "1": "What",
+        "2": [
+          "robot",
+          "doll",
+          "teddy bear"
+        ]
+      },
+      "8": {
+        "0": "is growing",
+        "1": "What",
+        "2": [
+          "oak",
+          "fir tree",
+          "palm tree"
+        ]
+      },
+      "9": {
+        "0": "is standing",
+        "1": "What",
+        "2": [
+          "bus",
+          "streetcar",
+          "truck"
+        ]
+      }
+    },
+    "COMPARE": {
+      "0": {
+        "0": "taller",
+        "1": "the tallest",
+        "2": "the shortest"
+      },
+      "1": {
+        "0": "older",
+        "1": "the oldest",
+        "2": "the youngest"
+      },
+      "2": {
+        "0": "stronger",
+        "1": "the strongest",
+        "2": "the weakest"
+      },
+      "3": {
+        "0": "faster",
+        "1": "the fastest",
+        "2": "the slowest"
+      },
+      "4": {
+        "0": "heavier",
+        "1": "the heaviest",
+        "2": "the lightest"
+      },
+      "5": {
+        "0": "more cheerful",
+        "1": "the most cheerful",
+        "2": "the saddest"
+      },
+      "6": {
+        "0": "more nimble",
+        "1": "the most nimble",
+        "2": "the least nimble"
+      },
+      "7": {
+        "0": "braver",
+        "1": "the bravest",
+        "2": "the least brave"
+      },
+      "8": {
+        "0": "more patient",
+        "1": "the most patient",
+        "2": "the least patient"
+      },
+      "9": {
+        "0": "more careful",
+        "1": "the most careful",
+        "2": "the least careful"
+      }
+    },
+    "rule": {
+      "1": "{by} is added every time",
+      "2": "{by} is taken away every time",
+      "3": "first {by} is added, then {then} — in turn",
+      "4": "every number is twice as big as the one before",
+      "5": "every number is three times as big as the one before",
+      "6": "every number is half of the one before",
+      "7": "first 1 is added, then 2, then 3, and after that — 4",
+      "8": "first 1 is taken away, then 2, then 3, and after that — 4",
+      "9": "two rows are woven together here — look at every other number"
+    },
+    "QUEUES": {
+      "0": "Mark is standing in line for ice cream. There are {a} people in front of him and {b} behind him. How many people are in the line altogether?",
+      "1": "Olivia is standing in a row in gym class. There are {a} children in front of her and {b} behind her. How many children are in the row altogether?",
+      "2": "A red car is part of a train. There are {a} cars in front of it and {b} behind it. How many cars does the train have altogether?",
+      "3": "A blue car is stuck in a traffic jam. There are {a} cars in front of it and {b} behind it. How many cars are in the traffic jam altogether?",
+      "4": "Lucy is standing in line at the checkout. There are {a} people in front of her and {b} behind her. How many people are in the line altogether?",
+      "5": "In the line for tickets Tom is {a} from the front and {b} from the back. How many people are in the line altogether?",
+      "6": "In the row Nate is {a} from the front and {b} from the back. How many children are in the row altogether?",
+      "7": "In the row of books on the shelf the dictionary is {a} from the front and {b} from the back. How many books are in the row altogether?",
+      "8": "In the train the dining car is {a} from the front and {b} from the back. How many cars does the train have altogether?",
+      "9": "In the column of ants the biggest ant is {a} from the front and {b} from the back. How many ants are in the column altogether?"
+    },
+    "LEGS": {
+      "0": {
+        "0": "There are {a} hens and {b} dogs walking in the yard. How many legs do they have altogether?",
+        "1": "Hens",
+        "3": "Dogs"
+      },
+      "1": {
+        "0": "There are {a} geese and {b} cows grazing in the meadow. How many legs do they have altogether?",
+        "1": "Geese",
+        "3": "Cows"
+      },
+      "2": {
+        "0": "There are {a} roosters and {b} horses standing in the farmyard. How many legs do they have altogether?",
+        "1": "Roosters",
+        "3": "Horses"
+      },
+      "3": {
+        "0": "There are {a} pigeons and {b} cats sitting by the house. How many legs and paws do they have altogether?",
+        "1": "Pigeons",
+        "3": "Cats"
+      },
+      "4": {
+        "0": "{a} ducks and {b} sheep have met in the clearing. How many legs do they have altogether?",
+        "1": "Ducks",
+        "3": "Sheep"
+      },
+      "5": {
+        "0": "There are {a} bicycles and {b} cars in the parking lot. How many wheels do they have altogether?",
+        "1": "Bicycles",
+        "3": "Cars"
+      },
+      "6": {
+        "0": "There are {a} scooters and {b} tricycles standing in the yard. How many wheels do they have altogether?",
+        "1": "Scooters",
+        "3": "Tricycles"
+      },
+      "7": {
+        "0": "There are {a} stools with three legs and {b} chairs with four standing in the room. How many legs do they have altogether?",
+        "1": "Stools",
+        "3": "Chairs"
+      },
+      "8": {
+        "0": "There are {a} beetles and {b} little birds sitting on a flower. How many legs do they have altogether?",
+        "1": "Beetles",
+        "3": "Birds"
+      },
+      "9": {
+        "0": "{a} spiders and {b} flies have gathered in a corner. How many legs do they have altogether?",
+        "1": "Spiders",
+        "3": "Flies"
+      }
+    },
+    "DAYS": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "DAY_ASKS": {
+      "0": {
+        "0": "Today is {d}.",
+        "1": "What day of the week will it be tomorrow?",
+        "2": "today"
+      },
+      "1": {
+        "0": "Today is {d}.",
+        "1": "What day of the week was it yesterday?",
+        "2": "today"
+      },
+      "2": {
+        "0": "Today is {d}.",
+        "1": "What day of the week will it be the day after tomorrow?",
+        "2": "today"
+      },
+      "3": {
+        "0": "Today is {d}.",
+        "1": "What day of the week was it the day before yesterday?",
+        "2": "today"
+      },
+      "4": {
+        "0": "Today is {d}.",
+        "1": "What day of the week will it be in three days?",
+        "2": "today"
+      },
+      "5": {
+        "0": "Today is {d}.",
+        "1": "What day of the week will it be in five days?",
+        "2": "today"
+      },
+      "6": {
+        "0": "Tomorrow will be {d}.",
+        "1": "What day of the week was it yesterday?",
+        "2": "tomorrow"
+      },
+      "7": {
+        "0": "Yesterday was {d}.",
+        "1": "What day of the week will it be tomorrow?",
+        "2": "yesterday"
+      },
+      "8": {
+        "0": "The day before yesterday was {d}.",
+        "1": "What day of the week is it today?",
+        "2": "two days ago"
+      },
+      "9": {
+        "0": "The day after tomorrow will be {d}.",
+        "1": "What day of the week is it today?",
+        "2": "in two days"
+      }
+    },
+    "CUTS": {
+      "0": {
+        "0": "A log was sawn into {n} parts. How many cuts were made?"
+      },
+      "1": {
+        "0": "A rope was cut into {n} pieces. How many cuts were made?"
+      },
+      "2": {
+        "0": "A baguette was cut into {n} pieces. How many cuts were made?"
+      },
+      "3": {
+        "0": "A ribbon was cut into {n} parts. How many cuts were made?"
+      },
+      "4": {
+        "0": "{n} trees were planted in one row along a path. How many gaps are there between them?"
+      },
+      "5": {
+        "0": "{n} cuts were made in a board. How many parts did the board fall into?"
+      },
+      "6": {
+        "0": "{n} cuts were made in a sausage. How many pieces came out?"
+      },
+      "7": {
+        "0": "{n} cuts were made in a wire. How many pieces of wire came out?"
+      },
+      "8": {
+        "0": "A chocolate bar was broken in {n} places. How many pieces came out?"
+      },
+      "9": {
+        "0": "There are {n} gaps between the posts of a fence. How many posts does the fence have?"
+      }
+    },
+    "REPEATS": {
+      "0": {
+        "0": "The beads on the string go like this",
+        "1": "bead",
+        "2": [
+          "red",
+          "blue",
+          "yellow"
+        ]
+      },
+      "1": {
+        "0": "The flags on the garland hang like this",
+        "1": "flag",
+        "2": [
+          "green",
+          "yellow",
+          "blue"
+        ]
+      },
+      "2": {
+        "0": "The balloons at the party hang like this",
+        "1": "balloon",
+        "2": [
+          "red",
+          "white",
+          "blue"
+        ]
+      },
+      "3": {
+        "0": "The tiles on the floor lie like this",
+        "1": "tile",
+        "2": [
+          "black",
+          "white",
+          "gray"
+        ]
+      },
+      "4": {
+        "0": "The blocks in the tower stand like this",
+        "1": "block",
+        "2": [
+          "yellow",
+          "red",
+          "green"
+        ]
+      },
+      "5": {
+        "0": "The lights on the Christmas tree shine like this",
+        "1": "light",
+        "2": [
+          "blue",
+          "yellow",
+          "red"
+        ]
+      },
+      "6": {
+        "0": "The flowers in the flower bed grow like this",
+        "1": "flower",
+        "2": [
+          "white",
+          "yellow",
+          "purple"
+        ]
+      },
+      "7": {
+        "0": "The cars of the toy train go like this",
+        "1": "car",
+        "2": [
+          "green",
+          "blue",
+          "orange"
+        ]
+      },
+      "8": {
+        "0": "The stripes on the scarf go like this",
+        "1": "stripe",
+        "2": [
+          "red",
+          "yellow",
+          "green"
+        ]
+      },
+      "9": {
+        "0": "The buttons on the ribbon are sewn like this",
+        "1": "button",
+        "2": [
+          "black",
+          "red",
+          "white"
+        ]
+      }
+    },
+    "RACES": [
+      "reached the finish line",
+      "woke up",
+      "got to school",
+      "finished his drawing",
+      "finished breakfast",
+      "put the puzzle together",
+      "swam to the shore",
+      "climbed the slide",
+      "solved the problem",
+      "went to bed"
+    ],
+    "HAVE": [
+      "apples",
+      "stickers",
+      "nuts",
+      "balloons",
+      "pencils",
+      "candies",
+      "shells",
+      "stamps",
+      "blocks",
+      "coins"
+    ],
+    "OWNERS": {
+      "0": {
+        "0": "have pets",
+        "1": "pet",
+        "2": [
+          "a cat",
+          "a dog",
+          "a parrot"
+        ],
+        "3": [
+          "the cat",
+          "the dog",
+          "the parrot"
+        ]
+      },
+      "1": {
+        "0": "are eating fruit",
+        "1": "fruit",
+        "2": [
+          "an apple",
+          "a pear",
+          "a banana"
+        ],
+        "3": [
+          "the apple",
+          "the pear",
+          "the banana"
+        ]
+      },
+      "2": {
+        "0": "do sports",
+        "1": "sport",
+        "2": [
+          "soccer",
+          "swimming",
+          "tennis"
+        ],
+        "3": [
+          "soccer",
+          "swimming",
+          "tennis"
+        ]
+      },
+      "3": {
+        "0": "play instruments",
+        "1": "instrument",
+        "2": [
+          "a violin",
+          "a drum",
+          "a guitar"
+        ],
+        "3": [
+          "the violin",
+          "the drum",
+          "the guitar"
+        ]
+      },
+      "4": {
+        "0": "got presents",
+        "1": "present",
+        "2": [
+          "a book",
+          "a robot",
+          "a puzzle"
+        ],
+        "3": [
+          "the book",
+          "the robot",
+          "the puzzle"
+        ]
+      },
+      "5": {
+        "0": "came to school",
+        "1": "ride",
+        "2": [
+          "a bicycle",
+          "a scooter",
+          "a bus"
+        ],
+        "3": [
+          "the bicycle",
+          "the scooter",
+          "the bus"
+        ]
+      },
+      "6": {
+        "0": "put on hats",
+        "1": "hat",
+        "2": [
+          "a red one",
+          "a blue one",
+          "a green one"
+        ],
+        "3": [
+          "red",
+          "blue",
+          "green"
+        ],
+        "4": "What color is {kid}’s hat?"
+      },
+      "7": {
+        "0": "are drawing",
+        "1": "drawing",
+        "2": [
+          "a house",
+          "a tree",
+          "a ship"
+        ],
+        "3": [
+          "the house",
+          "the tree",
+          "the ship"
+        ]
+      },
+      "8": {
+        "0": "ordered drinks",
+        "1": "drink",
+        "2": [
+          "juice",
+          "tea",
+          "milk"
+        ],
+        "3": [
+          "juice",
+          "tea",
+          "milk"
+        ]
+      },
+      "9": {
+        "0": "chose ice cream",
+        "1": "ice cream",
+        "2": [
+          "chocolate",
+          "strawberry",
+          "vanilla"
+        ],
+        "3": [
+          "chocolate",
+          "strawberry",
+          "vanilla"
+        ]
+      }
+    },
+    "MEETINGS": {
+      "0": {
+        "0": "friends",
+        "1": "met, and each shook hands with each of the others",
+        "2": "How many handshakes were there?"
+      },
+      "1": {
+        "0": "teams",
+        "1": "played one another: each with each, one time",
+        "2": "How many games were there?"
+      },
+      "2": {
+        "0": "towns",
+        "1": "were joined by roads: between every two towns there is a road of its own",
+        "2": "How many roads were built?"
+      },
+      "3": {
+        "0": "girls",
+        "1": "gave one another cards: each one to each of the others",
+        "2": "How many cards were given?"
+      },
+      "4": {
+        "0": "chess players",
+        "1": "played one another: each with each, one game",
+        "2": "How many games were there?"
+      }
+    },
+    "COUNT": [
+      "Three",
+      "Four",
+      "Five",
+      "Six"
+    ],
+    "note": {
+      "mark": "Mark",
+      "sister": "sister",
+      "brother": "brother",
+      "olia": "Olivia",
+      "now": "now",
+      "later": "later",
+      "then": "then",
+      "son": "Son",
+      "mum": "Mom",
+      "olderSister": "Sister",
+      "thought": "my number",
+      "tens": "tens",
+      "ones": "ones"
+    },
+    "oneOf": {
+      "tell": {
+        "text": {
+          "1": "{lead} {set}. It is {out}. {ask}",
+          "2": "or",
+          "3": "not {things}"
+        },
+        "how": "Cross out what is not there: {out}. Only one is left."
+      }
+    },
+    "row": {
+      "ends": {
+        "0": "left",
+        "1": "right"
+      },
+      "tell": {
+        "text": {
+          "1": "The {three} {verb} to the left of the {three2}, and the {three3} is to the right of the {three2}.",
+          "2": "The {three} {verb} to the right of the {three2}, and the {three3} is to the left of the {three2}.",
+          "3": [
+            "in the middle",
+            "on the far left",
+            "on the far right"
+          ]
+        },
+        "how": "Line them up in your mind: on the left — the {three}, then the {three2}, on the right — the {three3}."
+      }
+    },
+    "chain": {
+      "tell": {
+        "links": "{names} is {more} than {names2}",
+        "text": "{told}, and {told2}. Who is {low}?",
+        "how": "Line them up: {row}. The first name is {top}, the last is {bottom}."
+      }
+    },
+    "next": {
+      "text": "Which number comes next? {row}, …",
+      "how": "Work out the rule: {r}."
+    },
+    "queue": {
+      "ends": {
+        "0": "in front",
+        "1": "behind"
+      },
+      "tell": {
+        "how": {
+          "1": "There are {a} in front and {b} behind. Add them and don’t forget the one in between: count that one once, not twice.",
+          "2": "Add those in front and those behind: {a} and {b}. And don’t forget to count one more — the one the riddle is about."
+        }
+      }
+    },
+    "legs": {
+      "tell": {
+        "how": "Count them separately: {a} times {legs} and {b} times {legsToo}. Then add."
+      }
+    },
+    "days": {
+      "tell": {
+        "how": "Say the days in order: {x}. First find what day it is today, and then count to the one you need."
+      }
+    },
+    "cuts": {
+      "tell": {
+        "how": {
+          "1": "Try it small: to get two pieces you need one cut, and to get three — two cuts. It is the same with trees and the gaps between them. {skin}",
+          "2": "Here the answer is one less.",
+          "3": "Here the answer is one more."
+        }
+      }
+    },
+    "repeats": {
+      "tell": {
+        "text": "{lead}: {unit} — and so on. What color will the {place} {thing} be?",
+        "how": "The colors repeat every {length}. Count around: {unit} — and again from the start, up to the place you need."
+      }
+    },
+    "race": {
+      "ends": {
+        "0": "earlier",
+        "1": "later"
+      },
+      "tell": {
+        "tells": {
+          "0": "{second} {did} earlier than {third} but later than {first}",
+          "1": "{second} {did} later than {first} but earlier than {third}",
+          "2": "{first} {did} earlier than {second}, and {third} — later than {second}"
+        },
+        "text": {
+          "1": "{tells}. Who {did} {last}?",
+          "2": "last",
+          "3": "first"
+        },
+        "how": "Put them in order of time: first {first}, then {second}, last of all {third}."
+      }
+    },
+    "more": {
+      "names": {
+        "0": "Lucy",
+        "1": "Tom",
+        "2": "Olivia"
+      },
+      "tell": {
+        "text": {
+          "1": "Lucy has {c} {many}. Tom has {b} fewer than Lucy, and Olivia has {a} fewer than Tom. How many {many} does Olivia have?",
+          "2": "Lucy has {c} {many}. Tom has {b} more than Lucy, and Olivia has {a} more than Tom. How many {many} does Olivia have?"
+        },
+        "how": "Go along the chain: first find out how many Tom has, and then how many Olivia has."
+      }
+    },
+    "family": {
+      "0": {
+        "text": {
+          "1": "Mark has {a} {a2} and {b} {b2}. How many children are there in this family altogether?",
+          "2": "sister",
+          "3": "sisters",
+          "4": "brother",
+          "5": "brothers"
+        },
+        "how": "Count the sisters, the brothers — and don’t forget Mark himself."
+      },
+      "1": {
+        "text": "There are {a} brothers in a family. Each of them has one sister. How many children are there in the family altogether?",
+        "how": "All the brothers have one and the same sister. Count the brothers and add her alone."
+      },
+      "2": {
+        "text": "There are {a} sisters in a family. Each of them has one brother. How many children are there in the family altogether?",
+        "how": "All the sisters have one and the same brother. Count the sisters and add him alone."
+      },
+      "3": {
+        "text": "Olivia has as many brothers as sisters: {a} of each. How many children are there in this family altogether?",
+        "how": "Count the brothers, just as many sisters — and don’t forget Olivia herself."
+      },
+      "4": {
+        "text": "Grandma has {a} daughters. Each daughter has two children. How many grandchildren does Grandma have?",
+        "how": "Each daughter has two children. Count by twos as many times as there are daughters."
+      }
+    },
+    "ages": {
+      "0": {
+        "text": "Olivia is {a} years old. Her brother is {d} years older. How old is her brother?",
+        "how": "“Older” means more years. Add."
+      },
+      "1": {
+        "text": "In {d} years Mark will be {a} years old. How old is Mark now?",
+        "how": "Now he is younger than he will be later. Take away the years that have not passed yet."
+      },
+      "2": {
+        "text": "The sister is twice as old as Olivia. Olivia is {a} years old. How old is the sister?",
+        "how": "“Twice as old” means two times as many."
+      },
+      "3": {
+        "text": {
+          "1": "{d} years ago Daniel was {a} years old. How old will he be in {e} {e2}?",
+          "2": "Two",
+          "3": "Three",
+          "4": "year",
+          "5": "years"
+        },
+        "how": "First find out how old he is now, and then add the years that are still to pass."
+      },
+      "4": {
+        "text": "Mom is {d} years old, and her son is {a}. How old was Mom when her son was born?",
+        "how": "When the son was born, Mom was younger by exactly as many years as the son is now. Take away."
+      }
+    },
+    "hidden": {
+      "0": {
+        "text": "I am thinking of a number. It is bigger than {a} but smaller than {b}, and it is even — it can be divided by two. What is the number?",
+        "how": "Say all the numbers between {a} and {b}. The even one among them is the one that can be divided by two."
+      },
+      "1": {
+        "text": "I am thinking of a number. It is bigger than {a} but smaller than {b}, and it is odd. What is the number?",
+        "how": "Say all the numbers between {a} and {b}. The odd one is the one that cannot be divided by two evenly."
+      },
+      "2": {
+        "text": "I am thinking of a number. It is bigger than {a} but smaller than {b}, and it can be divided by five. What is the number?",
+        "how": "Numbers that can be divided by five end in zero or in five."
+      },
+      "3": {
+        "text": "In a two-digit number the tens digit is {a}, and the ones digit is {b} bigger. What is the number?",
+        "how": "First find the ones digit: add {b} to {a}. Then write the two digits side by side."
+      },
+      "4": {
+        "text": "I thought of a number, added {b} to it and got as much as {a} and {a} more. What number did I think of?",
+        "how": "First work out how much came out: {a} and {a} more. Then take away {b}."
+      }
+    },
+    "owners": {
+      "tell": {
+        "not": {
+          "1": "{kid}’s {kind} is {things}.",
+          "2": "not {named}",
+          "3": " and "
+        },
+        "text": {
+          "1": "{kids} {does}. Each has his own: {listed}. {kids2}{hard} {ask}",
+          "2": "What is {asked}’s {kind}?"
+        },
+        "how": {
+          "1": "First find {kids}’s {kind}: only one is left. Then look at what {kids2}’s {kind} is not — and you will find out what is left for {kids3}.",
+          "2": "Cross out what is surely not there. Only one is left."
+        }
+      }
+    },
+    "meetings": {
+      "tell": {
+        "how": {
+          "1": "Each girl gives a card to everyone but herself. Count how many one girl gives, and multiply by the number of girls.",
+          "2": "The first meets all the others, the second — all but the first, and so on. Add: {length}."
+        }
+      }
+    }
+  },
+  "UNIT_SIZE": [
+    "",
+    "",
+    "two",
+    "three",
+    "four"
+  ],
+  "cards": {
+    "title": "Logic",
+    "games": {
+      "patterns": {
+        "label": "Rhythm and Patterns",
+        "blurb": "Work out the rule and carry the pattern on",
+        "intro": "The pictures stand in a row by a rule, and they repeat. Work out the rule and say what should stand in place of the question mark!"
+      },
+      "shadows": {
+        "label": "Shadow Lotto",
+        "blurb": "Find the shadow of each picture",
+        "intro": "Every thing has a shadow — a black outline of the very same shape. Drag each picture onto its shadow!"
+      },
+      "mirror": {
+        "label": "The Mirror",
+        "blurb": "Finish the other half — as in a mirror",
+        "intro": "Only the left half of a picture is drawn here. The right half must be the same, only mirrored. Find it!"
+      },
+      "riddles": {
+        "label": "Logic Riddles",
+        "blurb": "Little stories where you have to think, not count",
+        "intro": "Listen to a short story and think. There is no need to count for long here — you have to work it out! If you need to, tap the speaker and I will read the riddle again."
+      }
+    }
+  },
+  "introFor": {
+    "patterns": {
+      "1": "Now the question mark stands in the middle of the row. Look at what repeats before it and after it.",
+      "2": "The patterns are getting longer: now three different pictures repeat.",
+      "3": "Careful: now pictures can stand in pairs — two of the same in a row."
+    },
+    "shadows": {
+      "1": "Now the things on the board are of one kind — their shadows look more alike. Watch the little details!",
+      "2": "Now the shadows come in pairs: two that look very alike, and two more that look very alike. Don’t mix them up!",
+      "3": "The hardest part: all the shadows are almost the same, like those of a dog, a wolf and a fox. Look very carefully!"
+    },
+    "mirror": {
+      "1": "And now the halves of real pictures: a butterfly, a heart, a fir tree. Find the other half!",
+      "2": "Now the halves look very much alike: they differ by one or two squares. Check each one!"
+    },
+    "riddles": {
+      "1": "Now we look for the rule: by what law do the numbers go? And we learn not to forget to count the one the story is about.",
+      "2": "New riddles — about the days of the week, about cuts and pieces, and about what repeats in a circle.",
+      "3": "Now the answer takes two steps: first find out one thing, and then the other.",
+      "4": "The hardest of all: several clues at once. Cross out what cannot be — and the answer is left."
+    }
+  },
+  "patterns": {
+    "prompt": "Which picture should stand in place of the question mark?",
+    "hint": "Say the pictures out loud in order. A piece of {unit} pictures repeats here."
+  },
+  "shadows": {
+    "prompt": "Find the shadow of each picture.",
+    "hint": "Look closely at the outlines: ears, a tail, wheels. A shadow has the same shape as the picture."
+  },
+  "mirror": {
+    "prompt": "This is the left half of a picture. Find the right one — just as in a mirror.",
+    "hint": "Imagine a mirror in the middle. A square that stands next to the mirror on the left will stand next to it on the right too.",
+    "figures": [
+      "Butterfly",
+      "Heart",
+      "Fir tree",
+      "House",
+      "Rocket",
+      "Mushroom",
+      "Trophy",
+      "Crown",
+      "Robot",
+      "Key"
+    ]
+  }
+}

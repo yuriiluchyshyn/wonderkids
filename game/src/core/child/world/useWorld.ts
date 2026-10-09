@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
-import { useGameLang } from '@/core/i18n';
-import type { LangCode } from '@/core/lang';
+import { useGameLang } from '@/core/translator';
+import type { LangCode } from '@/core/language';
 import { themeWorld, type ThemeWorld } from './themeWorlds';
 import { treasureKey } from '@/core/child/progress/treasures';
 import { gamesProgress } from './games';

@@ -1,4 +1,4 @@
-import { LangProvider, useGameLang, useParentLang, useT } from '@/core/i18n';
+import { LangProvider, useGameLang, useParentLang, useT } from '@/core/translator';
 import { lazy, Suspense, useEffect, type CSSProperties, type ReactNode } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { VoiceGuard } from '@/core/audio/voice';

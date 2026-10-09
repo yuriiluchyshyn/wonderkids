@@ -1,0 +1,628 @@
+{
+  "FORMS": {
+    "uk": {
+      "name": "Ukraiński",
+      "some": "ukraińskie",
+      "one": "ukraińską",
+      "ofOne": "ukraińskiego",
+      "ofMany": "ukraińskich",
+      "abc": "ukraiński",
+      "inAbc": "ukraińskim",
+      "way": "po ukraińsku"
+    },
+    "en": {
+      "name": "Angielski",
+      "some": "angielskie",
+      "one": "angielską",
+      "ofOne": "angielskiego",
+      "ofMany": "angielskich",
+      "abc": "angielski",
+      "inAbc": "angielskim",
+      "way": "po angielsku"
+    },
+    "pl": {
+      "name": "Polski",
+      "some": "polskie",
+      "one": "polską",
+      "ofOne": "polskiego",
+      "ofMany": "polskich",
+      "abc": "polski",
+      "inAbc": "polskim",
+      "way": "po polsku"
+    }
+  },
+  "OWN": {
+    "alphabet": {
+      "blurb": "Postaw litery na swoich miejscach w alfabecie — aż do wszystkich trzydziestu dwóch",
+      "intro": "Litery w alfabecie stoją jedna za drugą, zawsze w tej samej kolejności. Kilka liter się zgubiło! Przeciągnij każdą na jej miejsce."
+    },
+    "bubbles": {
+      "blurb": "Przebijaj bańki po kolei: alfabet, sylaby i słowa",
+      "intro": "W bańkach mydlanych schowały się litery! Przebijaj je po kolei — tak, jak stoją w alfabecie."
+    },
+    "chain": {
+      "blurb": "Łącz słowa: pierwsza litera, połówki słowa, znaczenie",
+      "intro": "Każde słowo zaczyna się na jakąś literę. Połącz słowo z jego pierwszą literą!"
+    },
+    "rhymes": {
+      "blurb": "Znajduj słowa, które brzmią podobnie: kot — płot",
+      "intro": "Niektóre słowa kończą się tak samo, jakby śpiewały razem: kot — płot. To rym! Znajdź rym dla każdego słowa."
+    },
+    "sentences": {
+      "blurb": "Ułóż zdanie ze słów — od dwóch do pięciu",
+      "intro": "Słowa się rozsypały! Ustaw je po kolei, żeby powstało zdanie. Pierwsze słowo pisze się wielką literą, a na końcu stoi kropka."
+    }
+  },
+  "other": {
+    "alphabet": {
+      "blurb": "{name}: postaw litery na swoich miejscach w alfabecie",
+      "intro": "Uczymy się {ofOne} alfabetu! Litery stoją w nim jedna za drugą, zawsze w tej samej kolejności. Kilka liter się zgubiło — przeciągnij każdą na jej miejsce."
+    },
+    "bubbles": {
+      "blurb": "{name}: przebijaj bańki — alfabet i słowa",
+      "intro": "Uczymy się {ofOne}! W bańkach są {some} litery. Przebijaj je po kolei, jak w {inAbc} alfabecie. Naciśnij głośnik, żeby usłyszeć literę."
+    },
+    "chain": {
+      "blurb": "{name}: łącz słowa z literami i ze sobą",
+      "intro": "Uczymy się {ofMany} słów! Połącz każde słowo z literą, na którą się zaczyna. Naciśnij głośnik, żeby usłyszeć słowo."
+    },
+    "rhymes": {
+      "blurb": "{name}: znajduj słowa, które się rymują",
+      "intro": "W języku {inAbc} też są rymy — słowa, które brzmią podobnie na końcu. Naciskaj głośniki, słuchaj słów i łącz te, które się rymują."
+    },
+    "sentences": {
+      "blurb": "{name}: ułóż zdanie ze słów",
+      "intro": "Układamy zdania {way}! Ustaw słowa po kolei. Pierwsze słowo pisze się wielką literą, a na końcu stoi kropka."
+    }
+  },
+  "title": "Język",
+  "packName": {
+    "uk": "Język ukraiński",
+    "en": "Język angielski",
+    "pl": "Język polski"
+  },
+  "stage": {
+    "1": "Teraz w pustych kratkach nie ma podpowiedzi. Przypomnij sobie, która litera stoi po której!",
+    "2": "Tabela urosła: teraz ma trzy rzędy liter.",
+    "3": "Teraz wszystkie litery są na miejscu — ale dwie z nich zamieniły się miejscami. Znajdź jedną z nich i jej dotknij!",
+    "4": "Przed tobą cały {p}alfabet! Postaw na miejscach wszystkie litery, których brakuje.",
+    "5": "Teraz w bańkach są sylaby. Przebijaj je po kolei, żeby wyszło słowo!",
+    "6": "Teraz składamy {some} słowa z sylab. Przebijaj sylaby tak, jak stoją w słowie!",
+    "7": "Teraz składamy krótkie {p}słowa. Przebijaj litery tak, jak stoją w słowie!",
+    "8": "A teraz składamy słowa z pojedynczych liter. Przebijaj literę po literze!",
+    "9": "Słowa robią się dłuższe. Przebijaj literę po literze — od lewej do prawej!",
+    "10": "Teraz słowo nie jest napisane — posłuchaj go i ułóż je samodzielnie. Uwaga: wśród baniek są niepotrzebne litery!",
+    "11": "Uwaga: wśród baniek są teraz niepotrzebne litery. One nie pękają!",
+    "12": "Teraz łączymy dwa słowa, które zaczynają się na tę samą literę.",
+    "13": "Słowo rozpadło się na dwie połówki! Znajdź dla każdego początku jego zakończenie.",
+    "14": "Teraz szukamy słów, które łączy znaczenie: co do czego pasuje?",
+    "15": "Zdania robią się dłuższe: teraz mają po trzy słowa.",
+    "16": "A teraz — prawdziwe duże zdania z czterech i pięciu słów!"
+  },
+  "order": "W alfabecie litera „{a}” stoi wcześniej niż litera „{b}”.",
+  "swapAsk": "Dwie {p}litery zamieniły się miejscami. Dotknij litery, która stoi nie na swoim miejscu.",
+  "swapHint": {
+    "1": "{order} Te dwie litery mrugają.",
+    "2": "Zaśpiewaj {abc} alfabet po kolei. Dwie litery, które zamieniły się miejscami, mrugają."
+  },
+  "after": "Po literze „{prev}” w alfabecie stoi litera „{letter}”.",
+  "before": "Przed literą „{next}” w alfabecie stoi litera „{letter}”.",
+  "fillAsk": {
+    "1": "Ułóż cały {p}alfabet: postaw każdą literę na jej miejscu.",
+    "2": "Postaw {p}literę na jej miejscu w alfabecie.",
+    "3": "Postaw {p}litery na swoich miejscach w alfabecie."
+  },
+  "fillHint": {
+    "1": "{neighbour} Jej miejsce mruga.",
+    "2": "Przypomnij sobie {abc} alfabet. Miejsce na następną literę mruga, a w pustych kratkach widać podpowiedzi."
+  },
+  "runAsk": {
+    "1": "Przebijaj litery według alfabetu: od {from} do {to}.",
+    "2": "Przebijaj {some} litery według alfabetu — od pierwszej do ostatniej."
+  },
+  "runHint": {
+    "1": "Przypomnij sobie alfabet: {letters}.",
+    "2": "Przypomnij sobie {abc} alfabet. Potrzebna bańka mruga."
+  },
+  "partsAsk": {
+    "1": "Złóż słowo z {p}: {word}.",
+    "2": "sylab",
+    "3": "liter",
+    "4": "Złóż {some} słowo z {p}. Jest napisane pod obrazkiem.",
+    "5": "sylab",
+    "6": "liter"
+  },
+  "partsHint": {
+    "1": "Słowo „{word}” składa się tak: {parts}.",
+    "2": "Popatrz na słowo pod obrazkiem i przebijaj {p} od lewej do prawej.",
+    "3": "sylaby",
+    "4": "litery"
+  },
+  "spellAsk": {
+    "1": "Posłuchaj słowa i ułóż je z liter.",
+    "2": "Ułóż słowo z liter: {word}.",
+    "3": "Posłuchaj {ofOne} słowa i ułóż je z liter.",
+    "4": "Ułóż {some} słowo z liter. Jest napisane pod obrazkiem."
+  },
+  "spellHint": {
+    "1": "Wymów słowo powoli: {word}. Jego litery: {letters}.",
+    "2": "Naciśnij głośnik przy obrazku, posłuchaj słowa jeszcze raz i przebijaj litery od lewej do prawej. Niepotrzebne litery nie pękają.",
+    "3": "Popatrz na słowo pod obrazkiem i przebijaj litery od lewej do prawej. Niepotrzebne litery nie pękają."
+  },
+  "firstAsk": {
+    "1": "Połącz każde słowo z literą, na którą się zaczyna.",
+    "2": "Połącz każde {some} słowo z jego pierwszą literą."
+  },
+  "firstHint": {
+    "1": "Wymów słowo na głos i posłuchaj pierwszej głoski. „{word}” zaczyna się na literę „{letter}”.",
+    "2": "Popatrz, na jaką literę zaczyna się każde słowo."
+  },
+  "sameAsk": "Połącz {p}słowa, które zaczynają się na tę samą literę.",
+  "sameHint": {
+    "1": "„{a}” i „{b}” zaczynają się na tę samą literę — „{letter}”.",
+    "2": "Porównaj pierwsze litery słów: w parze są takie same."
+  },
+  "halfAsk": "Połącz początek {p}słowa z jego zakończeniem.",
+  "halfHint": {
+    "1": "Popatrz na obrazek: to „{head}{tail}”. Słowo zaczyna się od sylaby „{head}”.",
+    "2": "Naciśnij głośnik przy obrazku, posłuchaj słowa i znajdź jego początek."
+  },
+  "assocAsk": "Połącz {p}słowa, które łączy znaczenie.",
+  "assocHint": {
+    "1": "Pomyśl, co do siebie pasuje. „{a}” — „{b}”.",
+    "2": "Naciśnij głośnik, żeby usłyszeć słowo. Szukaj tego, co do niego pasuje."
+  },
+  "rhymeAsk": "Znajdź pary {p}słów, które się rymują.",
+  "rhymeHint": {
+    "1": "Słowa się rymują, kiedy kończą się tak samo: „{a}” — „{b}”.",
+    "2": "Naciskaj głośniki i słuchaj: słowa, które się rymują, brzmią na końcu tak samo."
+  },
+  "rhymeYes": "„{a}” — „{b}”. To rym!",
+  "sentenceAsk": "Ustaw {p}słowa po kolei, żeby powstało zdanie.",
+  "sentenceHint": {
+    "1": "Zdanie zaczyna się od słowa z wielkiej litery: „{first}”. Ostatnie słowo ma kropkę.",
+    "2": "Zdanie zaczyna się od słowa z wielkiej litery, a kończy słowem z kropką."
+  },
+  "ends": {
+    "0": "początek",
+    "1": "koniec"
+  },
+  "pack": {
+    "SYLLABLES": "\nma-ma|👩 ta-ta|👨 ko-za|🐐 ry-ba|🐟 so-wa|🦉 lo-dy|🍦 wo-da|💧 no-ga|🦵 rę-ka|✋ o-ko|👁️\nu-cho|👂 zu-pa|🥣 mle-ko|🥛 ma-sło|🧈 buł-ka|🥯 jaj-ko|🥚 ba-nan|🍌 jabł-ko|🍎 grusz-ka|🍐 wi-śnia|🍒\nro-wer|🚲 po-ciąg|🚆 łód-ka|⛵ do-mek|🏠 ok-no|🪟 krze-sło|🪑 łóż-ko|🛏️ lam-pa|💡 ze-gar|⏰ książ-ka|📖\npił-ka|⚽ lal-ka|🪆 ba-lon|🎈 pre-zent|🎁 bu-ty|👟 czap-ka|🧢 sza-lik|🧣 kwia-tek|🌸 drze-wo|🌳 tra-wa|🌿\nsłoń-ce|☀️ księ-życ|🌙 gwiaz-da|⭐ chmu-ra|☁️ tę-cza|🌈 mo-rze|🌊 gó-ra|⛰️ rze-ka|🏞️ wy-spa|🏝️ kro-wa|🐄\nświn-ka|🐷 ku-ra|🐔 kacz-ka|🦆 ko-gut|🐓 ow-ca|🐑 pie-sek|🐶 ko-tek|🐱 mysz-ka|🐭 żab-ka|🐸 je-leń|🦌\nli-sek|🦊 za-jąc|🐇 mo-tyl|🦋 pszczo-ła|🐝 mrów-ka|🐜 pa-jąk|🕷️ śli-mak|🐌 mał-pa|🐒 ty-grys|🐯 ze-bra|🦓\npan-da|🐼 pin-gwin|🐧 del-fin|🐬 re-kin|🦈 ro-bot|🤖 piz-za|🍕 cias-tko|🍪 gło-wa|🙂 ser-ce|❤️ klu-cze|🔑\nmi-ska|🥣 ku-bek|☕ łyż-ka|🥄 ta-lerz|🍽️ my-dło|🧼 za-mek|🏰 wie-ża|🗼 na-miot|⛺ ma-pa|🗺️ fla-ga|🚩\nko-ro-na|👑 pa-ra-sol|☂️ cy-try-na|🍋 po-mi-dor|🍅 o-gó-rek|🥒 ce-bu-la|🧅 ka-pu-sta|🥬 ma-li-na|🍓 ja-go-da|🫐 mar-chew-ka|🥕\nsa-mo-chód|🚗 sa-mo-lot|✈️ ra-kie-ta|🚀 au-to-bus|🚌 su-kien-ka|👗 ko-szu-la|👕 ży-ra-fa|🦒 pa-pu-ga|🦜 kro-ko-dyl|🐊 wie-wiór-ka|🐿️\nbie-dron-ka|🐞 cze-ko-la-da|🍫 cu-kie-rek|🍬 her-ba-ta|🍵 gi-ta-ra|🎸 te-le-fon|📱 kom-pu-ter|💻 ka-pe-lusz|🎩 mo-ne-ta|🪙 la-tar-ka|🔦\n",
+    "SPELL": "\nkot|🐱 dom|🏠 las|🌲 nos|👃 ser|🧀 sok|🧃 lew|🦁 lis|🦊 miś|🧸 rak|🦞\nmak|🌺 but|👟 nóż|🔪 ząb|🦷 sól|🧂 ryż|🍚 koń|🐴 pies|🐶 mysz|🐭 słoń|🐘\nwilk|🐺 ptak|🐦 krab|🦀 róża|🌹 liść|🍃 miód|🍯 tort|🎂 auto|🚗 król|🤴 most|🌉\nżaba|🐸 kura|🐔 sowa|🦉 ryba|🐟 koza|🐐 mapa|🗺️ noga|🦵 ręka|✋ ucho|👂 okno|🪟\nkwiat|🌸 grzyb|🍄 chleb|🍞 mleko|🥛 jajko|🥚 woda|💧 lampa|💡 klucz|🔑 zegar|⏰ piłka|⚽\nlalka|🪆 balon|🎈 rower|🚲 łódka|⛵ śnieg|❄️ wiatr|🌬️ ogień|🔥 morze|🌊 rzeka|🏞️ serce|❤️\nrobot|🤖 dzwon|🔔 bęben|🥁 flaga|🚩 kubek|☕ łyżka|🥄 mydło|🧼 drzwi|🚪 zamek|🏰 wieża|🗼\nbanan|🍌 arbuz|🍉 dynia|🎃 pizza|🍕 lody|🍦 zupa|🥣 mama|👩 tata|👨 góra|⛰️ buty|👟\ndrzewo|🌳 słońce|☀️ chmura|☁️ deszcz|🌧️ statek|🚢 pociąg|🚆 czapka|🧢 jabłko|🍎 wiśnia|🍒 orzech|🌰\ngitara|🎸 korona|👑 moneta|🪙 namiot|⛺ talerz|🍽️ ołówek|✏️ ogórek|🥒 cebula|🧅 ciasto|🍰 łóżko|🛏️\ngwiazda|⭐ rakieta|🚀 książka|📖 prezent|🎁 gruszka|🍐 cytryna|🍋 marchew|🥕 pomidor|🍅 widelec|🍴 cukierek|🍬\nbok cel cud dym gol hak kij koc kos lot los mur noc pas pan raj rok sen sad tor\nwóz żal bal bas bat byk gaj gra łan łza nić ryś żuk pół wół dół ból mól lód puch\ncień czas dach dzień głos groch kasa kino klej koło kosz kran kret krok kula kurz lato lina list ława\nmgła mina młot mowa nuta olej owoc pani park piec pień plac pole próg rada rama rosa rura sala siła\nskok smak smok staw szal targ tłum waga włos zima złoto obraz pióro plama praca sanki siano skała słowo sosna\nstopa stróż szafa sznur szyba taca tunel ulica wanna wazon worek wyspa zboże gniazdo miska płaszcz szkoła trawa traktor wioska\nwiosna żagiel jesień ogród poranek wieczór niedziela piątek sobota zeszyt plecak tablica kreda ławka lekcja przerwa boisko zabawa kolega rodzina\n",
+    "RHYMES": "\nkot|🐱 płot lot młot\ndom|🏠 tom grom złom\nlas|🌲 pas czas bas\nnos|👃 los kos głos\nmak|🌺 rak|🦞 ptak|🐦 znak\nkura|🐔 góra|⛰️ chmura|☁️ dziura\nmama|👩 rama brama dama\nrosa|💧 kosa osa\nfala|🌊 sala lala|🪆 gala\nnoc|🌃 koc moc\nsen|😴 len tlen ten\nwoda|💧 moda jagoda|🫐 zgoda\nlody|🍦 schody brody wody\nżaba|🐸 baba|👵\nsowa|🦉 krowa|🐄 głowa mowa\nrzeka|🏞️ apteka biblioteka opieka\nnoga|🦵 droga|🛣️ stonoga podłoga\noko|👁️ wysoko głęboko szeroko\nucho|👂 sucho głucho\nkwiatek|🌸 płatek dodatek\nkotek|🐱 młotek|🔨 płotek\nwół|🐂 stół dół pół\ndzień|☀️ cień pień leń\nszal|🧣 bal żal\nkról|🤴 sól|🧂 ból mól\nlato|🏖️ tato\nburza|🌩️ róża|🌹 kałuża duża\nbułka|🥯 półka jaskółka spółka\nkaczka|🦆 paczka|📦 taczka\nmyszka|🐭 szyszka\nświnka|🐷 dziewczynka|👧 choinka|🎄 malinka\nkubek|☕ dzióbek czubek\nlew|🦁 krzew śpiew gniew\ngruszka|🍐 muszka poduszka pietruszka\nsmok|🐉 sok|🧃 krok skok\nżuk|🪲 łuk|🏹 stuk kruk\nśnieg|❄️ brzeg bieg\nmorze|🌊 zboże\ntort|🎂 port sport kort\ndach|🏠 strach piach zamach\npiłka|⚽ pomyłka\npalec|👆 walec\n",
+    "DOERS": {
+      "0": {
+        "0": "Psy",
+        "2": [
+          "szczekają",
+          "biegają",
+          "śpią",
+          "jedzą",
+          "skaczą"
+        ]
+      },
+      "1": {
+        "0": "Koty",
+        "2": [
+          "śpią",
+          "mruczą",
+          "skaczą",
+          "jedzą",
+          "biegają"
+        ]
+      },
+      "2": {
+        "0": "Ptaki",
+        "2": [
+          "latają",
+          "śpiewają",
+          "jedzą",
+          "śpią",
+          "skaczą"
+        ]
+      },
+      "3": {
+        "0": "Ryby",
+        "2": [
+          "pływają",
+          "jedzą",
+          "śpią",
+          "skaczą",
+          "czekają"
+        ]
+      },
+      "4": {
+        "0": "Żaby",
+        "2": [
+          "skaczą",
+          "pływają",
+          "kumkają",
+          "jedzą",
+          "śpią"
+        ]
+      },
+      "5": {
+        "0": "Niedźwiedzie",
+        "2": [
+          "śpią",
+          "jedzą",
+          "chodzą",
+          "ryczą",
+          "biegają"
+        ]
+      },
+      "6": {
+        "0": "Pszczoły",
+        "2": [
+          "latają",
+          "bzyczą",
+          "pracują",
+          "tańczą",
+          "śpią"
+        ]
+      },
+      "7": {
+        "0": "Dzieci",
+        "2": [
+          "biegają",
+          "skaczą",
+          "śpiewają",
+          "rysują",
+          "czytają"
+        ]
+      },
+      "8": {
+        "0": "Konie",
+        "2": [
+          "biegają",
+          "skaczą",
+          "jedzą",
+          "śpią",
+          "rżą"
+        ]
+      },
+      "9": {
+        "0": "Kaczki",
+        "2": [
+          "pływają",
+          "kwaczą",
+          "latają",
+          "jedzą",
+          "chodzą"
+        ]
+      },
+      "10": {
+        "0": "Lwy",
+        "2": [
+          "ryczą",
+          "biegają",
+          "śpią",
+          "jedzą",
+          "polują"
+        ]
+      },
+      "11": {
+        "0": "Małpy",
+        "2": [
+          "skaczą",
+          "jedzą",
+          "biegają",
+          "krzyczą",
+          "śpią"
+        ]
+      },
+      "12": {
+        "0": "Zające",
+        "2": [
+          "skaczą",
+          "biegają",
+          "jedzą",
+          "śpią",
+          "uciekają"
+        ]
+      },
+      "13": {
+        "0": "Krowy",
+        "2": [
+          "muczą",
+          "jedzą",
+          "chodzą",
+          "śpią",
+          "stoją"
+        ]
+      },
+      "14": {
+        "0": "Sowy",
+        "2": [
+          "latają",
+          "hukają",
+          "polują",
+          "patrzą",
+          "śpią"
+        ]
+      },
+      "15": {
+        "0": "Wilki",
+        "2": [
+          "wyją",
+          "biegają",
+          "polują",
+          "śpią",
+          "jedzą"
+        ]
+      },
+      "16": {
+        "0": "Myszy",
+        "2": [
+          "piszczą",
+          "biegają",
+          "jedzą",
+          "śpią",
+          "uciekają"
+        ]
+      },
+      "17": {
+        "0": "Kury",
+        "2": [
+          "gdaczą",
+          "dziobią",
+          "chodzą",
+          "jedzą",
+          "śpią"
+        ]
+      },
+      "18": {
+        "0": "Mrówki",
+        "2": [
+          "pracują",
+          "chodzą",
+          "kopią",
+          "noszą",
+          "biegają"
+        ]
+      },
+      "19": {
+        "0": "Samoloty",
+        "2": [
+          "latają",
+          "lądują",
+          "startują",
+          "czekają",
+          "stoją"
+        ]
+      }
+    },
+    "PEOPLE": [
+      "Mama",
+      "Tata",
+      "Babcia",
+      "Dziadek",
+      "Ola",
+      "Jan",
+      "Kasia",
+      "Tomek",
+      "Zosia",
+      "Adam",
+      "Ania",
+      "Piotr",
+      "Ewa",
+      "Kuba",
+      "Maja"
+    ],
+    "ACTIONS": {
+      "0": {
+        "0": "czyta książkę"
+      },
+      "1": {
+        "0": "je jabłko"
+      },
+      "2": {
+        "0": "pije sok"
+      },
+      "3": {
+        "0": "rysuje kwiaty"
+      },
+      "4": {
+        "0": "piecze ciasto"
+      },
+      "5": {
+        "0": "lubi pizzę"
+      },
+      "6": {
+        "0": "kupuje chleb"
+      },
+      "7": {
+        "0": "myje naczynia"
+      },
+      "8": {
+        "0": "gotuje zupę"
+      },
+      "9": {
+        "0": "karmi kota"
+      },
+      "10": {
+        "0": "naprawia rower"
+      },
+      "11": {
+        "0": "nosi kapelusz"
+      },
+      "12": {
+        "0": "kocha muzykę"
+      },
+      "13": {
+        "0": "maluje obraz"
+      },
+      "14": {
+        "0": "podlewa kwiaty"
+      },
+      "15": {
+        "0": "prowadzi auto"
+      },
+      "16": {
+        "0": "buduje dom"
+      },
+      "17": {
+        "0": "łowi ryby"
+      },
+      "18": {
+        "0": "otwiera drzwi"
+      },
+      "19": {
+        "0": "śpiewa piosenkę"
+      },
+      "20": {
+        "0": "ma psa"
+      },
+      "21": {
+        "0": "widzi gwiazdy"
+      },
+      "22": {
+        "0": "pije mleko"
+      },
+      "23": {
+        "0": "szuka kluczy"
+      },
+      "24": {
+        "0": "je ciasto"
+      },
+      "25": {
+        "0": "pije herbatę"
+      },
+      "26": {
+        "0": "czyta mapę"
+      },
+      "27": {
+        "0": "lubi lody"
+      },
+      "28": {
+        "0": "kopie piłkę"
+      },
+      "29": {
+        "0": "sadzi drzewo"
+      }
+    },
+    "HEROES": {
+      "0": {
+        "0": "Mały piesek"
+      },
+      "1": {
+        "0": "Wielki niedźwiedź"
+      },
+      "2": {
+        "0": "Wesoła małpka"
+      },
+      "3": {
+        "0": "Mała myszka"
+      },
+      "4": {
+        "0": "Wesoła dziewczynka"
+      },
+      "5": {
+        "0": "Dobry chłopiec"
+      },
+      "6": {
+        "0": "Biały kotek"
+      },
+      "7": {
+        "0": "Zielona żabka"
+      },
+      "8": {
+        "0": "Stary koń"
+      },
+      "9": {
+        "0": "Żółty ptaszek"
+      },
+      "10": {
+        "0": "Rudy lis"
+      },
+      "11": {
+        "0": "Szary wilk"
+      },
+      "12": {
+        "0": "Różowa świnka"
+      },
+      "13": {
+        "0": "Wysoka żyrafa"
+      },
+      "14": {
+        "0": "Szybki zając"
+      },
+      "15": {
+        "0": "Czarna owca"
+      },
+      "16": {
+        "0": "Młody lew"
+      },
+      "17": {
+        "0": "Mała kaczka"
+      },
+      "18": {
+        "0": "Śpiący koala"
+      },
+      "19": {
+        "0": "Mądra sowa"
+      }
+    },
+    "ENDINGS": [
+      "biegnie szybko",
+      "śpi smacznie",
+      "je powoli",
+      "skacze wysoko",
+      "idzie do domu",
+      "wraca do domu",
+      "stoi spokojnie",
+      "czeka na mamę",
+      "patrzy w niebo",
+      "śpi pod drzewem",
+      "biegnie przez łąkę",
+      "szuka jedzenia",
+      "pije zimną wodę",
+      "lubi ciepłe słońce",
+      "idzie na spacer",
+      "siedzi bardzo cicho",
+      "budzi się rano",
+      "je smaczny obiad",
+      "pływa w rzece",
+      "chowa się w trawie",
+      "idzie do lasu",
+      "czeka na deszcz",
+      "patrzy na gwiazdy",
+      "bawi się piłką",
+      "odpoczywa w cieniu"
+    ],
+    "PL": {
+      "name": "Польська мова",
+      "alphabet": {
+        "0": "aąbcćdeęfghijklłmnńoóprsśtuwyzźż"
+      },
+      "cards": {
+        "alphabet": {
+          "label": "Alfabet",
+          "blurb": "Польська: постав літери на свої місця в абетці",
+          "intro": "Вчимо польську абетку! Літери в ній стоять одна за одною, завжди в тому самому порядку. Кілька літер загубилося — перетягни кожну на її місце."
+        },
+        "bubbles": {
+          "label": "Bańki mydlane",
+          "blurb": "Польська: лопай бульбашки — абетка, склади і слова",
+          "intro": "Вчимо польську! У бульбашках — польські літери. Лопай їх по порядку, як у польській абетці. Натисни на динамік, щоб почути літеру."
+        },
+        "chain": {
+          "label": "Łańcuszek słów",
+          "blurb": "Польська: з’єднуй слова з літерами та між собою",
+          "intro": "Вчимо польські слова! З’єднай кожне слово з літерою, на яку воно починається. Натисни на динамік, щоб почути слово."
+        },
+        "rhymes": {
+          "label": "Szukamy rymów",
+          "blurb": "Польська: знаходь слова, що римуються",
+          "intro": "У польській мові теж є рими — слова, які звучать схоже наприкінці. Натискай на динаміки, слухай слова і з’єднуй ті, що римуються."
+        },
+        "sentences": {
+          "label": "Budujemy zdania",
+          "blurb": "Польська: склади речення зі слів",
+          "intro": "Складаємо речення польською! Постав слова по порядку. Перше слово пишеться з великої літери, а в кінці стоїть крапка."
+        }
+      }
+    }
+  }
+}

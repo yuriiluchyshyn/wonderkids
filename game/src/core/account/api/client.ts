@@ -7,7 +7,7 @@
  */
 
 import type { SignupSource } from '@/core/app/attribution';
-import type { LangCode } from '@/core/lang';
+import type { LangCode } from '@/core/language';
 
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
 

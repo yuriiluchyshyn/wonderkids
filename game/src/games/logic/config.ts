@@ -2,7 +2,10 @@ import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { MIRROR_STEPS, PATTERN_STEPS, SHADOW_STEPS } from './content/data';
 import { RIDDLE_STEPS } from './content/riddles';
-import { logicTexts } from './lang';
+import { logicTexts } from './grammar';
+import TEXTS from '@/locales/app/uk/games/logic.json';
+
+const J = TEXTS.config;
 
 /** Publication date of «Логічні задачі» (drives the 60-day "NEW" badge). */
 const RIDDLES_RELEASE = '2026-10-08T00:00:00Z';
@@ -11,7 +14,7 @@ const RIDDLES_RELEASE = '2026-10-08T00:00:00Z';
 export const SUBJECT: SubjectDef = {
   id: 'logic',
   texts: { en: logicTexts('en').cards, pl: logicTexts('pl').cards },
-  title: 'Логіка',
+  title: J.SUBJECT.title,
   icon: '🧩',
   accent: '#8b5cf6',
 };
@@ -24,10 +27,10 @@ export const GAMES: GameCard[] = [
   {
     id: 'patterns',
     gameId: 'logic_patterns',
-    label: 'Ритм і Візерунки',
+    label: J.GAMES.patterns.label,
     icon: '🔁',
-    blurb: 'Розгадай правило і продовж візерунок',
-    intro: 'Малюнки стоять у рядку за правилом і повторюються. Розгадай це правило і скажи, що має бути замість знака питання!',
+    blurb: J.GAMES.patterns.blurb,
+    intro: J.GAMES.patterns.intro,
     introFor: (step, lang) => logicTexts(lang).introFor.patterns(step),
     langs: logicTexts.langs,
     steps: PATTERN_STEPS.length,
@@ -40,10 +43,10 @@ export const GAMES: GameCard[] = [
   {
     id: 'shadows',
     gameId: 'logic_shadow_lotto',
-    label: 'Тіньове Лото',
+    label: J.GAMES.shadows.label,
     icon: '👤',
-    blurb: 'Знайди для кожного малюнка його тінь',
-    intro: 'У кожного предмета є тінь — чорний силует такої самої форми. Перетягни кожен малюнок на його тінь!',
+    blurb: J.GAMES.shadows.blurb,
+    intro: J.GAMES.shadows.intro,
     introFor: (step, lang) => logicTexts(lang).introFor.shadows(step),
     langs: logicTexts.langs,
     steps: SHADOW_STEPS.length,
@@ -56,10 +59,10 @@ export const GAMES: GameCard[] = [
   {
     id: 'mirror',
     gameId: 'logic_mirror_symmetry',
-    label: 'Дзеркало',
+    label: J.GAMES.mirror.label,
     icon: '🪞',
-    blurb: 'Домалюй другу половинку — як у дзеркалі',
-    intro: 'Тут намальована лише ліва половинка малюнка. Права має бути такою самою, тільки віддзеркаленою. Знайди її!',
+    blurb: J.GAMES.mirror.blurb,
+    intro: J.GAMES.mirror.intro,
     introFor: (step, lang) => logicTexts(lang).introFor.mirror(step),
     langs: logicTexts.langs,
     steps: MIRROR_STEPS.length,
@@ -72,10 +75,10 @@ export const GAMES: GameCard[] = [
   {
     id: 'riddles',
     gameId: 'logic_riddles',
-    label: 'Логічні Задачі',
+    label: J.GAMES.riddles.label,
     icon: '🧠',
-    blurb: 'Маленькі історії, де треба не рахувати, а міркувати',
-    intro: 'Послухай коротку історію і подумай. Тут не треба довго рахувати — треба здогадатися! Якщо потрібно, натисни на динамік, і я прочитаю задачу ще раз.',
+    blurb: J.GAMES.riddles.blurb,
+    intro: J.GAMES.riddles.intro,
     introFor: (step, lang) => logicTexts(lang).introFor.riddles(step),
     langs: logicTexts.langs,
     steps: RIDDLE_STEPS,

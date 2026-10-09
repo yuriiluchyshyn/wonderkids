@@ -9,8 +9,8 @@ import { UA_FIGURES, UA_INVENTIONS, WORLD_FIGURES, WORLD_INVENTIONS, type Achiev
 import { DINOSAURS } from './content/dinosaurs';
 import { PL_FIGURES, PL_INVENTIONS } from './content/poland';
 import { EARLIER, EPOCHS, EPOCH_ITEMS, SEQUENCES, WHEN } from './content/timeMachine';
-import { historyTexts } from './lang';
-import type { HistoryTexts } from './lang/types';
+import { historyTexts } from './grammar';
+import type { HistoryTexts } from './grammar/types';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 type Config = Pick<TaskConfig, 'lang'>;

@@ -1,4 +1,4 @@
-import { useT, useVoiceLang, type T } from '@/core/i18n';
+import { useT, useVoiceLang, type T } from '@/core/translator';
 import { useVoiceStopsOnLeave } from '@/core/audio/voice';
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';

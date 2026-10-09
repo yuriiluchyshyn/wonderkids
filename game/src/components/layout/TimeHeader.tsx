@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { useGameStore } from '@/core/child/store/useGameStore';

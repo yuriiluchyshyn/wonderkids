@@ -1,12 +1,12 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, DragMatchPayload, LetterGridPayload, SpeechLang, TemplatePayload } from '@/core/game/templates/types';
-import { DEFAULT_LANG, language } from '@/core/lang';
-import { own, say } from '@/core/lang/marks';
+import { DEFAULT_LANG, language } from '@/core/language';
+import { own, say } from '@/core/language/marks';
 import { shuffle } from '@/core/utils/random';
 import { templateTask, type GameTasks, type TemplateGame } from '../shared/templateModule';
-import { languageTexts } from './lang';
-import type { PackView } from './lang/types';
+import { languageTexts } from './grammar';
+import type { PackView } from './grammar/types';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 type Config = Pick<TaskConfig, 'lang'>;

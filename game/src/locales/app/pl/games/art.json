@@ -1,0 +1,225 @@
+{
+  "PAINTS": {
+    "red": {
+      "0": "Czerwony",
+      "1": "czerwoną"
+    },
+    "yellow": {
+      "0": "Żółty",
+      "1": "żółtą"
+    },
+    "blue": {
+      "0": "Niebieski",
+      "1": "niebieską"
+    },
+    "white": {
+      "0": "Biały",
+      "1": "białą"
+    },
+    "black": {
+      "0": "Czarny",
+      "1": "czarną"
+    },
+    "green": {
+      "0": "Zielony",
+      "1": "zieloną"
+    },
+    "orange": {
+      "0": "Pomarańczowy",
+      "1": "pomarańczową"
+    }
+  },
+  "MIXES": {
+    "green": {
+      "0": "Zielony",
+      "1": "na zielono"
+    },
+    "orange": {
+      "0": "Pomarańczowy",
+      "1": "na pomarańczowo"
+    },
+    "purple": {
+      "0": "Fioletowy",
+      "1": "na fioletowo"
+    },
+    "pink": {
+      "0": "Różowy",
+      "1": "na różowo"
+    },
+    "grey": {
+      "0": "Szary",
+      "1": "na szaro"
+    },
+    "sky": {
+      "0": "Błękitny",
+      "1": "na błękitno"
+    },
+    "navy": {
+      "0": "Granatowy",
+      "1": "na granatowo"
+    },
+    "peach": {
+      "0": "Brzoskwiniowy",
+      "1": "na brzoskwiniowo"
+    },
+    "brown": {
+      "0": "Brązowy",
+      "1": "na brązowo"
+    },
+    "lime": {
+      "0": "Seledynowy",
+      "1": "na seledynowo"
+    },
+    "forest": {
+      "0": "Ciemnozielony",
+      "1": "na ciemnozielono"
+    }
+  },
+  "THINGS": {
+    "0": {
+      "0": "Żabka",
+      "1": "żabkę"
+    },
+    "1": {
+      "0": "Pomarańcza",
+      "1": "pomarańczę"
+    },
+    "2": {
+      "0": "Listek",
+      "1": "listek"
+    },
+    "3": {
+      "0": "Marchewka",
+      "1": "marchewkę"
+    },
+    "4": {
+      "0": "Winogrona",
+      "1": "winogrona"
+    },
+    "5": {
+      "0": "Bakłażan",
+      "1": "bakłażan"
+    },
+    "6": {
+      "0": "Krokodyl",
+      "1": "krokodyla"
+    },
+    "7": {
+      "0": "Dynia",
+      "1": "dynię"
+    },
+    "8": {
+      "0": "Ogórek",
+      "1": "ogórek"
+    },
+    "9": {
+      "0": "Lisek",
+      "1": "liska"
+    },
+    "10": {
+      "0": "Parasolka",
+      "1": "parasolkę"
+    },
+    "11": {
+      "0": "Świnka",
+      "1": "świnkę"
+    },
+    "12": {
+      "0": "Słoń",
+      "1": "słonia"
+    },
+    "13": {
+      "0": "Kwiatek",
+      "1": "kwiatek"
+    },
+    "14": {
+      "0": "Myszka",
+      "1": "myszkę"
+    },
+    "15": {
+      "0": "Wieloryb",
+      "1": "wieloryba"
+    },
+    "16": {
+      "0": "Flaming",
+      "1": "flaminga"
+    },
+    "17": {
+      "0": "Borówka",
+      "1": "borówkę"
+    },
+    "18": {
+      "0": "Dżinsy",
+      "1": "dżinsy"
+    },
+    "19": {
+      "0": "Wilk",
+      "1": "wilka"
+    },
+    "20": {
+      "0": "Brzoskwinia",
+      "1": "brzoskwinię"
+    },
+    "21": {
+      "0": "Motyl",
+      "1": "motyla"
+    },
+    "22": {
+      "0": "Kokardka",
+      "1": "kokardkę"
+    },
+    "23": {
+      "0": "Niedźwiedź",
+      "1": "niedźwiedzia"
+    },
+    "24": {
+      "0": "Kasztan",
+      "1": "kasztan"
+    },
+    "25": {
+      "0": "Czekolada",
+      "1": "czekoladę"
+    },
+    "26": {
+      "0": "Jabłko",
+      "1": "jabłko"
+    },
+    "27": {
+      "0": "Gruszka",
+      "1": "gruszkę"
+    },
+    "28": {
+      "0": "Sałata",
+      "1": "sałatę"
+    },
+    "29": {
+      "0": "Choinka",
+      "1": "choinkę"
+    },
+    "30": {
+      "0": "Brokuł",
+      "1": "brokuł"
+    },
+    "31": {
+      "0": "Ziemniak",
+      "1": "ziemniaka"
+    }
+  },
+  "cards": {
+    "title": "Sztuka",
+    "games": {
+      "mixer": {
+        "label": "Mieszanie kolorów",
+        "blurb": "Mieszaj farby w kociołku i koloruj obrazki",
+        "intro": "Obrazek jest jeszcze szary — trzeba go pokolorować! Wlej do czarodziejskiego kociołka dwie farby, żeby powstał potrzebny kolor."
+      }
+    }
+  },
+  "introFor": {
+    "1": "Teraz są też biała i czarna farba. Biała rozjaśnia kolor, a czarna go przyciemnia.",
+    "2": "Najtrudniejsze kolory powstają, gdy gotowy kolor zmieszasz z innym. Spróbuj!"
+  },
+  "prompt": "Pomaluj {at} {mix}. Jakie dwie farby trzeba zmieszać?",
+  "hint": "Kolor {mix} powstanie, gdy zmieszasz farbę {a} i {b}.",
+  "outro": "{a} i {b} razem dają {mix}!"
+}

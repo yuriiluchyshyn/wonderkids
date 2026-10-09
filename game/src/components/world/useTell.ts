@@ -1,6 +1,6 @@
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { useWorld, type World } from '@/core/child/world/useWorld';
-import { useT, useVoiceLang, type T } from '@/core/i18n';
+import { useT, useVoiceLang, type T } from '@/core/translator';
 
 /**
  * The voice of «Мій світ». What is read out is made in the VOICE's language,

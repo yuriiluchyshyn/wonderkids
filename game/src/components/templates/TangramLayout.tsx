@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
 import type { TangramPayload, TangramPiece } from '@/core/game/templates/types';

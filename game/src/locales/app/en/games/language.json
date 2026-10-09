@@ -1,0 +1,645 @@
+{
+  "NAME": {
+    "uk": "Ukrainian",
+    "en": "English",
+    "pl": "Polish"
+  },
+  "pieces": {
+    "1": "syllables",
+    "2": "letters"
+  },
+  "OWN": {
+    "alphabet": {
+      "blurb": "Put the letters in their places in the alphabet — all twenty-six of them",
+      "intro": "The letters of the alphabet stand one after another, always in the same order. A few letters have gone missing! Drag each one to its place."
+    },
+    "bubbles": {
+      "blurb": "Pop the bubbles in order: the alphabet and words",
+      "intro": "Letters are hiding in the soap bubbles! Pop them in order — the way they stand in the alphabet."
+    },
+    "chain": {
+      "blurb": "Join words: the first letter, halves of a word, meaning",
+      "intro": "Every word begins with some letter. Join the word with its first letter!"
+    },
+    "rhymes": {
+      "blurb": "Find words that sound alike: cat — hat",
+      "intro": "Some words end in the same way, as if they were singing together: cat — hat. That is a rhyme! Find the rhyme for every word."
+    },
+    "sentences": {
+      "blurb": "Make a sentence out of words — from two to five",
+      "intro": "The words have scattered! Put them in order to make a sentence. The first word is written with a capital letter, and there is a period at the end."
+    }
+  },
+  "other": {
+    "alphabet": {
+      "blurb": "{name}: put the letters in their places in the alphabet",
+      "intro": "We are learning the {name} alphabet! Its letters stand one after another, always in the same order. A few letters have gone missing — drag each one to its place."
+    },
+    "bubbles": {
+      "blurb": "{name}: pop the bubbles — the alphabet and words",
+      "intro": "We are learning {name}! There are {name} letters in the bubbles. Pop them in order, as in the {name} alphabet. Tap the speaker to hear a letter."
+    },
+    "chain": {
+      "blurb": "{name}: join words with letters and with one another",
+      "intro": "We are learning {name} words! Join every word with the letter it begins with. Tap the speaker to hear the word."
+    },
+    "rhymes": {
+      "blurb": "{name}: find the words that rhyme",
+      "intro": "{name} has rhymes too — words that sound alike at the end. Tap the speakers, listen to the words and join the ones that rhyme."
+    },
+    "sentences": {
+      "blurb": "{name}: make a sentence out of words",
+      "intro": "We are making sentences in {name}! Put the words in order. The first word is written with a capital letter, and there is a period at the end."
+    }
+  },
+  "title": "Language",
+  "stage": {
+    "1": "Now there are no clues in the empty squares. Remember which letter comes after which!",
+    "2": "The table has grown: now it has three rows of letters.",
+    "3": "Now all the letters are in place — but two of them have swapped places. Find one of them and tap it!",
+    "4": "Here is the whole {p}alphabet! Put all the missing letters in their places.",
+    "5": "Now there are syllables in the bubbles. Pop them in order to make a word!",
+    "6": "Now we put {p} words together from syllables. Pop the syllables in the order they stand in the word!",
+    "7": "Now we put short {p}words together. Pop the letters in the order they stand in the word!",
+    "8": "And now we spell words from single letters. Pop letter after letter!",
+    "9": "The words are getting longer. Pop letter after letter — from left to right!",
+    "10": "Now the word is not written — listen to it and spell it yourself. Careful: there are extra letters among the bubbles!",
+    "11": "Careful: there are extra letters among the bubbles now. They do not pop!",
+    "12": "Now we join two words that begin with the same letter.",
+    "13": "The word has fallen into two halves! Find the ending for every beginning.",
+    "14": "Now we look for words that belong together in meaning: what goes with what?",
+    "15": "The sentences are getting longer: now they have three words.",
+    "16": "And now — real big sentences of four and five words!"
+  },
+  "order": "In the alphabet the letter “{a}” comes before the letter “{b}.”",
+  "swapAsk": "Two {p}letters have swapped places. Tap a letter that is not in its own place.",
+  "swapHint": {
+    "1": "{order} These two letters are blinking.",
+    "2": "Sing the {p} alphabet in order. The two letters that swapped places are blinking."
+  },
+  "after": "After the letter “{prev}” in the alphabet comes the letter “{letter}.”",
+  "before": "Before the letter “{next}” in the alphabet comes the letter “{letter}.”",
+  "fillAsk": {
+    "1": "Put the whole {p}alphabet together: put every letter in its place.",
+    "2": "Put the {p}letter in its place in the alphabet.",
+    "3": "Put the {p}letters in their places in the alphabet."
+  },
+  "fillHint": {
+    "1": "{neighbour} Its place is blinking.",
+    "2": "Remember the {p} alphabet. The place for the next letter is blinking, and there are clues in the empty squares."
+  },
+  "runAsk": {
+    "1": "Pop the letters in alphabet order: from {from} to {to}.",
+    "2": "Pop the {p} letters in alphabet order — from the first to the last."
+  },
+  "runHint": {
+    "1": "Remember the alphabet: {letters}.",
+    "2": "Remember the {p} alphabet. The bubble you need is blinking."
+  },
+  "partsAsk": {
+    "1": "Put the word together from {p}: {word}.",
+    "2": "Put the {p} word together from {p2}. It is written under the picture."
+  },
+  "partsHint": {
+    "1": "The word “{word}” goes together like this: {parts}.",
+    "2": "Look at the word under the picture and pop the {p} from left to right."
+  },
+  "spellAsk": {
+    "1": "Listen to the word and spell it from the letters.",
+    "2": "Spell the word from the letters: {word}.",
+    "3": "Listen to the {p} word and spell it from the letters.",
+    "4": "Spell the {p} word from the letters. It is written under the picture."
+  },
+  "spellHint": {
+    "1": "Say the word slowly: {word}. Its letters: {letters}.",
+    "2": "Tap the speaker by the picture, listen to the word again and pop the letters from left to right. The extra letters do not pop.",
+    "3": "Look at the word under the picture and pop the letters from left to right. The extra letters do not pop."
+  },
+  "firstAsk": {
+    "1": "Join every word with the letter it begins with.",
+    "2": "Join every {p} word with its first letter."
+  },
+  "firstHint": {
+    "1": "Say the word out loud and listen to the first sound. “{word}” begins with the letter “{letter}.”",
+    "2": "Look which letter every word begins with."
+  },
+  "sameAsk": "Join the {p}words that begin with the same letter.",
+  "sameHint": {
+    "1": "“{a}” and “{b}” begin with the same letter — “{letter}.”",
+    "2": "Compare the first letters of the words: in a pair they are the same."
+  },
+  "halfAsk": "Join the beginning of each {p}word with its ending.",
+  "halfHint": {
+    "1": "Look at the picture: it is “{head}{tail}.” The word begins with “{head}.”",
+    "2": "Tap the speaker by the picture, listen to the word and find its beginning."
+  },
+  "assocAsk": "Join the {p}words that belong together in meaning.",
+  "assocHint": {
+    "1": "Think what goes together. “{a}” — “{b}.”",
+    "2": "Tap the speaker to hear the word. Look for what goes with it."
+  },
+  "rhymeAsk": "Find the pairs of {p}words that rhyme.",
+  "rhymeHint": {
+    "1": "Words rhyme when they sound the same at the end: “{a}” — “{b}.”",
+    "2": "Tap the speakers and listen: words that rhyme sound the same at the end."
+  },
+  "rhymeYes": "“{a}” — “{b}.” That’s a rhyme!",
+  "sentenceAsk": "Put the {p}words in order to make a sentence.",
+  "sentenceHint": {
+    "1": "A sentence begins with a word with a capital letter: “{first}.” The last word has a period.",
+    "2": "A sentence begins with a word with a capital letter and ends with a word with a period."
+  },
+  "ends": {
+    "0": "beginning",
+    "1": "end"
+  },
+  "pack": {
+    "PHONICS": "\ncat|🐱 dog|🐶 sun|☀️ hat|🎩 bed|🛏️ pig|🐷 bus|🚌 cup|🥤 pen|🖊️ box|📦\nfox|🦊 hen|🐔 bat|🦇 bug|🐛 bag|👜 map|🗺️ nut|🥜 pan|🍳 pot|🍲 jet|✈️\nvan|🚐 web|🕸️ leg|🦵 lip|👄 rat|🐀 ram|🐏 cow|🐄 owl|🦉 bee|🐝 ant|🐜\negg|🥚 eye|👁️ ear|👂 arm|💪 key|🔑 toy|🧸 boy|👦 man|👨 ice|🧊 sea|🌊\ncar|🚗 jam|🍓 gem|💎 log|🪵 fog|🌫️ tub|🛁 pin|📌 pie|🥧 tea|🍵 ten|🔟\nsix|6️⃣ one|1️⃣ two|2️⃣ red|🔴 sad|😢 hot|🥵 wet|💦 run|🏃 hug|🤗 cry|😭\nape|🦍 cub|🐻 axe|🪓 saw|🪚 bow|🏹 gas|⛽ oil|🛢️ tie|👔 cap|🧢 art|🎨\nzoo|🦓 net|🥅 sky|🌌 kid|🧒 mop|🧹 ham|🍖 bun|🥯 nap|😴 elf|🧝 gym|🏋️\ncab cob cod cop cot cut dad den dig dot fan fig fin fit gap gum hip hit hop hut\njar jaw jog joy jug kit lap lid lot mat mix mom mud mug nod pad pal pat paw pea\npeg pet pit pod pop pup rag rib rod rug sip sit sum tab tag tan tap tin tip top\ntug vet wag wax wig win yak yam zip bib bud dip hum lab rim row sap\n",
+    "SPELL": "\nfish|🐟 bird|🐦 frog|🐸 duck|🦆 bear|🐻 lion|🦁 wolf|🐺 goat|🐐 deer|🦌 crab|🦀\nseal|🦭 swan|🦢 pony|🐎 bull|🐂 worm|🪱 milk|🥛 cake|🎂 rice|🍚 corn|🌽 pear|🍐\nkiwi|🥝 soup|🥣 meat|🥩 salt|🧂 taco|🌮 book|📖 ball|⚽ door|🚪 lamp|💡 sock|🧦\nshoe|👟 boot|👢 coat|🧥 ring|💍 bell|🔔 drum|🥁 kite|🪁 boat|⛵ ship|🚢 bike|🚲\ntaxi|🚕 fork|🍴 bowl|🍜 soap|🧼 sofa|🛋️ flag|🚩 gift|🎁 coin|🪙 lock|🔒 tent|⛺\nstar|⭐ moon|🌙 rain|🌧️ snow|❄️ wind|🌬️ fire|🔥 tree|🌳 leaf|🍃 rose|🌹 rock|🪨\nroad|🛣️ city|🏙️ hand|✋ foot|🦶 nose|👃 face|🙂 baby|👶 girl|👧 king|🤴 game|🎮\ndice|🎲 card|🃏 film|🎬 zero|0️⃣ four|4️⃣ five|5️⃣ nine|9️⃣ snail|🐌 snake|🐍 mouse|🐭\nhorse|🐴 sheep|🐑 zebra|🦓 tiger|🐯 panda|🐼 koala|🐨 camel|🐫 whale|🐳 shark|🦈 eagle|🦅\nchick|🐥 bunny|🐰 otter|🦦 sloth|🦥 hippo|🦛 rhino|🦏 llama|🦙 squid|🦑 bread|🍞 apple|🍎\nlemon|🍋 grape|🍇 peach|🍑 mango|🥭 melon|🍈 pizza|🍕 salad|🥗 candy|🍬 honey|🍯 juice|🧃\nwater|💧 onion|🧅 bacon|🥓 pasta|🍝 donut|🍩 train|🚆 plane|🛩️ truck|🚚 house|🏠 chair|🪑\nclock|⏰ phone|📱 watch|⌚ brush|🖌️ broom|🧹 spoon|🥄 knife|🔪 plate|🍽️ robot|🤖 crown|👑\ndress|👗 shirt|👕 pants|👖 scarf|🧣 glove|🧤 heart|❤️ cloud|☁️ beach|🏖️ world|🌍 plant|🌱\ntooth|🦷 mouth|👄 brain|🧠 queen|👸 clown|🤡 ghost|👻 angel|👼 music|🎵 piano|🎹 smile|😄\nbank barn bath bead beak bean beef belt bush cage camp cane cape cart cave chin clap claw clay coal\ncomb cook cord cork crow cube curl desk dish doll dove drop dust farm fort gate glue gold hair hall\nharp hawk heel hill hive hood hook horn hose iron joke jump knee knot lace lake lamb lane lawn lime\nline loaf mail mask meal mint mist moth nail neck nest oven page pail palm park path pipe plum pond\npool rake roof room root rope sail sand seed shop silk sink sled soil song tail tape town tray twig\nvase vest vine wall wave whip wing wire wood wool yard yarn\nbench brick bride chain chalk cheek chest cliff coach coast couch crane cream dance dream earth elbow fairy feast fence\nfield flame flour flute fruit giant glass globe goose grass gravy guest hotel jeans jelly jewel judge lunch magic maple\nmarch medal month night noise north nurse ocean olive paint paper party pearl pedal penny petal pilot porch prize puppy\npurse quilt radio ranch river ruler scale shade shelf shell skate skirt slide smoke snack spark stamp steam stick stone\nstorm story straw sugar swing sword table teeth thumb toast tower towel track trail tulip uncle voice wagon wheat wheel\nbridge bubble bucket butter button cheese cherry circle crayon dragon engine finger garden hammer island jacket kettle kitten ladder letter\nlizard mirror monkey orange pencil pepper pillow pocket rabbit school spider spring square stairs street ticket tunnel turtle valley violin zipper\n",
+    "HALVES": "\nsun|flower|🌻 rain|bow|🌈 cup|cake|🧁 butter|fly|🦋 snow|man|⛄ pan|cake|🥞 pop|corn|🍿 tooth|brush|🪥 air|plane|✈️ gold|fish|🐠\nlady|bug|🐞 bath|tub|🛁 fire|truck|🚒 pine|apple|🍍 straw|berry|🍓 water|melon|🍉 pea|nut|🥜 hot|dog|🌭 hand|bag|👜 back|pack|🎒\nnote|book|📓 key|board|⌨️ basket|ball|🏀 base|ball|⚾ foot|ball|🏈 snow|flake|❄️ sun|glasses|🕶️ rain|coat|🧥 mail|box|📫 door|bell|🔔\nskate|board|🛹 moon|light|🌙 neck|lace|📿 lip|stick|💄 tea|pot|🫖 egg|plant|🍆 grass|hopper|🦗 cow|boy|🤠 rail|road|🛤️ motor|bike|🏍️\nspace|ship|🚀 sun|rise|🌅 class|room|🏫 birth|day|🎂 bed|room|🛏️ mon|key|🐒 ti|ger|🐯 rab|bit|🐰 kit|ten|🐱 pup|py|🐶\ntur|tle|🐢 spi|der|🕷️ par|rot|🦜 pen|guin|🐧 dol|phin|🐬 chi|cken|🐔 pan|da|🐼 ze|bra|🦓 ap|ple|🍎 le|mon|🍋\ncar|rot|🥕 che|rry|🍒 coo|kie|🍪 can|dy|🍬 piz|za|🍕 win|dow|🪟 pen|cil|✏️ bas|ket|🧺 ro|bot|🤖 bal|loon|🎈\ngui|tar|🎸 vio|lin|🎻 doc|tor|🧑‍⚕️ ba|by|👶 flo|wer|🌸 gar|den|🏡 win|ter|☃️ sum|mer|🏖️ moun|tain|⛰️ is|land|🏝️\ncas|tle|🏰 buc|ket|🪣 ham|mer|🔨 lad|der|🪜 mir|ror|🪞 can|dle|🕯️ jac|ket|🧥 um|brella|☂️ ri|ver|🏞️ roc|ket|🚀\n",
+    "RHYMES": "\ncat|🐱 hat|🎩 bat|🦇 mat\ndog|🐶 frog|🐸 log|🪵 fog|🌫️\nsun|☀️ bun|🥯 run|🏃 fun|🎉\nbee|🐝 tree|🌳 key|🔑 three|3️⃣\ncake|🎂 lake|🏞️ snake|🐍 rake\nstar|⭐ car|🚗 jar guitar|🎸\nmoon|🌙 spoon|🥄 balloon|🎈 raccoon|🦝\nbear|🐻 chair|🪑 pear|🍐 hair|💇\nfish|🐟 dish|🍽️ wish|🌠 swish\nboat|⛵ coat|🧥 goat|🐐 float\nking|🤴 ring|💍 wing swing\ntrain|🚆 rain|🌧️ plane|✈️ crane|🏗️\nnight|🌃 light|💡 kite|🪁 white|⚪\nclock|⏰ sock|🧦 rock|🪨 lock|🔒\nnose|👃 rose|🌹 toes|🦶 hose\npig big dig wig\nhen pen ten men\nbed red sled bread\nball wall tall small\nbook cook hook look\nfly sky pie eye\nday play tray gray\nbell shell well smell\nduck truck luck stuck\nsheep sleep jeep deep\nsnow crow blow grow\ncow now how wow\nshoe blue two zoo\nfour door floor more\nnine line pine shine\nfive dive hive drive\neight gate plate skate\nhand sand band land\nname game same flame\ngreen queen bean clean\nbug rug hug mug\nmap cap nap clap\nhill bill mill still\nnest best test west\njump bump pump lump\ncold gold old told\nfunny bunny sunny runny\nmice rice ice dice\ntoy boy joy enjoy\nhot pot dot spot\n",
+    "DOERS": {
+      "0": {
+        "0": "Dogs",
+        "2": [
+          "bark",
+          "run",
+          "sleep",
+          "eat",
+          "play"
+        ]
+      },
+      "1": {
+        "0": "Cats",
+        "2": [
+          "sleep",
+          "purr",
+          "jump",
+          "eat",
+          "play"
+        ]
+      },
+      "2": {
+        "0": "Birds",
+        "2": [
+          "fly",
+          "sing",
+          "eat",
+          "sleep",
+          "hop"
+        ]
+      },
+      "3": {
+        "0": "Fish",
+        "2": [
+          "swim",
+          "eat",
+          "sleep",
+          "play",
+          "hide"
+        ]
+      },
+      "4": {
+        "0": "Frogs",
+        "2": [
+          "jump",
+          "swim",
+          "croak",
+          "eat",
+          "sleep"
+        ]
+      },
+      "5": {
+        "0": "Bears",
+        "2": [
+          "sleep",
+          "eat",
+          "walk",
+          "growl",
+          "climb"
+        ]
+      },
+      "6": {
+        "0": "Bees",
+        "2": [
+          "fly",
+          "buzz",
+          "work",
+          "dance",
+          "rest"
+        ]
+      },
+      "7": {
+        "0": "Kids",
+        "2": [
+          "play",
+          "run",
+          "jump",
+          "laugh",
+          "sing"
+        ]
+      },
+      "8": {
+        "0": "Horses",
+        "2": [
+          "run",
+          "jump",
+          "eat",
+          "sleep",
+          "walk"
+        ]
+      },
+      "9": {
+        "0": "Babies",
+        "2": [
+          "cry",
+          "sleep",
+          "eat",
+          "smile",
+          "crawl"
+        ]
+      },
+      "10": {
+        "0": "Ducks",
+        "2": [
+          "swim",
+          "quack",
+          "fly",
+          "eat",
+          "walk"
+        ]
+      },
+      "11": {
+        "0": "Lions",
+        "2": [
+          "roar",
+          "run",
+          "sleep",
+          "eat",
+          "hunt"
+        ]
+      },
+      "12": {
+        "0": "Monkeys",
+        "2": [
+          "climb",
+          "jump",
+          "play",
+          "eat",
+          "swing"
+        ]
+      },
+      "13": {
+        "0": "Rabbits",
+        "2": [
+          "hop",
+          "run",
+          "eat",
+          "hide",
+          "dig"
+        ]
+      },
+      "14": {
+        "0": "Cows",
+        "2": [
+          "moo",
+          "eat",
+          "walk",
+          "sleep",
+          "stand"
+        ]
+      },
+      "15": {
+        "0": "Pigs",
+        "2": [
+          "oink",
+          "eat",
+          "sleep",
+          "dig",
+          "run"
+        ]
+      },
+      "16": {
+        "0": "Owls",
+        "2": [
+          "fly",
+          "hoot",
+          "hunt",
+          "watch",
+          "sleep"
+        ]
+      },
+      "17": {
+        "0": "Wolves",
+        "2": [
+          "howl",
+          "run",
+          "hunt",
+          "sleep",
+          "eat"
+        ]
+      },
+      "18": {
+        "0": "Snakes",
+        "2": [
+          "hiss",
+          "crawl",
+          "hide",
+          "sleep",
+          "hunt"
+        ]
+      },
+      "19": {
+        "0": "Whales",
+        "2": [
+          "swim",
+          "dive",
+          "sing",
+          "eat",
+          "jump"
+        ]
+      },
+      "20": {
+        "0": "Mice",
+        "2": [
+          "squeak",
+          "run",
+          "hide",
+          "eat",
+          "sleep"
+        ]
+      },
+      "21": {
+        "0": "Hens",
+        "2": [
+          "cluck",
+          "peck",
+          "walk",
+          "eat",
+          "sleep"
+        ]
+      },
+      "22": {
+        "0": "Ants",
+        "2": [
+          "work",
+          "walk",
+          "dig",
+          "climb",
+          "carry"
+        ]
+      },
+      "23": {
+        "0": "Planes",
+        "2": [
+          "fly",
+          "land",
+          "turn",
+          "climb",
+          "wait"
+        ]
+      },
+      "24": {
+        "0": "Boys",
+        "2": [
+          "run",
+          "play",
+          "read",
+          "jump",
+          "swim"
+        ]
+      }
+    },
+    "PEOPLE": [
+      "Mom",
+      "Dad",
+      "Grandma",
+      "Grandpa",
+      "Anna",
+      "Tom",
+      "Kate",
+      "Max",
+      "Lily",
+      "Sam",
+      "Emma",
+      "Ben",
+      "Mia",
+      "Jack",
+      "Lucy"
+    ],
+    "ACTIONS": {
+      "0": {
+        "0": "reads books"
+      },
+      "1": {
+        "0": "eats apples"
+      },
+      "2": {
+        "0": "drinks juice"
+      },
+      "3": {
+        "0": "draws flowers"
+      },
+      "4": {
+        "0": "bakes cakes"
+      },
+      "5": {
+        "0": "likes pizza"
+      },
+      "6": {
+        "0": "buys bread"
+      },
+      "7": {
+        "0": "washes dishes"
+      },
+      "8": {
+        "0": "plays football"
+      },
+      "9": {
+        "0": "makes soup"
+      },
+      "10": {
+        "0": "feeds cats"
+      },
+      "11": {
+        "0": "rides bikes"
+      },
+      "12": {
+        "0": "wears hats"
+      },
+      "13": {
+        "0": "loves music"
+      },
+      "14": {
+        "0": "paints pictures"
+      },
+      "15": {
+        "0": "grows flowers"
+      },
+      "16": {
+        "0": "drives cars"
+      },
+      "17": {
+        "0": "builds houses"
+      },
+      "18": {
+        "0": "catches fish"
+      },
+      "19": {
+        "0": "opens doors"
+      },
+      "20": {
+        "0": "sings songs"
+      },
+      "21": {
+        "0": "needs help"
+      },
+      "22": {
+        "0": "likes apples"
+      },
+      "23": {
+        "0": "has toys"
+      },
+      "24": {
+        "0": "sees stars"
+      },
+      "25": {
+        "0": "wants milk"
+      },
+      "26": {
+        "0": "finds keys"
+      },
+      "27": {
+        "0": "eats cake"
+      },
+      "28": {
+        "0": "drinks tea"
+      },
+      "29": {
+        "0": "reads maps"
+      }
+    },
+    "HEROES": {
+      "0": {
+        "0": "The little dog"
+      },
+      "1": {
+        "0": "The big bear"
+      },
+      "2": {
+        "0": "The funny monkey"
+      },
+      "3": {
+        "0": "The small mouse"
+      },
+      "4": {
+        "0": "The happy girl"
+      },
+      "5": {
+        "0": "The kind boy"
+      },
+      "6": {
+        "0": "The white cat"
+      },
+      "7": {
+        "0": "The green frog"
+      },
+      "8": {
+        "0": "The old horse"
+      },
+      "9": {
+        "0": "The yellow bird"
+      },
+      "10": {
+        "0": "The brown fox"
+      },
+      "11": {
+        "0": "The gray wolf"
+      },
+      "12": {
+        "0": "The fat pig"
+      },
+      "13": {
+        "0": "The tall giraffe"
+      },
+      "14": {
+        "0": "The fast rabbit"
+      },
+      "15": {
+        "0": "The black sheep"
+      },
+      "16": {
+        "0": "The young lion"
+      },
+      "17": {
+        "0": "The pink duck"
+      },
+      "18": {
+        "0": "The sleepy koala"
+      },
+      "19": {
+        "0": "The clever owl"
+      }
+    },
+    "ENDINGS": [
+      "runs",
+      "sleeps",
+      "jumps",
+      "eats",
+      "plays",
+      "walks",
+      "hides",
+      "waits",
+      "smiles",
+      "rests",
+      "runs fast",
+      "sleeps well",
+      "eats slowly",
+      "jumps high",
+      "plays outside",
+      "walks home",
+      "swims well",
+      "hides here",
+      "sits down",
+      "goes away",
+      "comes back",
+      "looks up",
+      "stands still",
+      "runs away",
+      "wakes up"
+    ],
+    "EN": {
+      "name": "Англійська мова",
+      "alphabet": {
+        "0": "abcdefghijklmnopqrstuvwxyz"
+      },
+      "cards": {
+        "alphabet": {
+          "label": "Alphabet",
+          "blurb": "Англійська: постав літери на свої місця в абетці",
+          "intro": "Вчимо англійську абетку! Літери в ній стоять одна за одною, завжди в тому самому порядку. Кілька літер загубилося — перетягни кожну на її місце."
+        },
+        "bubbles": {
+          "label": "Bubble Pop",
+          "blurb": "Англійська: лопай бульбашки — абетка і слова з літер",
+          "intro": "Вчимо англійську! У бульбашках — англійські літери. Лопай їх по порядку, як в англійській абетці. Натисни на динамік, щоб почути літеру."
+        },
+        "chain": {
+          "label": "Word Chain",
+          "blurb": "Англійська: з’єднуй слова з літерами та між собою",
+          "intro": "Вчимо англійські слова! З’єднай кожне слово з літерою, на яку воно починається. Натисни на динамік, щоб почути слово."
+        },
+        "rhymes": {
+          "label": "Rhyme Matcher",
+          "blurb": "Англійська: знаходь слова, що римуються",
+          "intro": "В англійській мові теж є рими — слова, які звучать схоже наприкінці. Натискай на динаміки, слухай слова і з’єднуй ті, що римуються."
+        },
+        "sentences": {
+          "label": "Sentence Builder",
+          "blurb": "Англійська: склади речення зі слів",
+          "intro": "Складаємо речення англійською! Постав слова по порядку. Перше слово пишеться з великої літери, а в кінці стоїть крапка."
+        }
+      }
+    }
+  }
+}

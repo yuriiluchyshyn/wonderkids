@@ -1,3 +1,7 @@
+import TEXTS from '@/locales/app/uk/games/history.json';
+
+const J = TEXTS.content.data;
+
 /** Content for the History games. Ordered easy → hard (see `unlocked`). */
 
 export interface Achiever {
@@ -21,64 +25,64 @@ export interface Achiever {
  */
 export const WORLD_FIGURES: Achiever[] = [
   // ---- level 1
-  { id: 'einstein', name: 'Альберт Ейнштейн', face: '👨‍🔬', symbol: '⚛️', symbolName: 'Атом і формули', fact: 'Альберт Ейнштейн — фізик, який пояснив, як влаштовані час, простір і світло.' },
-  { id: 'davinci', name: 'Леонардо да Вінчі', face: '👨‍🎨', symbol: '🖼️', symbolName: 'Мона Ліза', fact: 'Леонардо да Вінчі намалював «Мону Лізу» і придумував літальні машини.' },
-  { id: 'columbus', name: 'Христофор Колумб', face: '🧭', symbol: '⛵', symbolName: 'Корабель до Америки', fact: 'Колумб переплив океан на вітрильниках і дістався Америки.' },
-  { id: 'armstrong', name: 'Ніл Армстронг', face: '🧑‍🚀', symbol: '🌙', symbolName: 'Місяць', fact: 'Ніл Армстронг першим із людей ступив на Місяць.' },
-  { id: 'mozart', name: 'Вольфганг Моцарт', face: '🧑‍🎤', symbol: '🎹', symbolName: 'Музика з дитинства', fact: 'Моцарт почав складати музику, коли йому було лише п’ять років.' },
+  { id: 'einstein', name: J.WORLD_FIGURES.einstein.name, face: '👨‍🔬', symbol: '⚛️', symbolName: J.WORLD_FIGURES.einstein.symbolName, fact: J.WORLD_FIGURES.einstein.fact },
+  { id: 'davinci', name: J.WORLD_FIGURES.davinci.name, face: '👨‍🎨', symbol: '🖼️', symbolName: J.WORLD_FIGURES.davinci.symbolName, fact: J.WORLD_FIGURES.davinci.fact },
+  { id: 'columbus', name: J.WORLD_FIGURES.columbus.name, face: '🧭', symbol: '⛵', symbolName: J.WORLD_FIGURES.columbus.symbolName, fact: J.WORLD_FIGURES.columbus.fact },
+  { id: 'armstrong', name: J.WORLD_FIGURES.armstrong.name, face: '🧑‍🚀', symbol: '🌙', symbolName: J.WORLD_FIGURES.armstrong.symbolName, fact: J.WORLD_FIGURES.armstrong.fact },
+  { id: 'mozart', name: J.WORLD_FIGURES.mozart.name, face: '🧑‍🎤', symbol: '🎹', symbolName: J.WORLD_FIGURES.mozart.symbolName, fact: J.WORLD_FIGURES.mozart.fact },
   // ---- level 2
-  { id: 'newton', name: 'Ісаак Ньютон', face: '🧑‍🏫', symbol: '🍎', symbolName: 'Яблуко і тяжіння', fact: 'Ісаак Ньютон зрозумів, чому яблуко падає вниз: Земля все притягує до себе.' },
-  { id: 'shakespeare', name: 'Вільям Шекспір', face: '🧔', symbol: '🎭', symbolName: 'Театр', fact: 'Шекспір написав п’єси, які в театрах грають уже понад чотириста років.' },
-  { id: 'galileo', name: 'Галілео Галілей', face: '🧙‍♂️', symbol: '🔭', symbolName: 'Телескоп', fact: 'Галілей першим роздивився в телескоп гори на Місяці та супутники Юпітера.' },
+  { id: 'newton', name: J.WORLD_FIGURES.newton.name, face: '🧑‍🏫', symbol: '🍎', symbolName: J.WORLD_FIGURES.newton.symbolName, fact: J.WORLD_FIGURES.newton.fact },
+  { id: 'shakespeare', name: J.WORLD_FIGURES.shakespeare.name, face: '🧔', symbol: '🎭', symbolName: J.WORLD_FIGURES.shakespeare.symbolName, fact: J.WORLD_FIGURES.shakespeare.fact },
+  { id: 'galileo', name: J.WORLD_FIGURES.galileo.name, face: '🧙‍♂️', symbol: '🔭', symbolName: J.WORLD_FIGURES.galileo.symbolName, fact: J.WORLD_FIGURES.galileo.fact },
   // ---- level 3
-  { id: 'curie', name: 'Марія Кюрі', who: 'she', face: '👩‍🔬', symbol: '🧪', symbolName: 'Досліди в лабораторії', fact: 'Марія Кюрі відкрила нові хімічні елементи і двічі отримала Нобелівську премію.' },
-  { id: 'picasso', name: 'Пабло Пікассо', face: '🧑‍🎨', symbol: '🎨', symbolName: 'Незвичайні картини', fact: 'Пікассо малював людей із кубиків і трикутників.' },
-  { id: 'darwin', name: 'Чарльз Дарвін', face: '👴', symbol: '🐢', symbolName: 'Тварини з далеких островів', fact: 'Дарвін вивчав тварин і пояснив, як вони змінюються з часом.' },
+  { id: 'curie', name: J.WORLD_FIGURES.curie.name, who: 'she', face: '👩‍🔬', symbol: '🧪', symbolName: J.WORLD_FIGURES.curie.symbolName, fact: J.WORLD_FIGURES.curie.fact },
+  { id: 'picasso', name: J.WORLD_FIGURES.picasso.name, face: '🧑‍🎨', symbol: '🎨', symbolName: J.WORLD_FIGURES.picasso.symbolName, fact: J.WORLD_FIGURES.picasso.fact },
+  { id: 'darwin', name: J.WORLD_FIGURES.darwin.name, face: '👴', symbol: '🐢', symbolName: J.WORLD_FIGURES.darwin.symbolName, fact: J.WORLD_FIGURES.darwin.fact },
   // ---- level 4
-  { id: 'gutenberg', name: 'Йоганн Гутенберг', face: '🧑‍🔧', symbol: '📖', symbolName: 'Друкована книга', fact: 'Гутенберг придумав друкарський верстат — і книжок стало багато.' },
-  { id: 'edison', name: 'Томас Едісон', face: '👨‍🔧', symbol: '💡', symbolName: 'Лампочка', fact: 'Томас Едісон зробив лампочку, яка світила дуже довго, і ще понад тисячу винаходів.' },
-  { id: 'magellan', name: 'Фернан Магеллан', face: '🧑‍✈️', symbol: '🌍', symbolName: 'Подорож навколо світу', fact: 'Кораблі Фернана Магеллана першими обпливли навколо всієї Землі.' },
+  { id: 'gutenberg', name: J.WORLD_FIGURES.gutenberg.name, face: '🧑‍🔧', symbol: '📖', symbolName: J.WORLD_FIGURES.gutenberg.symbolName, fact: J.WORLD_FIGURES.gutenberg.fact },
+  { id: 'edison', name: J.WORLD_FIGURES.edison.name, face: '👨‍🔧', symbol: '💡', symbolName: J.WORLD_FIGURES.edison.symbolName, fact: J.WORLD_FIGURES.edison.fact },
+  { id: 'magellan', name: J.WORLD_FIGURES.magellan.name, face: '🧑‍✈️', symbol: '🌍', symbolName: J.WORLD_FIGURES.magellan.symbolName, fact: J.WORLD_FIGURES.magellan.fact },
   // ---- level 5
-  { id: 'beethoven', name: 'Людвіг ван Бетховен', face: '👨‍🦱', symbol: '🎼', symbolName: 'Симфонії', fact: 'Бетховен писав музику навіть тоді, коли втратив слух.' },
-  { id: 'archimedes', name: 'Архімед', face: '🧓', symbol: '🛁', symbolName: '«Еврика!» у ванні', fact: 'Архімед зрозумів, чому предмети плавають, коли сидів у ванні, — і вигукнув: «Еврика!»' },
-  { id: 'cleopatra', name: 'Клеопатра', who: 'she', face: '👸', symbol: '👑', symbolName: 'Цариця Єгипту', fact: 'Клеопатра була останньою царицею Стародавнього Єгипту.' },
+  { id: 'beethoven', name: J.WORLD_FIGURES.beethoven.name, face: '👨‍🦱', symbol: '🎼', symbolName: J.WORLD_FIGURES.beethoven.symbolName, fact: J.WORLD_FIGURES.beethoven.fact },
+  { id: 'archimedes', name: J.WORLD_FIGURES.archimedes.name, face: '🧓', symbol: '🛁', symbolName: J.WORLD_FIGURES.archimedes.symbolName, fact: J.WORLD_FIGURES.archimedes.fact },
+  { id: 'cleopatra', name: J.WORLD_FIGURES.cleopatra.name, who: 'she', face: '👸', symbol: '👑', symbolName: J.WORLD_FIGURES.cleopatra.symbolName, fact: J.WORLD_FIGURES.cleopatra.fact },
   // ---- level 6
-  { id: 'joan', name: 'Жанна д’Арк', who: 'she', face: '👩', symbol: '🛡️', symbolName: 'Дівчина-воїн', fact: 'Жанна д’Арк ще дівчиною повела французьке військо в бій і стала героїнею Франції.' },
-  { id: 'vangogh', name: 'Вінсент ван Гог', face: '👨‍🦰', symbol: '🌻', symbolName: '«Соняшники»', fact: 'Вінсент ван Гог малював яскраві соняшники й зоряне небо.' },
-  { id: 'alexander', name: 'Олександр Македонський', face: '🤴', symbol: '🗺️', symbolName: 'Величезна імперія', fact: 'Олександр Македонський створив величезну державу — від Греції аж до Індії.' },
+  { id: 'joan', name: J.WORLD_FIGURES.joan.name, who: 'she', face: '👩', symbol: '🛡️', symbolName: J.WORLD_FIGURES.joan.symbolName, fact: J.WORLD_FIGURES.joan.fact },
+  { id: 'vangogh', name: J.WORLD_FIGURES.vangogh.name, face: '👨‍🦰', symbol: '🌻', symbolName: J.WORLD_FIGURES.vangogh.symbolName, fact: J.WORLD_FIGURES.vangogh.fact },
+  { id: 'alexander', name: J.WORLD_FIGURES.alexander.name, face: '🤴', symbol: '🗺️', symbolName: J.WORLD_FIGURES.alexander.symbolName, fact: J.WORLD_FIGURES.alexander.fact },
   // ---- level 7
-  { id: 'wright', name: 'Брати Райт', who: 'they', face: '👬', symbol: '✈️', symbolName: 'Перший літак', fact: 'Брати Райт збудували перший літак із мотором і піднялися на ньому в небо.' },
-  { id: 'michelangelo', name: 'Мікеланджело', face: '🧔‍♂️', symbol: '🗿', symbolName: 'Мармурові статуї', fact: 'Мікеланджело вирізьбив із мармуру статую Давида і розписав стелю Сикстинської капели.' },
-  { id: 'copernicus', name: 'Миколай Коперник', face: '👨‍🏫', symbol: '☀️', symbolName: 'Сонце в центрі', fact: 'Миколай Коперник пояснив, що Земля обертається навколо Сонця, а не навпаки.' },
+  { id: 'wright', name: J.WORLD_FIGURES.wright.name, who: 'they', face: '👬', symbol: '✈️', symbolName: J.WORLD_FIGURES.wright.symbolName, fact: J.WORLD_FIGURES.wright.fact },
+  { id: 'michelangelo', name: J.WORLD_FIGURES.michelangelo.name, face: '🧔‍♂️', symbol: '🗿', symbolName: J.WORLD_FIGURES.michelangelo.symbolName, fact: J.WORLD_FIGURES.michelangelo.fact },
+  { id: 'copernicus', name: J.WORLD_FIGURES.copernicus.name, face: '👨‍🏫', symbol: '☀️', symbolName: J.WORLD_FIGURES.copernicus.symbolName, fact: J.WORLD_FIGURES.copernicus.fact },
   // ---- level 8
-  { id: 'andersen', name: 'Ганс Крістіан Андерсен', face: '👨‍💼', symbol: '🧜‍♀️', symbolName: 'Казки', fact: 'Андерсен написав казки «Русалонька», «Гидке каченя» і «Снігова королева».' },
-  { id: 'tesla', name: 'Нікола Тесла', face: '👨‍💻', symbol: '⚡', symbolName: 'Електричний струм', fact: 'Нікола Тесла придумав, як передавати електричний струм на великі відстані.' },
-  { id: 'marcopolo', name: 'Марко Поло', face: '🧳', symbol: '🐫', symbolName: 'Подорож до Китаю', fact: 'Марко Поло багато років мандрував до Китаю і розповів про нього Європі.' },
+  { id: 'andersen', name: J.WORLD_FIGURES.andersen.name, face: '👨‍💼', symbol: '🧜‍♀️', symbolName: J.WORLD_FIGURES.andersen.symbolName, fact: J.WORLD_FIGURES.andersen.fact },
+  { id: 'tesla', name: J.WORLD_FIGURES.tesla.name, face: '👨‍💻', symbol: '⚡', symbolName: J.WORLD_FIGURES.tesla.symbolName, fact: J.WORLD_FIGURES.tesla.fact },
+  { id: 'marcopolo', name: J.WORLD_FIGURES.marcopolo.name, face: '🧳', symbol: '🐫', symbolName: J.WORLD_FIGURES.marcopolo.symbolName, fact: J.WORLD_FIGURES.marcopolo.fact },
   // ---- level 9
-  { id: 'nightingale', name: 'Флоренс Найтінгейл', who: 'she', face: '👩‍⚕️', symbol: '🏥', symbolName: 'Догляд за хворими', fact: 'Флоренс Найтінгейл навчила лікарні бути чистими й дбайливо доглядати хворих.' },
-  { id: 'chaplin', name: 'Чарлі Чаплін', face: '🥸', symbol: '🎩', symbolName: 'Німе кіно', fact: 'Чарлі Чаплін смішив увесь світ у німих фільмах — без жодного слова.' },
-  { id: 'cousteau', name: 'Жак-Ів Кусто', face: '🧑‍🔬', symbol: '🤿', symbolName: 'Підводний світ', fact: 'Жак-Ів Кусто допоміг створити акваланг і показав людям підводний світ.' },
+  { id: 'nightingale', name: J.WORLD_FIGURES.nightingale.name, who: 'she', face: '👩‍⚕️', symbol: '🏥', symbolName: J.WORLD_FIGURES.nightingale.symbolName, fact: J.WORLD_FIGURES.nightingale.fact },
+  { id: 'chaplin', name: J.WORLD_FIGURES.chaplin.name, face: '🥸', symbol: '🎩', symbolName: J.WORLD_FIGURES.chaplin.symbolName, fact: J.WORLD_FIGURES.chaplin.fact },
+  { id: 'cousteau', name: J.WORLD_FIGURES.cousteau.name, face: '🧑‍🔬', symbol: '🤿', symbolName: J.WORLD_FIGURES.cousteau.symbolName, fact: J.WORLD_FIGURES.cousteau.fact },
   // ---- level 10
-  { id: 'jobs', name: 'Стів Джобс', face: '👨‍💼', symbol: '📱', symbolName: 'Смартфон', fact: 'Стів Джобс разом із командою створив комп’ютери і смартфон, яким користуються в усьому світі.' },
-  { id: 'pythagoras', name: 'Піфагор', face: '👳', symbol: '📐', symbolName: 'Теорема про трикутник', fact: 'Піфагор — давньогрецький математик. Його теорему про трикутник вивчають у школі.' },
-  { id: 'goodall', name: 'Джейн Гудолл', who: 'she', face: '👩‍🦳', symbol: '🐒', symbolName: 'Дружба з шимпанзе', fact: 'Джейн Гудолл багато років жила поруч із шимпанзе й відкрила, що вони вміють користуватися знаряддями.' },
+  { id: 'jobs', name: J.WORLD_FIGURES.jobs.name, face: '👨‍💼', symbol: '📱', symbolName: J.WORLD_FIGURES.jobs.symbolName, fact: J.WORLD_FIGURES.jobs.fact },
+  { id: 'pythagoras', name: J.WORLD_FIGURES.pythagoras.name, face: '👳', symbol: '📐', symbolName: J.WORLD_FIGURES.pythagoras.symbolName, fact: J.WORLD_FIGURES.pythagoras.fact },
+  { id: 'goodall', name: J.WORLD_FIGURES.goodall.name, who: 'she', face: '👩‍🦳', symbol: '🐒', symbolName: J.WORLD_FIGURES.goodall.symbolName, fact: J.WORLD_FIGURES.goodall.fact },
 ];
 
 /** Ordered by fame too: the first four open step 1, then one more per step. */
 export const UA_FIGURES: Achiever[] = [
-  { id: 'shevchenko', name: 'Тарас Шевченко', face: '👨‍🦳', symbol: '📖', symbolName: '«Кобзар»', fact: 'Тарас Шевченко — поет і художник. Його головна книжка називається «Кобзар».' },
-  { id: 'korolov', name: 'Сергій Корольов', face: '👨‍🚀', symbol: '🚀', symbolName: 'Космічна ракета', fact: 'Сергій Корольов народився в Житомирі і сконструював перші космічні ракети.' },
-  { id: 'yaroslav', name: 'Ярослав Мудрий', face: '🤴', symbol: '📜', symbolName: 'Закони і бібліотека', fact: 'Князь Ярослав Мудрий записав перші закони і зібрав велику бібліотеку.' },
-  { id: 'lesia', name: 'Леся Українка', who: 'she', face: '👩‍🦰', symbol: '🌳', symbolName: '«Лісова пісня»', fact: 'Леся Українка написала казкову «Лісову пісню» про Мавку.' },
-  { id: 'leontovych', name: 'Микола Леонтович', face: '🧑‍🎼', symbol: '🔔', symbolName: '«Щедрик»', fact: 'Микола Леонтович створив «Щедрик» — мелодію, яку на Різдво співає весь світ.' },
-  { id: 'sikorsky', name: 'Ігор Сікорський', face: '👨‍✈️', symbol: '🚁', symbolName: 'Гелікоптер', fact: 'Ігор Сікорський народився в Києві і побудував перший серійний гелікоптер.' },
-  { id: 'olha', name: 'Княгиня Ольга', who: 'she', face: '👸', symbol: '👑', symbolName: 'Правителька Русі', fact: 'Княгиня Ольга мудро правила Київською Руссю понад тисячу років тому.' },
-  { id: 'khmelnytsky', name: 'Богдан Хмельницький', face: '🧔‍♂️', symbol: '🐎', symbolName: 'Гетьман козаків', fact: 'Богдан Хмельницький був гетьманом і очолив козацьке військо.' },
-  { id: 'skovoroda', name: 'Григорій Сковорода', face: '🧙', symbol: '🎒', symbolName: 'Мандрівний філософ', fact: 'Григорій Сковорода мандрував пішки з торбинкою і вчив людей мудрості.' },
-  { id: 'franko', name: 'Іван Франко', face: '👨‍🏫', symbol: '🦊', symbolName: '«Лис Микита»', fact: 'Іван Франко написав для дітей казку «Лис Микита».' },
-  { id: 'prymachenko', name: 'Марія Примаченко', who: 'she', face: '👵', symbol: '🎨', symbolName: 'Казкові звірі на картинах', fact: 'Марія Примаченко малювала яскравих казкових звірів, яких не буває насправді.' },
-  { id: 'kadeniuk', name: 'Леонід Каденюк', face: '🧑‍🚀', symbol: '🛰️', symbolName: 'Політ у космос', fact: 'Леонід Каденюк — перший космонавт незалежної України.' },
-  { id: 'amosov', name: 'Микола Амосов', face: '👨‍⚕️', symbol: '❤️', symbolName: 'Операції на серці', fact: 'Лікар Микола Амосов навчився лагодити людські серця.' },
+  { id: 'shevchenko', name: J.UA_FIGURES.shevchenko.name, face: '👨‍🦳', symbol: '📖', symbolName: J.UA_FIGURES.shevchenko.symbolName, fact: J.UA_FIGURES.shevchenko.fact },
+  { id: 'korolov', name: J.UA_FIGURES.korolov.name, face: '👨‍🚀', symbol: '🚀', symbolName: J.UA_FIGURES.korolov.symbolName, fact: J.UA_FIGURES.korolov.fact },
+  { id: 'yaroslav', name: J.UA_FIGURES.yaroslav.name, face: '🤴', symbol: '📜', symbolName: J.UA_FIGURES.yaroslav.symbolName, fact: J.UA_FIGURES.yaroslav.fact },
+  { id: 'lesia', name: J.UA_FIGURES.lesia.name, who: 'she', face: '👩‍🦰', symbol: '🌳', symbolName: J.UA_FIGURES.lesia.symbolName, fact: J.UA_FIGURES.lesia.fact },
+  { id: 'leontovych', name: J.UA_FIGURES.leontovych.name, face: '🧑‍🎼', symbol: '🔔', symbolName: J.UA_FIGURES.leontovych.symbolName, fact: J.UA_FIGURES.leontovych.fact },
+  { id: 'sikorsky', name: J.UA_FIGURES.sikorsky.name, face: '👨‍✈️', symbol: '🚁', symbolName: J.UA_FIGURES.sikorsky.symbolName, fact: J.UA_FIGURES.sikorsky.fact },
+  { id: 'olha', name: J.UA_FIGURES.olha.name, who: 'she', face: '👸', symbol: '👑', symbolName: J.UA_FIGURES.olha.symbolName, fact: J.UA_FIGURES.olha.fact },
+  { id: 'khmelnytsky', name: J.UA_FIGURES.khmelnytsky.name, face: '🧔‍♂️', symbol: '🐎', symbolName: J.UA_FIGURES.khmelnytsky.symbolName, fact: J.UA_FIGURES.khmelnytsky.fact },
+  { id: 'skovoroda', name: J.UA_FIGURES.skovoroda.name, face: '🧙', symbol: '🎒', symbolName: J.UA_FIGURES.skovoroda.symbolName, fact: J.UA_FIGURES.skovoroda.fact },
+  { id: 'franko', name: J.UA_FIGURES.franko.name, face: '👨‍🏫', symbol: '🦊', symbolName: J.UA_FIGURES.franko.symbolName, fact: J.UA_FIGURES.franko.fact },
+  { id: 'prymachenko', name: J.UA_FIGURES.prymachenko.name, who: 'she', face: '👵', symbol: '🎨', symbolName: J.UA_FIGURES.prymachenko.symbolName, fact: J.UA_FIGURES.prymachenko.fact },
+  { id: 'kadeniuk', name: J.UA_FIGURES.kadeniuk.name, face: '🧑‍🚀', symbol: '🛰️', symbolName: J.UA_FIGURES.kadeniuk.symbolName, fact: J.UA_FIGURES.kadeniuk.fact },
+  { id: 'amosov', name: J.UA_FIGURES.amosov.name, face: '👨‍⚕️', symbol: '❤️', symbolName: J.UA_FIGURES.amosov.symbolName, fact: J.UA_FIGURES.amosov.fact },
 ];
 
 export interface Invention {
@@ -103,29 +107,29 @@ export const PICTURED = new Set(['alexander', 'andersen', 'archimedes', 'armstro
 export const UNPICTURED_INVENTIONS = new Set<string>([]);
 
 export const WORLD_INVENTIONS: Invention[] = [
-  { id: 'bulb', name: 'Лампочка', emoji: '💡', by: 'Томас Едісон', face: 'edison', fact: 'Томас Едісон зробив лампочку, яка могла світити дуже довго.' },
-  { id: 'telephone', name: 'Телефон', emoji: '☎️', by: 'Александер Белл', face: 'bell', fact: 'Александер Белл придумав телефон, щоб чути голос здалеку.' },
-  { id: 'plane', name: 'Літак', emoji: '✈️', by: 'Брати Райт', face: 'wright', fact: 'Брати Райт першими піднялися в небо на літаку з мотором.' },
-  { id: 'radio', name: 'Радіо', emoji: '📻', by: 'Гульєльмо Марконі', face: 'marconi', fact: 'Марконі навчився передавати сигнали без дротів.' },
-  { id: 'press', name: 'Друкарський верстат', emoji: '📖', by: 'Йоганн Гутенберг', face: 'gutenberg', fact: 'Завдяки верстату Гутенберга книжки перестали переписувати від руки.' },
-  { id: 'car', name: 'Автомобіль', emoji: '🚗', by: 'Карл Бенц', face: 'benz', fact: 'Карл Бенц збудував перший автомобіль із бензиновим двигуном.' },
-  { id: 'train', name: 'Паровоз', emoji: '🚂', by: 'Джордж Стефенсон', face: 'stephenson', fact: 'Паровоз Стефенсона возив людей швидше за коней.' },
-  { id: 'penicillin', name: 'Пеніцилін', ask: 'Хто відкрив пеніцилін — ліки, що перемагають мікробів?', emoji: '💊', by: 'Александер Флемінг', face: 'fleming', fact: 'Флемінг відкрив пеніцилін — ліки, що перемагають мікробів.' },
-  { id: 'web', name: 'Інтернет-сторінки', ask: 'Хто придумав вебсторінки в інтернеті?', emoji: '🌐', by: 'Тім Бернерс-Лі', face: 'berners_lee', fact: 'Тім Бернерс-Лі придумав вебсторінки, які ми відкриваємо щодня.' },
-  { id: 'telescope', name: 'Телескоп для зірок', ask: 'Хто першим спрямував телескоп на зорі?', emoji: '🔭', by: 'Галілео Галілей', face: 'galileo', fact: 'Галілей удосконалив телескоп і спрямував його на небо.' },
+  { id: 'bulb', name: J.WORLD_INVENTIONS.bulb.name, emoji: '💡', by: J.WORLD_INVENTIONS.bulb.by, face: 'edison', fact: J.WORLD_INVENTIONS.bulb.fact },
+  { id: 'telephone', name: J.WORLD_INVENTIONS.telephone.name, emoji: '☎️', by: J.WORLD_INVENTIONS.telephone.by, face: 'bell', fact: J.WORLD_INVENTIONS.telephone.fact },
+  { id: 'plane', name: J.WORLD_INVENTIONS.plane.name, emoji: '✈️', by: J.WORLD_INVENTIONS.plane.by, face: 'wright', fact: J.WORLD_INVENTIONS.plane.fact },
+  { id: 'radio', name: J.WORLD_INVENTIONS.radio.name, emoji: '📻', by: J.WORLD_INVENTIONS.radio.by, face: 'marconi', fact: J.WORLD_INVENTIONS.radio.fact },
+  { id: 'press', name: J.WORLD_INVENTIONS.press.name, emoji: '📖', by: J.WORLD_INVENTIONS.press.by, face: 'gutenberg', fact: J.WORLD_INVENTIONS.press.fact },
+  { id: 'car', name: J.WORLD_INVENTIONS.car.name, emoji: '🚗', by: J.WORLD_INVENTIONS.car.by, face: 'benz', fact: J.WORLD_INVENTIONS.car.fact },
+  { id: 'train', name: J.WORLD_INVENTIONS.train.name, emoji: '🚂', by: J.WORLD_INVENTIONS.train.by, face: 'stephenson', fact: J.WORLD_INVENTIONS.train.fact },
+  { id: 'penicillin', name: J.WORLD_INVENTIONS.penicillin.name, ask: J.WORLD_INVENTIONS.penicillin.ask, emoji: '💊', by: J.WORLD_INVENTIONS.penicillin.by, face: 'fleming', fact: J.WORLD_INVENTIONS.penicillin.fact },
+  { id: 'web', name: J.WORLD_INVENTIONS.web.name, ask: J.WORLD_INVENTIONS.web.ask, emoji: '🌐', by: J.WORLD_INVENTIONS.web.by, face: 'berners_lee', fact: J.WORLD_INVENTIONS.web.fact },
+  { id: 'telescope', name: J.WORLD_INVENTIONS.telescope.name, ask: J.WORLD_INVENTIONS.telescope.ask, emoji: '🔭', by: J.WORLD_INVENTIONS.telescope.by, face: 'galileo', fact: J.WORLD_INVENTIONS.telescope.fact },
 ];
 
 export const UA_INVENTIONS: Invention[] = [
-  { id: 'helicopter', name: 'Гелікоптер', emoji: '🚁', by: 'Ігор Сікорський', face: 'sikorsky', fact: 'Киянин Ігор Сікорський створив гелікоптер, який літає і сьогодні.' },
-  { id: 'kerosene', name: 'Гасова лампа', emoji: '🪔', by: 'Ігнатій Лукасевич і Ян Зег', face: 'lukasiewicz', fact: 'Гасову лампу винайшли у львівській аптеці.' },
-  { id: 'cinema', name: 'Кіноапарат', emoji: '🎥', by: 'Йосип Тимченко', face: 'tymchenko', fact: 'Одеський механік Йосип Тимченко зробив апарат для показу рухомих картинок раніше за братів Люм’єр.' },
-  { id: 'welding', name: 'Швидке зварювання металу', ask: 'Хто навчив машини швидко зварювати метал?', emoji: '⚡', by: 'Євген Патон', face: 'paton', fact: 'Євген Патон навчив машини зварювати метал. Його іменем названо міст у Києві.' },
-  { id: 'xray', name: 'Рентгенівські промені', ask: 'Хто з українців досліджував рентгенівські промені?', emoji: '🩻', by: 'Іван Пулюй', face: 'pulyui', fact: 'Іван Пулюй досліджував промені, якими лікарі бачать кістки.' },
-  { id: 'tram', name: 'Електричний трамвай', emoji: '🚋', by: 'Федір Піроцький', face: 'pirotsky', fact: 'Федір Піроцький придумав, як пустити електрику по рейках для трамвая.' },
-  { id: 'vaccine', name: 'Вакцина від чуми й холери', emoji: '💉', by: 'Володимир Хавкін', face: 'haffkine', fact: 'Одесит Володимир Хавкін створив вакцини, які врятували мільйони людей.' },
-  { id: 'mriya', name: 'Літак «Мрія»', ask: 'Хто створив найбільший у світі літак «Мрія»?', emoji: '✈️', by: 'Конструктори Антонова', fact: 'Український літак «Мрія» був найбільшим у світі.' },
-  { id: 'cd', name: 'Компакт-диск', emoji: '💿', by: "В'ячеслав Петров", fact: 'Киянин В’ячеслав Петров придумав оптичний диск — попередника компакт-диска.' },
-  { id: 'rocket', name: 'Космічна ракета', emoji: '🚀', by: 'Сергій Корольов', face: 'korolov', fact: 'Ракети Сергія Корольова першими вивели людину в космос.' },
+  { id: 'helicopter', name: J.UA_INVENTIONS.helicopter.name, emoji: '🚁', by: J.UA_INVENTIONS.helicopter.by, face: 'sikorsky', fact: J.UA_INVENTIONS.helicopter.fact },
+  { id: 'kerosene', name: J.UA_INVENTIONS.kerosene.name, emoji: '🪔', by: J.UA_INVENTIONS.kerosene.by, face: 'lukasiewicz', fact: J.UA_INVENTIONS.kerosene.fact },
+  { id: 'cinema', name: J.UA_INVENTIONS.cinema.name, emoji: '🎥', by: J.UA_INVENTIONS.cinema.by, face: 'tymchenko', fact: J.UA_INVENTIONS.cinema.fact },
+  { id: 'welding', name: J.UA_INVENTIONS.welding.name, ask: J.UA_INVENTIONS.welding.ask, emoji: '⚡', by: J.UA_INVENTIONS.welding.by, face: 'paton', fact: J.UA_INVENTIONS.welding.fact },
+  { id: 'xray', name: J.UA_INVENTIONS.xray.name, ask: J.UA_INVENTIONS.xray.ask, emoji: '🩻', by: J.UA_INVENTIONS.xray.by, face: 'pulyui', fact: J.UA_INVENTIONS.xray.fact },
+  { id: 'tram', name: J.UA_INVENTIONS.tram.name, emoji: '🚋', by: J.UA_INVENTIONS.tram.by, face: 'pirotsky', fact: J.UA_INVENTIONS.tram.fact },
+  { id: 'vaccine', name: J.UA_INVENTIONS.vaccine.name, emoji: '💉', by: J.UA_INVENTIONS.vaccine.by, face: 'haffkine', fact: J.UA_INVENTIONS.vaccine.fact },
+  { id: 'mriya', name: J.UA_INVENTIONS.mriya.name, ask: J.UA_INVENTIONS.mriya.ask, emoji: '✈️', by: J.UA_INVENTIONS.mriya.by, fact: J.UA_INVENTIONS.mriya.fact },
+  { id: 'cd', name: J.UA_INVENTIONS.cd.name, emoji: '💿', by: J.UA_INVENTIONS.cd.by, fact: J.UA_INVENTIONS.cd.fact },
+  { id: 'rocket', name: J.UA_INVENTIONS.rocket.name, emoji: '🚀', by: J.UA_INVENTIONS.rocket.by, face: 'korolov', fact: J.UA_INVENTIONS.rocket.fact },
 ];
 
 /**
@@ -133,50 +137,4 @@ export const UA_INVENTIONS: Invention[] = [
  * recognise them by what they did. Written out, not glued from a symbol's
  * name: «Хто відкрив Америку?», never «Хто прославився цим: корабель до Америки?».
  */
-export const WHO_ASK: Record<string, string> = {
-  einstein: 'Хто пояснив, як влаштовані час, простір і світло?',
-  davinci: 'Хто намалював «Мону Лізу»?',
-  columbus: 'Хто переплив океан і відкрив Америку?',
-  armstrong: 'Хто першим із людей ступив на Місяць?',
-  mozart: 'Хто почав складати музику в п’ять років?',
-  newton: 'Хто зрозумів, чому яблуко падає вниз?',
-  shakespeare: 'Хто написав п’єси, які вже чотириста років грають у театрах?',
-  galileo: 'Хто першим роздивився Місяць у телескоп?',
-  curie: 'Хто відкрив нові хімічні елементи і двічі отримав Нобелівську премію?',
-  picasso: 'Хто малював людей із кубиків і трикутників?',
-  darwin: 'Хто пояснив, як тварини змінюються з часом?',
-  gutenberg: 'Хто придумав друкарський верстат?',
-  edison: 'Хто зробив лампочку, яка світила дуже довго?',
-  magellan: 'Чиї кораблі першими обпливли навколо Землі?',
-  beethoven: 'Хто писав музику навіть тоді, коли втратив слух?',
-  archimedes: 'Хто вигукнув «Еврика!», сидячи у ванні?',
-  cleopatra: 'Хто був останньою царицею Стародавнього Єгипту?',
-  joan: 'Хто ще дівчиною повів французьке військо в бій?',
-  vangogh: 'Хто намалював «Соняшники» і зоряне небо?',
-  alexander: 'Хто створив державу від Греції аж до Індії?',
-  wright: 'Хто збудував перший літак із мотором?',
-  michelangelo: 'Хто вирізьбив із мармуру статую Давида?',
-  copernicus: 'Хто пояснив, що Земля обертається навколо Сонця?',
-  andersen: 'Хто написав казки «Русалонька» і «Гидке каченя»?',
-  tesla: 'Хто придумав, як передавати електричний струм на великі відстані?',
-  marcopolo: 'Хто багато років мандрував до Китаю і розповів про нього Європі?',
-  nightingale: 'Хто навчив лікарні бути чистими й дбайливо доглядати хворих?',
-  chaplin: 'Хто смішив увесь світ у німому кіно?',
-  cousteau: 'Хто показав людям підводний світ?',
-  jobs: 'Хто зі своєю командою створив смартфон?',
-  pythagoras: 'Чию теорему про трикутник вивчають у школі?',
-  goodall: 'Хто багато років жив поруч із шимпанзе?',
-  shevchenko: 'Хто написав «Кобзар»?',
-  korolov: 'Хто сконструював перші космічні ракети?',
-  yaroslav: 'Хто записав перші закони Русі і зібрав велику бібліотеку?',
-  lesia: 'Хто написав «Лісову пісню»?',
-  leontovych: 'Хто створив «Щедрик»?',
-  sikorsky: 'Хто побудував перший серійний гелікоптер?',
-  olha: 'Хто мудро правив Київською Руссю понад тисячу років тому?',
-  khmelnytsky: 'Хто був гетьманом і очолив козацьке військо?',
-  skovoroda: 'Хто мандрував пішки з торбинкою і вчив людей мудрості?',
-  franko: 'Хто написав казку «Лис Микита»?',
-  prymachenko: 'Хто малював яскравих казкових звірів?',
-  kadeniuk: 'Хто став першим космонавтом незалежної України?',
-  amosov: 'Хто навчився лагодити людські серця?',
-};
+export const WHO_ASK: Record<string, string> = J.WHO_ASK;

@@ -1,4 +1,4 @@
-import { useT, useVoiceLang } from '@/core/i18n';
+import { useT, useVoiceLang } from '@/core/translator';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { useBalance } from '@/core/child/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -33,8 +33,8 @@ import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { useWorld } from '@/core/child/world/useWorld';
 import { keysOf } from '@/core/child/world/games';
 import { KEY } from '@/core/child/world/stations';
-import { spoken, written } from '@/core/lang/uk';
-import type { LangCode } from '@/core/lang';
+import { spoken, written } from '@/core/language/uk';
+import type { LangCode } from '@/core/language';
 import styles from './GameScreen.module.css';
 
 type GiftTier = 'small' | 'big' | 'biggest' | null;

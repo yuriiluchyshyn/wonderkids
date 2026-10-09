@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { useState, type MouseEvent } from 'react';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';

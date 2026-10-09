@@ -1,4 +1,4 @@
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { SubPageHeader } from '@/components/layout/SubPageHeader';
 import { TreasureVault } from '@/components/reward/TreasureVault';

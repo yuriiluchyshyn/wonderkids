@@ -164,7 +164,7 @@ try {
   const { isAdjacent, minGap } = await server.ssrLoadModule('/src/core/game/templates/validate.ts');
   const validate = { regions: regionsOf, isAdjacent, minGap };
   // Facts are paired with the voice's by place among those both languages tell (`tellFact`).
-  const { common } = await server.ssrLoadModule('/src/core/lang/marks.ts');
+  const { common } = await server.ssrLoadModule('/src/core/language/marks.ts');
   const told = (outro) => [outro ?? []].flat().map(common).filter(Boolean);
 
   const gameIds = new Set();

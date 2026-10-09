@@ -1,5 +1,5 @@
 import type { TaskInstance } from '@/core/game/kernel/types';
-import { common } from '@/core/lang';
+import { common } from '@/core/language';
 
 const STORE_KEY = 'wk-outro-v1';
 
@@ -53,7 +53,7 @@ export interface ToldFact {
  * The facts of one thing are written in every language in the same order, but
  * not all of them are translations: a language may tell its own story at a
  * place (the highest mountain of Poland where the Ukrainian names Hoverla) or
- * add a sentence of its own — those are marked `own` (`core/lang/marks.ts`).
+ * add a sentence of its own — those are marked `own` (`core/language/marks.ts`).
  * With one language the whole pool is told, own stories too. With two, only
  * what both tell is, with the own pieces cut out, and the n-th such fact of
  * the screen is the n-th of the voice. A pool of nothing but own stories is

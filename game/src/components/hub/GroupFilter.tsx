@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { GameGroup } from '@/core/game/kernel/types';
 import { useSayT, useVoiceSpeak } from '@/core/audio/useSpeech';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
-import { useT } from '@/core/i18n';
+import { useT } from '@/core/translator';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { cn } from '@/core/utils/cn';

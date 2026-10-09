@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { TIP_PREFIX, useGameStore } from '@/core/child/store/useGameStore';
 import { useSayT } from '@/core/audio/useSpeech';
-import { useT, type AppKey } from '@/core/i18n';
+import { useT, type AppKey } from '@/core/translator';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import styles from './CoachTips.module.css';
 

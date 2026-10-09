@@ -1,4 +1,4 @@
-import { useLang, useT } from '@/core/i18n';
+import { useLang, useT } from '@/core/translator';
 import { ALL_META } from '@/core/game/kernel/types';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { Chip } from '@/components/ui/Chip';

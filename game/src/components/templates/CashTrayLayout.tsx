@@ -1,4 +1,4 @@
-import { useT, type AppKey } from '@/core/i18n';
+import { useT, type AppKey } from '@/core/translator';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState, type CSSProperties } from 'react';
 import { useSound } from '@/core/audio/useSound';

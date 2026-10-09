@@ -1,4 +1,4 @@
-import { useT, useVoiceLang } from '@/core/i18n';
+import { useT, useVoiceLang } from '@/core/translator';
 import { DIFFICULTY_AGES, type Difficulty } from '@/core/game/kernel/types';
 import { useSayT } from '@/core/audio/useSpeech';
 import { useShowText } from '@/core/app/ui/useUiPrefs';

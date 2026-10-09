@@ -1,3 +1,7 @@
+import TEXTS from '@/locales/app/uk/games/logic.json';
+
+const J = TEXTS.content.data;
+
 /** New tasks every path step opens, in each logic game (the other half of a level is recall). */
 export const PER_STEP = 25;
 
@@ -120,16 +124,16 @@ export interface Half {
 
 /** Hand-drawn halves of familiar things (they open steps 3 and 4). */
 export const DRAWN: Half[] = [
-  { name: 'Метелик', rows: ['##.', '###', '.##', '###', '#..'] },
-  { name: 'Сердечко', rows: ['.##', '###', '###', '.##', '..#'] },
-  { name: 'Ялинка', rows: ['..#', '.##', '###', '.##', '..#'] },
-  { name: 'Будиночок', rows: ['..#', '.##', '###', '#.#', '###'] },
-  { name: 'Ракета', rows: ['..#', '.##', '.##', '###', '#..'] },
-  { name: 'Гриб', rows: ['.##', '###', '###', '..#', '.##'] },
-  { name: 'Кубок', rows: ['###', '###', '.##', '..#', '.##'] },
-  { name: 'Корона', rows: ['#..', '#.#', '###', '###', '.##'] },
-  { name: 'Робот', rows: ['.##', '.#.', '###', '#.#', '.#.'] },
-  { name: 'Ключ', rows: ['.##', '#..', '.##', '..#', '.##'] },
+  { name: J.DRAWN[0].name, rows: ['##.', '###', '.##', '###', '#..'] },
+  { name: J.DRAWN[1].name, rows: ['.##', '###', '###', '.##', '..#'] },
+  { name: J.DRAWN[2].name, rows: ['..#', '.##', '###', '.##', '..#'] },
+  { name: J.DRAWN[3].name, rows: ['..#', '.##', '###', '#.#', '###'] },
+  { name: J.DRAWN[4].name, rows: ['..#', '.##', '.##', '###', '#..'] },
+  { name: J.DRAWN[5].name, rows: ['.##', '###', '###', '..#', '.##'] },
+  { name: J.DRAWN[6].name, rows: ['###', '###', '.##', '..#', '.##'] },
+  { name: J.DRAWN[7].name, rows: ['#..', '#.#', '###', '###', '.##'] },
+  { name: J.DRAWN[8].name, rows: ['.##', '.#.', '###', '#.#', '.#.'] },
+  { name: J.DRAWN[9].name, rows: ['.##', '#..', '.##', '..#', '.##'] },
 ];
 
 /**

@@ -1,13 +1,16 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { ModuleTexts } from '@/core/game/kernel/types';
-import { DEFAULT_LANG, type LangCode } from '@/core/lang';
+import { DEFAULT_LANG, type LangCode } from '@/core/language';
 import { I18N_RELEASE, V6_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { EN } from './content/en';
 import { PL } from './content/pl';
 import { UK } from './content/uk';
-import { languageTexts } from './lang';
-import type { PackView, Stage } from './lang/types';
+import { languageTexts } from './grammar';
+import type { PackView, Stage } from './grammar/types';
 import { GAME_KINDS, LANGUAGE_STEPS, STAGE, type GameKind, type LangPack } from './tasks';
+import TEXTS from '@/locales/app/uk/games/language.json';
+
+const J = TEXTS.config;
 
 export const PACKS: LangPack[] = [UK, EN, PL];
 
@@ -29,7 +32,7 @@ const textsIn = (lang: LangCode): ModuleTexts => {
 export const SUBJECT: SubjectDef = {
   id: 'language',
   texts: { en: textsIn('en'), pl: textsIn('pl') },
-  title: 'Мова',
+  title: J.SUBJECT.title,
   icon: '🔤',
   accent: '#f59e0b',
 };
@@ -57,7 +60,7 @@ const STAGES: Record<GameKind, Stage[]> = {
 function cardsOf(pack: LangPack): GameCard[] {
   return GAME_KINDS.map((kind) => ({
     id: `${pack.prefix}${kind}`,
-    // The words about a pack are there in every language of the screen (`lang/`).
+    // The words about a pack are there in every language of the screen (`grammar/`).
     langs: languageTexts.langs,
     gameId: `language_${pack.lang}_${kind}`,
     ...pack.cards[kind],

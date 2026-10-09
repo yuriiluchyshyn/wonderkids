@@ -1,8 +1,8 @@
-import type { LangCode } from '@/core/lang';
+import type { LangCode } from '@/core/language';
 import { pick, randInt, shuffle } from '@/core/utils/random';
 import type { Clue, ClueCell } from '@/core/game/templates/types';
-import { riddleWords } from '../lang/riddles';
-import type { RiddleWords, Rule } from '../lang/riddles/types';
+import { riddleWords } from '../grammar/riddles';
+import type { RiddleWords, Rule } from '../grammar/riddles/types';
 
 /**
  * «Логічні задачі» — riddles to reason out, not to calculate.
@@ -14,7 +14,7 @@ import type { RiddleWords, Rule } from '../lang/riddles/types';
  *
  * This file only DRAWS a riddle — which things, which names, which numbers,
  * in what order — and builds the picture of its hint. It holds no words: a
- * riddle is told by `lang/riddles/<language>.ts`. That is what lets the same
+ * riddle is told by `grammar/riddles/<language>.ts`. That is what lets the same
  * draw be told in the language on the screen and in the voice's (see
  * `core/game/kernel/languages.ts`): every roll of the dice is made here, in
  * the same order whatever the language, and a card's id is its place in the

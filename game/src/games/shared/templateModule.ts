@@ -1,4 +1,4 @@
-import { DEFAULT_LANG, type LangCode } from '@/core/lang';
+import { DEFAULT_LANG, type LangCode } from '@/core/language';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import type { LearningModule, SubCategory, TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, TemplatePayload } from '@/core/game/templates/types';
@@ -7,7 +7,7 @@ import { TemplateGameView } from '@/components/templates/TemplateGameView';
 import { TemplateHelper, hasHelper } from '@/components/templates/TemplateHelper';
 import { RECALL_WINDOW, composeLevel } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
-import { hasOwn, spoken, written } from '@/core/lang/uk';
+import { hasOwn, spoken, written } from '@/core/language/uk';
 
 /** Publication date of the PRD v4.0 game pack (drives the 60-day "NEW" badge). */
 export const V4_RELEASE = '2026-10-06T00:00:00Z';
@@ -32,7 +32,7 @@ export function templateTask(
   /** How the voice says the prompt, when it differs from the written one. */
   speak?: string,
 ): TaskInstance<TemplatePayload> {
-  // A prompt written with `num` / `say` (core/lang/uk) carries both readings.
+  // A prompt written with `num` / `say` (core/language/uk) carries both readings.
   const shown = written(prompt);
   const said = speak ?? (spoken(prompt) !== shown ? spoken(prompt) : undefined);
   const task: TaskInstance<TemplatePayload> = { id: uid('tt'), key, prompt: shown, payload, reward: rewardFor(step), outro, speak: said };
@@ -225,7 +225,7 @@ export function defineGeneratedSubject(
 /**
  * What a subject says, by language: `const texts = subjectTexts({ uk, en, pl })`
  * → `texts(config.lang)`. Ukrainian when no language is asked for. Each
- * language is a file of its own in the subject's `lang/` folder.
+ * language is a file of its own in the subject's `grammar/` folder.
  */
 export function subjectTexts<T>(byLang: Record<LangCode, T>): ((lang?: LangCode) => T) & { langs: LangCode[] } {
   return Object.assign((lang: LangCode = DEFAULT_LANG) => byLang[lang], { langs: Object.keys(byLang) as LangCode[] });

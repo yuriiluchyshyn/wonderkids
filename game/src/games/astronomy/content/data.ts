@@ -1,3 +1,7 @@
+import TEXTS from '@/locales/app/uk/games/astronomy.json';
+
+const J = TEXTS.content.data;
+
 export interface Planet {
   id: string;
   name: string;
@@ -6,14 +10,14 @@ export interface Planet {
 
 /** In order from the Sun. */
 export const PLANETS: Planet[] = [
-  { id: 'mercury', name: 'Меркурій', emoji: '🌑' },
-  { id: 'venus', name: 'Венера', emoji: '🟡' },
-  { id: 'earth', name: 'Земля', emoji: '🌍' },
-  { id: 'mars', name: 'Марс', emoji: '🔴' },
-  { id: 'jupiter', name: 'Юпітер', emoji: '🟠' },
-  { id: 'saturn', name: 'Сатурн', emoji: '🪐' },
-  { id: 'uranus', name: 'Уран', emoji: '🟢' },
-  { id: 'neptune', name: 'Нептун', emoji: '🔵' },
+  { id: 'mercury', name: J.PLANETS.mercury.name, emoji: '🌑' },
+  { id: 'venus', name: J.PLANETS.venus.name, emoji: '🟡' },
+  { id: 'earth', name: J.PLANETS.earth.name, emoji: '🌍' },
+  { id: 'mars', name: J.PLANETS.mars.name, emoji: '🔴' },
+  { id: 'jupiter', name: J.PLANETS.jupiter.name, emoji: '🟠' },
+  { id: 'saturn', name: J.PLANETS.saturn.name, emoji: '🪐' },
+  { id: 'uranus', name: J.PLANETS.uranus.name, emoji: '🟢' },
+  { id: 'neptune', name: J.PLANETS.neptune.name, emoji: '🔵' },
 ];
 export const planet = (id: string) => PLANETS.find((p) => p.id === id) as Planet;
 /** From the smallest to the biggest. */
@@ -28,30 +32,30 @@ export const LINE_UPS: number[][][] = [
 
 /** What each planet is known for — the best-known first, six a step (steps 7–10). */
 export const FEATURES: [id: string, planet: string, emoji: string, label: string][] = [
-  ['red', 'mars', '🔴', 'Червона планета'],
-  ['rings', 'saturn', '💍', 'Має великі кільця'],
-  ['home', 'earth', '🏡', 'Тут живемо ми'],
-  ['biggest', 'jupiter', '🏆', 'Найбільша планета'],
-  ['nearest', 'mercury', '☀️', 'Найближча до Сонця'],
-  ['farthest', 'neptune', '🥶', 'Найдальша від Сонця'],
-  ['hottest', 'venus', '🔥', 'Найгарячіша планета'],
-  ['sideways', 'uranus', '🛌', 'Обертається лежачи на боці'],
-  ['moon', 'earth', '🌙', 'Має один супутник — Місяць'],
-  ['smallest', 'mercury', '🤏', 'Найменша планета'],
-  ['spot', 'jupiter', '🌀', 'Має Велику червону пляму — велетенський вихор'],
-  ['winds', 'neptune', '🌬️', 'Тут дмуть найшвидші вітри'],
-  ['olympus', 'mars', '🌋', 'Має найвищу гору — Олімп'],
-  ['morning', 'venus', '🌅', 'Її називають Ранковою зорею'],
-  ['year', 'mercury', '🏃', 'Рік триває лише 88 днів'],
-  ['light', 'saturn', '🎈', 'Легша за воду'],
-  ['oceans', 'earth', '🌊', 'Блакитна планета з океанами'],
-  ['day', 'jupiter', '⏱️', 'Доба триває лише 10 годин'],
-  ['icy', 'uranus', '🧊', 'Крижаний велетень бірюзового кольору'],
-  ['math', 'neptune', '🧮', 'Її знайшли завдяки математиці'],
-  ['moons', 'mars', '🥔', 'Має два крихітні супутники — Фобос і Деймос'],
-  ['backwards', 'venus', '🔄', 'Обертається у зворотний бік'],
-  ['titan', 'saturn', '🛰️', 'Має супутник Титан із власною атмосферою'],
-  ['ganymede', 'jupiter', '🌕', 'Має найбільший супутник — Ганімед'],
+  ['red', 'mars', '🔴', J.FEATURES[0][3]],
+  ['rings', 'saturn', '💍', J.FEATURES[1][3]],
+  ['home', 'earth', '🏡', J.FEATURES[2][3]],
+  ['biggest', 'jupiter', '🏆', J.FEATURES[3][3]],
+  ['nearest', 'mercury', '☀️', J.FEATURES[4][3]],
+  ['farthest', 'neptune', '🥶', J.FEATURES[5][3]],
+  ['hottest', 'venus', '🔥', J.FEATURES[6][3]],
+  ['sideways', 'uranus', '🛌', J.FEATURES[7][3]],
+  ['moon', 'earth', '🌙', J.FEATURES[8][3]],
+  ['smallest', 'mercury', '🤏', J.FEATURES[9][3]],
+  ['spot', 'jupiter', '🌀', J.FEATURES[10][3]],
+  ['winds', 'neptune', '🌬️', J.FEATURES[11][3]],
+  ['olympus', 'mars', '🌋', J.FEATURES[12][3]],
+  ['morning', 'venus', '🌅', J.FEATURES[13][3]],
+  ['year', 'mercury', '🏃', J.FEATURES[14][3]],
+  ['light', 'saturn', '🎈', J.FEATURES[15][3]],
+  ['oceans', 'earth', '🌊', J.FEATURES[16][3]],
+  ['day', 'jupiter', '⏱️', J.FEATURES[17][3]],
+  ['icy', 'uranus', '🧊', J.FEATURES[18][3]],
+  ['math', 'neptune', '🧮', J.FEATURES[19][3]],
+  ['moons', 'mars', '🥔', J.FEATURES[20][3]],
+  ['backwards', 'venus', '🔄', J.FEATURES[21][3]],
+  ['titan', 'saturn', '🛰️', J.FEATURES[22][3]],
+  ['ganymede', 'jupiter', '🌕', J.FEATURES[23][3]],
 ];
 export const FEATURES_PER_STEP = 6;
 
@@ -65,34 +69,34 @@ export interface Figure {
 
 /** Four or five stars — steps 1–5, joined by numbers. */
 export const SMALL: Figure[] = [
-  { name: 'Кассіопея', emoji: '👸', fact: 'Кассіопея схожа на літеру W. Її названо на честь міфічної цариці.', stars: [[12, 35], [30, 65], [50, 42], [70, 68], [88, 38]] },
-  { name: 'Південний Хрест', emoji: '➕', fact: 'Південний Хрест видно лише з південної половини Землі — він є на прапорі Австралії.', stars: [[50, 14], [50, 86], [22, 46], [80, 50]] },
-  { name: 'Стріла', emoji: '🏹', fact: 'Стріла — одне з найменших сузір’їв на небі.', stars: [[14, 72], [38, 56], [62, 44], [86, 24]] },
-  { name: 'Дельфін', emoji: '🐬', fact: 'Сузір’я Дельфін маленьке, але дуже помітне на літньому небі.', stars: [[20, 82], [42, 60], [60, 44], [80, 34], [64, 18]] },
-  { name: 'Овен', emoji: '🐏', fact: 'Овен — це баран із золотим руном із давньогрецького міфу.', stars: [[14, 40], [44, 28], [70, 38], [86, 60]] },
-  { name: 'Ворон', emoji: '🐦', fact: 'Чотири яскраві зорі Ворона утворюють на небі чотирикутник.', stars: [[24, 30], [70, 22], [80, 66], [30, 76]] },
+  { name: J.SMALL[0].name, emoji: '👸', fact: J.SMALL[0].fact, stars: [[12, 35], [30, 65], [50, 42], [70, 68], [88, 38]] },
+  { name: J.SMALL[1].name, emoji: '➕', fact: J.SMALL[1].fact, stars: [[50, 14], [50, 86], [22, 46], [80, 50]] },
+  { name: J.SMALL[2].name, emoji: '🏹', fact: J.SMALL[2].fact, stars: [[14, 72], [38, 56], [62, 44], [86, 24]] },
+  { name: J.SMALL[3].name, emoji: '🐬', fact: J.SMALL[3].fact, stars: [[20, 82], [42, 60], [60, 44], [80, 34], [64, 18]] },
+  { name: J.SMALL[4].name, emoji: '🐏', fact: J.SMALL[4].fact, stars: [[14, 40], [44, 28], [70, 38], [86, 60]] },
+  { name: J.SMALL[5].name, emoji: '🐦', fact: J.SMALL[5].fact, stars: [[24, 30], [70, 22], [80, 66], [30, 76]] },
 ];
 
 /** Six to eight stars — steps 11–15, joined counting by twos or tens. */
 export const MEDIUM: Figure[] = [
-  { name: 'Великий Віз', emoji: '🐻', fact: 'Великий Віз — це сім зір сузір’я Великої Ведмедиці. Він схожий на ківш.', stars: [[10, 30], [26, 24], [42, 30], [56, 38], [60, 58], [82, 62], [86, 40]] },
-  { name: 'Мала Ведмедиця', emoji: '🧸', fact: 'На кінці «хвоста» Малої Ведмедиці сяє Полярна зоря — вона завжди показує на північ.', stars: [[88, 14], [74, 24], [60, 30], [46, 40], [48, 58], [30, 62], [28, 44]] },
-  { name: 'Цефей', emoji: '🏠', fact: 'Сузір’я Цефей схоже на будиночок із гострим дахом.', stars: [[50, 10], [26, 36], [30, 78], [72, 78], [76, 36], [50, 56]] },
-  { name: 'Ліра', emoji: '🎵', fact: 'У сузір’ї Ліри сяє Вега — одна з найяскравіших зір нашого неба.', stars: [[50, 10], [36, 28], [40, 62], [64, 66], [66, 32], [52, 44]] },
-  { name: 'Близнята', emoji: '👬', fact: 'Дві найяскравіші зорі Близнят звуться Кастор і Поллукс — як брати з міфу.', stars: [[20, 14], [24, 34], [18, 56], [30, 76], [60, 82], [66, 60], [58, 38], [64, 16]] },
-  { name: 'Північна Корона', emoji: '👑', fact: 'Зорі Північної Корони утворюють півколо — наче справжня корона.', stars: [[10, 30], [20, 52], [36, 68], [54, 72], [70, 62], [84, 46], [90, 26]] },
+  { name: J.MEDIUM[0].name, emoji: '🐻', fact: J.MEDIUM[0].fact, stars: [[10, 30], [26, 24], [42, 30], [56, 38], [60, 58], [82, 62], [86, 40]] },
+  { name: J.MEDIUM[1].name, emoji: '🧸', fact: J.MEDIUM[1].fact, stars: [[88, 14], [74, 24], [60, 30], [46, 40], [48, 58], [30, 62], [28, 44]] },
+  { name: J.MEDIUM[2].name, emoji: '🏠', fact: J.MEDIUM[2].fact, stars: [[50, 10], [26, 36], [30, 78], [72, 78], [76, 36], [50, 56]] },
+  { name: J.MEDIUM[3].name, emoji: '🎵', fact: J.MEDIUM[3].fact, stars: [[50, 10], [36, 28], [40, 62], [64, 66], [66, 32], [52, 44]] },
+  { name: J.MEDIUM[4].name, emoji: '👬', fact: J.MEDIUM[4].fact, stars: [[20, 14], [24, 34], [18, 56], [30, 76], [60, 82], [66, 60], [58, 38], [64, 16]] },
+  { name: J.MEDIUM[5].name, emoji: '👑', fact: J.MEDIUM[5].fact, stars: [[10, 30], [20, 52], [36, 68], [54, 72], [70, 62], [84, 46], [90, 26]] },
 ];
 
 /** Ten and more stars — steps 6–10, joined by the alphabet. */
 export const LARGE: Figure[] = [
-  { name: 'Скорпіон', emoji: '🦂', fact: 'У серці Скорпіона горить червона зоря Антарес.', stars: [[18, 12], [30, 22], [18, 32], [34, 42], [48, 50], [60, 60], [66, 74], [60, 88], [46, 90], [34, 82], [30, 68]] },
-  { name: 'Дракон', emoji: '🐉', fact: 'Дракон звивається між Великою і Малою Ведмедицями.', stars: [[85, 12], [72, 20], [80, 34], [66, 42], [52, 34], [40, 44], [48, 58], [34, 68], [20, 60], [12, 74], [24, 86], [40, 88]] },
-  { name: 'Оріон', emoji: '🏹', fact: 'Оріон — небесний мисливець. Три зорі посередині — це його пояс.', stars: [[88, 36], [70, 18], [50, 10], [30, 15], [38, 52], [50, 48], [62, 44], [74, 82], [50, 92], [26, 84]] },
-  { name: 'Лев', emoji: '🦁', fact: 'Найяскравіша зоря Лева зветься Регул — «маленький цар».', stars: [[18, 34], [26, 18], [42, 12], [54, 24], [46, 40], [62, 52], [80, 48], [90, 62], [72, 70], [50, 68]] },
-  { name: 'Гідра', emoji: '🐍', fact: 'Гідра — найдовше сузір’я на всьому небі.', stars: [[10, 20], [22, 12], [34, 22], [26, 36], [38, 48], [52, 42], [64, 52], [58, 66], [70, 78], [84, 72], [90, 86]] },
+  { name: J.LARGE[0].name, emoji: '🦂', fact: J.LARGE[0].fact, stars: [[18, 12], [30, 22], [18, 32], [34, 42], [48, 50], [60, 60], [66, 74], [60, 88], [46, 90], [34, 82], [30, 68]] },
+  { name: J.LARGE[1].name, emoji: '🐉', fact: J.LARGE[1].fact, stars: [[85, 12], [72, 20], [80, 34], [66, 42], [52, 34], [40, 44], [48, 58], [34, 68], [20, 60], [12, 74], [24, 86], [40, 88]] },
+  { name: J.LARGE[2].name, emoji: '🏹', fact: J.LARGE[2].fact, stars: [[88, 36], [70, 18], [50, 10], [30, 15], [38, 52], [50, 48], [62, 44], [74, 82], [50, 92], [26, 84]] },
+  { name: J.LARGE[3].name, emoji: '🦁', fact: J.LARGE[3].fact, stars: [[18, 34], [26, 18], [42, 12], [54, 24], [46, 40], [62, 52], [80, 48], [90, 62], [72, 70], [50, 68]] },
+  { name: J.LARGE[4].name, emoji: '🐍', fact: J.LARGE[4].fact, stars: [[10, 20], [22, 12], [34, 22], [26, 36], [38, 48], [52, 42], [64, 52], [58, 66], [70, 78], [84, 72], [90, 86]] },
 ];
 
-export const ALPHABET = [...'АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ'];
+export const ALPHABET = [...J.ALPHABET[0]];
 
 /** How the stars of a figure are labelled: `start` + `by` for numbers, or letters from `start`. */
 export type Labels = { kind: 'count'; start: number; by: number } | { kind: 'abc'; start: number };

@@ -1,4 +1,4 @@
-import { useLang, useT } from '@/core/i18n';
+import { useLang, useT } from '@/core/translator';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

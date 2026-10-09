@@ -1,0 +1,2124 @@
+{
+  "stories": {
+    "I": {
+      "apple": {
+        "1": "jabłko",
+        "2": "jabłka",
+        "3": "jabłek"
+      },
+      "pear": {
+        "1": "gruszka",
+        "2": "gruszki",
+        "3": "gruszek"
+      },
+      "candy": {
+        "1": "cukierek",
+        "2": "cukierki",
+        "3": "cukierków"
+      },
+      "pencil": {
+        "1": "ołówek",
+        "2": "ołówki",
+        "3": "ołówków"
+      },
+      "marker": {
+        "1": "flamaster",
+        "2": "flamastry",
+        "3": "flamastrów"
+      },
+      "book": {
+        "1": "książka",
+        "2": "książki",
+        "3": "książek"
+      },
+      "ball": {
+        "1": "piłka",
+        "2": "piłki",
+        "3": "piłek"
+      },
+      "balloon": {
+        "1": "balonik",
+        "2": "baloniki",
+        "3": "baloników"
+      },
+      "sticker": {
+        "1": "naklejka",
+        "2": "naklejki",
+        "3": "naklejek"
+      },
+      "nut": {
+        "1": "orzech",
+        "2": "orzechy",
+        "3": "orzechów"
+      },
+      "car": {
+        "1": "autko",
+        "2": "autka",
+        "3": "autek"
+      },
+      "auto": {
+        "1": "samochód",
+        "2": "samochody",
+        "3": "samochodów"
+      },
+      "cube": {
+        "1": "klocek",
+        "2": "klocki",
+        "3": "klocków"
+      },
+      "shell": {
+        "1": "muszelka",
+        "2": "muszelki",
+        "3": "muszelek"
+      },
+      "bird": {
+        "1": "ptak",
+        "2": "ptaki",
+        "3": "ptaków"
+      },
+      "duck": {
+        "1": "kaczka",
+        "2": "kaczki",
+        "3": "kaczek"
+      },
+      "rabbit": {
+        "1": "królik",
+        "2": "króliki",
+        "3": "królików"
+      },
+      "butterfly": {
+        "1": "motyl",
+        "2": "motyle",
+        "3": "motyli"
+      },
+      "kitten": {
+        "1": "kotek",
+        "2": "kotki",
+        "3": "kotków"
+      },
+      "bee": {
+        "1": "pszczoła",
+        "2": "pszczoły",
+        "3": "pszczół"
+      },
+      "star": {
+        "1": "gwiazda",
+        "2": "gwiazdy",
+        "3": "gwiazd"
+      },
+      "cake": {
+        "1": "ciastko",
+        "2": "ciastka",
+        "3": "ciastek"
+      },
+      "page": {
+        "1": "strona",
+        "2": "strony",
+        "3": "stron"
+      },
+      "fish": {
+        "1": "rybka",
+        "2": "rybki",
+        "3": "rybek"
+      },
+      "bigFish": {
+        "1": "ryba",
+        "2": "ryby",
+        "3": "ryb"
+      },
+      "flower": {
+        "1": "kwiat",
+        "2": "kwiaty",
+        "3": "kwiatów"
+      },
+      "coin": {
+        "1": "moneta",
+        "2": "monety",
+        "3": "monet"
+      },
+      "stamp": {
+        "1": "znaczek",
+        "2": "znaczki",
+        "3": "znaczków"
+      },
+      "tomato": {
+        "1": "pomidor",
+        "2": "pomidory",
+        "3": "pomidorów"
+      },
+      "cucumber": {
+        "1": "ogórek",
+        "2": "ogórki",
+        "3": "ogórków"
+      },
+      "carrot": {
+        "1": "marchewka",
+        "2": "marchewki",
+        "3": "marchewek"
+      },
+      "egg": {
+        "1": "jajko",
+        "2": "jajka",
+        "3": "jajek"
+      },
+      "mushroom": {
+        "1": "grzyb",
+        "2": "grzyby",
+        "3": "grzybów"
+      },
+      "tree": {
+        "1": "drzewo",
+        "2": "drzewa",
+        "3": "drzew"
+      },
+      "appleTree": {
+        "1": "jabłoń",
+        "2": "jabłonie",
+        "3": "jabłoni"
+      },
+      "pearTree": {
+        "1": "grusza",
+        "2": "grusze",
+        "3": "grusz"
+      },
+      "bush": {
+        "1": "krzak",
+        "2": "krzaki",
+        "3": "krzaków"
+      },
+      "cup": {
+        "1": "filiżanka",
+        "2": "filiżanki",
+        "3": "filiżanek"
+      },
+      "plate": {
+        "1": "talerz",
+        "2": "talerze",
+        "3": "talerzy"
+      },
+      "notebook": {
+        "1": "zeszyt",
+        "2": "zeszyty",
+        "3": "zeszytów"
+      },
+      "bun": {
+        "1": "bułka",
+        "2": "bułki",
+        "3": "bułek"
+      },
+      "pie": {
+        "1": "pierożek",
+        "2": "pierożki",
+        "3": "pierożków"
+      },
+      "ticket": {
+        "1": "bilet",
+        "2": "bilety",
+        "3": "biletów"
+      },
+      "postcard": {
+        "1": "pocztówka",
+        "2": "pocztówki",
+        "3": "pocztówek"
+      },
+      "chair": {
+        "1": "krzesło",
+        "2": "krzesła",
+        "3": "krzeseł"
+      },
+      "desk": {
+        "1": "ławka",
+        "2": "ławki",
+        "3": "ławek"
+      },
+      "doll": {
+        "1": "lalka",
+        "2": "lalki",
+        "3": "lalek"
+      },
+      "robot": {
+        "1": "robot",
+        "2": "roboty",
+        "3": "robotów"
+      },
+      "puzzle": {
+        "1": "układanka",
+        "2": "układanki",
+        "3": "układanek"
+      },
+      "bike": {
+        "1": "rower",
+        "2": "rowery",
+        "3": "rowerów"
+      },
+      "card": {
+        "1": "karta",
+        "2": "karty",
+        "3": "kart"
+      },
+      "photo": {
+        "1": "zdjęcie",
+        "2": "zdjęcia",
+        "3": "zdjęć"
+      },
+      "goal": {
+        "1": "gol",
+        "2": "gole",
+        "3": "goli"
+      },
+      "lap": {
+        "1": "okrążenie",
+        "2": "okrążenia",
+        "3": "okrążeń"
+      },
+      "passenger": {
+        "1": "pasażer",
+        "2": "pasażerów"
+      },
+      "pupil": {
+        "1": "uczeń",
+        "2": "uczniów"
+      },
+      "visitor": {
+        "1": "gość",
+        "2": "gości"
+      },
+      "athlete": {
+        "1": "sportowiec",
+        "2": "sportowców"
+      },
+      "boy": {
+        "1": "chłopiec",
+        "2": "chłopców"
+      },
+      "girl": {
+        "1": "dziewczynka",
+        "2": "dziewczynki",
+        "3": "dziewczynek"
+      },
+      "cow": {
+        "1": "krowa",
+        "2": "krowy",
+        "3": "krów"
+      },
+      "horse": {
+        "1": "koń",
+        "2": "konie",
+        "3": "koni"
+      },
+      "monkey": {
+        "1": "małpa",
+        "2": "małpy",
+        "3": "małp"
+      },
+      "parrot": {
+        "1": "papuga",
+        "2": "papugi",
+        "3": "papug"
+      },
+      "row": {
+        "1": "rząd",
+        "2": "rzędy",
+        "3": "rzędów"
+      },
+      "line": {
+        "1": "szereg",
+        "2": "szeregi",
+        "3": "szeregów"
+      },
+      "km": {
+        "1": "kilometr",
+        "2": "kilometry",
+        "3": "kilometrów"
+      },
+      "hour": {
+        "1": "godzina",
+        "2": "godziny",
+        "3": "godzin"
+      },
+      "friend": {
+        "1": "przyjaciel",
+        "2": "przyjaciół"
+      },
+      "child": {
+        "1": "dziecko",
+        "2": "dzieci",
+        "3": "dzieci"
+      },
+      "squirrel": {
+        "1": "wiewiórka",
+        "2": "wiewiórki",
+        "3": "wiewiórek"
+      },
+      "sister": {
+        "1": "siostra",
+        "2": "siostry",
+        "3": "sióstr"
+      },
+      "guest": {
+        "1": "gość",
+        "2": "gości"
+      },
+      "little": {
+        "1": "maluch",
+        "2": "maluchy",
+        "3": "maluchów"
+      },
+      "cat": {
+        "1": "kot",
+        "2": "koty",
+        "3": "kotów"
+      },
+      "player": {
+        "1": "gracz",
+        "2": "graczy"
+      }
+    },
+    "grammar": {
+      "howMany": {
+        "1": "Ilu",
+        "2": "Ile"
+      },
+      "names": {
+        "boys": [
+          "Wojtek",
+          "Andrzej",
+          "Tomek",
+          "Maks",
+          "Oskar",
+          "Norbert",
+          "Daniel",
+          "Marek"
+        ],
+        "girls": [
+          "Ola",
+          "Zosia",
+          "Marysia",
+          "Zuzia",
+          "Sara",
+          "Daria",
+          "Hania",
+          "Lena"
+        ]
+      },
+      "heroWords": {
+        "mu": {
+          "0": "mu",
+          "1": "jej"
+        }
+      }
+    },
+    "PLAIN": [
+      "",
+      "jeden",
+      "dwa",
+      "trzy",
+      "cztery",
+      "pięć",
+      "sześć"
+    ],
+    "MEN": [
+      "",
+      "jednego",
+      "dwóch",
+      "trzech",
+      "czterech",
+      "pięciu",
+      "sześciu"
+    ],
+    "TOGETHER": [
+      "",
+      "jedno",
+      "dwoje",
+      "troje",
+      "czworo",
+      "pięcioro",
+      "sześcioro"
+    ],
+    "among": {
+      "word": "dwie"
+    },
+    "JOIN": {
+      "0": {
+        "0": "Na stole",
+        "1": "w koszyku",
+        "2": "leżą|leży"
+      },
+      "1": {
+        "0": "Na półce",
+        "1": "w szufladzie",
+        "2": "stoją|stoi"
+      },
+      "2": {
+        "0": "W miseczce",
+        "1": "na talerzu",
+        "2": "leżą|leży"
+      },
+      "3": {
+        "0": "Na gałęzi",
+        "1": "na dachu",
+        "2": "siedzą|siedzi"
+      },
+      "4": {
+        "0": "W akwarium",
+        "1": "w słoiku",
+        "2": "pływają|pływa"
+      },
+      "5": {
+        "0": "Na rabacie",
+        "1": "w doniczce",
+        "2": "rosną|rośnie"
+      },
+      "6": {
+        "0": "W piórniku",
+        "1": "na ławce",
+        "2": "leżą|leży"
+      },
+      "7": {
+        "0": "W garażu",
+        "1": "na podwórku",
+        "2": "stoją|stoi"
+      }
+    },
+    "THOUGHT": {
+      "0": {
+        "0": "{h?dodał|dodała} do niej {b}",
+        "1": "odejmij {b}"
+      },
+      "1": {
+        "0": "{h?odjął|odjęła} od niej {b}",
+        "1": "dodaj {b}"
+      },
+      "2": {
+        "0": "{h?pomnożył|pomnożyła} ją przez {b}",
+        "1": "podziel przez {b}"
+      },
+      "3": {
+        "0": "{h?podzielił|podzieliła} ją przez {b}",
+        "1": "pomnóż przez {b}"
+      },
+      "4": {
+        "0": "{h?dodał|dodała} do niej {b}, a potem jeszcze {c}",
+        "1": "odejmij {c}, a potem jeszcze {b}"
+      },
+      "5": {
+        "0": "{h?pomnożył|pomnożyła} ją przez {b} i {h?dodał|dodała} {c}",
+        "1": "odejmij {c}, a potem podziel przez {b}"
+      },
+      "6": {
+        "0": "{h?odjął|odjęła} od niej {b}, a potem {h?dodał|dodała} {c}",
+        "1": "odejmij {c}, a potem dodaj {b}"
+      },
+      "7": {
+        "0": "{h?podwoił|podwoiła} ją i {h?odjął|odjęła} {b}",
+        "1": "dodaj {b}, a potem podziel przez dwa"
+      }
+    },
+    "FRAMES": {
+      "join": {
+        "line": "{here} {a?{verbs}} {A}, a {there} — jeszcze {b~}. {Ile} jest razem {many}?",
+        "how": "Słowo „razem” podpowiada: trzeba złożyć obie kupki. Dodaj."
+      },
+      "gotMore": {
+        "line": "{N} {h?miał|miała} {A}. {gave} {mu} jeszcze {b~}. {Ile} {many} ma teraz {N}?",
+        "how": "Było {a}, a potem przybyło jeszcze {b}. Kiedy przybywa — dodajemy.",
+        "skins": {
+          "0": {
+            "0": {
+              "gave": "Mama dała"
+            }
+          },
+          "1": {
+            "0": {
+              "gave": "Tata kupił"
+            }
+          },
+          "2": {
+            "0": {
+              "gave": "Babcia podarowała"
+            }
+          },
+          "3": {
+            "0": {
+              "gave": "Dziadek przyniósł"
+            }
+          },
+          "4": {
+            "0": {
+              "gave": "Kolega podarował"
+            }
+          },
+          "5": {
+            "0": {
+              "gave": "Siostra oddała"
+            }
+          },
+          "6": {
+            "0": {
+              "gave": "Brat przyniósł"
+            }
+          },
+          "7": {
+            "0": {
+              "gave": "Ciocia przysłała"
+            }
+          }
+        }
+      },
+      "cameIn": {
+        "line": "{where} {a?{was}} {A}. {b?{came}} jeszcze {b~}. {Ile} {many} jest teraz {now}?",
+        "how": "{Many} jest teraz więcej. Dodaj te, które były, i te, które przybyły.",
+        "skins": {
+          "0": {
+            "0": {
+              "where": "Na gałęzi",
+              "was": "siedziały|siedziało",
+              "came": "Przyleciały|Przyleciało",
+              "now": "na gałęzi"
+            }
+          },
+          "1": {
+            "0": {
+              "where": "Po stawie",
+              "was": "pływały|pływało",
+              "came": "Przypłynęły|Przypłynęło",
+              "now": "na stawie"
+            }
+          },
+          "2": {
+            "0": {
+              "where": "Na polanie",
+              "was": "bawiły się|bawiło się",
+              "came": "Przybiegły|Przybiegło",
+              "now": "na polanie"
+            }
+          },
+          "3": {
+            "0": {
+              "where": "Na kwiatku",
+              "was": "siedziały|siedziało",
+              "came": "Przyleciały|Przyleciało",
+              "now": "na kwiatku"
+            }
+          },
+          "4": {
+            "0": {
+              "where": "Na podwórku",
+              "was": "bawiły się|bawiło się",
+              "came": "Przybiegły|Przybiegło",
+              "now": "na podwórku"
+            }
+          },
+          "5": {
+            "0": {
+              "where": "Przy ulu",
+              "was": "latały|latało",
+              "came": "Przyleciały|Przyleciało",
+              "now": "przy ulu"
+            }
+          },
+          "6": {
+            "0": {
+              "where": "Na parkingu",
+              "was": "stały|stało",
+              "came": "Przyjechały|Przyjechało",
+              "now": "na parkingu"
+            }
+          },
+          "7": {
+            "0": {
+              "where": "Na niebie",
+              "was": "świeciły|świeciło",
+              "came": "Zaświeciły|Zaświeciło",
+              "now": "na niebie"
+            }
+          }
+        }
+      },
+      "gave": {
+        "line": "{N} {h?miał|miała} {A}. {b~} z nich {h?{did}}{whom}. {Ile} {many} zostało?",
+        "how": "Było {a}, a potem ubyło {b}. Kiedy ubywa — odejmujemy.",
+        "skins": {
+          "0": {
+            "0": {
+              "did": "oddał|oddała",
+              "whom": " koledze"
+            }
+          },
+          "1": {
+            "0": {
+              "did": "podarował|podarowała",
+              "whom": " siostrze"
+            }
+          },
+          "2": {
+            "0": {
+              "did": "zjadł|zjadła",
+              "whom": ""
+            }
+          },
+          "3": {
+            "0": {
+              "did": "zgubił|zgubiła",
+              "whom": ""
+            }
+          },
+          "4": {
+            "0": {
+              "did": "rozdał|rozdała",
+              "whom": " kolegom"
+            }
+          },
+          "5": {
+            "0": {
+              "did": "włożył|włożyła",
+              "whom": " do szuflady"
+            }
+          },
+          "6": {
+            "0": {
+              "did": "posadził|posadziła",
+              "whom": " na rabacie"
+            }
+          },
+          "7": {
+            "0": {
+              "did": "oddał|oddała",
+              "whom": " bratu"
+            }
+          }
+        }
+      },
+      "wentAway": {
+        "line": "{where} {a?{was}} {A}. {b~} z nich {b?{gone}}. {Ile} {many} zostało {now}?",
+        "how": "{Many} jest teraz mniej. Od wszystkich odejmij te, których już nie ma.",
+        "skins": {
+          "0": {
+            "0": {
+              "where": "Na gałęzi",
+              "was": "siedziały|siedziało",
+              "gone": "odleciały|odleciało",
+              "now": "na gałęzi"
+            }
+          },
+          "1": {
+            "0": {
+              "where": "Na talerzu",
+              "was": "leżały|leżało",
+              "gone": "zjedzono|zjedzono",
+              "now": "na talerzu"
+            }
+          },
+          "2": {
+            "0": {
+              "where": "W koszyku",
+              "was": "leżały|leżało",
+              "gone": "zabrano|zabrano",
+              "now": "w koszyku"
+            }
+          },
+          "3": {
+            "0": {
+              "where": "Po stawie",
+              "was": "pływały|pływało",
+              "gone": "odpłynęły|odpłynęło",
+              "now": "na stawie"
+            }
+          },
+          "4": {
+            "0": {
+              "where": "Na parkingu",
+              "was": "stały|stało",
+              "gone": "odjechały|odjechało",
+              "now": "na parkingu"
+            }
+          },
+          "5": {
+            "0": {
+              "where": "Na półce",
+              "was": "stały|stało",
+              "gone": "zabrano do czytania|zabrano do czytania",
+              "now": "na półce"
+            }
+          },
+          "6": {
+            "0": {
+              "where": "Po niebie",
+              "was": "latały|latało",
+              "gone": "pękły|pękło",
+              "now": "na niebie"
+            }
+          },
+          "7": {
+            "0": {
+              "where": "Na stole",
+              "was": "stały|stało",
+              "gone": "zabrano do mycia|zabrano do mycia",
+              "now": "na stole"
+            }
+          }
+        }
+      },
+      "twoKinds": {
+        "how": "Tu pytają o wszystkich razem. Dodaj obie liczby.",
+        "skins": {
+          "0": {
+            "0": "W klasie jest {A} i {Bu}. Ile dzieci jest w klasie?"
+          },
+          "1": {
+            "0": "W sadzie rośnie {A} i {Bu}. Ile drzew rośnie w sadzie?"
+          },
+          "2": {
+            "0": "Na farmie żyje {A} i {Bu}. Ile zwierząt żyje na farmie?"
+          },
+          "3": {
+            "0": "W misie leży {A} i {Bu}. Ile owoców leży w misie?"
+          },
+          "4": {
+            "0": "Na grządce dojrzało {A} i {Bu}. Ile warzyw dojrzało na grządce?"
+          },
+          "5": {
+            "0": "W pudełku leży {A} i {Bu}. Ile zabawek leży w pudełku?"
+          },
+          "6": {
+            "0": "W wolierze żyje {A} i {Bu}. Ile zwierząt żyje w wolierze?"
+          },
+          "7": {
+            "0": "Na stole stoi {A} i {Bu}. Ile naczyń stoi na stole?"
+          }
+        }
+      },
+      "left20": {
+        "how": "Od wszystkich odejmij {b} — tyle już ubyło.",
+        "skins": {
+          "0": {
+            "0": "W autobusie jechało {A}. Na przystanku wysiadło {b~}. Ilu pasażerów zostało w autobusie?"
+          },
+          "1": {
+            "0": "Książka ma {A}. Przeczytano już {b~}. Ile stron zostało jeszcze do przeczytania?"
+          },
+          "2": {
+            "0": "W zestawie było {A}. Naklejono już {b~}. Ile naklejek zostało jeszcze w zestawie?"
+          },
+          "3": {
+            "0": "Na drzewie wisiało {A}. Wiatr strącił {b~}. Ile jabłek zostało na drzewie?"
+          },
+          "4": {
+            "0": "W torebce było {A}. Dzieci zjadły {b~}. Ile cukierków zostało w torebce?"
+          },
+          "5": {
+            "0": "W garażu stało {A}. Rano {b?wyjechały|wyjechało} {b~}. Ile samochodów zostało w garażu?"
+          },
+          "6": {
+            "0": "W koszyku leżało {A}. Na śniadanie wzięto {b~}. Ile jajek zostało w koszyku?"
+          },
+          "7": {
+            "0": "Na łące pasło się {A}. Do obory {b?poszły|poszło} {b~}. Ile krów zostało na łące?"
+          }
+        }
+      },
+      "howManyMore": {
+        "how": "Żeby dowiedzieć się, o ile jedna liczba jest większa od drugiej, od większej odejmij mniejszą.",
+        "skins": {
+          "0": {
+            "0": "Ola ma {A}, a Tomek — {b~}. O ile {many} więcej ma Ola?"
+          },
+          "1": {
+            "0": "Marek ma {A}, a Zosia — {b~}. O ile {many} więcej ma Marek?"
+          },
+          "2": {
+            "0": "W pierwszym koszyku jest {A}, a w drugim — {b~}. O ile {many} więcej jest w pierwszym koszyku?"
+          },
+          "3": {
+            "0": "Na górnej półce jest {A}, a na dolnej — {b~}. O ile {many} więcej jest na górnej półce?"
+          },
+          "4": {
+            "0": "W czerwonym pudełku jest {A}, a w niebieskim — {b~}. O ile {many} więcej jest w czerwonym pudełku?"
+          },
+          "5": {
+            "0": "Babcia ma {A}, a dziadek — {b~}. O ile {many} więcej ma babcia?"
+          },
+          "6": {
+            "0": "W pierwszym akwarium jest {A}, a w drugim — {b~}. O ile {many} więcej jest w pierwszym akwarium?"
+          },
+          "7": {
+            "0": "Na lewej rabacie jest {A}, a na prawej — {b~}. O ile {many} więcej jest na lewej rabacie?"
+          }
+        }
+      },
+      "howManyFewer": {
+        "how": "Żeby dowiedzieć się, o ile jedna liczba jest mniejsza od drugiej, od większej odejmij mniejszą.",
+        "skins": {
+          "0": {
+            "0": "Daniel ma {A}, a Zuzia — {b~}. O ile {many} mniej ma Zuzia?"
+          },
+          "1": {
+            "0": "Lena ma {A}, a Norbert — {b~}. O ile {many} mniej ma Norbert?"
+          },
+          "2": {
+            "0": "W dużej misce jest {A}, a w małej — {b~}. O ile {many} mniej jest w małej misce?"
+          },
+          "3": {
+            "0": "Na pierwszym drzewie jest {A}, a na drugim — {b~}. O ile {many} mniej jest na drugim drzewie?"
+          },
+          "4": {
+            "0": "W zielonym piórniku jest {A}, a w żółtym — {b~}. O ile {many} mniej jest w żółtym piórniku?"
+          },
+          "5": {
+            "0": "Mama ma {A}, a tata — {b~}. O ile {many} mniej ma tata?"
+          },
+          "6": {
+            "0": "Na pierwszym talerzu jest {A}, a na drugim — {b~}. O ile {many} mniej jest na drugim talerzu?"
+          },
+          "7": {
+            "0": "Starszy brat ma {A}, a młodszy — {b~}. O ile {many} mniej ma młodszy brat?"
+          }
+        }
+      },
+      "missing": {
+        "how": "Od tego, ile jest teraz, odejmij to, ile było: od {a+b} odejmij {a}.",
+        "skins": {
+          "0": {
+            "0": "W miseczce {a?były|było} {A}. Mama dołożyła jeszcze kilka i zrobiło się {a+b}. Ile {many} dołożyła mama?"
+          },
+          "1": {
+            "0": "Na półce {a?stały|stało} {A}. Tata postawił jeszcze kilka i zrobiło się {a+b}. Ile {many} postawił tata?"
+          },
+          "2": {
+            "0": "W koszyku {a?leżały|leżało} {A}. Dziadek znalazł jeszcze kilka i zrobiło się {a+b}. Ile {many} znalazł dziadek?"
+          },
+          "3": {
+            "0": "Na gałęzi {a?siedziały|siedziało} {A}. Przyleciało jeszcze kilka i zrobiło się {a+b}. Ile {many} przyleciało?"
+          },
+          "4": {
+            "0": "W piórniku {a?były|było} {A}. Ola włożyła jeszcze kilka i zrobiło się {a+b}. Ile {many} włożyła Ola?"
+          },
+          "5": {
+            "0": "Na parkingu {a?stały|stało} {A}. Przyjechało jeszcze kilka i zrobiło się {a+b}. Ile {many} przyjechało?"
+          },
+          "6": {
+            "0": "W skarbonce {a?były|było} {A}. Marek wrzucił jeszcze kilka i zrobiło się {a+b}. Ile {many} wrzucił Marek?"
+          },
+          "7": {
+            "0": "W albumie {a?były|było} {A}. Siostra wkleiła jeszcze kilka i zrobiło się {a+b}. Ile {many} wkleiła siostra?"
+          }
+        }
+      },
+      "totalPrice": {
+        "line": "{x} kosztuje {$a}, a {y} — {$b}. Ile {coins} kosztują razem {both}?",
+        "how": "Żeby dowiedzieć się, ile kosztuje wszystko razem, dodaj ceny.",
+        "skins": {
+          "0": {
+            "0": {
+              "x": "Sok",
+              "y": "bułka",
+              "both": "sok i bułka"
+            }
+          },
+          "1": {
+            "0": {
+              "x": "Zeszyt",
+              "y": "długopis",
+              "both": "zeszyt i długopis"
+            }
+          },
+          "2": {
+            "0": {
+              "x": "Porcja lodów",
+              "y": "woda",
+              "both": "lody i woda"
+            }
+          },
+          "3": {
+            "0": {
+              "x": "Bilet do kina",
+              "y": "popcorn",
+              "both": "bilet i popcorn"
+            }
+          },
+          "4": {
+            "0": {
+              "x": "Lalka",
+              "y": "piłka",
+              "both": "lalka i piłka"
+            }
+          },
+          "5": {
+            "0": {
+              "x": "Chleb",
+              "y": "mleko",
+              "both": "chleb i mleko"
+            }
+          },
+          "6": {
+            "0": {
+              "x": "Ołówek",
+              "y": "gumka",
+              "both": "ołówek i gumka"
+            }
+          },
+          "7": {
+            "0": {
+              "x": "Jabłko",
+              "y": "banan",
+              "both": "jabłko i banan"
+            }
+          }
+        }
+      },
+      "change": {
+        "line": "{N} kupuje {thing} za {$a} i daje sprzedawczyni {$b}. Ile {coins} reszty dostanie {N}?",
+        "how": "Reszta to pieniądze, które zostały. Od {b} odejmij cenę zakupu.",
+        "skins": [
+          "książkę",
+          "zabawkę",
+          "piłkę",
+          "album",
+          "lody",
+          "kwiaty",
+          "pocztówkę",
+          "farby"
+        ]
+      },
+      "notEnough": {
+        "line": "{N} ma {$a}. {thing} {$b}. Ile {coins} {mu} brakuje?",
+        "how": "Od ceny odejmij pieniądze, które już są.",
+        "skins": [
+          "Lody kosztują",
+          "Klocki kosztują",
+          "Książka kosztuje",
+          "Hulajnoga kosztuje",
+          "Lalka kosztuje",
+          "Bilet kosztuje",
+          "Piłka kosztuje",
+          "Układanka kosztuje"
+        ]
+      },
+      "repriced": {
+        "line": "{thing} {$a}, a potem {way} o {$b}. Ile {coins} kosztuje teraz?",
+        "how": {
+          "1": "„Zdrożeć” znaczy, że cena wzrosła. Dodaj.",
+          "2": "„Stanieć” znaczy, że cena spadła. Odejmij."
+        },
+        "skins": {
+          "0": {
+            "0": {
+              "thing": "Zabawka kosztowała",
+              "way": "staniała"
+            }
+          },
+          "1": {
+            "0": {
+              "thing": "Bilet kosztował",
+              "way": "zdrożał"
+            }
+          },
+          "2": {
+            "0": {
+              "thing": "Książka kosztowała",
+              "way": "staniała"
+            }
+          },
+          "3": {
+            "0": {
+              "thing": "Sok kosztował",
+              "way": "zdrożał"
+            }
+          },
+          "4": {
+            "0": {
+              "thing": "Tort kosztował",
+              "way": "staniał"
+            }
+          },
+          "5": {
+            "0": {
+              "thing": "Lalka kosztowała",
+              "way": "zdrożała"
+            }
+          },
+          "6": {
+            "0": {
+              "thing": "Piłka kosztowała",
+              "way": "staniała"
+            }
+          },
+          "7": {
+            "0": {
+              "thing": "Porcja lodów kosztowała",
+              "way": "zdrożała"
+            }
+          }
+        }
+      },
+      "threeAdd": {
+        "how": "Dodaj wszystkie trzy liczby po kolei: najpierw {a} i {b}, potem — jeszcze {c}.",
+        "skins": {
+          "0": {
+            "0": "W pierwszym koszyku {a?są|jest} {A}, w drugim — {b~}, a w trzecim — {c~}. Ile {many} jest w trzech koszykach razem?"
+          },
+          "1": {
+            "0": "W poniedziałek Ola przeczytała {A}, we wtorek — {b~}, a w środę — {c~}. Ile {many} przeczytała przez trzy dni?"
+          },
+          "2": {
+            "0": "Na pierwszej półce {a?stoją|stoi} {A}, na drugiej — {b~}, a na trzeciej — {c~}. Ile {many} stoi na trzech półkach razem?"
+          },
+          "3": {
+            "0": "Rano sprzedano {A}, w południe — {b~}, a wieczorem — {c~}. Ile {many} sprzedano przez cały dzień?"
+          },
+          "4": {
+            "0": "Pierwsza klasa posadziła {A}, druga — {b~}, a trzecia — {c~}. Ile {many} posadziły trzy klasy razem?"
+          },
+          "5": {
+            "0": "W pierwszym wagonie jedzie {A}, w drugim — {b~}, a w trzecim — {c~}. Ilu {many} jedzie w trzech wagonach?"
+          },
+          "6": {
+            "0": "Marek strzelił {A}, Daniel — {b~}, a Oskar — {c~}. Ile {many} strzelili chłopcy razem?"
+          },
+          "7": {
+            "0": "W czerwonym pudełku {a?są|jest} {A}, w niebieskim — {b~}, a w zielonym — {c~}. Ile {many} jest w trzech pudełkach razem?"
+          }
+        }
+      },
+      "groups": {
+        "how": "To jednakowe kupki — po {a}. Jednakowe kupki mnożymy: {a} pomnóż przez {b}.",
+        "skins": {
+          "0": {
+            "0": "W każdym pudełku jest po {A}. Ile {many} jest w {b} pudełkach?"
+          },
+          "1": {
+            "0": "W każdym koszyku jest po {A}. Ile {many} jest w {b} koszykach?"
+          },
+          "2": {
+            "0": "Na każdym talerzu jest po {A}. Ile {many} jest na {b} talerzach?"
+          },
+          "3": {
+            "0": "W każdej torebce jest po {A}. Ile {many} jest w {b} torebkach?"
+          },
+          "4": {
+            "0": "W każdym wazonie jest po {A}. Ile {many} jest w {b} wazonach?"
+          },
+          "5": {
+            "0": "Na każdej półce jest po {A}. Ile {many} jest na {b} półkach?"
+          },
+          "6": {
+            "0": "W każdym gnieździe jest po {A}. Ile {many} jest w {b} gniazdach?"
+          },
+          "7": {
+            "0": "W każdym wagonie jedzie po {A}. Ilu {many} jedzie w {b} wagonach?"
+          }
+        }
+      },
+      "priceTimes": {
+        "line": "{one} kosztuje {$a}. Ile {coins} {b?kosztują|kosztuje} {B}?",
+        "how": "Każda taka rzecz kosztuje tyle samo. Cenę pomnóż przez liczbę rzeczy: {a} pomnóż przez {b}.",
+        "skins": {
+          "0": {
+            "0": {
+              "one": "Jeden zeszyt"
+            }
+          },
+          "1": {
+            "0": {
+              "one": "Jedna bułka"
+            }
+          },
+          "2": {
+            "0": {
+              "one": "Jeden bilet"
+            }
+          },
+          "3": {
+            "0": {
+              "one": "Jedna naklejka"
+            }
+          },
+          "4": {
+            "0": {
+              "one": "Jeden ołówek"
+            }
+          },
+          "5": {
+            "0": {
+              "one": "Jedno ciastko"
+            }
+          },
+          "6": {
+            "0": {
+              "one": "Jedna pocztówka"
+            }
+          },
+          "7": {
+            "0": {
+              "one": "Jeden balonik"
+            }
+          }
+        }
+      },
+      "rows": {
+        "line": "{where} {a?są|jest} {A}, po {Bu} w każdym. {q} jest razem {umany}?",
+        "how": "W każdym rzędzie jest tyle samo — po {b}. Pomnóż przez liczbę rzędów.",
+        "skins": {
+          "0": {
+            "0": {
+              "where": "W klasie",
+              "q": "Ile"
+            }
+          },
+          "1": {
+            "0": {
+              "where": "Na grządce",
+              "q": "Ile"
+            }
+          },
+          "2": {
+            "0": {
+              "where": "W sali",
+              "q": "Ile"
+            }
+          },
+          "3": {
+            "0": {
+              "where": "W pudełku",
+              "q": "Ile"
+            }
+          },
+          "4": {
+            "0": {
+              "where": "W pochodzie",
+              "q": "Ilu"
+            }
+          },
+          "5": {
+            "0": {
+              "where": "W sadzie",
+              "q": "Ile"
+            }
+          },
+          "6": {
+            "0": {
+              "where": "Na arkuszu",
+              "q": "Ile"
+            }
+          },
+          "7": {
+            "0": {
+              "where": "Na parkingu",
+              "q": "Ile"
+            }
+          }
+        }
+      },
+      "share": {
+        "line": "{A} podzielono po równo między {among}. {Ile} {many} {got}?",
+        "how": "„Po równo” znaczy: dzielimy. {a} podziel przez {b}.",
+        "skins": {
+          "0": {
+            "0": {
+              "got": "dostał każdy przyjaciel"
+            }
+          },
+          "1": {
+            "0": {
+              "got": "dostało każde dziecko"
+            }
+          },
+          "2": {
+            "0": {
+              "got": "dostała każda wiewiórka"
+            }
+          },
+          "3": {
+            "0": {
+              "got": "dostała każda siostra"
+            }
+          },
+          "4": {
+            "0": {
+              "got": "dostał każdy gość"
+            }
+          },
+          "5": {
+            "0": {
+              "got": "dostał każdy królik"
+            }
+          },
+          "6": {
+            "0": {
+              "got": "dostał każdy maluch"
+            }
+          },
+          "7": {
+            "0": {
+              "got": "dostał każdy kot"
+            }
+          }
+        }
+      },
+      "pack": {
+        "how": "Rozłożyć po równo to znaczy podzielić. {a} podziel przez {b}.",
+        "skins": {
+          "0": {
+            "0": "{A} włożono po {b~} do każdego pudełka. Ile pudełek było potrzebnych?"
+          },
+          "1": {
+            "0": "{A} włożono po {b~} do każdej wytłaczanki. Ile wytłaczanek było potrzebnych?"
+          },
+          "2": {
+            "0": "{A} włożono po {b~} do każdej torebki. Ile torebek było potrzebnych?"
+          },
+          "3": {
+            "0": "{A} ustawiono po {b~} na każdej półce. Ile półek było potrzebnych?"
+          },
+          "4": {
+            "0": "{A} włożono po {b~} do każdego bukietu. Ile bukietów wyszło?"
+          },
+          "5": {
+            "0": "{A} włożono po {b~} do każdego prezentu. Ile prezentów wyszło?"
+          },
+          "6": {
+            "0": "{A} wklejono po {b~} na każdej stronie albumu. Ile stron zajęto?"
+          },
+          "7": {
+            "0": "{A} położono po {b~} na każdym talerzu. Ile talerzy było potrzebnych?"
+          }
+        }
+      },
+      "timesPlus": {
+        "line": "W {a} {boxes} jest po {B}, a jeszcze {c~} {loose}. {Ile} jest razem {many}?",
+        "how": "Najpierw policz te, które leżą po równo: {b} pomnóż przez {a}. Potem dodaj jeszcze {c}.",
+        "skins": {
+          "0": {
+            "0": {
+              "boxes": "pudełkach",
+              "loose": "{c?leżą|leży} osobno"
+            }
+          },
+          "1": {
+            "0": {
+              "boxes": "koszykach",
+              "loose": "{c?leżą|leży} na stole"
+            }
+          },
+          "2": {
+            "0": {
+              "boxes": "torebkach",
+              "loose": "{c?leżą|leży} w miseczce"
+            }
+          },
+          "3": {
+            "0": {
+              "boxes": "albumach",
+              "loose": "czeka na wklejenie"
+            }
+          },
+          "4": {
+            "0": {
+              "boxes": "wazonach",
+              "loose": "{c?stoją|stoi} osobno"
+            }
+          },
+          "5": {
+            "0": {
+              "boxes": "skrzynkach",
+              "loose": "{c?leżą|leży} obok"
+            }
+          },
+          "6": {
+            "0": {
+              "boxes": "akwariach",
+              "loose": "{c?pływają|pływa} w słoiku"
+            }
+          },
+          "7": {
+            "0": {
+              "boxes": "piórnikach",
+              "loose": "{c?leżą|leży} na ławce"
+            }
+          }
+        }
+      },
+      "timesChange": {
+        "line": "{N} {h?kupił|kupiła} {A} po {$b} i {h?dał|dała} sprzedawczyni {$c}. Ile {coins} reszty dostanie {N}?",
+        "how": "Najpierw dowiedz się, ile kosztują zakupy: {b} pomnóż przez {a}. Potem odejmij to od {c}."
+      },
+      "shareMinus": {
+        "line": "{A} podzielono po równo między {among}. {each} od razu {did} {c~}. {Ile} {many} zostało {whose}?",
+        "how": "Najpierw podziel: {a} przez {b}. Potem odejmij {c}.",
+        "skins": {
+          "0": {
+            "0": {
+              "each": "Każde dziecko",
+              "did": "zjadło",
+              "whose": "każdemu dziecku"
+            }
+          },
+          "1": {
+            "0": {
+              "each": "Każdy przyjaciel",
+              "did": "zjadł",
+              "whose": "każdemu przyjacielowi"
+            }
+          },
+          "2": {
+            "0": {
+              "each": "Każda siostra",
+              "did": "nakleiła",
+              "whose": "każdej siostrze"
+            }
+          },
+          "3": {
+            "0": {
+              "each": "Każda wiewiórka",
+              "did": "schowała",
+              "whose": "każdej wiewiórce"
+            }
+          },
+          "4": {
+            "0": {
+              "each": "Każdy maluch",
+              "did": "wypuścił w niebo",
+              "whose": "każdemu maluchowi"
+            }
+          },
+          "5": {
+            "0": {
+              "each": "Każdy gość",
+              "did": "zjadł",
+              "whose": "każdemu gościowi"
+            }
+          },
+          "6": {
+            "0": {
+              "each": "Każdy królik",
+              "did": "zjadł",
+              "whose": "każdemu królikowi"
+            }
+          },
+          "7": {
+            "0": {
+              "each": "Każdy gracz",
+              "did": "położył na stole",
+              "whose": "każdemu graczowi"
+            }
+          }
+        }
+      },
+      "timesMore": {
+        "how": "„{b} razy więcej” to mnożenie: {a} pomnóż przez {b}.",
+        "skins": {
+          "0": {
+            "0": "Na pierwszej grządce {a?rosną|rośnie} {A}, a na drugiej — {b~} razy więcej. Ile {many} rośnie na drugiej grządce?"
+          },
+          "1": {
+            "0": "Marek ma {A}, a Ola — {b~} razy więcej. Ile {many} ma Ola?"
+          },
+          "2": {
+            "0": "W małym akwarium {a?pływają|pływa} {A}, a w dużym — {b~} razy więcej. Ile {many} pływa w dużym akwarium?"
+          },
+          "3": {
+            "0": "W pierwszej klasie jest {A}, a w drugiej — {b~} razy więcej. Ilu {many} jest w drugiej klasie?"
+          },
+          "4": {
+            "0": "Na dolnej półce {a?stoją|stoi} {A}, a na górnej — {b~} razy więcej. Ile {many} stoi na górnej półce?"
+          },
+          "5": {
+            "0": "W sobotę do muzeum przyszło {A}, a w niedzielę — {b~} razy więcej. Ilu {many} przyszło w niedzielę?"
+          },
+          "6": {
+            "0": "W pierwszym koszyku {a?leżą|leży} {A}, a w drugim — {b~} razy więcej. Ile {many} leży w drugim koszyku?"
+          },
+          "7": {
+            "0": "Tata złowił {A}, a dziadek — {b~} razy więcej. Ile {many} złowił dziadek?"
+          }
+        }
+      },
+      "timesFewer": {
+        "how": "„{b} razy mniej” to dzielenie: {a} podziel przez {b}.",
+        "skins": {
+          "0": {
+            "0": "W dużym pudełku {a?są|jest} {A}, a w małym — {b~} razy mniej. Ile {many} jest w małym pudełku?"
+          },
+          "1": {
+            "0": "Starszy brat ma {A}, a młodszy — {b~} razy mniej. Ile {many} ma młodszy brat?"
+          },
+          "2": {
+            "0": "Na pierwszym drzewie {a?wiszą|wisi} {A}, a na drugim — {b~} razy mniej. Ile {many} wisi na drugim drzewie?"
+          },
+          "3": {
+            "0": "Na pierwszej półce {a?stoją|stoi} {A}, a na drugiej — {b~} razy mniej. Ile {many} stoi na drugiej półce?"
+          },
+          "4": {
+            "0": "Latem Zosia znalazła {A}, a jesienią — {b~} razy mniej. Ile {many} znalazła jesienią?"
+          },
+          "5": {
+            "0": "W pierwszym bukiecie {a?są|jest} {A}, a w drugim — {b~} razy mniej. Ile {many} jest w drugim bukiecie?"
+          },
+          "6": {
+            "0": "Rano piekarz upiekł {A}, a wieczorem — {b~} razy mniej. Ile {many} upiekł wieczorem?"
+          },
+          "7": {
+            "0": "Po dużym stawie {a?pływają|pływa} {A}, a po małym — {b~} razy mniej. Ile {many} pływa po małym stawie?"
+          }
+        }
+      },
+      "moreTotal": {
+        "how": "Najpierw dowiedz się, ile jest tam, gdzie jest więcej: do {a} dodaj {b}. Potem dodaj do siebie obie liczby.",
+        "skins": {
+          "0": {
+            "0": "Na pierwszej półce {a?stoją|stoi} {A}, a na drugiej — o {b~} więcej. Ile {many} stoi na dwóch półkach razem?"
+          },
+          "1": {
+            "0": "W pierwszym koszyku {a?leżą|leży} {A}, a w drugim — o {b~} więcej. Ile {many} leży w dwóch koszykach razem?"
+          },
+          "2": {
+            "0": "Tomek ma {A}, a Lena — o {b~} więcej. Ile {many} mają razem?"
+          },
+          "3": {
+            "0": "W pierwszym wagonie jedzie {A}, a w drugim — o {b~} więcej. Ilu {many} jedzie w dwóch wagonach razem?"
+          },
+          "4": {
+            "0": "Rano sprzedano {A}, a wieczorem — o {b~} więcej. Ile {many} sprzedano przez cały dzień?"
+          },
+          "5": {
+            "0": "W pierwszej klasie jest {A}, a w drugiej — o {b~} więcej. Ilu {many} jest w dwóch klasach razem?"
+          },
+          "6": {
+            "0": "Na pierwszej rabacie {a?rosną|rośnie} {A}, a na drugiej — o {b~} więcej. Ile {many} rośnie na dwóch rabatach razem?"
+          },
+          "7": {
+            "0": "W sobotę Daniel przebiegł {A}, a w niedzielę — o {b~} więcej. Ile {many} przebiegł przez dwa dni?"
+          }
+        }
+      },
+      "timed": {
+        "how": "Do godziny początku dodaj tyle, ile minęło: {a} i jeszcze {b}.",
+        "skins": [
+          "Pociąg wyjechał o {a}:00 i jechał {B}. O której godzinie przyjechał?",
+          "Przedstawienie zaczęło się o {a}:00 i trwało {B}. O której godzinie się skończyło?",
+          "Wycieczka zaczęła się o {a}:00 i trwała {B}. O której godzinie się skończyła?",
+          "Samolot wystartował o {a}:00 i leciał {B}. O której godzinie wylądował?",
+          "Zawody zaczęły się o {a}:00 i trwały {B}. O której godzinie się skończyły?",
+          "Tata poszedł do pracy o {a}:00 i pracował {B}. O której godzinie skończył pracę?",
+          "Wędrowcy wyruszyli na wyprawę o {a}:00 i szli {B}. O której godzinie doszli do obozu?",
+          "Statek wypłynął o {a}:00 i płynął {B}. O której godzinie dopłynął do portu?"
+        ]
+      },
+      "speed": {
+        "line": "W ciągu jednej godziny {mover} {A}. Ile kilometrów {will} przez {Bu}?",
+        "how": "W każdej godzinie tyle samo — po {a} km. Pomnóż przez liczbę godzin: przez {b}.",
+        "skins": [
+          [
+            "rowerzysta przejeżdża",
+            "przejedzie"
+          ],
+          [
+            "turysta przechodzi",
+            "przejdzie"
+          ],
+          [
+            "łódka przepływa",
+            "przepłynie"
+          ],
+          [
+            "pociąg przejeżdża",
+            "przejedzie"
+          ],
+          [
+            "autobus przejeżdża",
+            "przejedzie"
+          ],
+          [
+            "jeździec przejeżdża",
+            "przejedzie"
+          ],
+          [
+            "narciarz przebiega",
+            "przebiegnie"
+          ],
+          [
+            "statek przepływa",
+            "przepłynie"
+          ]
+        ]
+      },
+      "thought": {
+        "line": "{N} {h?pomyślał|pomyślała} liczbę, {did} — i {h?otrzymał|otrzymała} {a}. Jaką liczbę {h?pomyślał|pomyślała} {N}?",
+        "how": "Idź od końca do początku: weź {a} i {undo}."
+      },
+      "twoBuys": {
+        "line": "{N} {h?kupił|kupiła} {A} po {$b} i {other} za {$c}. Ile {coins} {h?zapłacił|zapłaciła} {N}?",
+        "how": "Najpierw policz jednakowe zakupy: {b} pomnóż przez {a}. Potem dodaj jeszcze {c}.",
+        "skins": {
+          "0": {
+            "0": {
+              "other": "zeszyt"
+            }
+          },
+          "1": {
+            "0": {
+              "other": "sok"
+            }
+          },
+          "2": {
+            "0": {
+              "other": "album"
+            }
+          },
+          "3": {
+            "0": {
+              "other": "tort"
+            }
+          },
+          "4": {
+            "0": {
+              "other": "popcorn"
+            }
+          },
+          "5": {
+            "0": {
+              "other": "kopertę"
+            }
+          },
+          "6": {
+            "0": {
+              "other": "piórnik"
+            }
+          },
+          "7": {
+            "0": {
+              "other": "herbatę"
+            }
+          },
+          "8": {
+            "0": {
+              "other": "czekoladę"
+            }
+          }
+        }
+      },
+      "halves": {
+        "how": "Połowa — to podzielić przez dwa: zostało {a}. Potem odejmij jeszcze {b}.",
+        "skins": {
+          "0": {
+            "0": "Ola miała {T}. Połowę podarowała koleżance, a potem jeszcze {b~} oddała bratu. Ile {many} zostało?"
+          },
+          "1": {
+            "0": "Na półce {t?stały|stało} {T}. Połowę zabrano do czytania, a potem jeszcze {b~} oddano do biblioteki. Ile {many} zostało?"
+          },
+          "2": {
+            "0": "W koszyku {t?były|było} {T}. Połowę zjedzono na obiad, a potem jeszcze {b~} na kolację. Ile {many} zostało?"
+          },
+          "3": {
+            "0": "W paczce {t?były|było} {T}. Połowę naklejono w albumie, a potem jeszcze {b~} podarowano. Ile {many} zostało?"
+          },
+          "4": {
+            "0": "Na drzewie {t?wisiały|wisiało} {T}. Połowę zerwano rano, a potem jeszcze {b~} wieczorem. Ile {many} zostało?"
+          },
+          "5": {
+            "0": "W sklepie {t?były|było} {T}. Połowę sprzedano przed południem, a potem jeszcze {b~} po południu. Ile {many} zostało?"
+          },
+          "6": {
+            "0": "W skarbonce {t?były|było} {T}. Połowę wydano na książkę, a potem jeszcze {b~} na lody. Ile {many} zostało?"
+          },
+          "7": {
+            "0": "Na grządce {t?rosły|rosło} {T}. Połowę zebrano w sobotę, a potem jeszcze {b~} w niedzielę. Ile {many} zostało?"
+          },
+          "8": {
+            "0": "Na tacy {t?były|było} {T}. Połowę rozdano gościom, a potem jeszcze {b~} zjadły dzieci. Ile {many} zostało?"
+          }
+        }
+      }
+    },
+    "chips": {
+      "howManyMore": "o ile więcej",
+      "howManyFewer": "o ile mniej",
+      "change": "reszta",
+      "lack": "brakuje",
+      "half": "połowa",
+      "when": "o której",
+      "eachPrice": "po {n}",
+      "by": "o {n}",
+      "each": "po {n}",
+      "extra": "jeszcze {n}",
+      "timesMore": "{n} razy więcej",
+      "timesFewer": "{n} razy mniej",
+      "moreBy": "o {n} więcej",
+      "at": "o {hour}:00",
+      "speed": "{km} km na godzinę"
+    }
+  },
+  "SQUARES": {
+    "0": "kratka",
+    "1": "kratki",
+    "2": "kratek"
+  },
+  "SHAPES": {
+    "triangle": "trójkątów",
+    "square": "kwadratów",
+    "circle": "kół",
+    "rect": "prostokątów"
+  },
+  "OPS": {
+    "+": "plus",
+    "-": "minus",
+    "×": "razy",
+    "÷": "podzielić przez"
+  },
+  "heaps": {
+    "0": "kupka",
+    "1": "jednakowe kupki",
+    "2": "jednakowych kupek"
+  },
+  "MONEY": {
+    "UAH": {
+      "short": "hrn",
+      "forms": {
+        "0": "hrywna",
+        "1": "hrywny",
+        "2": "hrywien"
+      },
+      "small": "kop.",
+      "smallMany": "kopiejek",
+      "rule": "Jedna hrywna to sto kopiejek."
+    },
+    "EUR": {
+      "forms": {
+        "0": "euro",
+        "1": "euro",
+        "2": "euro"
+      },
+      "small": "ct",
+      "smallMany": "centów",
+      "rule": "Jedno euro to sto centów."
+    },
+    "USD": {
+      "forms": {
+        "0": "dolar",
+        "1": "dolary",
+        "2": "dolarów"
+      },
+      "smallMany": "centów",
+      "rule": "Jeden dolar to sto centów."
+    },
+    "GBP": {
+      "forms": {
+        "0": "funt",
+        "1": "funty",
+        "2": "funtów"
+      },
+      "small": "p",
+      "smallMany": "pensów",
+      "rule": "Jeden funt to sto pensów."
+    },
+    "PLN": {
+      "short": "zł",
+      "forms": {
+        "0": "złoty",
+        "1": "złote",
+        "2": "złotych"
+      },
+      "small": "gr",
+      "smallMany": "groszy",
+      "rule": "Jeden złoty to sto groszy."
+    }
+  },
+  "cards": {
+    "title": "Matematyka",
+    "games": {
+      "add": {
+        "label": "Dodawanie",
+        "blurb": "Zbieramy wszystko razem"
+      },
+      "sub": {
+        "label": "Odejmowanie",
+        "blurb": "Zabieramy po trochu"
+      },
+      "mul": {
+        "label": "Mnożenie",
+        "blurb": "Jednakowe kupki razem",
+        "demoCaption": "2 razy po 2"
+      },
+      "div": {
+        "label": "Dzielenie",
+        "blurb": "Dzielimy po równo",
+        "demoCaption": "4 po równo na 2"
+      },
+      "mixed": {
+        "label": "Rachunek pamięciowy",
+        "blurb": "Wszystko razem: +, −, ×, ÷"
+      },
+      "fractions": {
+        "label": "Smaczne ułamki",
+        "blurb": "Szukamy kawałka smakołyku"
+      },
+      "fraction_ops": {
+        "label": "Ułamki: działania",
+        "blurb": "Dodajemy, odejmujemy, mnożymy i dzielimy ułamki"
+      },
+      "balance": {
+        "label": "Matematyczna waga",
+        "blurb": "Znajdź odważnik, który zrównoważy",
+        "intro": "Waga lubi równowagę! Po lewej leży działanie. Przeciągnij na prawą szalkę odważnik, który waży tyle samo."
+      },
+      "geometry": {
+        "label": "Geometryczny konstruktor",
+        "blurb": "Układamy figury, liczymy pole i obwód"
+      },
+      "maze": {
+        "label": "Liczbowy labirynt",
+        "blurb": "Biegnij tylko po właściwych liczbach",
+        "intro": "Pomóż przyjacielowi przebiec przez labirynt! Stawać można tylko na liczbach, które pasują do zasady. Zrób krok na sąsiednią kratkę."
+      },
+      "shop": {
+        "label": "Sklep",
+        "blurb": "Liczymy kieszonkowe",
+        "intro": "Witaj w sklepie! Spójrz na cenę i połóż na kasie tyle pieniędzy, ile kosztuje zabawka."
+      },
+      "word_problems": {
+        "label": "Zadania z treścią",
+        "blurb": "Historyjki z życia: sklep, przyjaciele, droga",
+        "intro": "Posłuchaj krótkiej historyjki i odpowiedz na pytanie. Obrazki podpowiedzą, co wiemy i o co pytają. Jeśli chcesz — naciśnij głośnik, a przeczytam zadanie jeszcze raz."
+      },
+      "compare": {
+        "label": "Większe, mniejsze, równe",
+        "blurb": "Porównujemy liczby, działania i wielkości",
+        "intro": "Porównujmy! Znak „większe” i „mniejsze” wygląda jak dziobek ptaszka: zawsze jest otwarty w stronę większej liczby. A jeśli po obu stronach jest tyle samo, stawiamy „równa się”."
+      },
+      "clock": {
+        "label": "Która godzina?",
+        "blurb": "Uczymy się odczytywać zegar ze wskazówkami"
+      }
+    }
+  },
+  "intro": {
+    "add": "Dodawać to zbierać razem! Połóż {it}{it} i jeszcze {it}. Policz: jeden, dwa, trzy. Razem trzy {it}!",
+    "sub": "Odejmować to zabierać. Było {it}{it}{it}, jedno {it} zabrano — zostały dwa. Policz, ile zostanie!",
+    "mul": "Mnożyć to brać jednakowe kupki. Bierzemy {it}{it} dwa razy: {it}{it} i jeszcze {it}{it} — razem cztery {it}!",
+    "div": "Dzielić to rozdawać po równo. Mamy {it}{it}{it}{it}, wkładamy po równo do dwóch koszyków — w każdym po dwa. Ile jest w jednym?",
+    "mixed": "Tutaj są różne działania. Patrz na znak: „plus” — zbieramy razem, „minus” — zabieramy. Licz uważnie!",
+    "fractions": "Ułamki to równe kawałki. Wyobraź sobie pizzę 🍕: pokrojono ją na cztery kawałki i wzięto jeden — to jedna czwarta. Znajdź zamalowany kawałek!",
+    "other": "Przygoda czeka! Liczymy razem!"
+  },
+  "mental": {
+    "prompt": "Ile to jest {a} {op} {b}?",
+    "hint": {
+      "1": "To {a}, w każdej po {b}. Dotykaj kółeczek po jednym i licz wszystkie razem.",
+      "2": "Masz {a} — rozłóż kółeczka po równo w {b} rzędach. Policz, ile znajdzie się w jednym rzędzie.",
+      "3": "Było {a}. Zabierz {b} — odkładaj po jednym kółeczku. Ile zostało?",
+      "4": "Licz kółeczka po jednym: najpierw {a}, a potem dodaj jeszcze {b}. Ile jest razem?"
+    }
+  },
+  "balance": {
+    "prompt": "Zrównoważ wagę! Który odważnik waży tyle samo?",
+    "reduce": "Skróć ułamek: podziel górę i dół przez tę samą liczbę. {n} z {d} to tyle samo, co {simpleN} z {simpleD}.",
+    "add": "Policz wszystkie kropki razem: {a} i jeszcze {b}.",
+    "sub": "Było {a}, zabrano {b}. Policz, ile kropek zostało.",
+    "mul": "To {a} po {b}. Policz wszystkie kropki."
+  },
+  "fractions": {
+    "foods": [
+      "pizzy",
+      "tortu",
+      "jabłka",
+      "arbuza",
+      "pomarańczy",
+      "ciasta",
+      "czekolady"
+    ],
+    "prompt": "Jaka część {food} jest zamalowana?",
+    "hint": "Policzmy zamalowane kawałki: {length}. Wszystkich kawałków jest {denom}. A więc to {filled} z {denom}!"
+  },
+  "fractionOps": {
+    "intro": {
+      "addSame": "Kiedy mianowniki są takie same, kawałki mają ten sam rozmiar. Wystarczy dodać górne liczby, a dolną zostawić bez zmian: jedna czwarta plus dwie czwarte to trzy czwarte.",
+      "subSame": "Odejmujemy tak samo: kawałki są jednakowe, więc od górnej liczby odejmujemy górną, a dolnej nie zmieniamy. Trzy czwarte minus jedna czwarta to dwie czwarte.",
+      "unlike": "Teraz mianowniki są różne — kawałki mają różne rozmiary. Najpierw je wyrównaj: znajdź wspólny mianownik, a potem dodawaj lub odejmuj górne liczby. Jedna druga to to samo, co dwie czwarte!",
+      "mul": "Żeby pomnożyć ułamki, mnożymy górę przez górę i dół przez dół. Jedna druga z jednej trzeciej to jedna szósta.",
+      "div": "Żeby podzielić przez ułamek, odwracamy drugi ułamek i mnożymy. Podzielić przez jedną drugą to to samo, co pomnożyć przez dwa.",
+      "mixed": "Tutaj są wszystkie działania naraz. Patrz uważnie na znak i przypomnij sobie zasadę dla każdego działania!"
+    },
+    "prompt": {
+      "1": "Oblicz: {a} {op} {op2}",
+      "2": "jedną {b}"
+    }
+  },
+  "compare": {
+    "plus": "{a} plus {b}",
+    "minus": "{a} minus {b}",
+    "times": "{a} razy {b}",
+    "units": {
+      "0": {
+        "0": "metr",
+        "1": {
+          "1": "m",
+          "2": "metry"
+        },
+        "2": {
+          "1": "metrów",
+          "2": "cm"
+        },
+        "3": "centymetrów",
+        "4": "Jeden metr to sto centymetrów."
+      },
+      "1": {
+        "0": "kilogram",
+        "1": {
+          "1": "kg",
+          "2": "kilogramy"
+        },
+        "2": {
+          "1": "kilogramów",
+          "2": "g"
+        },
+        "3": "gramów",
+        "4": "Jeden kilogram to tysiąc gramów."
+      },
+      "2": {
+        "0": "godzina",
+        "1": {
+          "1": "godz.",
+          "2": "godziny"
+        },
+        "2": {
+          "1": "godzin",
+          "2": "min"
+        },
+        "3": "minut",
+        "4": "Jedna godzina to sześćdziesiąt minut."
+      },
+      "3": {
+        "0": "centymetr",
+        "1": {
+          "1": "cm",
+          "2": "centymetry"
+        },
+        "2": {
+          "1": "centymetrów",
+          "2": "mm"
+        },
+        "3": "milimetrów",
+        "4": "Jeden centymetr to dziesięć milimetrów."
+      },
+      "4": {
+        "0": "litr",
+        "1": {
+          "1": "l",
+          "2": "litry"
+        },
+        "2": {
+          "1": "litrów",
+          "2": "ml"
+        },
+        "3": "mililitrów",
+        "4": "Jeden litr to tysiąc mililitrów."
+      }
+    },
+    "signs": {
+      "lt": "mniejsze",
+      "eq": "równe",
+      "gt": "większe"
+    },
+    "rule": "Znak wygląda jak dziobek ptaszka: zawsze jest otwarty w stronę większej liczby.",
+    "verdict": {
+      "1": "{left} równa się {right}",
+      "2": "{left} to {sign} niż {right}",
+      "3": "mniej",
+      "4": "więcej"
+    },
+    "prompt": "Porównaj: {left} i {right}. Jaki znak postawić między nimi?",
+    "yes": "Tak! {verdict}{verdict2}.",
+    "hint": "{rule} Policz, ile jest po lewej, a ile po prawej: po lewej {left}, po prawej {right}."
+  },
+  "clock": {
+    "say": {
+      "1": "godzina {h}",
+      "2": "wpół do {next}",
+      "3": "kwadrans po {h}",
+      "4": "za kwadrans {next}",
+      "5": "zero "
+    },
+    "intro": {
+      "hours": "Zegar ma dwie wskazówki. Krótka pokazuje godziny. Kiedy długa wskazówka patrzy prosto w górę, na dwunastkę, jest równa godzina. Zobacz, na co pokazuje krótka!",
+      "half": "Kiedy długa wskazówka patrzy w dół, na szóstkę, minęło pół godziny. Krótka wskazówka stoi wtedy między dwiema liczbami.",
+      "quarter": "Długa wskazówka na trójce — minął kwadrans. A jeśli jest na dziewiątce, do nowej godziny został kwadrans.",
+      "minutes": "Długa wskazówka pokazuje minuty. Każda liczba na zegarze to kolejne pięć minut: jeden — pięć, dwa — dziesięć, trzy — piętnaście."
+    },
+    "hint": {
+      "long": {
+        "1": "patrzy w górę, na dwunastkę",
+        "2": "pokazuje na {m}"
+      },
+      "short": {
+        "1": "pokazuje na {h}",
+        "2": "minęła już {h}"
+      },
+      "_": "Krótka wskazówka {short}, a długa {long}. Krótka to godziny, długa — minuty."
+    },
+    "yes": "Tak, to {time}!",
+    "find": "Znajdź zegar, który pokazuje: {time}.",
+    "read": "Która godzina jest na zegarze?"
+  },
+  "maze": {
+    "negatives": " Teraz są tu też liczby ujemne — ze znakiem minus. Dzielą się tak samo: minus dwanaście dzieli się przez trzy, bo dwanaście dzieli się przez trzy.",
+    "deadEnds": " Labirynt urósł i ma ślepe zaułki: jeśli dalej nie ma drogi, wróć i spróbuj inaczej.",
+    "table": "Biegnij po tabliczce mnożenia przez {k}: {k}, {k2}, {k3} i dalej",
+    "divisible": "Biegnij tylko po liczbach, które dzielą się przez {k}",
+    "hint": {
+      "1": "Szukaj sąsiedniej kratki z liczbą, która dzieli się przez {k} bez reszty. Podświetlę następny krok.",
+      "2": " Jeśli trafisz w ślepy zaułek, wróć.",
+      "3": " Znak minus nie przeszkadza: patrz na samą liczbę."
+    }
+  },
+  "shop": {
+    "toys": [
+      "miś",
+      "samochodzik",
+      "jojo",
+      "piłka",
+      "latawiec",
+      "zestaw farb",
+      "układanka",
+      "dinozaur",
+      "pociąg",
+      "piniata"
+    ],
+    "change": "{toy}{toy2} kosztuje {price}. Dajesz {paid}. Ile dostaniesz reszty?",
+    "buy": "Kup zabawkę: {toy}. Cena to {price}. Połóż pieniądze na kasie.",
+    "changeHint": "Od {paid} odejmij {price}. Możesz doliczać od {price} do {paid}.",
+    "payHint": "Zacznij od największych pieniędzy, które nie przekraczają {price}, a potem dokładaj mniejsze."
+  },
+  "geometry": {
+    "figures": {
+      "0": {
+        "0": "lody",
+        "1": "To lody: okrągła gałka i trójkątny rożek."
+      },
+      "1": {
+        "0": "grzyb",
+        "1": "To grzyb: trójkątny kapelusz i kwadratowa nóżka."
+      },
+      "2": {
+        "0": "lizak",
+        "1": "To lizak: okrągły smakołyk na patyku."
+      },
+      "3": {
+        "0": "domek",
+        "1": "To domek: kwadratowe ściany i trójkątny dach."
+      },
+      "4": {
+        "0": "bałwan",
+        "1": "To bałwan: trzy koła — małe, średnie i duże."
+      },
+      "5": {
+        "0": "cukierek",
+        "1": "To cukierek: okrągły środek i dwa trójkątne ogonki."
+      },
+      "6": {
+        "0": "choinka",
+        "1": "To choinka: dwa trójkąty i mały pień."
+      },
+      "7": {
+        "0": "rybka",
+        "1": "To rybka: okrągłe ciało i trójkątny ogonek."
+      },
+      "8": {
+        "0": "stateczek",
+        "1": "To stateczek: prostokątny kadłub i trójkątny żagiel."
+      },
+      "9": {
+        "0": "kotek",
+        "1": "To kotek: okrągła głowa, trójkątne uszka i kwadratowe ciało."
+      },
+      "10": {
+        "0": "ciężarówka",
+        "1": "To ciężarówka: długa naczepa, kwadratowa kabina i dwa koła."
+      },
+      "11": {
+        "0": "kwiatek",
+        "1": "To kwiatek: trzy okrągłe płatki na łodydze."
+      },
+      "12": {
+        "0": "rakieta",
+        "1": "To rakieta: ostry nos, dwa kwadraty i trójkątne skrzydła."
+      },
+      "13": {
+        "0": "pociąg",
+        "1": "To pociąg: długi wagon, kabina i trzy koła."
+      },
+      "14": {
+        "0": "motyl",
+        "1": "To motyl: okrągły tułów, główka i dwa trójkątne skrzydła."
+      },
+      "15": {
+        "0": "robot",
+        "1": "To robot: kwadratowa głowa, tułów, dwie ręce i dwie nogi."
+      },
+      "16": {
+        "0": "zamek",
+        "1": "To zamek: długi mur, trzy wieże i dwa spiczaste dachy."
+      },
+      "17": {
+        "0": "miś",
+        "1": "To miś — cały jest z kół: głowa, uszka, tułów i łapki."
+      },
+      "18": {
+        "0": "kaczątko",
+        "1": "To kaczątko: okrągłe ciało i głowa, dziobek, ogonek i łapki."
+      },
+      "19": {
+        "0": "autobus",
+        "1": "To autobus: długie nadwozie, trzy koła i dwie walizki na dachu."
+      },
+      "20": {
+        "0": "ludzik",
+        "1": "To ludzik: okrągła głowa, kwadratowy tułów, ręce i nogi."
+      },
+      "21": {
+        "0": "pałac",
+        "1": "To pałac: mur, trzy wieże, dwa dachy i chorągiewka na górze."
+      },
+      "22": {
+        "0": "parowóz",
+        "1": "To parowóz: wagon, kabina, trzy koła, komin i obłoczek dymu."
+      },
+      "23": {
+        "0": "dinozaur",
+        "1": "To dinozaur: długie ciało, szyja, głowa, ogon, nogi i kolce na grzbiecie."
+      }
+    },
+    "build": "Ułóż z figur: {name}",
+    "buildHint": "Znajdź kontur o takim samym kształcie i takiej samej wielkości.",
+    "count": "Spójrz na obrazek: {name}. Ile jest tu {shape}?",
+    "countHint": "Szukaj tylko {shape}. Dotykaj każdego palcem i licz na głos.",
+    "areaRead": "Jakie pole ma ta figura? Policz zamalowane kratki.",
+    "areaIs": "Tak! Pole figury to {area}: właśnie tyle ma kratek.",
+    "areaHint": "Pole to liczba kratek, które zajmuje figura. Dotykaj każdej zamalowanej kratki i licz.",
+    "pens": [
+      "owieczki",
+      "królika",
+      "kurczaków",
+      "prosiaczka",
+      "koźlątka",
+      "źrebaka"
+    ],
+    "pen": {
+      "1": "Zbuduj zagrodę dla {animal} o polu {area}.",
+      "2": "{num} kratki",
+      "3": "{area} kratek"
+    },
+    "penDone": "Świetna zagroda! Jej pole to {area}.",
+    "penHint": "Pole to liczba kratek. Zamaluj dokładnie {area} obok siebie.",
+    "perimeterRead": "Jaki obwód ma ta figura? Obejdź ją po brzegu i policz boki kratek.",
+    "perimeterIs": "Tak! Obwód to {length}: właśnie tyle boków kratek jest na brzegu figury.",
+    "perimeterHint": "Obwód to długość płotu wokół figury. Prowadź palcem po brzegu i licz każdy bok kratki.",
+    "longest": "Znajdź figurę o największym obwodzie",
+    "longestIs": "Tak! Jej obwód to {length}: właśnie tyle boków kratek trzeba obejść.",
+    "longestHint": "Obwód to długość płotu wokół figury. Obejdź palcem każdą figurę i policz boki kratek na brzegu.",
+    "intro": {
+      "figures": "Ułóż obrazek z figur! Przeciągnij każdą figurę na kontur o takim samym kształcie. Policzymy też, z jakich figur składa się obrazek.",
+      "area": "Pole to liczba kratek, które zajmuje figura. Policz zamalowane kratki albo zamaluj tyle, o ile prosimy.",
+      "perimeter": "Obwód to długość płotu wokół figury. Obejdź figurę po brzegu i policz boki kratek."
+    }
+  }
+}

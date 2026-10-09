@@ -1,5 +1,5 @@
-import { tApp, type AppKey, type Params } from '@/core/i18n/app';
-import type { LangCode } from '@/core/lang';
+import { tApp, type AppKey, type Params } from '@/core/translator/app';
+import type { LangCode } from '@/core/language';
 import { DEFAULT_THEME_ID, THEMES } from './themes';
 import type { Theme, ThemeId, ThemeSpec } from './theme.types';
 
