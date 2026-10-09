@@ -1,13 +1,15 @@
 import { useMemo } from 'react';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
+import { useGameLang } from '@/core/i18n';
+import type { LangCode } from '@/core/lang';
 import { themeWorld, type ThemeWorld } from './themeWorlds';
 import { treasureKey } from '@/core/child/progress/treasures';
 import { gamesProgress } from './games';
 import { stationsOf, type StationDef } from './stations';
 import {
   PLANET_COUNT,
-  PLANET_NAMES,
+  planetName,
   SPACEPORT_ID,
   WORLD_PLANETS,
   frontierPlanet,
@@ -91,23 +93,27 @@ export interface World {
 /**
  * The active child's world, derived live from their artifacts and progress.
  * `viewPlanet` is the planet to show (1-based) — any of the eight, a closed
- * one too; by default the furthest one the child has reached.
+ * one too; by default the furthest one the child has reached. `lang` is the
+ * language its names are in — the game's own unless another is asked for (the
+ * voice's, when the voice speaks another language than the screen).
  */
-export function useWorld(viewPlanet?: number): World {
-  const theme = useActiveTheme();
+export function useWorld(viewPlanet?: number, lang?: LangCode): World {
+  const gameLang = useGameLang();
+  const words = lang ?? gameLang;
+  const theme = useActiveTheme(words);
   const artifacts = useGameStore((s) => s.artifacts);
   const progress = useGameStore((s) => s.progress);
   const treasures = useGameStore((s) => s.treasures);
 
   return useMemo(() => {
-    let def = themeWorld(theme);
+    let def = themeWorld(theme, 1, words);
     const all = gamesProgress(progress);
     const gifts = giftsEarned(all);
     const balance = balanceOf(artifacts, treasures);
     const keys = keyBalance(keysEarned(all), treasures);
     const treasuresFound = theme.treasures.filter((t) => treasures.includes(treasureKey(theme.id, t.id))).length;
     const stationsOn = (planet: number): StationState[] =>
-      stationsOf(planet).map((station) => {
+      stationsOf(planet, words).map((station) => {
         const cost = stationCost(station.id, planet);
         if (treasures.includes(stationKey(station.id, planet))) return { station, cost, status: 'open', missing: 0 };
         return keys >= cost ? { station, cost, status: 'affordable', missing: 0 } : { station, cost, status: 'saving', missing: cost - keys };
@@ -116,7 +122,7 @@ export function useWorld(viewPlanet?: number): World {
     // Every planet: what stands on it and whether it is done.
     const planets = WORLD_PLANETS.map((id, i) => {
       const planet = i + 1;
-      const world = themeWorld(theme, planet);
+      const world = themeWorld(theme, planet, words);
       const owned = new Set(world.items.filter((item) => treasures.includes(ownedKey(theme.id, item.id, planet))).map((item) => item.id));
       const needs = planetNeeds({
         planet,
@@ -137,7 +143,7 @@ export function useWorld(viewPlanet?: number): World {
     const system = planets.map((p) => ({
       planet: p.planet,
       id: p.id,
-      name: PLANET_NAMES[p.id],
+      name: planetName(p.id, words),
       open: p.planet <= frontier,
       done: p.needs.done,
       needs: p.needs,
@@ -149,7 +155,7 @@ export function useWorld(viewPlanet?: number): World {
       def,
       planet: shown.planet,
       planetId: shown.id,
-      planetName: PLANET_NAMES[shown.id],
+      planetName: planetName(shown.id, words),
       open: shown.planet <= frontier,
       frontier,
       system,
@@ -166,5 +172,5 @@ export function useWorld(viewPlanet?: number): World {
       gifts,
       newestResident: residentForGift(def.residents, gifts),
     };
-  }, [theme, artifacts, progress, treasures, viewPlanet]);
+  }, [theme, artifacts, progress, treasures, viewPlanet, words]);
 }

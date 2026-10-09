@@ -3,14 +3,15 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSound } from '@/core/audio/useSound';
-import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useGameLang, useT, type T } from '@/core/i18n';
+import { useTell } from './useTell';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
 import type { World } from '@/core/child/world/useWorld';
-import { DREAM_ID, GALAXY_NAME, PLANET_COUNT, SPACEPORT_ID, sellPrice, type ItemState, type Need } from '@/core/child/world/world';
+import { DREAM_ID, PLANET_COUNT, SPACEPORT_ID, galaxyName, sellPrice, type ItemState, type Need } from '@/core/child/world/world';
 import { PlanetArt } from '@/components/templates/PlanetArt';
 import { Globe } from './Globe';
 import { SolarSystem } from './SolarSystem';
@@ -23,8 +24,6 @@ const MAX_PITCH = 70 * RAD;
 const ZOOM_MIN = 0.7;
 /** Far enough in for the smallest decoration to be looked at closely. */
 const ZOOM_MAX = 4;
-/** How the artifacts a thing costs are earned — said whenever there are not enough of them. */
-const HOW_TO_EARN = 'Щоб зібрати, грай у будь-яку гру: за кожне виконане завдання дають нагороду.';
 /** A message with nothing to press fades out by itself after this long — long enough to be read out. */
 const NOTICE_MS = 9000;
 
@@ -35,8 +34,8 @@ interface NeedChip {
   text: string;
   done: boolean;
   count?: string;
-  /** How to get it — shown and read out. */
-  how: string;
+  /** How to get it — shown, and read out in the voice's own words (see `useTell`). */
+  how: (t: T, said: World) => string;
   /** The button that leads there, and what it does. */
   go: string;
   act: () => void;
@@ -63,7 +62,11 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   const theme = useActiveTheme();
   const showText = useShowText();
   const { play } = useSound();
-  const announce = useVoiceSpeak('selections');
+  const t = useT();
+  const gameLang = useGameLang();
+  const { tell } = useTell(world.planet);
+  /** A thing's name as the voice says it: the same thing in the voice's world. */
+  const saidName = (said: World, state: ItemState) => said.items.find((other) => other.item.id === state.item.id)?.item.name ?? state.item.name;
   const buy = useGameStore((s) => s.buyWorldItem);
   const sell = useGameStore((s) => s.sellWorldItem);
   // The item whose «Продати» was tapped once: the warning has been read out
@@ -137,14 +140,15 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   // The family goal the child is closest to: buying moves it further away.
   const nextGoal = [...milestones].sort((a, b) => a.amount - b.amount).find((m) => m.reward.trim());
 
-  /** What the bar says about an item — also what is read aloud. */
-  const describe = (state: ItemState): string => {
-    const { name, cost } = state.item;
-    const port = state.item.id === SPACEPORT_ID ? ' Космопорт відкриває шлях до наступної планети.' : '';
-    if (state.status === 'owned') return `${name}. Уже стоїть на твоїй планеті.${port}`;
-    if (state.status === 'locked') return `${name}. Це головна мрія! Спершу збудуй усі інші будівлі та космопорт.`;
-    if (state.status === 'saving') return `${name}. Коштує ${cost}. У тебе є ${balance}. Збери ще ${state.missing} — і можна будувати. ${HOW_TO_EARN}${port}`;
-    return `${name}. Коштує ${cost}. Можна будувати!${port}`;
+  /** What is read out about an item — made from the voice's own words (see `useTell`). */
+  const describe = (state: ItemState) => (vt: T, said: World): string => {
+    const name = saidName(said, state);
+    const { cost } = state.item;
+    const port = state.item.id === SPACEPORT_ID ? ` ${vt('world.item.portNote')}` : '';
+    if (state.status === 'owned') return `${vt('world.item.owned', { name })}${port}`;
+    if (state.status === 'locked') return vt('world.item.locked', { name });
+    if (state.status === 'saving') return `${vt('world.item.saving', { name, cost, balance, missing: state.missing, how: vt('world.item.howToEarn') })}${port}`;
+    return `${vt('world.item.affordable', { name, cost })}${port}`;
   };
 
   const deselect = () => {
@@ -160,7 +164,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     // A closed planet can only be looked at.
     if (!world.open) {
       turnTo(placeOf(state));
-      announce(`${state.item.name}. Ця планета ще закрита.`);
+      tell((vt, said) => vt('world.item.closedPlanet', { name: saidName(said, state) }));
       return;
     }
     // A second tap on the same thing puts it down again.
@@ -172,7 +176,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     setSelectedId(state.item.id);
     setSelling(null);
     turnTo(placeOf(state));
-    announce(describe(state));
+    tell(describe(state));
   };
 
   // A message with nothing to press (still saving, locked) leaves by itself;
@@ -191,9 +195,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     play('tap');
     setSelling(state.item.id);
     const back = sellPrice(state.item.id, world.planet);
-    announce(
-      `Якщо продати, тобі повернуть ${back}, а не ${state.item.cost}. Це менше, ніж ти заплатив. Якщо часто купувати і продавати, скарбів ставатиме дедалі менше. Подумай добре!`,
-    );
+    tell((vt) => vt('world.item.sellWarn', { back, cost: state.item.cost }));
   };
   const confirmSell = (state: ItemState) => {
     if (sell(theme.id, state.item.id, world.planet) <= 0) return;
@@ -211,7 +213,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     turnTo(placeOf(state));
     play('chestOpen');
     window.setTimeout(() => play(state.item.id === DREAM_ID || state.item.id === SPACEPORT_ID ? 'fanfare' : 'treasure'), 420);
-    window.setTimeout(() => announce(`${state.item.name}. Збудовано!`), 700);
+    window.setTimeout(() => tell((vt, said) => vt('world.item.built', { name: saidName(said, state) })), 700);
     confetti({ particleCount: 70, spread: 75, origin: { y: 0.42 }, scalar: 0.9 });
   };
 
@@ -238,7 +240,8 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   const cx = (size?.w ?? 0) / 2;
   const cy = (size?.h ?? 0) / 2;
 
-  const nextName = world.system[world.planet]?.name ?? 'Сонце';
+  const next = world.system[world.planet];
+  const nextName = next?.name ?? t('world.sun.name');
   // A closed planet opens when the one the child is building on is done, so
   // that is the planet whose list it shows.
   const gate = world.system[(world.open ? world.planet : world.frontier) - 1];
@@ -256,14 +259,18 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
   const play_ = () => navigate('/');
   const port = gate.items.find((i) => i.item.id === SPACEPORT_ID);
   const count = (n: Need) => `${n.have}/${n.need}`;
+  /** The planet whose list is shown, named in the language of the world it is told in. */
+  const planetIn = (said: World) => said.system[gate.planet - 1]?.name ?? gate.name;
+  /** The same text on the screen: the dictionary and the world of the game's own language. */
+  const shown = (how: NeedChip['how']) => how(t, world);
   const needChips: NeedChip[] = [
     {
       id: 'port',
       icon: '🚀',
-      text: 'Космопорт',
+      text: t('world.need.port.text'),
       done: needs.spaceport,
-      how: `Космопорт — це будівля. Він є у списку «Будівлі» на планеті ${gate.name} і коштує ${port?.item.cost ?? ''} ${theme.artifact.emoji}. Їх дають за кожне виконане завдання в іграх.`,
-      go: 'Показати космопорт',
+      how: (vt, said) => vt('world.need.port.how', { planet: planetIn(said), cost: port?.item.cost ?? '', artifact: theme.artifact.emoji }),
+      go: t('world.need.port.go'),
       // The spaceport is chosen once the planet it stands on is on the screen.
       act: () => {
         toGate();
@@ -273,11 +280,11 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     {
       id: 'built',
       icon: '🏗️',
-      text: 'Будівлі та прикраси',
+      text: t('world.need.built.text'),
       done: needs.built.done,
       count: count(needs.built),
-      how: `Збудуй усе зі списків «Будівлі» та «Прикраси» на планеті ${gate.name}: уже є ${needs.built.have} з ${needs.built.need}. Будують за ${theme.artifact.emoji} — їх дають за виконані завдання.`,
-      go: 'До будівель і прикрас',
+      how: (vt, said) => vt('world.need.built.how', { planet: planetIn(said), have: needs.built.have, need: needs.built.need, artifact: theme.artifact.emoji }),
+      go: t('world.need.built.go'),
       act: () => {
         toGate();
         scrollTo('world-buildings');
@@ -286,11 +293,11 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     {
       id: 'stations',
       icon: '🛰️',
-      text: 'Станції знань',
+      text: t('world.need.stations.text'),
       done: needs.stations.done,
       count: count(needs.stations),
-      how: `Відчини станції знань на планеті ${gate.name}: уже є ${needs.stations.have} з ${needs.stations.need}. Їх відчиняють ключами знань 🗝️ — ключ дають за кожну нову сходинку в будь-якій грі.`,
-      go: 'До станцій',
+      how: (vt, said) => vt('world.need.stations.how', { planet: planetIn(said), have: needs.stations.have, need: needs.stations.need }),
+      go: t('world.need.stations.go'),
       act: () => {
         toGate();
         scrollTo('world-stations');
@@ -299,36 +306,37 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
     {
       id: 'residents',
       icon: '🎁',
-      text: 'Мешканці',
+      text: t('world.need.residents.text'),
       done: needs.residents.done,
       count: count(needs.residents),
-      how: `Мешканці приходять із подарунками. Подарунок чекає на кожній п’ятій сходинці шляху в будь-якій грі. Уже є ${needs.residents.have} з ${needs.residents.need}.`,
-      go: 'Грати',
+      how: (vt) => vt('world.need.residents.how', { have: needs.residents.have, need: needs.residents.need }),
+      go: t('common.play'),
       act: play_,
     },
     {
       id: 'treasures',
       icon: '💎',
-      text: 'Скарби',
+      text: t('world.need.treasures.text'),
       done: needs.treasures.done,
       count: count(needs.treasures),
-      how: `Скарби лежать у скринях на шляху: скриня чекає на кожній третій сходинці гри, і в кожній — новий скарб. Уже є ${needs.treasures.have} з ${needs.treasures.need}.`,
-      go: 'Грати',
+      how: (vt) => vt('world.need.treasures.how', { have: needs.treasures.have, need: needs.treasures.need }),
+      go: t('common.play'),
       act: play_,
     },
   ];
   const need = needChips.find((c) => c.id === needId) ?? null;
   const needsTitle = !world.open
-    ? `🔒 Спершу — планета ${gate.name}`
+    ? t('world.needs.first', { planet: gate.name })
     : needs.done
-      ? '🚀 Шлях далі відкрито!'
-      : `🚀 Щоб летіти ${nextName === 'Сонце' ? 'до Сонця' : `на ${nextName}`}`;
+      ? t('world.needs.open')
+      : next
+        ? t('world.needs.to', { planet: next.name })
+        : t('world.needs.toSun');
 
-  const hintText = !world.open
-    ? 'Ця планета ще закрита.'
-    : suggestion
-      ? `Уже можна збудувати: ${suggestion.item.name}!`
-      : 'Торкнися будь-чого на планеті або у списку внизу.';
+  /** The line under the planet: what can be done now — shown, and read out when tapped. */
+  const hint = (vt: T, said: World): string =>
+    !world.open ? vt('world.hint.closed') : suggestion ? vt('world.hint.canBuild', { name: saidName(said, suggestion) }) : vt('world.hint.tap');
+  const hintText = hint(t, world);
 
   return (
     <section className={styles.card}>
@@ -339,10 +347,10 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
           </span>{' '}
           {world.def.name}
           <small className={styles.where}>
-            {world.planetName} · галактика {GALAXY_NAME}
+            {t('world.where', { planet: world.planetName, galaxy: galaxyName(gameLang) })}
           </small>
         </h2>
-        <span className={styles.purse} aria-label={`Можна витратити: ${balance}`}>
+        <span className={styles.purse} aria-label={t('world.purse', { balance })}>
           <span className="emoji" aria-hidden>
             {theme.artifact.emoji}
           </span>{' '}
@@ -351,13 +359,13 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
       </header>
 
       {/* The solar system: eight planets on the way to the Sun. */}
-      <div className={styles.system} role="group" aria-label="Сонячна система">
+      <div className={styles.system} role="group" aria-label={t('world.system.label')}>
         {world.system.map((p) => (
           <button
             key={p.id}
             type="button"
             className={cn(styles.systemPlanet, p.planet === world.planet && styles.systemHere, !p.open && styles.systemClosed)}
-            aria-label={`${p.name}: ${p.done ? 'усе збудовано' : p.open ? 'відкрито' : 'ще закрито'}`}
+            aria-label={t(p.done ? 'world.planet.ariaDone' : p.open ? 'world.planet.ariaOpen' : 'world.planet.ariaClosed', { name: p.name })}
             aria-current={p.planet === world.planet}
             onClick={() => {
               play('tap');
@@ -368,10 +376,10 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
               setNeedId(null);
               onPlanet(p.planet);
               if (!p.open) {
-                announce(`${p.name}. Сюди ще не можна. Спершу зроби все на планеті ${world.system[world.frontier - 1].name} і збудуй там космопорт.`);
+                tell((vt, said) => vt('world.planet.notYet', { name: said.system[p.planet - 1].name, frontier: said.system[world.frontier - 1].name }));
                 return;
               }
-              announce(p.done ? `${p.name}. Тут уже все збудовано!` : `${p.name}. Планета номер ${p.planet} з ${PLANET_COUNT} на шляху до Сонця.`);
+              tell((vt, said) => (p.done ? vt('world.planet.done', { name: said.system[p.planet - 1].name }) : vt('world.planet.number', { name: said.system[p.planet - 1].name, n: p.planet, total: PLANET_COUNT })));
             }}
           >
             <PlanetArt id={p.id} turned={0} />
@@ -390,14 +398,10 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
         <button
           type="button"
           className={cn(styles.systemPlanet, styles.systemSun, !world.sunReached && styles.systemClosed)}
-          aria-label="Сонце"
+          aria-label={t('world.sun.name')}
           onClick={() => {
             play('tap');
-            announce(
-              world.sunReached
-                ? `Ти дістався Сонця! Уся Сонячна система твоя. Далі на тебе чекає нова галактика.`
-                : 'Сонце — мета твоєї подорожі. Щоб дістатися до нього, пройди всі вісім планет.',
-            );
+            tell((vt) => vt(world.sunReached ? 'world.sun.reachedNext' : 'world.sun.goal'));
           }}
         >
           <span className="emoji" aria-hidden>
@@ -433,16 +437,16 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
       </div>
 
       <div className={styles.controls}>
-        <button type="button" onClick={() => spin(1)} aria-label="Повернути планету ліворуч">
+        <button type="button" onClick={() => spin(1)} aria-label={t('world.planet.spinLeft')}>
           ↺
         </button>
-        <button type="button" onClick={() => spin(-1)} aria-label="Повернути планету праворуч">
+        <button type="button" onClick={() => spin(-1)} aria-label={t('world.planet.spinRight')}>
           ↻
         </button>
-        <button type="button" onClick={() => zoomBy(1.25)} aria-label="Наблизити">
+        <button type="button" onClick={() => zoomBy(1.25)} aria-label={t('world.system.zoomIn')}>
           ＋
         </button>
-        <button type="button" onClick={() => zoomBy(0.8)} aria-label="Віддалити">
+        <button type="button" onClick={() => zoomBy(0.8)} aria-label={t('world.system.zoomOut')}>
           －
         </button>
         <button
@@ -454,7 +458,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
             setNeedsOpen(false);
             setFull(true);
           }}
-          aria-label="Показати всю Сонячну систему"
+          aria-label={t('world.system.showAll')}
         >
           ⛶
         </button>
@@ -468,12 +472,12 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
         onClick={() => {
           play('tap');
           if (!world.open) setNeedsOpen(true);
-          announce(hintText);
+          tell(hint);
         }}
       >
         {world.open && suggestion ? (
           <>
-            Уже можна збудувати:{' '}
+            {t('world.hint.canBuildLead')}{' '}
             <button
               type="button"
               className={styles.hintLink}
@@ -509,7 +513,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                 voice.stop();
                 setNeedsOpen(false);
               }}
-              aria-label="Закрити"
+              aria-label={t('common.close')}
             >
               ✕
             </button>
@@ -524,7 +528,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                     onClick={() => {
                       play('tap');
                       setNeedId(needId === row.id ? null : row.id);
-                      announce(`${row.how} ${row.done ? 'Готово!' : 'Ще не готово.'}`);
+                      tell((vt, said) => `${row.how(vt, said)} ${vt(row.done ? 'world.need.done' : 'world.need.notDone')}`);
                     }}
                   >
                     <span className={cn(styles.needIcon, 'emoji')} aria-hidden>
@@ -539,7 +543,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
             {/* How to get the chosen thing, and the way there. */}
             {need ? (
               <div className={styles.needHow}>
-                {showText && <p>{need.done ? `Готово! ${need.how}` : need.how}</p>}
+                {showText && <p>{need.done ? t('world.need.doneHow', { how: shown(need.how) }) : shown(need.how)}</p>}
                 {!need.done && (
                   <button type="button" className={styles.buy} onClick={need.act}>
                     {need.go} →
@@ -547,7 +551,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                 )}
               </div>
             ) : (
-              showText && !needs.done && <p className={styles.needTip}>Торкнись картинки — розповім, як це отримати.</p>
+              showText && !needs.done && <p className={styles.needTip}>{t('world.need.tip')}</p>
             )}
             {world.open && needs.done && world.planet < PLANET_COUNT && (
               <button
@@ -558,10 +562,10 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                   deselect();
                   setNeedsOpen(false);
                   onPlanet(world.planet + 1);
-                  announce(`Летимо! Наступна планета — ${nextName}.`);
+                  tell((vt, said) => vt('world.fly.say', { planet: said.system[world.planet]?.name ?? vt('world.sun.name') }));
                 }}
               >
-                🚀 Летіти: {nextName}
+                {t('world.fly.button', { planet: nextName })}
               </button>
             )}
           </motion.div>
@@ -580,7 +584,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20, transition: { duration: 0.6 } }}
             // Tap the bar to hear it again.
-            onClick={() => announce(describe(selected))}
+            onClick={() => tell(describe(selected))}
           >
             <span className={cn(styles.sheetEmoji, 'emoji')} aria-hidden>
               {selected.item.emoji}
@@ -588,68 +592,60 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
             <div className={styles.sheetText}>
               <strong>{selected.item.name}</strong>
               <span>
-                {selected.status === 'owned' && 'Уже стоїть на твоїй планеті ✓'}
-                {selected.status === 'locked' && 'Це головна мрія! Спершу збудуй усі інші будівлі та космопорт.'}
-                {selected.status === 'saving' && (
-                  <>
-                    Коштує {selected.item.cost} {theme.artifact.emoji} · є {balance} · збери ще {selected.missing} {theme.artifact.emoji}
-                  </>
-                )}
-                {selected.status === 'affordable' && (
-                  <>
-                    Обміняти {selected.item.cost} {theme.artifact.emoji}?
-                  </>
-                )}
+                {selected.status === 'owned' && t('world.bar.owned')}
+                {selected.status === 'locked' && t('world.bar.locked')}
+                {selected.status === 'saving' && t('world.bar.saving', { cost: selected.item.cost, artifact: theme.artifact.emoji, balance, missing: selected.missing })}
+                {selected.status === 'affordable' && t('world.bar.affordable', { cost: selected.item.cost, artifact: theme.artifact.emoji })}
               </span>
               {/* Not enough yet: how the rest is earned — a price alone does not say. */}
               {selected.status === 'saving' && (
                 <span className={styles.tradeoff}>
-                  {theme.artifact.emoji} дають за кожне виконане завдання в будь-якій грі.
-                  {selected.item.id === SPACEPORT_ID && ' Космопорт відкриває шлях до наступної планети.'}
+                  {t('world.bar.earn', { artifact: theme.artifact.emoji })}
+                  {selected.item.id === SPACEPORT_ID && ` ${t('world.item.portNote')}`}
                 </span>
               )}
               {/* The choice, spelled out: build now, or keep saving for a goal. */}
               {selected.status === 'affordable' && nextGoal && (
                 <span className={styles.tradeoff}>
-                  Або збирай далі на «{nextGoal.reward}»:{' '}
+                  {t('world.bar.goal', { reward: nextGoal.reward })}{' '}
                   {balance >= nextGoal.amount
                     ? balance - selected.item.cost >= nextGoal.amount
-                      ? 'на ціль вистачить і після покупки'
-                      : `після покупки бракуватиме ${nextGoal.amount - (balance - selected.item.cost)}`
-                    : `зараз бракує ${nextGoal.amount - balance}, після покупки — ${nextGoal.amount - balance + selected.item.cost}`}{' '}
+                      ? t('world.bar.goalEnough')
+                      : t('world.bar.goalShortAfter', { n: nextGoal.amount - (balance - selected.item.cost) })
+                    : t('world.bar.goalShort', { now: nextGoal.amount - balance, after: nextGoal.amount - balance + selected.item.cost })}{' '}
                   {theme.artifact.emoji}
                 </span>
               )}
               {selected.status === 'owned' && selling === selected.item.id && (
                 <span className={styles.sellWarn}>
-                  Повернуть {sellPrice(selected.item.id, world.planet)} {theme.artifact.emoji}, а не {selected.item.cost} — це менше, ніж ти заплатив.
+                  {t('world.bar.sellNote', { back: sellPrice(selected.item.id, world.planet), artifact: theme.artifact.emoji, cost: selected.item.cost })}
                 </span>
               )}
             </div>
             <div className={styles.barActions} onClick={(e) => e.stopPropagation()}>
               {selected.status === 'affordable' && (
                 <motion.button type="button" className={styles.buy} whileTap={{ scale: 0.93 }} onClick={() => build(selected)}>
-                  🔨 {showText ? 'Збудувати' : ''} {selected.item.cost} {theme.artifact.emoji}
+                  🔨 {showText ? t('world.bar.build') : ''} {selected.item.cost} {theme.artifact.emoji}
                 </motion.button>
               )}
               {selected.status === 'saving' && (
                 <button type="button" className={styles.buy} onClick={() => navigate('/')}>
-                  🎮 {showText ? 'Грати й збирати' : ''} {theme.artifact.emoji}
+                  🎮 {showText ? t('world.bar.play') : ''} {theme.artifact.emoji}
                 </button>
               )}
               {selected.status === 'owned' &&
                 (selling === selected.item.id ? (
                   <>
                     <button type="button" className={styles.sellYes} onClick={() => confirmSell(selected)}>
-                      Так, продати
+                      {t('world.bar.sellYes')}
                     </button>
                     <button type="button" className={styles.sellNo} onClick={() => setSelling(null)}>
-                      Залишити
+                      {t('world.bar.sellNo')}
                     </button>
                   </>
                 ) : (
                   <button type="button" className={styles.sellAsk} onClick={() => askToSell(selected)}>
-                    💱 {showText ? 'Продати за' : ''} {sellPrice(selected.item.id, world.planet)} {theme.artifact.emoji}
+                    💱 {showText ? t('world.bar.sellFor') : ''} {sellPrice(selected.item.id, world.planet)} {theme.artifact.emoji}
                   </button>
                 ))}
               <button
@@ -659,7 +655,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
                   voice.stop();
                   deselect();
                 }}
-                aria-label="Закрити"
+                aria-label={t('common.close')}
               >
                 ✕
               </button>
@@ -671,7 +667,7 @@ export function PlanetView({ world, onPlanet }: PlanetViewProps) {
       {/* The same things as a list: what is built, what can be added next. */}
       {(['building', 'decor'] as const).map((kind) => (
         <div key={kind} className={styles.shelf} id={kind === 'building' ? 'world-buildings' : undefined}>
-          <h3 className={styles.shelfTitle}>{kind === 'building' ? '🏗️ Будівлі' : '🌷 Прикраси'}</h3>
+          <h3 className={styles.shelfTitle}>{kind === 'building' ? t('world.shelf.buildings') : t('world.shelf.decor')}</h3>
           <ul className={styles.items}>
             {items
               .filter((s) => s.item.kind === kind)

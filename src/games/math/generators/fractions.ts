@@ -3,17 +3,11 @@ import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import type { FractionValue, GridChoicePayload } from '@/core/game/templates/types';
 import { fractionDenomMax, rewardForStep } from '../difficulty';
+import { mathTexts } from '../lang';
 
 /** The 7 sensory foods from the PRD "Смачні Дроби" spec (§4.1). */
-const FOODS: { emoji: string; name: string }[] = [
-  { emoji: '🍕', name: 'піци' },
-  { emoji: '🎂', name: 'торта' },
-  { emoji: '🍏', name: 'яблука' },
-  { emoji: '🍉', name: 'кавуна' },
-  { emoji: '🍊', name: 'апельсина' },
-  { emoji: '🥧', name: 'пирога' },
-  { emoji: '🍫', name: 'шоколадки' },
-];
+/** The foods a slice is cut from; their names are the language's (`fractions.foods`, in this order). */
+const FOODS = ['🍕', '🎂', '🍏', '🍉', '🍊', '🥧', '🍫'];
 
 /** Nine answers, as on every tap-the-answer board. */
 const OPTIONS = 9;
@@ -44,13 +38,12 @@ function fractionOptions(answer: FractionValue): FractionValue[] {
  * Generates a "find the fraction" task: a food is split into `denom` slices,
  * `filled` of them are highlighted, and the child taps the matching fraction.
  */
-const NUMBER_WORDS = ['нуль', 'один', 'два', 'три', 'чотири', "п'ять", 'шість', 'сім', 'вісім'];
-
 export function generateFraction(config: TaskConfig): TaskInstance<GridChoicePayload> {
   const { step } = config;
   const maxD = fractionDenomMax(step);
   const denom = randInt(2, maxD);
   const filled = randInt(1, denom - 1);
+  const T = mathTexts(config.lang);
   const food = pick(FOODS);
   const answer: FractionValue = { n: filled, d: denom };
 
@@ -58,17 +51,17 @@ export function generateFraction(config: TaskConfig): TaskInstance<GridChoicePay
     id: uid('fr'),
     // Same fraction on a different food is the SAME task — never ask it twice.
     key: `fraction:${filled}/${denom}`,
-    prompt: `Яка частинка ${food.name} зафарбована?`,
+    prompt: T.fractions.prompt(T.fractions.foods[FOODS.indexOf(food)]),
     reward: rewardForStep(step),
     payload: {
       template: Mechanics.GridChoice,
       cols: 3,
-      stimulus: { pie: { food: food.emoji, denom, filled } },
+      stimulus: { pie: { food, denom, filled } },
       // Written on one line, with a slash: nine stacked fractions would not fit a phone.
       options: fractionOptions(answer).map((f) => ({ id: `${f.n}/${f.d}`, glyphs: [`${f.n}/${f.d}`] })),
       correctId: `${filled}/${denom}`,
       // Count the highlighted slices aloud: «Один, два, три — з чотирьох!»
-      hint: `Полічімо зафарбовані шматочки: ${Array.from({ length: filled }, (_, i) => NUMBER_WORDS[i + 1]).join(', ')}. Усього шматочків ${denom}. Отже, це ${filled} з ${denom}!`,
+      hint: T.fractions.hint(filled, denom),
     },
   };
 }

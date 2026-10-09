@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useSound } from '@/core/audio/useSound';
-import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useGameLang, useT } from '@/core/i18n';
+import { useTell } from './useTell';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
-import { PLANET_FACTS } from '@/core/child/world/planetFacts';
+import { planetFacts } from '@/core/child/world/planetFacts';
 import type { World } from '@/core/child/world/useWorld';
 import { PLANET_COUNT, type WorldPlanetId } from '@/core/child/world/world';
 import { pickOutro } from '@/core/game/content/outro';
@@ -57,7 +58,9 @@ interface SolarSystemProps {
 export function SolarSystem({ world, onClose }: SolarSystemProps) {
   useVoiceStopsOnLeave();
   const { play } = useSound();
-  const announce = useVoiceSpeak('selections');
+  const t = useT();
+  const gameLang = useGameLang();
+  const { tell: say, lang: voiceLang } = useTell(world.planet);
   /** The planet that is telling about itself, and the story it tells now. */
   const [told, setTold] = useState<{ id: WorldPlanetId; fact: string } | null>(null);
 
@@ -152,11 +155,14 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
   });
 
   /** The planet's next story, shown and read out; its pool comes round only after all twenty. */
-  const tell = (id: WorldPlanetId, name: string) => {
-    const fact = pickOutro({ outro: [...PLANET_FACTS[id]] });
+  const tell = (id: WorldPlanetId) => {
+    const shown = planetFacts(id, gameLang);
+    const fact = pickOutro({ outro: [...shown] });
     if (!fact) return;
     setTold({ id, fact });
-    announce(`${name}. ${fact}`);
+    // The voice tells the same story in its own language: the same place in its own list.
+    const spoken = planetFacts(id, voiceLang)[shown.indexOf(fact)] ?? fact;
+    say((_, said) => `${said.system.find((p) => p.id === id)?.name ?? ''}. ${spoken}`);
   };
 
   const { cam } = frame;
@@ -187,7 +193,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
         zoomAt(e.deltaY < 0 ? 1.12 : 0.89, e.clientX - at.left, e.clientY - at.top);
       }}
       role="dialog"
-      aria-label="Сонячна система"
+      aria-label={t('world.system.label')}
     >
       {size && (
         <>
@@ -201,15 +207,11 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
             type="button"
             className={styles.sun}
             style={{ left: sun.left, top: sun.top, width: sunSize, height: sunSize }}
-            aria-label="Сонце"
+            aria-label={t('world.sun.name')}
             onClick={() => {
               if (wasDrag()) return;
               play('tap');
-              announce(
-                world.sunReached
-                  ? 'Ти дістався Сонця! Уся Сонячна система твоя.'
-                  : 'Сонце — мета твоєї подорожі. Щоб дістатися до нього, пройди всі вісім планет.',
-              );
+              say((vt) => vt(world.sunReached ? 'world.sun.reached' : 'world.sun.goal'));
             }}
           />
 
@@ -230,7 +232,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
                     if (wasDrag()) return;
                     play('tap');
                     flyTo({ x: p.x, y: p.y, s: (short * FOCUS_SHARE) / p.across });
-                    tell(p.id, p.name);
+                    tell(p.id);
                   }}
                 />
                 <Globe
@@ -251,7 +253,11 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
                       ? (state) => {
                           if (wasDrag()) return;
                           play('tap');
-                          announce(`${state.item.name}. ${state.status === 'owned' ? 'Уже збудовано!' : 'Ще не збудовано.'}`);
+                          say((vt, said) =>
+                            vt(state.status === 'owned' ? 'world.item.builtYes' : 'world.item.builtNo', {
+                              name: said.system[p.planet - 1]?.items.find((other) => other.item.id === state.item.id)?.item.name ?? state.item.name,
+                            }),
+                          );
                         }
                       : undefined
                   }
@@ -269,14 +275,14 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
             play('tap');
             onClose();
           }}
-          aria-label="Закрити Сонячну систему"
+          aria-label={t('world.system.close')}
         >
           ✕
         </button>
-        <button type="button" onClick={() => zoomAt(1.5, w / 2, h / 2)} aria-label="Наблизити">
+        <button type="button" onClick={() => zoomAt(1.5, w / 2, h / 2)} aria-label={t('world.system.zoomIn')}>
           ＋
         </button>
-        <button type="button" onClick={() => zoomAt(1 / 1.5, w / 2, h / 2)} aria-label="Віддалити">
+        <button type="button" onClick={() => zoomAt(1 / 1.5, w / 2, h / 2)} aria-label={t('world.system.zoomOut')}>
           －
         </button>
         <button
@@ -289,7 +295,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
             setTold(null);
             flyTo(OVERVIEW);
           }}
-          aria-label="Показати всю Сонячну систему"
+          aria-label={t('world.system.showAll')}
         >
           ☀️
         </button>
@@ -305,23 +311,23 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
               voice.stop();
               setTold(null);
             }}
-            aria-label="Закрити й зупинити розповідь"
+            aria-label={t('world.system.closeStory')}
           >
             ✕
           </button>
           <div className={styles.storyHead}>
             <h2>{teller.name}</h2>
-            <span>{teller.open ? `Збудовано ${teller.items.filter((s) => s.status === 'owned').length} з ${teller.items.length}` : '🔒 Сюди ти ще не долетів'}</span>
+            <span>{teller.open ? t('world.system.builtOf', { have: teller.items.filter((s) => s.status === 'owned').length, total: teller.items.length }) : t('world.system.notReached')}</span>
           </div>
           <p aria-live="polite">{told.fact}</p>
           <button
             type="button"
             onClick={() => {
               play('tap');
-              tell(teller.id, teller.name);
+              tell(teller.id);
             }}
           >
-            Розкажи ще ✨
+            {t('world.system.more')}
           </button>
         </div>
       )}

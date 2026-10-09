@@ -1,4 +1,4 @@
-import { heaps } from './options';
+import { mathTexts } from '../lang';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import { pick, randInt, uid } from '@/core/utils/random';
@@ -6,12 +6,6 @@ import { buildNumberOptions } from './options';
 import type { Counting, GridChoicePayload } from '@/core/game/templates/types';
 import { MATH_SUB, type MathOp } from '../ids';
 import { addSubMax, divFactorMax, mulFactorMax, optionSpread, rewardForStep } from '../difficulty';
-
-function spokenPrompt(a: number, b: number, op: MathOp): string {
-  const word =
-    op === '+' ? 'плюс' : op === '-' ? 'мінус' : op === '×' ? 'помножити на' : 'поділити на';
-  return `Скільки буде ${a} ${word} ${b}?`;
-}
 
 /** What the child counts by touch when the sum needs help (PRD §5). */
 function countingFor(a: number, b: number, op: MathOp, answer: number): Counting {
@@ -22,14 +16,6 @@ function countingFor(a: number, b: number, op: MathOp, answer: number): Counting
   // Addition: the two numbers as two colours of cubes, counted together.
   if (op === '+') return { kind: 'towers', count: a + b, split: { a, b } };
   return { kind: 'towers', count: answer };
-}
-
-/** Encouraging explanation of HOW to count this sum out, read when the helper opens. */
-function hintFor(a: number, b: number, op: MathOp): string {
-  if (op === '×') return `Це ${heaps(a)}, у кожній по ${b}. Торкайся кружечків по одному і рахуй усі разом.`;
-  if (op === '÷') return `Розклади ${a} кружечків порівну у ${b} рядочки. Полічи, скільки опиниться в одному рядочку.`;
-  if (op === '-') return `Було ${a}. Прибери ${b} — забирай по одному кружечку. Скільки лишилось?`;
-  return `Полічи кружечки по одному: спочатку ${a}, а потім додай ще ${b}. Скільки вийшло разом?`;
 }
 
 /** Resolves the operation(s) a given adventure uses. */
@@ -56,6 +42,7 @@ function opForSub(subCategoryId: string): MathOp | 'mixed' {
  */
 export function generateMentalMath(config: TaskConfig): TaskInstance<GridChoicePayload> {
   const { step, subCategoryId, choicesCount = 9 } = config;
+  const T = mathTexts(config.lang);
   const resolved = opForSub(subCategoryId);
   const op: MathOp = resolved === 'mixed' ? pick<MathOp>(['+', '-', '×', '÷']) : resolved;
 
@@ -92,7 +79,7 @@ export function generateMentalMath(config: TaskConfig): TaskInstance<GridChoiceP
   return {
     id: uid('mm'),
     key: `${a}${op}${b}`,
-    prompt: spokenPrompt(a, b, op),
+    prompt: T.mental.prompt(a, b, op),
     reward: rewardForStep(step),
     payload: {
       template: Mechanics.GridChoice,
@@ -102,7 +89,7 @@ export function generateMentalMath(config: TaskConfig): TaskInstance<GridChoiceP
       options: buildNumberOptions(answer, choicesCount, optionSpread(step)).map((value) => ({ id: String(value), glyphs: [String(value)] })),
       correctId: String(answer),
       counting: countingFor(a, b, op, answer),
-      hint: hintFor(a, b, op),
+      hint: T.mental.hint(a, b, op),
     },
   };
 }

@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
@@ -17,6 +18,7 @@ import styles from './Templates.module.css';
  * ones the child has already put right are lit.
  */
 export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<SequencePayload>) {
+  const t = useT();
   const { cards, initial, orientation } = payload;
   const { playCode } = useSound();
   const correct = cards.map((c) => c.id);
@@ -64,8 +66,8 @@ export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<S
                 {i + 1}
               </span>
               {/* The ends of the line are labelled, so "in order" is unambiguous. */}
-              {i === 0 && <span className={styles.seqEnd}>{payload.ends?.[0] ?? 'найдавніше'}</span>}
-              {i === order.length - 1 && <span className={styles.seqEnd}>{payload.ends?.[1] ?? 'найновіше'}</span>}
+              {i === 0 && <span className={styles.seqEnd}>{payload.ends?.[0] ?? t('tpl.oldest')}</span>}
+              {i === order.length - 1 && <span className={styles.seqEnd}>{payload.ends?.[1] ?? t('tpl.newest')}</span>}
               <div
                 className={cn(
                   styles.seqCard,
@@ -84,7 +86,7 @@ export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<S
       </motion.div>
       {/* The whole row these cards belong to — the help for a child who is stuck. */}
       {hintActive && !solved && payload.guide && (
-        <div className={styles.seqGuide} aria-label="Підказка: уся послідовність по порядку">
+        <div className={styles.seqGuide} aria-label={t('tpl.seqGuide')}>
           {payload.guide.map((item, i) => (
             <span key={item.id} className={cn(styles.seqGuideItem, order.includes(item.id) && styles.seqGuideOurs, right[order.indexOf(item.id)] && styles.seqGuideRight)}>
               {i > 0 && (
@@ -100,8 +102,8 @@ export function SequenceLayout({ payload, callbacks, hintActive }: LayoutProps<S
           ))}
         </div>
       )}
-      <Button size="lg" icon="✅" block onClick={check} ariaLabel="Перевірити порядок">
-        Готово!
+      <Button size="lg" icon="✅" block onClick={check} ariaLabel={t('tpl.checkOrder')}>
+        {t('common.done')}
       </Button>
     </div>
   );

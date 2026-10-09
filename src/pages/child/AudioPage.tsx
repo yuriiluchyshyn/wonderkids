@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -6,7 +7,8 @@ import styles from '@/components/layout/SubPageHeader.module.css';
 
 /** Dedicated audio & text settings page (hidden sub-page of settings). */
 export function AudioPage() {
-  usePageMeta({ title: 'Звук і голос' });
+  const t = useT();
+  usePageMeta({ title: t('page.audio') });
   const navigate = useNavigate();
   return (
     <div className="page stack">
@@ -15,7 +17,7 @@ export function AudioPage() {
           className={styles.back}
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate('/parent')}
-          aria-label="Назад до налаштувань"
+          aria-label={t('page.audioBack')}
         >
           ⬅️
         </motion.button>
@@ -23,7 +25,7 @@ export function AudioPage() {
           <span className="emoji" aria-hidden>
             🔊
           </span>{' '}
-          Звук і голос
+          {t('page.audio')}
         </h1>
       </div>
       <AudioSettings />

@@ -1,15 +1,18 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import type { TaskInstance } from '@/core/game/kernel/types';
+import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, TemplatePayload } from '@/core/game/templates/types';
+import type { LangCode } from '@/core/lang';
 import { pick, shuffle } from '@/core/utils/random';
 import { card, templateTask, type GameTasks } from '../shared/templateModule';
 import { composeLevel, recallSteps } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
 import { buildNumberOptions } from '../math/generators/options';
+import { logicTexts } from './lang';
 import { RIDDLE_KINDS, RIDDLE_STEPS, RIDDLES_PER_STEP, type RiddleKind } from './content/riddles';
 import { CHOICES, DRAWN, MIRROR_STEPS, PATTERN_STEPS, PER_STEP, SETS, SHADOW_STEPS, SHADOW_WORLD, type Half } from './content/data';
 
 type Tasks = TaskInstance<TemplatePayload>[];
+type Config = Pick<TaskConfig, 'lang'>;
 
 /** Small deterministic generator, so a step always holds the same tasks. */
 function seeded(seed: number): () => number {
@@ -64,20 +67,19 @@ const patternsOf = perStep((step: number): Pattern[] => {
   return [...found.values()];
 });
 
-const UNIT_SIZE = ['', '', 'двох', 'трьох', 'чотирьох'];
-
-function patterns(step: number): Tasks {
+function patterns(step: number, config: Config): Tasks {
+  const T = logicTexts(config.lang).patterns;
   const tasks: Tasks = [];
   for (let s = 1; s <= Math.min(step, PATTERN_STEPS.length); s += 1) {
     for (const { shown, answer, set, unit } of patternsOf(s)) {
       tasks.push(
-        templateTask(`pattern:${s}:${shown.join('')}`, 'Який малюнок має бути замість знака питання?', {
+        templateTask(`pattern:${s}:${shown.join('')}`, T.prompt, {
           template: Mechanics.GridChoice,
           cols: 3,
           stimulus: { scene: [{ emoji: shown.join(' ') }] },
           options: shuffle(set).map((p) => card(p, p)),
           correctId: answer,
-          hint: `Назви малюнки вголос по порядку. Тут повторюється шматочок із ${UNIT_SIZE[unit.length]} малюнків.`,
+          hint: T.hint(unit.length),
         }, step),
       );
     }
@@ -138,7 +140,8 @@ function companions(lead: Thing, step: number): Thing[] {
   return [...shuffle(group), ...shuffle(family.filter((t) => !sameGroup(t, lead)))].slice(0, need);
 }
 
-function shadows(step: number): Tasks {
+function shadows(step: number, config: Config): Tasks {
+  const T = logicTexts(config.lang).shadows;
   const tasks: Tasks = [];
   for (let s = 1; s <= Math.min(step, SHADOW_STEPS.length); s += 1) {
     const { blur } = SHADOW_STEPS[s - 1];
@@ -147,12 +150,12 @@ function shadows(step: number): Tasks {
       const item = (t: Thing): Card => ({ id: t.emoji, emoji: t.emoji });
       const shadow = (t: Thing): Card => ({ id: `shadow:${t.emoji}`, emoji: t.emoji, silhouette: true, blur });
       tasks.push(
-        templateTask(`shadow:${s}:${lead.emoji}`, 'Знайди для кожного малюнка його тінь.', {
+        templateTask(`shadow:${s}:${lead.emoji}`, T.prompt, {
           template: Mechanics.DragMatch,
           items: shuffle(things.map(item)),
           slots: shuffle(things.map(shadow)),
           pairs: Object.fromEntries(things.map((t) => [t.emoji, `shadow:${t.emoji}`])),
-          hint: 'Придивись до обрисів: вуха, хвіст, колеса. Тінь має таку саму форму, як і малюнок.',
+          hint: T.hint,
         }, step),
       );
     }
@@ -231,21 +234,24 @@ function trapsFor(half: string[], step: number): string[][] {
   return [...traps.values()];
 }
 
-function mirrors(step: number): Tasks {
+function mirrors(step: number, config: Config): Tasks {
+  const T = logicTexts(config.lang).mirror;
+  // A drawn picture is named in the language of the task.
+  const nameOf = (half: Half) => (half.name ? T.figures[DRAWN.findIndex((d) => d.name === half.name)] : undefined);
   const tasks: Tasks = [];
   for (let s = 1; s <= Math.min(step, MIRROR_STEPS.length); s += 1) {
     for (const half of halvesOf(s)) {
       const right = flipH(half.rows);
       const width = right[0].length;
       tasks.push(
-        templateTask(`mirror:${keyOf(half.rows)}`, 'Це ліва половинка малюнка. Знайди праву — таку, як у дзеркалі.', {
+        templateTask(`mirror:${keyOf(half.rows)}`, T.prompt, {
           template: Mechanics.GridChoice,
           cols: 3,
           // The whole canvas with its right half still empty.
-          stimulus: { shape: toShape(half.rows.map((line) => line + '.'.repeat(width))), caption: half.name },
+          stimulus: { shape: toShape(half.rows.map((line) => line + '.'.repeat(width))), caption: nameOf(half) },
           options: shuffle([{ id: 'mirror', shape: toShape(right) }, ...trapsFor(half.rows, s).map((trap, i) => ({ id: `trap${i}`, shape: toShape(trap) }))]),
           correctId: 'mirror',
-          hint: 'Уяви дзеркало посередині. Клітинка, що стоїть біля дзеркала зліва, буде біля нього і справа.',
+          hint: T.hint,
         }, step),
       );
     }
@@ -256,8 +262,8 @@ function mirrors(step: number): Tasks {
 // --------------------------------------------------------- Logic riddles —
 
 /** One riddle of a kind, as a tap-the-answer task. A number to find gets near misses around it. */
-function riddleTask(kind: RiddleKind, step: number): TaskInstance<TemplatePayload> {
-  const riddle = kind.make(kind.r);
+function riddleTask(kind: RiddleKind, step: number, lang?: LangCode): TaskInstance<TemplatePayload> {
+  const riddle = kind.make(kind.r, lang);
   const options = typeof riddle.answer === 'number' ? buildNumberOptions(riddle.answer, 6, 4).map((n) => ({ id: `n${n}`, glyphs: [String(n)] })) : riddle.answer.options;
   return templateTask(
     `riddle:${kind.id}:${riddle.variant}`,
@@ -278,8 +284,8 @@ function riddleTask(kind: RiddleKind, step: number): TaskInstance<TemplatePayloa
 const riddleKindsAt = (step: number) => RIDDLE_KINDS.slice((step - 1) * RIDDLES_PER_STEP, step * RIDDLES_PER_STEP);
 
 /** Every kind opened so far, one draw of each (what the catalog counts). */
-function riddles(step: number): Tasks {
-  return RIDDLE_KINDS.slice(0, Math.min(RIDDLE_STEPS, step) * RIDDLES_PER_STEP).map((kind) => riddleTask(kind, step));
+function riddles(step: number, config: Pick<TaskConfig, 'lang'>): Tasks {
+  return RIDDLE_KINDS.slice(0, Math.min(RIDDLE_STEPS, step) * RIDDLES_PER_STEP).map((kind) => riddleTask(kind, step, config.lang));
 }
 
 /**
@@ -287,9 +293,9 @@ function riddles(step: number): Tasks {
  * from the steps just behind it. The very first level has nothing to recall,
  * so its kinds are drawn again with other names and numbers.
  */
-function riddleLevel(step: number, count: number): Tasks {
+function riddleLevel(step: number, count: number, config: Pick<TaskConfig, 'lang'>): Tasks {
   const at = Math.min(RIDDLE_STEPS, Math.max(1, step));
-  const draws = (kinds: RiddleKind[]) => shuffle(kinds).map((kind) => riddleTask(kind, step));
+  const draws = (kinds: RiddleKind[]) => shuffle(kinds).map((kind) => riddleTask(kind, step, config.lang));
   const fresh = draws(riddleKindsAt(at));
   const earlier = recallSteps(at).flatMap(riddleKindsAt);
   return composeLevel(at === 1 ? [...fresh, ...draws(riddleKindsAt(at)), ...draws(riddleKindsAt(at))] : fresh, draws(earlier), count, taskKey);

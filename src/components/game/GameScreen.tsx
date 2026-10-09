@@ -1,9 +1,11 @@
+import { useT, useVoiceLang } from '@/core/i18n';
+import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { useBalance } from '@/core/child/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { spokenPrompt, type TaskCallbacks } from '@/core/game/kernel/types';
+import { saidOf, spokenPrompt, type TaskCallbacks } from '@/core/game/kernel/types';
 import { useSound } from '@/core/audio/useSound';
-import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useSayT, useVoiceSpeak } from '@/core/audio/useSpeech';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
@@ -21,7 +23,6 @@ import { Cutscene } from './Cutscene';
 import { CoachTips } from '@/components/coach/CoachTips';
 import { gameTips } from '@/components/coach/tips';
 import { pickOutro } from '@/core/game/content/outro';
-import { spoken, written } from '@/core/lang/numbers';
 import { IntroDemo } from '@/components/templates/IntroDemo';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
@@ -31,8 +32,8 @@ import { subSteps } from '@/core/child/progress/path';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { useWorld } from '@/core/child/world/useWorld';
 import { keysOf } from '@/core/child/world/games';
-import { KEY, KEY_COUNTED } from '@/core/child/world/stations';
-import { counted } from '@/core/lang/uk';
+import { KEY } from '@/core/child/world/stations';
+import { spoken, written } from '@/core/lang/uk';
 import styles from './GameScreen.module.css';
 
 type GiftTier = 'small' | 'big' | 'biggest' | null;
@@ -45,15 +46,10 @@ function giftForStep(step: number, total: number): GiftTier {
   return null;
 }
 
-/** «Усі 6 завдань виконано.» — the count in the form its number asks for. */
-function tasksDone(total: number): string {
-  return total === 1 ? 'Завдання виконано.' : `Усі ${counted(total, ['завдання', 'завдання', 'завдань'])} виконано.`;
-}
-
-const GIFT_META: Record<Exclude<GiftTier, null>, { emoji: string; label: string; size: string }> = {
-  small: { emoji: '🎀', label: 'Маленький подарунок!', size: '3.6rem' },
-  big: { emoji: '🎁', label: 'Великий подарунок!', size: '4.4rem' },
-  biggest: { emoji: '🏆', label: 'Найбільший подарунок!', size: '5.4rem' },
+const GIFT_META: Record<Exclude<GiftTier, null>, { emoji: string; size: string }> = {
+  small: { emoji: '🎀', size: '3.6rem' },
+  big: { emoji: '🎁', size: '4.4rem' },
+  biggest: { emoji: '🏆', size: '5.4rem' },
 };
 
 interface GameScreenProps {
@@ -74,18 +70,32 @@ type Phase = 'intro' | 'play';
  * end-of-session celebration. Each voiced section has an inline mute toggle.
  */
 export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }: GameScreenProps) {
+  const t = useT();
   const session = useGameSession(config);
   const theme = useActiveTheme();
   const showText = useShowText();
   const { play, playCode } = useSound();
   const speakPrompt = useVoiceSpeak('taskPrompt');
   const speakIntro = useVoiceSpeak('taskIntro');
-  const speakHint = useVoiceSpeak('hint');
+  // A hint's «how» is a piece of the task: the whole phrase is said in the language the task is read in.
+  const sayHint = useSayT('hint', session.langs.said);
+  // The win screen is read out in the voice's language, whatever the screen shows.
+  const voiceLang = useVoiceLang();
+  const sayT = useT(voiceLang);
+  const voiceTheme = useActiveTheme(voiceLang);
+  const gender = useGameStore((s) => s.profile.gender);
 
   const { module, task } = session;
   const sub = module?.subCategories.find((s) => s.id === config.subCategoryId);
   // Prefer the module's themed, child-level intro; fall back to the static one.
   const introText = module?.getIntro?.(config.subCategoryId, theme, config.step) ?? sub?.intro;
+  // …and the same intro as the voice says it, when the voice speaks another language.
+  const saidModule = moduleRegistry.get(config.moduleId, session.langs.said);
+  const saidTheme = useActiveTheme(session.langs.said);
+  const introSpeech =
+    session.langs.said === session.langs.shown
+      ? introText
+      : (saidModule?.getIntro?.(config.subCategoryId, saidTheme, config.step) ?? saidModule?.subCategories.find((s) => s.id === config.subCategoryId)?.intro ?? introText);
 
   // A gift pops at every 5th / 10th / final step of the adventure.
   const maxSteps = sub ? subSteps(sub) : 0;
@@ -108,15 +118,19 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // The fact told after this task: the next one from its pool, so a replay of
   // the same task — even its repeat within this level — tells a new story.
   // Picked once per showing; the last one stays up while the level finishes.
-  const outroPick = useRef<{ at: number; text?: string }>({ at: -1 });
+  const outroPick = useRef<{ at: number; text?: string; said?: string }>({ at: -1 });
   if (task && !session.finished && outroPick.current.at !== session.index) {
-    outroPick.current = { at: session.index, text: pickOutro(task) };
+    const text = pickOutro(task);
+    // The voice tells the same fact — the one at the same place in its own pool.
+    const pool = saidOf(task).outro;
+    const at = Array.isArray(task.outro) && text ? task.outro.indexOf(text) : -1;
+    outroPick.current = { at: session.index, text, said: typeof pool === 'string' ? pool : ((at >= 0 ? pool?.[at] : undefined) ?? text) };
   }
   // A parent may switch the facts off: then nothing is told and nothing is waited for.
   const funFacts = useGameStore((s) => s.settings.funFacts);
   const picked = funFacts ? outroPick.current.text : undefined;
   const outro = picked ? written(picked) : undefined;
-  const outroSpeech = picked ? spoken(picked) : undefined;
+  const outroSpeech = picked ? spoken(outroPick.current.said ?? picked) : undefined;
   // First-run tips: how to answer on this kind of board, then what each
   // control does (text games also get the tap-to-hear one, PRD v4.0 §2.4).
   const template = (task?.payload as Partial<TemplatePayload> | null | undefined)?.template;
@@ -182,14 +196,14 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
   // Speak the intro once when the intro screen is shown.
   useEffect(() => {
-    if (phase === 'intro' && introText && !blocked) speakIntro(introText);
+    if (phase === 'intro' && introSpeech && !blocked) speakIntro(introSpeech, session.langs.said);
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Read the prompt aloud whenever a new task appears during play (Voice-First).
   // Keyed by queue position, not task id: the repeat of a missed task is read
   // out again like any other task.
   useEffect(() => {
-    if (phase === 'play' && task && !session.finished && !blocked) speakPrompt(spokenPrompt(task));
+    if (phase === 'play' && task && !session.finished && !blocked) speakPrompt(spokenPrompt(saidOf(task)), session.langs.said);
   }, [session.index, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // When the scaffolding helper appears: scroll to it and speak the how-to.
@@ -197,8 +211,9 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     if (!session.hintActive || phase !== 'play') return;
     const t = window.setTimeout(() => {
       helperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      const how = module?.getHintSpeech?.(task!);
-      speakHint(how ? `Ось підказка! ${how}` : 'Ось підказка! Подивімось разом.');
+      const how = module?.getHintSpeech?.(saidOf(task!));
+      if (how) sayHint('game.hint.with', { how });
+      else sayHint('game.hint.plain');
     }, 120);
     return () => window.clearTimeout(t);
   }, [session.hintActive, session.index, phase]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -217,7 +232,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     if (outroVoice && voice.supported) {
       // Let the "correct!" sound land first, then speak.
       const start = window.setTimeout(
-        () => voice.speak(outroSpeech ?? outro, () => window.setTimeout(outroDone, 350)),
+        () => voice.speak(outroSpeech ?? outro, () => window.setTimeout(outroDone, 350), session.langs.said),
         450,
       );
       return () => window.clearTimeout(start);
@@ -246,7 +261,15 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const keysBefore = useRef(keys);
   if (!session.finished) keysBefore.current = keys;
   const keysWon = Math.max(0, keys - keysBefore.current);
-  const summarySpeech = `Ти неймовірний! Зібрано ${counted(session.earned, theme.artifact.counted)}${keysWon > 0 ? ` і ${counted(keysWon, KEY_COUNTED)} знань` : ''}. ${tasksDone(session.total)} Чудова робота!`;
+  const winTitle = `game.win.title.${gender === 'boy' ? 'boy' : 'girl'}` as const;
+  const summarySpeech = [
+    sayT(winTitle),
+    keysWon > 0
+      ? sayT('game.win.collectedWithKeys', { amount: voiceTheme.artifact.count(session.earned), keys: sayT('world.keyCount', { count: keysWon }) })
+      : sayT('game.win.collected', { amount: voiceTheme.artifact.count(session.earned) }),
+    sayT('game.tasksDone', { count: session.total }),
+    sayT('game.win.great'),
+  ].join(' ');
   useEffect(() => {
     if (!(session.finished && revealDone)) {
       setSummarySaid(false);
@@ -257,7 +280,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       return;
     }
     // Let the victory jingle ring first.
-    const t = window.setTimeout(() => voice.speak(summarySpeech, () => setSummarySaid(true)), 900);
+    const t = window.setTimeout(() => voice.speak(summarySpeech, () => setSummarySaid(true), voiceLang), 900);
     return () => window.clearTimeout(t);
   }, [session.finished, revealDone]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -321,7 +344,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   if (!module || !task) {
     return (
       <div className="center" style={{ padding: 40 }}>
-        <p>Модуль не знайдено 🙈</p>
+        <p>{t('game.moduleNotFound')}</p>
       </div>
     );
   }
@@ -355,7 +378,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     },
     speakPrompt: () => {
       markActivity();
-      speakPrompt(spokenPrompt(task));
+      speakPrompt(spokenPrompt(saidOf(task)), session.langs.said);
     },
   };
 
@@ -374,7 +397,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
   const header = (
     <div className={styles.header}>
-      <button className={styles.back} onClick={onExit} aria-label="Назад до пригод" data-tip="home">
+      <button className={styles.back} onClick={onExit} aria-label={t('game.back')} data-tip="home">
         🏠
       </button>
       <div className={styles.headerMain}>
@@ -386,7 +409,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
             className={styles.dots}
             data-tip="dots"
             role="img"
-            aria-label={`Завдання ${Math.min(session.solvedCount + 1, session.total)} з ${session.total}`}
+            aria-label={t('game.progress', { n: Math.min(session.solvedCount + 1, session.total), total: session.total })}
           >
             {Array.from({ length: session.total }, (_, i) => {
               const done = i < session.solvedCount;
@@ -436,7 +459,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
             <button
               className={styles.introCloseBtn}
               onClick={startGame}
-              aria-label="Закрити і почати"
+              aria-label={t('game.intro.close')}
             >
               ✕
             </button>
@@ -444,7 +467,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
           {sub?.demo && <IntroDemo demo={sub.demo} />}
           {showText && introText && <p className={styles.introText}>{introText}</p>}
           <Button size="lg" icon="▶️" block onClick={startGame}>
-            Почнемо!
+            {t('game.intro.start')}
           </Button>
         </motion.div>
         {bedtimeOverlay}
@@ -508,7 +531,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
               exit={{ opacity: 0, height: 0, marginTop: 0 }}
             >
               <div className={styles.hintBar}>
-                <span className={styles.hintBarLabel}>🧚 Підказка</span>
+                <span className={styles.hintBarLabel}>{t('game.hint.label')}</span>
                 <VoiceToggle channel="hint" />
               </div>
               <VisualHelper task={task} callbacks={callbacks} hintActive />
@@ -523,7 +546,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         {session.hintActive && VisualHelper && (
           <motion.button
             className={styles.jumpUp}
-            aria-label="Повернутися до відповідей"
+            aria-label={t('game.hint.back')}
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
             exit={{ opacity: 0, scale: 0.5 }}
@@ -547,7 +570,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       <Modal
         open={session.finished && revealDone}
         dismissible={false}
-        title="Ти неймовірний!"
+        title={t(winTitle)}
         icon="🏆"
       >
         <div className={styles.summary}>
@@ -561,11 +584,11 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
               <span className="emoji" style={{ fontSize: GIFT_META[stepGift].size }} aria-hidden>
                 {GIFT_META[stepGift].emoji}
               </span>
-              <p className={styles.giftLabel}>{GIFT_META[stepGift].label}</p>
+              <p className={styles.giftLabel}>{t(`game.gift.${stepGift}`)}</p>
               {/* The gift is a new resident of the child's world. */}
               {newestResident && (
                 <p className={styles.residentLine}>
-                  У твоєму світі оселився:{' '}
+                  {t('game.win.resident')}{' '}
                   <span className="emoji" aria-hidden>
                     {newestResident.emoji}
                   </span>{' '}
@@ -577,7 +600,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
             <div className={`${styles.summaryArt} emoji`}>{theme.mascot.emoji}</div>
           )}
           <p className={styles.summaryBig}>
-            Зібрано +{session.earned} {theme.artifact.emoji}
+            {t('game.win.earned', { n: session.earned, emoji: theme.artifact.emoji })}
             {keysWon > 0 && (
               <>
                 {' '}
@@ -587,18 +610,20 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
           </p>
           {reveal && (
             <p className={styles.treasureLine}>
-              {reveal.isNew ? 'Новий скарб у колекції: ' : 'Скарб: '}
+              {reveal.isNew ? t('game.win.newTreasure') : t('game.win.treasure')}
               <span className="emoji" aria-hidden>
                 {reveal.treasure.emoji}
               </span>{' '}
               {reveal.treasure.name}
             </p>
           )}
-          <p className="muted">{tasksDone(session.total)} Чудова робота!</p>
+          <p className="muted">
+            {t('game.tasksDone', { count: session.total })} {t('game.win.great')}
+          </p>
           <div className={styles.summaryActions}>
             {config.step < maxSteps && (
               <Button size="lg" icon="▶️" block onClick={onContinue}>
-                Наступний рівень!
+                {t('game.win.next')}
               </Button>
             )}
             <Button
@@ -608,10 +633,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
               block
               onClick={onPlayAgain}
             >
-              Ще раз!
+              {t('game.win.again')}
             </Button>
             <Button size="lg" variant="ghost" icon="🏠" block onClick={onExit}>
-              До пригод
+              {t('game.win.exit')}
             </Button>
           </div>
         </div>

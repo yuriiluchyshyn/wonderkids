@@ -1,3 +1,4 @@
+import { useT, type AppKey } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
@@ -25,6 +26,7 @@ function RegionShape({ region, className, ...rest }: { region: MapRegion; classN
  * into its slot. The helper makes the target softly pulse with colour.
  */
 export function InteractiveMapLayout({ payload, callbacks, hintActive }: LayoutProps<MapPuzzlePayload>) {
+  const t = useT();
   const { layer, mode, marker, targetId } = payload;
   const { playCode } = useSound();
   const [solved, setSolved] = useState(false);
@@ -53,7 +55,7 @@ export function InteractiveMapLayout({ payload, callbacks, hintActive }: LayoutP
   return (
     <div className="stack">
       <div className={styles.mapWrap}>
-        <svg viewBox="0 0 200 100" className={styles.map} role="group" aria-label="Карта світу">
+        <svg viewBox="0 0 200 100" className={styles.map} role="group" aria-label={t('tpl.worldMap')}>
           <rect x="0" y="0" width="200" height="100" rx="6" className={styles.mapSea} />
           {backdrop.map((r) => (
             <RegionShape key={r.id} region={r} className={styles.mapLandStatic} />
@@ -70,7 +72,7 @@ export function InteractiveMapLayout({ payload, callbacks, hintActive }: LayoutP
                 dnd.over === r.id && styles.mapOver,
               )}
               role="button"
-              aria-label={r.name}
+              aria-label={t(`map.${r.id}` as AppKey)}
               {...(mode === 'tap' ? { onClick: () => answer(r.id) } : dnd.target(r.id))}
             />
           ))}

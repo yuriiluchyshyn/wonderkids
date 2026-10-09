@@ -225,6 +225,8 @@ export const EN: LangPack = {
   name: 'Англійська мова',
   flag: '🇬🇧',
   prefix: 'en_',
+  syllables: false,
+  byEar: false,
   alphabet: [...'abcdefghijklmnopqrstuvwxyz'],
   partWords: PHONICS_WORDS.map(([word, emoji]) => ({ parts: [...word], emoji })),
   spellWords: words(SPELL),

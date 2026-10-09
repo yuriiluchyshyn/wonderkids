@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useEffect, useRef, useState } from 'react';
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
@@ -23,6 +24,7 @@ const RECHECK_LIMIT = 100;
  * what a child downloads.
  */
 function Auth0Form() {
+  const t = useT();
   const { isLoading, isAuthenticated, error: auth0Error, loginWithRedirect, getIdTokenClaims, getAccessTokenSilently } = useAuth0();
   const loginWithAuth0 = useAuthStore((s) => s.loginWithAuth0);
   const pending = useAuthStore((s) => s.pending);
@@ -99,7 +101,7 @@ function Auth0Form() {
       <div className={styles.form}>
         <div className={styles.confirm} role="alert">
           <p>{error}</p>
-          {waiting && <p>Щойно підтвердите — кабінет відкриється тут сам.</p>}
+          {waiting && <p>{t('parentLogin.waitingHint')}</p>}
           <button
             className={styles.submit}
             type="button"
@@ -110,11 +112,11 @@ function Auth0Form() {
               });
             }}
           >
-            {waiting ? 'Пошту підтверджено — увійти' : 'Спробувати ще раз'}
+            {waiting ? t('parentLogin.confirmed') : t('common.retry')}
           </button>
           {/* Signs out of Auth0 first, or it would return the same account. */}
           <button className={styles.secondary} type="button" onClick={auth0Logout}>
-            Увійти з іншою поштою
+            {t('parentLogin.otherEmail')}
           </button>
         </div>
       </div>
@@ -124,9 +126,9 @@ function Auth0Form() {
   if (auth0Error) {
     return (
       <div className={styles.form}>
-        <p className={styles.error}>Вхід не завершено. Спробуйте, будь ласка, ще раз.</p>
+        <p className={styles.error}>{t('parentLogin.notFinished')}</p>
         <button className={styles.submit} type="button" onClick={signIn}>
-          Увійти або зареєструватися
+          {t('parentLogin.signInOrUp')}
         </button>
       </div>
     );
@@ -135,7 +137,7 @@ function Auth0Form() {
   return (
     <div className={styles.form}>
       <p className={styles.sub} role="status">
-        {isAuthenticated || pending ? 'Входимо…' : 'Переходимо на сторінку входу…'}
+        {isAuthenticated || pending ? t('parentLogin.pending') : t('parentLogin.redirecting')}
       </p>
     </div>
   );

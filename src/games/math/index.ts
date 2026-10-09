@@ -1,5 +1,5 @@
 import { defineGeneratedSubject } from '../shared/templateModule';
-import { GAMES, SUBJECT, getIntro } from './config';
+import { GAMES, SUBJECT, TEXTS, getIntro } from './config';
 import { generateTask } from './tasks';
 
-export const mathModule = defineGeneratedSubject(SUBJECT, GAMES, { generateTask, getIntro });
+export const mathModule = defineGeneratedSubject(SUBJECT, GAMES, { generateTask, getIntro, texts: TEXTS });

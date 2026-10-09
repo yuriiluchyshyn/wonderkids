@@ -1,3 +1,5 @@
+import { useLang, useT } from '@/core/i18n';
+import { useSayT } from '@/core/audio/useSpeech';
 import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
@@ -22,18 +24,10 @@ interface TaskCardProps {
 }
 
 /** Catalog card: subject icon, path progress, and a button to open the path. */
-/** «1 завдання», «3 завдання», «100 завдань». */
-function plural(n: number): string {
-  const tens = n % 100;
-  const ones = n % 10;
-  if (tens >= 11 && tens <= 14) return 'завдань';
-  if (ones === 1) return 'завдання';
-  if (ones >= 2 && ones <= 4) return 'завдання';
-  return 'завдань';
-}
-
 // forwardRef: AnimatePresence (popLayout) measures the card as it leaves.
 export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard({ entry, onStart, dimmed = false }, ref) {
+  const t = useT();
+  const say = useSayT('selections', useLang());
   const theme = useActiveTheme();
   const showText = useShowText();
   const announce = useVoiceSpeak('selections');
@@ -51,13 +45,11 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
   const taskCount = free ? (module.taskCount?.(sub.id) ?? 0) : 0;
   const [minStars, maxStars] = difficultyRange(sub);
   const ages =
-    minStars === maxStars
-      ? DIFFICULTY_AGES[minStars]
-      : `${DIFFICULTY_AGES[minStars].split('–')[0]}–${DIFFICULTY_AGES[maxStars].split('–')[1]}`;
+    t('ages.range', { from: DIFFICULTY_AGES[minStars][0], to: DIFFICULTY_AGES[maxStars][1] });
 
   const start = () => {
     if (locked) {
-      announce(`${sub.label}. Ця гра з’явиться скоро`);
+      say('hub.card.comingSoon', { name: sub.label });
       return;
     }
     announce(sub.label);
@@ -79,11 +71,11 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
       transition={{ type: 'spring', stiffness: 260, damping: 22, layout: { duration: 0.6, ease: [0.3, 0, 0.2, 1] } }}
     >
       {status === 'new' && (
-        <span className={styles.badgeNew} aria-label="Нова гра">
-          ✨ Нове
+        <span className={styles.badgeNew} aria-label={t('hub.card.newLabel')}>
+          {t('hub.card.new')}
         </span>
       )}
-      {locked && <span className={styles.badgeSoon}>Скоро</span>}
+      {locked && <span className={styles.badgeSoon}>{t('common.soon')}</span>}
 
       <div className={styles.top}>
         <motion.span
@@ -106,7 +98,7 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
       <div
         className={styles.stars}
         role="img"
-        aria-label={`Складність: ${minStars === maxStars ? minStars : `від ${minStars} до ${maxStars}`} з 3 зірочок, ${ages}`}
+        aria-label={minStars === maxStars ? t('hub.card.difficulty', { stars: minStars, ages }) : t('hub.card.difficultyRange', { from: minStars, to: maxStars, ages })}
       >
         {[1, 2, 3].map((n) => (
           <span
@@ -125,7 +117,7 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
           <span className="emoji" aria-hidden>
             ♾️
           </span>
-          {showText && (taskCount > 0 ? ` ${taskCount} ${plural(taskCount)} · грай скільки хочеш` : ' Грай скільки хочеш')}
+          {showText && ` ${taskCount > 0 ? t('hub.card.freeCount', { count: taskCount }) : t('hub.card.free')}`}
           {!showText && taskCount > 0 && ` ${taskCount}`}
         </p>
       ) : (
@@ -136,24 +128,24 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
         <div className={styles.pathBar}>
           <ProgressBar
             value={step / totalSteps}
-            label={showText ? `Сходинка ${step} / ${totalSteps}` : undefined}
+            label={showText ? t('hub.card.step', { step, total: totalSteps }) : undefined}
           />
         </div>
       </div>
       )}
 
       {locked ? (
-        <Button icon="🔒" variant="ghost" block onClick={start} ariaLabel={`${sub.label}: скоро`}>
-          {showText ? 'Скоро' : ''}
+        <Button icon="🔒" variant="ghost" block onClick={start} ariaLabel={t('hub.card.soonLabel', { name: sub.label })}>
+          {showText ? t('common.soon') : ''}
         </Button>
       ) : (
         <Button
           icon={free ? '▶️' : '🗺️'}
           block
           onClick={start}
-          ariaLabel={free ? `Грати: ${sub.label}` : `Відкрити шлях: ${sub.label}`}
+          ariaLabel={free ? t('hub.card.playLabel', { name: sub.label }) : t('hub.card.pathLabel', { name: sub.label })}
         >
-          {showText ? (free ? 'Грати' : 'Мій шлях') : ''}
+          {showText ? (free ? t('common.play') : t('hub.card.myPath')) : ''}
         </Button>
       )}
     </motion.article>

@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { VOICE_CHANNELS } from '@/core/audio/voiceChannels';
 import { Chip } from '@/components/ui/Chip';
@@ -10,23 +11,24 @@ import styles from './AudioSettings.module.css';
  * toggles mirror the inline ones in the app and persist to local storage.
  */
 export function AudioSettings() {
+  const t = useT();
   const settings = useGameStore((s) => s.settings);
   const updateSettings = useGameStore((s) => s.updateSettings);
 
   return (
     <div className="stack">
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🔈 Загальне</h3>
+        <h3 className={styles.sectionTitle}>{t('audio.general')}</h3>
         <div className={styles.chipRow}>
           <Chip
             icon={settings.soundOn ? '🔊' : '🔇'}
-            label="Звукові ефекти"
+            label={t('audio.effects')}
             active={settings.soundOn}
             onClick={() => updateSettings({ soundOn: !settings.soundOn })}
           />
           <Chip
             icon={settings.voiceOn ? '🗣️' : '🤐'}
-            label="Озвучення (голос)"
+            label={t('audio.voice')}
             active={settings.voiceOn}
             onClick={() => updateSettings({ voiceOn: !settings.voiceOn })}
           />
@@ -34,11 +36,11 @@ export function AudioSettings() {
       </section>
 
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🎙️ Голосові підказки по секціях</h3>
+        <h3 className={styles.sectionTitle}>{t('audio.sections')}</h3>
         <p className={styles.hint}>
           {settings.voiceOn
-            ? 'Увімкни або вимкни озвучення для кожної частини окремо.'
-            : 'Спочатку увімкни «Озвучення (голос)» вище.'}
+            ? t('audio.sectionsHint')
+            : t('audio.sectionsOff')}
         </p>
         <ul className={styles.list}>
           {VOICE_CHANNELS.map((ch) => (
@@ -47,7 +49,7 @@ export function AudioSettings() {
                 <span className="emoji" aria-hidden>
                   {ch.icon}
                 </span>
-                {ch.label}
+                {t(`voiceChannel.${ch.id}`)}
               </span>
               <VoiceToggle channel={ch.id} size="md" />
             </li>
@@ -56,15 +58,14 @@ export function AudioSettings() {
       </section>
 
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🔊 Кнопки озвучення тексту</h3>
+        <h3 className={styles.sectionTitle}>{t('audio.ttsButtons')}</h3>
         <p className={styles.hint}>
-          Значок динаміка біля текстових завдань і відповідей зачитує їх уголос. Вимкни, щоб дитина
-          читала самостійно.
+          {t('audio.ttsHint')}
         </p>
         <div className={styles.chipRow}>
           <Chip
             icon={settings.ttsButtons ? '🔊' : '📖'}
-            label={settings.ttsButtons ? 'Показувати кнопки' : 'Вимкнено — читаємо самі'}
+            label={settings.ttsButtons ? t('audio.ttsOn') : t('audio.ttsOff')}
             active={settings.ttsButtons}
             onClick={() => updateSettings({ ttsButtons: !settings.ttsButtons })}
           />
@@ -72,12 +73,12 @@ export function AudioSettings() {
       </section>
 
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>🔤 Текстові підписи</h3>
-        <p className={styles.hint}>Увімкнено — підписи для тих, хто читає. Вимкнено — лише малюнки.</p>
+        <h3 className={styles.sectionTitle}>{t('audio.captions')}</h3>
+        <p className={styles.hint}>{t('audio.captionsHint')}</p>
         <div className={styles.chipRow}>
           <Chip
             icon={settings.showText ? '🔤' : '🙈'}
-            label={settings.showText ? 'Показувати' : 'Приховані'}
+            label={settings.showText ? t('audio.captionsOn') : t('audio.captionsOff')}
             active={settings.showText}
             onClick={() => updateSettings({ showText: !settings.showText })}
           />

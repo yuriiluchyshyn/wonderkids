@@ -1,3 +1,4 @@
+import { DEFAULT_LANG, type LangCode } from '@/core/lang';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import type { LearningModule, SubCategory, TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { Card, TemplatePayload } from '@/core/game/templates/types';
@@ -6,12 +7,14 @@ import { TemplateGameView } from '@/components/templates/TemplateGameView';
 import { TemplateHelper, hasHelper } from '@/components/templates/TemplateHelper';
 import { RECALL_WINDOW, composeLevel } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
-import { spoken, written } from '@/core/lang/numbers';
+import { spoken, written } from '@/core/lang/uk';
 
 /** Publication date of the PRD v4.0 game pack (drives the 60-day "NEW" badge). */
 export const V4_RELEASE = '2026-10-06T00:00:00Z';
 /** Publication date of the Tech Spec v6 game pack (language, logic, astronomy, art). */
 export const V6_RELEASE = '2026-10-07T00:00:00Z';
+/** Publication date of the games that came with English and Polish (the Polish history, the Polish language pack). */
+export const I18N_RELEASE = '2026-10-09T00:00:00Z';
 
 /** Artifacts per task — grows gently along the path. */
 export function rewardFor(step: number): number {
@@ -29,7 +32,7 @@ export function templateTask(
   /** How the voice says the prompt, when it differs from the written one. */
   speak?: string,
 ): TaskInstance<TemplatePayload> {
-  // A prompt written with `num` / `say` (core/lang/numbers) carries both readings.
+  // A prompt written with `num` / `say` (core/lang/uk) carries both readings.
   const shown = written(prompt);
   const said = speak ?? (spoken(prompt) !== shown ? spoken(prompt) : undefined);
   return { id: uid('tt'), key, prompt: shown, payload, reward: rewardFor(step), outro, speak: said };
@@ -103,14 +106,16 @@ export interface TemplateGame extends SubCategory {
    * Without it a path game gets `recallLevel` (new + recalled questions worked
    * out from how `pool` grows step by step) and a free game a random draw.
    */
-  level?: (step: number, count: number) => TaskInstance<TemplatePayload>[];
+  level?: (step: number, count: number, config: Omit<TaskConfig, 'index'>) => TaskInstance<TemplatePayload>[];
   /** Child-level explanation; a function when it changes along the path. */
-  introFor?: (step: number) => string | undefined;
+  introFor?: (step: number, lang?: LangCode) => string | undefined;
 }
 
 /** A subject as the hub shows it (`config.ts` of every subject folder). */
 export interface SubjectDef {
   id: string;
+  /** The words of the cards in the languages other than Ukrainian (`LearningModule.texts`). */
+  texts?: LearningModule['texts'];
   title: string;
   icon: string;
   accent: string;
@@ -160,7 +165,7 @@ export function defineTemplateModule(def: TemplateModuleDef): LearningModule {
     buildLevel: (config, count) => {
       const g = game(config.subCategoryId);
       if (!g) return [];
-      if (g.level) return g.level(config.step, count);
+      if (g.level) return g.level(config.step, count, config);
       if (g.progression === 'free') return shuffle(g.pool(config.step, config));
       return recallLevel((step) => g.pool(step, { ...config, step }), config.step, count);
     },
@@ -173,10 +178,11 @@ export function defineTemplateModule(def: TemplateModuleDef): LearningModule {
       const g = game(subId);
       return g ? new Set(g.pool(step, { subCategoryId: subId, step }).map(taskKey)).size : 0;
     },
-    getIntro: (subId, _theme, step) => {
+    getIntro: (subId, _theme, step, lang) => {
       const g = game(subId);
-      return g?.introFor?.(step) ?? g?.intro;
+      return g?.introFor?.(step, lang) ?? (lang && def.texts?.[lang]?.games[subId]?.intro) ?? g?.intro;
     },
+    texts: def.texts,
   };
 
   moduleRegistry.register(module);
@@ -206,9 +212,18 @@ export function defineSubject(subject: SubjectDef, games: GameCard[], tasks: Rec
 export function defineGeneratedSubject(
   subject: SubjectDef,
   games: SubCategory[],
-  made: Pick<LearningModule, 'generateTask' | 'getIntro'>,
+  made: Pick<LearningModule, 'generateTask' | 'getIntro' | 'texts'>,
 ): LearningModule {
   const module: LearningModule = { ...subject, subCategories: games, ...SHARED_SCREENS, ...made };
   moduleRegistry.register(module);
   return module;
+}
+
+/**
+ * What a subject says, by language: `const texts = subjectTexts({ uk, en, pl })`
+ * → `texts(config.lang)`. Ukrainian when no language is asked for. Each
+ * language is a file of its own in the subject's `lang/` folder.
+ */
+export function subjectTexts<T>(byLang: Record<LangCode, T>): ((lang?: LangCode) => T) & { langs: LangCode[] } {
+  return Object.assign((lang: LangCode = DEFAULT_LANG) => byLang[lang], { langs: Object.keys(byLang) as LangCode[] });
 }

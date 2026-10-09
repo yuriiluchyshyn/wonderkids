@@ -2,10 +2,12 @@ import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { COUNTRIES } from './content/countries';
 import { FLAG_STEPS, BIOME_STEPS, OCEAN_STEPS, CAPITALS, CAPITAL_STEPS, ZONE_ANIMALS } from './tasks';
+import { geographyTexts } from './lang';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'geography',
+  texts: { en: geographyTexts('en').cards, pl: geographyTexts('pl').cards },
   title: 'Географія',
   icon: '🌍',
   accent: '#0ea5e9',
@@ -18,6 +20,7 @@ export const SUBJECT: SubjectDef = {
 export const GAMES: GameCard[] = [
   {
     id: 'flags',
+    langs: geographyTexts.langs,
     gameId: 'geo_flags_quiz',
     label: 'Вгадай Прапор',
     icon: '🚩',
@@ -32,6 +35,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'continents',
+    langs: geographyTexts.langs,
     gameId: 'geo_continent_puzzle',
     label: 'Склади Карту',
     icon: '🗺️',
@@ -45,6 +49,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'biomes',
+    langs: geographyTexts.langs,
     gameId: 'geo_biomes_sorter',
     label: 'Тварини і Природні Зони',
     icon: '🐧',
@@ -59,6 +64,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'oceans',
+    langs: geographyTexts.langs,
     gameId: 'geo_oceans',
     label: 'Моря та Океани',
     icon: '⛵',
@@ -72,6 +78,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'capitals',
+    langs: geographyTexts.langs,
     gameId: 'geo_timezones_capitals',
     label: 'Столиці та Часові Пояси',
     icon: '🌐',

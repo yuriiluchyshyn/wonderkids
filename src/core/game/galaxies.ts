@@ -1,3 +1,5 @@
+import type { AppKey } from '@/core/i18n/app';
+
 /**
  * Galaxies = subjects (PRD). Each galaxy holds planets (adventures / learning
  * module sub-categories): Математика → планета додавання, віднімання, …
@@ -8,7 +10,6 @@
  */
 export interface Galaxy {
   id: string;
-  name: string;
   icon: string;
   /** Registered learning-module id when the galaxy is live; absent = soon. */
   moduleId?: string;
@@ -18,20 +19,23 @@ export interface Galaxy {
 }
 
 export const GALAXIES: Galaxy[] = [
-  { id: 'math', name: 'Математика', icon: '🧮', moduleId: 'math', motif: ['➕', '➖', '✖️', '➗', '🔢', '📐'] },
-  { id: 'geography', name: 'Географія', icon: '🌍', moduleId: 'geography', motif: ['🌍', '🗺️', '🧭', '⛰️', '🏔️'] },
-  { id: 'ecology', name: 'Екологія', icon: '♻️', moduleId: 'ecology', motif: ['♻️', '🌱', '🌳', '💧', '🐝'] },
-  { id: 'history', name: 'Історія', icon: '🏛️', moduleId: 'history', motif: ['🏛️', '🦖', '⏳', '🏰', '📜'] },
-  { id: 'language', name: 'Мова', icon: '🔤', moduleId: 'language', motif: ['🔤', '📚', '✏️', '💬', '📝'] },
-  { id: 'logic', name: 'Логіка', icon: '🧩', moduleId: 'logic', motif: ['🧩', '🔷', '🔺', '🪞', '♟️'] },
-  { id: 'astronomy', name: 'Астрономія', icon: '🔭', moduleId: 'astronomy', motif: ['🔭', '🪐', '⭐', '🌙', '☄️'] },
-  { id: 'art', name: 'Творчість', icon: '🎨', moduleId: 'art', motif: ['🎨', '🖌️', '🌈', '✏️', '🖍️'] },
-  { id: 'science', name: 'Природа', icon: '🌿', moduleId: 'nature', motif: ['🌿', '❄️', '🌷', '☀️', '🍂'] },
-  { id: 'music', name: 'Музика', icon: '🎵', comingSoon: true, motif: ['🎵', '🎶', '🎹', '🥁', '🎺'] },
+  { id: 'math', icon: '🧮', moduleId: 'math', motif: ['➕', '➖', '✖️', '➗', '🔢', '📐'] },
+  { id: 'geography', icon: '🌍', moduleId: 'geography', motif: ['🌍', '🗺️', '🧭', '⛰️', '🏔️'] },
+  { id: 'ecology', icon: '♻️', moduleId: 'ecology', motif: ['♻️', '🌱', '🌳', '💧', '🐝'] },
+  { id: 'history', icon: '🏛️', moduleId: 'history', motif: ['🏛️', '🦖', '⏳', '🏰', '📜'] },
+  { id: 'language', icon: '🔤', moduleId: 'language', motif: ['🔤', '📚', '✏️', '💬', '📝'] },
+  { id: 'logic', icon: '🧩', moduleId: 'logic', motif: ['🧩', '🔷', '🔺', '🪞', '♟️'] },
+  { id: 'astronomy', icon: '🔭', moduleId: 'astronomy', motif: ['🔭', '🪐', '⭐', '🌙', '☄️'] },
+  { id: 'art', icon: '🎨', moduleId: 'art', motif: ['🎨', '🖌️', '🌈', '✏️', '🖍️'] },
+  { id: 'science', icon: '🌿', moduleId: 'nature', motif: ['🌿', '❄️', '🌷', '☀️', '🍂'] },
+  { id: 'music', icon: '🎵', comingSoon: true, motif: ['🎵', '🎶', '🎹', '🥁', '🎺'] },
 ];
 
 /** The galaxy the hub opens on. */
 export const DEFAULT_GALAXY_ID = GALAXIES.find((g) => g.moduleId)?.id ?? GALAXIES[0].id;
+
+/** The key of a galaxy's name in the app dictionary: `t(galaxyKey(galaxy.id))`. */
+export const galaxyKey = (id: string): AppKey => `galaxy.${id}` as AppKey;
 
 export function getGalaxy(id: string): Galaxy {
   return GALAXIES.find((g) => g.id === id) ?? GALAXIES[0];

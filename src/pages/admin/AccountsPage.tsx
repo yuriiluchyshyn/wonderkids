@@ -1,10 +1,10 @@
+import { themeOf } from '@/core/theme/localTheme';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { adminApi, type AdminAccount, type AdminChild, type SpeechKey } from '@/core/account/api/client';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { subSteps } from '@/core/child/progress/path';
 import { playsKey } from '@/core/child/progress/plays';
-import { THEMES } from '@/core/theme/themes';
 import type { ThemeId } from '@/core/theme/theme.types';
 import { computeAge } from '@/core/utils/age';
 import { SpeechSwitch } from './SpeechSwitch';
@@ -60,7 +60,7 @@ function ChildProgress({ child }: { child: AdminChild }) {
 function ChildRow({ child }: { child: AdminChild }) {
   const [open, setOpen] = useState(false);
   const age = child.birthYear ? computeAge(child.birthYear, child.birthMonth ?? 6) : null;
-  const theme = child.themeId ? THEMES[child.themeId as ThemeId] : undefined;
+  const theme = child.themeId ? themeOf(child.themeId as ThemeId, 'uk') : undefined;
   const gamesStarted = Object.keys(child.progress).filter((k) => !k.includes('#')).length;
 
   return (

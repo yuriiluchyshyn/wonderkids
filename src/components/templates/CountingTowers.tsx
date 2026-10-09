@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
@@ -22,6 +23,7 @@ interface CountingTowersProps {
  * Deliberately shows no running total — counting aloud is the point.
  */
 export function CountingTowers({ count, split }: CountingTowersProps) {
+  const t = useT();
   const total = split ? split.a + split.b : count;
   const [lit, setLit] = useState<Set<number>>(() => new Set());
   const { countChime } = useSound();
@@ -44,12 +46,12 @@ export function CountingTowers({ count, split }: CountingTowersProps) {
 
   return (
     <div className={styles.towers}>
-      {Array.from({ length: towers }, (_, t) => {
-        const inThis = Math.min(10, total - t * 10);
+      {Array.from({ length: towers }, (_, tower) => {
+        const inThis = Math.min(10, total - tower * 10);
         return (
-          <div className={styles.tower} key={t}>
+          <div className={styles.tower} key={tower}>
             {Array.from({ length: inThis }, (_, c) => {
-              const gi = t * 10 + c;
+              const gi = tower * 10 + c;
               const on = lit.has(gi);
               const groupClass = split
                 ? groupOf(gi) === 'b'
@@ -64,7 +66,7 @@ export function CountingTowers({ count, split }: CountingTowersProps) {
                   animate={on ? { scale: [1, 1.35, 1] } : {}}
                   transition={{ duration: 0.3 }}
                   onClick={() => tapCube(gi)}
-                  aria-label="Кубик"
+                  aria-label={t('tpl.cube')}
                 />
               );
             })}

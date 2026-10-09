@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import type { ThemeId } from '@/core/theme/theme.types';
 import { cn } from '@/core/utils/cn';
@@ -25,13 +26,14 @@ interface FuelGaugeProps {
 }
 
 export function FuelGauge({ pct }: FuelGaugeProps) {
+  const t = useT();
   const theme = useActiveTheme();
   const icon = FUEL_ICON[theme.id] ?? '⛽';
   const clamped = Math.max(0, Math.min(100, pct));
   const low = clamped <= 25;
 
   return (
-    <div className={styles.fuel} aria-label={`Пальне ${clamped}%`} title={`Пальне ${clamped}%`}>
+    <div className={styles.fuel} aria-label={t('tpl.fuel', { pct: clamped })} title={t('tpl.fuel', { pct: clamped })}>
       <span className={`${styles.icon} emoji`} aria-hidden>
         {icon}
       </span>

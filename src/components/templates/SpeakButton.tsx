@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useState, type MouseEvent } from 'react';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';
@@ -22,6 +23,7 @@ interface SpeakButtonProps {
  * independent reading (`settings.ttsButtons`).
  */
 export function SpeakButton({ text, size = 'sm', className, lang }: SpeakButtonProps) {
+  const t = useT();
   const enabled = useGameStore((s) => s.settings.ttsButtons);
   const voiceOn = useGameStore((s) => s.settings.voiceOn);
   const { playCode } = useSound();
@@ -43,7 +45,7 @@ export function SpeakButton({ text, size = 'sm', className, lang }: SpeakButtonP
       tabIndex={0}
       data-tts-button
       className={cn(styles.speak, size === 'md' && styles.speakMd, speaking && styles.speaking, className)}
-      aria-label={`Прочитати вголос: ${text}`}
+      aria-label={t('tpl.readAloud', { text })}
       onClick={speak}
       onPointerDown={(e) => e.stopPropagation()}
       onKeyDown={(e) => {

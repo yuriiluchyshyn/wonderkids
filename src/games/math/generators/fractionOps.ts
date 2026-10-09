@@ -1,8 +1,10 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
-import { glyphSpeech, type Card, type FractionValue, type Glyph, type GridChoicePayload } from '@/core/game/templates/types';
+import { type Card, type FractionValue, type Glyph, type GridChoicePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
+import type { LangCode } from '@/core/lang';
 import { rewardForStep } from '../difficulty';
+import { mathTexts } from '../lang';
 
 type Op = '+' | '−' | '×' | '÷';
 
@@ -19,17 +21,8 @@ export function fractionOpsTier(step: number): FractionOpsTier {
 }
 
 /** Child-level explanation shown before each new kind of task. */
-export const FRACTION_OPS_INTRO: Record<FractionOpsTier, string> = {
-  addSame:
-    'Коли знаменники однакові, шматочки однакового розміру. Просто додай верхні числа, а нижнє залиш таким самим: одна четверта плюс дві четверті — це три четверті.',
-  subSame:
-    'Віднімаємо так само: шматочки однакові, тому від верхнього числа забираємо верхнє, а нижнє не змінюємо. Три четверті мінус одна четверта — це дві четверті.',
-  unlike:
-    'Тепер знаменники різні — шматочки різного розміру. Спершу зроби їх однаковими: знайди спільний знаменник, а тоді додавай чи віднімай верхні числа. Одна друга — це те саме, що дві четверті!',
-  mul: 'Щоб помножити дроби, множимо верх на верх і низ на низ. Одна друга від однієї третьої — це одна шоста.',
-  div: 'Щоб поділити на дріб, перевертаємо другий дріб і множимо. Поділити на одну другу — те саме, що помножити на два.',
-  mixed: 'Тут усі дії разом. Дивись уважно на знак і згадай правило для кожної дії!',
-};
+/** What is new in this kind of fraction sum — told when the path reaches it. */
+export const fractionOpsIntro = (step: number, lang?: LangCode): string => mathTexts(lang).fractionOps.intro[fractionOpsTier(step)];
 
 const gcd = (a: number, b: number): number => (b === 0 ? Math.abs(a) : gcd(b, a % b));
 
@@ -124,6 +117,7 @@ function distractors({ a, b, op, answer }: Sum): FractionValue[] {
 
 /** «Дроби: дії» — add, subtract, multiply and divide fractions (UI_GRID_CHOICE). */
 export function generateFractionOps(config: TaskConfig): TaskInstance<GridChoicePayload> {
+  const T = mathTexts(config.lang);
   const tier = fractionOpsTier(config.step);
   const sum = draw(tier === 'mixed' ? pick(['addSame', 'subSame', 'unlike', 'mul', 'div'] as const) : tier);
   const glyphs: Glyph[] = [sum.a, sum.op, sum.b, '=', '?'];
@@ -135,7 +129,7 @@ export function generateFractionOps(config: TaskConfig): TaskInstance<GridChoice
   return {
     id: uid('fo'),
     key: `${sum.a.n}/${sum.a.d}${sum.op}${sum.b.n}/${sum.b.d}`,
-    prompt: `Обчисли: ${[sum.a, sum.op, sum.b].map(glyphSpeech).join(' ')}`,
+    prompt: T.fractionOps.prompt(sum.a, sum.op, sum.b),
     reward: rewardForStep(config.step) + 1,
     payload: {
       template: Mechanics.GridChoice,
@@ -143,7 +137,7 @@ export function generateFractionOps(config: TaskConfig): TaskInstance<GridChoice
       stimulus: { glyphs },
       options,
       correctId: `${sum.answer.n}/${sum.answer.d}`,
-      hint: FRACTION_OPS_INTRO[tier === 'mixed' ? 'unlike' : tier],
+      hint: T.fractionOps.intro[tier === 'mixed' ? 'unlike' : tier],
     },
   };
 }

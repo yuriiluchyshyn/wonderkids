@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { cn } from '@/core/utils/cn';
 import styles from './TimeBudget.module.css';
@@ -21,6 +22,7 @@ interface TimeBudgetProps {
  * blinking out — never a digital countdown (Tech Spec AC-2).
  */
 export function TimeBudget({ pct, slots = 10, resting = false, size = 'md', className }: TimeBudgetProps) {
+  const t = useT();
   const theme = useActiveTheme();
   const token = theme.timeToken.emoji;
   const clamped = Math.max(0, Math.min(100, pct));
@@ -34,7 +36,7 @@ export function TimeBudget({ pct, slots = 10, resting = false, size = 'md', clas
     <div
       className={cn(styles.row, size === 'sm' && styles.rowSm, resting && styles.resting, className)}
       role="img"
-      aria-label={resting ? 'Час відпочити' : `Залишилось ігрового часу: ${clamped}%`}
+      aria-label={resting ? t('time.rest') : t('time.left', { pct: clamped })}
     >
       {Array.from({ length: slots }, (_, i) => {
         let state: 'full' | 'fading' | 'spent' = 'spent';

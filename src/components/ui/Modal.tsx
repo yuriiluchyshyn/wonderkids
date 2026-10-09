@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 import { voice } from '@/core/audio/voice';
@@ -15,6 +16,7 @@ interface ModalProps {
 
 /** Spring-animated bottom-safe modal sheet. */
 export function Modal({ open, onClose, title, icon, children, dismissible = true }: ModalProps) {
+  const t = useT();
   // Put away by the child (✕ or a tap beside it): whatever was being read out in it stops.
   const dismiss = () => {
     voice.stop();
@@ -52,7 +54,7 @@ export function Modal({ open, onClose, title, icon, children, dismissible = true
                 </h2>
               )}
               {dismissible && onClose && (
-                <button className={styles.close} onClick={dismiss} aria-label="Закрити">
+                <button className={styles.close} onClick={dismiss} aria-label={t('common.close')}>
                   ✕
                 </button>
               )}

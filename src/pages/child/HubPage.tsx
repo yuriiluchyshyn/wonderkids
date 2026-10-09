@@ -1,7 +1,9 @@
+import { useLang, useT } from '@/core/i18n';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { useEffect, useMemo, useState } from 'react';
 import { StarFilter } from '@/components/hub/StarFilter';
 import { GroupFilter } from '@/components/hub/GroupFilter';
+import { pathKey } from '@/core/child/progress/path';
 import type { GameGroup } from '@/core/game/kernel/types';
 import { useHubState } from '@/core/app/ui/useHubState';
 import { difficultyRange } from '@/core/game/kernel/gameConfig';
@@ -14,7 +16,7 @@ import { TaskGrid } from '@/components/hub/TaskGrid';
 import { ThemeBrand, hasOwnScenery } from '@/components/theme/ThemeDecor';
 import { PathModal } from '@/components/hub/PathModal';
 import { buildCatalog, filterCatalog, type CatalogEntry } from '@/components/hub/catalog';
-import { getGalaxy } from '@/core/game/galaxies';
+import { galaxyKey, getGalaxy } from '@/core/game/galaxies';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/child/store/useGameStore';
@@ -25,7 +27,8 @@ import styles from './HubPage.module.css';
 
 /** The adventure "shop window": profile, galaxy picker, planets and path. */
 export function HubPage() {
-  usePageMeta({ title: 'Обери планету' });
+  const t = useT();
+  usePageMeta({ title: t('hub.title') });
   const navigate = useNavigate();
   const theme = useActiveTheme();
   const profile = useGameStore((s) => s.profile);
@@ -36,8 +39,9 @@ export function HubPage() {
   const setGalaxyId = useHubState((s) => s.setGalaxy);
   const stars = useHubState((s) => s.stars);
   const setStars = useHubState((s) => s.setStars);
-  const chosenGroup = useHubState((s) => s.groups[galaxyId] ?? null);
-  const setGroup = useHubState((s) => s.setGroup);
+  const chosenGroups = useHubState((s) => s.groups[galaxyId]);
+  const setGroups = useHubState((s) => s.setGroups);
+  const hiddenGames = useGameStore((s) => s.settings.hiddenGames);
   const [pathEntry, setPathEntry] = useState<CatalogEntry | null>(null);
 
   // Back from a game: bring its card into view (the cards fly in first). The
@@ -56,24 +60,27 @@ export function HubPage() {
   }, [focusGame]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const tips = useMemo(() => hubTips(), []);
-  const catalog = useMemo(() => buildCatalog(), []);
+  const lang = useLang();
+  const catalog = useMemo(() => buildCatalog(lang), [lang]);
   const galaxy = getGalaxy(galaxyId);
-  // "Planets" = the galaxy's adventures (module sub-categories).
-  const galaxyPlanets = useMemo(
-    () => (galaxy.moduleId ? filterCatalog(catalog, { subjectId: galaxy.moduleId }) : []),
-    [catalog, galaxy.moduleId],
-  );
-  // A galaxy whose games come in sets (languages) can be narrowed to one of
-  // them. A remembered set that no longer exists simply shows everything.
+  // "Planets" = the galaxy's adventures (module sub-categories) — without the
+  // games the parent has put away for this child.
+  const galaxyPlanets = useMemo(() => {
+    if (!galaxy.moduleId) return [];
+    const hidden = new Set(hiddenGames);
+    return filterCatalog(catalog, { subjectId: galaxy.moduleId }).filter(({ module, sub }) => !hidden.has(pathKey(module.id, sub.id)));
+  }, [catalog, galaxy.moduleId, hiddenGames]);
+  // A galaxy whose games come in sets (languages) can be narrowed to some of
+  // them. A remembered set that no longer exists is simply not counted.
   const groups = useMemo(() => {
     const seen = new Map<string, GameGroup>();
     for (const { sub } of galaxyPlanets) if (sub.group && !seen.has(sub.group.id)) seen.set(sub.group.id, sub.group);
     return seen.size >= 2 ? [...seen.values()] : [];
   }, [galaxyPlanets]);
-  const groupId = groups.some((g) => g.id === chosenGroup) ? chosenGroup : null;
+  const groupIds = useMemo(() => (Array.isArray(chosenGroups) ? chosenGroups.filter((id) => groups.some((g) => g.id === id)) : []), [chosenGroups, groups]);
   const allPlanets = useMemo(
-    () => (groupId ? galaxyPlanets.filter((entry) => entry.sub.group?.id === groupId) : galaxyPlanets),
-    [galaxyPlanets, groupId],
+    () => (groupIds.length > 0 ? galaxyPlanets.filter((entry) => entry.sub.group && groupIds.includes(entry.sub.group.id)) : galaxyPlanets),
+    [galaxyPlanets, groupIds],
   );
   // Star filter SORTS, it never hides: games of the chosen level come first,
   // the rest follow dimmed (still playable). A game spanning ★–★★★ matches
@@ -120,7 +127,7 @@ export function HubPage() {
           {theme.mascot.emoji}
         </motion.span>
         <p className={styles.heroSub}>
-          {showText ? `Привіт, ${profile.name}! Обери планету` : 'Обери планету'}
+          {showText ? t('hub.hello', { name: profile.name }) : t('hub.title')}
         </p>
       </motion.header>
 
@@ -138,14 +145,14 @@ export function HubPage() {
           >
             {galaxy.icon}
           </motion.span>
-          <h2 className={styles.comingSoonTitle}>Галактика «{galaxy.name}»</h2>
-          <p className={styles.comingSoonText}>Незабаром тут з'являться планети! 🚀</p>
+          <h2 className={styles.comingSoonTitle}>{t('hub.galaxyTitle', { name: t(galaxyKey(galaxy.id)) })}</h2>
+          <p className={styles.comingSoonText}>{t('hub.galaxySoon')}</p>
         </motion.div>
       ) : (
         <>
         {/* Small and to the right: the first game should start mid-screen, not below a wall of filters. */}
         <div className={styles.filters}>
-          {groups.length > 0 && <GroupFilter groups={groups} value={groupId} onChange={(id) => setGroup(galaxyId, id)} />}
+          {groups.length > 0 && <GroupFilter groups={groups} value={groupIds} onChange={(ids) => setGroups(galaxyId, ids)} />}
           <div data-tip="stars">
             <StarFilter value={stars} onChange={setStars} />
           </div>

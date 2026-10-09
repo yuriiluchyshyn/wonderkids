@@ -1,6 +1,6 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { ComponentType } from 'react';
-import { spokenPrompt, type GameViewProps } from '@/core/game/kernel/types';
+import { saidOf, spokenPrompt, type GameViewProps } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { PhysicsScaleLayout } from './PhysicsScaleLayout';
 import { CashTrayLayout } from './CashTrayLayout';
@@ -53,7 +53,7 @@ export function TemplateGameView(props: GameViewProps) {
       {/* The written task, with its tap-to-hear speaker (PRD v4.0 §2.4). */}
       <p className={styles.prompt}>
         <span>{props.task.prompt}</span>
-        <SpeakButton text={spokenPrompt(props.task)} size="md" />
+        <SpeakButton text={spokenPrompt(saidOf(props.task))} size="md" lang={saidOf(props.task).lang} />
       </p>
       <Layout {...props} payload={payload} />
     </div>

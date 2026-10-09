@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -25,10 +26,10 @@ const DECOR = [
  * This is the default login — the home page lands here.
  */
 export function ChildLoginPage() {
+  const t = useT();
   usePageMeta({
-    title: 'Вхід для дітей',
-    description:
-      'Вхід у Pulsar Kids для дітей: введи свій нік і PIN, який дали батьки, — і вирушай у пригоду з математикою, географією та історією.',
+    title: t('childLogin.title'),
+    description: t('childLogin.description'),
     index: true,
   });
   const navigate = useNavigate();
@@ -76,12 +77,12 @@ export function ChildLoginPage() {
         className={styles.parentCorner}
         whileTap={{ scale: 0.94 }}
         onClick={() => navigate('/parent-login')}
-        aria-label="Вхід для батьків"
+        aria-label={t('childLogin.parents')}
       >
         <span className={`${styles.parentCornerIcon} emoji`} aria-hidden>
           👨‍👩‍👧
         </span>
-        <span className={styles.parentCornerText}>Вхід для батьків</span>
+        <span className={styles.parentCornerText}>{t('childLogin.parents')}</span>
       </motion.button>
 
       <div className={styles.card}>
@@ -92,11 +93,11 @@ export function ChildLoginPage() {
         </div>
 
         <h1 className={styles.title}>Pulsar Kids</h1>
-        <p className={styles.sub}>Привіт! Введи свій нік і PIN</p>
+        <p className={styles.sub}>{t('childLogin.hello')}</p>
 
         <form className={styles.form} onSubmit={submit}>
           <label className={styles.label} htmlFor="identifier">
-            Нік
+            {t('childLogin.nick')}
           </label>
           <input
             id="identifier"
@@ -105,13 +106,13 @@ export function ChildLoginPage() {
             autoCapitalize="none"
             autoCorrect="off"
             autoFocus
-            placeholder="напр. marko_speed"
+            placeholder={t('childLogin.nickPlaceholder')}
             value={identifier}
             onChange={(e) => {
               setIdentifier(e.target.value);
               if (error) clearError();
             }}
-            aria-label="Нік"
+            aria-label={t('childLogin.nick')}
           />
 
           <label className={styles.label} htmlFor="pin">
@@ -137,11 +138,11 @@ export function ChildLoginPage() {
           {error && <p className={styles.error}>{error}</p>}
 
           <button className={styles.submit} type="submit" disabled={pending}>
-            {pending ? 'Заходимо…' : 'Грати!'}
+            {pending ? t('childLogin.pending') : t('childLogin.submit')}
           </button>
         </form>
 
-        <p className={styles.hint}>Немає акаунта? Попроси батьків створити тобі профіль 👨‍👩‍👧</p>
+        <p className={styles.hint}>{t('childLogin.noAccount')}</p>
       </div>
     </div>
   );

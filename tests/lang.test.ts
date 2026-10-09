@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { adj, agree, clause, conjugate, counted, inflect, list, noun, phrase, verb } from '../src/core/lang/uk.ts';
+import { adj, agree, clause, conjugate, counted, inflect, list, noun, phrase, verb } from '../src/core/lang/uk/index.ts';
 
 test('nouns decline by rule', () => {
   const brick = noun('цеглинка', 'f');
@@ -64,7 +64,7 @@ test('phrases and clauses', () => {
 });
 
 test('lifeless things in the accusative', async () => {
-  const { accusative, from } = await import('../src/core/lang/uk.ts');
+  const { accusative, from } = await import('../src/core/lang/uk/index.ts');
   assert.equal(accusative('зубна щітка'), 'зубну щітку');
   assert.equal(accusative('кришечка від пляшки'), 'кришечку від пляшки');
   assert.equal(accusative('Бранденбурзькі ворота'), 'Бранденбурзькі ворота');
@@ -75,7 +75,7 @@ test('lifeless things in the accusative', async () => {
 });
 
 test('numbers are said as words in the gender and case the sentence asks for', async () => {
-  const { numberWords, num, say, written, spoken, hourAt, letterName } = await import('../src/core/lang/numbers.ts');
+  const { numberWords, num, say, written, spoken, hourAt, letterName } = await import('../src/core/lang/uk/index.ts');
   assert.equal(numberWords(2, 'f'), 'дві');
   assert.equal(numberWords(2, 'm'), 'два');
   assert.equal(numberWords(1, 'n'), 'одне');
@@ -98,7 +98,7 @@ test('numbers are said as words in the gender and case the sentence asks for', a
 });
 
 test('a plain text with digits is read out in words, by the words around each number', async () => {
-  const { voiced, ordinalWords, num } = await import('../src/core/lang/numbers.ts');
+  const { voiced, ordinalWords, num } = await import('../src/core/lang/uk/index.ts');
   assert.equal(ordinalWords(1863, 'gen'), 'тисяча вісімсот шістдесят третього');
   assert.equal(ordinalWords(2000, 'gen'), 'двохтисячного');
   assert.equal(ordinalWords(2011, 'gen'), 'дві тисячі одинадцятого');
@@ -127,4 +127,127 @@ test('a plain text with digits is read out in words, by the words around each nu
   // What the author marked is said as marked.
   says(`Скільки ${num(2, 'n')} та ${num(2, 'f')}?`, 'Скільки два та дві?');
   says('без чисел', 'без чисел');
+});
+
+// ---- English -------------------------------------------------------------------
+
+test('English numbers, ordinals and years in words', async () => {
+  const { numberWords, ordinalWords, yearWords, num, ord, year } = await import('../src/core/lang/en/index.ts');
+  const { written, spoken } = await import('../src/core/lang/marks.ts');
+  assert.equal(numberWords(0), 'zero');
+  assert.equal(numberWords(21), 'twenty-one');
+  assert.equal(numberWords(105), 'one hundred five');
+  assert.equal(numberWords(1204), 'one thousand two hundred four');
+  assert.equal(numberWords(1_000_000), 'one million');
+  assert.equal(ordinalWords(1), 'first');
+  assert.equal(ordinalWords(12), 'twelfth');
+  assert.equal(ordinalWords(20), 'twentieth');
+  assert.equal(ordinalWords(22), 'twenty-second');
+  assert.equal(ordinalWords(100), 'one hundredth');
+  assert.equal(yearWords(1846), 'eighteen forty-six');
+  assert.equal(yearWords(1900), 'nineteen hundred');
+  assert.equal(yearWords(1905), 'nineteen oh five');
+  assert.equal(yearWords(2000), 'two thousand');
+  assert.equal(yearWords(2005), 'two thousand five');
+  assert.equal(yearWords(2026), 'twenty twenty-six');
+  assert.equal(yearWords(988), 'nine eighty-eight');
+  const text = `The ${ord(3)} planet has ${num(1)} moon since ${year(1846)}.`;
+  assert.equal(written(text), 'The 3rd planet has 1 moon since 1846.');
+  assert.equal(spoken(text), 'The third planet has one moon since eighteen forty-six.');
+});
+
+test('an English text is read aloud as a person would read it', async () => {
+  const { voiced } = await import('../src/core/lang/index.ts');
+  const en = (text: string) => voiced(text, 'en');
+  assert.equal(en('I have 2 cats and 1 dog.'), 'I have two cats and one dog.');
+  assert.equal(en('Wake up at 7:00.'), 'Wake up at seven o’clock.');
+  assert.equal(en('Bed is at 9:05 p.m.'), 'Bed is at nine oh five p.m.');
+  assert.equal(en('Tea is at 15:30.'), 'Tea is at three thirty p.m.');
+  assert.equal(en('Neptune was found in 1846.'), 'Neptune was found in eighteen forty-six.');
+  assert.equal(en('From 1914 to 1918.'), 'From nineteen fourteen to nineteen eighteen.');
+  assert.equal(en('It takes about 1,500 steps, in 2000 years.'), 'It takes about one thousand five hundred steps, in two thousand years.');
+  assert.equal(en('Rome: 753 BC.'), 'Rome: seven fifty-three BC.');
+  assert.equal(en('The 1990s.'), 'The nineteen nineties.');
+  assert.equal(en('On 24 August 1991.'), 'On the twenty-fourth of August nineteen ninety-one.');
+  assert.equal(en('August 24, 1991'), 'August twenty-fourth, nineteen ninety-one');
+  assert.equal(en('The 3rd planet.'), 'The third planet.');
+  assert.equal(en('Henry VIII and Elizabeth I.'), 'Henry the Eighth and Elizabeth the First.');
+  assert.equal(en('Then I ran. World War II.'), 'Then I ran. World War Two.');
+  assert.equal(en('It costs $5.'), 'It costs five dollars.');
+  assert.equal(en('That is 50% and 3.14.'), 'That is fifty percent and three point one four.');
+  assert.equal(en('The letter A. From A to Z.'), 'The letter ay. From ay to zee.');
+  assert.equal(en('It starts with B.'), 'It starts with bee.');
+  // The article and the pronoun are not letters being named.
+  assert.equal(en('I am a cat. A dog is here.'), 'I am a cat. A dog is here.');
+  assert.equal(en('It starts with a bang.'), 'It starts with a bang.');
+});
+
+// ---- Polish --------------------------------------------------------------------
+
+test('Polish numbers answer to gender, case and the kind of noun', async () => {
+  const { numberWords, collectiveWords, ordinalWords, num, year } = await import('../src/core/lang/pl/index.ts');
+  const { written, spoken } = await import('../src/core/lang/marks.ts');
+  assert.equal(numberWords(1, 'f'), 'jedna');
+  assert.equal(numberWords(1, 'n'), 'jedno');
+  assert.equal(numberWords(2, 'f'), 'dwie');
+  assert.equal(numberWords(2, 'mp'), 'dwaj');
+  assert.equal(numberWords(5, 'mp'), 'pięciu');
+  assert.equal(numberWords(22, 'f'), 'dwadzieścia dwie');
+  assert.equal(numberWords(22, 'mp'), 'dwudziestu dwóch');
+  assert.equal(numberWords(21, 'f'), 'dwadzieścia jeden');
+  assert.equal(numberWords(2, 'm', 'gen'), 'dwóch');
+  assert.equal(numberWords(2, 'f', 'ins'), 'dwiema');
+  assert.equal(numberWords(5, 'm', 'ins'), 'pięcioma');
+  assert.equal(numberWords(20, 'f', 'gen'), 'dwudziestu');
+  assert.equal(numberWords(500, 'm', 'gen'), 'pięciuset');
+  assert.equal(numberWords(1000), 'tysiąc');
+  assert.equal(numberWords(2000), 'dwa tysiące');
+  assert.equal(numberWords(5000), 'pięć tysięcy');
+  assert.equal(numberWords(21_000), 'dwadzieścia jeden tysięcy');
+  assert.equal(numberWords(1_000_000), 'milion');
+  assert.equal(collectiveWords(2), 'dwoje');
+  assert.equal(collectiveWords(5), 'pięcioro');
+  assert.equal(collectiveWords(3, 'gen'), 'trojga');
+  assert.equal(collectiveWords(22), 'dwadzieścia dwoje');
+  assert.equal(ordinalWords(3, 'f'), 'trzecia');
+  assert.equal(ordinalWords(2, 'f-acc'), 'drugą');
+  assert.equal(ordinalWords(24, 'gen'), 'dwudziestego czwartego');
+  assert.equal(ordinalWords(1991, 'loc'), 'tysiąc dziewięćset dziewięćdziesiątym pierwszym');
+  assert.equal(ordinalWords(2000), 'dwutysięczny');
+  const text = `Od ${year(1846)} roku znamy ${num(8, 'f')} planet.`;
+  assert.equal(written(text), 'Od 1846 roku znamy 8 planet.');
+  assert.equal(spoken(text), 'Od tysiąc osiemset czterdziestego szóstego roku znamy osiem planet.');
+});
+
+test('a Polish text is read aloud as a person would read it', async () => {
+  const { voiced } = await import('../src/core/lang/index.ts');
+  const pl = (text: string) => voiced(text, 'pl');
+  assert.equal(pl('Mam 2 gwiazdy, 1 jabłko, 2 koty i 1 książkę.'), 'Mam dwie gwiazdy, jedno jabłko, dwa koty i jedną książkę.');
+  assert.equal(pl('Grają 2 chłopcy, a 5 chłopców śpi.'), 'Grają dwaj chłopcy, a pięciu chłopców śpi.');
+  assert.equal(pl('Jest tu 5 dzieci, do 3 dzieci.'), 'Jest tu pięcioro dzieci, do trojga dzieci.');
+  assert.equal(pl('Wstaję o 7:00.'), 'Wstaję o siódmej.');
+  assert.equal(pl('Lekcje od 8:30 do 15:05.'), 'Lekcje od ósmej trzydzieści do piętnastej zero pięć.');
+  assert.equal(pl('Jest 12:00, budzik na 6:45.'), 'Jest dwunasta, budzik na szóstą czterdzieści pięć.');
+  assert.equal(pl('Neptuna odkryto w 1846 roku.'), 'Neptuna odkryto w tysiąc osiemset czterdziestym szóstym roku.');
+  assert.equal(pl('Stało się to 24 sierpnia 1991 roku.'), 'Stało się to dwudziestego czwartego sierpnia tysiąc dziewięćset dziewięćdziesiątego pierwszego roku.');
+  assert.equal(pl('Rok 2000 i rok 1410.'), 'Rok dwutysięczny i rok tysiąc czterysta dziesiąty.');
+  assert.equal(pl('Od 1914 do 1918.'), 'Od tysiąc dziewięćset czternastego do tysiąc dziewięćset osiemnastego.');
+  assert.equal(pl('W XX wieku rządził Jan III Sobieski.'), 'W dwudziestym wieku rządził Jan Trzeci Sobieski.');
+  assert.equal(pl('Do 20 godzin, 3 z 4.'), 'Do dwudziestu godzin, trzy z czterech.');
+  assert.equal(pl('Między 5 a 10, z 2 kotami.'), 'Między pięcioma a dziesięcioma, z dwoma kotami.');
+  assert.equal(pl('W 5 miastach, w 5 minut.'), 'W pięciu miastach, w pięć minut.');
+  assert.equal(pl('To 3,5 kg i 50%.'), 'To trzy przecinek pięć kg i pięćdziesiąt procent.');
+  assert.equal(pl('Na literę „W”. Od A do Z.'), 'Na literę „wu”. Od a do zet.');
+  // A preposition that opens a sentence is not a letter being named.
+  assert.equal(pl('W lesie rośnie 1 drzewo i w nim mieszka sowa.'), 'W lesie rośnie jedno drzewo i w nim mieszka sowa.');
+});
+
+test('every language makes a text ready for its own voice', async () => {
+  const { LANGUAGES, langOfCountry, isLang } = await import('../src/core/lang/index.ts');
+  assert.equal(LANGUAGES.uk.voiced('2 машинки'), 'дві машинки');
+  assert.equal(LANGUAGES.en.voiced('2 cars'), 'two cars');
+  assert.equal(LANGUAGES.pl.voiced('2 gwiazdy'), 'dwie gwiazdy');
+  assert.deepEqual([LANGUAGES.uk.letterName('ж'), LANGUAGES.en.letterName('w'), LANGUAGES.pl.letterName('ż')], ['же', 'double-you', 'żet']);
+  assert.deepEqual([langOfCountry('UA'), langOfCountry('pl'), langOfCountry('DE'), langOfCountry(null)], ['uk', 'pl', 'en', 'en']);
+  assert.equal(isLang('pl') && !isLang('de'), true);
 });

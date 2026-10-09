@@ -1,3 +1,6 @@
+import { useCurrency, useGameLang, useVoiceLang } from '@/core/i18n';
+import { contentLangs, inLanguages, type ContentLangs } from '@/core/game/kernel/languages';
+import { DEFAULT_LANG } from '@/core/lang';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import type { LearningModule, TaskInstance } from '@/core/game/kernel/types';
@@ -32,6 +35,8 @@ export interface GameSessionConfig {
 }
 
 export interface GameSession {
+  /** The languages this level is played in: what is shown, what is said. */
+  langs: ContentLangs;
   module: LearningModule | undefined;
   task: TaskInstance | null;
   index: number;
@@ -77,16 +82,21 @@ export function drawCandidates(
   base: { subCategoryId: string; step: number; choicesCount: number; currency?: CurrencyId },
   count: number,
   recall = true,
+  langs: ContentLangs = { shown: DEFAULT_LANG, said: DEFAULT_LANG },
 ): TaskInstance[] {
-  if (module.buildLevel) return module.buildLevel(base, count);
-  const draw = (stepOf: () => number) =>
-    Array.from({ length: count * CANDIDATE_FACTOR }, (_, index) =>
-      module.generateTask({ ...base, step: stepOf(), index }),
-    );
-  const fresh = draw(() => base.step);
-  const earlier = recallSteps(base.step);
-  if (!recall || earlier.length === 0) return fresh;
-  return composeLevel(fresh, draw(() => pick(earlier)), count, taskKey);
+  // Made in the language on the screen, and once more in the voice's when that is another.
+  return inLanguages(langs, (lang) => {
+    const inLang = { ...base, lang };
+    if (module.buildLevel) return module.buildLevel(inLang, count);
+    const draw = (stepOf: () => number) =>
+      Array.from({ length: count * CANDIDATE_FACTOR }, (_, index) =>
+        module.generateTask({ ...inLang, step: stepOf(), index }),
+      );
+    const fresh = draw(() => base.step);
+    const earlier = recallSteps(base.step);
+    if (!recall || earlier.length === 0) return fresh;
+    return composeLevel(fresh, draw(() => pick(earlier)), count, taskKey);
+  });
 }
 
 /**
@@ -99,13 +109,19 @@ export function drawCandidates(
  */
 export function useGameSession(config: GameSessionConfig): GameSession {
   const { moduleId, subCategoryId, step } = config;
-  const module = moduleRegistry.get(moduleId);
+  // The game is played in the language of the child's game, read in the voice's — where its content has them.
+  const gameLang = useGameLang();
+  const voiceLang = useVoiceLang();
+  const offered = moduleRegistry.get(moduleId)?.subCategories.find((sc) => sc.id === subCategoryId);
+  const { shown, said } = contentLangs(offered, gameLang, voiceLang);
+  const langs = useMemo<ContentLangs>(() => ({ shown, said }), [shown, said]);
+  const module = moduleRegistry.get(moduleId, shown);
   const sub = module?.subCategories.find((sc) => sc.id === subCategoryId);
   const maxSteps = sub ? subSteps(sub) : 30;
   const levelSize = sub ? tasksPerLevel(sub) : 0;
   const free = sub ? isFreePlay(sub) : false;
   const gridSize = useGameStore((s) => s.settings.choicesGridSize);
-  const currency = useGameStore((s) => s.settings.currency);
+  const currency = useCurrency();
   const awardArtifacts = useGameStore((s) => s.awardArtifacts);
   const recordTaskComplete = useGameStore((s) => s.recordTaskComplete);
   const advanceStep = useGameStore((s) => s.advanceStep);
@@ -117,9 +133,9 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     const base = { subCategoryId, step, choicesCount: gridSize, currency };
     return new LevelEngine<TaskInstance>({
       steps_count_default: levelSize,
-      tasks: drawCandidates(module, base, levelSize, !free),
+      tasks: drawCandidates(module, base, levelSize, !free, langs),
     });
-  }, [module, subCategoryId, step, gridSize, levelSize, free]);
+  }, [module, subCategoryId, step, gridSize, levelSize, free, langs]);
 
   // The engine is mutable; `tick` re-renders after each transition.
   const [, setTick] = useState(0);
@@ -166,14 +182,14 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   /** Append one question the level does not ask yet. False once capped. */
   const appendFresh = useCallback((): boolean => {
     if (!engine || !module) return false;
-    const base = { subCategoryId, step, choicesCount: gridSize };
+    const base = { subCategoryId, step, choicesCount: gridSize, currency };
     for (let attempt = 0; attempt < 8; attempt += 1) {
-      const extra = module.generateTask({ ...base, index: engine.total + attempt });
+      const [extra] = inLanguages(langs, (lang) => [module.generateTask({ ...base, lang, index: engine.total + attempt })]);
       if (engine.includesKey(taskKey(extra))) continue;
       return engine.extend(extra);
     }
     return false;
-  }, [engine, module, subCategoryId, step, gridSize]);
+  }, [engine, module, subCategoryId, step, gridSize, currency, langs]);
 
   const extendForIdle = useCallback((): boolean => {
     if (!engine || engine.isFinished || advancingRef.current) return false;
@@ -250,6 +266,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
 
   return {
     module,
+    langs,
     // Keep the last task on screen while the finish celebration plays.
     task: task ?? engine?.lastTask ?? null,
     index: engine?.position ?? 0,

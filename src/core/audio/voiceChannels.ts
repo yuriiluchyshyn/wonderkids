@@ -1,21 +1,21 @@
 /**
  * Named voice "channels". Each is independently mutable (persisted) so a parent
  * can silence, say, the equation reading while keeping selection prompts. Every
- * voiced section in the UI maps to one of these.
+ * voiced section in the UI maps to one of these. A channel's label is the
+ * text `voiceChannel.<id>` of the app dictionary.
  */
 export type VoiceChannel = 'selections' | 'taskPrompt' | 'taskIntro' | 'hint';
 
 export interface VoiceChannelMeta {
   id: VoiceChannel;
-  label: string;
   icon: string;
 }
 
 export const VOICE_CHANNELS: VoiceChannelMeta[] = [
-  { id: 'selections', label: 'Озвучення вибору (вік, предмет, складність)', icon: '👆' },
-  { id: 'taskPrompt', label: 'Читання завдання (напр. «шість плюс один»)', icon: '🔢' },
-  { id: 'taskIntro', label: 'Пояснення на початку завдання', icon: '📖' },
-  { id: 'hint', label: 'Голосова підказка-пояснення при помилці', icon: '🧚' },
+  { id: 'selections', icon: '👆' },
+  { id: 'taskPrompt', icon: '🔢' },
+  { id: 'taskIntro', icon: '📖' },
+  { id: 'hint', icon: '🧚' },
 ];
 
 export type VoiceChannelState = Record<VoiceChannel, boolean>;

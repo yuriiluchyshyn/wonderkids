@@ -1,41 +1,41 @@
 <!doctype html>
-<html lang="uk">
+<html lang="{{@lang}}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Pulsar Kids — навчальні ігри для дітей 4–10 років українською</title>
+    <title>{{meta.title}}</title>
     <meta
       name="description"
-      content="Pulsar Kids — ігрова платформа, де діти 4–10 років вчать математику, географію, історію та екологію українською. Без реклами, сліз і таймерів: помилка — це підказка, а час за екраном контролюють батьки."
+      content="{{meta.description}}"
     />
-    <meta name="keywords" content="навчальні ігри для дітей, ігри українською, математика для дітей, прапори світу, дроби, розвивальні ігри, екранний час, Pulsar Kids, Пульсар Кідс, pulsarkids" />
+    <meta name="keywords" content="{{meta.keywords}}" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#1e0a45" />
-    <link rel="canonical" href="__SITE_URL__/" />
-    <link rel="alternate" hreflang="uk" href="__SITE_URL__/" />
-    <link rel="alternate" hreflang="x-default" href="__SITE_URL__/" />
+    <link rel="canonical" href="__SITE_URL__/{{@path}}" />
+    {{@alternates}}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Pulsar Kids" />
-    <meta property="og:locale" content="uk_UA" />
-    <meta property="og:url" content="__SITE_URL__/" />
-    <meta property="og:title" content="Pulsar Kids — навчання, схоже на пригоду" />
+    <meta property="og:locale" content="{{@ogLocale}}" />
+    {{@ogAlternates}}
+    <meta property="og:url" content="__SITE_URL__/{{@path}}" />
+    <meta property="og:title" content="{{meta.ogTitle}}" />
     <meta
       property="og:description"
-      content="Математика, мова, англійська, логіка, географія, астрономія, історія й природа у 45 іграх українською. Дитина грає і будує власну планету, а батьки керують часом за екраном."
+      content="{{meta.ogDescription}}"
     />
     <meta property="og:image" content="__SITE_URL__/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Pulsar Kids — навчальні ігри для дітей" />
+    <meta property="og:image:alt" content="{{meta.ogImageAlt}}" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Pulsar Kids — навчання, схоже на пригоду" />
+    <meta name="twitter:title" content="{{meta.ogTitle}}" />
     <meta
       name="twitter:description"
-      content="45 навчальних ігор українською для дітей 4–10 років. Без реклами, сліз і таймерів."
+      content="{{meta.twitterDescription}}"
     />
     <meta name="twitter:image" content="__SITE_URL__/og-image.png" />
 
@@ -52,26 +52,26 @@
         "@graph": [
           {
             "@type": "WebSite",
-            "@id": "__SITE_URL__/#website",
-            "url": "__SITE_URL__/",
+            "@id": "__SITE_URL__/{{@path}}#website",
+            "url": "__SITE_URL__/{{@path}}",
             "name": "Pulsar Kids",
             "alternateName": ["Пульсар Кідс", "PulsarKids"],
-            "inLanguage": "uk",
-            "description": "Навчальні ігри для дітей 4–10 років українською: математика, мова, англійська, логіка, географія, астрономія, історія, природа, екологія, творчість."
+            "inLanguage": "{{@lang}}",
+            "description": "{{ld.siteDescription}}"
           },
           {
             "@type": "WebApplication",
-            "@id": "__SITE_URL__/#app",
+            "@id": "__SITE_URL__/{{@path}}#app",
             "name": "Pulsar Kids",
             "url": "__PLAY_URL__/",
             "applicationCategory": "EducationalApplication",
             "operatingSystem": "Web",
-            "browserRequirements": "Сучасний браузер на телефоні, планшеті або комп’ютері",
-            "inLanguage": "uk",
+            "browserRequirements": "{{ld.browser}}",
+            "inLanguage": "{{@lang}}",
             "isFamilyFriendly": true,
-            "audience": { "@type": "EducationalAudience", "educationalRole": "student", "audienceType": "Діти 4–10 років" },
-            "educationalUse": "Вправи, самостійне навчання",
-            "about": ["Математика", "Географія", "Історія", "Екологія"],
+            "audience": { "@type": "EducationalAudience", "educationalRole": "student", "audienceType": "{{ld.audience}}" },
+            "educationalUse": "{{ld.use}}",
+            "about": ["{{ld.about.math}}", "{{ld.about.geography}}", "{{ld.about.history}}", "{{ld.about.ecology}}"],
             "image": "__SITE_URL__/og-image.png"
           }
         ]
@@ -590,13 +590,87 @@
         margin: 0 8px;
       }
 
+      /* ---- the language of the page: a small menu in the bar, the full list in the footer ---- */
+      .langs {
+        position: relative;
+      }
+      .langs summary {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        min-height: 40px;
+        padding: 0 11px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--soft);
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.04em;
+        list-style: none;
+        cursor: pointer;
+        user-select: none;
+      }
+      .langs summary::-webkit-details-marker {
+        display: none;
+      }
+      .langs[open] summary,
+      .langs summary:hover {
+        color: var(--ink);
+        border-color: var(--accent);
+      }
+      .langs ul {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        z-index: 5;
+        min-width: 170px;
+        margin: 0;
+        padding: 6px;
+        list-style: none;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: #2a1263;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+      }
+      .langs a,
+      .langs-row a {
+        color: var(--soft);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .langs a {
+        display: block;
+        padding: 11px 12px;
+        border-radius: 11px;
+      }
+      .langs a:hover,
+      .langs-row a:hover {
+        color: var(--accent);
+      }
+      .langs a[aria-current],
+      .langs-row a[aria-current] {
+        color: var(--ink);
+      }
+      .langs a[aria-current] {
+        background: rgba(124, 108, 255, 0.28);
+      }
+      .langs-row {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 4px 6px;
+        margin: 14px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
       /* ---- the letter form ---- */
       .letter-open {
         margin-top: 22px;
         border: 0;
         cursor: pointer;
       }
-      /* The form lives in a window of its own, opened by «Написати нам». */
+      /* The form lives in a window of its own, opened by «{{nav.write}}». */
       .letter-modal {
         width: min(100% - 24px, 720px);
         max-height: calc(100dvh - 24px);
@@ -984,38 +1058,43 @@
     <div class="sky" aria-hidden="true"><i></i><i></i></div>
     <header>
       <div class="wrap bar">
-        <a class="logo" href="/" aria-label="Pulsar Kids — на головну">
+        <a class="logo" href="/{{@path}}" aria-label="{{header.logoLabel}}">
           <span class="emoji" aria-hidden="true">🪐</span> Pulsar Kids
         </a>
-        <nav aria-label="Розділи сторінки">
-          <a href="#about">Для чого</a>
-          <a href="#games">Ігри</a>
-          <a href="#world">Планета</a>
-          <a href="#parents">Батькам</a>
-          <a href="#feedback" data-letter-open>Написати нам</a>
+        <nav aria-label="{{header.navLabel}}">
+          <a href="#about">{{nav.about}}</a>
+          <a href="#games">{{nav.games}}</a>
+          <a href="#world">{{nav.world}}</a>
+          <a href="#parents">{{nav.parents}}</a>
+          <a href="#feedback" data-letter-open>{{nav.write}}</a>
         </nav>
-        <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">Батькам</a>
-        <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/">Грати</a>
+        <details class="langs">
+          <summary aria-label="{{lang.label}}"><span class="emoji" aria-hidden="true">🌐</span> {{@langShort}}</summary>
+          <ul>
+            {{@langLinks}}
+          </ul>
+        </details>
+        <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">{{nav.parents}}</a>
+        <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/">{{cta.play}}</a>
       </div>
     </header>
 
     <main>
       <div class="wrap hero">
         <div>
-          <span class="eyebrow">Навчальні ігри українською · 4–10 років</span>
-          <h1>Навчання, схоже на <span>пригоду</span></h1>
+          <span class="eyebrow">{{hero.eyebrow}}</span>
+          <h1>{{{hero.title}}}</h1>
           <p class="lead">
-            Pulsar Kids — це ігрова панель, де дитина вчить математику, географію, історію та екологію, граючи.
-            Без реклами, без програшів і без таймерів, що лякають. А батьки спокійно керують часом за екраном.
+            {{hero.lead}}
           </p>
           <div class="cta">
-            <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> Грати</a>
-            <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> Кабінет батьків</a>
+            <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> {{cta.play}}</a>
+            <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> {{cta.parents}}</a>
           </div>
-          <p class="cta-note">Спершу батьки створюють профіль дитини в кабінеті, а тоді дитина заходить у гру за ніком і PIN-кодом.</p>
+          <p class="cta-note">{{hero.note}}</p>
         </div>
 
-        <div class="system" role="img" aria-label="Сонячна система: Сонце і вісім планет, якими мандрує дитина">
+        <div class="system" role="img" aria-label="{{hero.systemLabel}}">
           <div class="sun"></div>
           <div class="orbit" style="--d: 25%; --t: 12s; --from: -3s"><i class="mercury"></i></div>
           <div class="orbit" style="--d: 33%; --t: 17s; --from: -21s"><i class="venus"></i></div>
@@ -1030,41 +1109,36 @@
 
       <section id="about">
         <div class="wrap">
-          <h2>Для чого Pulsar Kids</h2>
+          <h2>{{about.title}}</h2>
           <p class="sub">
-            Наша мета — щоб дитина хотіла вчитися сама. Більшість навчальних застосунків карають за помилку: забирають
-            «життя», вмикають таймер, показують червоний хрестик. Від цього дитина боїться помилятися й кидає гру. Ми
-            зробили навпаки.
+            {{about.sub}}
           </p>
           <div class="grid">
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🤗</div>
-              <h3>Помилка — це підказка</h3>
+              <h3>{{about.hint.title}}</h3>
               <p>
-                Немає програшу. Після помилки з’являється наочна підказка, а завдання, яке не вдалося, повернеться ще раз
-                наприкінці рівня — щоб закріпити, а не покарати.
+                {{about.hint.text}}
               </p>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🔊</div>
-              <h3>Грати можна, ще не читаючи</h3>
+              <h3>{{about.voice.title}}</h3>
               <p>
-                Завдання й відповіді озвучуються українською. Біля тексту є кнопка-динамік. Коли дитина вже читає, батьки
-                можуть вимкнути озвучення.
+                {{about.voice.text}}
               </p>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🪜</div>
-              <h3>Складність росте разом із дитиною</h3>
+              <h3>{{about.steps.title}}</h3>
               <p>
-                Кожна гра — це шлях зі сходинок: наступна трохи складніша за попередню. Зірочки на картці підкажуть, для
-                якого віку гра.
+                {{about.steps.text}}
               </p>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🛡️</div>
-              <h3>Без реклами</h3>
-              <p>У грі немає сторонньої реклами та покупок. Дитина бачить лише завдання, свій світ і свої досягнення.</p>
+              <h3>{{about.ads.title}}</h3>
+              <p>{{about.ads.text}}</p>
             </article>
           </div>
         </div>
@@ -1072,114 +1146,114 @@
 
       <section id="games">
         <div class="wrap">
-          <h2>Що можна робити: 45 ігор у дев’яти галактиках</h2>
-          <p class="sub">Предмети тут називаються галактиками, а ігри — планетами. Ось що на них чекає.</p>
+          <h2>{{games.title}}</h2>
+          <p class="sub">{{games.sub}}</p>
           <div class="grid">
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🧮</div>
-              <h3>Математика</h3>
+              <h3>{{games.math.title}}</h3>
               <ul>
-                <li>Додавання, віднімання, множення, ділення</li>
-                <li>Дроби на піці й тортах та дії з дробами</li>
-                <li>Математичні ваги й числовий лабіринт</li>
-                <li>Танграм, площа і периметр</li>
-                <li>Магазин: рахуємо гроші та решту</li>
-                <li>Більше, менше, дорівнює і годинник зі стрілками</li>
-                <li>Задачі-історії: магазин, друзі, дорога</li>
+                <li>{{games.math.1}}</li>
+                <li>{{games.math.2}}</li>
+                <li>{{games.math.3}}</li>
+                <li>{{games.math.4}}</li>
+                <li>{{games.math.5}}</li>
+                <li>{{games.math.6}}</li>
+                <li>{{games.math.7}}</li>
               </ul>
-              <span class="tag">14 ігор</span>
+              <span class="tag">{{games.math.tag}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🔤</div>
-              <h3>Мова</h3>
+              <h3>{{games.language.title}}</h3>
               <ul>
-                <li>Абетка: постав літери на свої місця в таблиці</li>
-                <li>Бульбашки з літерами, ланцюжок слів, рими та речення</li>
-                <li>Ті самі п’ять ігор англійською — з англійською озвучкою</li>
-                <li>50 сходинок у кожній грі</li>
+                <li>{{games.language.1}}</li>
+                <li>{{games.language.2}}</li>
+                <li>{{games.language.3}}</li>
+                <li>{{games.language.4}}</li>
               </ul>
-              <span class="tag">10 ігор</span>
+              <span class="tag">{{games.language.tag}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🧩</div>
-              <h3>Логіка</h3>
+              <h3>{{games.logic.title}}</h3>
               <ul>
-                <li>Ритм і візерунки: що буде далі</li>
-                <li>Тіньове лото: знайди тінь предмета</li>
-                <li>Дзеркальна симетрія: друга половинка малюнка</li>
-                <li>Логічні задачі: 150 видів загадок, де треба міркувати</li>
+                <li>{{games.logic.1}}</li>
+                <li>{{games.logic.2}}</li>
+                <li>{{games.logic.3}}</li>
+                <li>{{games.logic.4}}</li>
               </ul>
-              <span class="tag">4 гри</span>
+              <span class="tag">{{games.logic.tag}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🔭</div>
-              <h3>Астрономія</h3>
+              <h3>{{games.astronomy.title}}</h3>
               <ul>
-                <li>Парад планет: порядок від Сонця, розміри і сто запитань про планети</li>
-                <li>Сузір’я: з’єднуй зорі за числами й абеткою та шукай їх на зоряному небі</li>
+                <li>{{games.astronomy.1}}</li>
+                <li>{{games.astronomy.2}}</li>
               </ul>
-              <span class="tag">2 гри</span>
+              <span class="tag">{{games.twoGames}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🎨</div>
-              <h3>Творчість</h3>
+              <h3>{{games.art.title}}</h3>
               <ul>
-                <li>Змішувач кольорів: з двох фарб — новий колір</li>
+                <li>{{games.art.1}}</li>
               </ul>
-              <span class="tag">1 гра</span>
+              <span class="tag">{{games.oneGame}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🌍</div>
-              <h3>Географія</h3>
+              <h3>{{games.geography.title}}</h3>
               <ul>
-                <li>Прапори всіх країн світу — від найвідоміших</li>
-                <li>Материки: хто де живе</li>
-                <li>Океани на карті світу</li>
-                <li>Природні зони та їхні мешканці</li>
-                <li>Столиці й чому десь день, а десь ніч</li>
+                <li>{{games.geography.1}}</li>
+                <li>{{games.geography.2}}</li>
+                <li>{{games.geography.3}}</li>
+                <li>{{games.geography.4}}</li>
+                <li>{{games.geography.5}}</li>
               </ul>
-              <span class="tag">5 ігор</span>
+              <span class="tag">{{games.geography.tag}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🏛️</div>
-              <h3>Історія</h3>
+              <h3>{{games.history.title}}</h3>
               <ul>
-                <li>«Часова машина»: 100 завдань про те, що було раніше</li>
-                <li>50 динозаврів: чим годувати і як упізнати</li>
-                <li>Видатні постаті світу й України</li>
-                <li>Винаходи світу й України</li>
+                <li>{{games.history.1}}</li>
+                <li>{{games.history.2}}</li>
+                <li>{{games.history.3}}</li>
+                <li>{{games.history.4}}</li>
               </ul>
-              <span class="tag">6 ігор</span>
+              <span class="tag">{{games.history.tag}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">♻️</div>
-              <h3>Екологія</h3>
+              <h3>{{games.ecology.title}}</h3>
               <ul>
-                <li>«Еко-патруль»: сортуємо скло, папір і пластик</li>
-                <li>Дізнаємось, що з них зроблять потім</li>
-                <li>«Чому так?»: повітря, вода, клімат, тварини, енергія</li>
+                <li>{{games.ecology.1}}</li>
+                <li>{{games.ecology.2}}</li>
+                <li>{{games.ecology.3}}</li>
               </ul>
-              <span class="tag">2 гри</span>
+              <span class="tag">{{games.twoGames}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🌿</div>
-              <h3>Природа</h3>
+              <h3>{{games.nature.title}}</h3>
               <ul>
-                <li>Пори року: що коли буває в природі</li>
-                <li>Дванадцять місяців по порядку</li>
+                <li>{{games.nature.1}}</li>
+                <li>{{games.nature.2}}</li>
               </ul>
-              <span class="tag">1 гра</span>
+              <span class="tag">{{games.oneGame}}</span>
             </article>
           </div>
 
           <div class="band" style="margin-top: 26px">
             <div class="numbers">
-              <div><b>45</b><span>навчальних ігор</span></div>
-              <div><b>9</b><span>розділів-галактик</span></div>
-              <div><b>1278</b><span>рівнів у всіх іграх</span></div>
-              <div><b>3</b><span>вікові групи</span></div>
-              <div><b>1</b><span>мова застосунку</span></div>
-              <div><b>10</b><span>тем оформлення</span></div>
+              <div><b>{{numbers.gamesCount}}</b><span>{{numbers.games}}</span></div>
+              <div><b>9</b><span>{{numbers.galaxies}}</span></div>
+              <div><b>{{numbers.levelsCount}}</b><span>{{numbers.levels}}</span></div>
+              <div><b>3</b><span>{{numbers.ages}}</span></div>
+              <div><b>3</b><span>{{numbers.languages}}</span></div>
+              <div><b>10</b><span>{{numbers.themes}}</span></div>
             </div>
           </div>
         </div>
@@ -1187,41 +1261,37 @@
 
       <section id="world">
         <div class="wrap">
-          <h2>Власна планета, яка росте</h2>
+          <h2>{{world.title}}</h2>
           <p class="sub">
-            За кожне завдання дитина отримує кристали. Що з ними робити — вона вирішує сама, і це теж маленький урок.
+            {{world.sub}}
           </p>
           <div class="grid">
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🏗️</div>
-              <h3>Будувати свій світ</h3>
+              <h3>{{world.build.title}}</h3>
               <p>
-                Кристали можна обміняти на будівлі та прикраси для власної планети. Найголовніша — «замок мрії» —
-                відкривається останньою.
+                {{world.build.text}}
               </p>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🎯</div>
-              <h3>Або збирати на сімейну ціль</h3>
+              <h3>{{world.goal.title}}</h3>
               <p>
-                Батьки домовляються з дитиною про справжню нагороду: «збереш 500 кристалів — печемо печиво разом». Витратити
-                зараз чи збирати далі — вибір дитини.
+                {{world.goal.text}}
               </p>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🛰️</div>
-              <h3>Станції знань</h3>
+              <h3>{{world.stations.title}}</h3>
               <p>
-                За кожен новий крок у будь-якій грі дитина отримує ключ знань. Ключами вона відчиняє на своїй планеті
-                станції: обсерваторію, бібліотеку, лабораторію чисел.
+                {{world.stations.text}}
               </p>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🎨</div>
-              <h3>Улюблена тема</h3>
+              <h3>{{world.theme.title}}</h3>
               <p>
-                Єдинороги, космос, динозаври, підводний світ, кубики, ліс, зима… Тема змінює кольори, героя, кристали й те,
-                яке місто виросте на планеті.
+                {{world.theme.text}}
               </p>
             </article>
           </div>
@@ -1230,31 +1300,30 @@
 
       <section id="parents">
         <div class="wrap">
-          <h2>Кабінет батьків</h2>
-          <p class="sub">Окремий вхід для дорослих. Дитина до нього не потрапить — у грі його просто немає.</p>
+          <h2>{{cta.parents}}</h2>
+          <p class="sub">{{parents.sub}}</p>
           <div class="grid">
             <article class="card">
               <div class="icon emoji" aria-hidden="true">⏳</div>
-              <h3>Час за екраном без сліз</h3>
+              <h3>{{parents.time.title}}</h3>
               <p>
-                Ви задаєте тривалість сеансу, перерву й денний ліміт. Дитина бачить не таймер, а пісочні годинники, що
-                поволі зникають. Розпочатий рівень вона завжди дограє, а тоді герой «іде відпочивати».
+                {{parents.time.text}}
               </p>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">👧</div>
-              <h3>До п’яти дітей</h3>
-              <p>У кожної дитини свій профіль, нік і PIN, своя тема, свій прогрес і власні налаштування.</p>
+              <h3>{{parents.children.title}}</h3>
+              <p>{{parents.children.text}}</p>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🎁</div>
-              <h3>Сімейні цілі</h3>
-              <p>Домовтеся про нагороди з реального життя й стежте, як дитина до них наближається.</p>
+              <h3>{{parents.goals.title}}</h3>
+              <p>{{parents.goals.text}}</p>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🔧</div>
-              <h3>Налаштування під дитину</h3>
-              <p>Звук, голос, підписи, кнопки озвучення, кількість варіантів відповіді, сходинка в кожній грі.</p>
+              <h3>{{parents.settings.title}}</h3>
+              <p>{{parents.settings.text}}</p>
             </article>
           </div>
         </div>
@@ -1262,19 +1331,19 @@
 
       <section id="start">
         <div class="wrap">
-          <h2>Як почати</h2>
+          <h2>{{start.title}}</h2>
           <div class="steps">
             <article class="card">
-              <h3>Батьки відкривають кабінет</h3>
-              <p>Увійдіть за електронною поштою і натисніть «Додати дитину».</p>
+              <h3>{{start.open.title}}</h3>
+              <p>{{start.open.text}}</p>
             </article>
             <article class="card">
-              <h3>Задають нік і PIN</h3>
-              <p>Придумайте дитині простий нік і короткий PIN-код, налаштуйте час гри.</p>
+              <h3>{{start.nick.title}}</h3>
+              <p>{{start.nick.text}}</p>
             </article>
             <article class="card">
-              <h3>Дитина заходить і грає</h3>
-              <p>На сторінці гри вона вводить свій нік і PIN, обирає тему та першу планету.</p>
+              <h3>{{start.play.title}}</h3>
+              <p>{{start.play.text}}</p>
             </article>
           </div>
         </div>
@@ -1282,24 +1351,23 @@
 
       <section id="feedback">
         <div class="wrap">
-          <h2>Знайшли помилку чи маєте ідею?</h2>
+          <h2>{{feedback.title}}</h2>
           <p class="sub">
-            Напишіть нам: що пішло не так, що зробити зручнішим або якої гри бракує. Можна додати фото чи коротке
-            відео — так легше зрозуміти, про що мова.
+            {{feedback.sub}}
           </p>
           <button class="btn btn-play letter-open" type="button" data-letter-open>
-            <span class="emoji" aria-hidden="true">✉️</span> Написати нам
+            <span class="emoji" aria-hidden="true">✉️</span> {{nav.write}}
           </button>
         </div>
       </section>
 
       <section class="final">
         <div class="wrap band">
-          <h2>Готові до пригоди?</h2>
-          <p class="sub" style="margin-inline: auto">Оберіть, куди далі.</p>
+          <h2>{{final.title}}</h2>
+          <p class="sub" style="margin-inline: auto">{{final.sub}}</p>
           <div class="cta">
-            <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> Я дитина — грати</a>
-            <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> Я дорослий — у кабінет</a>
+            <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> {{final.child}}</a>
+            <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> {{final.adult}}</a>
           </div>
         </div>
       </section>
@@ -1307,58 +1375,61 @@
 
     <dialog class="letter-modal" id="letter-modal" aria-labelledby="letter-title">
       <div class="letter-head">
-        <h2 id="letter-title">Написати нам</h2>
-        <button class="letter-close" type="button" aria-label="Закрити">✕</button>
+        <h2 id="letter-title">{{nav.write}}</h2>
+        <button class="letter-close" type="button" aria-label="{{letter.close}}">✕</button>
       </div>
     <form class="letter" id="letter" novalidate>
       <fieldset>
-        <legend>Про що лист?</legend>
+        <legend>{{letter.about}}</legend>
         <div class="kinds">
-          <label><input type="radio" name="kind" value="bug" checked /><span><i class="emoji" aria-hidden="true">🐞</i> Помилка</span></label>
-          <label><input type="radio" name="kind" value="idea" /><span><i class="emoji" aria-hidden="true">💡</i> Ідея</span></label>
-          <label><input type="radio" name="kind" value="game" /><span><i class="emoji" aria-hidden="true">🎮</i> Нова гра</span></label>
-          <label><input type="radio" name="kind" value="other" /><span><i class="emoji" aria-hidden="true">✉️</i> Інше</span></label>
+          <label><input type="radio" name="kind" value="bug" checked /><span><i class="emoji" aria-hidden="true">🐞</i> {{letter.kind.bug}}</span></label>
+          <label><input type="radio" name="kind" value="idea" /><span><i class="emoji" aria-hidden="true">💡</i> {{letter.kind.idea}}</span></label>
+          <label><input type="radio" name="kind" value="game" /><span><i class="emoji" aria-hidden="true">🎮</i> {{letter.kind.game}}</span></label>
+          <label><input type="radio" name="kind" value="other" /><span><i class="emoji" aria-hidden="true">✉️</i> {{letter.kind.other}}</span></label>
         </div>
       </fieldset>
       <label class="field">
-        <span>Ваш лист</span>
+        <span>{{letter.message}}</span>
         <textarea
           name="message"
           rows="6"
           maxlength="4000"
           required
-          placeholder="Наприклад: у грі «Магазин» на 12-й сходинці не видно решти…"
+          placeholder="{{letter.placeholder}}"
         ></textarea>
       </label>
       <label class="field">
-        <span>Електронна пошта <small>— якщо хочете отримати відповідь</small></span>
+        <span>{{{letter.email}}}</span>
         <input type="email" name="email" maxlength="200" autocomplete="email" placeholder="name@example.com" />
       </label>
       <input class="trap" type="text" name="topic" tabindex="-1" autocomplete="off" aria-hidden="true" />
       <div class="attach">
         <label class="btn btn-parent btn-small">
           <input type="file" id="letter-pick" accept="image/*,video/*" multiple />
-          <span class="emoji" aria-hidden="true">📎</span> Додати фото чи відео
+          <span class="emoji" aria-hidden="true">📎</span> {{letter.attach}}
         </label>
-        <small>До 5 файлів, разом до 18 МБ. Відео — до 15 МБ.</small>
+        <small>{{letter.limits}}</small>
       </div>
       <ul class="files" id="letter-files"></ul>
       <p class="letter-note" id="letter-note" role="alert"></p>
-      <button class="btn btn-play" type="submit">Надіслати</button>
+      <button class="btn btn-play" type="submit">{{letter.send}}</button>
     </form>
     <div class="letter-done" id="letter-done" role="status" hidden>
-      <h3>Дякуємо, лист у нас!</h3>
+      <h3>{{letter.thanks}}</h3>
       <p id="letter-done-text"></p>
-      <button class="btn btn-parent btn-small" type="button">Написати ще</button>
+      <button class="btn btn-parent btn-small" type="button">{{letter.again}}</button>
     </div>
     </dialog>
 
     <footer>
       <div class="wrap">
-        <p>© <span id="year">2026</span> Pulsar Kids. Навчання, схоже на пригоду.</p>
+        <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}}</p>
         <p>
-          <a data-portal="play" href="__PLAY_URL__/">Гра</a>·<a data-portal="parents" href="__PARENTS_URL__/">Кабінет батьків</a>·<a href="#feedback" data-letter-open>Написати нам</a>
+          <a data-portal="play" href="__PLAY_URL__/">{{footer.game}}</a>·<a data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>·<a href="#feedback" data-letter-open>{{nav.write}}</a>
         </p>
+        <ul class="langs-row" aria-label="{{lang.label}}">
+          {{@langLinks}}
+        </ul>
       </div>
     </footer>
 
@@ -1397,8 +1468,35 @@
         } catch (e) {
           /* storage blocked — the links simply go without a source */
         }
+        // The language is remembered in a cookie on the root domain — the game and the
+        // parents' cabinet read the same one (src/core/i18n/deviceLang.ts), and «/»
+        // sends a returning visitor to their language (vercel.json).
+        function remember(lang) {
+          var domain = host.indexOf('.') > 0 && !/^\d+(\.\d+){3}$/.test(host) ? '; domain=.' + host : '';
+          document.cookie = 'pk_lang=' + lang + '; path=/; max-age=31536000; samesite=lax' + domain;
+          try {
+            localStorage.setItem('pulsar-lang-v1', lang);
+          } catch (e) {
+            /* the cookie is enough */
+          }
+        }
+        // Choosing a language in the menu is a choice to keep.
+        document.querySelectorAll('[data-lang]').forEach(function (a) {
+          a.addEventListener('click', function () {
+            remember(a.getAttribute('data-lang'));
+          });
+        });
         document.querySelectorAll('[data-portal]').forEach(function (a) {
           a.href = target[a.getAttribute('data-portal')] + from;
+          // Going on from this page, the visitor goes on in its language.
+          a.addEventListener('click', function () {
+            remember(document.documentElement.lang);
+          });
+        });
+        // The menu closes on a tap outside it.
+        var menu = document.querySelector('.langs');
+        document.addEventListener('click', function (e) {
+          if (menu && menu.open && !menu.contains(e.target)) menu.open = false;
         });
         document.getElementById('year').textContent = new Date().getFullYear();
       })();
@@ -1481,11 +1579,18 @@
         var PART = 3 * 524288;
         var PHOTO_SIDE = 1920;
         var ALLOWED = /^(image\/(jpeg|png|webp|gif|heic|heif)|video\/(mp4|quicktime|webm))$/;
+        // The form's own words, in the language of the page (src/locales/site/<lang>.json, «js»).
+        var T = {{json:js}};
+        function say(text, values) {
+          return text.replace(/\{(\w+)\}/g, function (all, name) {
+            return name in values ? values[name] : all;
+          });
+        }
         var ERRORS = {
-          message_too_short: 'Напишіть, будь ласка, хоча б кілька слів.',
-          message_too_long: 'Лист задовгий — скоротіть його до 4000 знаків.',
-          invalid_email: 'Перевірте адресу пошти: схоже, у ній помилка.',
-          too_many: 'Ви вже надіслали кілька листів поспіль. Спробуйте, будь ласка, за годину.',
+          message_too_short: T.tooShort,
+          message_too_long: T.tooLong,
+          invalid_email: T.badEmail,
+          too_many: T.tooMany,
         };
 
         var list = document.getElementById('letter-files');
@@ -1498,7 +1603,7 @@
         var sending = false;
 
         function megabytes(size) {
-          return (size / 1024 / 1024).toFixed(1).replace('.', ',') + ' МБ';
+          return say(T.megabytes, { n: (size / 1024 / 1024).toFixed(1).replace('.', T.decimal) });
         }
         function total() {
           return files.reduce(function (sum, f) {
@@ -1517,7 +1622,7 @@
             var remove = document.createElement('button');
             remove.type = 'button';
             remove.textContent = '✕';
-            remove.setAttribute('aria-label', 'Прибрати ' + file.name);
+            remove.setAttribute('aria-label', say(T.remove, { name: file.name }));
             remove.onclick = function () {
               if (sending) return;
               files.splice(i, 1);
@@ -1560,15 +1665,15 @@
 
         async function add(file) {
           var type = (file.type || '').toLowerCase();
-          if (!ALLOWED.test(type)) return '«' + file.name + '» не схоже на фото чи відео.';
-          if (files.length >= MAX_FILES) return 'Можна додати не більше ' + MAX_FILES + ' файлів.';
+          if (!ALLOWED.test(type)) return say(T.notMedia, { name: file.name });
+          if (files.length >= MAX_FILES) return say(T.maxFiles, { max: MAX_FILES });
           var blob = await shrink(file);
           var name = blob === file ? file.name : file.name.replace(/\.[^.]*$/, '') + '.jpg';
           if (blob.size > MAX_FILE) {
-            return '«' + file.name + '» важить ' + megabytes(blob.size) + ', а можна до 15 МБ. Спробуйте коротше відео.';
+            return say(T.tooBig, { name: file.name, size: megabytes(blob.size) });
           }
-          if (total() + blob.size > MAX_TOTAL) return '«' + file.name + '» уже не вміщається: разом можна до 18 МБ.';
-          if (files.length >= MAX_FILES) return 'Можна додати не більше ' + MAX_FILES + ' файлів.';
+          if (total() + blob.size > MAX_TOTAL) return say(T.noRoom, { name: file.name });
+          if (files.length >= MAX_FILES) return say(T.maxFiles, { max: MAX_FILES });
           files.push({ blob: blob, name: name, type: blob.type || type });
           return '';
         }
@@ -1632,7 +1737,7 @@
               var piece = blob.slice(p * PART, (p + 1) * PART);
               await sendPart({ id: letter.id, token: letter.token, file: f, part: p, data: await base64(piece) });
               sent += piece.size;
-              button.textContent = 'Надсилаю файли… ' + Math.round((sent / all) * 100) + ' %';
+              button.textContent = say(T.sendingFiles, { pct: Math.round((sent / all) * 100) });
             }
           }
         }
@@ -1648,7 +1753,7 @@
           }
           sending = true;
           button.disabled = true;
-          button.textContent = 'Надсилаю…';
+          button.textContent = T.sending;
           note.textContent = '';
           try {
             var letter = await call('POST', {
@@ -1671,10 +1776,10 @@
               await call('POST', { id: letter.id, token: letter.token, finish: true }).catch(function () {});
             }
             doneText.textContent = filesLost
-              ? 'Текст ми отримали, а от не всі файли дійшли — схоже, підвів зв’язок. Якщо вони важливі, надішліть їх, будь ласка, ще раз.'
+              ? T.filesLost
               : form.email.value.trim()
-                ? 'Прочитаємо й відповімо на вказану пошту.'
-                : 'Ми читаємо кожен лист. Дякуємо, що допомагаєте робити гру кращою.';
+                ? T.willReply
+                : T.thanks;
             form.reset();
             files = [];
             render();
@@ -1682,11 +1787,11 @@
             done.hidden = false;
             modal.scrollTop = 0;
           } catch (err) {
-            note.textContent = ERRORS[err.message] || 'Не вдалося надіслати. Перевірте інтернет і спробуйте ще раз.';
+            note.textContent = ERRORS[err.message] || T.failed;
           } finally {
             sending = false;
             button.disabled = false;
-            button.textContent = 'Надіслати';
+            button.textContent = T.send;
           }
         });
 

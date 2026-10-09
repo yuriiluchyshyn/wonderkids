@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useVoiceChannel } from '@/core/audio/useSpeech';
 import { useSound } from '@/core/audio/useSound';
@@ -18,6 +19,7 @@ interface VoiceToggleProps {
  * master voice switch is off it shows as muted and disabled.
  */
 export function VoiceToggle({ channel, label, size = 'sm' }: VoiceToggleProps) {
+  const t = useT();
   const { channelOn, masterOn, toggle } = useVoiceChannel(channel);
   const { play } = useSound();
 
@@ -29,9 +31,9 @@ export function VoiceToggle({ channel, label, size = 'sm' }: VoiceToggleProps) {
       whileTap={{ scale: 0.88 }}
       aria-pressed={channelOn}
       aria-label={
-        channelOn ? `Вимкнути озвучення${label ? `: ${label}` : ''}` : `Увімкнути озвучення${label ? `: ${label}` : ''}`
+        label ? t(channelOn ? 'voiceToggle.offOf' : 'voiceToggle.onOf', { label }) : t(channelOn ? 'voiceToggle.off' : 'voiceToggle.on')
       }
-      title={masterOn ? undefined : 'Увімкніть «Озвучення» у налаштуваннях'}
+      title={masterOn ? undefined : t('voiceToggle.masterOff')}
       onClick={() => {
         play('tap');
         toggle();

@@ -55,3 +55,32 @@
     padding: 0 9px;
   }
 }
+
+/* The sheet of the group filter: one big row to tick per set of games. */
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--surface-ink);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.check {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  margin: 0;
+  accent-color: var(--primary);
+}

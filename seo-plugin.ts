@@ -1,6 +1,8 @@
 import { existsSync, renameSync } from 'node:fs';
 import path from 'node:path';
 import type { Plugin } from 'vite';
+import { sitePath, siteUrl } from './landing-i18n';
+import { LANG_CODES } from './src/core/lang/index.ts';
 
 /**
  * Site-wide SEO plumbing that depends on the public address:
@@ -8,7 +10,8 @@ import type { Plugin } from 'vite';
  *  - replaces `__SITE_URL__`, `__PLAY_URL__`, `__PARENTS_URL__` and
  *    `__USE_SUBDOMAINS__` in every HTML entry (canonical links, Open Graph,
  *    JSON-LD, the landing page's default portal links);
- *  - serves / emits `robots.txt` and `sitemap.xml`;
+ *  - serves / emits `robots.txt` and `sitemap.xml` (the landing page in every
+ *    language — `landing-i18n.ts` makes the pages themselves);
  *  - on Vercel, renames the built app shell `index.html` → `app.html`. Vercel
  *    serves an existing file before it looks at rewrites, so with an
  *    `index.html` in the output the root URL would always be the (noindex) app
@@ -17,7 +20,7 @@ import type { Plugin } from 'vite';
  * The address comes from VITE_SITE_URL (the ROOT domain, no trailing slash).
  */
 export function seo(): Plugin {
-  const site = (process.env.VITE_SITE_URL ?? 'https://pulsarkids.com').replace(/\/$/, '');
+  const site = siteUrl();
   const useSubdomains = process.env.VITE_USE_SUBDOMAINS !== 'false';
   const sub = (name: string) => (useSubdomains ? site.replace('://', `://${name}.`) : site);
 
@@ -33,10 +36,15 @@ export function seo(): Plugin {
   ].join('\n');
 
   const today = new Date().toISOString().slice(0, 10);
+  const alternates = [...LANG_CODES.map((lang) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${site}/${sitePath(lang)}"/>`), `<xhtml:link rel="alternate" hreflang="x-default" href="${site}/"/>`].join('');
   const sitemap = [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    `  <url><loc>${site}/</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>`,
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+    // The landing page in each language, every one naming the others.
+    ...LANG_CODES.map(
+      (lang) =>
+        `  <url><loc>${site}/${sitePath(lang)}</loc>${alternates}<lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>`,
+    ),
     '</urlset>',
     '',
   ].join('\n');

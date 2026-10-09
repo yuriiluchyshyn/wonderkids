@@ -1,9 +1,10 @@
+import { useLang, useT } from '@/core/i18n';
 import { ALL_META } from '@/core/game/kernel/types';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { Chip } from '@/components/ui/Chip';
 import { VoiceToggle } from '@/components/ui/VoiceToggle';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
-import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useSayT } from '@/core/audio/useSpeech';
 import type { CatalogFilters } from './catalog';
 import styles from './FilterBar.module.css';
 
@@ -18,27 +19,29 @@ interface FilterBarProps {
  * read aloud for non-readers. Only shown when there's more than one subject.
  */
 export function FilterBar({ filters, onChange }: FilterBarProps) {
-  const subjects = moduleRegistry.getAll();
+  const t = useT();
+  const lang = useLang();
+  const subjects = moduleRegistry.getAll(lang);
   const showText = useShowText();
-  const announce = useVoiceSpeak('selections');
+  const say = useSayT('selections', lang);
 
   if (subjects.length <= 1) return null;
 
   return (
     <div className={styles.group}>
       <div className={styles.headRow}>
-        {showText && <span className={styles.head}>📚 Предмети</span>}
+        {showText && <span className={styles.head}>{t('hub.subjects.head')}</span>}
         <VoiceToggle channel="selections" />
       </div>
       <div className={styles.chips}>
         <Chip
           icon={ALL_META.icon}
-          label={ALL_META.subjectLabel}
+          label={t('common.all')}
           showLabel={showText}
           active={filters.subjectId === 'all'}
           onClick={() => {
             onChange({ ...filters, subjectId: 'all' });
-            announce('Усі предмети');
+            say('hub.subjects.all');
           }}
         />
         {subjects.map((m) => (
@@ -50,7 +53,7 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
             active={filters.subjectId === m.id}
             onClick={() => {
               onChange({ ...filters, subjectId: m.id });
-              announce(`Предмет ${m.title}`);
+              say('hub.subjects.one', { name: m.title });
             }}
           />
         ))}

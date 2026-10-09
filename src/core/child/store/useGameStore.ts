@@ -10,6 +10,8 @@ import { playsKey } from '@/core/child/progress/plays';
 import { balanceOf, itemCost, lossKey, ownedKey, sellPrice, stationCost, stationKey } from '@/core/child/world/world';
 import { keysOf } from '@/core/child/world/games';
 import { DEFAULT_CURRENCY, isCurrency, type CurrencyId } from '@/core/game/content/currency';
+import { tApp } from '@/core/i18n/app';
+import { DEFAULT_LANG, isLang, type LangCode } from '@/core/lang';
 import { uid } from '@/core/utils/random';
 // Note: no DEFAULT_THEME_ID import — a child's theme is `null` until chosen;
 // useActiveTheme resolves null → the neutral galaxy skin.
@@ -118,8 +120,22 @@ export interface Settings {
   choicesGridSize: ChoicesGridSize;
   /** Tell the short fact after a right answer. Off — the next task starts at once. */
   funFacts: boolean;
-  /** The money the shop game counts in. */
+  /** The money the shop game counts in — in effect only once the parent has chosen it (`effectiveCurrency`). */
   currency: CurrencyId;
+  /**
+   * The parent picked the money themselves. Until then it follows the language
+   * of the game; from then on a change of language leaves it alone.
+   */
+  currencyChosen: boolean;
+  /**
+   * The language of the child's game — its texts. `null` — not chosen: the
+   * language offered to this device is used (`core/i18n`).
+   */
+  gameLang: LangCode | null;
+  /** The language the voice speaks to the child. `null` — the same as the game's. */
+  voiceLang: LangCode | null;
+  /** Games the parent has put away for this child: `${moduleId}:${subId}`. */
+  hiddenGames: string[];
   /** Non-aggressive screen-time / fuel limits. */
   timeControl: TimeControl;
 }
@@ -197,6 +213,8 @@ export interface PersistableState {
   children: ChildState[];
   /** Which child is currently playing (null → the child-select gate shows). */
   activeChildId: string | null;
+  /** The language of the parents' cabinet. `null` — not chosen: the one offered to this device. */
+  parentLang: LangCode | null;
 }
 
 export interface GameState extends ActiveChildView, PersistableState {
@@ -241,6 +259,8 @@ export interface GameState extends ActiveChildView, PersistableState {
   updateSettings: (patch: Partial<Omit<Settings, 'voice' | 'timeControl'>>) => void;
   updateTimeControl: (patch: Partial<TimeControl>) => void;
   toggleVoice: (channel: VoiceChannel) => void;
+  /** Parent: show or put away one game — or several at once (a whole language pack) — for the active child. */
+  setGamesHidden: (keys: string[], hidden: boolean) => void;
   /**
    * Mirror the server's play-time numbers for a child (PRD v4.0 §2.2 — the
    * backend is the source of truth). `running` re-anchors the local clock that
@@ -265,6 +285,8 @@ export interface GameState extends ActiveChildView, PersistableState {
   removeChild: (id: string) => void;
   /** Switch the active (playing / edited) child. */
   setActiveChild: (id: string) => void;
+  /** The language of the parents' cabinet. */
+  setParentLang: (lang: LangCode) => void;
 
   /** Replace the save with server-loaded data layered over defaults. */
   hydrate: (data: Partial<PersistableState> | Record<string, unknown>) => void;
@@ -285,6 +307,8 @@ export interface ServerScreenTime {
 }
 
 export interface AddChildInput {
+  /** The language the child's first goals are written in — the parent's. */
+  lang?: LangCode;
   profile?: Partial<ChildProfile>;
   themeId?: ThemeId;
   settings?: Partial<Settings>;
@@ -293,8 +317,11 @@ export interface AddChildInput {
 const CURRENT_YEAR = new Date().getFullYear();
 const MAX_CHILDREN = 5;
 
+/** What a child with no name is called («Привіт, Друже!»). */
+const NO_NAME = tApp(DEFAULT_LANG, 'child.defaultName');
+
 const DEFAULT_PROFILE: ChildProfile = {
-  name: 'Друже',
+  name: NO_NAME,
   nickname: '',
   pin: '',
   email: '',
@@ -323,13 +350,18 @@ const DEFAULT_SETTINGS: Settings = {
   ttsButtons: true,
   funFacts: true,
   currency: DEFAULT_CURRENCY,
+  currencyChosen: false,
+  gameLang: null,
+  voiceLang: null,
+  hiddenGames: [],
   timeControl: { ...DEFAULT_TIME_CONTROL },
 };
 
-const DEFAULT_MILESTONES: Milestone[] = [
-  { id: 'm_cookie', amount: 30, reward: 'Спекти печиво разом 🍪' },
-  { id: 'm_park', amount: 100, reward: 'Поїздка в парк розваг 🎡' },
-  { id: 'm_trip', amount: 200, reward: 'Велика сімейна пригода 🎉' },
+/** The goals a new child starts with — the parent rewrites them; `lang` is the parent's language. */
+const defaultMilestones = (lang: LangCode): Milestone[] => [
+  { id: 'm_cookie', amount: 30, reward: tApp(lang, 'goal.default.cookie') },
+  { id: 'm_park', amount: 100, reward: tApp(lang, 'goal.default.park') },
+  { id: 'm_trip', amount: 200, reward: tApp(lang, 'goal.default.trip') },
 ];
 
 /**
@@ -378,7 +410,7 @@ function createScreenTime(): ScreenTimeState {
 
 /** Normalise a profile as the parent types it (charset, PIN digits, age range). */
 function sanitizeProfile(p: Partial<ChildProfile>): ChildProfile {
-  const name = typeof p.name === 'string' ? p.name.trim() || 'Друже' : 'Друже';
+  const name = typeof p.name === 'string' ? p.name.trim() || NO_NAME : NO_NAME;
   const nickname =
     typeof p.nickname === 'string'
       ? p.nickname.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 12)
@@ -407,7 +439,7 @@ function createChildState(input?: AddChildInput): ChildState {
     hintsSurfaced: 0,
     progress: {},
     treasures: [],
-    milestones: DEFAULT_MILESTONES.map((m) => ({ ...m })),
+    milestones: defaultMilestones(input?.lang ?? DEFAULT_LANG),
     settings: {
       ...DEFAULT_SETTINGS,
       ...settings,
@@ -445,6 +477,11 @@ function migrateChild(raw: Record<string, unknown>): ChildState {
       ...settings,
       funFacts: settings.funFacts ?? base.settings.funFacts,
       currency: isCurrency(settings.currency) ? settings.currency : base.settings.currency,
+      // A save from before this flag: money other than the default was somebody's choice.
+      currencyChosen: typeof settings.currencyChosen === 'boolean' ? settings.currencyChosen : isCurrency(settings.currency) && settings.currency !== DEFAULT_CURRENCY,
+      gameLang: isLang(settings.gameLang) ? settings.gameLang : null,
+      voiceLang: isLang(settings.voiceLang) ? settings.voiceLang : null,
+      hiddenGames: Array.isArray(settings.hiddenGames) ? settings.hiddenGames.filter((g): g is string => typeof g === 'string') : [],
       voice: { ...base.settings.voice, ...(settings.voice ?? {}) },
       timeControl: { ...base.settings.timeControl, ...(settings.timeControl ?? {}) },
     },
@@ -513,7 +550,7 @@ function patchActive(s: GameState, fn: (c: ChildState) => ChildState): Partial<G
 
 /** A brand-new account: no children yet (the parent adds the first one). */
 function createInitialState(): PersistableState {
-  return { children: [], activeChildId: null };
+  return { children: [], activeChildId: null, parentLang: null };
 }
 
 /**
@@ -535,13 +572,13 @@ function fromPersisted(data: Partial<PersistableState> | Record<string, unknown>
       typeof d.activeChildId === 'string' && ids.has(d.activeChildId)
         ? d.activeChildId
         : (children[0]?.id ?? null);
-    return { children, activeChildId };
+    return { children, activeChildId, parentLang: isLang(d.parentLang) ? d.parentLang : null };
   }
 
   // Legacy single-child blob → wrap into one child, keep it active.
   if (d.profile || d.settings || d.progress || typeof d.artifacts === 'number') {
     const child = migrateChild(d);
-    return { children: [child], activeChildId: child.id };
+    return { children: [child], activeChildId: child.id, parentLang: null };
   }
 
   return createInitialState();
@@ -549,7 +586,7 @@ function fromPersisted(data: Partial<PersistableState> | Record<string, unknown>
 
 /** Extract just the persistable save from the live store (for syncing). */
 export function selectPersistable(s: GameState): PersistableState {
-  return { children: s.children, activeChildId: s.activeChildId };
+  return { children: s.children, activeChildId: s.activeChildId, parentLang: s.parentLang };
 }
 
 /** Is a nickname already used by another child in THIS account? */
@@ -704,6 +741,14 @@ export const useGameStore = create<GameState>()((set) => ({
         ...c,
         settings: { ...c.settings, voice: { ...c.settings.voice, [channel]: !c.settings.voice[channel] } },
       })),
+    ),
+
+  setGamesHidden: (keys, hidden) =>
+    set((s) =>
+      patchActive(s, (c) => {
+        const rest = c.settings.hiddenGames.filter((k) => !keys.includes(k));
+        return { ...c, settings: { ...c.settings, hiddenGames: hidden ? [...rest, ...keys] : rest } };
+      }),
     ),
 
   applyServerScreenTime: (childId, view, running) =>
@@ -867,6 +912,8 @@ export const useGameStore = create<GameState>()((set) => ({
       writeLastTheme(c.themeId);
       return { activeChildId: id, ...viewOf(c) };
     }),
+
+  setParentLang: (lang) => set(() => ({ parentLang: lang })),
 
   hydrate: (data) =>
     set(() => {

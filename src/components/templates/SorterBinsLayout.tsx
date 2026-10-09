@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
@@ -13,6 +14,7 @@ import styles from './Templates.module.css';
  * blows the object back; the helper makes the right bin glow.
  */
 export function SorterBinsLayout({ payload, callbacks, hintActive }: LayoutProps<SorterBinsPayload>) {
+  const t = useT();
   const { item, bins, correctBinId, wrongSay } = payload;
   const { playCode } = useSound();
   const [solved, setSolved] = useState(false);
@@ -29,7 +31,7 @@ export function SorterBinsLayout({ payload, callbacks, hintActive }: LayoutProps
       return;
     }
     setShake(true);
-    setSay(wrongSay?.[binId] ?? 'Ой, сюди не підходить. Спробуй інше місце!');
+    setSay(wrongSay?.[binId] ?? t('tpl.wrongBin'));
     callbacks.onMistake();
   };
   const dnd = useDragDrop(onDrop, solved, item.id);

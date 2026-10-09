@@ -1,6 +1,7 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { useMemo } from 'react';
-import { GALAXIES } from '@/core/game/galaxies';
+import { GALAXIES, galaxyKey } from '@/core/game/galaxies';
+import { tApp } from '@/core/i18n';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { difficultyRange, gameStatus, isFreePlay, tasksPerLevel, toGameConfig } from '@/core/game/kernel/gameConfig';
 import type { LearningModule, MechanicsType, SubCategory } from '@/core/game/kernel/types';
@@ -135,7 +136,7 @@ export function GamesPage() {
       {galaxies.map(({ galaxy, rows: games }) => (
         <section key={galaxy.id} className={styles.gamesSection}>
           <h2>
-            {galaxy.icon} {galaxy.name}
+            {galaxy.icon} {tApp('uk', galaxyKey(galaxy.id))}
             <span className={styles.gamesCount}>
               {games.length > 0 ? `ігор: ${games.length} · завдань: ${games.reduce((n, r) => n + r.tasks, 0)}` : 'незабаром'}
             </span>

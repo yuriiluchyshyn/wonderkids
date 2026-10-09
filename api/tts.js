@@ -1,12 +1,13 @@
 import { cacheSpeech, ensureSchema, getCachedSpeech, getTtsConfig } from './_lib/db.js';
 import { getUserFromReq } from './_lib/auth.js';
 import { decryptSecret } from './_lib/secrets.js';
-import { ENGLISH_VOICE, MAX_TTS_CHARS, normaliseVoice, synthesize, ttsHash } from './_lib/tts.js';
+import { MAX_TTS_CHARS, normaliseLang, synthesize, ttsHash, voiceFor } from './_lib/tts.js';
 
 /**
  * Natural voice → POST /api/tts  { text, lang? }  →  { audio }  (base64 MP3)
  *
- * `lang: 'en'` reads the phrase with the English voice (English-lesson cards).
+ * `lang` (`uk` — the default —, `en`, `pl`) names the language of the phrase,
+ * and with it the voice that reads it.
  *
  * Uses the Google Cloud key the admin configured for this account. Phrases are
  * cached in the database (the game repeats the same lines constantly), so each
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
     const apiKey = config.enabled ? decryptSecret(config.encryptedKey) : null;
     if (!apiKey) return res.status(404).json({ error: 'tts_disabled' });
 
-    const voice = req.body?.lang === 'en' ? ENGLISH_VOICE : normaliseVoice(config.voice);
+    const voice = voiceFor(normaliseLang(req.body?.lang), config.voice);
     const hash = ttsHash(voice, text);
     let audio = await getCachedSpeech(hash);
     if (!audio) {

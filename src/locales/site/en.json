@@ -1,0 +1,254 @@
+{
+  "meta": {
+    "title": "Pulsar Kids — learning games for kids aged 4–10",
+    "description": "Pulsar Kids is a playful learning platform where children aged 4–10 master math, geography, history and ecology — in English. No ads, no tears, no timers: a mistake is just a hint, and parents stay in charge of screen time.",
+    "keywords": "learning games for kids, educational games, math for kids, flags of the world, fractions, learning through play, screen time, Pulsar Kids, pulsarkids",
+    "ogDescription": "Math, language, logic, geography, astronomy, history and nature in 50 games. Your child plays and builds a planet of their own, while you stay in charge of screen time.",
+    "ogTitle": "Pulsar Kids — learning that feels like an adventure",
+    "ogImageAlt": "Pulsar Kids — learning games for kids",
+    "twitterDescription": "50 learning games for kids aged 4–10. No ads, no tears, no timers."
+  },
+  "ld": {
+    "siteDescription": "Learning games for kids aged 4–10: math, language, logic, geography, astronomy, history, nature, ecology and art.",
+    "browser": "A modern browser on a phone, tablet or computer",
+    "audience": "Children aged 4–10",
+    "use": "Practice, self-study",
+    "about": {
+      "math": "Math",
+      "geography": "Geography",
+      "history": "History",
+      "ecology": "Ecology"
+    }
+  },
+  "header": {
+    "logoLabel": "Pulsar Kids — home",
+    "navLabel": "Page sections"
+  },
+  "hero": {
+    "eyebrow": "Learning games · ages 4–10",
+    "title": "Learning that feels like an <span>adventure</span>",
+    "lead": "Pulsar Kids turns math, geography, history and ecology into games your child will ask to play. No ads, no losing, no scary timers — just the joy of getting it right. And you stay calmly in charge of screen time.",
+    "note": "It takes a minute: a parent creates the child’s profile, and the child signs in to the game with a nickname and a PIN.",
+    "systemLabel": "The Solar System: the Sun and the eight planets your child travels through"
+  },
+  "about": {
+    "title": "Why Pulsar Kids",
+    "sub": "We want children to want to learn — all by themselves. Most learning apps punish a mistake: they take away a “life”, start a timer, flash a red cross. Children grow afraid of getting it wrong and give up. We did the opposite.",
+    "hint": {
+      "title": "A mistake is a hint",
+      "text": "Nobody loses here. After a mistake a visual hint appears, and the task that didn’t work out comes back once more at the end of the level — to make it stick, not to punish."
+    },
+    "voice": {
+      "title": "Play before you can read",
+      "text": "Tasks and answers are read aloud, and every text has a speaker button next to it. Once your child reads confidently, you can switch the voice off."
+    },
+    "steps": {
+      "title": "Difficulty grows with your child",
+      "text": "Every game is a path of steps, each a little harder than the one before. The stars on a card tell you what age the game is for."
+    },
+    "ads": {
+      "title": "No ads",
+      "text": "No third-party ads and no in-app purchases. Your child sees only the tasks, their own world and their own achievements."
+    }
+  },
+  "games": {
+    "title": "50 games across nine galaxies",
+    "sub": "Here subjects are galaxies and games are planets. This is what awaits on them.",
+    "math": {
+      "1": "Addition, subtraction, multiplication, division",
+      "2": "Fractions on pizzas and cakes, and sums with fractions",
+      "3": "A balance scale for numbers and a number maze",
+      "4": "Tangram, area and perimeter",
+      "5": "The shop: counting money and change",
+      "6": "Greater, less, equal — and a clock with hands",
+      "7": "Story problems: the shop, friends, the road",
+      "tag": "14 games",
+      "title": "Math"
+    },
+    "language": {
+      "1": "The alphabet: put the letters in their places in the table",
+      "2": "Letter bubbles, word chains, rhymes and sentences",
+      "3": "Five games in English, and the same five in Ukrainian and in Polish — each with a voice of its own",
+      "4": "50 steps in every game",
+      "tag": "15 games",
+      "title": "Language"
+    },
+    "logic": {
+      "1": "Rhythm and patterns: what comes next",
+      "2": "Shadow lotto: find the shadow of the thing",
+      "3": "Mirror symmetry: the other half of the picture",
+      "4": "Logic riddles: 150 kinds of puzzles that make you think",
+      "tag": "4 games",
+      "title": "Logic"
+    },
+    "astronomy": {
+      "1": "Parade of planets: their order from the Sun, their sizes and a hundred questions about them",
+      "2": "Constellations: join the stars by numbers and letters, then find them in the night sky",
+      "title": "Astronomy"
+    },
+    "art": {
+      "1": "Color mixer: two paints make a new color",
+      "title": "Art"
+    },
+    "geography": {
+      "1": "The flags of every country in the world — starting with the best known",
+      "2": "Continents: who lives where",
+      "3": "The oceans on a map of the world",
+      "4": "Natural zones and the animals that live there",
+      "5": "Capitals — and why it is day in one place and night in another",
+      "tag": "5 games",
+      "title": "Geography"
+    },
+    "history": {
+      "1": "“Time Machine”: 100 tasks about what came first",
+      "2": "50 dinosaurs: what to feed them and how to tell them apart",
+      "3": "Great people of the world and of Ukraine",
+      "4": "Inventions of the world and of Ukraine",
+      "tag": "6 games",
+      "title": "History"
+    },
+    "ecology": {
+      "1": "“Eco Patrol”: sorting glass, paper and plastic",
+      "2": "Finding out what they will be turned into",
+      "3": "“Why is that?”: air, water, climate, animals, energy",
+      "title": "Ecology"
+    },
+    "nature": {
+      "1": "The seasons: what happens in nature and when",
+      "2": "The twelve months in order",
+      "title": "Nature"
+    },
+    "twoGames": "2 games",
+    "oneGame": "1 game"
+  },
+  "numbers": {
+    "games": "learning games",
+    "galaxies": "subject galaxies",
+    "levels": "levels across all games",
+    "ages": "age groups",
+    "themes": "visual themes",
+    "languages": "app languages",
+    "gamesCount": "50",
+    "levelsCount": "1528"
+  },
+  "world": {
+    "title": "A planet of their own that keeps growing",
+    "sub": "Every task earns crystals. What to do with them is your child’s own decision — and that is a little lesson too.",
+    "build": {
+      "title": "Build a world",
+      "text": "Crystals can be traded for buildings and decorations for their own planet. The grandest of all — the “dream castle” — unlocks last."
+    },
+    "goal": {
+      "title": "Or save up for a family goal",
+      "text": "You agree on a real-life reward together: “collect 500 crystals and we bake cookies”. Spend now or keep saving — the choice is your child’s."
+    },
+    "stations": {
+      "title": "Stations of knowledge",
+      "text": "Every new step in any game earns a key of knowledge. The keys open stations on the planet: an observatory, a library, a laboratory of numbers."
+    },
+    "theme": {
+      "title": "A favorite theme",
+      "text": "Unicorns, space, dinosaurs, the underwater world, bricks, the forest, winter… A theme changes the colors, the hero, the crystals and the city that grows on the planet."
+    }
+  },
+  "parents": {
+    "sub": "A separate entrance for grown-ups. Your child can’t wander in — the game simply has no door to it.",
+    "time": {
+      "title": "Screen time without tears",
+      "text": "You set the session length, the break and the daily limit. Your child sees no timer — just hourglasses that slowly disappear. A level already started is always finished, and then the hero “goes for a rest”."
+    },
+    "children": {
+      "title": "Up to five children",
+      "text": "Each child has their own profile, nickname and PIN, their own theme, progress and settings."
+    },
+    "goals": {
+      "title": "Family goals",
+      "text": "Agree on real-life rewards and watch your child get closer to them."
+    },
+    "settings": {
+      "title": "Settings that fit your child",
+      "text": "Sound, voice, labels, read-aloud buttons, the number of answer options, the step in every game."
+    }
+  },
+  "start": {
+    "title": "How to start",
+    "open": {
+      "title": "A parent opens the parents’ area",
+      "text": "Sign in with your email and tap “Add a child”."
+    },
+    "nick": {
+      "title": "Sets a nickname and a PIN",
+      "text": "Think of a simple nickname and a short PIN for your child, and set the play time."
+    },
+    "play": {
+      "title": "The child signs in and plays",
+      "text": "On the game page they type their nickname and PIN, then pick a theme and their first planet."
+    }
+  },
+  "feedback": {
+    "title": "Spotted a bug or have an idea?",
+    "sub": "Write to us: what went wrong, what could be handier, which game is missing. You can add a photo or a short video — it makes things easier to understand."
+  },
+  "final": {
+    "title": "Ready for the adventure?",
+    "sub": "Choose where to go next.",
+    "child": "I’m a kid — let’s play",
+    "adult": "I’m a grown-up — to the parents’ area"
+  },
+  "letter": {
+    "about": "What is it about?",
+    "message": "Your message",
+    "placeholder": "For example: in the “Shop” game, on step 12, the change is not visible…",
+    "email": "Email <small>— if you would like a reply</small>",
+    "attach": "Add a photo or video",
+    "limits": "Up to 5 files, 18 MB in total. A video — up to 15 MB.",
+    "thanks": "Thank you, we have your message!",
+    "again": "Write another",
+    "close": "Close",
+    "kind": {
+      "bug": "A bug",
+      "idea": "An idea",
+      "game": "A new game",
+      "other": "Something else"
+    },
+    "send": "Send"
+  },
+  "footer": {
+    "tagline": "Learning that feels like an adventure.",
+    "game": "The game"
+  },
+  "nav": {
+    "about": "Why",
+    "games": "Games",
+    "world": "Planet",
+    "parents": "For parents",
+    "write": "Write to us"
+  },
+  "cta": {
+    "play": "Play",
+    "parents": "Parents’ area"
+  },
+  "lang": {
+    "label": "Site language"
+  },
+  "js": {
+    "tooShort": "Please write at least a few words.",
+    "tooLong": "The message is too long — please shorten it to 4000 characters.",
+    "badEmail": "Please check the email address: there seems to be a mistake in it.",
+    "tooMany": "You have already sent several messages in a row. Please try again in an hour.",
+    "megabytes": "{n} MB",
+    "decimal": ".",
+    "remove": "Remove {name}",
+    "notMedia": "“{name}” doesn’t look like a photo or a video.",
+    "maxFiles": "You can add no more than {max} files.",
+    "tooBig": "“{name}” is {size}, and the limit is 15 MB. Try a shorter video.",
+    "noRoom": "“{name}” no longer fits: the total limit is 18 MB.",
+    "sendingFiles": "Sending files… {pct}%",
+    "sending": "Sending…",
+    "filesLost": "We received your text, but not all the files arrived — the connection seems to have let us down. If they matter, please send them again.",
+    "willReply": "We will read it and reply to the address you gave.",
+    "thanks": "We read every message. Thank you for helping us make the game better.",
+    "failed": "It could not be sent. Check your connection and try again.",
+    "send": "Send"
+  }
+}

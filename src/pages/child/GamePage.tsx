@@ -1,3 +1,4 @@
+import { useLang, useT } from '@/core/i18n';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -11,14 +12,16 @@ import { useHubState } from '@/core/app/ui/useHubState';
 
 /** Hosts a learning session at the step chosen on the path (?step=). */
 export function GamePage() {
+  const t = useT();
   const navigate = useNavigate();
   const { moduleId = '', subId = '' } = useParams();
   const [search] = useSearchParams();
 
-  const module = moduleRegistry.get(moduleId);
+  const module = moduleRegistry.get(moduleId, useLang());
   const sub = module?.subCategories.find((s) => s.id === subId);
-  usePageMeta({ title: sub ? `${sub.label} · ${module?.title}` : 'Гра' });
+  usePageMeta({ title: sub ? `${sub.label} · ${module?.title}` : t('page.game') });
   // Frontier step from the store (advances when a session completes).
+  const hiddenGames = useGameStore((s) => s.settings.hiddenGames);
   const storedStep = useGameStore((s) => s.progress[pathKey(moduleId, subId)] ?? 1);
 
   // The step chosen on the path (never above the frontier); falls back to it.
@@ -42,14 +45,15 @@ export function GamePage() {
     navigate('/', { state: { focusGame: `${moduleId}:${subId}` } });
   };
 
-  if (!module || !sub || gameStatus(sub) === 'soon') {
+  // A game the parent has put away is not there for this child — by its address either.
+  if (!module || !sub || gameStatus(sub) === 'soon' || hiddenGames.includes(pathKey(module.id, sub.id))) {
     return (
       <div className="page center" style={{ minHeight: '60dvh' }}>
         <div className="stack" style={{ textAlign: 'center' }}>
           <span className="emoji" style={{ fontSize: '3rem' }}>
             🙈
           </span>
-          <p>Таку пригоду не знайдено.</p>
+          <p>{t('page.gameNotFound')}</p>
           <button className="emoji" onClick={() => navigate('/')} style={{ fontSize: '2rem' }}>
             🏠
           </button>

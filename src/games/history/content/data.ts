@@ -10,6 +10,8 @@ export interface Achiever {
   fact: string;
   /** Who the verb agrees with («прославилася», «прославилися»). Default: he. */
   who?: 'she' | 'they';
+  /** Whose portrait to show instead of the person's own (`/people/<id>.webp`). */
+  picture?: string;
 }
 
 /**

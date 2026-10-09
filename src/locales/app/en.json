@@ -1,0 +1,952 @@
+{
+  "theme": {
+    "galaxy": {
+      "name": "Galaxy",
+      "mascot": "Little Starship",
+      "goal": "Faraway Planet",
+      "artifact": "Star",
+      "artifactCount": {
+        "one": "{count} star",
+        "other": "{count} stars"
+      },
+      "timeToken": "Time Crystal",
+      "dreamBuild": "Space Station",
+      "treasure": {
+        "star": "Star",
+        "planet": "Planet",
+        "comet": "Comet",
+        "moon": "Moon",
+        "rocket": "Rocket",
+        "satellite": "Satellite",
+        "ufo": "UFO",
+        "galaxy": "Galaxy"
+      }
+    },
+    "unicorns": {
+      "name": "Unicorns",
+      "mascot": "Magic Pony",
+      "goal": "Rainbow",
+      "artifact": "Shining Crystal",
+      "artifactCount": {
+        "one": "{count} shining crystal",
+        "other": "{count} shining crystals"
+      },
+      "timeToken": "Hourglass",
+      "dreamBuild": "Dream Castle",
+      "treasure": {
+        "crown": "Crown",
+        "wand": "Magic Wand",
+        "rainbow": "Rainbow",
+        "orb": "Magic Orb",
+        "stardust": "Stardust",
+        "ring": "Magic Ring",
+        "fairy": "Fairy",
+        "lolly": "Magic Lollipop"
+      }
+    },
+    "cars": {
+      "name": "Cars",
+      "mascot": "Lightning Sports Car",
+      "goal": "Checkered Flag",
+      "artifact": "Golden Gear",
+      "artifactCount": {
+        "one": "{count} golden gear",
+        "other": "{count} golden gears"
+      },
+      "timeToken": "Hourglass",
+      "dreamBuild": "Race Car",
+      "treasure": {
+        "cup": "Trophy",
+        "flag": "Checkered Flag",
+        "wrench": "Wrench",
+        "gear": "Gear",
+        "tire": "Wheel",
+        "light": "Traffic Light",
+        "medal": "Medal",
+        "fuel": "Turbo Fuel"
+      }
+    },
+    "space": {
+      "name": "Space",
+      "mascot": "Robot Astronaut",
+      "goal": "Planet",
+      "artifact": "Space Meteor",
+      "artifactCount": {
+        "one": "{count} space meteor",
+        "other": "{count} space meteors"
+      },
+      "timeToken": "Hourglass",
+      "dreamBuild": "Rocket",
+      "treasure": {
+        "ufo": "Flying Saucer",
+        "planet": "Planet",
+        "comet": "Comet",
+        "alien": "Alien",
+        "moon": "Moon",
+        "satellite": "Satellite",
+        "star": "Star",
+        "telescope": "Telescope"
+      }
+    },
+    "dinos": {
+      "name": "Dinosaurs",
+      "mascot": "Rex the Little Dino",
+      "goal": "Volcano",
+      "artifact": "Ancient Shell",
+      "artifactCount": {
+        "one": "{count} ancient shell",
+        "other": "{count} ancient shells"
+      },
+      "timeToken": "Hourglass",
+      "dreamBuild": "Lost World",
+      "treasure": {
+        "trex": "T-Rex",
+        "diplo": "Diplodocus",
+        "bone": "Bone",
+        "egg": "Dinosaur Egg",
+        "shell": "Ancient Shell",
+        "volcano": "Volcano",
+        "fern": "Fern",
+        "footprint": "Footprint"
+      }
+    },
+    "underwater": {
+      "name": "Underwater World",
+      "mascot": "Jolly Little Crab",
+      "goal": "Treasure",
+      "artifact": "Sea Pearl",
+      "artifactCount": {
+        "one": "{count} sea pearl",
+        "other": "{count} sea pearls"
+      },
+      "timeToken": "Time Crystal",
+      "dreamBuild": "Submarine",
+      "treasure": {
+        "fish": "Little Fish",
+        "dolphin": "Dolphin",
+        "octopus": "Octopus",
+        "crab": "Little Crab",
+        "shell": "Seashell",
+        "turtle": "Little Turtle",
+        "treasure": "Pirate Treasure",
+        "squid": "Squid"
+      }
+    },
+    "forest": {
+      "name": "Forest Fairy Tale",
+      "mascot": "Wise Little Owl",
+      "goal": "Ripe Apple",
+      "artifact": "Ripe Apple",
+      "artifactCount": {
+        "one": "{count} ripe apple",
+        "other": "{count} ripe apples"
+      },
+      "timeToken": "Hourglass",
+      "dreamBuild": "Tree House",
+      "treasure": {
+        "apple": "Little Apple",
+        "mushroom": "Little Mushroom",
+        "acorn": "Acorn",
+        "hedgehog": "Little Hedgehog",
+        "owl": "Little Owl",
+        "pear": "Pear",
+        "squirrel": "Squirrel",
+        "sunflower": "Sunflower"
+      }
+    },
+    "lego": {
+      "name": "Lego",
+      "mascot": "Little Builder",
+      "goal": "Brick Castle",
+      "artifact": "Brick",
+      "artifactCount": {
+        "one": "{count} brick",
+        "other": "{count} bricks"
+      },
+      "timeToken": "Hourglass",
+      "dreamBuild": "Great Brick Castle",
+      "treasure": {
+        "brick": "2×4 Brick",
+        "red": "Red 2×2 Brick",
+        "yellow": "Yellow Plate",
+        "blue": "Blue Roof Slope",
+        "green": "Green Baseplate",
+        "wheel": "Wheel",
+        "builder": "Builder Minifigure",
+        "crane": "Crane"
+      }
+    },
+    "frozen": {
+      "name": "Icy Fairy Tale",
+      "mascot": "Little Snowman",
+      "goal": "Ice Castle",
+      "artifact": "Snowflake",
+      "artifactCount": {
+        "one": "{count} snowflake",
+        "other": "{count} snowflakes"
+      },
+      "timeToken": "Time Crystal",
+      "dreamBuild": "Ice Palace",
+      "treasure": {
+        "snowflake": "Snowflake",
+        "snowman": "Little Snowman",
+        "ice": "Ice Cube",
+        "crystal": "Crystal",
+        "heart": "Icy Heart",
+        "mountain": "Snowy Mountain",
+        "deer": "Reindeer",
+        "spark": "Ice Spark"
+      }
+    },
+    "minecraft": {
+      "name": "Minecraft",
+      "mascot": "Piggy",
+      "goal": "Diamond",
+      "artifact": "Emerald",
+      "artifactCount": {
+        "one": "{count} emerald",
+        "other": "{count} emeralds"
+      },
+      "timeToken": "Hourglass",
+      "dreamBuild": "Block Fortress",
+      "treasure": {
+        "pickaxe": "Diamond Pickaxe",
+        "sword": "Sword",
+        "axe": "Axe",
+        "tnt": "TNT",
+        "torch": "Torch",
+        "apple": "Golden Apple",
+        "bed": "Bed",
+        "diamond": "Diamond"
+      }
+    }
+  },
+  "common": {
+    "back": "Back",
+    "close": "Close",
+    "logout": "Log out",
+    "retry": "Try again",
+    "play": "Play",
+    "soon": "Soon",
+    "all": "All",
+    "done": "Done!",
+    "cancel": "Cancel"
+  },
+  "app": {
+    "loading": "Loading your adventure",
+    "loadFailed": "We couldn’t load your progress.",
+    "loadFailedHint": "Check your connection and try again."
+  },
+  "childLogin": {
+    "title": "Kids’ login",
+    "description": "Kids’ login to Pulsar Kids: type your nickname and the PIN your parents gave you — and set off on an adventure with math, geography and history.",
+    "parents": "Parents’ login",
+    "hello": "Hi! Type your nickname and PIN",
+    "nick": "Nickname",
+    "nickPlaceholder": "e.g. marko_speed",
+    "pending": "Signing in…",
+    "submit": "Play!",
+    "noAccount": "No account yet? Ask your parents to make a profile for you 👨‍👩‍👧"
+  },
+  "parentLogin": {
+    "title": "Parents’ area",
+    "description": "Sign in to the Pulsar Kids parents’ area: add your children, set play time and family goals, and follow their progress.",
+    "hintAuth0": "Used Pulsar Kids before? Sign in with the same email — your children and their progress are waiting.",
+    "hintEmail": "No password needed — for now you sign in with your email only.",
+    "childLogin": "Child’s login",
+    "email": "Email",
+    "noAccount": "There is no account for {email} yet.",
+    "didYouMean": "Did you mean {email}?",
+    "suggestionExists": " That account already exists.",
+    "loginAs": "Sign in as {email}",
+    "creating": "Creating…",
+    "create": "Create a new account for {email}",
+    "fixEmail": "Correct the email",
+    "pending": "Signing in…",
+    "submit": "Sign in",
+    "waitingHint": "As soon as you confirm it, your area will open right here.",
+    "confirmed": "Email confirmed — sign in",
+    "otherEmail": "Sign in with another email",
+    "notFinished": "Sign-in was not completed. Please try again.",
+    "signInOrUp": "Sign in or sign up",
+    "redirecting": "Taking you to the sign-in page…"
+  },
+  "auth": {
+    "error": {
+      "invalid_email": "That doesn’t look like an email address. Please check it.",
+      "invalid_pin": "That PIN isn’t right. Try again or ask your parents.",
+      "invalid_credentials": "Please check your nickname and PIN.",
+      "child_not_found": "There’s no player with that name yet. Ask your parents to make an account for you 👨‍👩‍👧",
+      "network_error": "We couldn’t reach the server. Is the internet on?",
+      "login_failed": "Something went wrong on our side. Please try again.",
+      "invalid_token": "We couldn’t confirm your sign-in. Please sign in again.",
+      "email_missing": "This sign-in method didn’t share your email with us. Please choose another one.",
+      "email_not_verified": "Please confirm your email first: open the message we sent and tap the link in it.",
+      "auth0_required": "Sign-in has been updated. Refresh the page and sign in again."
+    }
+  },
+  "who": {
+    "title": "Who’s playing?",
+    "empty": "No players yet",
+    "emptyHint": "Ask a grown-up to make your profile in the parents’ area.",
+    "openParents": "Open the parents’ area",
+    "today": "Who’s playing today?",
+    "hello": "Hi, {name}!",
+    "enterCode": "Type your code",
+    "erase": "Delete"
+  },
+  "page": {
+    "world": "My world",
+    "vault": "Treasure box",
+    "audio": "Sound and voice",
+    "audioBack": "Back to settings",
+    "game": "Game",
+    "gameNotFound": "We couldn’t find that adventure.",
+    "settings": "Settings"
+  },
+  "hub": {
+    "title": "Pick a planet",
+    "hello": "Hi, {name}! Pick a planet",
+    "galaxyTitle": "The {name} galaxy",
+    "galaxySoon": "Planets are coming here soon! 🚀",
+    "card": {
+      "comingSoon": "{name}. This game is coming soon",
+      "newLabel": "New game",
+      "new": "✨ New",
+      "difficulty": "Difficulty: {stars} out of 3 stars, {ages}",
+      "difficultyRange": "Difficulty: {from} to {to} out of 3 stars, {ages}",
+      "freeCount": {
+        "one": "{count} task · play as much as you like",
+        "other": "{count} tasks · play as much as you like"
+      },
+      "free": "Play as much as you like",
+      "step": "Step {step} / {total}",
+      "soonLabel": "{name}: coming soon",
+      "playLabel": "Play: {name}",
+      "pathLabel": "Open the path: {name}",
+      "myPath": "My path"
+    },
+    "profile": {
+      "open": "Open your profile and goals",
+      "treasures": "Treasure collection: {found} of {total}",
+      "purse": "{name}: {count}. Open the shop of your world"
+    },
+    "subjects": {
+      "head": "📚 Subjects",
+      "all": "All subjects",
+      "one": "Subject: {name}"
+    },
+    "filter": {
+      "allGames": "All games",
+      "games": "Game filter",
+      "stars": "Difficulty filter",
+      "starsSay": {
+        "one": "Difficulty: {count} star out of three, {ages}",
+        "other": "Difficulty: {count} stars out of three, {ages}"
+      },
+      "starsLabel": "{stars} of 3 stars, {ages}"
+    },
+    "empty": "There are no planets in this galaxy yet. Pick another one!",
+    "galaxy": {
+      "say": "The {name} galaxy",
+      "label": "Galaxy: {name}. Pick another",
+      "kicker": "Galaxy",
+      "pick": "Pick a galaxy",
+      "soon": "soon"
+    },
+    "groups": {
+      "title": "Which games to show?",
+      "label": "Choose which games to show"
+    }
+  },
+  "ages": {
+    "range": "ages {from}–{to}",
+    "said": "ages {from} to {to}"
+  },
+  "galaxy": {
+    "math": "Math",
+    "geography": "Geography",
+    "ecology": "Ecology",
+    "history": "History",
+    "language": "Language",
+    "logic": "Logic",
+    "astronomy": "Astronomy",
+    "art": "Art",
+    "science": "Nature",
+    "music": "Music"
+  },
+  "path": {
+    "caption": "This is your path — tap a step you have passed to play it again. The {chests} hide treasures!",
+    "step": "Step {n}",
+    "current": " (current)",
+    "chest": " (hidden treasure)",
+    "locked": " (locked)"
+  },
+  "drawer": {
+    "label": "Profile and treasure box",
+    "inVault": "in the treasure box",
+    "goals": "🎯 Goals",
+    "goalReached": "Goal: {goal}. Reached! You have collected {amount}.",
+    "goalPending": "Goal: {goal}. Not reached yet. Still to collect: {amount}.",
+    "familyGoal": "family goal",
+    "familyGoalTitle": "Family goal",
+    "goalLeft": "{left} {emoji} to go ({have} / {need})",
+    "theme": "🎨 Theme",
+    "sound": "🔈 Sound",
+    "muted": "Sound is off",
+    "mute": "Turn all sound off",
+    "voiceOff": "Turn the voice off",
+    "voiceIsOff": "Voice is off",
+    "hideTts": "Hide the speaker buttons",
+    "ttsHidden": "Speaker buttons are hidden",
+    "switchPlayer": "Switch player"
+  },
+  "goal": {
+    "reached": "Reached! 🎁",
+    "default": {
+      "cookie": "Bake cookies together 🍪",
+      "park": "A trip to the amusement park 🎡",
+      "trip": "A big family adventure 🎉"
+    }
+  },
+  "time": {
+    "rest": "Time for a rest",
+    "left": "Play time left: {pct}%",
+    "label": "Play time"
+  },
+  "voiceToggle": {
+    "off": "Turn the voice off",
+    "offOf": "Turn the voice off: {label}",
+    "on": "Turn the voice on",
+    "onOf": "Turn the voice on: {label}",
+    "masterOff": "Switch on “Voice” in the settings"
+  },
+  "tip": {
+    "hub": {
+      "card": "This is a game. Tap it to start playing!",
+      "galaxy": "Here you can pick another subject: math, language, logic, geography or astronomy.",
+      "stars": "The stars show how hard a game is. One star means the easiest games, three stars the hardest.",
+      "artifacts": "This is your treasure box: everything you have earned in the games is here. Tap it to visit your world — there you can buy buildings and decorations with it.",
+      "treasures": "Here are the treasures you find in the chests along your path.",
+      "profile": "This is you! Tap to see your goals and change the theme.",
+      "time": "This is your time to play. When it runs out, it will be time for a rest."
+    },
+    "how": {
+      "UI_GRID_CHOICE": "To answer, tap the right card.",
+      "UI_DRAG_MATCH": "Drag each card to its place. Or tap a card, and then the place for it.",
+      "UI_CHRONO_SEQUENCE": "Tap two cards to swap them. When everything is in order, tap “Done”.",
+      "UI_MAP_PUZZLE": "Drag it onto the map, or simply tap the right place on it.",
+      "UI_BALANCE_SCALE": "Drag a weight onto the right pan of the scales.",
+      "UI_SORTER_BINS": "Drag the thing to the right place — or simply tap that place.",
+      "UI_CASH_TRAY": "Tap the coins and bills to put them on the counter.",
+      "UI_TANGRAM": "Drag each shape onto its outline.",
+      "UI_GRID_AREA": "Tap the squares to color them in, then tap “Done”.",
+      "UI_NUMBER_MAZE": "Tap the next square to take a step.",
+      "UI_BUBBLE_POP": "Pop the bubbles in order: tap the one that comes next.",
+      "UI_DOT_TO_DOT": "Tap the stars in order, or slide your finger from star to star — a line will appear between them.",
+      "UI_COLOR_MIX": "Tap two paints to pour them into the cauldron and mix them.",
+      "UI_LETTER_GRID": "Drag each letter to its place in the table. Or tap a letter, and then an empty square."
+    },
+    "game": {
+      "tts": "Not sure what it says here? Tap the speaker and I will read it to you!",
+      "track": "Your friend is running to the finish. Every right answer is a step forward!",
+      "dots": "The dots show how many tasks there are in a level. The colored ones are those you have already done.",
+      "home": "The little house takes you back to all the games."
+    }
+  },
+  "coach": {
+    "label": "Tip",
+    "gotIt": "Got it 👍"
+  },
+  "treasures": {
+    "title": "Treasure collection",
+    "notFound": "Not found yet",
+    "found": "Treasures found:",
+    "all": "The whole collection is complete! 🎉",
+    "hint": "Open the {chests} along your path to find new treasures!"
+  },
+  "vault": {
+    "inVault": "{name} in the treasure box",
+    "goals": "Family goals",
+    "hint": "{name} from every task drops into one shared basket!"
+  },
+  "audio": {
+    "general": "🔈 General",
+    "effects": "Sound effects",
+    "voice": "Voice",
+    "sections": "🎙️ Voice prompts by section",
+    "sectionsHint": "Turn the voice on or off for each part separately.",
+    "sectionsOff": "First switch on “Voice” above.",
+    "ttsButtons": "🔊 Read-aloud buttons",
+    "ttsHint": "The speaker icon next to text tasks and answers reads them aloud. Turn it off so your child reads on their own.",
+    "ttsOn": "Show the buttons",
+    "ttsOff": "Off — we read by ourselves",
+    "captions": "🔤 Text labels",
+    "captionsHint": "On — labels for those who can read. Off — pictures only.",
+    "captionsOn": "Show",
+    "captionsOff": "Hidden"
+  },
+  "voiceChannel": {
+    "selections": "Reading out choices (age, subject, difficulty)",
+    "taskPrompt": "Reading the task (e.g. “six plus one”)",
+    "taskIntro": "Explanation at the start of a task",
+    "hint": "A spoken hint after a mistake"
+  },
+  "gender": {
+    "girl": "Girl",
+    "boy": "Boy"
+  },
+  "speed": {
+    "off": "Off",
+    "verySlow": "Very slowly",
+    "slow": "Slowly",
+    "medium": "Moderately",
+    "fast": "Fast"
+  },
+  "celebration": {
+    "balloons": "Balloons",
+    "balls": "Balls",
+    "stars": "Stars",
+    "fireworks": "Fireworks",
+    "candy": "Candy"
+  },
+  "currency": {
+    "UAH": "Hryvnia",
+    "EUR": "Euro",
+    "USD": "Dollar",
+    "GBP": "Pound",
+    "PLN": "Zloty",
+    "short": {
+      "UAH": "UAH",
+      "EUR": "€",
+      "USD": "$",
+      "GBP": "£",
+      "PLN": "zł"
+    },
+    "count": {
+      "UAH": {
+        "one": "{count} hryvnia",
+        "other": "{count} hryvnias"
+      },
+      "EUR": {
+        "one": "{count} euro",
+        "other": "{count} euros"
+      },
+      "USD": {
+        "one": "{count} dollar",
+        "other": "{count} dollars"
+      },
+      "GBP": {
+        "one": "{count} pound",
+        "other": "{count} pounds"
+      },
+      "PLN": {
+        "one": "{count} zloty",
+        "other": "{count} zlotys"
+      }
+    }
+  },
+  "child": {
+    "defaultName": "Friend"
+  },
+  "parent": {
+    "signedInAs": "Signed in as {email}",
+    "saving": "Saving…",
+    "savedBar": "✅ Saved",
+    "saveBar": "💾 Save changes",
+    "allSaved": "Everything is saved",
+    "logoutBar": "🚪 Log out",
+    "saved": "Saved!",
+    "save": "Save changes",
+    "logout": "Log out of the account",
+    "pickChild": "Choose a child above or add a new one to set up their game.",
+    "lang": {
+      "title": "🌐 Languages",
+      "hint": "The language of the game, of the voice and of this area can each be chosen separately — for example, a game in Ukrainian with an English voice.",
+      "parent": "Language of the parents’ area",
+      "game": "Language of the child’s game",
+      "voice": "Voice language for the child"
+    },
+    "profile": {
+      "title": "👤 Child’s profile",
+      "openGame": "Open the child’s game",
+      "openFailed": "The game could not be opened. If the child has just been added, tap “Save changes” first.",
+      "openHint": "The game opens in a new tab, already signed in as the child — no nickname or PIN needed.",
+      "name": "Name",
+      "nameLabel": "Child’s name",
+      "nick": "Unique nickname (@nickname)",
+      "nickLabel": "Child’s unique nickname",
+      "nickShort": "Unique nickname",
+      "nickHint": "Lowercase letters, digits and “_” only (3–12 characters). Shown in the profile panel.",
+      "pin": "Login PIN (3–4 digits)",
+      "pinPlaceholder": "e.g. 1234",
+      "pinLabel": "Child’s PIN",
+      "pinHint": "Your child signs in with the nickname and this PIN.",
+      "birth": "Date of birth",
+      "birthMonth": "Month of birth",
+      "birthYear": "Year of birth",
+      "age": "The age is worked out automatically: {age}",
+      "gender": "Gender"
+    },
+    "audio": {
+      "title": "🔊 Sound, voice and labels",
+      "hint": "All the sounds, voice prompts and text labels in one place.",
+      "open": "Open sound settings"
+    },
+    "theme": {
+      "title": "🎨 Theme (world)"
+    },
+    "rollback": {
+      "title": "🏎️ Companion roll-back",
+      "hint": "If your child takes a long time to answer, the companion slowly rolls back. Each whole step it rolls back adds one more task to the level (three extra at most)."
+    },
+    "tips": {
+      "title": "💡 Tips about the buttons",
+      "hint": "The first time round, the game explains to your child what each button does. A tip your child has closed does not come back. Tips read: {count}.",
+      "reset": "Show them again"
+    },
+    "celebration": {
+      "title": "🎉 Victory celebration"
+    },
+    "grid": {
+      "title": "🔢 Answer grid",
+      "label": "Answer grid",
+      "hint": "More options make it harder to guess at random."
+    },
+    "facts": {
+      "title": "💡 Fun facts",
+      "hint": "After a right answer the game tells a short fact about what your child has just done and waits until it has been read out. Turn it off and the next task starts at once.",
+      "on": "Tell the facts",
+      "off": "No facts"
+    },
+    "money": {
+      "title": "💰 Money in the “Shop” game",
+      "hint": "The coins and bills your child pays with in the shop.",
+      "auto": "Until you choose, the money follows the language of the game: hryvnias, dollars or zlotys.",
+      "chosen": "You chose the money yourself — changing the language will no longer change it."
+    },
+    "time": {
+      "title": "⛽ Screen time",
+      "hint": "Your child sees only a themed fuel gauge — no digital timers. When the fuel runs out, a short cartoon plays, and then comes a calm rest.",
+      "session": "Session length (min)",
+      "sessionLabel": "Session length in minutes",
+      "minutes": "{n} min",
+      "cooldown": "Rest between sessions (min)",
+      "cooldownLabel": "Rest length in minutes",
+      "daily": "Daily limit (min)",
+      "dailyLabel": "Daily limit in minutes",
+      "refill": "Refill the time now",
+      "refillHint": "Gives your child a full gauge at once and ends the rest — whether or not other changes are saved.",
+      "resting": "😴 Your child is resting. Next game in: {min} min {sec} s",
+      "refilled": "Time refilled!",
+      "refillButton": "Refill play time"
+    },
+    "goals": {
+      "title": "🎯 Family goals",
+      "hint": "How many artifacts (from any tasks) need to be collected in the shared basket to earn a reward.",
+      "add": "Add a goal",
+      "reward": "Reward",
+      "rewardPlaceholder": "E.g. Bake cookies together 🍪",
+      "amount": "How many {artifact} to collect",
+      "amountLabel": "How many artifacts to collect for the reward: {reward}",
+      "removeLabel": "Remove the goal: {reward}",
+      "unnamed": "unnamed"
+    },
+    "games": {
+      "title": "🪜 Games and steps",
+      "hint": "Open a galaxy: the checkbox shows a game to your child or puts it away, and the number is the step they are on. Language games are grouped — a whole language can be switched off with one checkbox.",
+      "stepLabel": "Step for {name} (max {max})",
+      "showLabel": "Show the game: {name}",
+      "showSet": "Show all games: {name}",
+      "reset": "Reset all progress"
+    },
+    "password": {
+      "title": "🔑 Password",
+      "sent": "A message with a link has been sent to {email}. Open it and set a new password. Can’t see it? Check your spam folder.",
+      "failed": "The message could not be sent. Please try again in a minute.",
+      "hint": "We will send {email} a message with a link for setting a new password.",
+      "sending": "Sending…",
+      "again": "Send again",
+      "change": "Change password"
+    }
+  },
+  "cm": {
+    "nick": {
+      "idle": "Lowercase letters, digits and “_” only (3–12 characters).",
+      "invalid": "✋ A nickname is 3–12 characters: lowercase letters, digits, “_”.",
+      "checking": "⏳ Checking whether the nickname is free…",
+      "available": "✅ The nickname is free!",
+      "taken": "🙈 That nickname is taken. Try another one.",
+      "error": "⚠️ We couldn’t check it online — we’ll save it as it is."
+    },
+    "title": "👨‍👩‍👧 Children",
+    "hint": "Up to {max} children per account. Tap a child to edit their settings below.",
+    "edit": "Edit {name}",
+    "editing": "editing",
+    "remove": "Remove {name}",
+    "max": "5 children at most",
+    "add": "Add a child",
+    "new": "New child",
+    "namePlaceholder": "e.g. Mark",
+    "pinOk": "Your child signs in with the nickname and this PIN.",
+    "pinBad": "✋ A PIN is 3 or 4 digits.",
+    "create": "Create the profile",
+    "removeTitle": "Remove the child?",
+    "removeHint": "All the progress of this profile will be lost. This cannot be undone.",
+    "removeYes": "Yes, remove"
+  },
+  "game": {
+    "tasksDone": {
+      "one": "The task is done.",
+      "other": "All {count} tasks are done."
+    },
+    "gift": {
+      "small": "A little gift!",
+      "big": "A big gift!",
+      "biggest": "The biggest gift!"
+    },
+    "hint": {
+      "with": "Here is a hint! {how}",
+      "plain": "Here is a hint! Let’s look together.",
+      "label": "🧚 Hint",
+      "back": "Back to the answers"
+    },
+    "win": {
+      "title": {
+        "boy": "You are amazing!",
+        "girl": "You are amazing!"
+      },
+      "collected": "You collected {amount}.",
+      "collectedWithKeys": "You collected {amount} and {keys} of knowledge.",
+      "great": "Great job!",
+      "earned": "Collected +{n} {emoji}",
+      "resident": "A new friend has moved into your world:",
+      "newTreasure": "A new treasure in your collection: ",
+      "treasure": "Treasure: ",
+      "next": "Next level!",
+      "again": "Once more!",
+      "exit": "To the adventures"
+    },
+    "moduleNotFound": "Module not found 🙈",
+    "back": "Back to the adventures",
+    "progress": "Task {n} of {total}",
+    "intro": {
+      "close": "Close and start",
+      "start": "Let’s start!"
+    }
+  },
+  "world": {
+    "keyCount": {
+      "one": "{count} key",
+      "other": "{count} keys"
+    },
+    "station": {
+      "open": "{name}. Already open! {about}",
+      "closedPlanet": "{name}. {about} This planet is still closed.",
+      "price": {
+        "one": "To open it you need {count} key.",
+        "other": "To open it you need {count} keys."
+      },
+      "saving": "{name}. {about} {price} Collect {missing} more: keys are given for new steps in any game.",
+      "ready": "{name}. {about} {price} You can open it!",
+      "opened": "{name}. Open!",
+      "unlock": "Open"
+    },
+    "stations": {
+      "title": "Stations of Knowledge",
+      "hint": "Stations are opened with keys of knowledge {key}. A key is given for every new step in any game. To fly on from the planet {planet}, open at least {need}.",
+      "closed": "The planet {planet} is still closed — its stations will open when you fly here. For now, open the stations on the planet {frontier}."
+    },
+    "keys": {
+      "label": "Keys of knowledge: {count}",
+      "about": {
+        "one": "You have {count} key of knowledge. A key is given for every new step in any game. Keys open the stations of knowledge.",
+        "other": "You have {count} keys of knowledge. A key is given for every new step in any game. Keys open the stations of knowledge."
+      }
+    },
+    "residents": {
+      "title": "Residents",
+      "coming": "Someone else is on the way",
+      "comingSay": "Someone else is on the way to you. It’s a surprise!"
+    },
+    "system": {
+      "label": "The Solar System",
+      "close": "Close the Solar System",
+      "showAll": "Show the whole Solar System",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "closeStory": "Close and stop the story",
+      "builtOf": "Built: {have} of {total}",
+      "notReached": "🔒 You have not flown here yet",
+      "more": "Tell me more ✨"
+    },
+    "sun": {
+      "name": "The Sun",
+      "reached": "You have reached the Sun! The whole Solar System is yours.",
+      "reachedNext": "You have reached the Sun! The whole Solar System is yours. A new galaxy is waiting for you next.",
+      "goal": "The Sun is the goal of your journey. To reach it, pass all eight planets."
+    },
+    "item": {
+      "builtYes": "{name}. Already built!",
+      "builtNo": "{name}. Not built yet.",
+      "ariaBuilt": "{name}: built",
+      "ariaNotBuilt": "{name}: not built yet",
+      "portNote": "The spaceport opens the way to the next planet.",
+      "owned": "{name}. It already stands on your planet.",
+      "locked": "{name}. This is the big dream! First build all the other buildings and the spaceport.",
+      "saving": "{name}. It costs {cost}. You have {balance}. Collect {missing} more — and you can build. {how}",
+      "howToEarn": "To collect them, play any game: a reward is given for every task you do.",
+      "affordable": "{name}. It costs {cost}. You can build it!",
+      "closedPlanet": "{name}. This planet is still closed.",
+      "sellWarn": "If you sell it, you will get back {back}, not {cost}. That is less than you paid. If you buy and sell often, there will be fewer and fewer treasures. Think it over well!",
+      "built": "{name}. Built!"
+    },
+    "need": {
+      "port": {
+        "text": "Spaceport",
+        "how": "The spaceport is a building. It is in the “Buildings” list on the planet {planet} and costs {cost} {artifact}. They are given for every task you do in the games.",
+        "go": "Show the spaceport"
+      },
+      "built": {
+        "text": "Buildings and decorations",
+        "how": "Build everything from the “Buildings” and “Decorations” lists on the planet {planet}: {have} of {need} are there already. Building is paid for with {artifact} — they are given for the tasks you do.",
+        "go": "To the buildings and decorations"
+      },
+      "stations": {
+        "text": "Stations of Knowledge",
+        "how": "Open the stations of knowledge on the planet {planet}: {have} of {need} are open already. They are opened with keys of knowledge 🗝️ — a key is given for every new step in any game.",
+        "go": "To the stations"
+      },
+      "residents": {
+        "text": "Residents",
+        "how": "Residents come with presents. A present waits on every fifth step of the path in any game. {have} of {need} are here already."
+      },
+      "treasures": {
+        "text": "Treasures",
+        "how": "Treasures lie in chests along the path: a chest waits on every third step of a game, and in each there is a new treasure. {have} of {need} are found already."
+      },
+      "done": "Done!",
+      "notDone": "Not done yet.",
+      "doneHow": "Done! {how}",
+      "tip": "Tap a picture — I will tell you how to get it."
+    },
+    "needs": {
+      "first": "🔒 First — the planet {planet}",
+      "open": "🚀 The way on is open!",
+      "toSun": "🚀 To fly to the Sun",
+      "to": "🚀 To fly on to {planet}"
+    },
+    "hint": {
+      "closed": "This planet is still closed.",
+      "canBuild": "You can already build: {name}!",
+      "canBuildLead": "You can already build:",
+      "tap": "Tap anything on the planet or in the list below."
+    },
+    "where": "{planet} · the {galaxy} galaxy",
+    "purse": "You can spend: {balance}",
+    "planet": {
+      "ariaDone": "{name}: everything is built",
+      "ariaOpen": "{name}: open",
+      "ariaClosed": "{name}: still closed",
+      "notYet": "{name}. You cannot come here yet. First do everything on the planet {frontier} and build a spaceport there.",
+      "done": "{name}. Everything is already built here!",
+      "number": "{name}. Planet number {n} of {total} on the way to the Sun.",
+      "spinLeft": "Turn the planet to the left",
+      "spinRight": "Turn the planet to the right"
+    },
+    "fly": {
+      "say": "Off we fly! The next planet is {planet}.",
+      "button": "🚀 Fly: {planet}"
+    },
+    "bar": {
+      "owned": "It already stands on your planet ✓",
+      "locked": "This is the big dream! First build all the other buildings and the spaceport.",
+      "saving": "It costs {cost} {artifact} · you have {balance} · collect {missing} {artifact} more",
+      "affordable": "Trade {cost} {artifact}?",
+      "earn": "{artifact} are given for every task you do in any game.",
+      "goal": "Or keep saving for “{reward}”:",
+      "goalEnough": "there will be enough for the goal even after buying",
+      "goalShortAfter": "after buying you will be {n} short",
+      "goalShort": "you are {now} short now, and after buying — {after}",
+      "sellNote": "You will get back {back} {artifact}, not {cost} — that is less than you paid.",
+      "build": "Build",
+      "play": "Play and collect",
+      "sellYes": "Yes, sell",
+      "sellNo": "Keep it",
+      "sellFor": "Sell for"
+    },
+    "shelf": {
+      "buildings": "🏗️ Buildings",
+      "decor": "🌷 Decorations"
+    }
+  },
+  "treasure": {
+    "found": "Treasure found: {name}",
+    "new": "🎉 A new treasure!",
+    "one": "✨ Treasure!",
+    "collection": "My collection"
+  },
+  "rest": {
+    "cars": {
+      "title": "Cartoon: Pit stop!",
+      "message": "Our sports car has driven a great distance and it’s time for it to rest! Time to run around the room or have some tasty juice. Come back in a while — the tank will be full again!"
+    },
+    "space": {
+      "title": "Cartoon: Landing at the station!",
+      "message": "The rocket has gently docked at the station and switched on its night light. Have a little rest. Come back in a while — and we’ll fly on!"
+    },
+    "unicorns": {
+      "title": "Cartoon: The crystal’s nap!",
+      "message": "The crystal has wrapped itself in a soft little cloud and fallen asleep to bring the rainbow back. Come back in a while — and it will shine again!"
+    },
+    "default": {
+      "title": "Cartoon: Time for a rest!",
+      "message": "{mascot} has worked wonderfully today and is off for a rest. Time to run around the room or have a drink of water. Come back in a while!"
+    },
+    "playOn": "Keep playing!",
+    "goRest": "Go and rest"
+  },
+  "tpl": {
+    "clock": "Clock",
+    "worldMap": "World map",
+    "rows": {
+      "one": "{count} row · {cols} in it",
+      "other": "{count} rows · {cols} in each"
+    },
+    "dot": "Dot",
+    "oldest": "oldest",
+    "newest": "newest",
+    "seqGuide": "Hint: the whole sequence in order",
+    "checkOrder": "Check the order",
+    "silhouette": "Silhouette: {figure}",
+    "shape": "Shape",
+    "fuel": "Fuel {pct}%",
+    "wrongBin": "Oops, it doesn’t fit here. Try another place!",
+    "cell": "Square {n}",
+    "checkArea": "Check the pen",
+    "tooMuch": "That’s too much! Take a little back.",
+    "takeBack": "Take back {amount}",
+    "cube": "Cube",
+    "repeat": "Repeat the task",
+    "sky": "Starry sky",
+    "star": "Star {label}",
+    "cauldron": "Cauldron",
+    "paint": "Paint: {name}",
+    "pie": "{filled} of {total} colored in",
+    "readAloud": "Read aloud: {text}"
+  },
+  "map": {
+    "north_america": "North America",
+    "south_america": "South America",
+    "europe": "Europe",
+    "africa": "Africa",
+    "asia": "Asia",
+    "australia": "Australia",
+    "antarctica": "Antarctica",
+    "pacific": "Pacific Ocean",
+    "atlantic": "Atlantic Ocean",
+    "indian": "Indian Ocean",
+    "arctic": "Arctic Ocean",
+    "southern": "Southern Ocean"
+  }
+}

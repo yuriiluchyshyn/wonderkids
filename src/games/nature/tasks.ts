@@ -1,21 +1,19 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import type { TaskInstance } from '@/core/game/kernel/types';
+import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { shuffle } from '@/core/utils/random';
 import { factPool } from '../shared/facts';
 import { card, templateTask, withDistractors, type GameTasks } from '../shared/templateModule';
-import { capitalise, clause, from, inflect, list, phrase } from '@/core/lang/uk';
-import { MONTHS, MONTH_WORD, SEASONS, SEASON_FACTS, SIGNS, type Month, type SeasonId } from './content/data';
+import { MONTHS, SEASONS, SIGNS, type Month, type SeasonId } from './content/data';
+import { natureTexts } from './lang';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 export const RELEASE = '2026-10-06T00:00:00Z';
 const byId = <T extends { id: string }>(a: T, b: T) => a.id === b.id;
-const seasonName = (id: SeasonId) => SEASONS.find((s) => s.id === id)?.name ?? '';
 const monthsOf = (id: SeasonId) =>
-  // In calendar order within the season: winter runs December → February.
   id === 'winter' ? [MONTHS[11], MONTHS[0], MONTHS[1]] : MONTHS.filter((m) => m.season === id);
 
-/** A shuffled order that is guaranteed not to be already solved. */
+/** A wrong order to start from — never the right one. */
 function scramble(ids: string[]): string[] {
   for (let i = 0; i < 12; i += 1) {
     const order = shuffle(ids);
@@ -24,32 +22,28 @@ function scramble(ids: string[]): string[] {
   return [...ids].reverse();
 }
 
-const monthOptions = (month: Month) => withDistractors(month, MONTHS, 4, byId).map((m) => card(m.id, m.emoji, m.name));
-
 /**
- * «Пори року і місяці». The path adds one kind of question at a time:
- *   1  signs of the seasons (the first twelve)      UI_SORTER_BINS
- *   2  all signs                                    UI_SORTER_BINS
- *   3  which season is this month in                UI_SORTER_BINS
- *   4  which month comes next                       UI_GRID_CHOICE
- *   5  which month came before                      UI_GRID_CHOICE
- *   6  put a season's months in order               UI_CHRONO_SEQUENCE
- *   7  which month is the N-th of the year          UI_GRID_CHOICE
- *   8  the seasons in order, starting anywhere      UI_CHRONO_SEQUENCE
- * `recallLevel` turns that growth into "new + recalled" levels by itself.
+ * «Пори року і місяці»: what happens when, then the twelve months — their
+ * season, their neighbours, their order, their number — and the seasons in a
+ * circle. Every word comes from the language of the task (`lang/`).
  */
-function seasons(step: number): Tasks {
-  const bins = SEASONS.map((s) => card(s.id, s.emoji, s.name));
-  const wrongSay = Object.fromEntries(SEASONS.map((s) => [s.id, s.no]));
+function seasons(step: number, config: Pick<TaskConfig, 'lang'>): Tasks {
+  const T = natureTexts(config.lang);
+  const at = (m: Month) => MONTHS.indexOf(m);
+  const monthCard = (m: Month) => card(m.id, m.emoji, T.month(at(m)).name);
+  const monthOptions = (month: Month) => withDistractors(month, MONTHS, 4, byId).map(monthCard);
+  const bins = SEASONS.map((s) => card(s.id, s.emoji, T.season(s.id).name));
+  const wrongSay = Object.fromEntries(SEASONS.map((s) => [s.id, T.season(s.id).no]));
   const tasks: Tasks = [];
 
-  for (const [i, { emoji, what, season, fact }] of SIGNS.slice(0, step === 1 ? 12 : SIGNS.length).entries()) {
+  // Signs of a season — step 1 uses the twelve clearest ones.
+  for (const [i, { emoji, season }] of SIGNS.slice(0, step === 1 ? 12 : SIGNS.length).entries()) {
+    const { ask, label, fact } = T.sign(i);
     tasks.push(
       templateTask(
         `season:sign:${i}`,
-        // «Коли достигають кавуни?», «Коли ми ліпимо сніговика?»
-        `Коли ${clause(what, 'present', { we: true })}?`,
-        { template: Mechanics.SorterBins, item: card(`sign${i}`, emoji, capitalise(clause(what))), bins, correctBinId: season, wrongSay, hint: fact },
+        ask,
+        { template: Mechanics.SorterBins, item: card(`sign${i}`, emoji, label), bins, correctBinId: season, wrongSay, hint: fact },
         step,
         fact,
       ),
@@ -57,21 +51,14 @@ function seasons(step: number): Tasks {
   }
 
   if (step >= 3) {
-    for (const m of MONTHS) {
+    for (const [i, m] of MONTHS.entries()) {
       tasks.push(
         templateTask(
           `season:month:${m.id}`,
-          `До якої пори року належить ${m.name.toLowerCase()}?`,
-          {
-            template: Mechanics.SorterBins,
-            item: card(m.id, m.emoji, m.name),
-            bins,
-            correctBinId: m.season,
-            wrongSay,
-            hint: `${m.name} — це ${seasonName(m.season).toLowerCase()}. ${SEASON_FACTS[m.season][0]}`,
-          },
+          T.monthSeason.ask(i),
+          { template: Mechanics.SorterBins, item: monthCard(m), bins, correctBinId: m.season, wrongSay, hint: T.monthSeason.hint(i, m.season) },
           step,
-          m.fact,
+          T.month(i).fact,
         ),
       );
     }
@@ -83,17 +70,17 @@ function seasons(step: number): Tasks {
       tasks.push(
         templateTask(
           `month:next:${m.id}`,
-          `Який місяць настає після ${m.after}?`,
+          T.after.ask(i),
           {
             template: Mechanics.GridChoice,
             cols: 2,
-            stimulus: { emoji: m.emoji, caption: m.name },
+            stimulus: { emoji: m.emoji, caption: T.month(i).name },
             options: monthOptions(next),
             correctId: next.id,
-            hint: `Згадай місяці по порядку: ${MONTHS[(i + 11) % 12].name.toLowerCase()}, ${m.name.toLowerCase()}, а далі…`,
+            hint: T.after.hint(i),
           },
           step,
-          factPool(`Після ${m.after} настає ${next.name.toLowerCase()}.`, next.fact),
+          factPool(T.after.fact(i), T.month(at(next)).fact),
         ),
       );
     }
@@ -105,17 +92,17 @@ function seasons(step: number): Tasks {
       tasks.push(
         templateTask(
           `month:prev:${m.id}`,
-          `Який місяць був перед ${m.before}?`,
+          T.before.ask(i),
           {
             template: Mechanics.GridChoice,
             cols: 2,
-            stimulus: { emoji: m.emoji, caption: m.name },
+            stimulus: { emoji: m.emoji, caption: T.month(i).name },
             options: monthOptions(prev),
             correctId: prev.id,
-            hint: `Згадай місяці по порядку. Після якого місяця настає ${m.name.toLowerCase()}?`,
+            hint: T.before.hint(i),
           },
           step,
-          factPool(`Перед ${m.before} був ${prev.name.toLowerCase()}.`, prev.fact),
+          factPool(T.before.fact(i), T.month(at(prev)).fact),
         ),
       );
     }
@@ -127,39 +114,38 @@ function seasons(step: number): Tasks {
       tasks.push(
         templateTask(
           `season:order:${s.id}`,
-          phrase('Постав {of~months} {months} по порядку. Перший місяць — на місце 1.', { of: s.of, months: MONTH_WORD }),
+          T.orderMonths.ask(s.id),
           {
             template: Mechanics.ChronoSequence,
-            cards: months.map((m) => card(m.id, m.emoji, m.name)),
+            cards: months.map(monthCard),
             initial: scramble(months.map((m) => m.id)),
             orientation: 'horizontal',
-            ends: ['спочатку', 'наприкінці'],
-            hint: `${s.name} починається ${from(months[0].after)}. Торкнись двох карток, щоб поміняти їх місцями.`,
+            ends: T.ends,
+            hint: T.orderMonths.hint(s.id, at(months[0])),
           },
           step,
-          factPool(`${s.name} — це ${list(months.map((m) => m.name.toLowerCase()))}.`, SEASON_FACTS[s.id]),
+          factPool(T.orderMonths.fact(s.id, months.map(at)), [...T.season(s.id).facts]),
         ),
       );
     }
   }
 
   if (step >= 7) {
-    const ORDINAL = ['перший', 'другий', 'третій', 'четвертий', 'п’ятий', 'шостий', 'сьомий', 'восьмий', 'дев’ятий', 'десятий', 'одинадцятий', 'дванадцятий'];
     for (const [i, m] of MONTHS.entries()) {
       tasks.push(
         templateTask(
           `month:number:${m.id}`,
-          `Який місяць ${ORDINAL[i]} у році?`,
+          T.nth.ask(i),
           {
             template: Mechanics.GridChoice,
             cols: 2,
             stimulus: { glyphs: [String(i + 1)] },
             options: monthOptions(m),
             correctId: m.id,
-            hint: 'Рік починається із січня. Порахуй місяці по порядку: січень — перший, лютий — другий, березень — третій…',
+            hint: T.nth.hint,
           },
           step,
-          factPool(`${m.name} — ${ORDINAL[i]} місяць року.`, m.fact),
+          factPool(T.nth.fact(i), T.month(i).fact),
         ),
       );
     }
@@ -171,17 +157,17 @@ function seasons(step: number): Tasks {
       tasks.push(
         templateTask(
           `seasons:order:${first.id}`,
-          `Постав пори року по порядку. Почни ${from(inflect(first.word, 'gen'))}.`,
+          T.orderSeasons.ask(first.id),
           {
             template: Mechanics.ChronoSequence,
-            cards: order.map((s) => card(s.id, s.emoji, s.name)),
+            cards: order.map((s) => card(s.id, s.emoji, T.season(s.id).name)),
             initial: scramble(order.map((s) => s.id)),
             orientation: 'horizontal',
-            ends: ['спочатку', 'наприкінці'],
-            hint: 'Пори року йдуть по колу: зима, весна, літо, осінь — і знову зима.',
+            ends: T.ends,
+            hint: T.orderSeasons.circle,
           },
           step,
-          'Пори року йдуть по колу: зима, весна, літо, осінь — і знову зима.',
+          T.orderSeasons.circle,
         ),
       );
     }
@@ -190,7 +176,6 @@ function seasons(step: number): Tasks {
   return tasks;
 }
 
-/** Task generators of every game, by game id (the cards are in `config.ts`). */
 export const TASKS: Record<string, GameTasks> = {
   seasons: { pool: seasons },
 };

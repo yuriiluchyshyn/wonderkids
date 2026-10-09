@@ -1,26 +1,16 @@
 import confetti from 'canvas-confetti';
 import { useState } from 'react';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
-import { KEY, KEY_COUNTED } from '@/core/child/world/stations';
+import { KEY } from '@/core/child/world/stations';
 import { PlanetView } from './PlanetView';
 import { useWorld, type StationState, type World } from '@/core/child/world/useWorld';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
-import { counted } from '@/core/lang/uk';
 import { cn } from '@/core/utils/cn';
-import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useT, type T } from '@/core/i18n';
+import { useTell } from './useTell';
 import { useSound } from '@/core/audio/useSound';
 import styles from './WorldView.module.css';
-
-/** Tap a picture to hear what it is (the caption may be hidden or unreadable yet). */
-function useSayOnTap() {
-  const speak = useVoiceSpeak('selections');
-  const { play } = useSound();
-  return (text: string) => () => {
-    play('tap');
-    speak(text);
-  };
-}
 
 /**
  * The stations of knowledge of the planet being looked at. Tapping one reads
@@ -29,24 +19,27 @@ function useSayOnTap() {
  */
 function Stations({ world }: { world: World }) {
   const showText = useShowText();
-  const announce = useVoiceSpeak('selections');
+  const t = useT();
+  const { tell } = useTell(world.planet);
   const { play } = useSound();
   const open = useGameStore((s) => s.openStation);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { stations, keys, needs } = world;
 
-  const describe = ({ station, cost, status, missing }: StationState): string => {
-    if (status === 'open') return `${station.name}. Уже відчинено! ${station.about}`;
-    if (!world.open) return `${station.name}. ${station.about} Ця планета ще закрита.`;
-    const price = `Щоб відчинити, потрібно ${counted(cost, KEY_COUNTED)}.`;
-    if (status === 'saving') return `${station.name}. ${station.about} ${price} Збери ще ${missing}: ключі дають за нові кроки в будь-якій грі.`;
-    return `${station.name}. ${station.about} ${price} Можна відчиняти!`;
+  /** What is read out about a station — made from the voice's own words (see `useTell`). */
+  const describe = (state: StationState) => (vt: T, said: World): string => {
+    const { cost, status, missing } = state;
+    const { name, about } = said.stations.find((other) => other.station.id === state.station.id)?.station ?? state.station;
+    if (status === 'open') return vt('world.station.open', { name, about });
+    if (!world.open) return vt('world.station.closedPlanet', { name, about });
+    const price = vt('world.station.price', { count: cost });
+    return vt(status === 'saving' ? 'world.station.saving' : 'world.station.ready', { name, about, price, missing });
   };
 
   const select = (state: StationState) => {
     play('tap');
     setSelectedId(state.station.id);
-    announce(describe(state));
+    tell(describe(state));
   };
 
   const unlock = (state: StationState) => {
@@ -56,7 +49,7 @@ function Stations({ world }: { world: World }) {
     setSelectedId(null);
     play('treasure');
     confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 }, scalar: 0.9 });
-    window.setTimeout(() => announce(`${state.station.name}. Відчинено!`), 500);
+    window.setTimeout(() => tell((vt, said) => vt('world.station.opened', { name: said.stations.find((other) => other.station.id === state.station.id)?.station.name ?? state.station.name })), 500);
   };
 
   return (
@@ -65,17 +58,17 @@ function Stations({ world }: { world: World }) {
         <span className="emoji" aria-hidden>
           🛰️
         </span>{' '}
-        Станції знань
+        {t('world.stations.title')}
         <span className={styles.count}>
           {needs.stations.have} / {needs.stations.need}
         </span>
         <button
           type="button"
           className={styles.keys}
-          aria-label={`Ключі знань: ${keys}`}
+          aria-label={t('world.keys.label', { count: keys })}
           onClick={() => {
             play('tap');
-            announce(`У тебе ${counted(keys, KEY_COUNTED)} знань. Ключ дають за кожен новий крок у будь-якій грі. Ключами відчиняють станції знань.`);
+            tell((vt) => vt('world.keys.about', { count: keys }));
           }}
         >
           <span className="emoji" aria-hidden>
@@ -86,15 +79,10 @@ function Stations({ world }: { world: World }) {
       </h2>
       {showText && (
         <p className={styles.hint}>
-          {world.open ? (
-            <>
-              Станції відчиняють ключами знань {KEY}. Ключ дають за кожну нову сходинку в будь-якій грі. Щоб летіти далі з планети «{world.planetName}»,
-              відчини щонайменше {needs.stations.need}.
-            </>
-          ) : (
-            // A planet not reached yet: its stations wait, and nothing here can be opened.
-            <>Планета «{world.planetName}» ще закрита — її станції відчиняться, коли ти долетиш сюди. Зараз відчиняй станції на планеті «{world.system[world.frontier - 1].name}».</>
-          )}
+          {world.open
+            ? t('world.stations.hint', { key: KEY, planet: world.planetName, need: needs.stations.need })
+            : // A planet not reached yet: its stations wait, and nothing here can be opened.
+              t('world.stations.closed', { planet: world.planetName, frontier: world.system[world.frontier - 1].name })}
         </p>
       )}
       <ul className={styles.stations}>
@@ -112,7 +100,7 @@ function Stations({ world }: { world: World }) {
               </button>
               {ready && selectedId === station.id && (
                 <button type="button" className={styles.stationOpen} onClick={() => unlock(state)}>
-                  🔓 {showText ? 'Відчинити' : ''} {cost} {KEY}
+                  🔓 {showText ? t('world.station.unlock') : ''} {cost} {KEY}
                 </button>
               )}
             </li>
@@ -136,7 +124,14 @@ export function WorldView() {
   const [planet, setPlanet] = useState<number | undefined>(undefined);
   const world = useWorld(planet);
   const { def, residents } = world;
-  const say = useSayOnTap();
+  const t = useT();
+  const { tell } = useTell(world.planet);
+  const { play } = useSound();
+  /** Tap a picture to hear what it is (the caption may be hidden or unreadable yet). */
+  const say = (make: (vt: T, said: World) => string) => () => {
+    play('tap');
+    tell(make);
+  };
 
   return (
     <div className="stack">
@@ -152,14 +147,14 @@ export function WorldView() {
           <span className="emoji" aria-hidden>
             🎁
           </span>{' '}
-          Мешканці
+          {t('world.residents.title')}
           <span className={styles.count}>{residents.length}</span>
         </h2>
         {/* Who comes next, when and how many there are is a surprise: only
             those who already moved in are shown, plus one mystery guest. */}
         <ul className={styles.residents}>
           {residents.map((r) => (
-            <li key={r.id} className={styles.resident} aria-label={r.name} role="button" tabIndex={0} onClick={say(r.name)}>
+            <li key={r.id} className={styles.resident} aria-label={r.name} role="button" tabIndex={0} onClick={say((_, said) => said.residents.find((other) => other.id === r.id)?.name ?? r.name)}>
               <span className={cn(styles.residentEmoji, 'emoji')} aria-hidden>
                 {r.emoji}
               </span>
@@ -169,10 +164,10 @@ export function WorldView() {
           {residents.length < def.residents.length && (
             <li
               className={cn(styles.resident, styles.locked)}
-              aria-label="Хтось іще в дорозі"
+              aria-label={t('world.residents.coming')}
               role="button"
               tabIndex={0}
-              onClick={say('Хтось іще в дорозі до тебе. Це сюрприз!')}
+              onClick={say((vt) => vt('world.residents.comingSay'))}
             >
               <span className={cn(styles.residentEmoji, 'emoji')} aria-hidden>
                 ❔

@@ -1,4 +1,4 @@
-import { heaps } from './options';
+import { mathTexts } from '../lang';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { BalanceScalePayload, Card, FractionValue, Glyph } from '@/core/game/templates/types';
@@ -28,9 +28,10 @@ const EQUIVALENTS: { simple: FractionValue; same: FractionValue[] }[] = [
  */
 export function generateBalance(config: TaskConfig): TaskInstance<BalanceScalePayload> {
   const { step } = config;
+  const T = mathTexts(config.lang);
   const base = {
     id: uid('bl'),
-    prompt: 'Зрівноваж ваги! Яка гиря важить стільки ж?',
+    prompt: T.balance.prompt,
     reward: rewardForStep(step) + 1,
   };
 
@@ -45,7 +46,7 @@ export function generateBalance(config: TaskConfig): TaskInstance<BalanceScalePa
         template: Mechanics.BalanceScale,
         left: { glyphs: [left], value: left.n / left.d },
         weights: shuffle([eq.simple, ...others]).map(fractionWeight),
-        hint: `Скороти дріб: поділи верх і низ на одне й те саме число. ${left.n} з ${left.d} — це стільки ж, скільки ${eq.simple.n} з ${eq.simple.d}.`,
+        hint: T.balance.reduce(left.n, left.d, eq.simple.n, eq.simple.d),
       },
     };
   }
@@ -60,21 +61,21 @@ export function generateBalance(config: TaskConfig): TaskInstance<BalanceScalePa
     glyphs = [String(a), '+', String(b)];
     answer = a + b;
     hintDots = answer <= 24 ? [a, b] : undefined;
-    hint = `Полічи всі крапки разом: ${a} і ще ${b}.`;
+    hint = T.balance.add(a, b);
   } else if (step <= 8) {
     const a = randInt(6, 10 + step * 2);
     const b = randInt(1, a - 1);
     glyphs = [String(a), '−', String(b)];
     answer = a - b;
     hintDots = answer <= 24 ? [answer] : undefined;
-    hint = `Було ${a}, забрали ${b}. Полічи, скільки крапок лишилось.`;
+    hint = T.balance.sub(a, b);
   } else {
     const a = randInt(2, 5);
     const b = randInt(2, step - 4);
     glyphs = [String(a), '×', String(b)];
     answer = a * b;
     hintDots = answer <= 24 ? Array.from({ length: a }, () => b) : undefined;
-    hint = `Це ${heaps(a)} по ${b}. Полічи всі крапки.`;
+    hint = T.balance.mul(a, b);
   }
 
   return {

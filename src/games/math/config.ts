@@ -1,13 +1,15 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import type { SubCategory } from '@/core/game/kernel/types';
+import type { LearningModule, SubCategory } from '@/core/game/kernel/types';
+import type { LangCode } from '@/core/lang';
 import type { Theme } from '@/core/theme/theme.types';
-import { FRACTION_OPS_INTRO, fractionOpsTier } from './generators/fractionOps';
+import { fractionOpsIntro } from './generators/fractionOps';
 import { GEOMETRY_STEPS, geometryIntro } from './generators/geometry';
 import { MAZE_STEPS, mazeIntro } from './generators/maze';
 import { clockIntro } from './generators/clock';
 import { WORD_PROBLEM_STEPS } from './generators/wordProblems';
 import type { SubjectDef } from '../shared/templateModule';
 import { MATH_SUB } from './ids';
+import { MATH_LANGS, mathTexts } from './lang';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
@@ -31,7 +33,7 @@ const COMPARE_CLOCK_RELEASE = '2026-10-06T00:00:00Z';
  * The games of this subject — their catalog cards, in the order the hub lists
  * them. How each game makes its tasks lives in `tasks.ts` under the same id.
  */
-export const GAMES: SubCategory[] = [
+const CARDS: SubCategory[] = [
   {
     id: MATH_SUB.add,
     demo: { kind: 'row', items: ['*', '*', '➕', '*', '🟰', '*', '*', '*'] },
@@ -211,40 +213,49 @@ export const GAMES: SubCategory[] = [
   },
 ];
 
+/** The games of the galaxy: every one is written in every language of `lang/`. */
+export const GAMES: SubCategory[] = CARDS.map((game) => ({ ...game, langs: MATH_LANGS }));
+
 /**
  * Short, concrete, 6-year-old-level explanation for each adventure, counted in
  * the active theme's own collectible (apples, bricks, snowflakes…).
  */
-export function getIntro(subCategoryId: string, theme: Theme, step: number): string | undefined {
+export function getIntro(subCategoryId: string, theme: Theme, step: number, lang?: LangCode): string | undefined {
+  const T = mathTexts(lang);
   const it = theme.artifact.emoji;
+  // The game's own intro, as its card has it in this language.
+  const own = (lang && T.cards?.games[subCategoryId]?.intro) || GAMES.find((sc) => sc.id === subCategoryId)?.intro;
   switch (subCategoryId) {
     // Each new kind of fraction sum is explained when the path reaches it.
     case MATH_SUB.fractionOps:
-      return FRACTION_OPS_INTRO[fractionOpsTier(step)];
+      return fractionOpsIntro(step, lang);
     case MATH_SUB.geometry:
-      return geometryIntro(step);
+      return geometryIntro(step, lang);
     case MATH_SUB.clock:
-      return clockIntro(step);
+      return clockIntro(step, lang);
     case MATH_SUB.maze:
-      return mazeIntro(step, GAMES.find((sc) => sc.id === subCategoryId)?.intro);
+      return mazeIntro(step, own, lang);
     case MATH_SUB.balance:
     case MATH_SUB.shop:
     case MATH_SUB.compare:
     case MATH_SUB.wordProblems:
-      return GAMES.find((sc) => sc.id === subCategoryId)?.intro;
+      return own;
     case MATH_SUB.add:
-      return `Додавати — це збирати разом! Поклади ${it}${it} і ще ${it}. Порахуй: один, два, три. Разом три ${it}!`;
+      return T.intro.add(it);
     case MATH_SUB.sub:
-      return `Віднімати — це забирати. Було ${it}${it}${it}, одне ${it} забрали — лишилось два. Полічи, скільки лишиться!`;
+      return T.intro.sub(it);
     case MATH_SUB.mul:
-      return `Множити — це брати однакові купки. Беремо ${it}${it} два рази: ${it}${it} і ще ${it}${it} — разом чотири ${it}!`;
+      return T.intro.mul(it);
     case MATH_SUB.div:
-      return `Ділити — це роздати порівну. Маємо ${it}${it}${it}${it}, кладемо у два кошики порівну — у кожному по два. Скільки в одному?`;
+      return T.intro.div(it);
     case MATH_SUB.mixed:
-      return `Тут різні приклади. Дивись на знак: «плюс» — збираємо разом, «мінус» — забираємо. Рахуй уважно!`;
+      return T.intro.mixed;
     case MATH_SUB.fractions:
-      return `Дроби — це рівні шматочки. Уяви піцу 🍕: розрізали на чотири шматочки й узяли один — це одна четвертинка. Знайди зафарбований шматочок!`;
+      return T.intro.fractions;
     default:
-      return 'Готовий до пригоди? Рахуймо разом!';
+      return T.intro.other;
   }
 }
+
+/** The words of the galaxy's cards in the languages other than Ukrainian. */
+export const TEXTS: LearningModule['texts'] = Object.fromEntries(MATH_LANGS.flatMap((lang) => (mathTexts(lang).cards ? [[lang, mathTexts(lang).cards]] : [])));

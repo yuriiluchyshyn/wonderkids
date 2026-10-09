@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useSound } from '@/core/audio/useSound';
@@ -15,6 +16,7 @@ import styles from './Templates.module.css';
  * happy sheep.
  */
 export function GridAreaLayout({ payload, callbacks, hintActive }: LayoutProps<GridAreaPayload>) {
+  const t = useT();
   const { cols, rows, targetArea } = payload;
   const { chime } = useSound();
   const [cells, setCells] = useState<Set<number>>(new Set());
@@ -59,7 +61,7 @@ export function GridAreaLayout({ payload, callbacks, hintActive }: LayoutProps<G
             type="button"
             className={cn(styles.areaCell, cells.has(index) && styles.areaCellOn, solved && cells.has(index) && styles.areaCellDone)}
             onClick={() => toggle(index)}
-            aria-label={`Клітинка ${index + 1}`}
+            aria-label={t('tpl.cell', { n: index + 1 })}
             aria-pressed={cells.has(index)}
           >
             {solved && cells.has(index) && index === Math.min(...cells) ? '🐑' : ''}
@@ -71,8 +73,8 @@ export function GridAreaLayout({ payload, callbacks, hintActive }: LayoutProps<G
           🟩 {cells.size} / {targetArea}
         </p>
       )}
-      <Button size="lg" icon="✅" block onClick={check} ariaLabel="Перевірити загін">
-        Готово!
+      <Button size="lg" icon="✅" block onClick={check} ariaLabel={t('tpl.checkArea')}>
+        {t('common.done')}
       </Button>
     </div>
   );

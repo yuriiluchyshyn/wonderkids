@@ -1,3 +1,4 @@
+import { useT } from '@/core/i18n';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styles from './SubPageHeader.module.css';
@@ -11,6 +12,7 @@ interface SubPageHeaderProps {
 
 /** Section header with an optional back arrow. */
 export function SubPageHeader({ title, icon, backTo = '/' }: SubPageHeaderProps) {
+  const t = useT();
   const navigate = useNavigate();
   return (
     <div className={styles.header}>
@@ -19,7 +21,7 @@ export function SubPageHeader({ title, icon, backTo = '/' }: SubPageHeaderProps)
           className={styles.back}
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(backTo)}
-          aria-label="Назад"
+          aria-label={t('common.back')}
         >
           ⬅️
         </motion.button>

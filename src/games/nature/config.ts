@@ -1,9 +1,11 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { GameCard, SubjectDef } from '../shared/templateModule';
 import { RELEASE } from './tasks';
+import { natureTexts } from './lang';
 
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
+  texts: { en: natureTexts('en').cards, pl: natureTexts('pl').cards },
   id: 'nature',
   title: 'Природа',
   icon: '🌿',
@@ -23,13 +25,8 @@ export const GAMES: GameCard[] = [
     blurb: 'Що коли буває в природі й дванадцять місяців по порядку',
     intro:
       'У році чотири пори: зима, весна, літо й осінь, а в кожній — по три місяці. Подивись на картинку і покажи, коли це буває!',
-    introFor: (step) => {
-      if (step === 3) return 'Тепер познайомимось із місяцями. Їх у році дванадцять, і кожен належить до своєї пори року.';
-      if (step === 4 || step === 5) return 'Місяці завжди йдуть один за одним. Згадай, який місяць сусідній!';
-      if (step === 6 || step === 8) return 'Розстав картки по порядку. Торкнись двох карток, щоб поміняти їх місцями.';
-      if (step === 7) return 'У кожного місяця є свій номер: січень — перший, а грудень — дванадцятий.';
-      return undefined;
-    },
+    introFor: (step, lang) => natureTexts(lang).introFor(step),
+    langs: natureTexts.langs,
     steps: 8,
     difficulty: 1,
     publishDate: RELEASE,

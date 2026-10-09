@@ -3,6 +3,8 @@
  * they say otherwise). Only whole units: coins for the small values, paper
  * notes for the big ones, as in the country's real money.
  */
+import { language, type LangCode } from '@/core/lang';
+
 export enum Currency {
   UAH = 'UAH',
   EUR = 'EUR',
@@ -43,4 +45,16 @@ export const CURRENCIES: Record<CurrencyId, CurrencyDef> = {
 export const DEFAULT_CURRENCY: CurrencyId = Currency.UAH;
 
 export const isCurrency = (value: unknown): value is CurrencyId => typeof value === 'string' && value in CURRENCIES;
+/**
+ * The money of a child's game: what the parent chose — or, while they have
+ * chosen nothing, the money at home with the language of the game (hryvnias in
+ * Ukrainian, dollars in English, złotys in Polish). Once chosen it stays,
+ * whatever the language is changed to.
+ */
+export function effectiveCurrency(settings: { currency: CurrencyId; currencyChosen: boolean }, lang: LangCode): CurrencyId {
+  if (settings.currencyChosen) return settings.currency;
+  const own = language(lang).currency;
+  return isCurrency(own) ? own : DEFAULT_CURRENCY;
+}
+
 export const currencyOf = (id: unknown): CurrencyDef => CURRENCIES[isCurrency(id) ? id : DEFAULT_CURRENCY];

@@ -132,6 +132,35 @@
   font-weight: 600;
 }
 
+.stepName {
+  cursor: pointer;
+}
+
+/* A game put away for the child: still listed, but quiet. */
+.stepRowHidden {
+  opacity: 0.55;
+}
+
+.gameCheck {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  margin: 0;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* The head of a set of games (a language): one tick for all of them. */
+.setHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 6px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
 .stepRow > input {
   width: 90px;
   flex: 0 0 auto;

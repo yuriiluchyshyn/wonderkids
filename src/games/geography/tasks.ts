@@ -1,37 +1,20 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
-import { accusative } from '@/core/lang/uk';
-import type { TaskInstance } from '@/core/game/kernel/types';
+import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
-import { OCEANS, regionName } from '@/core/game/templates/worldMap';
+import { OCEANS } from '@/core/game/templates/worldMap';
 import { shuffle } from '@/core/utils/random';
 import { card, templateTask, unlocked, withDistractors, type GameTasks } from '../shared/templateModule';
 import { COUNTRIES, MAP_COUNTRIES, type Country } from './content/countries';
-import {
-  BIOMES,
-  BIOME_ANIMALS,
-  BIOME_FACTS,
-  CAPITAL_OF,
-  CONTINENT_ANIMALS,
-  DAY_NIGHT,
-  LANDMARKS,
-  OCEAN_FACTS,
-  OCEAN_PLACES,
-  OCEAN_RIDDLES,
-  SEAS,
-  TIME_SHIFTS,
-  type Biome,
-  type BiomeAnimal,
-  type BiomeId,
-  type OceanPart,
-} from './content/data';
-import { ANIMAL_FACTS } from './content/animalFacts';
-import { MORE_OCEAN_PLACES, MORE_OCEAN_RIDDLES, MORE_SEAS, RIDDLE_FACTS, RIVERS, SHORES } from './content/moreOceans';
-import { ANIMAL_CLUES, MORE_ANIMAL_FACTS, MORE_BIOME_ANIMALS, MORE_SIGNS } from './content/moreAnimals';
-import { LANDMARK_FACTS, OCEAN_POOLS } from './content/facts';
+import { BIOMES, BIOME_ANIMALS, CAPITAL_OF, CONTINENT_ANIMALS, DAY_NIGHT, LANDMARKS, OCEAN_PLACES, SEAS, TIME_SHIFTS, type Biome, type BiomeAnimal, type BiomeId, type OceanPart } from './content/data';
+import { MORE_OCEAN_PLACES, MORE_SEAS, RIVERS, SHORES } from './content/moreOceans';
+import { MORE_BIOME_ANIMALS } from './content/moreAnimals';
 import { RECALL_WINDOW, composeLevel } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
 import { factPool } from '../shared/facts';
+import { geographyTexts } from './lang';
+import type { GeographyTexts } from './lang/types';
 
+type Config = Pick<TaskConfig, 'lang'>;
 type Tasks = TaskInstance<TemplatePayload>[];
 const byId = <T extends { id: string }>(a: T, b: T) => a.id === b.id;
 
@@ -39,54 +22,33 @@ const byId = <T extends { id: string }>(a: T, b: T) => a.id === b.id;
 const FLAGS_PER_STEP = 5;
 
 /** Ten ways to confirm a flag, so a familiar one is not always met the same way. */
-function flagStories(country: Country): string[] {
-  const n = country.name;
-  return factPool(
-    `Так, це прапор країни ${n}!`,
-    country.look,
-    `Саме так! ${n} — це країна в ${country.continentName}.`,
-    `Чудово! Ти знаєш прапор країни ${n}.`,
-    `Молодець! Це ${n}.`,
-    `Влучно! Прапор країни ${n} ти вже не забудеш.`,
-    `Чудова пам’ять! Це прапор країни ${n}.`,
-    `Так тримати! Це ${n}. Шукай цю країну на карті в ${country.continentName}.`,
-    `Є! Це прапор країни ${n}.`,
-    `Точно! ${n}. Запам’ятай кольори цього прапора.`,
-    `Так! Якщо побачиш цей прапор на змаганнях — це ${n}.`,
-  );
-}
-/** Path length that walks through every country once. */
 export const FLAG_STEPS = Math.ceil(COUNTRIES.length / FLAGS_PER_STEP);
 
-function flagTask(country: Country, known: readonly Country[], step: number): TaskInstance<TemplatePayload> {
+function flagTask(country: Country, known: readonly Country[], step: number, T: GeographyTexts): TaskInstance<TemplatePayload> {
   return templateTask(
     `flag:${country.id}`,
-    `Знайди прапор ${country.of}.`,
+    T.flags.ask(country.id),
     {
       template: Mechanics.GridChoice,
       cols: 3,
-      options: withDistractors(country, known, 6, byId).map((c) => card(c.id, c.flag, undefined, c.name)),
+      options: withDistractors(country, known, 6, byId).map((c) => card(c.id, c.flag, undefined, T.country(c.id))),
       correctId: country.id,
-      hint: country.look ?? `${country.name} — це країна в ${country.continentName}. Придивись до кольорів і малюнка на прапорах.`,
+      hint: T.flags.hint(country.id),
     },
     step,
-    flagStories(country),
+    factPool(...T.flags.stories(country.id)),
   );
 }
 
-/** Every flag met up to and including this step. */
+/** By the last step every flag is in play; the first steps still offer a full board. */
 const flagsKnownAt = (step: number) => COUNTRIES.slice(0, Math.max(12, step * FLAGS_PER_STEP));
 
-/**
- * Game 7 — «Вгадай Прапор». The path walks down the familiarity ranking: each
- * step brings five new, slightly less famous flags and recalls five met on
- * the previous `RECALL_WINDOW` steps (older ones only when those run out).
- */
-function flagsLevel(step: number, count: number): Tasks {
+function flagsLevel(step: number, count: number, config: Config): Tasks {
+  const T = geographyTexts(config.lang);
   const start = (step - 1) * FLAGS_PER_STEP;
   const windowStart = Math.max(0, start - RECALL_WINDOW * FLAGS_PER_STEP);
   const known = flagsKnownAt(step);
-  const tasks = (list: readonly Country[]) => shuffle(list).map((country) => flagTask(country, known, step));
+  const tasks = (list: readonly Country[]) => shuffle(list).map((country) => flagTask(country, known, step, T));
   return composeLevel(
     tasks(COUNTRIES.slice(start, start + FLAGS_PER_STEP)),
     [...tasks(COUNTRIES.slice(windowStart, start)), ...tasks(COUNTRIES.slice(0, windowStart))],
@@ -95,45 +57,44 @@ function flagsLevel(step: number, count: number): Tasks {
   );
 }
 
-function flags(step: number): Tasks {
+function flags(step: number, config: Config): Tasks {
+  const T = geographyTexts(config.lang);
   const known = flagsKnownAt(step);
-  return known.map((country) => flagTask(country, known, step));
+  return known.map((country) => flagTask(country, known, step, T));
 }
 
-/** Game 8 — «Склади Карту»: drag a flag or an animal onto its continent. */
-function continents(step: number): Tasks {
+function continents(step: number, config: Config): Tasks {
+  const T = geographyTexts(config.lang);
   const animals: Tasks = CONTINENT_ANIMALS.map((a) =>
     templateTask(
       `home:${a.id}`,
-      `Де живе ${a.name}? Перетягни на карту.`,
+      T.map.animalAsk(a.id),
       {
         template: Mechanics.MapPuzzle,
         layer: 'continents',
         mode: 'drag',
         marker: card(a.id, a.emoji),
         targetId: a.home,
-        hint: `Шукай материк, який блимає. ${a.name[0].toUpperCase()}${a.name.slice(1)} живе на материку ${regionName(a.home)}.`,
+        hint: T.map.animalHint(a.id),
       },
       step,
-      // Ten facts about this very animal — not about its continent.
-      ANIMAL_FACTS[a.id],
+      T.map.animalFacts(a.id),
     ),
   );
-  // Countries join once the animals are familiar — the best-known ones first.
   const countries: Tasks = unlocked(MAP_COUNTRIES.slice(0, 60), step, 12, 0).map((c) =>
     templateTask(
       `where:${c.id}`,
-      `На якому материку ${c.name}? Перетягни прапор.`,
+      T.map.countryAsk(c.id),
       {
         template: Mechanics.MapPuzzle,
         layer: 'continents',
         mode: 'drag',
         marker: card(c.id, c.flag),
         targetId: c.continent,
-        hint: `Шукай материк ${regionName(c.continent)} — він блимає.`,
+        hint: T.map.countryHint(c.id),
       },
       step,
-      [`Так! ${c.name} — це країна в ${c.continentName}.`, `Саме так: ${c.name} — на материку ${regionName(c.continent)}.`],
+      T.map.countryYes(c.id),
     ),
   );
   return step <= 3 ? animals : [...animals, ...countries];
@@ -149,9 +110,7 @@ export const CAPITAL_STEPS = 15;
 /** Every dweller of the zones, in the order the path meets them. */
 export const ZONE_ANIMALS: BiomeAnimal[] = [...BIOME_ANIMALS, ...MORE_BIOME_ANIMALS];
 /** What is told about an animal once it is placed: its own facts, never its zone's. */
-const factsOf = (a: BiomeAnimal): string[] => ANIMAL_FACTS[a.id] ?? MORE_ANIMAL_FACTS[a.id] ?? [a.fact];
 /** Six ways to recognise a zone. */
-const signsOf = (zone: Biome): string[] => [...zone.signs, ...MORE_SIGNS[zone.id]];
 
 /** Answers on a board of this game: the right one and five others. */
 const ZONE_CHOICES = 6;
@@ -178,12 +137,14 @@ const livesIn = (a: BiomeAnimal, zone: BiomeId) => a.home === zone || Boolean(a.
  *   +9 steps  «Хто тут зайвий?» — five neighbours and a stranger
  * plus «Яка це природна зона?» by six descriptions of every zone.
  */
-function biomes(step: number): Tasks {
+function biomes(step: number, config: Config): Tasks {
+  const T = geographyTexts(config.lang);
+  const factsOf = (a: BiomeAnimal) => T.animal(a.id).facts;
   const animals = animalsAt(step);
-  const wrongSay = Object.fromEntries(BIOMES.map((b) => [b.id, b.no]));
+  const wrongSay = Object.fromEntries(BIOMES.map((b) => [b.id, T.zone(b.id).no]));
   const zoneOf = (a: BiomeAnimal) => BIOMES.find((b) => b.id === a.home) as Biome;
-  const zoneCard = (b: Biome) => card(b.id, b.emoji, b.name);
-  const animalCard = (a: BiomeAnimal) => card(a.id, a.emoji, cap(a.name));
+  const zoneCard = (b: Biome) => card(b.id, b.emoji, T.zone(b.id).name);
+  const animalCard = (a: BiomeAnimal) => card(a.id, a.emoji, cap(T.animal(a.id).name));
   /** The right zone plus up to five wrong ones, always in the same order. */
   const zoneChoices = (right: Biome, wrong: readonly Biome[]) => {
     const picked = new Set([right.id, ...shuffle(wrong).slice(0, ZONE_CHOICES - 1).map((b) => b.id)]);
@@ -193,7 +154,7 @@ function biomes(step: number): Tasks {
   const whereLives: Tasks = animals.map((a) =>
     templateTask(
       `biome:${a.id}`,
-      `Де живе ${a.name}?`,
+      T.zones.whereAsk(a.id),
       {
         template: Mechanics.SorterBins,
         item: card(a.id, a.emoji),
@@ -201,7 +162,7 @@ function biomes(step: number): Tasks {
         bins: zoneChoices(zoneOf(a), BIOMES.filter((b) => !livesIn(a, b.id))),
         correctBinId: a.home,
         wrongSay,
-        hint: `Подумай, де тваринці буде добре. ${a.fact}`,
+        hint: T.zones.whereHint(a.id),
       },
       step,
       factsOf(a),
@@ -213,14 +174,14 @@ function biomes(step: number): Tasks {
     const others = shuffle(animals.filter((o) => !livesIn(o, zone.id))).slice(0, ZONE_CHOICES - 1);
     return templateTask(
       `biome:who:${a.id}`,
-      `Хто живе ${zone.where}?`,
+      T.zones.whoAsk(zone.id),
       {
         template: Mechanics.GridChoice,
         cols: 3,
-        stimulus: { emoji: zone.emoji, caption: zone.name },
+        stimulus: { emoji: zone.emoji, caption: T.zone(zone.id).name },
         options: shuffle([a, ...others]).map(animalCard),
         correctId: a.id,
-        hint: `Згадай, яка це природна зона. ${zone.signs[0]}`,
+        hint: T.zones.whoHint(zone.id),
       },
       step,
       factsOf(a),
@@ -230,13 +191,13 @@ function biomes(step: number): Tasks {
   const riddles: Tasks = animalsAt(step - RIDDLE_AFTER).map((a) =>
     templateTask(
       `biome:riddle:${a.id}`,
-      `Хто це? ${ANIMAL_CLUES[a.id]}`,
+      T.zones.riddleAsk(a.id),
       {
         template: Mechanics.GridChoice,
         cols: 3,
         options: withDistractors(a, animals, ZONE_CHOICES, byId).map(animalCard),
         correctId: a.id,
-        hint: `Ця тварина живе ${zoneOf(a).where}. Її назва починається на літеру «${a.name[0].toUpperCase()}».`,
+        hint: T.zones.riddleHint(a.id, a.home),
       },
       step,
       factsOf(a),
@@ -252,13 +213,13 @@ function biomes(step: number): Tasks {
     return [
       templateTask(
         `biome:odd:${a.id}`,
-        'Хто тут зайвий? Усі інші — сусіди: вони живуть в одній природній зоні.',
+        T.zones.oddAsk,
         {
           template: Mechanics.GridChoice,
           cols: 3,
           options: shuffle([a, ...neighbours]).map(animalCard),
           correctId: a.id,
-          hint: `Усі сусіди живуть ${zone.where}. Знайди того, хто живе деінде.`,
+          hint: T.zones.oddHint(zone.id),
         },
         step,
         factsOf(a),
@@ -267,23 +228,23 @@ function biomes(step: number): Tasks {
   });
 
   const whichZone: Tasks = BIOMES.flatMap((zone) =>
-    signsOf(zone)
+    T.zone(zone.id).signs
       .filter((_, i) => step >= SIGN_STEPS[i])
-      .map((sign, i) => {
+      .map((_, i) => {
         const dwellers = animals.filter((a) => a.home === zone.id).slice(0, 3);
         return templateTask(
           `biome:zone:${zone.id}:${i}`,
-          `Яка це природна зона? ${sign}`,
+          T.zones.zoneAsk(zone.id, i),
           {
             template: Mechanics.GridChoice,
             cols: 3,
             options: zoneChoices(zone, BIOMES.filter((b) => b.id !== zone.id)),
             correctId: zone.id,
-            hint: dwellers.length > 0 ? `Тут живуть: ${dwellers.map((a) => a.name).join(', ')}.` : zone.signs[0],
+            hint: T.zones.zoneHint(zone.id, dwellers.map((a) => a.id)),
           },
           step,
           // This very description, and one more thing about the zone that no other question tells.
-          factPool(`Так, це ${zone.name.toLowerCase()}! ${sign}`, BIOME_FACTS[zone.id][i]),
+          factPool(T.zones.zoneYes(zone.id, i), T.zone(zone.id).facts[i]),
         );
       }),
   );
@@ -292,15 +253,6 @@ function biomes(step: number): Tasks {
 }
 
 /** «Пливи до …» needs the ocean's name in the genitive. */
-const OCEAN_TO: Record<string, string> = {
-  pacific: 'Тихого океану',
-  atlantic: 'Атлантичного океану',
-  indian: 'Індійського океану',
-  arctic: 'Північного Льодовитого океану',
-  southern: 'Південного океану',
-};
-
-/** The step on which each of an ocean's eight riddles opens. */
 const RIDDLE_STEPS = [1, 2, 3, 6, 9, 12, 15, 18];
 /** What a list has opened by `step`, arriving evenly from its first step to its last. */
 function arriving<T>(items: readonly T[], step: number, from: number, to: number): T[] {
@@ -324,8 +276,8 @@ const SHORE_COUNTRIES = COUNTRIES.flatMap((c) => {
  *   20–50   rivers: which ocean does its water run to
  * What is told afterwards is always about the very thing that was asked.
  */
-function oceans(step: number): Tasks {
-  const oceanName = (id: string) => OCEANS.find((o) => o.id === id)?.name ?? id;
+function oceans(step: number, config: Config): Tasks {
+  const T = geographyTexts(config.lang);
   const sail = (key: string, prompt: string, oceanId: string, facts: string | string[], clue?: string) =>
     templateTask(
       key,
@@ -336,168 +288,134 @@ function oceans(step: number): Tasks {
         mode: 'tap',
         marker: card('ship', '⛵'),
         targetId: oceanId,
-        hint: `Шукай воду, що переливається хвилями. ${clue ?? OCEAN_FACTS[oceanId]}`,
+        hint: T.seas.hint(clue ?? T.ocean(oceanId).fact),
       },
       step,
       facts,
     );
 
-  const tasks: Tasks = OCEANS.map((o) => sail(`ocean:${o.id}`, `Пливи до ${OCEAN_TO[o.id]}!`, o.id, OCEAN_POOLS[o.id]));
+  const tasks: Tasks = OCEANS.map((o) => sail(`ocean:${o.id}`, T.seas.sailTo(o.id), o.id, T.ocean(o.id).pool));
 
   for (const o of OCEANS) {
-    [...OCEAN_RIDDLES[o.id], ...MORE_OCEAN_RIDDLES[o.id]].forEach((riddle, i) => {
-      if (step >= RIDDLE_STEPS[i]) tasks.push(sail(`ocean:riddle:${o.id}:${i}`, `Пливи до ${riddle}!`, o.id, RIDDLE_FACTS[o.id][i], `Це ${o.name}.`));
+    T.ocean(o.id).riddles.forEach((_, i) => {
+      if (step >= RIDDLE_STEPS[i]) tasks.push(sail(`ocean:riddle:${o.id}:${i}`, T.seas.riddleAsk(o.id, i), o.id, T.ocean(o.id).riddleFacts[i], T.seas.itIs(o.id)));
     });
   }
 
-  const part = (kind: string, prompt: (p: OceanPart) => string) => (p: OceanPart) => sail(`ocean:${kind}:${p.id}`, prompt(p), p.ocean, p.fact, p.fact);
-  tasks.push(...arriving([...SEAS, ...MORE_SEAS], step, 4, OCEAN_STEPS).map(part('sea', (p) => `${cap(p.name)} — частина якого океану? Пливи туди!`)));
-  tasks.push(...arriving([...OCEAN_PLACES, ...MORE_OCEAN_PLACES], step, 7, OCEAN_STEPS).map(part('place', (p) => `У якому океані ${p.name}? Пливи туди!`)));
+  const part = (kind: 'sea' | 'place' | 'river') => (p: OceanPart) => {
+    const words = T.seas[kind](p.id);
+    return sail(`ocean:${kind}:${p.id}`, words.ask, p.ocean, words.fact, words.fact);
+  };
+  tasks.push(...arriving([...SEAS, ...MORE_SEAS], step, 4, OCEAN_STEPS).map(part('sea')));
+  tasks.push(...arriving([...OCEAN_PLACES, ...MORE_OCEAN_PLACES], step, 7, OCEAN_STEPS).map(part('place')));
   tasks.push(
     ...arriving(SHORE_COUNTRIES, step, 10, OCEAN_STEPS).map(({ country, ocean }) =>
-      sail(`ocean:shore:${country.id}`, `Який океан омиває береги ${country.of}? Пливи туди!`, ocean, `Так! Береги ${country.of} омиває ${oceanName(ocean)}.`, `Це ${oceanName(ocean)}.`),
+      sail(`ocean:shore:${country.id}`, T.seas.shoreAsk(country.id), ocean, T.seas.shoreYes(country.id, ocean), T.seas.itIs(ocean)),
     ),
   );
-  tasks.push(...arriving(RIVERS, step, 20, OCEAN_STEPS).map(part('river', (p) => `У який океан несе свої води річка ${p.name}? Пливи туди!`)));
+  tasks.push(...arriving(RIVERS, step, 20, OCEAN_STEPS).map(part('river')));
   return tasks;
 }
 
-/** A country and its capital. */
-interface Capital extends Country {
-  capital: string;
-}
+/** The countries whose capital is asked about, in the order of the flags. */
+export const CAPITALS: Country[] = COUNTRIES.filter((c) => CAPITAL_OF[c.id]);
 
-/** Countries with a capital we ask about, best-known country first. */
-export const CAPITALS: Capital[] = COUNTRIES.flatMap((c) => (CAPITAL_OF[c.id] ? [{ ...c, capital: CAPITAL_OF[c.id] }] : []));
-
-/** Ten ways to confirm a capital, so a familiar one is not always met the same way. */
-function capitalStories(c: Capital): string[] {
-  const pair = `${c.capital} — столиця країни ${c.name}`;
-  return factPool(
-    `Так! ${pair}.`,
-    `Саме так! Столиця країни ${c.name} — ${c.capital}.`,
-    `Чудово! ${c.capital} — найголовніше місто країни ${c.name}.`,
-    `Молодець! ${pair}. Це в ${c.continentName}.`,
-    `Влучно! ${c.name} і ${c.capital} — запам’ятай цю пару.`,
-    `Чудова пам’ять! ${pair}.`,
-    `Так тримати! Шукай місто ${c.capital} на карті в ${c.continentName}.`,
-    `Є! ${pair}.`,
-    `Точно! Якщо поїдеш у країну ${c.name}, побачиш її столицю — ${c.capital}.`,
-    `Правильно! ${pair}. Тепер ти це знаєш.`,
-  );
-}
-
-/** «на 1 годину», «на 2 години», «на 7 годин». */
-const hoursWord = (n: number) => (n === 1 ? 'годину' : n >= 2 && n <= 4 ? 'години' : 'годин');
-
-/**
- * Game 11 — «Столиці та Часові Пояси». The path adds, one at a time:
- *   1  a landmark → its capital; a country → its capital (more every step)
- *   3  a capital → its country (by flag)
- *   5  day or night in another city
- *   9  what time is it there (the clock difference with Kyiv)
- */
-function capitals(step: number): Tasks {
+function capitals(step: number, config: Config): Tasks {
+  const T = geographyTexts(config.lang);
+  const C = T.capitals;
   const landmarks = unlocked(LANDMARKS, step, CAPITAL_STEPS, 6);
-  const landmarkTasks: Tasks = landmarks.map((l) =>
-    templateTask(
+  const landmarkTasks: Tasks = landmarks.map((l) => {
+    const words = C.landmark(l.id);
+    return templateTask(
       `capital:${l.id}`,
-      `У якій столиці можна побачити ${accusative(l.landmark)}?`,
+      words.ask,
       {
         template: Mechanics.GridChoice,
         cols: 2,
-        stimulus: { emoji: l.emoji, art: l.id, caption: l.landmark },
-        options: withDistractors(l, landmarks, 4, byId).map((o) => card(o.id, undefined, o.capital)),
+        stimulus: { emoji: l.emoji, art: l.id, caption: words.name },
+        options: withDistractors(l, landmarks, 4, byId).map((o) => card(o.id, undefined, C.landmark(o.id).capital)),
         correctId: l.id,
-        hint: `${l.landmark} — символ ${l.country}. Згадай столицю цієї країни.`,
+        hint: words.hint,
       },
       step,
-      LANDMARK_FACTS[l.id],
-    ),
-  );
+      words.facts,
+    );
+  });
 
   const known = unlocked(CAPITALS, step, CAPITAL_STEPS, 8);
   const capitalOf: Tasks = known.map((c) =>
     templateTask(
       `capital:of:${c.id}`,
-      `Яка столиця ${c.of}?`,
+      C.ask(c.id),
       {
         template: Mechanics.GridChoice,
         cols: 2,
-        stimulus: { emoji: c.flag, caption: c.name },
-        options: withDistractors(c, known, 4, byId).map((o) => card(o.id, undefined, o.capital)),
+        stimulus: { emoji: c.flag, caption: T.country(c.id) },
+        options: withDistractors(c, known, 4, byId).map((o) => card(o.id, undefined, C.capital(o.id))),
         correctId: c.id,
-        hint: `Назва цієї столиці починається на літеру «${c.capital[0]}».`,
+        hint: C.hint(c.id),
       },
       step,
-      capitalStories(c),
+      factPool(...C.stories(c.id)),
     ),
   );
 
-  // The reverse question, about capitals met two steps ago.
+  // «X — столиця якої країни?» comes two steps after the capital itself was met.
   const familiar = step >= 3 ? unlocked(CAPITALS, step - 2, CAPITAL_STEPS, 8) : [];
   const countryOf: Tasks = familiar.map((c) =>
     templateTask(
       `capital:where:${c.id}`,
-      `${c.capital} — столиця якої країни?`,
+      C.countryAsk(c.id),
       {
         template: Mechanics.GridChoice,
         cols: 2,
-        options: withDistractors(c, known, 4, byId).map((o) => card(o.id, o.flag, o.name)),
+        options: withDistractors(c, known, 4, byId).map((o) => card(o.id, o.flag, T.country(o.id))),
         correctId: c.id,
-        hint: c.look ?? `Ця країна — в ${c.continentName}. Її назва починається на літеру «${c.name[0]}».`,
+        hint: C.countryHint(c.id),
       },
       step,
-      capitalStories(c),
+      factPool(...C.stories(c.id)),
     ),
   );
 
-  const dayNight: Tasks = (step >= 5 ? DAY_NIGHT : []).map((q) =>
-    templateTask(
+  const dayNight: Tasks = (step >= 5 ? DAY_NIGHT : []).map((q) => {
+    const words = C.dayNight(q.id);
+    return templateTask(
       `time:${q.id}`,
-      `У Києві зараз ${q.kyiv === 'day' ? 'день' : 'ніч'}. А що у ${q.city}?`,
+      words.ask,
       {
         template: Mechanics.GridChoice,
         cols: 2,
-        stimulus: { emoji: q.kyiv === 'day' ? '🌍☀️' : '🌍🌙', caption: `Київ: ${q.kyiv === 'day' ? 'день' : 'ніч'}` },
-        options: shuffle([card('day', '☀️', 'День'), card('night', '🌙', 'Ніч')]),
+        stimulus: { emoji: q.kyiv === 'day' ? '🌍☀️' : '🌍🌙', caption: words.caption },
+        options: shuffle([card('day', '☀️', C.day), card('night', '🌙', C.night)]),
         correctId: q.answer,
-        hint: 'Земля крутиться, як дзиґа. Сонце світить тільки на один її бік: там день, а на іншому боці — ніч.',
+        hint: C.dayNightHint,
       },
       step,
-      q.why,
-    ),
-  );
+      words.why,
+    );
+  });
 
-  // Clock sums: four cities at step 9, two more every step.
   const shifts = step >= 9 ? TIME_SHIFTS.slice(0, 4 + (step - 9) * 2) : [];
   const clock: Tasks = shifts.flatMap((t) =>
     t.kyiv.map((hour) => {
       const there = hour + t.shift;
-      const by = Math.abs(t.shift);
-      const rule =
-        t.shift === 0
-          ? `У ${t.city} час такий самий, як у нас`
-          : `${'winter' in t ? 'Узимку у' : 'У'} ${t.city} на ${by} ${hoursWord(by)} ${t.shift > 0 ? 'більше' : 'менше'}, ніж у Києві`;
-      // The right hour, Kyiv's own, the shift taken the wrong way, and near misses.
+      const words = C.clock(t.id, hour);
       const hours = [...new Set([there, hour, hour - t.shift, there + 1, there - 1, there + 2])].filter((h) => h >= 0 && h <= 23);
       const offered = shuffle([there, ...shuffle(hours.filter((h) => h !== there)).slice(0, 3)]);
       return templateTask(
         `time:clock:${t.id}:${hour}`,
-        `У Києві ${hour}:00. ${rule}. Котра година у ${t.city}?`,
+        words.ask,
         {
           template: Mechanics.GridChoice,
           cols: 2,
-          stimulus: { emoji: '🕰️', caption: `Київ — ${hour}:00` },
-          options: offered.map((h) => ({ id: String(h), glyphs: [`${h}:00`], speak: `${h} година` })),
+          stimulus: { emoji: '🕰️', caption: words.caption },
+          options: offered.map((h) => ({ id: String(h), glyphs: [`${h}:00`], speak: C.hourSay(h) })),
           correctId: String(there),
-          hint:
-            t.shift === 0
-              ? 'Це місто в тому самому часовому поясі, що й Київ, — годинники показують однаково.'
-              : `«На ${by} ${hoursWord(by)} ${t.shift > 0 ? 'більше' : 'менше'}» — це ${hour} ${t.shift > 0 ? 'плюс' : 'мінус'} ${by}.`,
+          hint: words.hint,
         },
         step,
-        `Так! Коли в Києві ${hour}:00, у ${t.city} — ${there}:00.`,
+        words.yes,
       );
     }),
   );
@@ -505,7 +423,6 @@ function capitals(step: number): Tasks {
   return [...landmarkTasks, ...capitalOf, ...countryOf, ...dayNight, ...clock];
 }
 
-/** Task generators of every game, by game id (the cards are in `config.ts`). */
 export const TASKS: Record<string, GameTasks> = {
   flags: { pool: flags, level: flagsLevel },
   continents: { pool: continents },

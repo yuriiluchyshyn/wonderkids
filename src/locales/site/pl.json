@@ -1,0 +1,254 @@
+{
+  "meta": {
+    "title": "Pulsar Kids — gry edukacyjne dla dzieci w wieku 4–10 lat",
+    "description": "Pulsar Kids to platforma z grami, dzięki której dzieci w wieku 4–10 lat poznają matematykę, geografię, historię i ekologię — po polsku. Bez reklam, łez i stoperów: błąd to tylko podpowiedź, a czas przed ekranem kontrolują rodzice.",
+    "keywords": "gry edukacyjne dla dzieci, nauka przez zabawę, matematyka dla dzieci, flagi świata, ułamki, gry rozwijające, czas przed ekranem, Pulsar Kids, pulsarkids",
+    "ogDescription": "Matematyka, język, logika, geografia, astronomia, historia i przyroda w 52 grach. Dziecko gra i buduje własną planetę, a rodzice decydują o czasie przed ekranem.",
+    "ogTitle": "Pulsar Kids — nauka, która wciąga jak przygoda",
+    "ogImageAlt": "Pulsar Kids — gry edukacyjne dla dzieci",
+    "twitterDescription": "52 gry edukacyjne dla dzieci w wieku 4–10 lat. Bez reklam, łez i stoperów."
+  },
+  "ld": {
+    "siteDescription": "Gry edukacyjne dla dzieci w wieku 4–10 lat: matematyka, język, logika, geografia, astronomia, historia, przyroda, ekologia i sztuka.",
+    "browser": "Nowoczesna przeglądarka na telefonie, tablecie lub komputerze",
+    "audience": "Dzieci w wieku 4–10 lat",
+    "use": "Ćwiczenia, samodzielna nauka",
+    "about": {
+      "math": "Matematyka",
+      "geography": "Geografia",
+      "history": "Historia",
+      "ecology": "Ekologia"
+    }
+  },
+  "header": {
+    "logoLabel": "Pulsar Kids — strona główna",
+    "navLabel": "Sekcje strony"
+  },
+  "hero": {
+    "eyebrow": "Gry edukacyjne · 4–10 lat",
+    "title": "Nauka, która wciąga jak <span>przygoda</span>",
+    "lead": "Pulsar Kids zamienia matematykę, geografię, historię i ekologię w gry, do których dziecko samo chce wracać. Bez reklam, bez przegranych i bez stresujących stoperów — za to z radością z każdej dobrej odpowiedzi. A Ty spokojnie decydujesz o czasie przed ekranem.",
+    "note": "To zajmuje minutę: rodzic zakłada profil dziecka, a dziecko wchodzi do gry, podając nick i PIN.",
+    "systemLabel": "Układ Słoneczny: Słońce i osiem planet, po których podróżuje dziecko"
+  },
+  "about": {
+    "title": "Po co jest Pulsar Kids",
+    "sub": "Chcemy, żeby dziecko samo chciało się uczyć. Większość aplikacji edukacyjnych karze za błąd: zabiera „życie”, włącza stoper, pokazuje czerwony krzyżyk. Dziecko zaczyna bać się pomyłek i porzuca grę. My zrobiliśmy odwrotnie.",
+    "hint": {
+      "title": "Błąd to podpowiedź",
+      "text": "Tu nikt nie przegrywa. Po błędzie pojawia się obrazkowa podpowiedź, a zadanie, które się nie udało, wraca jeszcze raz pod koniec poziomu — żeby utrwalić, a nie ukarać."
+    },
+    "voice": {
+      "title": "Można grać, zanim nauczy się czytać",
+      "text": "Zadania i odpowiedzi są czytane na głos, a obok tekstu jest przycisk z głośnikiem. Gdy dziecko już czyta, rodzice mogą wyłączyć lektora."
+    },
+    "steps": {
+      "title": "Poziom trudności rośnie razem z dzieckiem",
+      "text": "Każda gra to ścieżka z kroków: następny jest odrobinę trudniejszy od poprzedniego. Gwiazdki na karcie podpowiadają, dla jakiego wieku jest gra."
+    },
+    "ads": {
+      "title": "Bez reklam",
+      "text": "W grze nie ma obcych reklam ani zakupów. Dziecko widzi tylko zadania, swój świat i swoje osiągnięcia."
+    }
+  },
+  "games": {
+    "title": "52 gry w dziewięciu galaktykach",
+    "sub": "Przedmioty to tutaj galaktyki, a gry — planety. Oto, co na nich czeka.",
+    "math": {
+      "1": "Dodawanie, odejmowanie, mnożenie, dzielenie",
+      "2": "Ułamki na pizzy i tortach oraz działania na ułamkach",
+      "3": "Matematyczna waga i liczbowy labirynt",
+      "4": "Tangram, pole i obwód",
+      "5": "Sklep: liczymy pieniądze i resztę",
+      "6": "Większe, mniejsze, równe i zegar ze wskazówkami",
+      "7": "Zadania z treścią: sklep, przyjaciele, droga",
+      "tag": "14 gier",
+      "title": "Matematyka"
+    },
+    "language": {
+      "1": "Alfabet: ustaw litery na swoich miejscach w tabeli",
+      "2": "Bańki z literami, łańcuszek słów, rymy i zdania",
+      "3": "Pięć gier po polsku i te same pięć po angielsku i po ukraińsku — każda z własnym lektorem",
+      "4": "50 kroków w każdej grze",
+      "tag": "15 gier",
+      "title": "Język"
+    },
+    "logic": {
+      "1": "Rytm i wzory: co będzie dalej",
+      "2": "Lotto z cieniami: znajdź cień przedmiotu",
+      "3": "Lustrzana symetria: druga połówka obrazka",
+      "4": "Zagadki logiczne: 150 rodzajów łamigłówek, przy których trzeba pomyśleć",
+      "tag": "4 gry",
+      "title": "Logika"
+    },
+    "astronomy": {
+      "1": "Parada planet: kolejność od Słońca, rozmiary i sto pytań o planety",
+      "2": "Gwiazdozbiory: łącz gwiazdy według liczb i alfabetu, a potem szukaj ich na nocnym niebie",
+      "title": "Astronomia"
+    },
+    "art": {
+      "1": "Mieszanie kolorów: z dwóch farb powstaje nowy kolor",
+      "title": "Sztuka"
+    },
+    "geography": {
+      "1": "Flagi wszystkich państw świata — od najbardziej znanych",
+      "2": "Kontynenty: kto gdzie mieszka",
+      "3": "Oceany na mapie świata",
+      "4": "Strefy przyrodnicze i ich mieszkańcy",
+      "5": "Stolice oraz dlaczego gdzieś jest dzień, a gdzieś noc",
+      "tag": "5 gier",
+      "title": "Geografia"
+    },
+    "history": {
+      "1": "„Wehikuł czasu”: 100 zadań o tym, co było wcześniej",
+      "2": "50 dinozaurów: czym je karmić i jak je rozpoznać",
+      "3": "Wybitne postacie świata, Polski i Ukrainy",
+      "4": "Wynalazki świata, Polski i Ukrainy",
+      "tag": "8 gier",
+      "title": "Historia"
+    },
+    "ecology": {
+      "1": "„Eko-patrol”: segregujemy szkło, papier i plastik",
+      "2": "Dowiadujemy się, co z nich potem powstanie",
+      "3": "„Dlaczego tak?”: powietrze, woda, klimat, zwierzęta, energia",
+      "title": "Ekologia"
+    },
+    "nature": {
+      "1": "Pory roku: co i kiedy dzieje się w przyrodzie",
+      "2": "Dwanaście miesięcy po kolei",
+      "title": "Przyroda"
+    },
+    "twoGames": "2 gry",
+    "oneGame": "1 gra"
+  },
+  "numbers": {
+    "games": "gry edukacyjne",
+    "galaxies": "galaktyk-przedmiotów",
+    "levels": "poziomów we wszystkich grach",
+    "ages": "grupy wiekowe",
+    "themes": "motywów graficznych",
+    "languages": "języki aplikacji",
+    "gamesCount": "52",
+    "levelsCount": "1551"
+  },
+  "world": {
+    "title": "Własna planeta, która rośnie",
+    "sub": "Za każde zadanie dziecko dostaje kryształy. Co z nimi zrobi, decyduje samo — i to też jest mała lekcja.",
+    "build": {
+      "title": "Budować swój świat",
+      "text": "Kryształy można wymienić na budynki i ozdoby dla własnej planety. Najważniejsza budowla — „zamek marzeń” — odblokowuje się na końcu."
+    },
+    "goal": {
+      "title": "Albo zbierać na rodzinny cel",
+      "text": "Rodzice umawiają się z dzieckiem na prawdziwą nagrodę: „zbierzesz 500 kryształów — pieczemy razem ciasteczka”. Wydać teraz czy zbierać dalej — wybiera dziecko."
+    },
+    "stations": {
+      "title": "Stacje wiedzy",
+      "text": "Za każdy nowy krok w dowolnej grze dziecko dostaje klucz wiedzy. Kluczami otwiera na swojej planecie stacje: obserwatorium, bibliotekę, laboratorium liczb."
+    },
+    "theme": {
+      "title": "Ulubiony motyw",
+      "text": "Jednorożce, kosmos, dinozaury, podwodny świat, klocki, las, zima… Motyw zmienia kolory, bohatera, kryształy i to, jakie miasto wyrośnie na planecie."
+    }
+  },
+  "parents": {
+    "sub": "Osobne wejście dla dorosłych. Dziecko tu nie trafi — w grze po prostu go nie ma.",
+    "time": {
+      "title": "Czas przed ekranem bez łez",
+      "text": "Ustawiasz długość sesji, przerwę i dzienny limit. Dziecko nie widzi stopera, tylko klepsydry, które powoli znikają. Zaczęty poziom zawsze może dokończyć, a potem bohater „idzie odpocząć”."
+    },
+    "children": {
+      "title": "Do pięciorga dzieci",
+      "text": "Każde dziecko ma własny profil, nick i PIN, swój motyw, swoje postępy i własne ustawienia."
+    },
+    "goals": {
+      "title": "Rodzinne cele",
+      "text": "Umówcie się na nagrody z prawdziwego życia i obserwuj, jak dziecko się do nich zbliża."
+    },
+    "settings": {
+      "title": "Ustawienia dopasowane do dziecka",
+      "text": "Dźwięk, lektor, podpisy, przyciski czytania na głos, liczba odpowiedzi do wyboru, krok w każdej grze."
+    }
+  },
+  "start": {
+    "title": "Jak zacząć",
+    "open": {
+      "title": "Rodzic otwiera panel",
+      "text": "Zaloguj się adresem e-mail i kliknij „Dodaj dziecko”."
+    },
+    "nick": {
+      "title": "Ustawia nick i PIN",
+      "text": "Wymyśl dla dziecka prosty nick i krótki PIN, ustaw czas gry."
+    },
+    "play": {
+      "title": "Dziecko wchodzi i gra",
+      "text": "Na stronie gry wpisuje swój nick i PIN, wybiera motyw i pierwszą planetę."
+    }
+  },
+  "feedback": {
+    "title": "Widzisz błąd albo masz pomysł?",
+    "sub": "Napisz do nas: co poszło nie tak, co można ułatwić albo jakiej gry brakuje. Możesz dodać zdjęcie lub krótki film — wtedy łatwiej zrozumieć, o co chodzi."
+  },
+  "final": {
+    "title": "Gotowi na przygodę?",
+    "sub": "Wybierz, dokąd dalej.",
+    "child": "Jestem dzieckiem — gram",
+    "adult": "Jestem dorosłym — do panelu"
+  },
+  "letter": {
+    "about": "Czego dotyczy wiadomość?",
+    "message": "Twoja wiadomość",
+    "placeholder": "Na przykład: w grze „Sklep” na 12. kroku nie widać reszty…",
+    "email": "Adres e-mail <small>— jeśli chcesz dostać odpowiedź</small>",
+    "attach": "Dodaj zdjęcie lub film",
+    "limits": "Do 5 plików, razem do 18 MB. Film — do 15 MB.",
+    "thanks": "Dziękujemy, wiadomość dotarła!",
+    "again": "Napisz jeszcze",
+    "close": "Zamknij",
+    "kind": {
+      "bug": "Błąd",
+      "idea": "Pomysł",
+      "game": "Nowa gra",
+      "other": "Inne"
+    },
+    "send": "Wyślij"
+  },
+  "footer": {
+    "tagline": "Nauka, która wciąga jak przygoda.",
+    "game": "Gra"
+  },
+  "nav": {
+    "about": "Po co",
+    "games": "Gry",
+    "world": "Planeta",
+    "parents": "Dla rodziców",
+    "write": "Napisz do nas"
+  },
+  "cta": {
+    "play": "Graj",
+    "parents": "Panel rodzica"
+  },
+  "lang": {
+    "label": "Język strony"
+  },
+  "js": {
+    "tooShort": "Napisz, proszę, chociaż kilka słów.",
+    "tooLong": "Wiadomość jest za długa — skróć ją do 4000 znaków.",
+    "badEmail": "Sprawdź adres e-mail: chyba jest w nim błąd.",
+    "tooMany": "Kilka wiadomości zostało już wysłanych jedna po drugiej. Spróbuj, proszę, za godzinę.",
+    "megabytes": "{n} MB",
+    "decimal": ",",
+    "remove": "Usuń {name}",
+    "notMedia": "„{name}” nie wygląda na zdjęcie ani film.",
+    "maxFiles": "Można dodać najwyżej {max} plików.",
+    "tooBig": "„{name}” waży {size}, a limit to 15 MB. Spróbuj krótszego filmu.",
+    "noRoom": "„{name}” już się nie mieści: razem można do 18 MB.",
+    "sendingFiles": "Wysyłam pliki… {pct}%",
+    "sending": "Wysyłam…",
+    "filesLost": "Tekst do nas dotarł, ale nie wszystkie pliki — chyba zawiodło połączenie. Jeśli są ważne, wyślij je, proszę, jeszcze raz.",
+    "willReply": "Przeczytamy i odpowiemy na podany adres.",
+    "thanks": "Czytamy każdą wiadomość. Dziękujemy za pomoc w ulepszaniu gry.",
+    "failed": "Nie udało się wysłać. Sprawdź połączenie i spróbuj ponownie.",
+    "send": "Wyślij"
+  }
+}

@@ -2,7 +2,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { TIP_PREFIX, useGameStore } from '@/core/child/store/useGameStore';
-import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { useSayT } from '@/core/audio/useSpeech';
+import { useT, type AppKey } from '@/core/i18n';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import styles from './CoachTips.module.css';
 
@@ -11,8 +12,10 @@ export interface CoachTip {
   id: string;
   /** CSS selector of the control the tip points at. */
   anchor: string;
-  text: string;
 }
+
+/** The words of a tip: `tip.<id>` in the app dictionary. */
+const tipKey = (tip: CoachTip): AppKey => `tip.${tip.id}` as AppKey;
 
 interface CoachTipsProps {
   /** In the order they should be explained. */
@@ -52,11 +55,12 @@ function visibleRect(selector: string): DOMRect | null {
  * (they are stored with the child's save, see `store.markTipSeen`).
  */
 export function CoachTips({ tips, enabled = true, startDelayMs = 700, onOpenChange }: CoachTipsProps) {
+  const t = useT();
   useVoiceStopsOnLeave();
   const hasChild = useGameStore((s) => s.children.some((c) => c.id === s.activeChildId));
   const treasures = useGameStore((s) => s.treasures);
   const markTipSeen = useGameStore((s) => s.markTipSeen);
-  const speak = useVoiceSpeak('taskIntro');
+  const say = useSayT('taskIntro');
   const [shown, setShown] = useState<Shown | null>(null);
 
   const pending = useMemo(() => {
@@ -109,7 +113,7 @@ export function CoachTips({ tips, enabled = true, startDelayMs = 700, onOpenChan
   const tipId = shown?.tip.id;
   useEffect(() => {
     onOpenChange?.(Boolean(tipId));
-    if (shown) speak(shown.tip.text);
+    if (shown) say(tipKey(shown.tip));
   }, [tipId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Follow the control if the page scrolls or the phone is rotated.
@@ -143,7 +147,7 @@ export function CoachTips({ tips, enabled = true, startDelayMs = 700, onOpenChan
           key={shown.tip.id}
           className={styles.layer}
           role="dialog"
-          aria-label="Підказка"
+          aria-label={t('coach.label')}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -179,9 +183,9 @@ export function CoachTips({ tips, enabled = true, startDelayMs = 700, onOpenChan
                 : { bottom: Math.min(window.innerHeight - shown.rect.top + 62, window.innerHeight - 170) }
             }
           >
-            <p className={styles.text}>{shown.tip.text}</p>
+            <p className={styles.text}>{t(tipKey(shown.tip))}</p>
             <button type="button" className={styles.ok} onClick={close}>
-              Зрозуміло 👍
+              {t('coach.gotIt')}
             </button>
           </div>
         </motion.div>

@@ -1,3 +1,4 @@
+import { Rich, useT } from '@/core/i18n';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { lazy, Suspense, useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -49,10 +50,10 @@ const DECOR: ReadonlyArray<{
 ];
 
 export function LoginPage() {
+  const t = useT();
   usePageMeta({
-    title: 'Кабінет батьків',
-    description:
-      'Вхід до кабінету батьків Pulsar Kids: додавайте дітей, налаштовуйте ігровий час, сімейні цілі та стежте за успіхами.',
+    title: t('parentLogin.title'),
+    description: t('parentLogin.description'),
     index: true,
   });
   const token = useAuthStore((s) => s.token);
@@ -92,7 +93,7 @@ export function LoginPage() {
         </div>
 
         <h1 className={styles.title}>Pulsar Kids</h1>
-        <p className={styles.sub}>Кабінет батьків</p>
+        <p className={styles.sub}>{t('parentLogin.title')}</p>
 
         {auth0Enabled ? (
           <Suspense fallback={null}>
@@ -104,13 +105,13 @@ export function LoginPage() {
 
         <p className={styles.hint}>
           {auth0Enabled
-            ? 'Уже користувалися Pulsar Kids? Увійдіть із тією самою поштою — діти й прогрес на місці.'
-            : 'Пароль не потрібен — поки що вхід лише за поштою.'}
+            ? t('parentLogin.hintAuth0')
+            : t('parentLogin.hintEmail')}
           {getPortal() === 'dev' && (
             <>
               {' · '}
               <a href="/login" className={styles.parentLink}>
-                Вхід для дитини
+                {t('parentLogin.childLogin')}
               </a>
             </>
           )}
@@ -126,6 +127,7 @@ export function LoginPage() {
  * first (and suggests the fix when the domain looks mistyped).
  */
 function EmailLoginForm() {
+  const t = useT();
   const navigate = useNavigate();
   const login = useAuthStore((s) => s.login);
   const pending = useAuthStore((s) => s.pending);
@@ -158,7 +160,7 @@ function EmailLoginForm() {
   return (
     <form className={styles.form} onSubmit={submit}>
       <label className={styles.label} htmlFor="email">
-        Електронна пошта
+        {t('parentLogin.email')}
       </label>
       <input
         id="email"
@@ -174,7 +176,7 @@ function EmailLoginForm() {
           setUnknown(null);
           if (error) clearError();
         }}
-        aria-label="Електронна пошта"
+        aria-label={t('parentLogin.email')}
         aria-invalid={Boolean(error)}
       />
 
@@ -182,13 +184,13 @@ function EmailLoginForm() {
       {unknown ? (
         <div className={styles.confirm} role="alert">
           <p>
-            Акаунта з поштою <b>{unknown.email}</b> ще немає.
+            <Rich k="parentLogin.noAccount" name="email" value={unknown.email} />
           </p>
           {unknown.suggestion && (
             <>
               <p>
-                Можливо, ви мали на увазі <b>{unknown.suggestion}</b>?
-                {unknown.suggestionExists && ' Такий акаунт уже є.'}
+                <Rich k="parentLogin.didYouMean" name="email" value={unknown.suggestion} />
+                {unknown.suggestionExists && t('parentLogin.suggestionExists')}
               </p>
               <button
                 className={styles.submit}
@@ -196,7 +198,7 @@ function EmailLoginForm() {
                 disabled={pending}
                 onClick={() => trySuggestion(unknown.suggestion as string)}
               >
-                Увійти як {unknown.suggestion}
+                {t('parentLogin.loginAs', { email: unknown.suggestion })}
               </button>
             </>
           )}
@@ -206,15 +208,15 @@ function EmailLoginForm() {
             disabled={pending}
             onClick={() => void signIn(unknown.email, true)}
           >
-            {pending ? 'Створюємо…' : `Створити новий акаунт для ${unknown.email}`}
+            {pending ? t('parentLogin.creating') : t('parentLogin.create', { email: unknown.email })}
           </button>
           <button className={styles.secondary} type="button" onClick={() => setUnknown(null)}>
-            Виправити пошту
+            {t('parentLogin.fixEmail')}
           </button>
         </div>
       ) : (
         <button className={styles.submit} type="submit" disabled={pending}>
-          {pending ? 'Входимо…' : 'Увійти'}
+          {pending ? t('parentLogin.pending') : t('parentLogin.submit')}
         </button>
       )}
     </form>

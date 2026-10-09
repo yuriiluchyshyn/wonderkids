@@ -7,6 +7,7 @@
  */
 
 import type { SignupSource } from '@/core/app/attribution';
+import type { LangCode } from '@/core/lang';
 
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
 
@@ -152,7 +153,7 @@ export const api = {
   },
 
   /** One phrase from the natural cloud voice, as base64 MP3. */
-  async tts(token: string, text: string, lang: 'uk' | 'en' = 'uk') {
+  async tts(token: string, text: string, lang: LangCode = 'uk') {
     const { audio } = await request<{ audio: string }>('/api/tts', {
       method: 'POST',
       token,

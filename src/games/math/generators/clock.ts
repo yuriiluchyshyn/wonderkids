@@ -2,12 +2,9 @@ import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
 import type { ClockTime, GridChoicePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
+import type { LangCode } from '@/core/lang';
 import { rewardForStep } from '../difficulty';
-
-/** «третя година» — hours 1..12. */
-const HOUR = ['', 'перша', 'друга', 'третя', 'четверта', 'п’ята', 'шоста', 'сьома', 'восьма', 'дев’ята', 'десята', 'одинадцята', 'дванадцята'];
-/** «пів на четверту», «чверть на четверту» — the hour that is coming. */
-const HOUR_TO = ['', 'першу', 'другу', 'третю', 'четверту', 'п’яту', 'шосту', 'сьому', 'восьму', 'дев’яту', 'десяту', 'одинадцяту', 'дванадцяту'];
+import { mathTexts } from '../lang';
 
 /** Answers on the board: the right time and five near misses. */
 const OPTIONS = 6;
@@ -15,15 +12,6 @@ const OPTIONS = 6;
 const nextHour = (h: number) => (h % 12) + 1;
 const digital = ({ h, m }: ClockTime) => `${h}:${String(m).padStart(2, '0')}`;
 const same = (a: ClockTime, b: ClockTime) => a.h === b.h && a.m === b.m;
-
-/** How people say the time: «третя година», «пів на четверту», «за чверть четверта». */
-export function sayTime({ h, m }: ClockTime): string {
-  if (m === 0) return `${HOUR[h]} година`;
-  if (m === 30) return `пів на ${HOUR_TO[nextHour(h)]}`;
-  if (m === 15) return `чверть на ${HOUR_TO[nextHour(h)]}`;
-  if (m === 45) return `за чверть ${HOUR[nextHour(h)]}`;
-  return `${HOUR[h]} година ${m} хвилин`;
-}
 
 /** Which minutes a path step asks about. */
 function minutesAt(step: number): number[] {
@@ -33,24 +21,12 @@ function minutesAt(step: number): number[] {
   return [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 }
 
-const INTRO = {
-  hours: 'На годиннику дві стрілки. Коротка показує години. Коли довга стрілка дивиться прямо вгору, на дванадцять, — це рівно година. Подивись, куди показує коротка!',
-  half: 'Коли довга стрілка дивиться вниз, на шість, минуло пів години. Коротка стрілка тоді стоїть між двома числами.',
-  quarter: 'Довга стрілка на трійці — минула чверть години. А якщо вона на дев’ятці — до нової години лишилася чверть.',
-  minutes: 'Довга стрілка показує хвилини. Кожне число на годиннику — це ще п’ять хвилин: один — п’ять, два — десять, три — п’ятнадцять.',
-};
-
-export function clockIntro(step: number): string {
-  if (step <= 3) return INTRO.hours;
-  if (step <= 5) return INTRO.half;
-  if (step <= 7) return INTRO.quarter;
-  return INTRO.minutes;
-}
-
-function hintFor({ h, m }: ClockTime): string {
-  const long = m === 0 ? 'дивиться вгору, на дванадцять' : `показує на ${m / 5}`;
-  const short = m === 0 ? `показує на ${h}` : `вже пройшла ${h}`;
-  return `Коротка стрілка ${short}, а довга ${long}. Коротка — це години, довга — хвилини.`;
+export function clockIntro(step: number, lang?: LangCode): string {
+  const { intro } = mathTexts(lang).clock;
+  if (step <= 3) return intro.hours;
+  if (step <= 5) return intro.half;
+  if (step <= 7) return intro.quarter;
+  return intro.minutes;
 }
 
 /**
@@ -60,6 +36,7 @@ function hintFor({ h, m }: ClockTime): string {
  */
 export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayload> {
   const { step } = config;
+  const T = mathTexts(config.lang).clock;
   const minutes = minutesAt(step);
   // Lean towards what this step has just introduced.
   const fresh = minutes.filter((m) => !minutesAt(step - 2).includes(m));
@@ -81,13 +58,13 @@ export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayloa
     if (others.length < OPTIONS - 1 && !same(c, time) && !others.some((o) => same(o, c))) others.push(c);
   }
   const options = shuffle([time, ...others]);
-  const base = { id: uid('clk'), reward: rewardForStep(step), outro: `Так, це ${sayTime(time)}!` };
+  const base = { id: uid('clk'), reward: rewardForStep(step), outro: T.yes(T.say(time)) };
 
   if (step >= 3 && Math.random() < 0.4) {
     return {
       ...base,
       key: `clock:find:${digital(time)}`,
-      prompt: `Знайди годинник, який показує: ${sayTime(time)}.`,
+      prompt: T.find(T.say(time)),
       payload: {
         template: Mechanics.GridChoice,
         cols: 2,
@@ -95,7 +72,7 @@ export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayloa
         // No speaker on these cards: hearing each clock's time would give it away.
         options: options.map((t) => ({ id: digital(t), clock: t })),
         correctId: digital(time),
-        hint: hintFor(time),
+        hint: T.hint(time),
       },
     };
   }
@@ -103,14 +80,14 @@ export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayloa
   return {
     ...base,
     key: `clock:read:${digital(time)}`,
-    prompt: 'Котра година на годиннику?',
+    prompt: T.read,
     payload: {
       template: Mechanics.GridChoice,
       cols: 2,
       stimulus: { clock: time },
-      options: options.map((t) => ({ id: digital(t), label: digital(t), speak: sayTime(t) })),
+      options: options.map((t) => ({ id: digital(t), label: digital(t), speak: T.say(t) })),
       correctId: digital(time),
-      hint: hintFor(time),
+      hint: T.hint(time),
     },
   };
 }

@@ -1,3 +1,4 @@
+import { offerLangByCountry } from '@/core/i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
@@ -16,6 +17,9 @@ adoptChildHandoff();
 // The channel that brought the visitor (utm_* in the address), kept for the
 // moment a parent account is created.
 rememberSource();
+
+// Offer the language of the visitor's country, unless they have chosen one.
+void offerLangByCountry((import.meta.env.VITE_API_URL ?? '').replace(/\/$/, ''));
 
 // Vercel Web Analytics: anonymous page views, no cookies (a no-op outside a
 // Vercel deployment). Only the path is reported — a query string can carry a

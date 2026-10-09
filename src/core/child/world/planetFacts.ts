@@ -1,3 +1,5 @@
+import type { LangCode } from '../../lang/types.ts';
+import { worldWords } from './lang/index.ts';
 import type { WorldPlanetId } from './world.ts';
 
 /** How many stories every planet has to tell. */
@@ -188,3 +190,6 @@ export const PLANET_FACTS: Record<WorldPlanetId, readonly string[]> = {
     'Часом Меркурій проходить просто між Землею та Сонцем. Тоді в телескоп із захисним фільтром видно, як крихітна чорна цятка повзе сонячним диском; наступного разу це станеться у 2032 році.',
   ],
 };
+
+/** What a planet tells about itself, in `lang` (Ukrainian when none is asked for). */
+export const planetFacts = (id: WorldPlanetId, lang?: LangCode): readonly string[] => worldWords(lang)?.facts[id] ?? PLANET_FACTS[id];

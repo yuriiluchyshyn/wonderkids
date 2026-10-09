@@ -2,11 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 import { devApi } from './dev-api';
+import { landingI18n } from './landing-i18n';
 import { seo } from './seo-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), devApi(), seo()],
+  plugins: [react(), devApi(), seo(), landingI18n()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -24,7 +25,8 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      // Two pages: the app, and the static public landing page (root domain).
+      // Two pages: the app, and the static public landing page (root domain) —
+      // which `landingI18n` then renders once per language (/, /en/, /pl/).
       input: {
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
         landing: fileURLToPath(new URL('./landing.html', import.meta.url)),
