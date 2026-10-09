@@ -1,0 +1,73 @@
+/* ---- the language of the page: a small menu in the bar, the full list in the footer ---- */
+.langs {
+  position: relative;
+}
+.langs summary {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 40px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--soft);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.langs summary::-webkit-details-marker {
+  display: none;
+}
+.langs[open] summary,
+.langs summary:hover {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+.langs ul {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 5;
+  min-width: 170px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #2a1263;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+.langs a,
+.langs-row a {
+  color: var(--soft);
+  font-weight: 600;
+  text-decoration: none;
+}
+.langs a {
+  display: block;
+  padding: 11px 12px;
+  border-radius: 11px;
+}
+.langs a:hover,
+.langs-row a:hover {
+  color: var(--accent);
+}
+.langs a[aria-current],
+.langs-row a[aria-current] {
+  color: var(--ink);
+}
+.langs a[aria-current] {
+  background: rgba(124, 108, 255, 0.28);
+}
+.langs-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}

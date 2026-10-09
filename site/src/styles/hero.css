@@ -1,0 +1,162 @@
+/* ---- hero ---- */
+.hero {
+  display: grid;
+  gap: 28px;
+  align-items: center;
+  padding: 44px 0 36px;
+}
+@media (min-width: 860px) {
+  .hero {
+    grid-template-columns: 1.15fr 1fr;
+    padding: 70px 0 56px;
+  }
+}
+.eyebrow {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(124, 108, 255, 0.18);
+  color: #c9c2ff;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+h1 {
+  margin-top: 14px;
+  font-size: clamp(2.3rem, 7vw, 3.9rem);
+  font-weight: 800;
+}
+h1 span {
+  background: linear-gradient(135deg, var(--brand-light), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.lead {
+  margin-top: 14px;
+  font-size: clamp(1.1rem, 2.6vw, 1.3rem);
+  color: var(--soft);
+  max-width: 34em;
+}
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+.cta-note {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: var(--soft);
+}
+
+/* The Solar System the child travels through in the game: the Sun and
+   eight planets, each on its own orbit — the nearer, the faster. */
+.system {
+  position: relative;
+  width: min(84vw, 420px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  container-type: inline-size;
+}
+.sun {
+  position: absolute;
+  inset: 43.5%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 36%, #fff7c2, var(--sun) 38%, #f59e0b 78%, #ea580c);
+  box-shadow:
+    0 0 24px 8px rgba(253, 224, 71, 0.55),
+    0 0 70px 26px rgba(245, 158, 11, 0.3);
+}
+.orbit {
+  position: absolute;
+  inset: calc(50% - var(--d) / 2);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: orbit var(--t) linear var(--from) infinite;
+}
+/* A planet turns against its orbit, so it stays upright all the way round. */
+.orbit i {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%;
+  box-shadow: inset calc(var(--s) * -0.16) calc(var(--s) * -0.14) calc(var(--s) * 0.3) rgba(0, 0, 0, 0.5);
+  animation: orbit var(--t) linear var(--from) infinite reverse;
+}
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.mercury {
+  --s: 3.2cqw;
+  background: radial-gradient(circle at 35% 30%, #d6d3d1, #8f8a86 65%, #57534e);
+}
+.venus {
+  --s: 4.6cqw;
+  background: radial-gradient(circle at 35% 30%, #fff1c2, #e9c46a 60%, #b98a2e);
+}
+.earth {
+  --s: 5cqw;
+  background:
+    radial-gradient(circle at 30% 36%, #4ade80 0 18%, transparent 19%),
+    radial-gradient(circle at 66% 62%, #22c55e 0 22%, transparent 23%),
+    radial-gradient(circle at 70% 22%, #86efac 0 10%, transparent 11%),
+    radial-gradient(circle at 35% 30%, #60a5fa, #2563eb 70%);
+}
+.mars {
+  --s: 4cqw;
+  background:
+    radial-gradient(circle at 50% 6%, #fff 0 10%, transparent 11%),
+    radial-gradient(circle at 62% 60%, #9a3412 0 20%, transparent 21%),
+    radial-gradient(circle at 35% 30%, #fb923c, #dc4a12 70%);
+}
+.jupiter {
+  --s: 9cqw;
+  background:
+    radial-gradient(ellipse 14% 9% at 68% 61%, #c2410c 0 96%, transparent 100%),
+    linear-gradient(180deg, #d6a574 0 14%, #f1dcc0 14% 26%, #c98b5a 26% 40%, #f3e3cc 40% 52%, #b9764a 52% 66%, #ecd3b0 66% 80%, #c79465 80%);
+}
+/* Saturn's box is as wide as its rings: half a ring in front, the ball, the whole ring behind. */
+.orbit .saturn {
+  --s: 7cqw;
+  --ring: rgba(232, 210, 158, 0.95);
+  --ring-out: rgba(200, 180, 132, 0.75);
+  width: calc(var(--s) * 2.3);
+  margin-left: calc(var(--s) * -1.15);
+  border-radius: 0;
+  box-shadow: none;
+  rotate: -16deg;
+  background:
+    radial-gradient(ellipse 50% 60% at 50% 0, transparent 60%, var(--ring) 62%, var(--ring) 80%, transparent 82%, transparent 86%, var(--ring-out) 88%, var(--ring-out) 97%, transparent 99%) 0 100% / 100% 50% no-repeat,
+    radial-gradient(circle closest-side, #f6e4b4, #dcb96f 62%, #9c7a38 99%, transparent 100%),
+    radial-gradient(ellipse 50% 30% at 50% 50%, transparent 60%, var(--ring) 62%, var(--ring) 80%, transparent 82%, transparent 86%, var(--ring-out) 88%, var(--ring-out) 97%, transparent 99%);
+}
+.uranus {
+  --s: 5.8cqw;
+  background: radial-gradient(circle at 35% 30%, #c8f4f1, #67d2d3 60%, #3aa9b3);
+}
+.neptune {
+  --s: 5.6cqw;
+  background: radial-gradient(circle at 35% 30%, #7aa7ff, #2f5fe0 60%, #1e3a9a);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Paused, not removed: every planet keeps its own place on the orbit. */
+  .orbit,
+  .orbit i {
+    animation-play-state: paused;
+  }
+  .sky::before,
+  .sky::after,
+  .sky i {
+    animation: none;
+    opacity: 0.6;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

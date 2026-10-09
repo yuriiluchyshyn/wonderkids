@@ -1,0 +1,16 @@
+/* The deep purple starry sky of the ad pictures (scripts/ads/creative/space.css in the workspace),
+   so the page a parent lands on looks like the ad they tapped. */
+:root {
+  --bg-1: #1e0a45;
+  --bg-2: #4c1d95;
+  --surface: rgba(46, 20, 100, 0.82);
+  --line: rgba(196, 160, 255, 0.28);
+  --ink: var(--pulsar-ink);
+  --soft: var(--pulsar-soft);
+  --brand: var(--pulsar-brand);
+  --brand-light: var(--pulsar-brand-light);
+  --accent: var(--pulsar-accent);
+  --sun: var(--pulsar-sun);
+  --radius: 26px;
+  color-scheme: dark;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@pulsar/platform",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "What the public site and the game's portals agree on: where each lives, the language a visitor chose, the channel that brought them.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./browser": "./src/browser.ts"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.ts\""
+  }
+}

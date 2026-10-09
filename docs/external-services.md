@@ -1,6 +1,6 @@
 # Pulsar Kids: зовнішні сервіси та інтеграції
 
-Станом на 2026-10-08.
+Станом на 2026-10-09.
 
 ## Огляд
 
@@ -8,7 +8,7 @@ Pulsar Kids (кодова назва WonderKids) працює на дванад�
 
 Система складається з трьох частин:
 
-- **Фронтенд** — Vite + React 18 + TypeScript (`app/src`), плюс статична посадкова сторінка `app/landing.html`.
+- **Фронтенд гри** — Vite + React 18 + TypeScript (`app/game/src`). **Публічний сайт** — окремий проєкт зі статичними сторінками (`app/site`), свій Vercel-проєкт на кореневому домені.
 - **API** — 12 серверних функцій Vercel у `app/api/*`. Це єдиний бекенд; локально ті самі обробники віддає плагін Vite `dev-api.ts`.
 - **Допоміжні скрипти** — окремий репозиторій `scripts/` (запуск, деплой, реклама в Meta).
 
@@ -25,12 +25,13 @@ flowchart TD
   Browser -- HTTPS --> Vercel
   GitHub["GitHub: пуш у main"] -- деплой --> Vercel
   subgraph Vercel
-    Static["Статика<br/>фронтенд React, landing.html"]
-    API["API<br/>12 функцій, app/api/*"]
+    Site["Проєкт «сайт»<br/>статичні сторінки, app/site"]
+    Static["Проєкт «гра»: статика<br/>фронтенд React, app/game"]
+    API["Проєкт «гра»: API<br/>12 функцій, app/game/api/*"]
     Analytics["Web Analytics<br/>анонімні перегляди"]
   end
   API --> Neon["Neon PostgreSQL<br/>акаунти, прогрес, екранний час,<br/>кеш озвучення, листи"]
-  API --> TTS["Google Cloud TTS<br/>голос українською й англійською,<br/>фрази кешуються в базі"]
+  API --> TTS["Google Cloud TTS<br/>голос трьома мовами,<br/>фрази кешуються в базі"]
   API --> Resend["Resend<br/>листи з форми на пошту власника,<br/>з фото й відео"]
   Sender["Лист на hello@pulsarkids.com"] --> ImprovMX["ImprovMX<br/>приймає пошту домену"]
   ImprovMX -- пересилає --> Gmail["Gmail власника"]
@@ -44,13 +45,13 @@ flowchart TD
 | Сервіс | Категорія | Для чого | Де підключено | Обов'язковий |
 | --- | --- | --- | --- | --- |
 | Vercel | Хостинг, серверні функції, домени | Віддає фронтенд, виконує `api/*`, тримає домени й редиректи | `app/vercel.json`, `app/api/*` | Так |
-| Vercel Web Analytics | Аналітика | Анонімні перегляди сторінок без cookies | `src/main.tsx`, `landing.html` | Ні |
+| Vercel Web Analytics | Аналітика | Анонімні перегляди сторінок без cookies | `game/src/main.tsx`, `site/index.html` | Ні |
 | Neon (PostgreSQL) | База даних | Акаунти, прогрес дітей, екранний час, кеш озвучення, листи | `api/_lib/db.js` | Так |
 | Auth0 | Автентифікація | Вхід батьків (пошта + пароль або Google) | `src/pages/auth/Auth0Login.tsx`, `api/_lib/auth0.js` | Ні: без нього вхід лише за адресою пошти |
-| Google Cloud Text-to-Speech | Озвучення | Природний голос українською та англійською | `api/tts.js`, `api/_lib/tts.js` | Ні: запасний варіант — голос браузера |
+| Google Cloud Text-to-Speech | Озвучення | Природний голос українською, англійською та польською | `api/tts.js`, `api/_lib/tts.js` | Ні: запасний варіант — голос браузера |
 | Resend | Пошта | Пересилає листи з форми «Написати нам» власнику, з вкладеннями | `api/_lib/mail.js`, `api/feedback.js` | Ні: без нього текст зберігається, файли губляться |
-| Google Fonts | Шрифти | Baloo 2, Fredoka, Handjet, Press Start 2P | `src/styles/global.css`, `landing.html` | Ні |
-| GitHub | Код і запуск деплою | Два репозиторії; пуш у `main` запускає деплой на Vercel | `scripts/deploy-app.sh`, `scripts/autopush.sh` | Так |
+| Google Fonts | Шрифти | Baloo 2, Fredoka, Handjet, Press Start 2P | `game/src/styles/global.css`, `site/index.html` | Ні |
+| GitHub | Код і запуск деплою | Два репозиторії; пуш у `main` запускає деплой на Vercel | `scripts/deploy.sh`, `scripts/autopush.sh` | Так |
 | Meta Marketing API | Реклама | Кампанії у Facebook та Instagram | `scripts/ads/meta-ads.mjs` | Ні |
 | Name.com | Реєстратор домену | Реєстрація `pulsarkids.com` (з 2026-10-07, до 2027-10-07) | Поза кодом | Так |
 | Vercel DNS | DNS | Усі записи домену: сайт, пошта, Auth0, Resend | Поза кодом (панель Vercel → Domains) | Так |
@@ -64,21 +65,23 @@ flowchart TD
 
 ### Vercel: хостинг, API та домени
 
-Vercel — єдина платформа, де виконується застосунок: статика фронтенду і серверні функції з `app/api/*`.
+Vercel — єдина платформа, де виконується застосунок. Проєктів два, з одного репозиторію: **сайт** (Root Directory `site`, кореневий домен) і **гра** (Root Directory `game`, хости `play.` і `parents.`) — статика фронтенду і серверні функції з `app/game/api/*`.
 
-- **Що робить.** Збирає проєкт після кожного пушу в `main`, віддає `dist/`, запускає функції API, зберігає продакшн-змінні середовища.
-- **Маршрутизація.** `vercel.json` переписує `/` на `landing.html` на кореневому домені, решту шляхів — на `app.html`; старі хости `*.wonderkids.yluch.app` отримують редирект 308 на `pulsarkids.com`.
+- **Що робить.** Після пушу в `main` збирає той проєкт, чия тека (або спільні `packages/`) змінилась — це `ignoreCommand` у його `vercel.json`; віддає `dist/`, запускає функції API, зберігає продакшн-змінні середовища (усі — у проєкті гри; сайту вони не потрібні).
+- **Маршрутизація.** `game/vercel.json` переписує всі шляхи, крім `/api/`, на оболонку застосунку. `site/vercel.json` відправляє шляхи гри, відкриті на кореневому домені (`/login`, `/parent`, `/admin`…), на їхній портал. Старі хости `*.wonderkids.yluch.app` отримують редирект 308 на `pulsarkids.com`.
+- **Мова посадкової.** Сторінка збирається трьома мовами: `/` (українська), `/en/`, `/pl/`. Куди відправити відвідувача з `/`, вирішують редиректи у `site/vercel.json`: спершу його вибір (cookie `pk_lang`), потім країна (заголовок `x-vercel-ip-country`), потім мова браузера (`accept-language`); пошукові роботи й попередній перегляд посилань не перенаправляються.
+- **Країна відвідувача.** Vercel додає до кожного запиту заголовок `x-vercel-ip-country`. `GET /api/health` повертає його як `country`, і застосунок пропонує мову цієї країни тому, хто ще не обрав свою. Поза Vercel значення `null`.
 - **Індексація.** Особисті шляхи (`/play/*`, `/parent`, `/admin`, `/world`, `/vault`, `/who`) отримують заголовок `X-Robots-Tag: noindex`.
 - **Обмеження.** Тариф Hobby дозволяє 12 функцій на деплой, і в `api/` їх рівно 12. Запит приймає до 4,5 МБ, тому форма листів ріже файли на шматки по 1,5 МБ.
 - **Домени.** `scripts/setup-vercel-domains.sh` додає `play.` і `parents.` через Vercel CLI.
-- **Перевірка.** `curl https://pulsarkids.com/api/health` повертає `{ ok: true }`.
+- **Перевірка.** `curl https://play.pulsarkids.com/api/health` (API належить грі; на кореневому домені його немає) повертає `{ ok: true, country: "UA" }`.
 
 ### Vercel Web Analytics
 
 Рахує анонімні перегляди сторінок без cookies; цифри дивитися в панелі Vercel → проєкт → Analytics.
 
 - **У застосунку.** `src/main.tsx` викликає `inject()` з `@vercel/analytics` і перед відправкою відрізає рядок запиту, бо в ньому може бути код входу Auth0.
-- **На посадковій.** `landing.html` сама підключає `/_vercel/insights/script.js`.
+- **На сайті.** `site/index.html` сама підключає `/_vercel/insights/script.js`; аналітику треба ввімкнути в кожному з двох Vercel-проєктів.
 - **Джерела реєстрацій** рахуються не тут: мітки `utm_*` зберігаються в `wk_parents.signup_*` і показуються в `/admin/sources`.
 
 ### Neon: керований PostgreSQL
@@ -103,8 +106,9 @@ Auth0 лише підтверджує, що людина володіє пошт
 
 ### Google Cloud Text-to-Speech
 
-Дає природний голос для завдань, підказок і фактів: `uk-UA-Wavenet-A` за замовчуванням, `en-US-Wavenet-F` для англійських карток.
+Дає природний голос для завдань, підказок і фактів трьома мовами: `uk-UA-Wavenet-A` (за замовчуванням), `en-US-Wavenet-F`, `pl-PL-Wavenet-A`. Перелік голосів — `VOICES` у `api/_lib/tts.js`; нова мова — це новий рядок там.
 
+- **Вибір голосу.** Клієнт передає мову фрази (`lang`: `uk`, `en`, `pl`). Голос, заданий разом із ключем акаунта, береться лише тоді, коли він тієї самої мови; інакше — голос мови зі списку (`voiceFor`).
 - **Проксі.** Браузер викликає `POST /api/tts`, сервер звертається до `texttospeech.googleapis.com/v1/text:synthesize` і повертає MP3 у base64. Ключ Google ніколи не потрапляє в браузер.
 - **Кеш.** Кожна фраза зберігається в `wk_tts_cache` за хешем «голос + швидкість + текст», тож оплачується один раз. Межа — 400 символів на фразу.
 - **Ключі.** Не в змінних середовища, а в таблиці `wk_tts_keys`, зашифровані AES-GCM (`api/_lib/secrets.js`). Додаються в `/admin/speech`: один глобальний або окремий на акаунт; `wk_parents.tts_off` вимикає акаунт.
@@ -122,15 +126,15 @@ Auth0 лише підтверджує, що людина володіє пошт
 
 ### Google Fonts
 
-Віддає шрифти напряму в браузер: Baloo 2 і Fredoka всюди, піксельні Handjet і Press Start 2P для тем `lego` / `minecraft`. Підключено через `@import` у `src/styles/global.css` та `<link>` у `landing.html`. Ключів не потребує.
+Віддає шрифти напряму в браузер: Baloo 2 і Fredoka всюди, піксельні Handjet і Press Start 2P для тем `lego` / `minecraft`. Підключено через `@import` у `game/src/styles/global.css` та `<link>` у `site/index.html`. Ключів не потребує.
 
 ### GitHub
 
 Зберігає код і запускає деплой: пуш у `main` репозиторію `yuriiluchyshyn/wonderkids` підхоплює Vercel.
 
 - **Репозиторії.** `wonderkids` (папка `app/`) і `wonderkids-scripts` (папка `scripts/`). Коренева папка `WonderKids/` не є репозиторієм.
-- **Скрипти.** `deploy-app.sh` збирає проєкт, комітить і пушить `app/`; `autopush.sh` — обидва репозиторії. Обидва пушать прямо в `main`.
-- **CI.** GitHub Actions немає; єдина перевірка перед деплоєм — локальний `npm run build` у `deploy-app.sh`.
+- **Скрипти.** `deploy.sh` питає, що деплоїти (сайт, гру чи все), проганяє тести й збірку вибраного, комітить лише його теку і пушить `app/`; `autopush.sh` — обидва репозиторії цілком. Обидва пушать прямо в `main`.
+- **CI.** GitHub Actions немає; єдина перевірка перед деплоєм — локальні тести й `npm run build` у `deploy.sh`.
 
 ### Meta Marketing API
 
@@ -183,7 +187,7 @@ Auth0 лише підтверджує, що людина володіє пошт
 
 ### Google Search Console
 
-TXT-запис `google-site-verification` підтверджує володіння доменом у Google. Він потрібен для Search Console (статистика пошуку, подання `sitemap.xml`, яку створює `seo-plugin.ts`). Коду, що звертається до Google, для цього немає.
+TXT-запис `google-site-verification` підтверджує володіння доменом у Google. Він потрібен для Search Console (статистика пошуку, подання `sitemap.xml`, яку створює `site/build/seo.ts`). Коду, що звертається до Google, для цього немає.
 
 ## Ключові потоки
 
@@ -203,7 +207,7 @@ TXT-запис `google-site-verification` підтверджує володін�
 ### Озвучення фрази
 
 1. Клієнт надсилає `POST /api/tts { text, lang? }`.
-2. API визначає ключ акаунта (`getTtsConfig`) і шукає фразу в `wk_tts_cache`.
+2. API визначає ключ акаунта (`getTtsConfig`), обирає голос за мовою фрази і шукає фразу в `wk_tts_cache`.
 3. Якщо фрази немає, API синтезує її в Google Cloud TTS і кладе в кеш.
 4. Відповідь 404 `tts_disabled`, помилка або затримка понад 3,5 с перемикають клієнт на голос браузера.
 
@@ -216,9 +220,9 @@ TXT-запис `google-site-verification` підтверджує володін�
 
 ### Деплой
 
-1. `./scripts/deploy-app.sh` запускає `npm run build`, комітить і пушить `app/` у GitHub.
-2. Vercel підхоплює коміт у `main`, збирає фронтенд і функції.
-3. Під час збірки на Vercel `seo-plugin.ts` перейменовує `index.html` на `app.html` і створює `robots.txt` та `sitemap.xml`.
+1. `./scripts/deploy.sh` питає, що деплоїти, запускає тести й `npm run build` вибраного проєкту, комітить його теку і пушить `app/` у GitHub.
+2. Vercel підхоплює коміт у `main`; кожен із двох проєктів (сайт, гра) збирається, лише якщо змінилась його тека або спільні пакети.
+3. Під час збірки сайту `site/build/pages.ts` робить із шаблону `site/index.html` три сторінки (`/`, `/en/`, `/pl/`), а `site/build/seo.ts` створює `robots.txt` та `sitemap.xml` з посиланнями `hreflang` на всі мови.
 
 ## Конфігурація та секрети
 
@@ -237,7 +241,7 @@ TXT-запис `google-site-verification` підтверджує володін�
 | `RESEND_API_KEY` | Resend | Ключ API | Так |
 | `FEEDBACK_TO`, `FEEDBACK_FROM` | Resend | Скринька власника та адреса відправника | Ні |
 | `RESEND_ENDPOINT` | Resend | Підміна адреси API для тестів | Ні |
-| `VITE_SITE_URL`, `VITE_USE_SUBDOMAINS`, `VITE_API_URL` | Vercel / домени | Кореневий домен для SEO, режим піддоменів, зовнішня адреса API | Ні |
+| `VITE_SITE_URL`, `VITE_API_URL` (гра); `VITE_SITE_URL`, `VITE_PLAY_URL`, `VITE_PARENTS_URL` (сайт) | Vercel / домени | Кореневий домен для SEO, зовнішня адреса API; адреси порталів гри, якщо вони не піддомени сайту | Ні |
 | `VERCEL_TOKEN` | Vercel CLI | Необов'язковий токен для `setup-vercel-domains.sh` | Так |
 | `META_ACCESS_TOKEN` | Meta | Токен System User (`ads_management`, `ads_read`, `pages_read_engagement`) | Так |
 | `META_AD_ACCOUNT_ID`, `META_PAGE_ID`, `META_API_VERSION` | Meta | Рекламний акаунт, сторінка, версія API | Ні |
@@ -266,6 +270,7 @@ TXT-запис `google-site-verification` підтверджує володін�
 | Auth0 | CLI за замовчуванням дивиться на інший тенант (TinyKits) | Команду без `--tenant` буде виконано не в тому тенанті |
 | Google Fonts | Шрифти вантажаться з серверів Google на дитячому сайті | IP відвідувача потрапляє до третьої сторони; локальні файли шрифтів це знімають |
 | GitHub | Скрипти пушать прямо в `main`, CI немає | Тести й `check:content` перед деплоєм не запускаються |
+| Vercel | Вибір мови залежить від заголовка `x-vercel-ip-country` і редиректів у `vercel.json` | Поза Vercel (локально, інший хостинг) країна невідома — лишається мова браузера |
 | Моніторинг | Сервісу збору помилок немає | Помилки видно лише в журналах функцій Vercel |
 
-Застарілі згадки, які варто виправити: `scripts/deploy-app.sh` радить перевіряти `wonderkids.yluch.app/api/health` замість `pulsarkids.com`, а `app/README.md` досі описує застосунок як «zero-backend, LocalStorage».
+Застаріла згадка, яку варто виправити: `app/README.md` досі описує застосунок як «zero-backend, LocalStorage».

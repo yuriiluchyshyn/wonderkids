@@ -1,0 +1,13 @@
+{
+  "name": "@pulsar/i18n",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The translation engine shared by the site and the game: texts by key, plurals, fallback. Brings no texts and no list of languages of its own.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.ts\""
+  }
+}

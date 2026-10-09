@@ -11,8 +11,10 @@ Zero-backend — усе працює в браузері (LocalStorage).
 доступом по локальній мережі для телефона/планшета):
 
 ```bash
-./scripts/dev.sh          # http://localhost:4321 (+ Network URL для мобільного)
+./scripts/dev.sh          # гра: http://localhost:4321 (+ Network URL для мобільного)
 ./scripts/dev.sh 4500     # власний порт
+./scripts/dev.sh site     # сайт: http://localhost:4322
+./scripts/dev.sh all      # обидва
 ```
 
 Або напряму:
@@ -20,9 +22,28 @@ Zero-backend — усе працює в браузері (LocalStorage).
 ```bash
 cd app
 npm install
-npm run dev      # http://localhost:4321 (host увімкнено)
-npm run build    # продакшн-збірка у dist/
+npm run dev:game   # гра: http://localhost:4321 (host увімкнено)
+npm run dev:site   # сайт: http://localhost:4322
+npm run build      # продакшн-збірка обох (game/dist, site/dist)
+npm test           # тести всіх частин
 ```
+
+## Структура репозиторію
+
+Сайт і гра — два окремі проєкти (npm workspaces), кожен деплоїться сам
+(`./scripts/deploy.sh` питає, що пушити):
+
+```
+site/        публічний сайт (pulsarkids.com): свої стилі, скрипти, тексти й переклади
+game/        гра: панель дитини, кабінет батьків, адмін-панель та API (play.* / parents.*)
+packages/    лише те, чим користуються обоє
+  i18n/      рушій перекладів (без текстів і без переліку мов)
+  platform/  про що сайт і гра домовились: хости, cookie мови, джерело відвідувача
+  brand/     іконки й кольори нічного неба
+```
+
+Подробиці — у `CLAUDE.md` та `docs/architecture.md`. Решта цього файла описує
+ранній POC гри; шляхи `src/…` нижче — усередині `game/`.
 
 ### Перевірка на мобільному
 Запусти `./scripts/dev.sh`, відкрий на телефоні/планшеті (та сама Wi-Fi) адресу

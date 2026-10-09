@@ -1,0 +1,14 @@
+{
+  "name": "@pulsar/brand",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The look Pulsar Kids is known by, shared by the site and the game: its icons and the colours of its night sky.",
+  "exports": {
+    "./vite": "./vite.ts",
+    "./night-sky.css": "./night-sky.css"
+  },
+  "peerDependencies": {
+    "vite": "^5.4.11"
+  }
+}

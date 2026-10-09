@@ -17,6 +17,9 @@ yarn-error.log*
 !.vscode/extensions.json
 .idea/
 
+# Vercel CLI link (per machine)
+.vercel/
+
 # env / local
 *.local
 .env
@@ -25,3 +28,4 @@ yarn-error.log*
 
 # TypeScript incremental build cache (must never be committed)
 *.tsbuildinfo
+.vercel

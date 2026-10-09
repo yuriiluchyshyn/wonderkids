@@ -16,7 +16,7 @@
 
 ```mermaid
 flowchart LR
-  Ad["Оголошення в Meta<br/>або посилання в профілі"] -- "?utm_source=…" --> Landing["pulsarkids.com<br/>landing.html"]
+  Ad["Оголошення в Meta<br/>або посилання в профілі"] -- "?utm_source=…" --> Landing["pulsarkids.com<br/>site/"]
   Landing -- "мітка в посиланнях «Грати» / «Батькам»" --> App["parents.pulsarkids.com<br/>вхід батьків"]
   App -- "мітка в localStorage,<br/>переживає Auth0" --> Login["POST /api/auth/login<br/>{ idToken, source }"]
   Login -- "лише при створенні акаунта" --> DB[("wk_parents<br/>signup_source / medium / campaign")]
@@ -103,7 +103,7 @@ Ads Manager: `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=10
 
 Як це зроблено:
 
-- **Стиль** — `space.css` (небо, планета) і `space.js` (зірки, жителі планети). Його ж палітру має лендінг (`app/landing.html`).
+- **Стиль** — `space.css` (небо, планета) і `space.js` (зірки, жителі планети). Його ж палітру має сайт (`app/site/src/styles`).
 - **Сторінки** — `og.html` (картинка; з `?cover` — обкладинка), `intro.html` (заставка), `inside.html` (запис у телефоні з підписами). Відео мають параметр `?h=1350` для версії 4:5.
 - **Рендер** — `render.mjs` відкриває сторінку в headless Chromium (той, що ставить Playwright) і знімає картинку або кадри по одному; `encode.swift` збирає кадри в mp4 (H.264, 30 кадрів/с, без звуку).
 - **Запис гри** — `recording/record.mjs` проходить справжній застосунок на локальному dev-сервері. Усі запити до `/api` підмінюються в браузері вигаданим профілем дитини, тож база не зачіпається.
@@ -139,7 +139,7 @@ node render.mjs 'intro.html?h=1350' 1080 1350 /tmp/intro45 12000 && swift encode
 
 ## Як зберігається джерело
 
-1. **Лендінг** (`landing.html`, останній скрипт): бере `utm_*` з адреси, а якщо їх немає — сайт, з якого прийшла людина (`document.referrer`, тип `referral`). Зберігає в `localStorage` під ключем `pulsar-source-v1` і дописує до всіх посилань `[data-portal]`.
+1. **Сайт** (`site/src/scripts/portals.ts`): бере `utm_*` з адреси, а якщо їх немає — сайт, з якого прийшла людина (`document.referrer`, тип `referral`). Зберігає в `localStorage` під ключем `pulsar-source-v1` і дописує до всіх посилань `[data-portal]`.
 2. **Застосунок** (`src/core/app/attribution.ts`): `rememberSource()` викликається в `main.tsx` до того, як аналітика обріже параметри з адреси; мітка лягає в `localStorage` і переживає перехід на Auth0 і назад.
 3. **Вхід** (`useAuthStore` → `api.auth0Login` / `api.login`): мітка йде в тілі `POST /api/auth/login` як `source`.
 4. **Сервер** (`api/auth/login.js`, `createParent` у `api/_lib/db.js`): зберігає мітку в `wk_parents.signup_source`, `signup_medium`, `signup_campaign` — **лише коли цей вхід створює акаунт**. Існуючий акаунт джерела не міняє.

@@ -1,0 +1,227 @@
+/* ---- the letter form ---- */
+.letter-open {
+  margin-top: 22px;
+  border: 0;
+  cursor: pointer;
+}
+/* The form lives in a window of its own, opened by the «write to us» links (`data-letter-open`). */
+.letter-modal {
+  width: min(100% - 24px, 720px);
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #2a1464;
+  color: var(--ink);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  overscroll-behavior: contain;
+}
+.letter-modal::backdrop {
+  background: rgba(5, 8, 20, 0.72);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.letter-modal[open] {
+  animation: rise 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+html.letter-on {
+  overflow: hidden;
+}
+.letter-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 12px 14px 22px;
+  border-bottom: 1px solid var(--line);
+  background: #2a1464;
+}
+.letter-head h2 {
+  margin-right: auto;
+  font-size: 1.5rem;
+}
+.letter-close {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.letter-close:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+.letter,
+.letter-done {
+  padding: 22px;
+}
+.letter {
+  display: grid;
+  gap: 18px;
+}
+.letter[hidden],
+.letter-done[hidden] {
+  display: none;
+}
+.letter fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.letter legend,
+.letter .field > span {
+  display: block;
+  padding: 0;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.letter small {
+  color: var(--soft);
+  font-weight: 400;
+  font-size: 0.92rem;
+}
+.kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.kinds label {
+  cursor: pointer;
+}
+.kinds input,
+.attach input,
+.trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.kinds span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--soft);
+  font-weight: 600;
+}
+.kinds input:checked + span {
+  border-color: var(--accent);
+  background: rgba(53, 214, 232, 0.14);
+  color: var(--ink);
+}
+.kinds input:focus-visible + span,
+.attach label:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.letter textarea,
+.letter input[type='email'] {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: rgba(30, 10, 69, 0.6);
+  color: var(--ink);
+  font: inherit;
+}
+.letter textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+.letter textarea:focus,
+.letter input[type='email']:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.letter ::placeholder {
+  color: #7f88b5;
+}
+.attach {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+}
+.attach label {
+  cursor: pointer;
+}
+.files {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.files:empty {
+  display: none;
+}
+.files li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.files span {
+  min-width: 0;
+  margin-right: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.files button {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--soft);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.files button:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.08);
+}
+.letter-note:empty {
+  display: none;
+}
+.letter-note {
+  color: #ffb4a8;
+}
+.letter button.btn {
+  justify-self: start;
+  border: 0;
+  cursor: pointer;
+}
+.letter button.btn:disabled {
+  opacity: 0.7;
+  cursor: progress;
+  transform: none;
+}
+.letter-done h3 {
+  font-size: 1.5rem;
+}
+.letter-done p {
+  margin: 8px 0 18px;
+  color: var(--soft);
+}
+.letter-done button {
+  cursor: pointer;
+  font-size: 1rem;
+}

@@ -1,0 +1,44 @@
+/* ---- header ---- */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(30, 10, 69, 0.78);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--ink);
+  text-decoration: none;
+  margin-right: auto;
+}
+nav {
+  display: none;
+  gap: 18px;
+}
+nav a {
+  color: var(--soft);
+  font-weight: 600;
+  text-decoration: none;
+}
+nav a:hover {
+  color: var(--accent);
+}
+@media (min-width: 860px) {
+  nav {
+    display: flex;
+  }
+}

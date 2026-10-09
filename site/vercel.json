@@ -1,0 +1,190 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "ignoreCommand": "git diff --quiet \"${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}\" HEAD -- . ../packages ../package.json ../package-lock.json",
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "wonderkids.yluch.app"
+        }
+      ],
+      "destination": "https://pulsarkids.com/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wonderkids.yluch.app"
+        }
+      ],
+      "destination": "https://pulsarkids.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "cookie",
+          "key": "pk_lang",
+          "value": "pl"
+        }
+      ],
+      "destination": "/pl/",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "cookie",
+          "key": "pk_lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/en/",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "PL"
+        }
+      ],
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "pk_lang"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Lighthouse|[Pp]review|HeadlessChrome).*"
+        }
+      ],
+      "destination": "/pl/",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "pl.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "pk_lang"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Lighthouse|[Pp]review|HeadlessChrome).*"
+        },
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "UA"
+        }
+      ],
+      "destination": "/pl/",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "pk_lang"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Lighthouse|[Pp]review|HeadlessChrome).*"
+        },
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "UA"
+        },
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "PL"
+        },
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "uk.*"
+        }
+      ],
+      "destination": "/en/",
+      "permanent": false
+    },
+    {
+      "source": "/landing.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/login",
+      "destination": "https://play.pulsarkids.com/login",
+      "permanent": false
+    },
+    {
+      "source": "/play/:path*",
+      "destination": "https://play.pulsarkids.com/play/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/world",
+      "destination": "https://play.pulsarkids.com/world",
+      "permanent": false
+    },
+    {
+      "source": "/vault",
+      "destination": "https://play.pulsarkids.com/vault",
+      "permanent": false
+    },
+    {
+      "source": "/who",
+      "destination": "https://play.pulsarkids.com/who",
+      "permanent": false
+    },
+    {
+      "source": "/parent",
+      "destination": "https://parents.pulsarkids.com/parent",
+      "permanent": false
+    },
+    {
+      "source": "/parent/:path*",
+      "destination": "https://parents.pulsarkids.com/parent/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/parent-login",
+      "destination": "https://parents.pulsarkids.com/parent-login",
+      "permanent": false
+    },
+    {
+      "source": "/admin",
+      "destination": "https://parents.pulsarkids.com/admin",
+      "permanent": false
+    },
+    {
+      "source": "/admin/:path*",
+      "destination": "https://parents.pulsarkids.com/admin/:path*",
+      "permanent": false
+    }
+  ]
+}

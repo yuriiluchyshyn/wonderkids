@@ -1,0 +1,298 @@
+/*
+ * Standalone styling: the login screen is shown before a child's world/theme
+ * is known, so it cannot read the theme variables. It wears the colours of the
+ * neutral «Галактика» theme (core/theme/themes.ts) — the same night sky as the
+ * public site, so the way in looks like one place (`@pulsar/brand/night-sky.css`).
+ */
+
+.wrap {
+  --login-bg-1: #0b1026;
+  --login-bg-2: #2b1a52;
+  --login-ink: var(--pulsar-ink);
+  --login-soft: var(--pulsar-soft);
+  --login-line: rgba(139, 124, 255, 0.3);
+  --login-brand: var(--pulsar-brand-light);
+  --login-accent: var(--pulsar-accent);
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(42% 36% at 84% 12%, rgba(53, 214, 232, 0.2), transparent 70%),
+    radial-gradient(46% 40% at 8% 80%, rgba(124, 108, 255, 0.28), transparent 72%),
+    linear-gradient(170deg, var(--login-bg-1) 0%, var(--login-bg-2) 55%, var(--login-bg-1) 100%);
+}
+
+/* Stars: three depths, each a tile of its own size so the pattern never lines up. */
+.wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 24px 36px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 150px 92px, #dfe6ff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 96px 190px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 210px 250px, #c9c2ff 50%, transparent 51%),
+    radial-gradient(2px 2px at 330px 130px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 280px 40px, #9fefff 50%, transparent 51%);
+  background-size:
+    230px 230px,
+    230px 230px,
+    310px 310px,
+    310px 310px,
+    410px 410px,
+    410px 410px;
+  animation: twinkle 5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 0.95;
+  }
+}
+
+/* Full-bleed decoration layer behind the card. */
+.bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.decor {
+  position: absolute;
+  line-height: 1;
+  opacity: 0.55;
+  transform: rotate(var(--rot, 0deg));
+  filter: drop-shadow(0 0 12px rgba(139, 124, 255, 0.45));
+  animation: floaty 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: rotate(var(--rot, 0deg)) translateY(0);
+  }
+  50% {
+    transform: rotate(var(--rot, 0deg)) translateY(-14px);
+  }
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  padding: 34px 26px 24px;
+  border: 1px solid var(--login-line);
+  border-radius: 32px;
+  background: rgba(24, 33, 63, 0.86);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--login-ink);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+/* A small cluster of space things above the name. */
+.logoRow {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.logoIcon {
+  font-size: 2.4rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 10px rgba(53, 214, 232, 0.4));
+}
+
+.logoIcon:nth-child(odd) {
+  transform: translateY(-4px) rotate(-6deg);
+}
+
+.logoIcon:nth-child(even) {
+  transform: translateY(2px) rotate(6deg);
+}
+
+.title {
+  margin: 12px 0 2px;
+  font-family: 'Baloo 2', 'Fredoka', sans-serif;
+  font-size: 2rem;
+  color: var(--login-ink);
+}
+
+.sub {
+  margin: 0 0 22px;
+  font-size: 1.05rem;
+  color: var(--login-soft);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--login-soft);
+  margin-left: 4px;
+}
+
+.input {
+  width: 100%;
+  min-height: 58px;
+  padding: 0 18px;
+  border-radius: 18px;
+  font-size: 1.2rem;
+  font-family: inherit;
+  color: var(--login-ink);
+  background: rgba(11, 16, 38, 0.6);
+  border: 2px solid var(--login-line);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+  color: #6b739c;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--login-accent);
+  box-shadow: 0 0 0 4px rgba(53, 214, 232, 0.2);
+}
+
+.input[aria-invalid='true'] {
+  border-color: #f87171;
+}
+
+.error {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fca5a5;
+}
+
+/* The same glowing button as «Грати» on the front page. */
+.submit {
+  margin-top: 6px;
+  min-height: 64px;
+  border: none;
+  border-radius: 22px;
+  font-family: inherit;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--login-bg-1);
+  background: linear-gradient(135deg, var(--login-brand), var(--login-accent));
+  cursor: pointer;
+  box-shadow: 0 0 26px rgba(53, 214, 232, 0.35);
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.submit:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.submit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.submit:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.hint {
+  margin: 18px 0 0;
+  font-size: 0.85rem;
+  color: var(--login-soft);
+}
+
+.parentLink {
+  color: var(--login-accent);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Top-right "parent entrance" on the child login. */
+.parentCorner {
+  position: absolute;
+  z-index: 2;
+  top: calc(14px + env(safe-area-inset-top));
+  right: calc(14px + env(safe-area-inset-right));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 10px;
+  border: 1px solid var(--login-line);
+  border-radius: 999px;
+  background: rgba(24, 33, 63, 0.86);
+  color: var(--login-ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.parentCornerIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+@media (max-width: 420px) {
+  .parentCornerText {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decor,
+  .wrap::before {
+    animation: none;
+  }
+}
+
+/* "No such account yet" — confirm before creating one. */
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(253, 224, 71, 0.1);
+  border: 1px solid rgba(253, 224, 71, 0.4);
+  color: #fde68a;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.confirm p {
+  margin: 0;
+}
+
+.secondary {
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--login-line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--login-ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}

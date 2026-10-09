@@ -1,0 +1,14 @@
+/*
+ * The night sky of Pulsar Kids — the colours a visitor meets first, wherever
+ * they come in: the public site, the game's sign-in pages, the Solar System.
+ * Kept once, so the way in looks like one place. Each side names its own
+ * tokens after these (`--ink: var(--pulsar-ink)`) and styles itself.
+ */
+:root {
+  --pulsar-ink: #e8ecff;
+  --pulsar-soft: #aab2db;
+  --pulsar-brand: #7c6cff;
+  --pulsar-brand-light: #a79bff;
+  --pulsar-accent: #35d6e8;
+  --pulsar-sun: #fde047;
+}

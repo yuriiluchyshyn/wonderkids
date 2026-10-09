@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="{{@lang}}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{{meta.title}}</title>
+    <meta
+      name="description"
+      content="{{meta.description}}"
+    />
+    <meta name="keywords" content="{{meta.keywords}}" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#1e0a45" />
+    <link rel="canonical" href="__SITE_URL__/{{@path}}" />
+    {{@alternates}}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Pulsar Kids" />
+    <meta property="og:locale" content="{{@ogLocale}}" />
+    {{@ogAlternates}}
+    <meta property="og:url" content="__SITE_URL__/{{@path}}" />
+    <meta property="og:title" content="{{meta.ogTitle}}" />
+    <meta
+      property="og:description"
+      content="{{meta.ogDescription}}"
+    />
+    <meta property="og:image" content="__SITE_URL__/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="{{meta.ogImageAlt}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{meta.ogTitle}}" />
+    <meta
+      name="twitter:description"
+      content="{{meta.twitterDescription}}"
+    />
+    <meta name="twitter:image" content="__SITE_URL__/og-image.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@400;500;600&display=swap"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "__SITE_URL__/{{@path}}#website",
+            "url": "__SITE_URL__/{{@path}}",
+            "name": "Pulsar Kids",
+            "alternateName": ["Пульсар Кідс", "PulsarKids"],
+            "inLanguage": "{{@lang}}",
+            "description": "{{ld.siteDescription}}"
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "__SITE_URL__/{{@path}}#app",
+            "name": "Pulsar Kids",
+            "url": "__PLAY_URL__/",
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Web",
+            "browserRequirements": "{{ld.browser}}",
+            "inLanguage": "{{@lang}}",
+            "isFamilyFriendly": true,
+            "audience": { "@type": "EducationalAudience", "educationalRole": "student", "audienceType": "{{ld.audience}}" },
+            "educationalUse": "{{ld.use}}",
+            "about": ["{{ld.about.math}}", "{{ld.about.geography}}", "{{ld.about.history}}", "{{ld.about.ecology}}"],
+            "image": "__SITE_URL__/og-image.png"
+          }
+        ]
+      }
+    </script>
+
+    <script>
+      // Scroll animations hide things until they are scrolled to — only when the script that reveals them can run.
+      if ('IntersectionObserver' in window) document.documentElement.classList.add('js');
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true"><i></i><i></i></div>
+    <header>
+      <div class="wrap bar">
+        <a class="logo" href="/{{@path}}" aria-label="{{header.logoLabel}}">
+          <span class="emoji" aria-hidden="true">🪐</span> Pulsar Kids
+        </a>
+        <nav aria-label="{{header.navLabel}}">
+          <a href="#about">{{nav.about}}</a>
+          <a href="#games">{{nav.games}}</a>
+          <a href="#world">{{nav.world}}</a>
+          <a href="#parents">{{nav.parents}}</a>
+          <a href="#feedback" data-letter-open>{{nav.write}}</a>
+        </nav>
+        <details class="langs">
+          <summary aria-label="{{lang.label}}"><span class="emoji" aria-hidden="true">🌐</span> {{@langShort}}</summary>
+          <ul>
+            {{@langLinks}}
+          </ul>
+        </details>
+        <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">{{nav.parents}}</a>
+        <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/">{{cta.play}}</a>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap hero">
+        <div>
+          <span class="eyebrow">{{hero.eyebrow}}</span>
+          <h1>{{{hero.title}}}</h1>
+          <p class="lead">
+            {{hero.lead}}
+          </p>
+          <div class="cta">
+            <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> {{cta.play}}</a>
+            <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> {{cta.parents}}</a>
+          </div>
+          <p class="cta-note">{{hero.note}}</p>
+        </div>
+
+        <div class="system" role="img" aria-label="{{hero.systemLabel}}">
+          <div class="sun"></div>
+          <div class="orbit" style="--d: 25%; --t: 12s; --from: -3s"><i class="mercury"></i></div>
+          <div class="orbit" style="--d: 33%; --t: 17s; --from: -21s"><i class="venus"></i></div>
+          <div class="orbit" style="--d: 42%; --t: 23s; --from: -9s"><i class="earth"></i></div>
+          <div class="orbit" style="--d: 50%; --t: 30s; --from: -40s"><i class="mars"></i></div>
+          <div class="orbit" style="--d: 63%; --t: 48s; --from: -70s"><i class="jupiter"></i></div>
+          <div class="orbit" style="--d: 78%; --t: 68s; --from: -25s"><i class="saturn"></i></div>
+          <div class="orbit" style="--d: 88%; --t: 93s; --from: -120s"><i class="uranus"></i></div>
+          <div class="orbit" style="--d: 96%; --t: 120s; --from: -60s"><i class="neptune"></i></div>
+        </div>
+      </div>
+
+      <section id="about">
+        <div class="wrap">
+          <h2>{{about.title}}</h2>
+          <p class="sub">
+            {{about.sub}}
+          </p>
+          <div class="grid">
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🤗</div>
+              <h3>{{about.hint.title}}</h3>
+              <p>
+                {{about.hint.text}}
+              </p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🔊</div>
+              <h3>{{about.voice.title}}</h3>
+              <p>
+                {{about.voice.text}}
+              </p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🪜</div>
+              <h3>{{about.steps.title}}</h3>
+              <p>
+                {{about.steps.text}}
+              </p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🛡️</div>
+              <h3>{{about.ads.title}}</h3>
+              <p>{{about.ads.text}}</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="games">
+        <div class="wrap">
+          <h2>{{games.title}}</h2>
+          <p class="sub">{{games.sub}}</p>
+          <div class="grid">
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🧮</div>
+              <h3>{{games.math.title}}</h3>
+              <ul>
+                <li>{{games.math.1}}</li>
+                <li>{{games.math.2}}</li>
+                <li>{{games.math.3}}</li>
+                <li>{{games.math.4}}</li>
+                <li>{{games.math.5}}</li>
+                <li>{{games.math.6}}</li>
+                <li>{{games.math.7}}</li>
+              </ul>
+              <span class="tag">{{games.math.tag}}</span>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🔤</div>
+              <h3>{{games.language.title}}</h3>
+              <ul>
+                <li>{{games.language.1}}</li>
+                <li>{{games.language.2}}</li>
+                <li>{{games.language.3}}</li>
+                <li>{{games.language.4}}</li>
+              </ul>
+              <span class="tag">{{games.language.tag}}</span>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🧩</div>
+              <h3>{{games.logic.title}}</h3>
+              <ul>
+                <li>{{games.logic.1}}</li>
+                <li>{{games.logic.2}}</li>
+                <li>{{games.logic.3}}</li>
+                <li>{{games.logic.4}}</li>
+              </ul>
+              <span class="tag">{{games.logic.tag}}</span>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🔭</div>
+              <h3>{{games.astronomy.title}}</h3>
+              <ul>
+                <li>{{games.astronomy.1}}</li>
+                <li>{{games.astronomy.2}}</li>
+              </ul>
+              <span class="tag">{{games.twoGames}}</span>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🎨</div>
+              <h3>{{games.art.title}}</h3>
+              <ul>
+                <li>{{games.art.1}}</li>
+              </ul>
+              <span class="tag">{{games.oneGame}}</span>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🌍</div>
+              <h3>{{games.geography.title}}</h3>
+              <ul>
+                <li>{{games.geography.1}}</li>
+                <li>{{games.geography.2}}</li>
+                <li>{{games.geography.3}}</li>
+                <li>{{games.geography.4}}</li>
+                <li>{{games.geography.5}}</li>
+              </ul>
+              <span class="tag">{{games.geography.tag}}</span>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🏛️</div>
+              <h3>{{games.history.title}}</h3>
+              <ul>
+                <li>{{games.history.1}}</li>
+                <li>{{games.history.2}}</li>
+                <li>{{games.history.3}}</li>
+                <li>{{games.history.4}}</li>
+              </ul>
+              <span class="tag">{{games.history.tag}}</span>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">♻️</div>
+              <h3>{{games.ecology.title}}</h3>
+              <ul>
+                <li>{{games.ecology.1}}</li>
+                <li>{{games.ecology.2}}</li>
+                <li>{{games.ecology.3}}</li>
+              </ul>
+              <span class="tag">{{games.twoGames}}</span>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🌿</div>
+              <h3>{{games.nature.title}}</h3>
+              <ul>
+                <li>{{games.nature.1}}</li>
+                <li>{{games.nature.2}}</li>
+              </ul>
+              <span class="tag">{{games.oneGame}}</span>
+            </article>
+          </div>
+
+          <div class="band" style="margin-top: 26px">
+            <div class="numbers">
+              <div><b>{{numbers.gamesCount}}</b><span>{{numbers.games}}</span></div>
+              <div><b>9</b><span>{{numbers.galaxies}}</span></div>
+              <div><b>{{numbers.levelsCount}}</b><span>{{numbers.levels}}</span></div>
+              <div><b>3</b><span>{{numbers.ages}}</span></div>
+              <div><b>3</b><span>{{numbers.languages}}</span></div>
+              <div><b>10</b><span>{{numbers.themes}}</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="world">
+        <div class="wrap">
+          <h2>{{world.title}}</h2>
+          <p class="sub">
+            {{world.sub}}
+          </p>
+          <div class="grid">
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🏗️</div>
+              <h3>{{world.build.title}}</h3>
+              <p>
+                {{world.build.text}}
+              </p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🎯</div>
+              <h3>{{world.goal.title}}</h3>
+              <p>
+                {{world.goal.text}}
+              </p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🛰️</div>
+              <h3>{{world.stations.title}}</h3>
+              <p>
+                {{world.stations.text}}
+              </p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🎨</div>
+              <h3>{{world.theme.title}}</h3>
+              <p>
+                {{world.theme.text}}
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="parents">
+        <div class="wrap">
+          <h2>{{cta.parents}}</h2>
+          <p class="sub">{{parents.sub}}</p>
+          <div class="grid">
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">⏳</div>
+              <h3>{{parents.time.title}}</h3>
+              <p>
+                {{parents.time.text}}
+              </p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">👧</div>
+              <h3>{{parents.children.title}}</h3>
+              <p>{{parents.children.text}}</p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🎁</div>
+              <h3>{{parents.goals.title}}</h3>
+              <p>{{parents.goals.text}}</p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🔧</div>
+              <h3>{{parents.settings.title}}</h3>
+              <p>{{parents.settings.text}}</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="start">
+        <div class="wrap">
+          <h2>{{start.title}}</h2>
+          <div class="steps">
+            <article class="card">
+              <h3>{{start.open.title}}</h3>
+              <p>{{start.open.text}}</p>
+            </article>
+            <article class="card">
+              <h3>{{start.nick.title}}</h3>
+              <p>{{start.nick.text}}</p>
+            </article>
+            <article class="card">
+              <h3>{{start.play.title}}</h3>
+              <p>{{start.play.text}}</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="feedback">
+        <div class="wrap">
+          <h2>{{feedback.title}}</h2>
+          <p class="sub">
+            {{feedback.sub}}
+          </p>
+          <button class="btn btn-play letter-open" type="button" data-letter-open>
+            <span class="emoji" aria-hidden="true">✉️</span> {{nav.write}}
+          </button>
+        </div>
+      </section>
+
+      <section class="final">
+        <div class="wrap band">
+          <h2>{{final.title}}</h2>
+          <p class="sub" style="margin-inline: auto">{{final.sub}}</p>
+          <div class="cta">
+            <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> {{final.child}}</a>
+            <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> {{final.adult}}</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="letter-modal" id="letter-modal" aria-labelledby="letter-title">
+      <div class="letter-head">
+        <h2 id="letter-title">{{nav.write}}</h2>
+        <button class="letter-close" type="button" aria-label="{{letter.close}}">✕</button>
+      </div>
+    <form class="letter" id="letter" data-api="__PLAY_URL__/api/feedback" novalidate>
+      <fieldset>
+        <legend>{{letter.about}}</legend>
+        <div class="kinds">
+          <label><input type="radio" name="kind" value="bug" checked /><span><i class="emoji" aria-hidden="true">🐞</i> {{letter.kind.bug}}</span></label>
+          <label><input type="radio" name="kind" value="idea" /><span><i class="emoji" aria-hidden="true">💡</i> {{letter.kind.idea}}</span></label>
+          <label><input type="radio" name="kind" value="game" /><span><i class="emoji" aria-hidden="true">🎮</i> {{letter.kind.game}}</span></label>
+          <label><input type="radio" name="kind" value="other" /><span><i class="emoji" aria-hidden="true">✉️</i> {{letter.kind.other}}</span></label>
+        </div>
+      </fieldset>
+      <label class="field">
+        <span>{{letter.message}}</span>
+        <textarea
+          name="message"
+          rows="6"
+          maxlength="4000"
+          required
+          placeholder="{{letter.placeholder}}"
+        ></textarea>
+      </label>
+      <label class="field">
+        <span>{{{letter.email}}}</span>
+        <input type="email" name="email" maxlength="200" autocomplete="email" placeholder="name@example.com" />
+      </label>
+      <input class="trap" type="text" name="topic" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <div class="attach">
+        <label class="btn btn-parent btn-small">
+          <input type="file" id="letter-pick" accept="image/*,video/*" multiple />
+          <span class="emoji" aria-hidden="true">📎</span> {{letter.attach}}
+        </label>
+        <small>{{letter.limits}}</small>
+      </div>
+      <ul class="files" id="letter-files"></ul>
+      <p class="letter-note" id="letter-note" role="alert"></p>
+      <button class="btn btn-play" type="submit">{{letter.send}}</button>
+    </form>
+    <div class="letter-done" id="letter-done" role="status" hidden>
+      <h3>{{letter.thanks}}</h3>
+      <p id="letter-done-text"></p>
+      <button class="btn btn-parent btn-small" type="button">{{letter.again}}</button>
+    </div>
+    </dialog>
+
+    <footer>
+      <div class="wrap">
+        <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}}</p>
+        <p>
+          <a data-portal="play" href="__PLAY_URL__/">{{footer.game}}</a>·<a data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>·<a href="#feedback" data-letter-open>{{nav.write}}</a>
+        </p>
+        <ul class="langs-row" aria-label="{{lang.label}}">
+          {{@langLinks}}
+        </ul>
+      </div>
+    </footer>
+
+    <!-- The words of the form's script, in the language of the page (src/scripts/letter/words.ts). -->
+    <script type="application/json" id="letter-words">{{json:js}}</script>
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <!-- Vercel Web Analytics: anonymous page views, no cookies. -->
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+  </body>
+</html>
