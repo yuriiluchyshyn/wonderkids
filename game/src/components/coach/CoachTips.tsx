@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { TIP_PREFIX, useGameStore } from '@/core/child/store/useGameStore';
 import { useSayT } from '@/core/audio/useSpeech';
@@ -163,18 +163,20 @@ export function CoachTips({ tips, enabled = true, startDelayMs = 700, onOpenChan
               height: shown.rect.height + PAD * 2,
             }}
           />
-          <motion.span
-            className={`${styles.pointer} emoji`}
-            style={{
-              left: shown.rect.left + shown.rect.width / 2,
-              top: below ? shown.rect.bottom + PAD : shown.rect.top - PAD - 44,
-            }}
-            animate={{ y: below ? [0, 10, 0] : [0, -10, 0] }}
-            transition={{ repeat: Infinity, duration: 0.9 }}
+          <span
+            className={`${styles.pointer} emoji loop-bob`}
+            style={
+              {
+                left: shown.rect.left + shown.rect.width / 2,
+                top: below ? shown.rect.bottom + PAD : shown.rect.top - PAD - 44,
+                '--loop': '0.9s',
+                '--loop-y': below ? '10px' : '-10px',
+              } as CSSProperties
+            }
             aria-hidden
           >
             {below ? '👆' : '👇'}
-          </motion.span>
+          </span>
           <div
             className={styles.note}
             style={

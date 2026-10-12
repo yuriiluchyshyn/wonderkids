@@ -6,8 +6,13 @@ import { adoptChildHandoff, dropStaleSession, watchSession } from '@/core/accoun
 import { rememberSource } from '@/core/app/attribution';
 import { beginDemo } from '@/core/app/demo';
 import { loadAvailability } from '@/core/app/availability';
+import { markPlatform } from '@/core/app/platform';
 import '@pulsar/brand/night-sky.css';
 import './styles/global.css';
+
+// What the game runs on — the stylesheets ask before the first paint
+// (`docs/browser-support.md`).
+markPlatform();
 
 // Register all learning modules with the micro-kernel before the UI mounts.
 import './games';

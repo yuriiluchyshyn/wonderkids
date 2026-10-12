@@ -18,6 +18,9 @@
   overscroll-behavior: contain;
   padding: 10px 4px;
   margin-bottom: 16px;
+  /* The sheet's own colour, said again: a scrolling part with a solid ground
+     is one opaque picture, and never shows the page through while it scrolls. */
+  background-color: var(--surface);
   background-image: radial-gradient(
     circle,
     color-mix(in srgb, var(--ring) 45%, transparent) 2px,

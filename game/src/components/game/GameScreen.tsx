@@ -554,12 +554,14 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
             className={styles.jumpUp}
             aria-label={t('game.hint.back')}
             initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
-            transition={{ y: { repeat: Infinity, duration: 1 }, default: { duration: 0.2 } }}
+            transition={{ duration: 0.2 }}
             onClick={scrollToAnswers}
           >
-            ⬆️
+            <span className="loop-bob" style={{ '--loop': '1s', '--loop-y': '-10px' } as CSSProperties}>
+              ⬆️
+            </span>
           </motion.button>
         )}
       </AnimatePresence>

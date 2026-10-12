@@ -146,9 +146,14 @@
   box-shadow: none;
 }
 
-.dimmed:hover,
 .dimmed:focus-within {
   opacity: 0.92 !important;
+}
+
+@media (hover: hover) {
+  .dimmed:hover {
+    opacity: 0.92 !important;
+  }
 }
 
 /* Keep long titles clear of the corner badge. */

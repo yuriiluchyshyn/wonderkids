@@ -10,10 +10,9 @@
   padding: 18px;
   background: linear-gradient(
     160deg,
-    color-mix(in srgb, var(--bg1) 92%, #000 8%),
-    color-mix(in srgb, var(--bg2) 92%, #000 8%)
+    color-mix(in srgb, var(--bg-1) 92%, #000 8%),
+    color-mix(in srgb, var(--bg-2) 92%, #000 8%)
   );
-  backdrop-filter: blur(2px);
 }
 
 .scene,
@@ -60,6 +59,31 @@
   top: 14px;
   right: 32%;
   font-size: 2rem;
+  opacity: 0;
+  /* Rises once the hero has driven in. */
+  animation: zzz 2.4s linear 2.2s infinite;
+}
+
+@keyframes zzz {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-30px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zzz {
+    opacity: 1;
+    animation: none;
+  }
 }
 
 .sceneMsg,

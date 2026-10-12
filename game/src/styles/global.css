@@ -4,7 +4,7 @@
    Theme palette comes from CSS variables set by ThemeProvider.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600;700&family=Handjet:wght@500;600;700;800&family=Press+Start+2P&display=swap');
+/* The fonts are asked for by `index.html` (a <link>, not an @import here). */
 
 /* ---------- reset ---------- */
 *,
@@ -21,11 +21,18 @@ body,
   height: 100%;
 }
 
+html {
+  /* The themes are the colour scheme: no browser may darken them by itself. */
+  color-scheme: only light;
+  /* Newer Chrome reads this from the root element only. */
+  overscroll-behavior-y: contain;
+}
+
 body {
   font-family: 'Fredoka', 'Baloo 2', system-ui, sans-serif;
   color: var(--text, #3b0764);
-  background: linear-gradient(160deg, var(--bg-1, #fdf2ff), var(--bg-2, #ede9fe));
-  background-attachment: fixed;
+  /* The gradient itself is `body::before` below; this is what shows past it. */
+  background: var(--bg-2, #ede9fe);
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -38,7 +45,24 @@ body {
   /* Stop pull-to-refresh / rubber-banding from interrupting play. */
   overscroll-behavior-y: contain;
   overflow-x: hidden;
-  transition: background 0.6s ease;
+}
+
+/* The page's background: a layer of its own that never moves and never
+   resizes. (`background-attachment: fixed` on the body made Chrome on Android
+   repaint the whole gradient on every scroll frame; iOS simply ignores it.)
+   As tall as the screen with the address bar hidden (`lvh`), so the bar
+   sliding away does not stretch it. */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100lvh;
+  z-index: -2;
+  background: linear-gradient(160deg, var(--bg-1, #fdf2ff), var(--bg-2, #ede9fe));
+  pointer-events: none;
 }
 
 button {
@@ -186,11 +210,97 @@ h3 {
     box-shadow var(--theme-fade) ease !important;
 }
 
+/* ============================================================
+   Endless decorations: a mascot that bobs, a pictogram that sways, a button
+   that breathes. Written here, in CSS, so they run on the compositor and cost
+   the main thread nothing — never as a framer-motion `repeat: Infinity`
+   (docs/browser-support.md). Tune one with `--loop` (how long), `--loop-y` /
+   `--loop-rot` / `--loop-scale` (how far) and `--loop-delay`.
+   ============================================================ */
+.loop-bob {
+  animation: loop-bob var(--loop, 3s) ease-in-out var(--loop-delay, 0s) infinite;
+}
+
+.loop-sway {
+  animation: loop-sway var(--loop, 3s) ease-in-out var(--loop-delay, 0s) infinite;
+}
+
+.loop-breathe {
+  animation: loop-breathe var(--loop, 1.4s) ease-in-out var(--loop-delay, 0s) infinite;
+}
+
+/* A transform does nothing to an inline box. */
+span.loop-bob,
+span.loop-sway,
+span.loop-breathe {
+  display: inline-block;
+}
+
+@keyframes loop-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(var(--loop-y, -6px));
+  }
+}
+
+@keyframes loop-sway {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(var(--loop-y, -4px)) rotate(calc(var(--loop-rot, 6deg) * -1));
+  }
+  66% {
+    transform: translateY(0) rotate(var(--loop-rot, 6deg));
+  }
+}
+
+@keyframes loop-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(var(--loop-scale, 1.1));
+  }
+}
+
+/* A weaker device: no blur behind a card, whoever asked for one. */
+:root[data-perf='lite'] * {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* …and under an open sheet the page rests: whatever sways or twinkles there is
+   only seen through the dim, yet it would be drawn again on every frame —
+   together with the sheet above it. `modal-layer` is the sheet's own overlay. */
+:root[data-perf='lite'][data-modal='open'] *:not(.modal-layer, .modal-layer *),
+:root[data-perf='lite'][data-modal='open'] *:not(.modal-layer, .modal-layer *)::before,
+:root[data-perf='lite'][data-modal='open'] *:not(.modal-layer, .modal-layer *)::after {
+  animation-play-state: paused !important;
+}
+
+/* …and the sheet itself stands still too: with nothing moving anywhere, the
+   screen is one finished picture until the next tap. */
+:root[data-perf='lite'] .modal-layer [class*='loop-'] {
+  animation: none;
+}
+
 /* reduce motion respect */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
+  }
+
+  .loop-bob,
+  .loop-sway,
+  .loop-breathe {
+    animation: none;
   }
 }
 
@@ -212,7 +322,8 @@ h3 {
   --shadow-lg: 0 9px 0 rgba(0, 0, 0, 0.24);
 }
 
-:root[data-theme='lego'] body {
+:root[data-theme='lego'] body,
+:root[data-theme='lego'] body::before {
   background: #ffd500;
 }
 

@@ -33,7 +33,7 @@ const splashBtn: CSSProperties = {
   fontFamily: 'inherit',
   fontSize: '1rem',
   fontWeight: 700,
-  color: 'var(--on-primary, #fff)',
+  color: 'var(--primary-ink, #fff)',
   background: 'var(--primary, #7c3aed)',
   cursor: 'pointer',
 };

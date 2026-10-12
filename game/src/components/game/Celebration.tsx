@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, type CSSProperties } from 'react';
+import { perf } from '@/core/app/platform';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';
@@ -10,12 +10,18 @@ interface CelebrationProps {
   active: boolean;
 }
 
-const PARTICLE_COUNT = 16;
+/** As many as the device can carry (`docs/browser-support.md`). */
+const PARTICLE_COUNT = perf.particles(16);
 
 /**
  * Full-screen, non-interactive celebration overlay. Combines canvas-confetti
  * with themed emoji particles and the fanfare sound. The particle motion adapts
  * to the chosen celebration style (balloons rise & pop, others shower down).
+ *
+ * The particles fly in CSS (`Celebration.module.css`), not in JavaScript: the
+ * win screen opens together with a jingle, a voice and the confetti, and on a
+ * phone whose main thread is busy with those a script-driven particle arrives
+ * in jerks. Each one only brings its own numbers as custom properties.
  */
 export function Celebration({ active }: CelebrationProps) {
   const theme = useActiveTheme();
@@ -49,29 +55,28 @@ export function Celebration({ active }: CelebrationProps) {
 
   const rising = style === 'balloons';
 
+  // Nothing to show — nothing on the screen: an empty layer over the whole
+  // game is still a layer.
+  if (!active) return null;
+
   return (
     <div className={styles.layer} aria-hidden>
-      <AnimatePresence>
-        {active &&
-          particles.map((p) => (
-            <motion.span
-              key={p.id}
-              className={`${styles.particle} emoji`}
-              style={{ left: `${p.x}%`, fontSize: `${p.size}rem` }}
-              initial={{ y: rising ? '110vh' : '-20vh', opacity: 0, rotate: 0 }}
-              animate={{
-                y: rising ? '-20vh' : '110vh',
-                opacity: [0, 1, 1, 0],
-                rotate: rising ? [0, -12, 12, 0] : [0, 180, 360],
-                x: [0, 20, -20, 0],
-              }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: p.duration, delay: p.delay, ease: 'easeInOut' }}
-            >
-              {p.emoji}
-            </motion.span>
-          ))}
-      </AnimatePresence>
+      {particles.map((p) => (
+        <span
+          key={p.id}
+          className={`${styles.particle} ${rising ? styles.rise : styles.fall} emoji`}
+          style={
+            {
+              left: `${p.x}%`,
+              fontSize: `${p.size}rem`,
+              '--fly': `${p.duration}s`,
+              '--wait': `${p.delay}s`,
+            } as CSSProperties
+          }
+        >
+          {p.emoji}
+        </span>
+      ))}
     </div>
   );
 }

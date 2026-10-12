@@ -17,12 +17,17 @@
   max-width: 460px;
   max-height: 90dvh;
   overflow-y: auto;
+  /* A scroll that reaches the end stays in the sheet: the page behind must not
+     move (on Android that slides the address bar and resizes the screen). */
+  overscroll-behavior: contain;
   background: var(--surface);
   color: var(--surface-ink);
   border-radius: var(--radius-xl);
   /* The same on every side: the corner close button sits inside it, and the title keeps clear of it. */
   padding: 22px;
   box-shadow: var(--shadow-lg);
+  /* One picture of its own: nothing in it is drawn together with the page below. */
+  isolation: isolate;
 }
 
 /* A sheet that fits the screen; one part of its content scrolls instead. */

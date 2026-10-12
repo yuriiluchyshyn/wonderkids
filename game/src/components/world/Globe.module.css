@@ -16,7 +16,7 @@
   z-index: 300;
   line-height: 1;
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   pointer-events: none;
 }
 
@@ -47,23 +47,28 @@
   position: relative;
   display: block;
   line-height: 1;
-  filter: drop-shadow(0 0.08em 0.08em rgba(0, 0, 0, 0.35));
+  /* Shadows of pictograms are `text-shadow`: the globe moves every one of them
+     on every frame of a turn, and a `filter` would be redone each time. */
+  text-shadow: 0 0.08em 0.08em rgba(0, 0, 0, 0.35);
   transform-origin: 50% 100%;
 }
 
 /* Not built yet: only a dim outline of what will stand here. */
 .ghost .thing {
+  text-shadow: none;
   filter: grayscale(1) brightness(0.5);
   opacity: 0.5;
 }
 
 .selected .thing {
-  filter: drop-shadow(0 0 0.2em #fff);
+  text-shadow: 0 0 0.2em #fff;
 }
 
 /* A building of a later planet: a level up, and it shows. */
 .upgraded .thing {
-  filter: drop-shadow(0 0 0.12em #fde047) drop-shadow(0 0.08em 0.08em rgba(0, 0, 0, 0.35));
+  text-shadow:
+    0 0 0.12em #fde047,
+    0 0.08em 0.08em rgba(0, 0, 0, 0.35);
 }
 
 .level {

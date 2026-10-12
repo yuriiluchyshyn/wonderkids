@@ -1,6 +1,7 @@
 import { useT } from '@/core/translator';
 import { useBalance } from '@/core/child/world/useBalance';
 import { motion } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { ProgressBar } from '@/components/ui/ProgressBar';
@@ -22,14 +23,13 @@ export function TreasureVault() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 220, damping: 18 }}
       >
-        <motion.span
-          className={`${styles.bigArt} emoji`}
+        <span
+          className={`${styles.bigArt} emoji loop-sway`}
+          style={{ '--loop-y': '-6px', '--loop-rot': '8deg' } as CSSProperties}
           aria-hidden
-          animate={{ rotate: [0, -8, 8, 0], y: [0, -6, 0] }}
-          transition={{ repeat: Infinity, duration: 3 }}
         >
           {theme.artifact.emoji}
-        </motion.span>
+        </span>
         <div>
           <div className={styles.count}>{artifacts}</div>
           <div className="muted">{t('vault.inVault', { name: theme.artifact.name })}</div>

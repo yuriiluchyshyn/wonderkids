@@ -19,13 +19,20 @@
   border-bottom: 3px dashed color-mix(in srgb, var(--ring) 70%, transparent);
 }
 
+/* As wide as the track, so sliding it by N % of itself is N % of the track. */
+.lane {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .mascot {
   position: absolute;
+  left: 0;
   bottom: 5px;
   font-size: 1.7rem;
   line-height: 1;
-  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.18));
-  will-change: left;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.18);
 }
 
 .goal {

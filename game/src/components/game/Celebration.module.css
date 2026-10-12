@@ -6,8 +6,70 @@
   overflow: hidden;
 }
 
+/* One flight per particle, run by the compositor; how long and after what wait
+   is the particle's own (`--fly`, `--wait`). Before it starts and after it
+   lands it is not seen (`both`, opacity 0 at either end). */
 .particle {
   position: absolute;
+  top: 0;
   font-size: 2.4rem;
-  will-change: transform, opacity;
+  line-height: 1;
+  opacity: 0;
+  animation-duration: var(--fly, 2s);
+  animation-delay: var(--wait, 0s);
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+.fall {
+  animation-name: fall;
+}
+
+.rise {
+  animation-name: rise;
+}
+
+@keyframes fall {
+  0% {
+    opacity: 0;
+    transform: translate(0, -20vh) rotate(0deg);
+  }
+  33% {
+    opacity: 1;
+    transform: translate(20px, 23vh) rotate(120deg);
+  }
+  66% {
+    opacity: 1;
+    transform: translate(-20px, 66vh) rotate(240deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 110vh) rotate(360deg);
+  }
+}
+
+@keyframes rise {
+  0% {
+    opacity: 0;
+    transform: translate(0, 110vh) rotate(0deg);
+  }
+  33% {
+    opacity: 1;
+    transform: translate(20px, 66vh) rotate(-12deg);
+  }
+  66% {
+    opacity: 1;
+    transform: translate(-20px, 23vh) rotate(12deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, -20vh) rotate(0deg);
+  }
+}
+
+/* Asked for less motion: the confetti is off too (`celebration.helpers`). */
+@media (prefers-reduced-motion: reduce) {
+  .particle {
+    animation: none;
+  }
 }

@@ -1,6 +1,6 @@
 import { useLang, useT } from '@/core/translator';
 import { useSayT } from '@/core/audio/useSpeech';
-import { forwardRef } from 'react';
+import { forwardRef, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
@@ -65,7 +65,9 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
       data-game={`${entry.module.id}:${sub.id}`}
       className={cn(styles.card, !showText && styles.compact, locked && styles.locked, dimmed && styles.dimmed)}
       aria-disabled={locked}
-      layout
+      // Only the place glides, never the size: a card that grew (a font that
+      // arrived late, a longer title) used to be stretched into its new shape.
+      layout="position"
       initial={{ opacity: 0, y: 20, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
@@ -81,14 +83,16 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
       {locked && <span className={styles.badgeSoon}>{t('common.soon')}</span>}
 
       <div className={styles.top}>
-        <motion.span
-          className={`${styles.icon} emoji`}
+        {/* A card under a filter (locked, toned down) keeps its pictogram
+            still: a filter is worked out again on every frame of what moves
+            inside it. */}
+        <span
+          className={cn(styles.icon, 'emoji', !locked && !dimmed && 'loop-sway')}
+          style={{ '--loop': '3.4s', '--loop-y': '-3px', '--loop-rot': '5deg' } as CSSProperties}
           aria-hidden
-          animate={{ rotate: [0, -5, 5, 0], y: [0, -3, 0] }}
-          transition={{ repeat: Infinity, duration: 3.4, ease: 'easeInOut' }}
         >
           {sub.icon}
-        </motion.span>
+        </span>
         {showText && (
           <div className={styles.titleBlock}>
             <h3 className={styles.title}>{sub.label}</h3>

@@ -71,9 +71,9 @@
   line-height: 1;
   opacity: 0.55;
   transform: rotate(var(--rot, 0deg));
-  filter: drop-shadow(0 0 12px rgba(139, 124, 255, 0.45));
+  /* A glow of a pictogram is a `text-shadow` (docs/browser-support.md). */
+  text-shadow: 0 0 12px rgba(139, 124, 255, 0.45);
   animation: floaty 6s ease-in-out infinite;
-  will-change: transform;
 }
 
 @keyframes floaty {
@@ -200,8 +200,10 @@
   transition: filter 0.15s ease, transform 0.1s ease;
 }
 
-.submit:hover:not(:disabled) {
-  filter: brightness(1.06);
+@media (hover: hover) {
+  .submit:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
 }
 
 .submit:active:not(:disabled) {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { useT, useVoiceLang } from '@/core/translator';
 import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
@@ -49,9 +49,9 @@ export function DemoOver() {
         animate={{ y: 0, scale: 1, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 260, damping: 24 }}
       >
-        <motion.span className={`${styles.mascot} emoji`} aria-hidden animate={{ y: [0, -8, 0], rotate: [0, -5, 5, 0] }} transition={{ repeat: Infinity, duration: 3 }}>
+        <span className={`${styles.mascot} emoji loop-sway`} style={{ '--loop-y': '-8px', '--loop-rot': '5deg' } as CSSProperties} aria-hidden>
           {theme.mascot.emoji}
-        </motion.span>
+        </span>
         <h1 id="demo-over-title" className={styles.title}>
           {t('demo.over.title')}
         </h1>

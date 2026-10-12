@@ -277,7 +277,7 @@
 }
 
 .barSave {
-  color: var(--on-primary, #fff);
+  color: var(--primary-ink, #fff);
   background: var(--primary);
   box-shadow: none;
 }

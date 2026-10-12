@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Mascot } from '@/components/theme/Mascot';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import styles from './Companion.module.css';
@@ -13,8 +13,9 @@ interface CompanionProps {
  * The themed companion race (PRD §4.1). The mascot travels left→right toward its
  * goal as the child completes tasks, and looks the way it is going (`Mascot`):
  * towards the goal after an answer, back when it slides back while the child
- * idles. The outer element owns the position and the idle bounce; the turn is
- * on the sprite inside.
+ * idles. Three boxes, one job each: the lane (as wide as the track) slides, so
+ * the position is a `transform` and never a `left` that lays the track out again
+ * on every frame; the hop inside it is a CSS loop; the turn is on the sprite.
  */
 export function Companion({ progress }: CompanionProps) {
   const theme = useActiveTheme();
@@ -39,15 +40,14 @@ export function Companion({ progress }: CompanionProps) {
     <div className={styles.track} data-tip="track" aria-hidden>
       <div className={styles.ground} />
       <motion.div
-        className={styles.mascot}
+        className={styles.lane}
         initial={false}
-        animate={{ left: `${left}%`, y: [0, -6, 0] }}
-        transition={{
-          left: { type: 'spring', stiffness: 120, damping: 18 },
-          y: { repeat: Infinity, duration: 1.1, ease: 'easeInOut' },
-        }}
+        animate={{ x: `${left}%` }}
+        transition={{ type: 'spring', stiffness: 120, damping: 18 }}
       >
-        <Mascot heading={back ? 'left' : 'right'} />
+        <div className={`${styles.mascot} loop-bob`} style={{ '--loop': '1.1s' } as CSSProperties}>
+          <Mascot heading={back ? 'left' : 'right'} />
+        </div>
       </motion.div>
       <span className={`${styles.goal} emoji`}>{theme.goal.emoji}</span>
     </div>

@@ -12,7 +12,6 @@
   /* Smooth melt as the active token drains second-by-second. */
   transition: opacity 0.9s linear, transform 0.9s ease, filter 0.4s ease;
   transform-origin: center bottom;
-  will-change: opacity, transform;
 }
 
 .rowSm .token {

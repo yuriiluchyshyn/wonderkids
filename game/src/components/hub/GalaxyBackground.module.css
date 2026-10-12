@@ -4,6 +4,8 @@
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  /* Nothing in here reaches the page, and nothing of the page reaches in. */
+  contain: strict;
   /* Star colour that works on any theme: follows the text colour (light on
      dark worlds, deep on pastel ones), warmed by the accent. */
   --star: color-mix(in srgb, var(--text) 62%, var(--accent));
@@ -19,17 +21,17 @@
     radial-gradient(30% 26% at 24% 22%, color-mix(in srgb, var(--ring) 26%, transparent), transparent 75%),
     radial-gradient(34% 30% at 76% 70%, color-mix(in srgb, var(--primary) 22%, transparent), transparent 75%);
   filter: blur(12px);
+  /* Only the opacity breathes. (It used to swell too: a blurred layer bigger
+     than the screen, drawn again at every new size.) */
   animation: breathe 16s ease-in-out infinite alternate;
 }
 
 @keyframes breathe {
   from {
     opacity: 0.6;
-    transform: scale(1);
   }
   to {
     opacity: 0.9;
-    transform: scale(1.06);
   }
 }
 
@@ -63,7 +65,7 @@
   width: 4px;
   height: 4px;
   opacity: 0.9;
-  filter: drop-shadow(0 0 4px var(--star));
+  /* Their glow is drawn with the stars themselves (`starField` in the component). */
   animation: twinkle 2.8s ease-in-out infinite alternate;
 }
 
@@ -172,8 +174,26 @@
 .motif {
   position: absolute;
   line-height: 1;
-  filter: drop-shadow(0 6px 10px rgba(20, 10, 50, 0.18));
-  will-change: transform;
+  opacity: 0.5;
+  text-shadow: 0 6px 10px rgba(20, 10, 50, 0.18);
+}
+
+/* A weaker device (every Android phone — docs/browser-support.md): the sky
+   stands still. Each of these layers is as big as the screen; twinkling, each
+   is a texture of its own in video memory, and the whole page above them has
+   to become layers too — that is what flickered. Still, they are painted once
+   into one picture. The galaxy keeps turning and the planets keep drifting:
+   those are small. */
+:global(:root[data-perf='lite']) .nebula {
+  opacity: 0.75;
+  filter: none;
+  animation: none;
+}
+
+:global(:root[data-perf='lite']) .starsFar,
+:global(:root[data-perf='lite']) .starsMid,
+:global(:root[data-perf='lite']) .starsNear {
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -182,8 +202,7 @@
   .starsMid,
   .starsNear,
   .galaxy,
-  .shooting,
-  .motif {
+  .shooting {
     animation: none;
   }
 }

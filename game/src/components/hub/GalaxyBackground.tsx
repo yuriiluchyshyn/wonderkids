@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { getGalaxy } from '@/core/game/galaxies';
 import styles from './GalaxyBackground.module.css';
 
@@ -15,15 +15,23 @@ function seeded(seed: number) {
   };
 }
 
-/** A layer of stars as one element: every star is a box-shadow. */
-function starField(count: number, seed: number): string {
+/**
+ * A layer of stars as one element: every star is a box-shadow. `glow` (px) is
+ * a halo drawn as a second, blurred shadow of the same star — in the picture
+ * itself, where a `filter: drop-shadow` on the layer would be worked out again
+ * on every frame the layer twinkles.
+ */
+function starField(count: number, seed: number, glow = 0): string {
   const rnd = seeded(seed);
-  return Array.from({ length: count }, () => `${(rnd() * 100).toFixed(2)}vw ${(rnd() * 100).toFixed(2)}vh 0 0 currentColor`).join(', ');
+  return Array.from({ length: count }, () => {
+    const at = `${(rnd() * 100).toFixed(2)}vw ${(rnd() * 100).toFixed(2)}vh`;
+    return glow ? `${at} 0 0 currentColor, ${at} ${glow}px 1px currentColor` : `${at} 0 0 currentColor`;
+  }).join(', ');
 }
 
 const FAR_STARS = starField(110, 7);
 const MID_STARS = starField(55, 23);
-const NEAR_STARS = starField(18, 41);
+const NEAR_STARS = starField(18, 41, 4);
 
 interface ArmDot {
   x: number;
@@ -147,20 +155,22 @@ export function GalaxyBackground({ galaxyId }: GalaxyBackgroundProps) {
       <span className={`${styles.shooting} ${styles.shooting2}`} />
 
       {PLANETS.map((slot, i) => (
-        <motion.span
+        <span
           key={`${galaxyId}-${i}`}
-          className={`${styles.motif} emoji`}
-          style={{ top: slot.top, left: slot.left, fontSize: `${slot.size}rem` }}
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 0.5, scale: 1, y: [0, -12, 0] }}
-          transition={{
-            opacity: { duration: 0.6 },
-            scale: { duration: 0.6 },
-            y: { repeat: Infinity, duration: 7, delay: slot.d, ease: 'easeInOut' },
-          }}
+          className={`${styles.motif} emoji loop-bob`}
+          style={
+            {
+              top: slot.top,
+              left: slot.left,
+              fontSize: `${slot.size}rem`,
+              '--loop': '7s',
+              '--loop-y': '-12px',
+              '--loop-delay': `${slot.d}s`,
+            } as CSSProperties
+          }
         >
           {galaxy.motif[i % galaxy.motif.length]}
-        </motion.span>
+        </span>
       ))}
     </div>
   );

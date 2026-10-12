@@ -117,12 +117,12 @@
   overflow-y: auto;
   border: 1px solid rgba(139, 124, 255, 0.45);
   border-radius: var(--radius);
-  background: rgba(11, 16, 38, 0.88);
+  /* Solid: the planets never stop turning under it, and a blur over them is
+     redone on every frame (docs/browser-support.md). */
+  background: rgba(11, 16, 38, 0.95);
   box-shadow: var(--shadow-lg);
   color: var(--pulsar-ink);
   transform: translateX(-50%);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   touch-action: pan-y;
 }
 

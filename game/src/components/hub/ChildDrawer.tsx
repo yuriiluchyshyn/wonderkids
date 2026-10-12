@@ -1,6 +1,7 @@
 import { useT, useVoiceLang } from '@/core/translator';
 import { useBalance } from '@/core/child/world/useBalance';
 import { AnimatePresence, motion } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/core/child/store/useGameStore';
@@ -113,14 +114,13 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
 
             {/* ---- Artifact (скарбничка) — top ---- */}
             <div className={styles.artifact}>
-              <motion.span
-                className={`${styles.artifactIcon} emoji`}
+              <span
+                className={`${styles.artifactIcon} emoji loop-sway`}
+                style={{ '--loop-rot': '8deg' } as CSSProperties}
                 aria-hidden
-                animate={{ rotate: [0, -8, 8, 0], y: [0, -4, 0] }}
-                transition={{ repeat: Infinity, duration: 3 }}
               >
                 {theme.artifact.emoji}
-              </motion.span>
+              </span>
               <div className={styles.artifactInfo}>
                 <div className={styles.artifactName}>{theme.artifact.name}</div>
                 <div className={styles.artifactCount}>

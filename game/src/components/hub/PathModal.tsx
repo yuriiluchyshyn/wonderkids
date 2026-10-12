@@ -1,5 +1,5 @@
 import { useT } from '@/core/translator';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
@@ -51,6 +51,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
 
   const [selected, setSelected] = useState(current);
   const currentRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<HTMLDivElement>(null);
 
   // Reset the selection to the frontier each time the path opens.
   useEffect(() => {
@@ -65,12 +66,14 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
     [totalSteps],
   );
 
-  useEffect(() => {
-    if (!entry) return;
-    const t = window.setTimeout(() => {
-      currentRef.current?.scrollIntoView({ behavior: 'auto', block: 'center' });
-    }, 60);
-    return () => window.clearTimeout(t);
+  // The path opens on the step the child stands on — set before the first
+  // frame, and on the path alone: `scrollIntoView` a moment later scrolled every
+  // box around it too, and jumped to a part of the path not drawn yet.
+  useLayoutEffect(() => {
+    const path = pathRef.current;
+    const row = currentRef.current;
+    if (!entry || !path || !row) return;
+    path.scrollTop = row.offsetTop - path.offsetTop - (path.clientHeight - row.offsetHeight) / 2;
   }, [entry]);
 
   const selectStep = (n: number) => {
@@ -88,7 +91,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
             {t('path.caption', { chests: theme.chest.closed })}
           </p>
 
-          <div className={styles.path}>
+          <div className={styles.path} ref={pathRef}>
             {steps.map((n) => {
               const unlocked = n <= current;
               const isCurrent = n === current;
@@ -112,6 +115,9 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                   style={{ transform: `translateX(${offset}px)` }}
                   ref={isCurrent ? currentRef : undefined}
                 >
+                  {/* Only the step the child stands on breathes — in CSS, on a
+                      box of its own: the button keeps its transform for the tap. */}
+                  <span className={isCurrent ? 'loop-breathe' : undefined}>
                   <motion.button
                     className={[
                       styles.node,
@@ -121,11 +127,6 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                       isSelected ? styles.selected : '',
                     ].join(' ')}
                     disabled={!unlocked}
-                    // Only the step the child stands on breathes. (The endless
-                    // repeat used to be every step's transition, so a tapped
-                    // step kept pulsing for ever.)
-                    animate={isCurrent ? { scale: [1, 1.1, 1] } : undefined}
-                    transition={isCurrent ? { repeat: Infinity, duration: 1.4 } : undefined}
                     whileTap={unlocked ? { scale: 0.9, transition: { duration: 0.1 } } : undefined}
                     onClick={() => selectStep(n)}
                     aria-label={`${t('path.step', { n })}${isCurrent ? t('path.current') : chest ? t('path.chest') : unlocked ? '' : t('path.locked')}`}
@@ -135,6 +136,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                     </span>
                     {!isCurrent && <span className={styles.badge}>{n}</span>}
                   </motion.button>
+                  </span>
                 </div>
               );
             })}

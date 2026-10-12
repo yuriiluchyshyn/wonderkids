@@ -49,7 +49,7 @@ flowchart TD
 | Neon (PostgreSQL) | База даних | Акаунти, прогрес дітей, екранний час, кеш озвучення, листи | `AccountService` (`backend/…/service`) | Так |
 | Auth0 | Автентифікація | Вхід батьків (пошта + пароль або Google) | `src/pages/auth/Auth0Login.tsx`, `Auth0.java` | Ні: без нього вхід лише за адресою пошти |
 | Google Cloud Text-to-Speech | Озвучення | Природний голос українською, англійською та польською | `TtsController`, `Tts.java` | Ні: запасний варіант — голос браузера |
-| Resend | Пошта | Пересилає листи з форми «Написати нам» власнику, з вкладеннями | `Mail.java`, `FeedbackController` | Ні: без нього текст зберігається, файли губляться |
+| Resend | Пошта | Пересилає листи з форми «Написати листа» власнику, з вкладеннями | `Mail.java`, `FeedbackController` | Ні: без нього текст зберігається, файли губляться |
 | Google Fonts | Шрифти | Baloo 2, Fredoka, Handjet, Press Start 2P | `game/src/styles/global.css`, `site/index.html` | Ні |
 | GitHub | Код і запуск деплою | Два репозиторії; пуш у `main` запускає деплой на Vercel | `scripts/deploy.sh`, `scripts/autopush.sh` | Так |
 | Meta Marketing API | Реклама | Кампанії у Facebook та Instagram | `scripts/ads/meta-ads.mjs` | Ні |
@@ -116,7 +116,7 @@ Auth0 лише підтверджує, що людина володіє пошт
 
 ### Resend: пошта
 
-Пересилає листи з форми «Написати нам» на скриньку власника і надсилає відповіді з `/admin/feedback`.
+Пересилає листи з форми «Написати листа» на скриньку власника і надсилає відповіді з `/admin/feedback`.
 
 - **Виклик.** `Mail.java` → `POST https://api.resend.com/emails`, тайм-аут 60 с, вкладення в base64.
 - **Файли.** Фото й відео ніде не зберігаються: шматки чекають у `wk_feedback_parts`, після відправки листа видаляються, невідправлені чистяться за добу.
@@ -167,7 +167,7 @@ Auth0 лише підтверджує, що людина володіє пошт
 3. ImprovMX пересилає лист у Gmail власника.
 4. Власник відповідає з Gmail.
 
-Це окремий шлях від форми «Написати нам»: листи з форми надсилає Resend напряму на `FEEDBACK_TO`, без ImprovMX.
+Це окремий шлях від форми «Написати листа»: листи з форми надсилає Resend напряму на `FEEDBACK_TO`, без ImprovMX.
 
 ### Домен і DNS: Name.com та Vercel DNS
 

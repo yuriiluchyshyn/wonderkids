@@ -14,8 +14,12 @@
   white-space: nowrap;
 }
 
-.btn:hover {
-  filter: brightness(1.05);
+/* Only for a pointer that hovers: after a tap Android leaves `:hover` on the
+   button, and the filter with it. */
+@media (hover: hover) {
+  .btn:hover {
+    filter: brightness(1.05);
+  }
 }
 
 .block {

@@ -67,8 +67,10 @@
   cursor: pointer;
 }
 
-.parentLink:hover {
-  color: var(--text);
+@media (hover: hover) {
+  .parentLink:hover {
+    color: var(--text);
+  }
 }
 
 .parentLink:focus-visible {
@@ -99,8 +101,8 @@
   display: grid;
   place-items: center;
   padding: 18px;
-  background: rgba(20, 8, 40, 0.5);
-  backdrop-filter: blur(4px);
+  /* A plain dim — see Modal.module.css. */
+  background: rgba(20, 8, 40, 0.74);
 }
 
 .pinSheet {

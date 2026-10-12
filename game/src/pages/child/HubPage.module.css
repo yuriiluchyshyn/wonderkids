@@ -22,7 +22,7 @@
 
 .heroMascot {
   font-size: 1.7rem;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.14));
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.14);
 }
 
 .heroSub {

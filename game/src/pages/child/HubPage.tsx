@@ -1,6 +1,6 @@
 import { useLang, useT } from '@/core/translator';
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { StarFilter } from '@/components/hub/StarFilter';
 import { GroupFilter } from '@/components/hub/GroupFilter';
 import { pathKey } from '@/core/child/progress/path';
@@ -127,14 +127,13 @@ export function HubPage() {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <motion.span
-          className={`${styles.heroMascot} emoji`}
+        <span
+          className={`${styles.heroMascot} emoji loop-sway`}
+          style={{ '--loop-y': '-6px', '--loop-rot': '4deg' } as CSSProperties}
           aria-hidden
-          animate={{ y: [0, -6, 0], rotate: [0, -4, 4, 0] }}
-          transition={{ repeat: Infinity, duration: 3 }}
         >
           {theme.mascot.emoji}
-        </motion.span>
+        </span>
         <p className={styles.heroSub}>
           {showText ? t('hub.hello', { name: profile.name }) : t('hub.title')}
         </p>
@@ -146,14 +145,13 @@ export function HubPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
         >
-          <motion.span
-            className={`${styles.comingSoonIcon} emoji`}
+          <span
+            className={`${styles.comingSoonIcon} emoji loop-bob`}
+            style={{ '--loop': '2.4s', '--loop-y': '-8px' } as CSSProperties}
             aria-hidden
-            animate={{ y: [0, -8, 0] }}
-            transition={{ repeat: Infinity, duration: 2.4 }}
           >
             {galaxy.icon}
-          </motion.span>
+          </span>
           <h2 className={styles.comingSoonTitle}>{t('hub.galaxyTitle', { name: t(galaxyKey(galaxy.id)) })}</h2>
           <p className={styles.comingSoonText}>{t('hub.galaxySoon')}</p>
         </motion.div>

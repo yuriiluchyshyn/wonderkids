@@ -140,15 +140,9 @@ export function Cutscene({
             >
               {copy.icon}
             </motion.span>
-            <motion.span
-              className={`${styles.zzz} emoji`}
-              aria-hidden
-              initial={{ opacity: 0, y: 0 }}
-              animate={{ opacity: [0, 1, 1], y: [-4, -18, -30] }}
-              transition={{ delay: 2.2, duration: 2.4, repeat: Infinity }}
-            >
+            <span className={`${styles.zzz} emoji`} aria-hidden>
               {copy.zzz}
-            </motion.span>
+            </span>
           </div>
           <p className={styles.sceneMsg}>{copy.message}</p>
         </motion.div>

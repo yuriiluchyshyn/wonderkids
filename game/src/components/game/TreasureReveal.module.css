@@ -13,7 +13,6 @@
     color-mix(in srgb, var(--primary) 55%, rgba(0, 0, 0, 0.78)),
     rgba(0, 0, 0, 0.82)
   );
-  backdrop-filter: blur(3px);
   cursor: pointer;
 }
 
@@ -43,7 +42,9 @@
 
 .chest {
   font-size: 6rem;
-  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.45));
+  /* `text-shadow`, not `filter: drop-shadow`: it is painted once with the
+     glyph, not filtered again on every frame of the shake. */
+  text-shadow: 0 10px 16px rgba(0, 0, 0, 0.45);
 }
 
 .burst {
@@ -53,7 +54,7 @@
 
 .treasure {
   font-size: 5.4rem;
-  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.4));
+  text-shadow: 0 8px 14px rgba(0, 0, 0, 0.4);
 }
 
 .sparkle {

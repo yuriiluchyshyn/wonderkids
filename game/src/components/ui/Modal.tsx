@@ -1,7 +1,9 @@
 import { useT } from '@/core/translator';
 import { AnimatePresence, motion } from 'framer-motion';
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { voice } from '@/core/audio/voice';
+import { perf } from '@/core/app/platform';
 import styles from './Modal.module.css';
 
 interface ModalProps {
@@ -20,19 +22,59 @@ interface ModalProps {
   fit?: boolean;
 }
 
+/**
+ * How a sheet comes and goes. A weaker device slides it without resizing it:
+ * a sheet that changes size is drawn anew on every frame of the spring, and on
+ * an Android phone the frames that are late show as holes in the sheet
+ * (docs/browser-support.md).
+ */
+const SHEET = perf.lite
+  ? {
+      from: { y: 28, opacity: 0 },
+      to: { y: 0, opacity: 1 },
+      transition: { duration: 0.18, ease: 'easeOut' },
+    }
+  : {
+      from: { y: 40, scale: 0.92, opacity: 0 },
+      to: { y: 0, scale: 1, opacity: 1 },
+      transition: { type: 'spring', stiffness: 320, damping: 26 },
+    };
+
+/** How many sheets are open: the page under them rests while there is one (`global.css`). */
+let openSheets = 0;
+
+function useRestingPage(open: boolean): void {
+  useEffect(() => {
+    if (!open) return;
+    const root = document.documentElement;
+    openSheets += 1;
+    root.dataset.modal = 'open';
+    return () => {
+      openSheets -= 1;
+      if (openSheets === 0) delete root.dataset.modal;
+    };
+  }, [open]);
+}
+
 /** Spring-animated bottom-safe modal sheet. */
 export function Modal({ open, onClose, title, icon, children, dismissible = true, fit = false }: ModalProps) {
   const t = useT();
+  useRestingPage(open);
   // Put away by the child (✕ or a tap beside it): whatever was being read out in it stops.
   const dismiss = () => {
     voice.stop();
     onClose?.();
   };
-  return (
+  // Portalled to <body>: a page is a stacking context of its own, so a sheet
+  // left in place is sorted among that page's cards — under the sticky
+  // play-time bar, and between layers that move. On Android the order was
+  // decided anew on every frame: parts of the page kept showing through the
+  // sheet (docs/browser-support.md).
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
-          className={styles.overlay}
+          className={`${styles.overlay} modal-layer`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -42,10 +84,10 @@ export function Modal({ open, onClose, title, icon, children, dismissible = true
             className={fit ? `${styles.sheet} ${styles.fit}` : styles.sheet}
             role="dialog"
             aria-modal="true"
-            initial={{ y: 40, scale: 0.92, opacity: 0 }}
-            animate={{ y: 0, scale: 1, opacity: 1 }}
-            exit={{ y: 40, scale: 0.92, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+            initial={SHEET.from}
+            animate={SHEET.to}
+            exit={SHEET.from}
+            transition={SHEET.transition}
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.head}>
@@ -69,6 +111,7 @@ export function Modal({ open, onClose, title, icon, children, dismissible = true
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
