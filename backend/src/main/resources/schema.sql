@@ -120,6 +120,9 @@ CREATE TABLE IF NOT EXISTS wk_tts_keys (
 );
 ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS tts_key_id INTEGER REFERENCES wk_tts_keys(id) ON DELETE SET NULL;
 ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS tts_off BOOLEAN NOT NULL DEFAULT false;
+-- An account the owner switched off: nobody signs in to it — neither the parent
+-- nor its children — and its save is neither read nor written. Nothing is deleted.
+ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS disabled BOOLEAN NOT NULL DEFAULT false;
 CREATE TABLE IF NOT EXISTS wk_tts_cache (
   hash       TEXT PRIMARY KEY,
   voice      TEXT NOT NULL,

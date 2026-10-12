@@ -62,10 +62,12 @@ public final class Fields {
   public static final String DEPLETED = "depleted";
   public static final String DETAIL = "detail";
   public static final String DEVICE = "device";
+  public static final String DISABLED = "disabled";
   public static final String DUPLICATE_MAILBOX = "duplicateMailbox";
   public static final String E = "e";
   public static final String EMAIL = "email";
   public static final String EMAIL_VERIFIED = "email_verified";
+  public static final String ENABLED = "enabled";
   public static final String ENCRYPTED_KEY = "encryptedKey";
   public static final String END = "end";
   public static final String ERROR = "error";

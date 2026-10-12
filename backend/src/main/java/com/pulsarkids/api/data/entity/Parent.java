@@ -31,6 +31,8 @@ public class Parent {
   /** The Google Speech key assigned to this account; NULL — the global one applies. */
   private Integer ttsKeyId;
   private boolean ttsOff;
+  /** Switched off by the owner: no sign-in, no save — until switched on again. */
+  private boolean disabled;
   /** The cabinet's language; NULL — not chosen. */
   private String lang;
 

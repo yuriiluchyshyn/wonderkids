@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Per-user save →  GET /api/state   (load; `state` is null when empty)
  *                  PUT /api/state   (replace with { state })
+ * Both answer 403 `account_disabled` for an account the owner switched off —
+ * a session opened before that ends here.
  */
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +37,7 @@ public class StateController extends ApiController {
   public ResponseEntity<Object> load(HttpServletRequest request, @RequestParam(name = Fields.TZ_OFFSET_MIN, required = false) String tzOffsetMin) {
     Auth.User user = Requests.requireUser(request);
     schema.ensure();
+    accounts.requireEnabled((int) user.id());
     // `features` tells the client what the account has switched on — never
     // the credentials themselves.
     return ok(Fields.STATE, accounts.getState((int) user.id(), ScreenTime.clampTzOffset(Json.number(tzOffsetMin))), Fields.FEATURES, Json.map(Fields.CLOUD_TTS, speech.configOf((int) user.id()).enabled()));
@@ -46,6 +49,7 @@ public class StateController extends ApiController {
     JsonNode state = Json.at(body, Fields.STATE);
     if (!state.isObject()) throw new HttpError(ApiError.INVALID_STATE);
     schema.ensure();
+    accounts.requireEnabled((int) user.id());
     return ok(Fields.OK, true, Fields.UPDATED_AT, accounts.saveState((int) user.id(), state, messages.lang()));
   }
 }

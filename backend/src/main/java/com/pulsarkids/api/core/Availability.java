@@ -22,7 +22,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * What is offered where — the owner's rules, set on `/admin/availability` and
+ * What is offered where — the owner's rules, set on `/admin/settings/availability` and
  * kept as one setting (`wk_settings`, key `availability`). Pure: no database
  * and no request here (tested in `AvailabilityTest`).
  *

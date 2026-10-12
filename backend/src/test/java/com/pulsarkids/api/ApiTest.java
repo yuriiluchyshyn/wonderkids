@@ -578,6 +578,27 @@ class ApiTest {
 
   @Test
   @Order(14)
+  void aSwitchedOffAccountLetsNobodyInAndLosesNothing() throws Exception {
+    assertEquals("invalid_enabled", asAdmin("PUT", "/api/admin/users", Map.of("parentId", parentId, "enabled", "no")).text("error"));
+    assertEquals(404, asAdmin("PUT", "/api/admin/users", Map.of("parentId", 999999, "enabled", false)).status());
+    assertTrue(asAdmin("PUT", "/api/admin/users", Map.of("parentId", parentId, "enabled", false)).body().get("disabled").asBoolean());
+
+    Answer parent = call("POST", "/api/auth/login", Map.of("email", "mamatest@googlemail.com"));
+    assertEquals(403, parent.status());
+    assertEquals("account_disabled", parent.text("error"));
+    assertEquals("account_disabled", call("POST", "/api/auth/child-login", Map.of("identifier", "marko_speed", "pin", "1234")).text("error"));
+    // A session opened before the account was switched off ends at its save.
+    assertEquals("account_disabled", asParent("GET", "/api/state", null).text("error"));
+    assertEquals(403, asParent("PUT", "/api/state", Map.of("state", Map.of("children", List.of()))).status());
+
+    assertFalse(asAdmin("PUT", "/api/admin/users", Map.of("parentId", parentId, "enabled", true)).body().get("disabled").asBoolean());
+    assertEquals(200, call("POST", "/api/auth/login", Map.of("email", "mamatest@googlemail.com")).status());
+    assertEquals(200, call("POST", "/api/auth/child-login", Map.of("identifier", "marko_speed", "pin", "1234")).status());
+    assertFalse(asParent("GET", "/api/state", null).body().at("/state/children").isEmpty(), "the children are still there");
+  }
+
+  @Test
+  @Order(15)
   void anAccountIsRemovedWithEverythingOfIts() throws Exception {
     assertEquals(200, asAdmin("DELETE", "/api/admin/users?id=" + parentId, null).status());
     assertEquals(404, asAdmin("DELETE", "/api/admin/users?id=" + parentId, null).status());

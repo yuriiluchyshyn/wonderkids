@@ -44,6 +44,8 @@ import org.springframework.web.bind.annotation.RestController;
  * Both bodies may carry `source` — `{ source, medium?, campaign?, link? }`, the
  * labels of the link that brought the parent. It is saved only when this call
  * creates the account, and shown in the admin's «Джерела» page.
+ *
+ * An account the owner switched off answers 403 `account_disabled`.
  */
 @RestController
 @RequiredArgsConstructor
@@ -58,6 +60,7 @@ public class LoginController extends ApiController {
   }
 
   private static ResponseEntity<Object> session(Parent user, boolean created) {
+    if (user.isDisabled()) throw new HttpError(ApiError.ACCOUNT_DISABLED);
     return ok(Fields.TOKEN, Auth.signToken(user.getId(), user.getEmail()), Fields.USER, Json.map(Fields.ID, user.getId(), Fields.EMAIL, user.getEmail()), Fields.CREATED, created);
   }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.pulsarkids.api.core.Auth;
 import com.pulsarkids.api.core.Json;
 import com.pulsarkids.api.model.ApiError;
+import com.pulsarkids.api.model.ChildLoginStatus;
 import com.pulsarkids.api.model.Fields;
 import com.pulsarkids.api.service.AccountService;
 import com.pulsarkids.api.service.SchemaService;
@@ -52,6 +53,7 @@ public class ChildLoginController extends ApiController {
       if (!childId.isTextual() || childId.textValue().isEmpty()) throw new HttpError(ApiError.INVALID_CHILD_PROFILE_ID);
       schema.ensure();
       if (!accounts.ownsChild((int) parent.id(), childId.textValue())) throw new HttpError(ApiError.CHILD_NOT_FOUND);
+      accounts.requireEnabled((int) parent.id());
       return session(parent.id(), childId.textValue());
     }
 
@@ -61,6 +63,8 @@ public class ChildLoginController extends ApiController {
 
     schema.ensure();
     AccountService.ChildLogin found = accounts.resolveChildLogin(identifier, pin);
+    // A child of an account the owner switched off does not get in either.
+    if (found.status() == ChildLoginStatus.OK) accounts.requireEnabled(found.parentId());
     return switch (found.status()) {
       case OK -> session(found.parentId(), found.childId());
       case BAD_PIN -> throw new HttpError(ApiError.INVALID_PIN);

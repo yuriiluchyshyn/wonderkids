@@ -502,6 +502,7 @@ public class AccountService {
           Fields.CREATED_AT, Json.iso(p.getCreatedAt()),
           // NULL key = an older row that shares its mailbox with another account.
           Fields.DUPLICATE_MAILBOX, p.getEmailKey() == null,
+          Fields.DISABLED, p.isDisabled(),
           Fields.SPEECH_OFF, p.isTtsOff(),
           Fields.SPEECH_KEY_ID, p.getTtsKeyId(),
           // The channel that brought the account; null for one registered without a label.
@@ -520,5 +521,24 @@ public class AccountService {
     if (parent == null) return false;
     parent.setTtsOff(off);
     return true;
+  }
+
+  /**
+   * Admin: switch an account off or back on. A switched-off account keeps
+   * everything it has, but nobody signs in to it and its save is out of reach
+   * (`requireEnabled`). False for an unknown account.
+   */
+  @Transactional
+  public boolean setDisabled(int parentId, boolean disabled) {
+    Parent parent = parents.findById(parentId).orElse(null);
+    if (parent == null) return false;
+    parent.setDisabled(disabled);
+    return true;
+  }
+
+  /** Refuses an account the owner switched off: 403 `account_disabled`. */
+  @Transactional(readOnly = true)
+  public void requireEnabled(int parentId) {
+    if (parents.findById(parentId).map(Parent::isDisabled).orElse(false)) throw new HttpError(ApiError.ACCOUNT_DISABLED);
   }
 }

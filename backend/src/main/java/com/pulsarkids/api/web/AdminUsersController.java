@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Admin: accounts →  GET    /api/admin/users
  *                    PUT    /api/admin/users  { parentId, speechEnabled }
+ *                    PUT    /api/admin/users  { parentId, enabled }
  *                    DELETE /api/admin/users?id=…   (with all children and their data)
- * The PUT switches Google Speech on/off for one account. Keys themselves are
- * managed in /api/admin/speech. Requires `x-admin-key`.
+ * The PUT switches Google Speech — or, with `enabled`, the whole account —
+ * on/off for one account. Keys themselves are managed in /api/admin/speech.
+ * Requires `x-admin-key`.
  *
  * With `?part=…` the same address serves the owner's side of the product:
  *
@@ -93,6 +95,12 @@ public class AdminUsersController extends ApiController {
         JsonNode parentId = Json.at(body, Fields.PARENT_ID);
         JsonNode speechEnabled = Json.at(body, Fields.SPEECH_ENABLED);
         if (!Json.isInt(parentId)) return refuse(ApiError.INVALID_PARENT_ID);
+        JsonNode enabled = Json.at(body, Fields.ENABLED);
+        if (!enabled.isMissingNode()) {
+          if (!enabled.isBoolean()) return refuse(ApiError.INVALID_ENABLED);
+          if (!accounts.setDisabled((int) Json.intOf(parentId), !enabled.booleanValue())) return refuse(ApiError.PARENT_NOT_FOUND);
+          return ok(Fields.OK, true, Fields.PARENT_ID, Json.intOf(parentId), Fields.DISABLED, !enabled.booleanValue());
+        }
         if (!speechEnabled.isBoolean()) return refuse(ApiError.INVALID_SPEECH_ENABLED);
         if (!accounts.setSpeechOff((int) Json.intOf(parentId), !speechEnabled.booleanValue())) return refuse(ApiError.PARENT_NOT_FOUND);
         return ok(Fields.OK, true, Fields.PARENT_ID, Json.intOf(parentId), Fields.SPEECH_OFF, !speechEnabled.booleanValue());
