@@ -627,20 +627,16 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
             {t('game.tasksDone', { count: session.total })} {t('game.win.great')}
           </p>
           <div className={styles.summaryActions}>
-            {config.step < maxSteps && (
+            {/* A next level leads on; replay is offered only once the path is done. */}
+            {config.step < maxSteps ? (
               <Button size="lg" icon="▶️" block onClick={onContinue}>
                 {t('game.win.next')}
               </Button>
+            ) : (
+              <Button size="lg" icon="🔁" block onClick={onPlayAgain}>
+                {t('game.win.again')}
+              </Button>
             )}
-            <Button
-              size="lg"
-              variant={config.step < maxSteps ? 'ghost' : 'primary'}
-              icon="🔁"
-              block
-              onClick={onPlayAgain}
-            >
-              {t('game.win.again')}
-            </Button>
             <Button size="lg" variant="ghost" icon="🏠" block onClick={onExit}>
               {t('game.win.exit')}
             </Button>

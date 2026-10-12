@@ -89,7 +89,7 @@ export const GAMES: GameCard[] = [
     blurb: fill(J.GAMES.capitals.blurb, { length: CAPITALS.length }),
     intro: J.GAMES.capitals.intro,
     steps: CAPITAL_STEPS,
-    difficulty: 3,
+    difficulty: [2, 3],
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
     mechanics: Mechanics.GridChoice,

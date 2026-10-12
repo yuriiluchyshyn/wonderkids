@@ -1,91 +1,174 @@
+/*
+ * Standalone colours, like the login: the loader shows before a child's world
+ * is known. Night sky and planets as on the public site (`@pulsar/brand/night-sky.css`,
+ * `site/src/styles/hero.css`).
+ */
+
+/* ---- The full-screen night sky ---- */
+.screen {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  overflow: hidden;
+  text-align: center;
+  color: var(--pulsar-ink, #f3f1ff);
+  background:
+    radial-gradient(42% 36% at 84% 12%, rgba(53, 214, 232, 0.2), transparent 70%),
+    radial-gradient(46% 40% at 8% 80%, rgba(124, 108, 255, 0.28), transparent 72%),
+    linear-gradient(170deg, #0b1026 0%, #2b1a52 55%, #0b1026 100%);
+}
+
+/* Stars: three depths, each a tile of its own size so the pattern never lines up (as on the login). */
+.screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 24px 36px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 150px 92px, #dfe6ff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 96px 190px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 210px 250px, #c9c2ff 50%, transparent 51%),
+    radial-gradient(2px 2px at 330px 130px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 280px 40px, #9fefff 50%, transparent 51%);
+  background-size:
+    230px 230px,
+    230px 230px,
+    310px 310px,
+    310px 310px,
+    410px 410px,
+    410px 410px;
+  animation: twinkle 5s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.screen > * {
+  position: relative;
+}
+
+/* ---- The Solar System ---- */
 .wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 22px;
 }
 
 .system {
   position: relative;
-  width: 168px;
-  height: 168px;
+  width: min(70vw, 260px);
+  aspect-ratio: 1;
+  container-type: inline-size;
 }
 
 .sun {
   position: absolute;
-  inset: 62px;
+  inset: 43.5%;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fff7c2, var(--ring, #fbbf24) 55%, var(--accent, #f97316));
-  box-shadow: 0 0 26px 8px color-mix(in srgb, var(--ring, #fbbf24) 55%, transparent);
+  background: radial-gradient(circle at 40% 36%, #fff7c2, #fde047 38%, #f59e0b 78%, #ea580c);
+  box-shadow:
+    0 0 18px 6px rgba(253, 224, 71, 0.55),
+    0 0 50px 18px rgba(245, 158, 11, 0.3);
   animation: glow 1.8s ease-in-out infinite alternate;
 }
 
 .orbit {
   position: absolute;
-  border: 2px dashed color-mix(in srgb, var(--primary, #7c3aed) 35%, transparent);
+  inset: calc(50% - var(--d) / 2);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  animation: turn linear infinite;
+  animation: turn var(--t) linear var(--from) infinite;
 }
 
-.orbit1 {
-  inset: 44px;
-  animation-duration: 2.2s;
-}
-
-.orbit2 {
-  inset: 22px;
-  animation-duration: 3.6s;
-  animation-direction: reverse;
-}
-
-.orbit3 {
-  inset: 0;
-  border-style: solid;
-  border-color: transparent;
-  animation-duration: 2.8s;
-}
-
-.planet,
-.rocket {
+/* A planet turns against its orbit, so it stays upright all the way round. */
+.orbit i {
   position: absolute;
-  top: -8px;
+  top: 0;
   left: 50%;
-  margin-left: -8px;
-}
-
-.planet {
-  width: 16px;
-  height: 16px;
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
   border-radius: 50%;
-  background: var(--primary, #7c3aed);
-  box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.18);
+  box-shadow: inset calc(var(--s) * -0.16) calc(var(--s) * -0.14) calc(var(--s) * 0.3) rgba(0, 0, 0, 0.5);
+  animation: turn var(--t) linear var(--from) infinite reverse;
 }
 
-.planet2 {
-  width: 20px;
-  height: 20px;
-  top: -10px;
-  margin-left: -10px;
-  background: var(--accent, #ec4899);
+.mercury {
+  --s: 3.2cqw;
+  background: radial-gradient(circle at 35% 30%, #d6d3d1, #8f8a86 65%, #57534e);
 }
 
-.rocket {
-  top: -16px;
-  margin-left: -14px;
-  font-size: 1.7rem;
-  line-height: 1;
-  /* Nose along the direction of travel. */
-  transform: rotate(45deg);
+.venus {
+  --s: 4.6cqw;
+  background: radial-gradient(circle at 35% 30%, #fff1c2, #e9c46a 60%, #b98a2e);
+}
+
+.earth {
+  --s: 5cqw;
+  background:
+    radial-gradient(circle at 30% 36%, #4ade80 0 18%, transparent 19%),
+    radial-gradient(circle at 66% 62%, #22c55e 0 22%, transparent 23%),
+    radial-gradient(circle at 70% 22%, #86efac 0 10%, transparent 11%),
+    radial-gradient(circle at 35% 30%, #60a5fa, #2563eb 70%);
+}
+
+.mars {
+  --s: 4cqw;
+  background:
+    radial-gradient(circle at 50% 6%, #fff 0 10%, transparent 11%),
+    radial-gradient(circle at 62% 60%, #9a3412 0 20%, transparent 21%),
+    radial-gradient(circle at 35% 30%, #fb923c, #dc4a12 70%);
+}
+
+.jupiter {
+  --s: 9cqw;
+  background:
+    radial-gradient(ellipse 14% 9% at 68% 61%, #c2410c 0 96%, transparent 100%),
+    linear-gradient(180deg, #d6a574 0 14%, #f1dcc0 14% 26%, #c98b5a 26% 40%, #f3e3cc 40% 52%, #b9764a 52% 66%, #ecd3b0 66% 80%, #c79465 80%);
+}
+
+/* Saturn's box is as wide as its rings: half a ring in front, the ball, the whole ring behind. */
+.orbit .saturn {
+  --s: 7cqw;
+  --ring: rgba(232, 210, 158, 0.95);
+  --ring-out: rgba(200, 180, 132, 0.75);
+  width: calc(var(--s) * 2.3);
+  margin-left: calc(var(--s) * -1.15);
+  border-radius: 0;
+  box-shadow: none;
+  rotate: -16deg;
+  background:
+    radial-gradient(ellipse 50% 60% at 50% 0, transparent 60%, var(--ring) 62%, var(--ring) 80%, transparent 82%, transparent 86%, var(--ring-out) 88%, var(--ring-out) 97%, transparent 99%) 0 100% / 100% 50% no-repeat,
+    radial-gradient(circle closest-side, #f6e4b4, #dcb96f 62%, #9c7a38 99%, transparent 100%),
+    radial-gradient(ellipse 50% 30% at 50% 50%, transparent 60%, var(--ring) 62%, var(--ring) 80%, transparent 82%, transparent 86%, var(--ring-out) 88%, var(--ring-out) 97%, transparent 99%);
+}
+
+.uranus {
+  --s: 5.8cqw;
+  background: radial-gradient(circle at 35% 30%, #c8f4f1, #67d2d3 60%, #3aa9b3);
+}
+
+.neptune {
+  --s: 5.6cqw;
+  background: radial-gradient(circle at 35% 30%, #7aa7ff, #2f5fe0 60%, #1e3a9a);
 }
 
 .label {
   margin: 0;
   font-weight: 700;
   text-align: center;
+  color: var(--pulsar-ink, #f3f1ff);
 }
 
 .label::after {
   content: '';
+  display: inline-block;
+  width: 1.2em;
+  text-align: left;
   animation: dots 1.6s steps(4, end) infinite;
 }
 
@@ -97,7 +180,16 @@
 
 @keyframes glow {
   to {
-    transform: scale(1.12);
+    transform: scale(1.08);
+  }
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 0.95;
   }
 }
 
@@ -117,8 +209,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Much slower, not stopped: it still has to say «loading». */
   .orbit,
-  .sun {
-    animation-duration: 12s;
+  .orbit i {
+    animation-duration: calc(var(--t) * 4);
+  }
+
+  .sun,
+  .screen::before {
+    animation: none;
   }
 }

@@ -46,7 +46,7 @@ export const GAMES: GameCard[] = [
     intro:
       J.GAMES.why.intro,
     steps: WHY_STEPS,
-    difficulty: [1, 2],
+    difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
     mechanics: Mechanics.GridChoice,

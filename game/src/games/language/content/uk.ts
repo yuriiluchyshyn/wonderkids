@@ -236,14 +236,14 @@ export const UK: LangPack = {
       icon: '🎶',
       blurb: J.UK.cards.rhymes.blurb,
       intro: J.UK.cards.rhymes.intro,
-      difficulty: [1, 3],
+      difficulty: [2, 3],
     },
     sentences: {
       label: J.UK.cards.sentences.label,
       icon: '🧱',
       blurb: J.UK.cards.sentences.blurb,
       intro: J.UK.cards.sentences.intro,
-      difficulty: [1, 2],
+      difficulty: 3,
     },
   },
 };

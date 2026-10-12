@@ -5,6 +5,9 @@ import { api, ApiError, type AuthUser } from '@/core/account/api/client';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { signupSource } from '@/core/app/attribution';
 import { auth0Enabled, auth0Logout } from './auth0';
+import { isStale, markAuth, wipeDevice } from './wipe';
+
+const AUTH_STORAGE_KEY = 'wonderkids-auth-v1';
 
 /** The error codes the API can return on login that have a message of their own (`auth.error.<code>`). */
 const LOGIN_ERRORS = new Set(['invalid_email', 'invalid_pin', 'invalid_credentials', 'child_not_found', 'network_error', 'login_failed', 'invalid_token', 'email_missing', 'email_not_verified', 'auth0_required']);
@@ -32,6 +35,8 @@ export interface AuthState {
   user: AuthUser | null;
   /** Set for a child session — which child to auto-select after state loads. */
   childId: string | null;
+  /** When this session began here (ms) — a sign-out or sign-in elsewhere after it ends it. */
+  since: number | null;
   pending: boolean;
   error: string | null;
 
@@ -49,9 +54,10 @@ export interface AuthState {
   /** Child login by unique nickname + parent-set PIN. */
   childLogin: (identifier: string, pin: string) => Promise<boolean>;
   /**
-   * Clear the session and wipe the in-memory save. A parent who signed in
-   * through Auth0 is also signed out there (the page leaves for Auth0 and
-   * comes back to the parent login).
+   * Clear the session, the in-memory save and everything the device keeps
+   * (storage, cookies, caches) — here and, through the shared mark, on the
+   * other portal too. With Auth0 on, its session ends as well (the page
+   * leaves for Auth0 and comes back to the child login).
    */
   logout: () => void;
   clearError: () => void;
@@ -63,6 +69,7 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       childId: null,
+      since: null,
       pending: false,
       error: null,
 
@@ -71,7 +78,8 @@ export const useAuthStore = create<AuthState>()(
         try {
           const { token, user } = await api.login(email, create, signupSource());
           // Parent session → no child auto-selected.
-          set({ token, user, childId: null, pending: false, error: null });
+          startSession(user.id);
+          set({ token, user, childId: null, since: Date.now(), pending: false, error: null });
           return { status: 'ok' };
         } catch (err) {
           // Not an error to show: the page asks whether to create the account.
@@ -97,7 +105,8 @@ export const useAuthStore = create<AuthState>()(
         set({ pending: true, error: null });
         try {
           const { token, user } = await api.auth0Login(idToken, signupSource());
-          set({ token, user: { ...user, provider: auth0Provider(idToken) }, childId: null, pending: false, error: null });
+          startSession(user.id);
+          set({ token, user: { ...user, provider: auth0Provider(idToken) }, childId: null, since: Date.now(), pending: false, error: null });
           return null;
         } catch (err) {
           const code = err instanceof ApiError ? err.code : 'login_failed';
@@ -110,7 +119,8 @@ export const useAuthStore = create<AuthState>()(
         set({ pending: true, error: null });
         try {
           const { token, user, childId } = await api.childLogin(identifier, pin);
-          set({ token, user, childId, pending: false, error: null });
+          startSession(user.id);
+          set({ token, user, childId, since: Date.now(), pending: false, error: null });
           return true;
         } catch (err) {
           const code = err instanceof ApiError ? err.code : 'login_failed';
@@ -123,13 +133,18 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        const wasParent = Boolean(get().token) && !get().childId;
+        const hadSession = Boolean(get().token);
+        // Tell the other portal (and other tabs) this account is gone.
+        markAuth(0);
         // Before the session is cleared: the parent login it reveals must
-        // already know we are leaving.
-        if (wasParent && auth0Enabled) auth0Logout();
+        // already know we are leaving. A child session ends Auth0 too — on a
+        // shared tablet the parent's Auth0 session would otherwise sign the
+        // same parent straight back in.
+        if (hadSession && auth0Enabled) auth0Logout();
         // Drop the signed-in child's data so the next login starts clean.
         useGameStore.getState().resetAll();
-        set({ token: null, user: null, childId: null, error: null });
+        set({ token: null, user: null, childId: null, since: null, error: null });
+        wipeDevice();
       },
 
       clearError: () => set({ error: null }),
@@ -137,11 +152,62 @@ export const useAuthStore = create<AuthState>()(
     {
       // Only the session identity is persisted locally; the game save itself
       // now lives on the server.
-      name: 'wonderkids-auth-v1',
-      partialize: (s) => ({ token: s.token, user: s.user, childId: s.childId }),
+      name: AUTH_STORAGE_KEY,
+      partialize: (s) => ({ token: s.token, user: s.user, childId: s.childId, since: s.since }),
     },
   ),
 );
+
+/**
+ * A new sign-in here: whatever another account left on this device goes, and
+ * the other portal learns about it (a session there for another account ends).
+ */
+function startSession(user: number): void {
+  const before = useAuthStore.getState().user?.id;
+  if (before !== undefined && before !== user) {
+    useGameStore.getState().resetAll();
+    wipeDevice();
+  }
+  markAuth(user);
+}
+
+/**
+ * Ended elsewhere — signed out, or another account signed in on the other
+ * portal or in another tab: drop the session and wipe the device, quietly
+ * (no trip to Auth0; whoever ended it already made it).
+ */
+export function dropStaleSession(): boolean {
+  const { token, since, user } = useAuthStore.getState();
+  if (!token || !isStale(since, user?.id)) return false;
+  useGameStore.getState().resetAll();
+  useAuthStore.setState({ token: null, user: null, childId: null, since: null, error: null });
+  wipeDevice();
+  return true;
+}
+
+/**
+ * Keeps a tab in step with the others: checks the mark whenever the tab comes
+ * back into view, and reloads when another tab of this portal signed in or
+ * out (the persisted store does not follow other tabs by itself).
+ */
+export function watchSession(): void {
+  const check = () => {
+    if (document.visibilityState === 'visible') dropStaleSession();
+  };
+  document.addEventListener('visibilitychange', check);
+  window.addEventListener('focus', check);
+  window.addEventListener('storage', (e) => {
+    if (e.key !== AUTH_STORAGE_KEY && e.key !== null) return;
+    const token = (() => {
+      try {
+        return (JSON.parse(e.newValue ?? 'null')?.state?.token as string | null) ?? null;
+      } catch {
+        return null;
+      }
+    })();
+    if (token !== useAuthStore.getState().token) window.location.reload();
+  });
+}
 
 /** The fragment the parent cabinet opens the child portal with: `#child=<token>`. */
 export const CHILD_HANDOFF = '#child=';
@@ -159,8 +225,11 @@ export function adoptChildHandoff(): void {
   try {
     const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
     if (typeof payload.childId !== 'string') return;
+    const user = Number(payload.sub);
+    // Another account's leftovers on this device go before the child comes in.
+    if (useAuthStore.getState().user?.id !== user) wipeDevice();
     useGameStore.getState().resetAll();
-    useAuthStore.setState({ token, user: { id: Number(payload.sub) }, childId: payload.childId, error: null });
+    useAuthStore.setState({ token, user: { id: user }, childId: payload.childId, since: Date.now(), error: null });
   } catch {
     /* not a token — ignore, the login page shows as usual */
   }

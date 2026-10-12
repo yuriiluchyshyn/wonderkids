@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { adminApi, type AvailabilityRules, type Place } from '@/core/account/api/client';
 import { GALAXIES, galaxyKey } from '@/core/game/galaxies';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
+import { setsOf } from '@/core/game/kernel/sets';
 import { LANG_CODES, language } from '@/core/language';
 import { tApp } from '@/core/translator';
 import { errorText } from './shared';
@@ -238,8 +239,12 @@ function Games({ items, regions, onChange }: { items: AvailabilityRules['items']
       GALAXIES.map((galaxy) => ({
         galaxy,
         name: `${galaxy.icon} ${tApp('uk', galaxyKey(galaxy.id))}`,
-        games: galaxy.moduleId ? (moduleRegistry.get(galaxy.moduleId)?.subCategories ?? []).map((sub) => ({ key: `game:${galaxy.moduleId}:${sub.id}`, name: `${sub.icon ?? ''} ${sub.label}`.trim(), id: sub.id })) : [],
-      })),
+        // In their sets (the Language galaxy: one per language) so each language's games sit together.
+        sets: setsOf(galaxy.moduleId ? (moduleRegistry.get(galaxy.moduleId)?.subCategories ?? []) : []).map(({ group, subs }) => ({
+          group,
+          games: subs.map((sub) => ({ key: `game:${galaxy.moduleId}:${sub.id}`, name: `${sub.icon ?? ''} ${sub.label}`.trim(), id: sub.id })),
+        })),
+      })).map((g) => ({ ...g, games: g.sets.flatMap((set) => set.games) })),
     [],
   );
   const set = (key: string, item: Item) => onChange({ ...items, [key]: item });
@@ -256,7 +261,7 @@ function Games({ items, regions, onChange }: { items: AvailabilityRules['items']
         список — де це взагалі доступно: всюди, тільки в певних країнах чи регіонах, або всюди, крім них. Сховати чи
         притримати розділ — означає сховати всі його ігри.
       </p>
-      {galaxies.map(({ galaxy, name, games }) => {
+      {galaxies.map(({ galaxy, name, games, sets }) => {
         const own = items[`galaxy:${galaxy.id}`] ?? ON;
         return (
           <Group
@@ -273,8 +278,18 @@ function Games({ items, regions, onChange }: { items: AvailabilityRules['items']
             }
           >
             <ItemRow strong name="Увесь розділ" item={own} regions={regions} onChange={(item) => set(`galaxy:${galaxy.id}`, item)} />
-            {games.map((game) => (
-              <ItemRow key={game.key} name={game.name} hint={game.id} item={items[game.key] ?? ON} regions={regions} onChange={(item) => set(game.key, item)} />
+            {sets.map(({ group, games: setGames }) => (
+              <div key={group?.id ?? 'all'} className={group ? styles.itemSet : undefined}>
+                {group && (
+                  <div className={styles.itemSetHead}>
+                    {group.icon} {group.label}
+                    <span className={styles.gamesCount}>ігор: {setGames.length}</span>
+                  </div>
+                )}
+                {setGames.map((game) => (
+                  <ItemRow key={game.key} name={game.name} hint={game.id} item={items[game.key] ?? ON} regions={regions} onChange={(item) => set(game.key, item)} />
+                ))}
+              </div>
             ))}
           </Group>
         );

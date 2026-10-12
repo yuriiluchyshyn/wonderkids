@@ -81,7 +81,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
   };
 
   return (
-    <Modal open={entry !== null} onClose={onClose} title={entry ? entry.sub.label : ''} icon={entry?.sub.icon}>
+    <Modal fit open={entry !== null} onClose={onClose} title={entry ? entry.sub.label : ''} icon={entry?.sub.icon}>
       {entry && (
         <>
           <p className={styles.caption}>

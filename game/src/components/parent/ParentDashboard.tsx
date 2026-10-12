@@ -21,7 +21,7 @@ import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
 import { GALAXIES, galaxyKey } from '@/core/game/galaxies';
 import { Rich, useCurrency, useDeviceLang, useGameLang, useLang, useParentLang, useT, useVoiceLang } from '@/core/translator';
-import type { GameGroup, SubCategory } from '@/core/game/kernel/types';
+import { setsOf } from '@/core/game/kernel/sets';
 import { language, type LangCode } from '@/core/language';
 import { galaxyState, gameState, useAvailability, useGameLangChoices } from '@/core/app/availability';
 import { CURRENCIES } from '@/core/game/content/currency';
@@ -87,17 +87,6 @@ const GRID_OPTIONS: { id: ChoicesGridSize; label: string; icon: string }[] = [
 const SESSION_MIN_OPTIONS = [5, 10, 15, 20, 30];
 const COOLDOWN_MIN_OPTIONS = [15, 30, 45, 60, 90];
 const DAILY_MIN_OPTIONS = [20, 30, 45, 60, 90, 120];
-
-/** The games of a galaxy in their sets (the Language galaxy: one per language); a galaxy without sets is one unnamed set. */
-function setsOf(subs: SubCategory[]): { group?: GameGroup; subs: SubCategory[] }[] {
-  const sets = new Map<string, { group?: GameGroup; subs: SubCategory[] }>();
-  for (const sub of subs) {
-    const id = sub.group?.id ?? '';
-    if (!sets.has(id)) sets.set(id, { group: sub.group, subs: [] });
-    sets.get(id)?.subs.push(sub);
-  }
-  return [...sets.values()];
-}
 
 /** One chip per language offered in the visitor's country (and the one already chosen); the chosen one is lit. */
 function LangChips({ value, onPick }: { value: LangCode; onPick: (lang: LangCode) => void }) {
@@ -323,14 +312,6 @@ export function ParentDashboard() {
       {/* ---- Child profile ---- */}
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>{t('parent.profile.title')}</h3>
-        <Button block icon="🎮" onClick={openChildGame}>
-          {t('parent.profile.openGame')}
-        </Button>
-        <p className={styles.hint}>
-          {openGameError
-            ? t('parent.profile.openFailed')
-            : t('parent.profile.openHint')}
-        </p>
         <label className={styles.fieldLabel}>{t('parent.profile.name')}</label>
         <input
           className={styles.textInput}
@@ -397,6 +378,18 @@ export function ParentDashboard() {
           {GENDER_OPTIONS.map((g) => (
             <Chip key={g.id} icon={g.icon} label={t(`gender.${g.id}`)} active={profile.gender === g.id} onClick={() => setProfile({ gender: g.id })} />
           ))}
+        </div>
+
+        {/* After the profile, apart from its fields: the way into this child's game. */}
+        <div className={styles.openGame}>
+          <Button block icon="🎮" onClick={openChildGame}>
+            {t('parent.profile.openGame')}
+          </Button>
+          <p className={styles.hint}>
+            {openGameError
+              ? t('parent.profile.openFailed')
+              : t('parent.profile.openHint')}
+          </p>
         </div>
       </section>
 
@@ -602,7 +595,7 @@ export function ParentDashboard() {
                   const keys = set.subs.map((sub) => pathKey(group.moduleId, sub.id));
                   const shown = keys.filter((key) => !hidden.has(key)).length;
                   return (
-                    <div key={set.group?.id ?? 'all'} className="stack">
+                    <div key={set.group?.id ?? 'all'} className={cn('stack', set.group && styles.set)}>
                       {/* A whole set — a language — is shown or put away with one tick. */}
                       {set.group && (
                         <label className={styles.setHead}>
@@ -625,6 +618,8 @@ export function ParentDashboard() {
                           </span>
                         </label>
                       )}
+                      {/* The games of a set sit indented under its head. */}
+                      <div className={cn('stack', set.group && styles.setGames)}>
                       {set.subs.map((sub) => {
                         const key = pathKey(group.moduleId, sub.id);
                         const step = progress[key] ?? 1;
@@ -659,6 +654,7 @@ export function ParentDashboard() {
                           </div>
                         );
                       })}
+                      </div>
                     </div>
                   );
                 })}

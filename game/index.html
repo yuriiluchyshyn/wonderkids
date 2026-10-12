@@ -34,61 +34,74 @@
     <meta name="apple-mobile-web-app-title" content="Pulsar Kids" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <style>
-      /* Shown until the app boots: the same little solar system the app uses
-         while it loads the save, so there is one continuous loading scene. */
+      /* Shown until the app boots: the same night sky and Solar System the app
+         shows while it loads the save (components/ui/SpaceLoader), so there is
+         one continuous loading scene. */
       #boot {
         position: fixed;
         inset: 0;
         display: grid;
         place-items: center;
-        background: linear-gradient(160deg, #fdf2ff, #ede9fe);
+        overflow: hidden;
+        background:
+          radial-gradient(42% 36% at 84% 12%, rgba(53, 214, 232, 0.2), transparent 70%),
+          radial-gradient(46% 40% at 8% 80%, rgba(124, 108, 255, 0.28), transparent 72%),
+          linear-gradient(170deg, #0b1026 0%, #2b1a52 55%, #0b1026 100%);
+      }
+      #boot::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        opacity: 0.7;
+        background-image:
+          radial-gradient(1.5px 1.5px at 24px 36px, #fff 50%, transparent 51%),
+          radial-gradient(1px 1px at 150px 92px, #dfe6ff 50%, transparent 51%),
+          radial-gradient(1.5px 1.5px at 96px 190px, #fff 50%, transparent 51%),
+          radial-gradient(1px 1px at 210px 250px, #c9c2ff 50%, transparent 51%),
+          radial-gradient(2px 2px at 330px 130px, #fff 50%, transparent 51%),
+          radial-gradient(1px 1px at 280px 40px, #9fefff 50%, transparent 51%);
+        background-size:
+          230px 230px,
+          230px 230px,
+          310px 310px,
+          310px 310px,
+          410px 410px,
+          410px 410px;
       }
       #boot i {
         position: relative;
-        width: 168px;
-        height: 168px;
         display: block;
+        width: min(70vw, 260px);
+        aspect-ratio: 1;
+        container-type: inline-size;
       }
       #boot b {
         position: absolute;
         border-radius: 50%;
       }
       #boot .sun {
-        inset: 62px;
-        background: radial-gradient(circle at 35% 30%, #fff7c2, #fbbf24 55%, #f97316);
-        box-shadow: 0 0 26px 8px rgba(251, 191, 36, 0.55);
+        inset: 43.5%;
+        background: radial-gradient(circle at 40% 36%, #fff7c2, #fde047 38%, #f59e0b 78%, #ea580c);
+        box-shadow:
+          0 0 18px 6px rgba(253, 224, 71, 0.55),
+          0 0 50px 18px rgba(245, 158, 11, 0.3);
       }
-      #boot .o1,
-      #boot .o2 {
-        border: 2px dashed rgba(124, 58, 237, 0.35);
-        animation: boot-turn 2.2s linear infinite;
+      #boot .o {
+        inset: calc(50% - var(--d) / 2);
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        animation: boot-turn var(--t) linear var(--from) infinite;
       }
-      #boot .o1 {
-        inset: 44px;
-      }
-      #boot .o2 {
-        inset: 22px;
-        animation-duration: 3.6s;
-        animation-direction: reverse;
-      }
-      #boot .o1::after,
-      #boot .o2::after {
+      #boot .o::after {
         content: '';
         position: absolute;
-        top: -9px;
+        top: 0;
         left: 50%;
-        width: 16px;
-        height: 16px;
-        margin-left: -8px;
+        width: var(--s);
+        height: var(--s);
+        margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
         border-radius: 50%;
-        background: #7c3aed;
-      }
-      #boot .o2::after {
-        background: #ec4899;
-        width: 20px;
-        height: 20px;
-        top: -11px;
-        margin-left: -10px;
+        background: var(--c);
+        box-shadow: inset calc(var(--s) * -0.16) calc(var(--s) * -0.14) calc(var(--s) * 0.3) rgba(0, 0, 0, 0.5);
       }
       @keyframes boot-turn {
         to {
@@ -100,7 +113,17 @@
   <body>
     <div id="root">
       <div id="boot" role="status" aria-label="Завантаження">
-        <i><b class="sun"></b><b class="o1"></b><b class="o2"></b></i>
+        <i
+          ><b class="sun"></b
+          ><b class="o" style="--d: 25%; --t: 3s; --from: -0.75s; --s: 3.2cqw; --c: #8f8a86"></b
+          ><b class="o" style="--d: 33%; --t: 4.25s; --from: -5.25s; --s: 4.6cqw; --c: #e9c46a"></b
+          ><b class="o" style="--d: 42%; --t: 5.75s; --from: -2.25s; --s: 5cqw; --c: #2563eb"></b
+          ><b class="o" style="--d: 50%; --t: 7.5s; --from: -10s; --s: 4cqw; --c: #dc4a12"></b
+          ><b class="o" style="--d: 63%; --t: 12s; --from: -17.5s; --s: 9cqw; --c: #d6a574"></b
+          ><b class="o" style="--d: 78%; --t: 17s; --from: -6.25s; --s: 7cqw; --c: #dcb96f"></b
+          ><b class="o" style="--d: 88%; --t: 23.25s; --from: -30s; --s: 5.8cqw; --c: #67d2d3"></b
+          ><b class="o" style="--d: 96%; --t: 30s; --from: -15s; --s: 5.6cqw; --c: #2f5fe0"></b
+        ></i>
       </div>
     </div>
     <noscript>Щоб грати в Pulsar Kids, увімкніть JavaScript у браузері.</noscript>

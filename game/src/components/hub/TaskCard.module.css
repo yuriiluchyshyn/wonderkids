@@ -10,6 +10,12 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Cards in a grid row share a height; the button sits at the bottom of each,
+   so every Play / My path button lines up in one row whatever the text above. */
+.card > button:last-child {
+  margin-top: auto;
+}
+
 .top {
   display: flex;
   align-items: center;

@@ -159,7 +159,7 @@ export const EN: LangPack = {
       icon: '🔗',
       blurb: J.EN.cards.chain.blurb,
       intro: J.EN.cards.chain.intro,
-      difficulty: [1, 3],
+      difficulty: 3,
     },
     rhymes: {
       label: J.EN.cards.rhymes.label,

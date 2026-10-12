@@ -12,10 +12,16 @@ interface ModalProps {
   children: ReactNode;
   /** Hide the close button (e.g. a gate the child must pass or cancel). */
   dismissible?: boolean;
+  /**
+   * The sheet itself never scrolls: it is a column that fits the screen, and
+   * the content picks one part to scroll (`flex: 1; min-height: 0; overflow-y: auto`).
+   * Avoids a scroll inside a scroll.
+   */
+  fit?: boolean;
 }
 
 /** Spring-animated bottom-safe modal sheet. */
-export function Modal({ open, onClose, title, icon, children, dismissible = true }: ModalProps) {
+export function Modal({ open, onClose, title, icon, children, dismissible = true, fit = false }: ModalProps) {
   const t = useT();
   // Put away by the child (✕ or a tap beside it): whatever was being read out in it stops.
   const dismiss = () => {
@@ -33,7 +39,7 @@ export function Modal({ open, onClose, title, icon, children, dismissible = true
           onClick={() => dismissible && dismiss()}
         >
           <motion.div
-            className={styles.sheet}
+            className={fit ? `${styles.sheet} ${styles.fit}` : styles.sheet}
             role="dialog"
             aria-modal="true"
             initial={{ y: 40, scale: 0.92, opacity: 0 }}

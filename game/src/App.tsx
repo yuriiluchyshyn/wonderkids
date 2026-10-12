@@ -19,7 +19,7 @@ import { ParentPage } from '@/pages/parent/ParentPage';
 import { AudioPage } from '@/pages/child/AudioPage';
 import { ChildSelectPage } from '@/pages/auth/ChildSelectPage';
 import { TimeHeader } from '@/components/layout/TimeHeader';
-import { SpaceLoader } from '@/components/ui/SpaceLoader';
+import { SpaceLoader, SpaceScreen } from '@/components/ui/SpaceLoader';
 import { ThemeDecor } from '@/components/theme/ThemeDecor';
 
 // Loaded on demand: the admin tool is never part of what a child downloads.
@@ -43,18 +43,7 @@ function SyncSplash({ error }: { error?: boolean }) {
   const t = useT();
   const logout = useAuthStore((s) => s.logout);
   return (
-    <div
-      style={{
-        minHeight: '100dvh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 14,
-        textAlign: 'center',
-        padding: 24,
-      }}
-    >
+    <SpaceScreen>
       {error ? (
         <span className="emoji" style={{ fontSize: '3rem' }} aria-hidden>
           😿
@@ -76,7 +65,7 @@ function SyncSplash({ error }: { error?: boolean }) {
           </div>
         </>
       ) : null}
-    </div>
+    </SpaceScreen>
   );
 }
 

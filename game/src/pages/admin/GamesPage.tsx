@@ -7,6 +7,7 @@ import { difficultyRange, gameStatus, isFreePlay, tasksPerLevel, toGameConfig } 
 import type { LearningModule, MechanicsType, SubCategory } from '@/core/game/kernel/types';
 import { taskKey } from '@/core/game/engine/LevelEngine';
 import { subSteps } from '@/core/child/progress/path';
+import { setsOf } from '@/core/game/kernel/sets';
 import { formatDate } from './shared';
 import styles from './Admin.module.css';
 
@@ -92,6 +93,10 @@ function describe(module: LearningModule, sub: SubCategory): GameRow {
   };
 }
 
+/** The rows of a galaxy in their sets (the Language galaxy: one per language). */
+const setsOfRows = (rows: GameRow[]) =>
+  setsOf(rows.map((row) => row.sub)).map(({ group, subs }) => ({ group, rows: subs.map((sub) => rows.find((row) => row.sub === sub) as GameRow) }));
+
 const mechanicsOf = (sub: SubCategory) =>
   (Array.isArray(sub.mechanics) ? sub.mechanics : sub.mechanics ? [sub.mechanics] : []).map((m) => MECHANICS[m]).join(', ') || '—';
 
@@ -157,10 +162,22 @@ export function GamesPage() {
                     <th>Опубліковано</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {games.map((row) => (
+                {/* One body per set (a language): its head row, then its games indented under it. */}
+                {setsOfRows(games).map(({ group, rows: setRows }) => (
+                <tbody key={group?.id ?? 'all'} className={group ? styles.gamesSet : undefined}>
+                  {group && (
+                    <tr className={styles.gamesSetHead}>
+                      <td colSpan={9}>
+                        {group.icon} {group.label}
+                        <span className={styles.gamesCount}>
+                          ігор: {setRows.length} · завдань: {setRows.reduce((n, r) => n + r.tasks, 0)}
+                        </span>
+                      </td>
+                    </tr>
+                  )}
+                  {setRows.map((row) => (
                     <tr key={row.sub.id}>
-                      <td>
+                      <td className={group ? styles.gamesSetGame : undefined}>
                         <strong>
                           {row.sub.icon} {row.sub.label}
                         </strong>
@@ -189,6 +206,7 @@ export function GamesPage() {
                     </tr>
                   ))}
                 </tbody>
+                ))}
               </table>
             </div>
           )}

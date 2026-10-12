@@ -82,7 +82,8 @@ export const GAMES: GameCard[] = [
     introFor: (step, lang) => logicTexts(lang).introFor.riddles(step),
     langs: logicTexts.langs,
     steps: RIDDLE_STEPS,
-    difficulty: [1, 3],
+    // From 8: the riddle is told in words and has to be held in mind — not for pre-readers.
+    difficulty: 3,
     publishDate: RIDDLES_RELEASE,
     // Five, not ten: a riddle takes a good think.
     tasksPerLevel: 5,

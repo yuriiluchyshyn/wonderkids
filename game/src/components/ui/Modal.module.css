@@ -23,6 +23,14 @@
   box-shadow: var(--shadow-lg);
 }
 
+/* A sheet that fits the screen; one part of its content scrolls instead. */
+.fit {
+  display: flex;
+  flex-direction: column;
+  /* Children keep their height (min-height: auto); only one set to min-height: 0 shrinks. */
+  overflow: hidden;
+}
+
 .title {
   font-size: 1.4rem;
   margin-bottom: 10px;

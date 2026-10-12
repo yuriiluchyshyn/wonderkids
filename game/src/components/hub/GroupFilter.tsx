@@ -52,22 +52,24 @@ export function GroupFilter({ groups, value, onChange }: GroupFilterProps) {
 
       <Modal open={open} onClose={() => setOpen(false)} title={t('hub.groups.title')} icon="🌍">
         <div className={styles.sheet}>
-          <label className={styles.option}>
-            <input type="checkbox" className={styles.check} checked={chosen.length === 0} onChange={showAll} />
+          {/* No checkboxes: a chosen row is simply outlined and tinted. */}
+          <button type="button" className={cn(styles.option, chosen.length === 0 && styles.picked)} aria-pressed={chosen.length === 0} onClick={showAll}>
             <span className={cn(styles.flag, 'emoji')} aria-hidden>
               🌍
             </span>
             {t('hub.filter.allGames')}
-          </label>
-          {groups.map((group) => (
-            <label key={group.id} className={styles.option}>
-              <input type="checkbox" className={styles.check} checked={value.includes(group.id)} onChange={() => toggle(group)} />
-              <span className={cn(styles.flag, 'emoji')} aria-hidden>
-                {group.icon}
-              </span>
-              {group.label}
-            </label>
-          ))}
+          </button>
+          {groups.map((group) => {
+            const on = value.includes(group.id);
+            return (
+              <button key={group.id} type="button" className={cn(styles.option, on && styles.picked)} aria-pressed={on} onClick={() => toggle(group)}>
+                <span className={cn(styles.flag, 'emoji')} aria-hidden>
+                  {group.icon}
+                </span>
+                {group.label}
+              </button>
+            );
+          })}
           <Button block icon="✅" onClick={() => setOpen(false)}>
             {t('common.done')}
           </Button>

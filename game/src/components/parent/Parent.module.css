@@ -11,6 +11,18 @@
   margin-bottom: 12px;
 }
 
+/* «Відкрити гру дитини»: at the end of the profile, set off from its fields. */
+.openGame {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border, rgba(127, 127, 127, 0.25));
+}
+
+.openGame > p {
+  margin: 8px 0 0;
+  text-align: center;
+}
+
 .hint {
   font-size: 0.9rem;
   color: var(--text-soft);
@@ -156,9 +168,37 @@
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  margin-top: 6px;
   font-weight: 800;
   cursor: pointer;
+}
+
+/* One set (a language): its own tinted block, apart from the next. */
+.set {
+  padding: 4px 12px 12px;
+  border-radius: var(--radius-sm, 12px);
+  background: rgba(127, 127, 127, 0.08);
+}
+
+.set + .set {
+  margin-top: 8px;
+}
+
+/* The games of a set: indented under its head, tied to it by a line. */
+.setGames {
+  margin-left: 11px;
+  padding-left: 16px;
+  border-left: 2px solid color-mix(in srgb, var(--primary) 45%, transparent);
+}
+
+@media (max-width: 520px) {
+  .set {
+    padding: 4px 8px 10px;
+  }
+
+  .setGames {
+    margin-left: 6px;
+    padding-left: 10px;
+  }
 }
 
 .stepRow > input {

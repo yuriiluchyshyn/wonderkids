@@ -50,16 +50,30 @@
 .footer {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 24px;
 }
 
+/* «Вийти»: quiet, so a child does not tap it instead of their face. */
 .parentLink {
-  padding: 10px 18px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1px solid color-mix(in srgb, var(--text-soft) 30%, transparent);
   border-radius: 999px;
+  font-family: inherit;
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-soft);
   background: color-mix(in srgb, var(--surface) 70%, transparent);
+  cursor: pointer;
+}
+
+.parentLink:hover {
+  color: var(--text);
+}
+
+.parentLink:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .empty {
@@ -145,6 +159,19 @@
   color: var(--surface-ink);
   background: color-mix(in srgb, var(--ring) 20%, var(--surface));
   box-shadow: var(--shadow-sm);
+}
+
+/* A key typed on the keyboard lights up on the pad, as if it was tapped. */
+.keyLit {
+  background: var(--primary);
+  color: #fff;
+  transform: scale(0.95);
+}
+
+.key {
+  transition:
+    background 0.12s ease,
+    transform 0.12s ease;
 }
 
 .keyGhost {

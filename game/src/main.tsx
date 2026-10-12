@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { inject } from '@vercel/analytics';
-import { adoptChildHandoff } from '@/core/account/auth/useAuthStore';
+import { adoptChildHandoff, dropStaleSession, watchSession } from '@/core/account/auth/useAuthStore';
 import { rememberSource } from '@/core/app/attribution';
 import { beginDemo } from '@/core/app/demo';
 import { loadAvailability } from '@/core/app/availability';
@@ -15,6 +15,10 @@ import './games';
 // Opened from the parent cabinet as one of the children: sign in before the
 // first render, so the login page never flashes.
 adoptChildHandoff();
+// Signed out, or another account signed in, on the other portal or in another
+// tab since this session began: it is over — before anything shows it.
+dropStaleSession();
+watchSession();
 
 // The channel that brought the visitor (utm_* in the address), kept for the
 // moment a parent account is created.

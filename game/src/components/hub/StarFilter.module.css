@@ -67,20 +67,32 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
   min-height: 56px;
   padding: 0 14px;
+  border: 3px solid transparent;
   border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--surface-ink);
+  font-family: inherit;
+  font-size: 1rem;
   font-weight: 700;
+  text-align: start;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
 }
 
-.check {
-  width: 26px;
-  height: 26px;
-  flex: 0 0 auto;
-  margin: 0;
-  accent-color: var(--primary);
+.option:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* A chosen set: outlined and tinted instead of a ticked box. */
+.picked {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 18%, var(--surface));
 }

@@ -61,7 +61,7 @@ export const GAMES: GameCard[] = [
     blurb: J.GAMES.world_figures.blurb,
     intro: J.GAMES.world_figures.intro,
     steps: worldFigures.steps,
-    difficulty: 1,
+    difficulty: 2,
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
     mechanics: [Mechanics.DragMatch, Mechanics.GridChoice],

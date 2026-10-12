@@ -10,8 +10,12 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  /* The only scrolling part: takes what the sheet has left (the sheet itself doesn't scroll). */
+  flex: 1 1 auto;
+  min-height: 0;
   max-height: 56dvh;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 10px 4px;
   margin-bottom: 16px;
   background-image: radial-gradient(

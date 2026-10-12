@@ -101,7 +101,8 @@ const CARDS: SubCategory[] = [
     icon: '🍕',
     blurb: J.CARDS[5].blurb,
     steps: 10,
-    difficulty: 1,
+    // Fractions start at school age: 6–8 (★★).
+    difficulty: 2,
     tasksPerLevel: 10,
     mechanics: Mechanics.GridChoice,
   },
@@ -181,7 +182,7 @@ const CARDS: SubCategory[] = [
     steps: 12,
     difficulty: [1, 2],
     publishDate: COMPARE_CLOCK_RELEASE,
-    tasksPerLevel: 10,
+    tasksPerLevel: 5,
     mechanics: Mechanics.GridChoice,
     hasText: true,
   },
