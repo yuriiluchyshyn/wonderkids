@@ -1,0 +1,16 @@
+{
+  "shell": {
+    "title": "Pulsar Kids — gry edukacyjne dla dzieci",
+    "description": "Pulsar Kids — 52 gry edukacyjne dla dzieci w wieku 4–10 lat: matematyka, język, logika, geografia, historia. Bez reklam, łez i stoperów.",
+    "ogTitle": "Pulsar Kids — nauka, która wciąga jak przygoda",
+    "ogDescription": "Matematyka, język, logika, geografia, astronomia, historia i przyroda w 52 grach. Dziecko gra i buduje własną planetę, a rodzice decydują o czasie przed ekranem."
+  },
+  "login": {
+    "title": "Logowanie dla dzieci — Pulsar Kids",
+    "description": "Logowanie do Pulsar Kids dla dzieci: wpisz swój nick i PIN od rodziców — i ruszaj na przygodę z matematyką, geografią i historią."
+  },
+  "parentLogin": {
+    "title": "Panel rodzica — Pulsar Kids",
+    "description": "Logowanie do panelu rodzica Pulsar Kids: dodawaj dzieci, ustawiaj czas gry i rodzinne cele, śledź postępy."
+  }
+}

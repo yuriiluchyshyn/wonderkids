@@ -11,23 +11,28 @@
     <!-- The child's theme IS the colour scheme: keeps Samsung Internet's and
          Chrome's forced dark mode from repainting it (docs/browser-support.md). -->
     <meta name="color-scheme" content="only light" />
-    <title>Pulsar Kids — навчальні ігри для дітей</title>
+    <!-- The words of this head are in src/locales/seo/<lang>.json; seo-plugin.ts fills them in. -->
+    <title>{{shell.title}}</title>
     <meta
       name="description"
-      content="Pulsar Kids — навчальні ігри українською для дітей 4–10 років: математика, географія, історія, екологія. Без реклами, сліз і таймерів."
+      content="{{shell.description}}"
     />
     <!-- App pages are personal: out of search by default. The public login
-         pages switch this to "index" themselves (see usePageMeta). -->
+         pages are served from shells of their own, made from this one at
+         build time with "index" already in them (seo-plugin.ts) — a crawler
+         that reads "noindex" does not run the script that would change it. -->
     <meta name="robots" content="noindex, nofollow" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Pulsar Kids" />
     <meta property="og:locale" content="uk_UA" />
-    <meta property="og:title" content="Pulsar Kids — навчання, схоже на пригоду" />
+    <meta property="og:title" content="{{shell.ogTitle}}" />
     <meta
       property="og:description"
-      content="Математика, мова, логіка, географія, астрономія, історія та екологія у 45 іграх українською. Дитина грає і будує власну планету, а батьки керують часом за екраном."
+      content="{{shell.ogDescription}}"
     />
     <meta property="og:image" content="__SITE_URL__/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <!-- Fullscreen, app-like behaviour when added to a phone/tablet home screen -->
     <link rel="manifest" href="/site.webmanifest" />

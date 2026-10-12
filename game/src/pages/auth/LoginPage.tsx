@@ -1,5 +1,5 @@
 import { Rich, useT } from '@/core/translator';
-import { usePageMeta } from '@/core/app/seo/usePageMeta';
+import { usePublicPageMeta } from '@/core/app/seo/usePageMeta';
 import { lazy, Suspense, useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuthStore, type LoginOutcome } from '@/core/account/auth/useAuthStore';
@@ -51,11 +51,7 @@ const DECOR: ReadonlyArray<{
 
 export function LoginPage() {
   const t = useT();
-  usePageMeta({
-    title: t('parentLogin.title'),
-    description: t('parentLogin.description'),
-    index: true,
-  });
+  usePublicPageMeta('parentLogin');
   const token = useAuthStore((s) => s.token);
 
   // This is the PARENT cabinet login. Parents land here; children use the

@@ -1,0 +1,16 @@
+{
+  "shell": {
+    "title": "Pulsar Kids — learning games for kids",
+    "description": "Pulsar Kids — 50 learning games for kids aged 4–10: math, language, logic, geography, history and more. No ads, no tears, no timers.",
+    "ogTitle": "Pulsar Kids — learning that feels like an adventure",
+    "ogDescription": "Math, language, logic, geography, astronomy, history and nature in 50 games. Your child plays and builds a planet of their own, while you stay in charge of screen time."
+  },
+  "login": {
+    "title": "Kids’ login — Pulsar Kids",
+    "description": "Kids’ login to Pulsar Kids: type your nickname and the PIN your parents gave you — and set off on an adventure with math, geography and history."
+  },
+  "parentLogin": {
+    "title": "Parents’ area — Pulsar Kids",
+    "description": "Sign in to the Pulsar Kids parents’ area: add your children, set play time and family goals, and follow their progress."
+  }
+}

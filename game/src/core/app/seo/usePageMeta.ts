@@ -1,4 +1,6 @@
+import { useLang } from '@/core/translator';
 import { useEffect } from 'react';
+import { seoWords, type PublicPageId } from './words';
 
 const SITE_NAME = 'Pulsar Kids';
 
@@ -11,6 +13,8 @@ interface PageMeta {
    * are; everything behind a session is personal and stays out of search.
    */
   index?: boolean;
+  /** The title is given whole — nothing is appended. */
+  whole?: boolean;
 }
 
 function setMeta(selector: string, attr: 'name' | 'property', key: string, content: string): void {
@@ -28,9 +32,9 @@ function setMeta(selector: string, attr: 'name' | 'property', key: string, conte
  * robots directive, canonical URL and the matching Open Graph tags. (The
  * public site is a deployment of its own — `../site` — and carries its own.)
  */
-export function usePageMeta({ title, description, index = false }: PageMeta): void {
+export function usePageMeta({ title, description, index = false, whole = false }: PageMeta): void {
   useEffect(() => {
-    const fullTitle = `${title} — ${SITE_NAME}`;
+    const fullTitle = whole ? title : `${title} — ${SITE_NAME}`;
     document.title = fullTitle;
     setMeta('meta[name="robots"]', 'name', 'robots', index ? 'index, follow' : 'noindex, nofollow');
     setMeta('meta[property="og:title"]', 'property', 'og:title', fullTitle);
@@ -49,5 +53,15 @@ export function usePageMeta({ title, description, index = false }: PageMeta): vo
     }
     canonical.href = url;
     setMeta('meta[property="og:url"]', 'property', 'og:url', url);
-  }, [title, description, index]);
+  }, [title, description, index, whole]);
+}
+
+/**
+ * A page search engines may list: its title and description come from the SEO
+ * texts of the language on the screen (`src/locales/seo/<lang>.json`) — the
+ * same file its server-side shell is made from.
+ */
+export function usePublicPageMeta(page: PublicPageId): void {
+  const { title, description } = seoWords(useLang())[page];
+  usePageMeta({ title, description, index: true, whole: true });
 }

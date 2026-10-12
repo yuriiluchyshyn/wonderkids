@@ -123,7 +123,7 @@ export function ChildSelectPage() {
   const signOut = () => {
     play('tap');
     if (demo) endDemo(); // the trial is over → App shows the login
-    else logout(); // clears the session and the device → App goes to /login
+    else logout(); // clears the session and the device → App shows a login
   };
 
   const logoutButton = (

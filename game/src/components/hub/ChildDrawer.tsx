@@ -72,7 +72,7 @@ export function ChildDrawer({ open, onClose }: ChildDrawerProps) {
     play('tap');
     onClose();
     if (demo) endDemo(); // the trial is over → App shows the login
-    else logout(); // clears the session → App redirects to /login
+    else logout(); // clears the session → App shows a login (the child's, after a child)
   };
 
   // Portalled to <body>: the hub page is its own stacking context, so an

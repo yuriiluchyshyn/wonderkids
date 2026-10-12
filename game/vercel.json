@@ -46,12 +46,54 @@
       ],
       "destination": "https://parents.pulsarkids.com/:path*",
       "permanent": true
+    },
+    {
+      "source": "/login",
+      "has": [
+        {
+          "type": "host",
+          "value": "parents.pulsarkids.com"
+        }
+      ],
+      "destination": "/parent-login",
+      "permanent": true
+    },
+    {
+      "source": "/parent-login",
+      "has": [
+        {
+          "type": "host",
+          "value": "play.pulsarkids.com"
+        }
+      ],
+      "destination": "https://parents.pulsarkids.com/parent-login",
+      "permanent": false
     }
   ],
   "rewrites": [
     {
       "source": "/api/:path*",
       "destination": "https://api.pulsarkids.com/api/:path*"
+    },
+    {
+      "source": "/login",
+      "has": [
+        {
+          "type": "host",
+          "value": "play.pulsarkids.com"
+        }
+      ],
+      "destination": "/login.html"
+    },
+    {
+      "source": "/parent-login",
+      "has": [
+        {
+          "type": "host",
+          "value": "parents.pulsarkids.com"
+        }
+      ],
+      "destination": "/parent-login.html"
     },
     {
       "source": "/((?!api/|_vercel/).*)",

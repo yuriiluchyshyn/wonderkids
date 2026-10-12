@@ -1,5 +1,5 @@
 import { useT } from '@/core/translator';
-import { usePageMeta } from '@/core/app/seo/usePageMeta';
+import { usePublicPageMeta } from '@/core/app/seo/usePageMeta';
 import { useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -27,11 +27,7 @@ const DECOR = [
  */
 export function ChildLoginPage() {
   const t = useT();
-  usePageMeta({
-    title: t('childLogin.title'),
-    description: t('childLogin.description'),
-    index: true,
-  });
+  usePublicPageMeta('login');
   const navigate = useNavigate();
   const token = useAuthStore((s) => s.token);
   const childLogin = useAuthStore((s) => s.childLogin);

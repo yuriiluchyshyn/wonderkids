@@ -8,6 +8,8 @@ import { useGameStore } from '@/core/child/store/useGameStore';
 import { useRemoteSync } from '@/core/account/sync/useRemoteSync';
 import { getPortal, portalUrl } from '@/core/app/portal';
 import { demoTick, seatGuest, useDemo } from '@/core/app/demo';
+import { signupSource } from '@/core/app/attribution';
+import { queryOfSource } from '@pulsar/platform';
 import { DemoOver } from '@/components/demo/DemoOver';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { ChildLoginPage } from '@/pages/auth/ChildLoginPage';
@@ -182,33 +184,47 @@ function DemoRoutes() {
   );
 }
 
-/** Gate: require a session — or a trial game —, otherwise send the user to the login screen. */
+/**
+ * Gate: require a session — or a trial game. Whoever comes without one is sent
+ * to the PARENTS' login, on every portal: a newcomer has no nickname and no
+ * PIN, so the child's login is a dead end for them, while the parents' is
+ * where an account begins. The child's login stays at `/login` for those who
+ * are sent there by name (the cabinet's «open the child's game», a parent's
+ * sign-out) — and takes over when a child's own session has just ended here,
+ * so the child reads why and signs in again.
+ */
 function ProtectedApp() {
   const token = useAuthStore((s) => s.token);
+  const endedAsChild = useAuthStore((s) => s.endedAsChild);
   const demo = useDemo((s) => s.active);
-  if (!token) return demo ? <DemoRoutes /> : <Navigate to="/login" replace />;
+  if (!token) return demo ? <DemoRoutes /> : <Navigate to={endedAsChild ? '/login' : '/parent-login'} replace />;
   return <SyncedRoutes />;
 }
 
 /**
  * The child portal has no parent cabinet, so a parent who signs in there has
- * nowhere to land (they would end up on the child picker). Its «Вхід для
- * батьків» leads here, and from here to the parents' own portal.
+ * nowhere to land (they would end up on the child picker). Whoever comes to
+ * it without a session, and its «Вхід для батьків», lead here, and from here
+ * to the parents' own portal — told where the visitor came from, because that
+ * portal is another origin and cannot read what this one remembered. (In
+ * production `vercel.json` redirects the address itself, before the app.)
  */
 function ToParentLogin() {
   useEffect(() => {
-    window.location.replace(portalUrl('parent', '/parent-login'));
+    const source = signupSource();
+    window.location.replace(portalUrl('parent', '/parent-login') + (source ? queryOfSource(source) : ''));
   }, []);
   return null;
 }
 
 /** Root application: theme side-effects + client routing + auth gate. */
 export function App() {
-  // `/login` is the CHILD credential login by default; on the parents.* portal
-  // it's the parent email login. `/parent-login` is always the parent login
-  // (so a parent can sign in on dev too) — except on the child portal, which
-  // sends it to the parents' portal.
-  const loginElement = getPortal() === 'parent' ? <LoginPage /> : <ChildLoginPage />;
+  // `/login` is the CHILD credential login; the parents.* portal has no child
+  // login, so there it is one more name of the parent login and leads to it
+  // (one page, one address). `/parent-login` is always the parent login (so a
+  // parent can sign in on dev too) — except on the child portal, which sends
+  // it to the parents' portal.
+  const loginElement = getPortal() === 'parent' ? <Navigate to="/parent-login" replace /> : <ChildLoginPage />;
 
   return (
     <BrowserRouter>

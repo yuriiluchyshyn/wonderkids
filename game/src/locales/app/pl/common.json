@@ -234,8 +234,6 @@
     "loadFailedHint": "Spróbuj później."
   },
   "childLogin": {
-    "title": "Logowanie dla dzieci",
-    "description": "Logowanie do Pulsar Kids dla dzieci: wpisz swój nick i PIN od rodziców — i ruszaj na przygodę z matematyką, geografią i historią.",
     "parents": "Logowanie dla rodziców",
     "hello": "Cześć! Wpisz swój nick i PIN",
     "nick": "Nick",
@@ -246,7 +244,6 @@
   },
   "parentLogin": {
     "title": "Panel rodzica",
-    "description": "Logowanie do panelu rodzica Pulsar Kids: dodawaj dzieci, ustawiaj czas gry i rodzinne cele, śledź postępy.",
     "hintAuth0": "Masz już konto w Pulsar Kids? Zaloguj się tym samym adresem e-mail — dzieci i postępy czekają na miejscu.",
     "hintEmail": "Hasło nie jest potrzebne — na razie logujesz się samym adresem e-mail.",
     "childLogin": "Logowanie dla dziecka",

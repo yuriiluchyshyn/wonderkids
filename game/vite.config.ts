@@ -10,14 +10,15 @@ const root = fileURLToPath(new URL('.', import.meta.url));
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, root, 'VITE_');
-  const { site, api } = publicUrls(env.VITE_SITE_URL, { api: env.VITE_API_URL });
+  const urls = publicUrls(env.VITE_SITE_URL, { play: env.VITE_PLAY_URL, parents: env.VITE_PARENTS_URL, api: env.VITE_API_URL });
+  const { api } = urls;
   // The API is a deployment of its own (`../backend`). The production build
   // calls it at its own address; every other build (a preview, `vite preview`)
   // asks its own origin's `/api`, which `vercel.json` passes on to the API.
   if (process.env.VERCEL_ENV === 'production') process.env.VITE_API_URL ??= api;
 
   return {
-    plugins: [react(), brandAssets(), seo(site)],
+    plugins: [react(), brandAssets(), seo(urls)],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),

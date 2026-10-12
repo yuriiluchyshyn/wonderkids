@@ -216,8 +216,6 @@
     "loadFailedHint": "Try again later."
   },
   "childLogin": {
-    "title": "Kids’ login",
-    "description": "Kids’ login to Pulsar Kids: type your nickname and the PIN your parents gave you — and set off on an adventure with math, geography and history.",
     "parents": "Parents’ login",
     "hello": "Hi! Type your nickname and PIN",
     "nick": "Nickname",
@@ -228,7 +226,6 @@
   },
   "parentLogin": {
     "title": "Parents’ area",
-    "description": "Sign in to the Pulsar Kids parents’ area: add your children, set play time and family goals, and follow their progress.",
     "hintAuth0": "Used Pulsar Kids before? Sign in with the same email — your children and their progress are waiting.",
     "hintEmail": "No password needed — for now you sign in with your email only.",
     "childLogin": "Child’s login",

@@ -37,6 +37,12 @@ export interface AuthState {
   childId: string | null;
   /** When this session began here (ms) — a sign-out or sign-in elsewhere after it ends it. */
   since: number | null;
+  /**
+   * The session that just ended on this page was a child's — so the child's
+   * login takes over, not the parents' (see `ProtectedApp`). Not kept: a visit
+   * that starts with no session is a newcomer's.
+   */
+  endedAsChild: boolean;
   pending: boolean;
   error: string | null;
 
@@ -72,6 +78,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       childId: null,
       since: null,
+      endedAsChild: false,
       pending: false,
       error: null,
 
@@ -145,7 +152,7 @@ export const useAuthStore = create<AuthState>()(
         if (hadSession && auth0Enabled) auth0Logout();
         // Drop the signed-in child's data so the next login starts clean.
         useGameStore.getState().resetAll();
-        set({ token: null, user: null, childId: null, since: null, error: null });
+        set({ token: null, user: null, childId: null, since: null, endedAsChild: Boolean(get().childId), error: null });
         wipeDevice();
       },
 
@@ -153,7 +160,7 @@ export const useAuthStore = create<AuthState>()(
       // of ours ran out is signed in again by Auth0 without typing anything.
       expire: (code) => {
         useGameStore.getState().resetAll();
-        set({ token: null, user: null, childId: null, since: null, error: code ? loginError(code) : null });
+        set({ token: null, user: null, childId: null, since: null, endedAsChild: Boolean(get().childId), error: code ? loginError(code) : null });
       },
 
       clearError: () => set({ error: null }),
@@ -186,10 +193,10 @@ function startSession(user: number): void {
  * (no trip to Auth0; whoever ended it already made it).
  */
 export function dropStaleSession(): boolean {
-  const { token, since, user } = useAuthStore.getState();
+  const { token, since, user, childId } = useAuthStore.getState();
   if (!token || !isStale(since, user?.id)) return false;
   useGameStore.getState().resetAll();
-  useAuthStore.setState({ token: null, user: null, childId: null, since: null, error: null });
+  useAuthStore.setState({ token: null, user: null, childId: null, since: null, endedAsChild: Boolean(childId), error: null });
   wipeDevice();
   return true;
 }
