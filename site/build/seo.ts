@@ -14,13 +14,15 @@ const LLMS_LANG: SiteLang = 'en';
  * where its pages are. It has no words of its own: every line is a text of the
  * site's dictionary, so it says what the page says — numbers included.
  */
-export function llmsTxt(urls: PublicUrls, dictionaries: Dictionaries = loadDictionaries()): string {
-  const words = dictionaries[LLMS_LANG];
+export function llmsTxt(urls: PublicUrls, dictionaries: Dictionaries = loadDictionaries(), lang: SiteLang = LLMS_LANG): string {
+  const words = dictionaries[lang];
   const group = (name: string): Dict => words[name] as Dict;
   const text = (of: Dict, key: string): string => String(of[key]).replace(/<[^>]+>/g, '');
   /** The cards of a section — each a `title` and a `text` —, as a list. */
   const cards = (of: Dict): string[] => Object.values(of).flatMap((card) => (typeof card === 'string' ? [] : [`- **${text(card, 'title')}**: ${text(card, 'text')}`]));
-  const [meta, hero, about, games, world, parents, start, cta] = ['meta', 'hero', 'about', 'games', 'world', 'parents', 'start', 'cta'].map(group);
+  const [meta, hero, about, games, world, parents, start, faq, cta] = ['meta', 'hero', 'about', 'games', 'world', 'parents', 'start', 'faq', 'cta'].map(group);
+  /** Questions with their answers: a heading each, so one can be quoted whole. */
+  const answers = Object.values(faq).flatMap((pair) => (typeof pair === 'string' ? [] : ['', `### ${text(pair, 'title')}`, '', text(pair, 'text')]));
 
   const subjects = Object.values(games).flatMap((subject) => {
     if (typeof subject === 'string') return [];
@@ -62,6 +64,9 @@ export function llmsTxt(urls: PublicUrls, dictionaries: Dictionaries = loadDicti
     '',
     ...cards(start),
     '',
+    `## ${text(faq, 'title')}`,
+    ...answers,
+    '',
     '## Links',
     '',
     ...SITE_LANGS.map((lang) => `- [${text(dictionaries[lang].meta as Dict, 'title')}](${urls.site}/${sitePath(lang)}) — ${LANGUAGES[lang].name}`),
@@ -81,12 +86,35 @@ export function llmsTxt(urls: PublicUrls, dictionaries: Dictionaries = loadDicti
  *    language — `pages.ts` makes the pages themselves) and `llms.txt`.
  *
  * `robots.txt` lets everyone in — search engines and the assistants' crawlers
- * alike: the page is there to be found and quoted.
+ * alike, the latter by name (`AI_CRAWLERS`): the page is there to be found and
+ * quoted. For the assistants there are also `llms.txt` (the page in English),
+ * `llms-full.txt` (in every language) and each page as Markdown (`index.md`).
  */
+/**
+ * The crawlers of the AI assistants, by what each is for. All are let in — the
+ * page is there to be found, quoted and known —, and they are named so that
+ * this is a decision, not an oversight: to keep the texts out of the training
+ * of models while staying in the assistants' search, turn `training` to
+ * `Disallow` and leave the rest.
+ */
+export const AI_CRAWLERS = {
+  /** The assistants' own search indexes: who can be cited in an answer. */
+  search: ['OAI-SearchBot', 'PerplexityBot', 'Claude-SearchBot', 'Applebot', 'DuckAssistBot'],
+  /** A page fetched because a person asked the assistant about it. */
+  user: ['ChatGPT-User', 'Claude-User', 'Perplexity-User', 'MistralAI-User'],
+  /** Training of models, and Gemini's use of what Google already crawled. */
+  training: ['GPTBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'meta-externalagent'],
+} as const;
+
+export function robotsTxt(site: string): string {
+  const group = (agents: readonly string[]): string[] => [...agents.map((agent) => `User-agent: ${agent}`), 'Allow: /', ''];
+  return ['User-agent: *', 'Allow: /', '', '# AI assistants: their search, pages fetched for a person, and training — all welcome.', ...group(AI_CRAWLERS.search), ...group(AI_CRAWLERS.user), ...group(AI_CRAWLERS.training), `Sitemap: ${site}/sitemap.xml`, ''].join('\n');
+}
+
 export function seo(urls: PublicUrls): Plugin {
   const { site } = urls;
 
-  const robots = ['User-agent: *', 'Allow: /', '', `Sitemap: ${site}/sitemap.xml`, ''].join('\n');
+  const robots = robotsTxt(site);
 
   const today = new Date().toISOString().slice(0, 10);
   const alternates = [...SITE_LANGS.map((lang) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${site}/${sitePath(lang)}"/>`), `<xhtml:link rel="alternate" hreflang="x-default" href="${site}/"/>`].join('');
@@ -103,6 +131,10 @@ export function seo(urls: PublicUrls): Plugin {
     '/robots.txt': ['text/plain; charset=utf-8', robots],
     '/sitemap.xml': ['application/xml; charset=utf-8', sitemap],
     '/llms.txt': ['text/plain; charset=utf-8', llmsTxt(urls)],
+    // Everything, in every language, in one request.
+    '/llms-full.txt': ['text/plain; charset=utf-8', SITE_LANGS.map((lang) => llmsTxt(urls, undefined, lang)).join('\n---\n\n')],
+    // Each page as Markdown, beside it: `/index.md`, `/en/index.md` (the page names it in a `<link>` and a `Link` header).
+    ...Object.fromEntries(SITE_LANGS.map((lang) => [`/${sitePath(lang)}index.md`, ['text/markdown; charset=utf-8', llmsTxt(urls, undefined, lang)] as [string, string]])),
   };
 
   return {
@@ -120,9 +152,7 @@ export function seo(urls: PublicUrls): Plugin {
     },
 
     generateBundle() {
-      this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots });
-      this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap });
-      this.emitFile({ type: 'asset', fileName: 'llms.txt', source: served['/llms.txt'][1] });
+      for (const [path, [, body]] of Object.entries(served)) this.emitFile({ type: 'asset', fileName: path.slice(1), source: body });
     },
   };
 }

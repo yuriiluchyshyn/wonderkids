@@ -20,6 +20,7 @@ import { DEFAULT_LANG, LANGUAGES, SITE_LANGS, sitePath, type SiteLang } from '..
  *   {{{section.key}}}      a text that carries markup of its own (`<span>`, `<small>`)
  *   {{json:section}}       a whole section as a JSON object — the words of a script
  *   {{@lang}} {{@path}} {{@ogLocale}} {{@langShort}}            facts about the page
+ *   {{@updated}} {{@updatedIso}}                                when the page was built, for a reader and for a machine
  *   {{@langList}}                                               every language of the site, as the items of a JSON list
  *   {{@alternates}} {{@ogAlternates}} {{@langLinks}}            links to its other languages
  *
@@ -54,6 +55,8 @@ const html = (text: string): string => text.replace(/&/g, '&amp;').replace(/</g,
 /** The inside of a JSON string — and never a way out of the `<script>` it stands in. */
 const jsonString = (text: string): string => JSON.stringify(text).slice(1, -1).replace(/</g, '\\u003c');
 
+const BUILT = new Date();
+
 const TOKEN = /\{\{\{([\w.]+)\}\}\}|\{\{json:([\w.]+)\}\}|\{\{@(\w+)\}\}|\{\{([\w.]+)\}\}/g;
 const JSON_LD = /(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/g;
 
@@ -78,6 +81,9 @@ export function renderPage(template: string, lang: SiteLang, site: string, dicti
     ogLocale: LANGUAGES[lang].ogLocale,
     langShort: html(LANGUAGES[lang].short),
     langList: SITE_LANGS.map((code) => JSON.stringify(code)).join(', '),
+    // When the page was last built — it is rebuilt only when it changed (`vercel.json`'s `ignoreCommand`).
+    updatedIso: BUILT.toISOString().slice(0, 10),
+    updated: html(new Intl.DateTimeFormat(lang, { dateStyle: 'long', timeZone: 'UTC' }).format(BUILT)),
     langLinks: links.join('\n            '),
     // Every page names all of its languages, itself included; `/` is where a visitor with no language yet lands.
     alternates: [...SITE_LANGS.map((code) => `<link rel="alternate" hreflang="${code}" href="${site}/${sitePath(code)}" />`), `<link rel="alternate" hreflang="x-default" href="${site}/" />`].join('\n    '),

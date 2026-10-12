@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { loadDictionaries, renderPage } from '../build/pages.ts';
-import { llmsTxt } from '../build/seo.ts';
+import { AI_CRAWLERS, llmsTxt, robotsTxt } from '../build/seo.ts';
 import { DEFAULT_LANG, SITE_LANGS, sitePath } from '../src/languages.ts';
 
 const read = (file: string): string => readFileSync(new URL(file, import.meta.url), 'utf8');
@@ -33,9 +33,14 @@ test('the page is made from one template for every language', () => {
     const graph = JSON.parse(ld)['@graph'] as { '@type': string; '@id': string; inLanguage?: string | string[]; about?: string[] }[];
     assert.equal(graph[0].inLanguage, lang);
     // The page is its own; the site, its publisher and the game are the same things on every page.
-    assert.deepEqual(graph.map((node) => node['@type']), ['WebPage', 'WebSite', 'Organization', 'WebApplication']);
+    assert.deepEqual(graph.map((node) => node['@type']), ['WebPage', 'WebSite', 'Organization', 'WebApplication', 'FAQPage']);
+    // The questions in the structured data are the ones a reader sees on the page.
+    const asked = (graph[4] as unknown as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] }).mainEntity;
+    const faq = Object.values(dictionaries[lang].faq as Dict).filter((pair): pair is Dict => typeof pair !== 'string');
+    assert.deepEqual(asked.map((q) => [q.name, q.acceptedAnswer.text]), faq.map((pair) => [pair.title, pair.text]));
+    for (const pair of faq) assert.ok(String(pair.text).length <= 420, `${lang}: «${pair.title}» is answered briefly`);
     assert.ok(graph[0]['@id'].startsWith(`__SITE_URL__/${sitePath(lang)}#`));
-    for (const node of graph.slice(1)) assert.ok(node['@id'].startsWith('__SITE_URL__/#'), `${lang}: ${node['@type']} has one id for every language`);
+    for (const node of graph.slice(1, 4)) assert.ok(node['@id'].startsWith('__SITE_URL__/#'), `${lang}: ${node['@type']} has one id for every language`);
     assert.deepEqual(graph[1].inLanguage, [...SITE_LANGS]);
     assert.equal(graph[3].about?.length, 9);
     // The form's words reach its script whole.
@@ -65,6 +70,23 @@ test('llms.txt tells the page in plain words, with the page’s own numbers', ()
   assert.ok(text.includes(`## ${en.games.title}`) && text.includes(`### ${en.games.math.title} (${en.games.math.tag})`));
   for (const lang of SITE_LANGS) assert.ok(text.includes(`(${URLS.site}/${sitePath(lang)})`), `names the ${lang} page`);
   assert.ok(text.includes(`(${URLS.play}${TRIAL_PATH})`));
+  // Every question of the page, with its answer — in each language's own Markdown.
+  for (const lang of SITE_LANGS) {
+    const md = llmsTxt(URLS, dictionaries, lang);
+    for (const pair of Object.values(dictionaries[lang].faq as Dict)) if (typeof pair !== 'string') assert.ok(md.includes(`### ${pair.title}\n\n${pair.text}`), `${lang}: ${pair.title}`);
+  }
+});
+
+test('robots.txt lets the assistants in by name, and vercel.json points each page at its Markdown', () => {
+  const robots = robotsTxt(URLS.site);
+  for (const agent of Object.values(AI_CRAWLERS).flat()) assert.ok(robots.includes(`User-agent: ${agent}\n`), `${agent} is named`);
+  assert.ok(!robots.includes('Disallow') && robots.includes(`Sitemap: ${URLS.site}/sitemap.xml`));
+  const { headers } = JSON.parse(read('../vercel.json')) as { headers: { source: string; headers: { key: string; value: string }[] }[] };
+  for (const lang of SITE_LANGS) {
+    const link = headers.find((rule) => rule.source === `/${sitePath(lang)}`)?.headers.find((header) => header.key === 'Link')?.value;
+    assert.equal(link, `</${sitePath(lang)}index.md>; rel="alternate"; type="text/markdown"`);
+    assert.ok(template.includes('type="text/markdown" href="__SITE_URL__/{{@path}}index.md"'));
+  }
 });
 
 test('every text of the dictionary is used — by the page, or by the form’s script', () => {

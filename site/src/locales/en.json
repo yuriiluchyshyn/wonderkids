@@ -164,6 +164,41 @@
       "text": "On the game page they type their nickname and PIN, then pick a theme and their first planet."
     }
   },
+  "faq": {
+    "title": "Questions parents ask about Pulsar Kids",
+    "what": {
+      "title": "What is Pulsar Kids?",
+      "text": "Pulsar Kids is a set of learning games for kids aged 4–10, played in a browser on a phone, tablet or computer. Across 50 games children practice math, language, logic, geography, history, astronomy, ecology, nature and art, while parents set the screen time."
+    },
+    "age": {
+      "title": "What ages is Pulsar Kids for?",
+      "text": "Children from 4 to 10. The games come in three age groups: the stars on a game’s card show what age it suits, and the difficulty grows step by step with the child."
+    },
+    "langs": {
+      "title": "Which languages can children play in?",
+      "text": "English, Ukrainian and Polish. It is not a translated interface: the tasks, hints and voice are written for each language. Parents choose the language of the game and of the voice in the parents’ area."
+    },
+    "install": {
+      "title": "Is there an app to install?",
+      "text": "No. Pulsar Kids runs in a modern browser on a phone, tablet or computer — it is not in the app stores. The game page can be added to the device’s home screen."
+    },
+    "mistake": {
+      "title": "What happens when a child makes a mistake?",
+      "text": "Nobody loses. After two mistakes a visual hint appears, and a missed task comes back once more at the end of the level. There are no “lives” and no red crosses."
+    },
+    "time": {
+      "title": "How do parents control screen time?",
+      "text": "In the parents’ area you set the session length, the break and the daily limit. The time is counted on the server, so it is the same on every device the child uses. The child sees no countdown — just hourglasses that slowly disappear — and always finishes a level already started."
+    },
+    "ads": {
+      "title": "Are there ads in the game?",
+      "text": "No, there are no third-party ads. A child sees only the tasks, their own planet and their own achievements."
+    },
+    "try": {
+      "title": "Can you try it without signing up?",
+      "text": "Yes. The “Try the game now” button opens a few minutes of the real game with no account and no payment. What is collected in a trial game is not saved — for that, a parent creates an account with an email address."
+    }
+  },
   "feedback": {
     "title": "Spotted a bug or have an idea?",
     "sub": "Describe what went wrong, what could be handier or which game is missing. A photo or a short video can be added — it makes things easier to understand."
@@ -192,7 +227,8 @@
   },
   "footer": {
     "tagline": "Learning that feels like an adventure.",
-    "game": "The game"
+    "game": "The game",
+    "updated": "Updated"
   },
   "nav": {
     "about": "Why",

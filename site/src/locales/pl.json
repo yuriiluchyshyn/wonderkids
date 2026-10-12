@@ -164,6 +164,41 @@
       "text": "Na stronie gry wpisuje swój nick i PIN, wybiera motyw i pierwszą planetę."
     }
   },
+  "faq": {
+    "title": "Najczęstsze pytania o Pulsar Kids",
+    "what": {
+      "title": "Czym jest Pulsar Kids?",
+      "text": "Pulsar Kids to gry edukacyjne dla dzieci w wieku 4–10 lat, w które gra się w przeglądarce na telefonie, tablecie lub komputerze. W 52 grach dziecko ćwiczy matematykę, język, logikę, geografię, historię, astronomię, ekologię, przyrodę i sztukę, a rodzice ustawiają czas przed ekranem."
+    },
+    "age": {
+      "title": "Dla jakiego wieku jest Pulsar Kids?",
+      "text": "Dla dzieci od 4 do 10 lat. Gry są podzielone na trzy grupy wiekowe: gwiazdki na karcie gry pokazują, dla jakiego wieku jest przeznaczona, a trudność rośnie krok po kroku razem z dzieckiem."
+    },
+    "langs": {
+      "title": "W jakich językach można grać?",
+      "text": "Po polsku, ukraińsku i angielsku. To nie jest przetłumaczony interfejs: zadania, podpowiedzi i głos są napisane osobno dla każdego języka. Język gry i język lektora rodzice wybierają w panelu rodzica."
+    },
+    "install": {
+      "title": "Czy trzeba instalować aplikację?",
+      "text": "Nie. Pulsar Kids działa w nowoczesnej przeglądarce na telefonie, tablecie lub komputerze — nie ma go w sklepach z aplikacjami. Stronę gry można dodać do ekranu głównego urządzenia."
+    },
+    "mistake": {
+      "title": "Co się dzieje, gdy dziecko się pomyli?",
+      "text": "Nikt nie przegrywa. Po dwóch pomyłkach pojawia się obrazkowa podpowiedź, a zadanie, które się nie udało, wraca jeszcze raz na końcu poziomu. Nie ma „żyć” ani czerwonych krzyżyków."
+    },
+    "time": {
+      "title": "Jak rodzice kontrolują czas przed ekranem?",
+      "text": "W panelu rodzica ustawia się długość sesji, przerwę i dzienny limit. Czas liczy serwer, więc jest taki sam na każdym urządzeniu dziecka. Dziecko nie widzi odliczania — tylko klepsydry, które powoli znikają — i zawsze kończy rozpoczęty poziom."
+    },
+    "ads": {
+      "title": "Czy w grze są reklamy?",
+      "text": "Nie, w grze nie ma reklam innych firm. Dziecko widzi tylko zadania, swoją planetę i swoje osiągnięcia."
+    },
+    "try": {
+      "title": "Czy można wypróbować grę bez rejestracji?",
+      "text": "Tak. Przycisk „Wypróbuj grę teraz” otwiera kilka minut prawdziwej gry bez konta i bez płatności. To, co dziecko zbierze w grze próbnej, nie zapisuje się — do tego rodzic zakłada konto na adres e-mail."
+    }
+  },
   "feedback": {
     "title": "Widzisz błąd albo masz pomysł?",
     "sub": "Opisz, co poszło nie tak, co można ułatwić albo jakiej gry brakuje. Można dodać zdjęcie lub krótki film — wtedy łatwiej zrozumieć, o co chodzi."
@@ -192,7 +227,8 @@
   },
   "footer": {
     "tagline": "Nauka, która wciąga jak przygoda.",
-    "game": "Gra"
+    "game": "Gra",
+    "updated": "Zaktualizowano"
   },
   "nav": {
     "about": "Po co",

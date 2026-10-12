@@ -12,6 +12,8 @@
     <meta name="theme-color" content="#1e0a45" />
     <link rel="canonical" href="__SITE_URL__/{{@path}}" />
     {{@alternates}}
+    <!-- The same page as plain Markdown, for the assistants that read rather than render. -->
+    <link rel="alternate" type="text/markdown" href="__SITE_URL__/{{@path}}index.md" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
@@ -55,6 +57,7 @@
             "name": "{{meta.title}}",
             "description": "{{meta.description}}",
             "inLanguage": "{{@lang}}",
+            "dateModified": "{{@updatedIso}}",
             "isPartOf": { "@id": "__SITE_URL__/#website" },
             "about": { "@id": "__SITE_URL__/#app" },
             "primaryImageOfPage": { "@type": "ImageObject", "url": "__SITE_URL__/og-image.png", "width": 1200, "height": 630 }
@@ -94,6 +97,22 @@
             "about": ["{{games.math.title}}", "{{games.language.title}}", "{{games.logic.title}}", "{{games.geography.title}}", "{{games.history.title}}", "{{games.astronomy.title}}", "{{games.ecology.title}}", "{{games.nature.title}}", "{{games.art.title}}"],
             "image": "__SITE_URL__/og-image.png",
             "publisher": { "@id": "__SITE_URL__/#organization" }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "__SITE_URL__/{{@path}}#faq",
+            "inLanguage": "{{@lang}}",
+            "isPartOf": { "@id": "__SITE_URL__/{{@path}}#webpage" },
+            "mainEntity": [
+              { "@type": "Question", "name": "{{faq.what.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.what.text}}" } },
+              { "@type": "Question", "name": "{{faq.age.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.age.text}}" } },
+              { "@type": "Question", "name": "{{faq.langs.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.langs.text}}" } },
+              { "@type": "Question", "name": "{{faq.install.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.install.text}}" } },
+              { "@type": "Question", "name": "{{faq.mistake.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.mistake.text}}" } },
+              { "@type": "Question", "name": "{{faq.time.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.time.text}}" } },
+              { "@type": "Question", "name": "{{faq.ads.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.ads.text}}" } },
+              { "@type": "Question", "name": "{{faq.try.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.try.text}}" } }
+            ]
           }
         ]
       }
@@ -405,6 +424,55 @@
         </div>
       </section>
 
+      <!-- The questions a parent asks — and the ones an assistant is asked about Pulsar Kids: each answer stands on its own. The same pairs are in the structured data (FAQPage). -->
+      <section id="faq">
+        <div class="wrap">
+          <h2>{{faq.title}}</h2>
+          <div class="grid">
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🪐</div>
+              <h3>{{faq.what.title}}</h3>
+              <p>{{faq.what.text}}</p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🎂</div>
+              <h3>{{faq.age.title}}</h3>
+              <p>{{faq.age.text}}</p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🗣️</div>
+              <h3>{{faq.langs.title}}</h3>
+              <p>{{faq.langs.text}}</p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">📱</div>
+              <h3>{{faq.install.title}}</h3>
+              <p>{{faq.install.text}}</p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🤗</div>
+              <h3>{{faq.mistake.title}}</h3>
+              <p>{{faq.mistake.text}}</p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">⏳</div>
+              <h3>{{faq.time.title}}</h3>
+              <p>{{faq.time.text}}</p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🛡️</div>
+              <h3>{{faq.ads.title}}</h3>
+              <p>{{faq.ads.text}}</p>
+            </article>
+            <article class="card">
+              <div class="icon emoji" aria-hidden="true">🚀</div>
+              <h3>{{faq.try.title}}</h3>
+              <p>{{faq.try.text}}</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section id="feedback">
         <div class="wrap">
           <h2>{{feedback.title}}</h2>
@@ -478,7 +546,7 @@
 
     <footer>
       <div class="wrap">
-        <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}}</p>
+        <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}} · {{footer.updated}}: <time datetime="{{@updatedIso}}">{{@updated}}</time></p>
         <p>
           <a data-portal="play" href="__PLAY_URL__/login">{{footer.game}}</a>·<a data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>·<a href="#feedback" data-letter-open>{{nav.write}}</a>
         </p>
