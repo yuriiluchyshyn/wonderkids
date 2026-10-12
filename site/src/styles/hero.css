@@ -44,22 +44,27 @@ h1 span {
   gap: 12px;
   margin-top: 24px;
 }
-/* The way straight into the trial game, set apart above the two ways in for those who have an account. */
+/* The one way in on the first screen: the trial game, big. «Play» and the parents' area are in the bar. */
 .try {
-  margin-top: 24px;
+  margin-top: 30px;
 }
 .try .btn {
-  min-height: 64px;
-  padding: 0 32px;
-  font-size: 1.3rem;
+  min-height: 76px;
+  padding-inline: 40px;
+  font-size: clamp(1.35rem, 3.6vw, 1.6rem);
+  gap: 12px;
 }
-.try + .cta {
-  margin-top: 18px;
+@media (max-width: 519px) {
+  .try .btn {
+    width: 100%;
+  }
 }
-.cta-note {
-  margin-top: 12px;
-  font-size: 0.95rem;
-  color: var(--soft);
+/* What the trial asks of a visitor: nothing. Said right under the button, large enough to be read. */
+.try-note {
+  margin-top: 14px;
+  font-size: clamp(1.05rem, 2.6vw, 1.2rem);
+  font-weight: 600;
+  color: var(--ink);
 }
 
 /* The Solar System the child travels through in the game: the Sun and

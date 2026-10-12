@@ -10,6 +10,10 @@
   font-family: 'Baloo 2', sans-serif;
   font-weight: 800;
   font-size: 1.15rem;
+  /* Baloo 2 leaves more room below its letters than above, so a word sat a little high in the
+     button: one line exactly as tall as the type, nudged down by what the font keeps below. */
+  line-height: 1;
+  padding-top: 0.14em;
   text-decoration: none;
   transition:
     transform 0.15s,
@@ -42,7 +46,7 @@
 }
 .btn-small {
   min-height: 44px;
-  padding: 0 18px;
+  padding-inline: 18px;
   font-size: 1rem;
 }
 .hide-narrow {

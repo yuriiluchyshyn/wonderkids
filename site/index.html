@@ -85,26 +85,30 @@
   </head>
   <body data-visits-api="__API_URL__/api/health">
     <div class="sky" aria-hidden="true"><i></i><i></i></div>
+    <div class="comets" aria-hidden="true"><b></b><b></b><b></b><b></b></div>
     <header>
       <div class="wrap bar">
         <a class="logo" href="/{{@path}}" aria-label="{{header.logoLabel}}">
           <span class="emoji" aria-hidden="true">🪐</span> Pulsar Kids
         </a>
+        <!-- The sections of the page; «write a message» is in its own section and the footer. -->
         <nav aria-label="{{header.navLabel}}">
           <a href="#about">{{nav.about}}</a>
           <a href="#games">{{nav.games}}</a>
           <a href="#world">{{nav.world}}</a>
           <a href="#parents">{{nav.parents}}</a>
-          <a href="#feedback" data-letter-open>{{nav.write}}</a>
         </nav>
-        <details class="langs">
-          <summary aria-label="{{lang.label}}"><span class="emoji" aria-hidden="true">🌐</span> {{@langShort}}</summary>
-          <ul>
-            {{@langLinks}}
-          </ul>
-        </details>
-        <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">{{nav.parents}}</a>
-        <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/">{{cta.play}}</a>
+        <!-- The two ways in, top right; the language last of all. -->
+        <div class="bar-actions">
+          <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>
+          <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/">{{cta.play}}</a>
+          <details class="langs">
+            <summary aria-label="{{lang.label}}"><span class="emoji" aria-hidden="true">🌐</span> {{@langShort}}</summary>
+            <ul>
+              {{@langLinks}}
+            </ul>
+          </details>
+        </div>
       </div>
     </header>
 
@@ -116,15 +120,11 @@
           <p class="lead">
             {{hero.lead}}
           </p>
+          <!-- One big way in: the trial game. «Play» and the parents' area are in the bar at the top. -->
           <div class="try">
             <a class="btn btn-try" data-portal="play" data-trial href="__PLAY_URL__/try"><span class="emoji" aria-hidden="true">🚀</span> {{cta.try}}</a>
-            <p class="cta-note">{{hero.tryNote}}</p>
+            <p class="try-note"><span class="emoji" aria-hidden="true">✅</span> {{hero.tryNote}}</p>
           </div>
-          <div class="cta">
-            <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> {{cta.play}}</a>
-            <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> {{cta.parents}}</a>
-          </div>
-          <p class="cta-note">{{hero.note}}</p>
         </div>
 
         <div class="system" role="img" aria-label="{{hero.systemLabel}}">
@@ -400,8 +400,6 @@
           <p class="sub" style="margin-inline: auto">{{final.sub}}</p>
           <div class="cta">
             <a class="btn btn-try" data-portal="play" data-trial href="__PLAY_URL__/try"><span class="emoji" aria-hidden="true">🚀</span> {{cta.try}}</a>
-            <a class="btn btn-play" data-portal="play" href="__PLAY_URL__/"><span class="emoji" aria-hidden="true">🎮</span> {{final.child}}</a>
-            <a class="btn btn-parent" data-portal="parents" href="__PARENTS_URL__/"><span class="emoji" aria-hidden="true">👨‍👩‍👧</span> {{final.adult}}</a>
           </div>
         </div>
       </section>

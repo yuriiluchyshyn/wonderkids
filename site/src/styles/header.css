@@ -8,11 +8,17 @@ header {
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
+/* The logo on the left; the sections; then, apart from them, the ways in and the language. */
 .bar {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   padding: 10px 0;
+}
+.bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .logo {
   display: flex;
@@ -27,7 +33,7 @@ header {
 }
 nav {
   display: none;
-  gap: 18px;
+  gap: 22px;
 }
 nav a {
   color: var(--soft);
@@ -37,8 +43,11 @@ nav a {
 nav a:hover {
   color: var(--accent);
 }
-@media (min-width: 860px) {
+@media (min-width: 960px) {
   nav {
     display: flex;
+  }
+  .bar {
+    gap: 28px;
   }
 }

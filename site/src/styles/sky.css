@@ -60,3 +60,112 @@
     opacity: 0.85;
   }
 }
+
+/* Now and then a shooting star or a comet crosses the sky — each on its own long cycle, so they
+   never come together and most of the time the sky is quiet. A streak is a bright head with a tail
+   fading behind it; it flies along its own axis, turned to fall down and to the left. */
+.comets {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.comets b {
+  position: absolute;
+  width: var(--len, 130px);
+  height: var(--h, 2px);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fff, rgba(221, 214, 254, 0.55) 30%, transparent);
+  rotate: -28deg;
+  opacity: 0;
+  animation: comet var(--t) linear var(--from) infinite;
+}
+.comets b::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  width: calc(var(--h, 2px) * 3);
+  aspect-ratio: 1;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px 3px rgba(199, 210, 254, 0.8);
+}
+.comets b:nth-child(1) {
+  top: 12%;
+  left: 78%;
+  --t: 13s;
+  --from: -2s;
+}
+.comets b:nth-child(2) {
+  top: 34%;
+  left: 96%;
+  --t: 19s;
+  --from: -11s;
+  --len: 90px;
+}
+/* a slow comet: longer and warmer */
+.comets b:nth-child(3) {
+  top: 4%;
+  left: 52%;
+  --t: 29s;
+  --from: -6s;
+  --len: 220px;
+  --h: 3px;
+  background: linear-gradient(90deg, #fff7c2, rgba(253, 224, 71, 0.45) 25%, rgba(167, 139, 250, 0.2) 60%, transparent);
+  animation-name: comet-slow;
+}
+.comets b:nth-child(4) {
+  top: 58%;
+  left: 88%;
+  --t: 23s;
+  --from: -17s;
+  --len: 110px;
+}
+@keyframes comet {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  6% {
+    opacity: 1;
+  }
+  8% {
+    transform: translateX(-70vmax);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-70vmax);
+    opacity: 0;
+  }
+}
+@keyframes comet-slow {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  3% {
+    opacity: 0.9;
+  }
+  18% {
+    opacity: 0.9;
+  }
+  22% {
+    transform: translateX(-60vmax);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-60vmax);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .comets {
+    display: none;
+  }
+}

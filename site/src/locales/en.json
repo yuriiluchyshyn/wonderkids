@@ -28,13 +28,12 @@
     "eyebrow": "Learning games · ages 4–10",
     "title": "Learning that feels like an <span>adventure</span>",
     "lead": "Pulsar Kids turns math, geography, history and ecology into games your child will ask to play. No ads, no losing, no scary timers — just the joy of getting it right. And you stay calmly in charge of screen time.",
-    "note": "It takes a minute: a parent creates the child’s profile, and the child signs in to the game with a nickname and a PIN.",
     "systemLabel": "The Solar System: the Sun and the eight planets your child travels through",
-    "tryNote": "A trial game with no sign-up: a few minutes for your child to see what it’s like."
+    "tryNote": "No sign-up and no payment — just tap and play."
   },
   "about": {
     "title": "Why Pulsar Kids",
-    "sub": "We want children to want to learn — all by themselves. Most learning apps punish a mistake: they take away a “life”, start a timer, flash a red cross. Children grow afraid of getting it wrong and give up. We did the opposite.",
+    "sub": "The goal of Pulsar Kids is for children to want to learn — all by themselves. Most learning apps punish a mistake: they take away a “life”, start a timer, flash a red cross. Children grow afraid of getting it wrong and give up. Pulsar Kids does the opposite.",
     "hint": {
       "title": "A mistake is a hint",
       "text": "Nobody loses here. After a mistake a visual hint appears, and the task that didn’t work out comes back once more at the end of the level — to make it stick, not to punish."
@@ -188,13 +187,11 @@
   },
   "feedback": {
     "title": "Spotted a bug or have an idea?",
-    "sub": "Write to us: what went wrong, what could be handier, which game is missing. You can add a photo or a short video — it makes things easier to understand."
+    "sub": "Describe what went wrong, what could be handier or which game is missing. A photo or a short video can be added — it makes things easier to understand."
   },
   "final": {
     "title": "Ready for the adventure?",
-    "sub": "Choose where to go next.",
-    "child": "I’m a kid — let’s play",
-    "adult": "I’m a grown-up — to the parents’ area"
+    "sub": "The trial game needs no sign-up and no payment."
   },
   "letter": {
     "about": "What is it about?",
@@ -203,7 +200,7 @@
     "email": "Email <small>— if you would like a reply</small>",
     "attach": "Add a photo or video",
     "limits": "Up to 5 files, 18 MB in total. A video — up to 15 MB.",
-    "thanks": "Thank you, we have your message!",
+    "thanks": "Message sent!",
     "again": "Write another",
     "close": "Close",
     "kind": {
@@ -223,7 +220,7 @@
     "games": "Games",
     "world": "Planet",
     "parents": "For parents",
-    "write": "Write to us"
+    "write": "Send a message"
   },
   "cta": {
     "play": "Play",
@@ -247,9 +244,9 @@
     "noRoom": "“{name}” no longer fits: the total limit is 18 MB.",
     "sendingFiles": "Sending files… {pct}%",
     "sending": "Sending…",
-    "filesLost": "We received your text, but not all the files arrived — the connection seems to have let us down. If they matter, please send them again.",
-    "willReply": "We will read it and reply to the address you gave.",
-    "thanks": "We read every message. Thank you for helping us make the game better.",
+    "filesLost": "The text arrived, but not all the files did — the connection seems to have failed. If they matter, please send them again.",
+    "willReply": "The reply will come to the address you gave.",
+    "thanks": "Every message is read, and each one helps make the game better.",
     "failed": "It could not be sent. Check your connection and try again.",
     "send": "Send"
   }

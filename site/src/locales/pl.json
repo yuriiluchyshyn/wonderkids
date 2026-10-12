@@ -28,13 +28,12 @@
     "eyebrow": "Gry edukacyjne · 4–10 lat",
     "title": "Nauka, która wciąga jak <span>przygoda</span>",
     "lead": "Pulsar Kids zamienia matematykę, geografię, historię i ekologię w gry, do których dziecko samo chce wracać. Bez reklam, bez przegranych i bez stresujących stoperów — za to z radością z każdej dobrej odpowiedzi. A Ty spokojnie decydujesz o czasie przed ekranem.",
-    "note": "To zajmuje minutę: rodzic zakłada profil dziecka, a dziecko wchodzi do gry, podając nick i PIN.",
     "systemLabel": "Układ Słoneczny: Słońce i osiem planet, po których podróżuje dziecko",
-    "tryNote": "Gra próbna bez rejestracji: kilka minut, żeby dziecko zobaczyło, jak to jest."
+    "tryNote": "Bez rejestracji i bez płatności — po prostu kliknij i graj."
   },
   "about": {
     "title": "Po co jest Pulsar Kids",
-    "sub": "Chcemy, żeby dziecko samo chciało się uczyć. Większość aplikacji edukacyjnych karze za błąd: zabiera „życie”, włącza stoper, pokazuje czerwony krzyżyk. Dziecko zaczyna bać się pomyłek i porzuca grę. My zrobiliśmy odwrotnie.",
+    "sub": "Celem Pulsar Kids jest to, żeby dziecko samo chciało się uczyć. Większość aplikacji edukacyjnych karze za błąd: zabiera „życie”, włącza stoper, pokazuje czerwony krzyżyk. Dziecko zaczyna bać się pomyłek i porzuca grę. W Pulsar Kids jest odwrotnie.",
     "hint": {
       "title": "Błąd to podpowiedź",
       "text": "Tu nikt nie przegrywa. Po błędzie pojawia się obrazkowa podpowiedź, a zadanie, które się nie udało, wraca jeszcze raz pod koniec poziomu — żeby utrwalić, a nie ukarać."
@@ -60,7 +59,7 @@
       "2": "Ułamki na pizzy i tortach oraz działania na ułamkach",
       "3": "Matematyczna waga i liczbowy labirynt",
       "4": "Tangram, pole i obwód",
-      "5": "Sklep: liczymy pieniądze i resztę",
+      "5": "Sklep: liczenie pieniędzy i reszty",
       "6": "Większe, mniejsze, równe i zegar ze wskazówkami",
       "7": "Zadania z treścią: sklep, przyjaciele, droga",
       "tag": "14 gier",
@@ -109,8 +108,8 @@
       "title": "Historia"
     },
     "ecology": {
-      "1": "„Eko-patrol”: segregujemy szkło, papier i plastik",
-      "2": "Dowiadujemy się, co z nich potem powstanie",
+      "1": "„Eko-patrol”: segregowanie szkła, papieru i plastiku",
+      "2": "Co z nich potem powstanie",
       "3": "„Dlaczego tak?”: powietrze, woda, klimat, zwierzęta, energia",
       "title": "Ekologia"
     },
@@ -188,13 +187,11 @@
   },
   "feedback": {
     "title": "Widzisz błąd albo masz pomysł?",
-    "sub": "Napisz do nas: co poszło nie tak, co można ułatwić albo jakiej gry brakuje. Możesz dodać zdjęcie lub krótki film — wtedy łatwiej zrozumieć, o co chodzi."
+    "sub": "Opisz, co poszło nie tak, co można ułatwić albo jakiej gry brakuje. Można dodać zdjęcie lub krótki film — wtedy łatwiej zrozumieć, o co chodzi."
   },
   "final": {
     "title": "Gotowi na przygodę?",
-    "sub": "Wybierz, dokąd dalej.",
-    "child": "Jestem dzieckiem — gram",
-    "adult": "Jestem dorosłym — do panelu"
+    "sub": "Gra próbna — bez rejestracji i bez płatności."
   },
   "letter": {
     "about": "Czego dotyczy wiadomość?",
@@ -203,7 +200,7 @@
     "email": "Adres e-mail <small>— jeśli chcesz dostać odpowiedź</small>",
     "attach": "Dodaj zdjęcie lub film",
     "limits": "Do 5 plików, razem do 18 MB. Film — do 15 MB.",
-    "thanks": "Dziękujemy, wiadomość dotarła!",
+    "thanks": "Wiadomość wysłana!",
     "again": "Napisz jeszcze",
     "close": "Zamknij",
     "kind": {
@@ -223,7 +220,7 @@
     "games": "Gry",
     "world": "Planeta",
     "parents": "Dla rodziców",
-    "write": "Napisz do nas"
+    "write": "Napisz wiadomość"
   },
   "cta": {
     "play": "Graj",
@@ -245,11 +242,11 @@
     "maxFiles": "Można dodać najwyżej {max} plików.",
     "tooBig": "„{name}” waży {size}, a limit to 15 MB. Spróbuj krótszego filmu.",
     "noRoom": "„{name}” już się nie mieści: razem można do 18 MB.",
-    "sendingFiles": "Wysyłam pliki… {pct}%",
-    "sending": "Wysyłam…",
-    "filesLost": "Tekst do nas dotarł, ale nie wszystkie pliki — chyba zawiodło połączenie. Jeśli są ważne, wyślij je, proszę, jeszcze raz.",
-    "willReply": "Przeczytamy i odpowiemy na podany adres.",
-    "thanks": "Czytamy każdą wiadomość. Dziękujemy za pomoc w ulepszaniu gry.",
+    "sendingFiles": "Wysyłanie plików… {pct}%",
+    "sending": "Wysyłanie…",
+    "filesLost": "Tekst dotarł, ale nie wszystkie pliki — chyba zawiodło połączenie. Jeśli są ważne, wyślij je, proszę, jeszcze raz.",
+    "willReply": "Odpowiedź przyjdzie na podany adres.",
+    "thanks": "Każda wiadomość jest czytana i każda pomaga ulepszać grę.",
     "failed": "Nie udało się wysłać. Sprawdź połączenie i spróbuj ponownie.",
     "send": "Wyślij"
   }

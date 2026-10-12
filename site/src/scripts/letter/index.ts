@@ -1,5 +1,5 @@
 /**
- * «Написати нам»: the text goes to the game's API; photos and videos follow in
+ * «Написати листа»: the text goes to the game's API; photos and videos follow in
  * pieces and reach the owner attached to an email.
  */
 import { localGameOrigin } from '../portals.ts';
