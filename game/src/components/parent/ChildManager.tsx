@@ -14,7 +14,6 @@ import { Modal } from '@/components/ui/Modal';
 import styles from './Parent.module.css';
 
 const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };
-const MAX_CHILDREN = 5;
 const NICKNAME_RE = /^[a-z0-9_]{3,12}$/;
 
 const GENDER_OPTIONS: { id: Gender; icon: string }[] = [
@@ -65,8 +64,6 @@ export function ChildManager() {
   const [nickStatus, setNickStatus] = useState<NickStatus>('idle');
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
   const checkSeq = useRef(0);
-
-  const atLimit = children.length >= MAX_CHILDREN;
 
   const openAdd = () => {
     setDraft(BLANK);
@@ -146,7 +143,7 @@ export function ChildManager() {
     <section className={styles.section}>
       <h3 className={styles.sectionTitle}>{t('cm.title')}</h3>
       <p className={styles.hint}>
-        {t('cm.hint', { max: MAX_CHILDREN })}
+        {t('cm.hint')}
       </p>
 
       <div className={styles.childrenGrid}>
@@ -180,8 +177,8 @@ export function ChildManager() {
         ))}
       </div>
 
-      <Button block size="lg" icon="➕" onClick={openAdd} disabled={atLimit}>
-        {atLimit ? t('cm.max') : t('cm.add')}
+      <Button block size="lg" icon="➕" onClick={openAdd}>
+        {t('cm.add')}
       </Button>
 
       {/* ---- Add child ---- */}

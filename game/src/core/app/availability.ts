@@ -1,5 +1,5 @@
 /**
- * What the owner offers in the visitor's country — set on `/admin/availability`,
+ * What the owner offers in the visitor's country — set on `/admin/settings/availability`,
  * resolved by the server for the country the request came from and told by
  * `GET /api/health` (`api/_lib/availability.js`):
  *

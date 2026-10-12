@@ -10,7 +10,7 @@ import { isStale, markAuth, wipeDevice } from './wipe';
 const AUTH_STORAGE_KEY = 'wonderkids-auth-v1';
 
 /** The error codes the API can return on login that have a message of their own (`auth.error.<code>`). */
-const LOGIN_ERRORS = new Set(['invalid_email', 'invalid_pin', 'invalid_credentials', 'child_not_found', 'network_error', 'login_failed', 'invalid_token', 'email_missing', 'email_not_verified', 'auth0_required']);
+const LOGIN_ERRORS = new Set(['invalid_email', 'invalid_pin', 'invalid_credentials', 'child_not_found', 'network_error', 'login_failed', 'invalid_token', 'email_missing', 'email_not_verified', 'auth0_required', 'account_disabled']);
 
 /** A human-friendly message for a login error, in the language of this device — nobody has signed in yet. */
 const loginError = (code: string): string => tApp(useDeviceLang.getState().lang, `auth.error.${LOGIN_ERRORS.has(code) ? code : 'login_failed'}` as AppKey);
@@ -61,7 +61,7 @@ export interface AuthState {
    */
   logout: () => void;
   /** The server no longer accepts this session (401): forget it, so the login page takes over. */
-  expire: () => void;
+  expire: (code?: string) => void;
   clearError: () => void;
 }
 
@@ -151,9 +151,9 @@ export const useAuthStore = create<AuthState>()(
 
       // Unlike `logout`, the Auth0 session is left alone: a parent whose session
       // of ours ran out is signed in again by Auth0 without typing anything.
-      expire: () => {
+      expire: (code) => {
         useGameStore.getState().resetAll();
-        set({ token: null, user: null, childId: null, since: null, error: null });
+        set({ token: null, user: null, childId: null, since: null, error: code ? loginError(code) : null });
       },
 
       clearError: () => set({ error: null }),

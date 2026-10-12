@@ -303,7 +303,7 @@ function Games({ items, regions, onChange }: { items: AvailabilityRules['items']
 // ---------------------------------------------------------------------------
 
 /**
- * `/admin/availability` — what is offered where: the languages of the site and
+ * `/admin/settings/availability` — what is offered where: the languages of the site and
  * of the game by country, and every game and galaxy — on, «soon» or put away,
  * everywhere or in some places only. One set of rules, saved whole
  * (`api/_lib/availability.js`); the server tells each visitor what applies in

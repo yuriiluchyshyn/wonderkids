@@ -272,6 +272,8 @@ export interface AdminAccount {
   createdAt: string;
   /** An older row sharing its mailbox with another account — safe to remove. */
   duplicateMailbox: boolean;
+  /** Switched off by the owner: nobody signs in to it until it is switched on again. */
+  disabled: boolean;
   /** Google Speech switched off for this account specifically. */
   speechOff: boolean;
   /** The key assigned to this account, if any (otherwise the global key applies). */
@@ -416,6 +418,15 @@ export const adminApi = {
   /** Remove an account together with its children and all their data. */
   deleteAccount(adminKey: string, parentId: number) {
     return request<{ ok: true }>(`/api/admin/users?id=${parentId}`, { method: 'DELETE', adminKey });
+  },
+
+  /** Switch a whole account off or back on; nothing of it is deleted. */
+  setAccountEnabled(adminKey: string, parentId: number, enabled: boolean) {
+    return request<{ ok: true; disabled: boolean }>('/api/admin/users', {
+      method: 'PUT',
+      adminKey,
+      body: { parentId, enabled },
+    });
   },
 
   /** Switch Google Speech on/off for one account. */

@@ -69,7 +69,7 @@
     #8a5a35;
 }
 
-.creeper {
+.critter {
   position: absolute;
   right: 5%;
   bottom: 72px;
@@ -91,45 +91,22 @@
   gap: 4px;
 }
 
-/* White bubble letters, black then yellow outline, on a red square. */
-.legoLogo {
+/* The theme's own name on a blue plate: plain upright letters, no outline. */
+.bricksLogo {
   display: inline-grid;
   place-items: center;
   padding: 6px 12px 7px;
   border-radius: 7px;
-  background: #e3000b;
+  background: #006cb7;
+  color: #fff;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.22);
   font-family: 'Baloo 2', 'Arial Black', sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  font-style: italic;
-  letter-spacing: 0.02em;
   line-height: 1;
 }
 
-.legoLogo span {
-  position: relative;
-  color: #fff;
-  z-index: 0;
-}
-
-.legoLogo span::before,
-.legoLogo span::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-}
-
-.legoLogo span::before {
-  -webkit-text-stroke: 9px #ffd500;
-}
-
-.legoLogo span::after {
-  -webkit-text-stroke: 5px #111;
-}
-
-.mcLogo {
+.blocksLogo {
   font-family: 'Press Start 2P', 'Handjet', monospace;
   font-size: clamp(1rem, 5.2vw, 1.6rem);
   color: #c8c8c8;

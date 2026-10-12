@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import { adminApi, type LinkMode, type MarketingLink, type MarketingVisit } from '@/core/account/api/client';
 import { errorText } from './shared';
-import { MODE_NAME, countryName, linkUrl } from './links';
+import { MODE_NAME, countryName, linkUrl, siteOrigin } from './links';
+import { CopyButton, SortTable, type Column } from './Table';
 import styles from './Admin.module.css';
 
 type Period = 7 | 30 | 90 | 0;
@@ -27,77 +28,6 @@ const VIA_NAME: Record<MarketingVisit['via'], string> = { link: 'за посил
 const DEVICE_NAME: Record<string, string> = { mobile: '📱 телефон', tablet: '📱 планшет', desktop: '💻 комп’ютер' };
 
 const linkLabel = (visit: MarketingVisit) => (visit.link === null ? '— без посилання' : visit.linkName ? `${visit.linkName} (${visit.link})` : `${visit.link} (видалене)`);
-
-// ---------------------------------------------------------------------------
-// A table whose every column sorts
-// ---------------------------------------------------------------------------
-
-interface Column<Row> {
-  id: string;
-  label: string;
-  /** What the column is sorted by. */
-  value: (row: Row) => string | number;
-  render?: (row: Row) => ReactNode;
-}
-
-function SortTable<Row>({ columns, rows, rowKey, initial }: { columns: Column<Row>[]; rows: Row[]; rowKey: (row: Row) => string | number; initial: { by: string; desc: boolean } }) {
-  const [sort, setSort] = useState(initial);
-  const sorted = useMemo(() => {
-    const column = columns.find((c) => c.id === sort.by) ?? columns[0];
-    const dir = sort.desc ? -1 : 1;
-    return [...rows].sort((a, b) => {
-      const x = column.value(a);
-      const y = column.value(b);
-      return (typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y), 'uk')) * dir;
-    });
-  }, [rows, columns, sort]);
-
-  return (
-    <div className={styles.gamesScroll}>
-      <table className={styles.dataTable}>
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th key={column.id} aria-sort={sort.by === column.id ? (sort.desc ? 'descending' : 'ascending') : 'none'}>
-                <button type="button" className={styles.sortBtn} onClick={() => setSort((now) => ({ by: column.id, desc: now.by === column.id ? !now.desc : true }))}>
-                  {column.label}
-                  <span aria-hidden>{sort.by === column.id ? (sort.desc ? ' ▼' : ' ▲') : ''}</span>
-                </button>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {sorted.map((row) => (
-            <tr key={rowKey(row)}>
-              {columns.map((column) => (
-                <td key={column.id}>{column.render ? column.render(row) : column.value(row)}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <button
-      type="button"
-      className={styles.btn}
-      onClick={() =>
-        void navigator.clipboard.writeText(text).then(() => {
-          setCopied(true);
-          window.setTimeout(() => setCopied(false), 1500);
-        })
-      }
-    >
-      {copied ? '✓ Скопійовано' : 'Копіювати'}
-    </button>
-  );
-}
 
 // ---------------------------------------------------------------------------
 // A new link
@@ -154,6 +84,49 @@ function NewLink({ busy, onCreate }: { busy: boolean; onCreate: (link: { name: s
         <span className={styles.meta}>Код — латинські малі літери, цифри, дефіс; після створення не змінюється.</span>
       </div>
     </form>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Ready links for the channels: the usual utm_* labels, nothing to create
+// ---------------------------------------------------------------------------
+
+const CHANNEL_LINKS: { where: string; query: string; note?: string }[] = [
+  {
+    where: 'Реклама у Facebook та Instagram (поле «Параметри URL» в оголошенні)',
+    query: 'utm_source={{site_source_name}}&utm_medium=paid&utm_campaign=parents-ua',
+    note: 'Вставляється без адреси сайту. Meta сама підставить fb або ig — де саме показали оголошення.',
+  },
+  { where: 'Сторінка і дописи у Facebook', query: 'utm_source=facebook&utm_medium=social' },
+  { where: 'Профіль і сторіз в Instagram', query: 'utm_source=instagram&utm_medium=social' },
+  { where: 'Опис каналу й відео на YouTube', query: 'utm_source=youtube&utm_medium=video' },
+  { where: 'Профіль у TikTok', query: 'utm_source=tiktok&utm_medium=social' },
+];
+
+function ChannelLinks() {
+  const site = `${siteOrigin()}/`;
+  return (
+    <section className={styles.gamesSection}>
+      <h2>📣 Посилання для каналів</h2>
+      <p className={styles.meta}>
+        Готові посилання зі звичними мітками <code>utm_*</code> — їх не треба створювати. Нові акаунти з них видно у
+        «Звіти → Джерела». Для нової кампанії додай у кінець <code>&amp;utm_campaign=назва-латинкою</code> (малі
+        літери, цифри, дефіс).
+      </p>
+      {CHANNEL_LINKS.map(({ where, query, note }) => {
+        const text = query.includes('{{') ? query : `${site}?${query}`;
+        return (
+          <div key={query} className={styles.sourceLink}>
+            <div>
+              <strong>{where}</strong>
+              <code>{text}</code>
+              {note && <span className={styles.meta}>{note}</span>}
+            </div>
+            <CopyButton text={text} />
+          </div>
+        );
+      })}
+    </section>
   );
 }
 
@@ -323,7 +296,9 @@ function Visits({ visits }: { visits: MarketingVisit[] }) {
 // ---------------------------------------------------------------------------
 
 /**
- * `/admin/links` — the owner's own links and who came by them.
+ * `/admin/links` — every link the owner hands out and who came by them: the
+ * links made here, the ready ones for the channels (utm_* labels), and the
+ * visits.
  *
  * A link is made here and handed out, one per place it is put; it leads to the
  * public site or straight into the trial game. Every arrival is kept in the
@@ -412,7 +387,7 @@ export function LinksPage({ adminKey }: { adminKey: string }) {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1>🔗 Посилання й відвідування</h1>
+        <h1>🔗 Посилання</h1>
         <div className={styles.totals}>
           <span>🔗 Посилань: {links.length}</span>
           <span>👣 Візитів за період: {visits.length}</span>
@@ -440,6 +415,8 @@ export function LinksPage({ adminKey }: { adminKey: string }) {
           !busy && <p className={styles.empty}>Посилань ще немає — створи перше вище.</p>
         )}
       </section>
+
+      <ChannelLinks />
 
       <div className={`${styles.actions} ${styles.empty} ${styles.filters}`}>
         {PERIODS.map(([days, label]) => (

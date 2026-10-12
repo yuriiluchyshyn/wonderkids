@@ -56,6 +56,8 @@ export function useRemoteSync(): SyncStatus {
         // The session is no longer valid (it ran out, or the server's key
         // changed): that is not «the server is down» — go and sign in again.
         if (err instanceof ApiError && err.status === 401) useAuthStore.getState().expire();
+        // The owner switched the account off: the login page says so.
+        else if (err instanceof ApiError && err.code === 'account_disabled') useAuthStore.getState().expire(err.code);
         else setStatus('error');
       });
 

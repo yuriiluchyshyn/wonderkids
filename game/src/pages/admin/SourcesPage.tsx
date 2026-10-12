@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { adminApi, type AdminAccount } from '@/core/account/api/client';
-import { DEFAULT_SITE_URL, rootHost } from '@pulsar/platform';
-import { getPortal } from '@/core/app/portal';
 import { errorText } from './shared';
 import styles from './Admin.module.css';
 
@@ -101,66 +99,12 @@ function StatsTable({ first, rows, total }: { first: string; rows: Row[]; total:
   );
 }
 
-/** The public site's address, to build links for the channels. */
-function siteUrl(): string {
-  if (getPortal() === 'dev') return `${DEFAULT_SITE_URL}/`;
-  return `https://${rootHost(window.location.hostname)}/`;
-}
-
-const LINKS: { where: string; query: string; note?: string }[] = [
-  {
-    where: 'Реклама у Facebook та Instagram (поле «Параметри URL» в оголошенні)',
-    query: 'utm_source={{site_source_name}}&utm_medium=paid&utm_campaign=parents-ua',
-    note: 'Вставляється без адреси сайту. Meta сама підставить fb або ig — де саме показали оголошення.',
-  },
-  { where: 'Сторінка і дописи у Facebook', query: 'utm_source=facebook&utm_medium=social' },
-  { where: 'Профіль і сторіз в Instagram', query: 'utm_source=instagram&utm_medium=social' },
-  { where: 'Опис каналу й відео на YouTube', query: 'utm_source=youtube&utm_medium=video' },
-  { where: 'Профіль у TikTok', query: 'utm_source=tiktok&utm_medium=social' },
-];
-
-function ChannelLinks() {
-  const [copied, setCopied] = useState<string | null>(null);
-  const site = siteUrl();
-
-  const copy = (text: string) => {
-    void navigator.clipboard.writeText(text).then(() => {
-      setCopied(text);
-      window.setTimeout(() => setCopied((now) => (now === text ? null : now)), 1500);
-    });
-  };
-
-  return (
-    <section className={styles.gamesSection}>
-      <h2>🔗 Посилання для каналів</h2>
-      <p className={styles.meta}>
-        Став на кожен канал своє посилання — тоді нові акаунти з нього з’являться в таблиці вище. Для нової кампанії
-        додай у кінець <code>&amp;utm_campaign=назва-латинкою</code> (малі літери, цифри, дефіс).
-      </p>
-      {LINKS.map(({ where, query, note }) => {
-        const text = query.includes('{{') ? query : `${site}?${query}`;
-        return (
-          <div key={query} className={styles.sourceLink}>
-            <div>
-              <strong>{where}</strong>
-              <code>{text}</code>
-              {note && <span className={styles.meta}>{note}</span>}
-            </div>
-            <button type="button" className={styles.btn} onClick={() => copy(text)}>
-              {copied === text ? '✓ Скопійовано' : 'Копіювати'}
-            </button>
-          </div>
-        );
-      })}
-    </section>
-  );
-}
-
 /**
- * `/admin/sources` — which channel brings families. Counted in the browser
- * from the accounts list: an account remembers the utm_* labels of the link
- * its parent arrived by (see `core/app/attribution.ts`), and the children's
- * progress shows whether the family stayed to play.
+ * `/admin/reports` — which channel and campaign bring families. Counted in the
+ * browser from the accounts list: an account remembers the utm_* labels of the
+ * link its parent arrived by (see `core/app/attribution.ts`), and the
+ * children's progress shows whether the family stayed to play. What each of
+ * the owner's own links brought is on `/admin/links`.
  */
 export function SourcesPage({ adminKey }: { adminKey: string }) {
   const [accounts, setAccounts] = useState<AdminAccount[]>([]);
@@ -190,7 +134,6 @@ export function SourcesPage({ adminKey }: { adminKey: string }) {
     return accounts.filter((a) => new Date(a.createdAt).getTime() >= since);
   }, [accounts, period]);
 
-  const channels = useMemo(() => group(inPeriod, channelOf, channelName), [inPeriod]);
   const campaigns = useMemo(
     () =>
       group(
@@ -235,27 +178,18 @@ export function SourcesPage({ adminKey }: { adminKey: string }) {
       {error && <p className={styles.noteErr}>{error}</p>}
 
       <section className={styles.gamesSection}>
-        <h2>Канали</h2>
+        <h2>Кампанії</h2>
         <p className={styles.meta}>
-          Звідки прийшли батьки, які створили акаунт за цей час. «Без мітки» — зайшли напряму, з пошуку або
-          зареєструвалися до того, як джерело почали записувати.
+          Канал · тип переходу · кампанія — за мітками <code>utm_*</code> посилання, яким прийшли батьки, що створили
+          акаунт за цей час. Акаунти без мітки (зайшли напряму чи з пошуку) сюди не потрапляють. Що принесло кожне
+          твоє посилання — у розділі «Посилання».
         </p>
-        {channels.length > 0 ? (
-          <StatsTable first="Канал" rows={channels} total={inPeriod.length} />
+        {campaigns.length > 0 ? (
+          <StatsTable first="Канал · тип · кампанія" rows={campaigns} total={labelled} />
         ) : (
-          !loading && <p className={styles.empty}>За цей час нових акаунтів немає.</p>
+          !loading && <p className={styles.empty}>За цей час акаунтів із міткою немає.</p>
         )}
       </section>
-
-      {campaigns.length > 0 && (
-        <section className={styles.gamesSection}>
-          <h2>Кампанії</h2>
-          <p className={styles.meta}>Те саме докладніше: канал · тип переходу · кампанія.</p>
-          <StatsTable first="Канал · тип · кампанія" rows={campaigns} total={labelled} />
-        </section>
-      )}
-
-      <ChannelLinks />
     </div>
   );
 }

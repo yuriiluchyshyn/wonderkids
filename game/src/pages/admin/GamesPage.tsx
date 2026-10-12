@@ -101,7 +101,7 @@ const mechanicsOf = (sub: SubCategory) =>
   (Array.isArray(sub.mechanics) ? sub.mechanics : sub.mechanics ? [sub.mechanics] : []).map((m) => MECHANICS[m]).join(', ') || '—';
 
 /**
- * `/admin/games` — a live summary of every game: its kind, how long its path
+ * `/admin/reports/games` — a live summary of every game: its kind, how long its path
  * is, its difficulty band and how many different tasks it can ask.
  */
 export function GamesPage() {

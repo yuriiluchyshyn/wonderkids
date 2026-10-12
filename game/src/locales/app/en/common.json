@@ -133,7 +133,7 @@
       }
     },
     "lego": {
-      "name": "Lego",
+      "name": "Bricks",
       "mascot": "Little Builder",
       "goal": "Brick Castle",
       "artifact": "Brick",
@@ -150,7 +150,7 @@
         "blue": "Blue Roof Slope",
         "green": "Green Baseplate",
         "wheel": "Wheel",
-        "builder": "Builder Minifigure",
+        "builder": "Builder Figure",
         "crane": "Crane"
       }
     },
@@ -177,7 +177,7 @@
       }
     },
     "minecraft": {
-      "name": "Minecraft",
+      "name": "Block World",
       "mascot": "Piggy",
       "goal": "Diamond",
       "artifact": "Emerald",
@@ -260,7 +260,8 @@
       "invalid_token": "We couldn’t confirm your sign-in. Please sign in again.",
       "email_missing": "This sign-in method didn’t share your email with us. Please choose another one.",
       "email_not_verified": "Please confirm your email first: open the message we sent and tap the link in it.",
-      "auth0_required": "Sign-in has been updated. Refresh the page and sign in again."
+      "auth0_required": "Sign-in has been updated. Refresh the page and sign in again.",
+      "account_disabled": "This account is switched off for now. Write to us and we will help."
     }
   },
   "who": {
@@ -658,11 +659,10 @@
       "error": "⚠️ We couldn’t check it online — we’ll save it as it is."
     },
     "title": "👨‍👩‍👧 Children",
-    "hint": "Up to {max} children per account. Tap a child to edit their settings below.",
+    "hint": "Tap a child to edit their settings below.",
     "edit": "Edit {name}",
     "editing": "editing",
     "remove": "Remove {name}",
-    "max": "5 children at most",
     "add": "Add a child",
     "new": "New child",
     "namePlaceholder": "e.g. Mark",

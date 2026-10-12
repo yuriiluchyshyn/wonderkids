@@ -23,7 +23,7 @@ export function GamePage() {
   usePageMeta({ title: sub ? `${sub.label} · ${module?.title}` : t('page.game') });
   // Frontier step from the store (advances when a session completes).
   const hiddenGames = useGameStore((s) => s.settings.hiddenGames);
-  // Offered in the visitor's country, and not held back as «soon» (`/admin/availability`).
+  // Offered in the visitor's country, and not held back as «soon» (`/admin/settings/availability`).
   const offered = useAvailability((a) => gameState(a, moduleId, subId) === 'on');
   const storedStep = useGameStore((s) => s.progress[pathKey(moduleId, subId)] ?? 1);
 

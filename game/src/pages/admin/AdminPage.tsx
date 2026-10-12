@@ -1,15 +1,12 @@
 import { usePageMeta } from '@/core/app/seo/usePageMeta';
 import { useState, type FormEvent } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { adminApi } from '@/core/account/api/client';
 import { AccountsPage } from './AccountsPage';
-import { SpeechPage } from './SpeechPage';
-import { GamesPage } from './GamesPage';
 import { FeedbackPage } from './FeedbackPage';
-import { SourcesPage } from './SourcesPage';
 import { LinksPage } from './LinksPage';
+import { ReportsPage } from './ReportsPage';
 import { SettingsPage } from './SettingsPage';
-import { AvailabilityPage } from './AvailabilityPage';
 import { AdminShell } from './AdminShell';
 import { ADMIN_KEY_STORAGE, errorText } from './shared';
 import styles from './Admin.module.css';
@@ -20,13 +17,14 @@ import styles from './Admin.module.css';
  * whose side panel lists them (`SECTIONS`):
  *
  *   /admin           accounts, children and their progress
- *   /admin/speech    Google Speech keys and who each one serves
- *   /admin/games     live summary of every game, read from the module registry
  *   /admin/feedback  letters from the public site, and the answers to them
- *   /admin/sources   which channel (ad, Instagram, YouTube…) brings new accounts
- *   /admin/links     the owner's own links to hand out, and who came by them
- *   /admin/availability  what is offered where: languages by country, games on / «soon» / put away
- *   /admin/settings  settings of the whole product (the trial game's length)
+ *   /admin/links     every link the owner hands out, and who came by them
+ *   /admin/reports   what is only read: where accounts come from (campaigns); `…/games` — the summary of every game
+ *   /admin/settings  the trial game's length; `…/speech` — Google Speech keys; `…/availability` — what is offered where
+ *
+ * The addresses these pages had while each was a section of its own
+ * (`/admin/sources`, `/admin/games`, `/admin/speech`, `/admin/availability`)
+ * lead to where the page is now.
  */
 export function AdminPage() {
   usePageMeta({ title: 'Адмінпанель' });
@@ -86,13 +84,14 @@ export function AdminPage() {
     <AdminShell adminKey={adminKey} onLogout={logout}>
       <Routes>
         <Route index element={<AccountsPage adminKey={adminKey} />} />
-        <Route path="speech" element={<SpeechPage adminKey={adminKey} />} />
-        <Route path="games" element={<GamesPage />} />
         <Route path="feedback" element={<FeedbackPage adminKey={adminKey} />} />
-        <Route path="sources" element={<SourcesPage adminKey={adminKey} />} />
         <Route path="links" element={<LinksPage adminKey={adminKey} />} />
-        <Route path="availability" element={<AvailabilityPage adminKey={adminKey} />} />
-        <Route path="settings" element={<SettingsPage adminKey={adminKey} />} />
+        <Route path="reports/*" element={<ReportsPage adminKey={adminKey} />} />
+        <Route path="settings/*" element={<SettingsPage adminKey={adminKey} />} />
+        <Route path="sources" element={<Navigate to="/admin/reports" replace />} />
+        <Route path="games" element={<Navigate to="/admin/reports/games" replace />} />
+        <Route path="speech" element={<Navigate to="/admin/settings/speech" replace />} />
+        <Route path="availability" element={<Navigate to="/admin/settings/availability" replace />} />
       </Routes>
     </AdminShell>
   );

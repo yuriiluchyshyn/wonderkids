@@ -201,7 +201,7 @@ function KeyEditor({ editing, defaultVoice, accounts, keys, busy, onSave, onCanc
 }
 
 /**
- * Google Speech settings (`/admin/speech`): the stored API keys — add a new
+ * Google Speech settings (`/admin/settings/speech`): the stored API keys — add a new
  * one or edit an existing one, and in both cases choose who it serves (every
  * account as the GLOBAL key, or selected accounts) — plus an on/off switch for
  * each account.

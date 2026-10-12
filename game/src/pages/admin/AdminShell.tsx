@@ -5,16 +5,14 @@ import styles from './Admin.module.css';
 
 /**
  * The sections of the admin area, in the order the side panel lists them.
- * A new section is one line here plus its `<Route>` in `AdminPage`.
+ * A new section is one line here plus its `<Route>` in `AdminPage`. A section
+ * with several pages («Звіти», «Налаштування») shows them as tabs of its own.
  */
 export const SECTIONS: { path: string; icon: string; label: string }[] = [
   { path: '/admin', icon: '👨‍👩‍👧', label: 'Акаунти' },
   { path: '/admin/feedback', icon: '✉️', label: 'Звернення' },
-  { path: '/admin/sources', icon: '📊', label: 'Джерела' },
   { path: '/admin/links', icon: '🔗', label: 'Посилання' },
-  { path: '/admin/games', icon: '🎮', label: 'Ігри' },
-  { path: '/admin/availability', icon: '🌍', label: 'Доступність' },
-  { path: '/admin/speech', icon: '🗣️', label: 'Google Speech' },
+  { path: '/admin/reports', icon: '📊', label: 'Звіти' },
   { path: '/admin/settings', icon: '⚙️', label: 'Налаштування' },
 ];
 
@@ -51,7 +49,8 @@ export function AdminShell({ adminKey, onLogout, children }: { adminKey: string;
             <NavLink
               key={path}
               to={path}
-              end
+              // «Акаунти» is the root: without `end` it would be lit on every page.
+              end={path === '/admin'}
               className={({ isActive }) => (isActive ? `${styles.sideLink} ${styles.sideLinkOn}` : styles.sideLink)}
             >
               <span aria-hidden>{icon}</span>

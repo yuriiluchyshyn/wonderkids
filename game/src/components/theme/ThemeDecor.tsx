@@ -63,18 +63,20 @@ function LegoDecor() {
   );
 }
 
-/** 8×8 pixel face of the green "creeper", row by row (1 = dark pixel). */
-const CREEPER = ['00000000', '01100110', '01100110', '00011000', '00111100', '00111100', '00100100', '00000000'];
+/** 8×8 pixel face of the theme's piglet, row by row (e = eye, s = snout, n = nostril). */
+const PIGLET = ['........', '........', '.e....e.', '........', '..ssss..', '..nssn..', '..ssss..', '........'];
+const PIGLET_INK: Record<string, string> = { e: '#3a2030', s: '#e8869d', n: '#a34a63' };
 
-export function CreeperFace({ size = 64 }: { size?: number }) {
+/** Our own pixel animal — never a character of somebody else's game. */
+export function PixelFace({ size = 64 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 8 8" shapeRendering="crispEdges" aria-hidden>
       {Array.from({ length: 64 }, (_, i) => {
         const x = i % 8;
         const y = Math.floor(i / 8);
-        // Mottled greens, deterministic so it never flickers.
-        const shade = ['#5cb531', '#4fa02a', '#6ac53c', '#48932a'][(x * 3 + y * 5 + ((x * y) % 3)) % 4];
-        return <rect key={i} x={x} y={y} width={1} height={1} fill={CREEPER[y][x] === '1' ? '#101810' : shade} />;
+        // Mottled pinks, deterministic so it never flickers.
+        const shade = ['#f6b3c4', '#f2a6b9', '#f9bfcd', '#eea0b4'][(x * 3 + y * 5 + ((x * y) % 3)) % 4];
+        return <rect key={i} x={x} y={y} width={1} height={1} fill={PIGLET_INK[PIGLET[y][x]] ?? shade} />;
       })}
     </svg>
   );
@@ -88,8 +90,8 @@ function MinecraftDecor() {
       <span className={styles.cloud} style={{ top: '9%', left: '6%' }} />
       <span className={styles.cloud} style={{ top: '21%', left: '58%', scale: '0.7' }} />
       <span className={styles.cloud} style={{ top: '38%', left: '22%', scale: '0.55' }} />
-      <span className={styles.creeper}>
-        <CreeperFace size={72} />
+      <span className={styles.critter}>
+        <PixelFace size={72} />
       </span>
       <span className={styles.ground} />
     </div>
@@ -112,15 +114,16 @@ export function ThemeDecor() {
   return null;
 }
 
-/** The theme's wordmark, shown at the top of the hub for branded themes. */
+/**
+ * The theme's own name as a wordmark at the top of the hub. It is our name in
+ * our lettering: no trademark, logo or character of another company.
+ */
 export function ThemeBrand() {
   const theme = useActiveTheme();
   if (theme.id === 'lego') {
     return (
       <div className={styles.brandRow}>
-        <span className={styles.legoLogo} role="img" aria-label="LEGO">
-          <span data-text="LEGO">LEGO</span>
-        </span>
+        <span className={styles.bricksLogo}>{theme.name}</span>
         <span className={styles.brandBricks} aria-hidden>
           <Brick studs={2} color={RED} />
           <Brick studs={2} color={BLUE} />
@@ -132,10 +135,8 @@ export function ThemeBrand() {
   if (theme.id === 'minecraft') {
     return (
       <div className={styles.brandRow}>
-        <CreeperFace size={44} />
-        <span className={styles.mcLogo} role="img" aria-label="MINECRAFT">
-          MINECRAFT
-        </span>
+        <PixelFace size={44} />
+        <span className={styles.blocksLogo}>{theme.name}</span>
       </div>
     );
   }

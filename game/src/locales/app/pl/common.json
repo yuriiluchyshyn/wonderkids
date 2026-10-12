@@ -145,7 +145,7 @@
       }
     },
     "lego": {
-      "name": "Lego",
+      "name": "Klocki",
       "mascot": "Ludzik Budowniczy",
       "goal": "Zamek z klocków",
       "artifact": "Klocek",
@@ -164,7 +164,7 @@
         "blue": "Niebieski skos dachowy",
         "green": "Zielona płytka bazowa",
         "wheel": "Koło",
-        "builder": "Minifigurka budowniczego",
+        "builder": "Figurka budowniczego",
         "crane": "Dźwig"
       }
     },
@@ -193,7 +193,7 @@
       }
     },
     "minecraft": {
-      "name": "Minecraft",
+      "name": "Świat bloków",
       "mascot": "Świnka",
       "goal": "Diament",
       "artifact": "Szmaragd",
@@ -278,7 +278,8 @@
       "invalid_token": "Nie udało się potwierdzić logowania. Zaloguj się ponownie.",
       "email_missing": "Ten sposób logowania nie przekazał nam adresu e-mail. Wybierz, proszę, inny.",
       "email_not_verified": "Najpierw potwierdź adres e-mail: otwórz wiadomość od nas i kliknij link.",
-      "auth0_required": "Logowanie zostało zaktualizowane. Odśwież stronę i zaloguj się ponownie."
+      "auth0_required": "Logowanie zostało zaktualizowane. Odśwież stronę i zaloguj się ponownie.",
+      "account_disabled": "To konto jest teraz wyłączone. Napisz do nas — pomożemy."
     }
   },
   "who": {
@@ -690,11 +691,10 @@
       "error": "⚠️ Nie udało się sprawdzić online — zapiszemy tak, jak jest."
     },
     "title": "👨‍👩‍👧 Dzieci",
-    "hint": "Do {max} dzieci na konto. Dotknij dziecka, żeby edytować jego ustawienia poniżej.",
+    "hint": "Dotknij dziecka, żeby edytować jego ustawienia poniżej.",
     "edit": "Edytuj: {name}",
     "editing": "edytowane",
     "remove": "Usuń: {name}",
-    "max": "Najwyżej 5 dzieci",
     "add": "Dodaj dziecko",
     "new": "Nowe dziecko",
     "namePlaceholder": "np. Marek",

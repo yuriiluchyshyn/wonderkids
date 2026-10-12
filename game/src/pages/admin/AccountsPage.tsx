@@ -1,5 +1,5 @@
 import { themeOf } from '@/core/theme/localTheme';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type MouseEvent } from 'react';
 import { adminApi, type AdminAccount, type AdminChild, type SpeechKey } from '@/core/account/api/client';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { isFreePlay } from '@/core/game/kernel/gameConfig';
@@ -7,8 +7,8 @@ import { subSteps } from '@/core/child/progress/path';
 import { playsKey } from '@/core/child/progress/plays';
 import type { ThemeId } from '@/core/theme/theme.types';
 import { computeAge } from '@/core/utils/age';
-import { SpeechSwitch } from './SpeechSwitch';
 import { errorText, formatDate, lookalikes, speechStatus } from './shared';
+import { SortTable, type Column } from './Table';
 import { channelName, channelOf } from './SourcesPage';
 import styles from './Admin.module.css';
 
@@ -95,10 +95,35 @@ function ChildRow({ child }: { child: AdminChild }) {
   );
 }
 
+/** A small round button of a row: a switch when `on` is given, a plain action otherwise. */
+function RowButton({ icon, label, on, danger, busy, onClick }: { icon: string; label: string; on?: boolean; danger?: boolean; busy?: boolean; onClick: () => void }) {
+  const look = danger ? styles.iconBtnDanger : on === undefined ? styles.iconBtn : on ? styles.iconBtnOn : styles.iconBtnOff;
+  return (
+    <button
+      type="button"
+      className={look}
+      role={on === undefined ? undefined : 'switch'}
+      aria-checked={on}
+      aria-label={label}
+      title={label}
+      disabled={busy}
+      onClick={onClick}
+    >
+      <span aria-hidden>{icon}</span>
+    </button>
+  );
+}
+
+/** When any child of the account last finished a session; 0 — never. */
+const lastPlayed = (account: AdminAccount) => Math.max(0, ...account.children.map((c) => c.lastSessionEndedAt ?? 0));
+const tasksDone = (account: AdminAccount) => account.children.reduce((n, c) => n + c.tasksCompleted, 0);
+
 /**
- * Admin home: every registered parent, the children they created and each
- * child's progress in every game. Google Speech is only summarised and
- * switched on/off here — keys live on their own page (`/admin/speech`).
+ * Admin home: every registered parent as a row of a table — a tap on a row
+ * unfolds the account (where it came from, its children and each child's
+ * progress in every game), and the small buttons on the right act on it:
+ * Google Speech on/off, the whole account on/off, delete. The keys of Google
+ * Speech live on their own page (`/admin/settings/speech`).
  */
 export function AccountsPage({ adminKey }: { adminKey: string }) {
   const [accounts, setAccounts] = useState<AdminAccount[]>([]);
@@ -106,6 +131,8 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
+  /** The account a button is working on, so it cannot be pressed twice. */
+  const [busyId, setBusyId] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -135,22 +162,121 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
     );
   }, [accounts, query]);
 
-  const remove = async (account: AdminAccount) => {
+  /** One change of one account: the row waits, a failure is said above the table. */
+  const act = async (account: AdminAccount, work: () => Promise<AdminAccount | null>) => {
+    setBusyId(account.id);
+    setError(null);
+    try {
+      const next = await work();
+      setAccounts((list) => (next ? list.map((a) => (a.id === next.id ? next : a)) : list.filter((a) => a.id !== account.id)));
+    } catch (err) {
+      setError(errorText(err));
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const toggleSpeech = (account: AdminAccount) =>
+    act(account, async () => ({ ...account, speechOff: (await adminApi.setSpeechEnabled(adminKey, account.id, account.speechOff)).speechOff }));
+
+  const toggleAccount = (account: AdminAccount) => {
+    if (!account.disabled && !window.confirm(`Вимкнути акаунт ${account.email}? Ні батьки, ні діти не зможуть увійти, доки не ввімкнеш його знову. Діти й прогрес залишаться.`)) return;
+    void act(account, async () => ({ ...account, disabled: (await adminApi.setAccountEnabled(adminKey, account.id, account.disabled)).disabled }));
+  };
+
+  const remove = (account: AdminAccount) => {
     const kids = account.children.length;
     const warning = kids
       ? `Разом із ним буде видалено дітей (${kids}) і весь їхній прогрес. Цього не можна скасувати.`
       : 'У ньому немає дітей.';
     if (!window.confirm(`Видалити акаунт ${account.email}? ${warning}`)) return;
-    try {
+    void act(account, async () => {
       await adminApi.deleteAccount(adminKey, account.id);
-      setAccounts((list) => list.filter((a) => a.id !== account.id));
-    } catch (err) {
-      setError(errorText(err));
-    }
+      return null;
+    });
   };
 
   const childCount = accounts.reduce((n, a) => n + a.children.length, 0);
   const voiceOn = accounts.filter((a) => speechStatus(a, keys).live).length;
+  const off = accounts.filter((a) => a.disabled).length;
+
+  const columns: Column<AdminAccount>[] = [
+    {
+      id: 'email',
+      label: 'Акаунт',
+      value: (a) => a.email,
+      render: (a) => (
+        <span className={styles.accountCell}>
+          <strong>{a.email}</strong>
+          {a.disabled && <span className={styles.pillOff}>вимкнено</span>}
+          {(a.duplicateMailbox || lookalikes(a, accounts).length > 0) && <span title={a.duplicateMailbox ? 'Дублікат поштової скриньки' : 'Схожий на інший акаунт'}>⚠️</span>}
+        </span>
+      ),
+    },
+    { id: 'created', label: 'Створено', value: (a) => new Date(a.createdAt).getTime(), render: (a) => formatDate(a.createdAt) },
+    { id: 'children', label: 'Дітей', value: (a) => a.children.length },
+    { id: 'tasks', label: 'Завдань', value: tasksDone },
+    { id: 'played', label: 'Остання гра', value: lastPlayed, render: (a) => formatDate(lastPlayed(a) || null) },
+    { id: 'source', label: 'Звідки', value: (a) => channelName(channelOf(a)), render: (a) => (a.signup ? channelName(channelOf(a)) : '—') },
+    {
+      id: 'voice',
+      label: 'Голос',
+      value: (a) => (speechStatus(a, keys).live ? 1 : 0),
+      render: (a) => {
+        const status = speechStatus(a, keys);
+        return (
+          <span className={status.live ? styles.pillOn : styles.pillOff} title={`Google Speech — ${status.text}`}>
+            {status.live ? 'Google' : status.key ? 'вимкнено' : 'браузер'}
+          </span>
+        );
+      },
+    },
+    {
+      id: 'actions',
+      label: 'Дії',
+      sortable: false,
+      value: () => 0,
+      render: (a) => (
+        // A button acts on the account; it must not also unfold the row.
+        <div className={styles.rowActions} onClick={(e: MouseEvent) => e.stopPropagation()}>
+          <RowButton icon="🗣️" on={!a.speechOff} busy={busyId === a.id} label={a.speechOff ? 'Google Speech вимкнено — увімкнути' : 'Google Speech увімкнено — вимкнути'} onClick={() => void toggleSpeech(a)} />
+          <RowButton icon="⏻" on={!a.disabled} busy={busyId === a.id} label={a.disabled ? 'Акаунт вимкнено — увімкнути' : 'Акаунт увімкнено — вимкнути'} onClick={() => toggleAccount(a)} />
+          <RowButton icon="🗑️" danger busy={busyId === a.id} label="Видалити акаунт" onClick={() => remove(a)} />
+        </div>
+      ),
+    },
+  ];
+
+  const detail = (account: AdminAccount) => {
+    const similar = lookalikes(account, accounts);
+    const { signup } = account;
+    return (
+      <div className={styles.accountDetail}>
+        <p className={styles.meta}>
+          #{account.id} · з {formatDate(account.createdAt)}
+          {signup
+            ? ` · прийшов із: ${[channelName(channelOf(account)), signup.medium, signup.campaign].filter(Boolean).join(' · ')}${signup.link ? ` · посилання ${signup.link}` : ''}`
+            : ' · без мітки джерела'}
+          {` · 🗣️ Google Speech — ${speechStatus(account, keys).text}`}
+        </p>
+        {account.disabled && <p className={styles.warn}>⏻ Акаунт вимкнено: ні батьки, ні діти не можуть увійти. Усе, що в ньому є, збережено.</p>}
+        {(account.duplicateMailbox || similar.length > 0) && (
+          <p className={styles.warn}>
+            {account.duplicateMailbox
+              ? '⚠️ Дублікат: ця адреса веде до тієї самої поштової скриньки, що й інший акаунт. Вхід уже йде в основний — цей можна видалити.'
+              : `⚠️ Дуже схожий на ${similar.map((a) => a.email).join(', ')} — імовірно, одруківка тієї самої людини.${
+                  account.children.length === 0 ? ' Тут немає дітей, тож його можна видалити.' : ''
+                }`}
+          </p>
+        )}
+        {account.children.length === 0 ? (
+          <p className={styles.meta}>Дітей ще не додано.</p>
+        ) : (
+          account.children.map((child) => <ChildRow key={child.id} child={child} />)
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className={styles.page}>
@@ -160,6 +286,7 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
           <span>👨‍👩‍👧 Батьків: {accounts.length}</span>
           <span>🧒 Дітей: {childCount}</span>
           <span>🗣️ Google Speech: {voiceOn}</span>
+          {off > 0 && <span>⏻ Вимкнено: {off}</span>}
         </div>
         <button type="button" className={styles.btn} onClick={() => void load()} disabled={loading}>
           ↻ Оновити
@@ -177,49 +304,18 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
       {error && <p className={styles.noteErr}>{error}</p>}
       {!loading && visible.length === 0 && <p className={styles.empty}>Нікого не знайдено.</p>}
 
-      {visible.map((account) => {
-        const status = speechStatus(account, keys);
-        const similar = lookalikes(account, accounts);
-        return (
-          <section key={account.id} className={styles.account}>
-            <div className={styles.accountHead}>
-              <h2>{account.email}</h2>
-              <span className={styles.meta}>
-                #{account.id} · з {formatDate(account.createdAt)} · дітей: {account.children.length}
-                {account.signup && ` · прийшов із: ${channelName(channelOf(account))}`}
-              </span>
-              <button type="button" className={styles.btnDanger} onClick={() => void remove(account)}>
-                Видалити акаунт
-              </button>
-            </div>
-            {(account.duplicateMailbox || similar.length > 0) && (
-              <p className={styles.warn}>
-                {account.duplicateMailbox
-                  ? '⚠️ Дублікат: ця адреса веде до тієї самої поштової скриньки, що й інший акаунт. Вхід уже йде в основний — цей можна видалити.'
-                  : `⚠️ Дуже схожий на ${similar.map((a) => a.email).join(', ')} — імовірно, одруківка тієї самої людини.${
-                      account.children.length === 0 ? ' Тут немає дітей, тож його можна видалити.' : ''
-                    }`}
-              </p>
-            )}
-
-            <div className={styles.voiceLine}>
-              <strong>🗣️ Google Speech</strong>
-              <span className={status.live ? styles.pillOn : styles.pillOff}>{status.text}</span>
-              <SpeechSwitch
-                account={account}
-                adminKey={adminKey}
-                onChange={(next) => setAccounts((list) => list.map((a) => (a.id === next.id ? next : a)))}
-              />
-            </div>
-
-            {account.children.length === 0 ? (
-              <p className={styles.empty}>Дітей ще не додано.</p>
-            ) : (
-              account.children.map((child) => <ChildRow key={child.id} child={child} />)
-            )}
-          </section>
-        );
-      })}
+      {visible.length > 0 && (
+        <section className={styles.gamesSection}>
+          <SortTable
+            columns={columns}
+            rows={visible}
+            rowKey={(a) => a.id}
+            initial={{ by: 'created', desc: true }}
+            detail={detail}
+            rowClass={(a) => (a.disabled ? styles.rowOff : undefined)}
+          />
+        </section>
+      )}
     </div>
   );
 }

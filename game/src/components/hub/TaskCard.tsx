@@ -39,7 +39,7 @@ export const TaskCard = forwardRef<HTMLElement, TaskCardProps>(function TaskCard
   const step = Math.min(useGameStore((s) => s.progress[pathKey(module.id, sub.id)] ?? 1), totalSteps);
 
   // Publication status comes from the game's publish date (PRD v4.0 §1.2) —
-  // unless the owner has marked the game «soon» here (`/admin/availability`).
+  // unless the owner has marked the game «soon» here (`/admin/settings/availability`).
   const heldBack = useAvailability((a) => gameState(a, module.id, sub.id) === 'soon');
   const status = heldBack ? 'soon' : gameStatus(sub);
   const locked = status === 'soon';

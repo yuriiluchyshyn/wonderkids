@@ -2,13 +2,17 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { adminApi, type ProductSettings } from '@/core/account/api/client';
 import { errorText } from './shared';
 import { trialUrl } from './links';
+import { Route, Routes } from 'react-router-dom';
+import { SpeechPage } from './SpeechPage';
+import { AvailabilityPage } from './AvailabilityPage';
+import { Tabs } from './Table';
 import styles from './Admin.module.css';
 
 /**
- * `/admin/settings` — settings of the whole product, kept in the database
- * (`wk_settings`). For now there is one: how long the trial game lasts.
+ * `/admin/settings` — how long the trial game lasts, kept in the database
+ * (`wk_settings`).
  */
-export function SettingsPage({ adminKey }: { adminKey: string }) {
+function TrialGame({ adminKey }: { adminKey: string }) {
   const [settings, setSettings] = useState<ProductSettings | null>(null);
   const [minutes, setMinutes] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -56,14 +60,13 @@ export function SettingsPage({ adminKey }: { adminKey: string }) {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1>⚙️ Налаштування</h1>
+        <h1>🚀 Пробна гра</h1>
       </header>
 
       {error && <p className={styles.noteErr}>{error}</p>}
 
       <section className={styles.gamesSection}>
         <form className={styles.editor} onSubmit={save}>
-          <h2>🚀 Пробна гра</h2>
           <p className={styles.meta}>
             Гра без акаунта за адресою <code>{trialUrl()}</code>. Коли час спливає, гра зупиняється — навіть посеред
             завдання — і дитину просять покликати батьків, щоб ті створили акаунт. Набране в пробній грі не
@@ -107,5 +110,28 @@ export function SettingsPage({ adminKey }: { adminKey: string }) {
         </form>
       </section>
     </div>
+  );
+}
+
+const TABS = [
+  { to: '/admin/settings', label: '🚀 Пробна гра' },
+  { to: '/admin/settings/speech', label: '🗣️ Google Speech' },
+  { to: '/admin/settings/availability', label: '🌍 Доступність' },
+];
+
+/**
+ * `/admin/settings/*` — everything the owner sets for the whole product, a tab
+ * each: the trial game, the Google Speech keys, what is offered where.
+ */
+export function SettingsPage({ adminKey }: { adminKey: string }) {
+  return (
+    <>
+      <Tabs label="Налаштування" tabs={TABS} />
+      <Routes>
+        <Route index element={<TrialGame adminKey={adminKey} />} />
+        <Route path="speech" element={<SpeechPage adminKey={adminKey} />} />
+        <Route path="availability" element={<AvailabilityPage adminKey={adminKey} />} />
+      </Routes>
+    </>
   );
 }

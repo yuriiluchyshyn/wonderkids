@@ -168,7 +168,7 @@ export interface ScreenTimeState {
 }
 
 /**
- * Everything that belongs to ONE child. A parent account holds up to five of
+ * Everything that belongs to ONE child. A parent account holds several of
  * these; each child has their own theme, progress, artifacts and settings.
  */
 export interface ChildState {
@@ -316,7 +316,6 @@ export interface AddChildInput {
 }
 
 const CURRENT_YEAR = new Date().getFullYear();
-const MAX_CHILDREN = 5;
 
 /** What a child with no name is called («Привіт, Друже!»). */
 const NO_NAME = tApp(DEFAULT_LANG, 'child.defaultName');
@@ -926,7 +925,6 @@ export const useGameStore = create<GameState>()((set) => ({
   addChild: (input) => {
     let newId: string | null = null;
     set((s) => {
-      if (s.children.length >= MAX_CHILDREN) return {};
       const child = createChildState(input);
       newId = child.id;
       return { children: [...s.children, child], activeChildId: child.id, ...viewOf(child) };
