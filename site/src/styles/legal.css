@@ -1,0 +1,70 @@
+/* A legal text — the privacy policy, the terms: one calm column that reads well on a phone. */
+.legal {
+  max-width: 780px;
+  padding-block: 28px 56px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.legal h1 {
+  font-size: clamp(1.7rem, 5vw, 2.4rem);
+  margin: 0 0 6px;
+}
+.legal h2 {
+  font-size: 1.3rem;
+  margin: 34px 0 8px;
+  /* A section linked to by its number is not hidden under the bar. */
+  scroll-margin-top: 90px;
+}
+.legal h3 {
+  font-size: 1.05rem;
+  margin: 22px 0 6px;
+}
+.legal p,
+.legal ul {
+  margin: 0 0 12px;
+  color: var(--soft);
+}
+.legal ul {
+  padding-left: 22px;
+}
+.legal li {
+  margin-bottom: 6px;
+}
+.legal strong {
+  color: var(--ink);
+}
+.legal a {
+  text-decoration: underline;
+}
+.legal .table {
+  overflow-x: auto;
+  margin: 0 0 16px;
+}
+.legal table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 520px;
+  font-size: 0.93rem;
+}
+.legal th,
+.legal td {
+  text-align: left;
+  vertical-align: top;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--soft);
+}
+.legal th {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Under the letter form: what happens to what is written. */
+.letter-privacy {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--soft);
+}
+.letter-privacy a {
+  text-decoration: underline;
+}

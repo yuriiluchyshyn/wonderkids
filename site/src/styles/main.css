@@ -1,4 +1,5 @@
-/* The public site's own look. Only the colours of the night sky are shared with the game (`@pulsar/brand`). */
+/* The public site's own look. Only the typefaces and the colours of the night sky are shared with the game (`@pulsar/brand`). */
+@import '@pulsar/brand/fonts.css';
 @import '@pulsar/brand/night-sky.css';
 @import './tokens.css';
 @import './base.css';
@@ -9,4 +10,5 @@
 @import './sections.css';
 @import './langs.css';
 @import './letter.css';
+@import './legal.css';
 @import './motion.css';

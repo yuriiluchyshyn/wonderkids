@@ -194,6 +194,10 @@
       "title": "Czy w grze są reklamy?",
       "text": "Nie, w grze nie ma reklam innych firm. Dziecko widzi tylko zadania, swoją planetę i swoje osiągnięcia."
     },
+    "privacy": {
+      "title": "Jakie dane o dziecku zbiera Pulsar Kids?",
+      "text": "Tylko to, co wpisze rodzic: imię lub nick, PIN, rok i miesiąc urodzenia — oraz to, jak dziecko radzi sobie w grach. W grze nie ma reklam ani trackerów reklamowych, a dane dziecka nie są sprzedawane ani przekazywane reklamodawcom. Rodzic może w każdej chwili pobrać lub usunąć wszystko w panelu rodzica."
+    },
     "try": {
       "title": "Czy można wypróbować grę bez rejestracji?",
       "text": "Tak. Przycisk „Wypróbuj grę teraz” otwiera kilka minut prawdziwej gry bez konta i bez płatności. To, co dziecko zbierze w grze próbnej, nie zapisuje się — do tego rodzic zakłada konto na adres e-mail."
@@ -214,6 +218,7 @@
     "email": "Adres e-mail <small>— jeśli chcesz dostać odpowiedź</small>",
     "attach": "Dodaj zdjęcie lub film",
     "limits": "Do 5 plików, razem do 18 MB. Film — do 15 MB.",
+    "privacy": "Wiadomość i adres do odpowiedzi trafiają wyłącznie do Pulsar Kids — żeby odpowiedzieć i poprawić grę.",
     "thanks": "Wiadomość wysłana!",
     "again": "Napisz jeszcze",
     "close": "Zamknij",
@@ -228,7 +233,10 @@
   "footer": {
     "tagline": "Nauka, która wciąga jak przygoda.",
     "game": "Gra",
-    "updated": "Zaktualizowano"
+    "updated": "Zaktualizowano",
+    "privacy": "Polityka prywatności",
+    "terms": "Regulamin",
+    "home": "Strona główna"
   },
   "nav": {
     "about": "Po co",

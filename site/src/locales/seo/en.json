@@ -12,5 +12,9 @@
     "browser": "A modern browser on a phone, tablet or computer",
     "audience": "Children aged 4–10",
     "use": "Practice, self-study"
+  },
+  "legalMeta": {
+    "privacy": "What data Pulsar Kids collects about parents and children, why, where it is kept, who receives it, and how to download or delete it.",
+    "terms": "The rules for using the Pulsar Kids learning games: the parent account, child profiles, consumer rights, complaints and ending the service."
   }
 }

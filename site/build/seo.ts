@@ -1,7 +1,9 @@
 import type { Dict } from '@pulsar/i18n';
-import { TRIAL_PATH, type PublicUrls } from '@pulsar/platform';
+import { CONTACT_EMAIL, TRIAL_PATH, type PublicUrls } from '@pulsar/platform';
 import type { Plugin } from 'vite';
 import { LANGUAGES, SITE_LANGS, sitePath, type SiteLang } from '../src/languages.ts';
+import { LEGAL_DOCS, LEGAL_UPDATED, legalPath } from '../src/legal.ts';
+import { legalText } from './legal.ts';
 import { loadDictionaries, type Dictionaries } from './pages.ts';
 
 /** The language `llms.txt` is written in: the one an assistant of any country reads. */
@@ -72,6 +74,9 @@ export function llmsTxt(urls: PublicUrls, dictionaries: Dictionaries = loadDicti
     ...SITE_LANGS.map((lang) => `- [${text(dictionaries[lang].meta as Dict, 'title')}](${urls.site}/${sitePath(lang)}) — ${LANGUAGES[lang].name}`),
     `- [${text(cta, 'try')}](${urls.play}${TRIAL_PATH}): ${text(hero, 'tryNote')}`,
     `- [${text(cta, 'parents')}](${urls.parents}/)`,
+    // What is done with a family's data, and the rules of the service — in this language.
+    ...LEGAL_DOCS.map((doc) => `- [${legalText(lang, doc, urls).title}](${urls.site}/${legalPath(lang, doc)})`),
+    `- [${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL})`,
     '',
   ].join('\n');
 }
@@ -82,8 +87,8 @@ export function llmsTxt(urls: PublicUrls, dictionaries: Dictionaries = loadDicti
  *  - fills `__SITE_URL__`, `__PLAY_URL__`, `__PARENTS_URL__` and `__API_URL__` in the page
  *    (canonical links, Open Graph, JSON-LD, the links into the game and the
  *    address its letters go to);
- *  - serves / emits `robots.txt`, `sitemap.xml` (the page in every
- *    language — `pages.ts` makes the pages themselves) and `llms.txt`.
+ *  - serves / emits `robots.txt`, `sitemap.xml` (the page and the legal
+ *    texts in every language — `pages.ts` makes the pages themselves) and `llms.txt`.
  *
  * `robots.txt` lets everyone in — search engines and the assistants' crawlers
  * alike, the latter by name (`AI_CRAWLERS`): the page is there to be found and
@@ -123,6 +128,11 @@ export function seo(urls: PublicUrls): Plugin {
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     // The page in each language, every one naming the others.
     ...SITE_LANGS.map((lang) => `  <url><loc>${site}/${sitePath(lang)}</loc>${alternates}<lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>`),
+    // The legal texts: changed when their text changes (`LEGAL_UPDATED`), not with every build.
+    ...LEGAL_DOCS.flatMap((doc) => {
+      const others = [...SITE_LANGS.map((lang) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${site}/${legalPath(lang, doc)}"/>`), `<xhtml:link rel="alternate" hreflang="x-default" href="${site}/${doc}/"/>`].join('');
+      return SITE_LANGS.map((lang) => `  <url><loc>${site}/${legalPath(lang, doc)}</loc>${others}<lastmod>${LEGAL_UPDATED[doc]}</lastmod><priority>0.3</priority></url>`);
+    }),
     '</urlset>',
     '',
   ].join('\n');

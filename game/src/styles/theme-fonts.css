@@ -1,0 +1,6 @@
+/* The typefaces only the game uses — the block-world theme's — served from our own address like the shared two (`@pulsar/brand/fonts.css`). */
+@import '@fontsource/handjet/500.css';
+@import '@fontsource/handjet/600.css';
+@import '@fontsource/handjet/700.css';
+@import '@fontsource/handjet/800.css';
+@import '@fontsource/press-start-2p/400.css';

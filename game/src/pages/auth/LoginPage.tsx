@@ -5,6 +5,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuthStore, type LoginOutcome } from '@/core/account/auth/useAuthStore';
 import { auth0Enabled } from '@/core/account/auth/auth0';
 import { getPortal } from '@/core/app/portal';
+import { LegalLinks } from '@/components/legal/LegalLinks';
 import styles from './LoginPage.module.css';
 
 // Loaded on demand: the Auth0 SDK is never part of what a child downloads.
@@ -112,6 +113,8 @@ export function LoginPage() {
             </>
           )}
         </p>
+        {/* An account begins here: what a parent agrees to is one tap away. */}
+        <LegalLinks note />
       </div>
     </div>
   );

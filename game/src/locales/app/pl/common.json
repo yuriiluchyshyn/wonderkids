@@ -676,6 +676,19 @@
       "sending": "Wysyłamy…",
       "again": "Wyślij ponownie",
       "change": "Zmień hasło"
+    },
+    "data": {
+      "title": "🔒 Dane Twojej rodziny",
+      "hint": "Wszystko, co Pulsar Kids przechowuje o Twojej rodzinie, jest na tym koncie. Możesz pobrać kopię albo usunąć wszystko.",
+      "export": "Pobierz dane",
+      "exporting": "Przygotowywanie pliku…",
+      "exportFailed": "Nie udało się przygotować pliku. Spróbuj ponownie.",
+      "delete": "Usuń konto",
+      "confirm": "Konto {email}, profile wszystkich dzieci i wszystkie postępy zostaną trwale usunięte. Tego nie da się cofnąć.",
+      "confirmYes": "Tak, usuń wszystko",
+      "confirmNo": "Zostaw konto",
+      "deleting": "Usuwanie…",
+      "deleteFailed": "Nie udało się usunąć konta. Spróbuj ponownie albo napisz na {contact}."
     }
   },
   "cm": {
@@ -977,5 +990,11 @@
       "parents": "Dla rodziców: w grze próbnej postępy nie są zapisywane. Załóżcie konto i dodajcie profil dziecka — będzie grać dalej, a jego postępy zostaną zapisane.",
       "login": "Mamy już konto"
     }
+  },
+  "legal": {
+    "note": "Logując się lub zakładając konto, akceptujesz regulamin i politykę prywatności:",
+    "privacy": "Polityka prywatności",
+    "terms": "Regulamin",
+    "label": "Informacje prawne"
   }
 }

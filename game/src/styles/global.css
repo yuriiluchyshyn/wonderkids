@@ -4,7 +4,7 @@
    Theme palette comes from CSS variables set by ThemeProvider.
    ============================================================ */
 
-/* The fonts are asked for by `index.html` (a <link>, not an @import here). */
+/* The fonts are our own files (`@pulsar/brand/fonts.css`, `theme-fonts.css`, imported by `main.tsx`) — nothing is asked of Google Fonts. */
 
 /* ---------- reset ---------- */
 *,

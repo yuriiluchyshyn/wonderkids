@@ -194,6 +194,10 @@
       "title": "Are there ads in the game?",
       "text": "No, there are no third-party ads. A child sees only the tasks, their own planet and their own achievements."
     },
+    "privacy": {
+      "title": "What data does Pulsar Kids collect about a child?",
+      "text": "Only what a parent enters — a name or nickname, a PIN, a year and month of birth — and how the child gets on in the games. There are no ads and no advertising trackers, and a child’s data is never sold or passed to advertisers. Parents can download or delete everything in the parents’ area at any time."
+    },
     "try": {
       "title": "Can you try it without signing up?",
       "text": "Yes. The “Try the game now” button opens a few minutes of the real game with no account and no payment. What is collected in a trial game is not saved — for that, a parent creates an account with an email address."
@@ -214,6 +218,7 @@
     "email": "Email <small>— if you would like a reply</small>",
     "attach": "Add a photo or video",
     "limits": "Up to 5 files, 18 MB in total. A video — up to 15 MB.",
+    "privacy": "Your message and reply address go to Pulsar Kids only — to answer you and fix the game.",
     "thanks": "Message sent!",
     "again": "Write another",
     "close": "Close",
@@ -228,7 +233,10 @@
   "footer": {
     "tagline": "Learning that feels like an adventure.",
     "game": "The game",
-    "updated": "Updated"
+    "updated": "Updated",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "home": "Home"
   },
   "nav": {
     "about": "Why",

@@ -33,6 +33,7 @@ import { Button } from '@/components/ui/Button';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { ChildManager } from './ChildManager';
+import { FamilyData } from './FamilyData';
 import { GoalRow } from './GoalRow';
 import { CHILD_HANDOFF, useAuthStore } from '@/core/account/auth/useAuthStore';
 import { auth0Enabled, auth0SendPasswordReset } from '@/core/account/auth/auth0';
@@ -702,6 +703,9 @@ export function ParentDashboard() {
           </Button>
         </section>
       )}
+
+      {/* ---- The family's data: a copy, deleting the account, the privacy policy and the terms ---- */}
+      <FamilyData />
 
       {/* ---- Sign out: the very last thing on a phone (on a wide screen it is at the top) ---- */}
       <div className={styles.narrowOnly}>

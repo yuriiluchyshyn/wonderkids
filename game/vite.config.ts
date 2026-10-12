@@ -18,6 +18,8 @@ export default defineConfig(({ mode }) => {
   if (process.env.VERCEL_ENV === 'production') process.env.VITE_API_URL ??= api;
 
   return {
+    // A font is a file of its own, never text inside the stylesheet: a browser then fetches only the subsets a screen uses.
+    build: { assetsInlineLimit: (file: string) => (/\.woff2?$/.test(file) ? false : undefined) },
     plugins: [react(), brandAssets(), seo(urls)],
     resolve: {
       alias: {

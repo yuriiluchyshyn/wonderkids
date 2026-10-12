@@ -13,9 +13,15 @@ export default defineConfig(({ mode }) => {
   const urls = publicUrls(env.VITE_SITE_URL, { play: env.VITE_PLAY_URL, parents: env.VITE_PARENTS_URL, api: env.VITE_API_URL });
 
   return {
-    plugins: [brandAssets(), seo(urls), pages(urls.site)],
+    plugins: [brandAssets(), seo(urls), pages(urls)],
     // Bound to the LAN, so the page can be read on a phone beside the game's dev server.
     server: { port: DEV_PORT.site, host: true },
     preview: { port: DEV_PORT.site, host: true },
+    // Two templates: the page itself, and the page a legal text stands in (`build/pages.ts` fills both per language).
+    build: {
+      rollupOptions: { input: { index: `${root}index.html`, legal: `${root}legal.html` } },
+      // A font is a file of its own, never text inside the stylesheet: a browser then fetches only the subsets a page uses.
+      assetsInlineLimit: (file) => (/\.woff2?$/.test(file) ? false : undefined),
+    },
   };
 });

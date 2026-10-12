@@ -1,0 +1,17 @@
+/*
+ * The two typefaces of Pulsar Kids, served from our own address.
+ *
+ * They used to come from Google Fonts: every page view then told Google the
+ * visitor's IP address — a child's too — before anyone could agree to it,
+ * which is what EU courts have fined sites for. The files are the same
+ * (SIL Open Font License, packaged by Fontsource); each weight brings its
+ * subsets with a `unicode-range`, so a browser fetches only what a page uses.
+ */
+@import '@fontsource/baloo-2/500.css';
+@import '@fontsource/baloo-2/600.css';
+@import '@fontsource/baloo-2/700.css';
+@import '@fontsource/baloo-2/800.css';
+@import '@fontsource/fredoka/400.css';
+@import '@fontsource/fredoka/500.css';
+@import '@fontsource/fredoka/600.css';
+@import '@fontsource/fredoka/700.css';

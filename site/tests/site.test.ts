@@ -1,16 +1,21 @@
 import { dictionaryProblems, type Dict } from '@pulsar/i18n';
-import { LANG_COOKIE, TRIAL_PATH, publicUrls } from '@pulsar/platform';
+import { CONTACT_EMAIL, LANG_COOKIE, TRIAL_PATH, legalUrl, publicUrls } from '@pulsar/platform';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { loadDictionaries, renderPage } from '../build/pages.ts';
+import { legalText } from '../build/legal.ts';
+import { markdownToHtml } from '../build/markdown.ts';
+import { loadDictionaries, renderLegalPage, renderPage } from '../build/pages.ts';
 import { AI_CRAWLERS, llmsTxt, robotsTxt } from '../build/seo.ts';
 import { DEFAULT_LANG, SITE_LANGS, sitePath } from '../src/languages.ts';
+import { LEGAL_DOCS, LEGAL_UPDATED, legalPath } from '../src/legal.ts';
+import { OPERATOR, operatorGaps } from '../src/operator.ts';
 
 const read = (file: string): string => readFileSync(new URL(file, import.meta.url), 'utf8');
 const URLS = publicUrls();
 const dictionaries = loadDictionaries();
 const template = read('../index.html');
+const legalTemplate = read('../legal.html');
 
 test('the site’s dictionary says the same things in every language', () => {
   assert.ok(JSON.stringify(dictionaries[DEFAULT_LANG]).length > 5_000, 'the dictionary is loaded');
@@ -90,17 +95,65 @@ test('robots.txt lets the assistants in by name, and vercel.json points each pag
 });
 
 test('every text of the dictionary is used — by the page, or by the form’s script', () => {
-  const inPage = new Set([...template.matchAll(/\{\{\{?([\w.]+)\}\}\}?/g)].map((m) => m[1]));
+  const inPage = new Set([...(template + legalTemplate).matchAll(/\{\{\{?([\w.]+)\}\}\}?/g)].map((m) => m[1]));
   const scripts = readdirSync(new URL('../src/scripts/letter/', import.meta.url)).map((file) => read(`../src/scripts/letter/${file}`)).join('\n');
   const unused: string[] = [];
   const walk = (dict: Dict, prefix = ''): void => {
     for (const [key, node] of Object.entries(dict)) {
       if (typeof node !== 'string') walk(node, `${prefix}${key}.`);
+      // A legal page's description is asked for by the build (`renderLegalPage`), one per text.
+      else if (prefix === 'legalMeta.') assert.ok(LEGAL_DOCS.some((doc) => doc === key), `legalMeta.${key} is a legal text`);
       else if (prefix === 'js.' ? !scripts.includes(`words.${key}`) : !inPage.has(`${prefix}${key}`)) unused.push(`${prefix}${key}`);
     }
   };
   walk(dictionaries[DEFAULT_LANG]);
   assert.deepEqual(unused, []);
+});
+
+test('the legal texts are a page each, in every language, and say the same', () => {
+  const sections = (markdown: string): number => markdown.match(/^## /gm)?.length ?? 0;
+  for (const doc of LEGAL_DOCS) {
+    assert.match(LEGAL_UPDATED[doc], /^\d{4}-\d{2}-\d{2}$/);
+    const original = legalText(DEFAULT_LANG, doc, URLS);
+    for (const lang of SITE_LANGS) {
+      const text = legalText(lang, doc, URLS);
+      assert.ok(!text.markdown.includes('{{'), `${lang}/${doc}: every name is filled`);
+      // A translation has the sections of the original, in its numbers — a clause cannot go missing in one language.
+      assert.equal(sections(text.markdown), sections(original.markdown), `${lang}/${doc}: as many sections as the original`);
+      assert.equal(text.markdown.match(/^\|/gm)?.length, original.markdown.match(/^\|/gm)?.length, `${lang}/${doc}: as many table rows as the original`);
+      assert.ok(text.markdown.includes(CONTACT_EMAIL), `${lang}/${doc}: says where to write`);
+
+      const page = renderLegalPage(legalTemplate, lang, doc, URLS, dictionaries);
+      assert.ok(!page.includes('{{'), `${lang}/${doc}: every key is filled`);
+      assert.ok(page.includes(`<html lang="${lang}">`) && page.includes(`<title>${text.title} — Pulsar Kids</title>`));
+      assert.ok(page.includes(`rel="canonical" href="__SITE_URL__/${legalPath(lang, doc)}"`));
+      for (const other of SITE_LANGS) assert.ok(page.includes(`hreflang="${other}" href="${URLS.site}/${legalPath(other, doc)}"`), `${lang}/${doc}: names its ${other} page`);
+      assert.equal(page.match(/<h1[\s>]/g)?.length, 1, `${lang}/${doc}: one main heading`);
+      const graph = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(page)?.[1] ?? '')['@graph'] as { '@type': string; dateModified?: string }[];
+      assert.equal(graph[0].dateModified, LEGAL_UPDATED[doc]);
+      // The main page leads to it — from the footer, in its own language.
+      assert.ok(renderPage(template, lang, URLS.site, dictionaries).includes(`href="/${legalPath(lang, doc)}"`), `${lang}: the page links to its ${doc}`);
+    }
+  }
+  // The privacy policy names what the site itself keeps on a device.
+  for (const lang of SITE_LANGS) for (const kept of [LANG_COOKIE, 'pulsar-lang-v1', 'pulsar-source-v1', 'pulsar-visit-']) assert.ok(legalText(lang, 'privacy', URLS).markdown.includes(kept), `${lang}: the policy names ${kept}`);
+
+  // What the texts are written in: nothing of the source reaches the page as markup.
+  assert.equal(markdownToHtml('## A <b>\n\ntext **bold** [x](/y/)\n\n- one\n- two\n\n| h |\n|---|\n| c |'), '<h2 id="s1">A &lt;b&gt;</h2>\n<p>text <strong>bold</strong> <a href="/y/">x</a></p>\n<ul><li>one</li><li>two</li></ul>\n<div class="table"><table><thead><tr><th>h</th></tr></thead><tbody><tr><td>c</td></tr></tbody></table></div>');
+});
+
+test('the operator is named before the legal pages go out', () => {
+  // GDPR art. 13 and the Polish act on electronic services: a policy and terms must say who stands behind the service.
+  assert.deepEqual(operatorGaps(), [], 'fill in src/operator.ts — the registered name, address and NIP of whoever runs Pulsar Kids');
+  assert.equal(OPERATOR.email, CONTACT_EMAIL);
+});
+
+test('nothing is fetched from another company’s servers when the page opens', () => {
+  // Fonts are our own files (`@pulsar/brand/fonts.css`): a request to Google Fonts hands over the visitor's IP address unasked.
+  for (const page of [template, legalTemplate]) {
+    const foreign = [...page.matchAll(/<(?:link|script|img)\b[^>]*\b(?:href|src)="(https?:[^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(foreign, []);
+  }
 });
 
 test('vercel.json speaks of the same cookie, languages and portals as the code', () => {
@@ -125,6 +178,10 @@ test('vercel.json speaks of the same cookie, languages and portals as the code',
   assert.deepEqual([...new Set(sent)].sort(), [...built].sort());
   // A language's page has one address — the one with the slash.
   for (const path of built) assert.equal(toPortal(path.replace(/\/$/, '')), path);
+  // A legal text has one address too; and the game, which does not know which language sits at the root, may name any (`legalUrl`).
+  for (const doc of LEGAL_DOCS) assert.equal(toPortal(`/${doc}`), `/${doc}/`);
+  assert.equal(toPortal(`/${DEFAULT_LANG}/:path*`), '/:path*');
+  assert.equal(legalUrl(URLS.site, 'pl', 'terms'), `${URLS.site}/${legalPath('pl', 'terms')}`);
   // Crawlers and the assistants' fetchers are never sent away from «/»: it is the Ukrainian page for them.
   const crawlers = new Set(redirects.flatMap((rule) => rule.missing ?? []).filter((when) => when.key === 'user-agent').map((when) => (when as { value?: string }).value));
   assert.equal(crawlers.size, 1, 'one list of crawlers in every rule');

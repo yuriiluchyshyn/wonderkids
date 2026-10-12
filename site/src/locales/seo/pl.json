@@ -12,5 +12,9 @@
     "browser": "Nowoczesna przeglądarka na telefonie, tablecie lub komputerze",
     "audience": "Dzieci w wieku 4–10 lat",
     "use": "Ćwiczenia, samodzielna nauka"
+  },
+  "legalMeta": {
+    "privacy": "Jakie dane o rodzicach i dzieciach zbiera Pulsar Kids, po co, gdzie je przechowuje, komu przekazuje oraz jak je pobrać lub usunąć.",
+    "terms": "Zasady korzystania z gier edukacyjnych Pulsar Kids: konto rodzica, profile dzieci, prawa konsumenta, reklamacje i zakończenie korzystania."
   }
 }

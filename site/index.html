@@ -39,13 +39,6 @@
     />
     <meta name="twitter:image" content="__SITE_URL__/og-image.png" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@400;500;600&display=swap"
-    />
-
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -78,6 +71,8 @@
             "name": "Pulsar Kids",
             "alternateName": ["Пульсар Кідс", "PulsarKids"],
             "url": "__SITE_URL__/",
+            "email": "{{@email}}",
+            "contactPoint": { "@type": "ContactPoint", "contactType": "customer support", "email": "{{@email}}", "availableLanguage": [{{@langList}}] },
             "logo": { "@type": "ImageObject", "url": "__SITE_URL__/apple-touch-icon.png", "width": 180, "height": 180 }
           },
           {
@@ -111,6 +106,7 @@
               { "@type": "Question", "name": "{{faq.mistake.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.mistake.text}}" } },
               { "@type": "Question", "name": "{{faq.time.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.time.text}}" } },
               { "@type": "Question", "name": "{{faq.ads.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.ads.text}}" } },
+              { "@type": "Question", "name": "{{faq.privacy.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.privacy.text}}" } },
               { "@type": "Question", "name": "{{faq.try.title}}", "acceptedAnswer": { "@type": "Answer", "text": "{{faq.try.text}}" } }
             ]
           }
@@ -465,6 +461,11 @@
               <p>{{faq.ads.text}}</p>
             </article>
             <article class="card">
+              <div class="icon emoji" aria-hidden="true">🔒</div>
+              <h3>{{faq.privacy.title}}</h3>
+              <p>{{faq.privacy.text}} <a href="/{{@home}}privacy/">{{footer.privacy}}</a></p>
+            </article>
+            <article class="card">
               <div class="icon emoji" aria-hidden="true">🚀</div>
               <h3>{{faq.try.title}}</h3>
               <p>{{faq.try.text}}</p>
@@ -535,6 +536,7 @@
       </div>
       <ul class="files" id="letter-files"></ul>
       <p class="letter-note" id="letter-note" role="alert"></p>
+      <p class="letter-privacy">{{letter.privacy}} <a href="/{{@home}}privacy/" target="_blank" rel="noopener">{{footer.privacy}}</a></p>
       <button class="btn btn-play" type="submit">{{letter.send}}</button>
     </form>
     <div class="letter-done" id="letter-done" role="status" hidden>
@@ -549,6 +551,10 @@
         <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}} · {{footer.updated}}: <time datetime="{{@updatedIso}}">{{@updated}}</time></p>
         <p>
           <a data-portal="play" href="__PLAY_URL__/login">{{footer.game}}</a>·<a data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>·<a href="#feedback" data-letter-open>{{nav.write}}</a>
+        </p>
+        <!-- What the law asks to be said, and where to write. -->
+        <p>
+          <a href="/{{@home}}privacy/">{{footer.privacy}}</a>·<a href="/{{@home}}terms/">{{footer.terms}}</a>·<a href="mailto:{{@email}}">{{@email}}</a>
         </p>
         <ul class="langs-row" aria-label="{{lang.label}}">
           {{@langLinks}}

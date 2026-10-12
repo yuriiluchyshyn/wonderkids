@@ -1,4 +1,4 @@
-import { portalHost, portalOfHost, type PortalHost } from '@pulsar/platform';
+import { DEFAULT_SITE_URL, portalHost, portalOfHost, rootHost, type PortalHost } from '@pulsar/platform';
 
 /**
  * Which "face" of the game is running, decided by the hostname so the parent
@@ -33,4 +33,9 @@ export function portalUrl(portal: 'kid' | 'parent', path = '/'): string {
   if (getPortal() === 'dev') return path;
   const { hostname, protocol } = window.location;
   return `${protocol}//${portalHost(HOST_OF_PORTAL[portal], hostname)}${path}`;
+}
+
+/** The public site's address, without a trailing slash — the root domain of the portal's host, or the real site where there are no portals. */
+export function siteOrigin(): string {
+  return getPortal() === 'dev' ? DEFAULT_SITE_URL : `https://${rootHost(window.location.hostname)}`;
 }

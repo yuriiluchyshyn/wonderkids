@@ -189,6 +189,11 @@ export const api = {
     });
   },
 
+  /** The parent deletes their own account — every child's profile and progress with it, for good. */
+  deleteAccount(token: string) {
+    return request<{ ok: true }>('/api/state', { method: 'DELETE', token });
+  },
+
   /** A play segment begins: returns the child's remaining play time. */
   sessionStart(token: string, childId: string) {
     return request<SessionView>('/api/v1/session/start', {

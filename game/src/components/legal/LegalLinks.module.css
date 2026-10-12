@@ -1,0 +1,27 @@
+/* Small print: there for a parent to find, never louder than the screen it stands on. */
+.legal {
+  margin: 14px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  text-align: center;
+  color: inherit;
+  opacity: 0.85;
+}
+
+.note {
+  display: block;
+}
+
+.links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 14px;
+}
+
+.links a {
+  color: inherit;
+  text-decoration: underline;
+  /* A finger finds it: the line is tall enough to tap. */
+  padding: 6px 0;
+}

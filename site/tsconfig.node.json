@@ -14,5 +14,5 @@
     "noUnusedParameters": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "build", "tests", "src/languages.ts"]
+  "include": ["vite.config.ts", "build", "tests", "src/languages.ts", "src/legal.ts", "src/operator.ts"]
 }

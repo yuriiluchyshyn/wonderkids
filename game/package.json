@@ -15,10 +15,12 @@
     "check:content": "node tests/content.check.mjs"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.28.2",
+    "@fontsource/handjet": "^5.3.1",
+    "@fontsource/press-start-2p": "^5.3.0",
     "@pulsar/brand": "*",
     "@pulsar/i18n": "*",
     "@pulsar/platform": "*",
-    "@auth0/auth0-react": "^2.28.2",
     "@vercel/analytics": "^2.0.1",
     "canvas-confetti": "^1.9.3",
     "framer-motion": "^11.11.17",

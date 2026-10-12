@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="{{@lang}}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{{@docTitle}} — Pulsar Kids</title>
+    <meta name="description" content="{{@docDescription}}" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#1e0a45" />
+    <link rel="canonical" href="__SITE_URL__/{{@path}}" />
+    {{@alternates}}
+    <!-- The same text as plain Markdown, for the assistants that read rather than render. -->
+    <link rel="alternate" type="text/markdown" href="__SITE_URL__/{{@path}}index.md" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Pulsar Kids" />
+    <meta property="og:locale" content="{{@ogLocale}}" />
+    {{@ogAlternates}}
+    <meta property="og:url" content="__SITE_URL__/{{@path}}" />
+    <meta property="og:title" content="{{@docTitle}} — Pulsar Kids" />
+    <meta property="og:description" content="{{@docDescription}}" />
+    <meta property="og:image" content="__SITE_URL__/og-image.png" />
+    <meta name="twitter:card" content="summary" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "__SITE_URL__/{{@path}}#webpage",
+            "url": "__SITE_URL__/{{@path}}",
+            "name": "{{@docTitle}}",
+            "description": "{{@docDescription}}",
+            "inLanguage": "{{@lang}}",
+            "dateModified": "{{@docUpdatedIso}}",
+            "isPartOf": { "@id": "__SITE_URL__/#website" },
+            "publisher": { "@id": "__SITE_URL__/#organization" }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "__SITE_URL__/#website",
+            "url": "__SITE_URL__/",
+            "name": "Pulsar Kids",
+            "publisher": { "@id": "__SITE_URL__/#organization" }
+          },
+          {
+            "@type": "Organization",
+            "@id": "__SITE_URL__/#organization",
+            "name": "Pulsar Kids",
+            "url": "__SITE_URL__/",
+            "email": "{{@email}}",
+            "logo": { "@type": "ImageObject", "url": "__SITE_URL__/apple-touch-icon.png", "width": 180, "height": 180 }
+          }
+        ]
+      }
+    </script>
+
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body data-visits-api="__API_URL__/api/health">
+    <div class="sky" aria-hidden="true"><i></i><i></i></div>
+    <header>
+      <div class="wrap bar">
+        <a class="logo" href="/{{@home}}" aria-label="{{header.logoLabel}}">
+          <span class="emoji" aria-hidden="true">🪐</span> Pulsar Kids
+        </a>
+        <div class="bar-actions">
+          <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>
+          <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/login">{{cta.play}}</a>
+          <details class="langs">
+            <summary aria-label="{{lang.label}}"><span class="emoji" aria-hidden="true">🌐</span> {{@langShort}}</summary>
+            <ul>
+              {{@langLinks}}
+            </ul>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <article class="wrap legal">
+        {{@docBody}}
+      </article>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}}</p>
+        <p>
+          <a href="/{{@home}}">{{footer.home}}</a>·<a href="/{{@home}}privacy/">{{footer.privacy}}</a>·<a href="/{{@home}}terms/">{{footer.terms}}</a>·<a href="mailto:{{@email}}">{{@email}}</a>
+        </p>
+        <ul class="langs-row" aria-label="{{lang.label}}">
+          {{@langLinks}}
+        </ul>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/scripts/legal.ts"></script>
+    <!-- Vercel Web Analytics: anonymous page views, no cookies. -->
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+  </body>
+</html>

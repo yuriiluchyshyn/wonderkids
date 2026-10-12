@@ -7,7 +7,9 @@ import { rememberSource } from '@/core/app/attribution';
 import { beginDemo } from '@/core/app/demo';
 import { loadAvailability } from '@/core/app/availability';
 import { markPlatform } from '@/core/app/platform';
+import '@pulsar/brand/fonts.css';
 import '@pulsar/brand/night-sky.css';
+import './styles/theme-fonts.css';
 import './styles/global.css';
 
 // What the game runs on — the stylesheets ask before the first paint

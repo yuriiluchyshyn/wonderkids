@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { LegalLinks } from '@/components/legal/LegalLinks';
 import styles from './LoginPage.module.css';
 
 /** A sprinkle of space things so the child login feels playful. */
@@ -139,6 +140,8 @@ export function ChildLoginPage() {
         </form>
 
         <p className={styles.hint}>{t('childLogin.noAccount')}</p>
+        {/* For the grown-up beside the child. */}
+        <LegalLinks />
       </div>
     </div>
   );

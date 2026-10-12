@@ -1,10 +1,10 @@
 # Pulsar Kids: зовнішні сервіси та інтеграції
 
-Станом на 2026-10-09.
+Станом на 2026-10-12.
 
 ## Огляд
 
-Pulsar Kids (кодова назва WonderKids) працює на дванадцяти зовнішніх сервісах: шість обслуговують застосунок у продакшні, чотири тримають домен і пошту `@pulsarkids.com` (Name.com, Vercel DNS, ImprovMX, Gmail), два (GitHub і Meta Marketing API) потрібні лише для деплою та реклами. Google Search Console підтверджений для домену, але на роботу застосунку не впливає.
+Pulsar Kids (кодова назва WonderKids) працює на одинадцяти зовнішніх сервісах: п’ять обслуговують застосунок у продакшні, чотири тримають домен і пошту `@pulsarkids.com` (Name.com, Vercel DNS, ImprovMX, Gmail), два (GitHub і Meta Marketing API) потрібні лише для деплою та реклами. Google Search Console підтверджений для домену, але на роботу застосунку не впливає.
 
 Система складається з трьох частин:
 
@@ -14,14 +14,13 @@ Pulsar Kids (кодова назва WonderKids) працює на дванад�
 
 Один деплой обслуговує чотири «обличчя» за іменем хоста: `pulsarkids.com` (посадкова), `play.pulsarkids.com` (дитячий хаб), `parents.pulsarkids.com` (кабінет батьків та адмінка) і localhost / `*.vercel.app` (усе разом).
 
-Браузер ніколи не звертається до Neon, Google Cloud TTS чи Resend напряму — лише через `/api`. Напряму з браузера йдуть тільки Auth0 (вхід), Vercel Analytics і Google Fonts.
+Браузер ніколи не звертається до Neon, Google Cloud TTS чи Resend напряму — лише через `/api`. Напряму з браузера йдуть тільки Auth0 (вхід) і Vercel Analytics; шрифти — власні файли (`@pulsar/brand/fonts.css`), до Google Fonts ніхто не звертається.
 
 ```mermaid
 flowchart TD
   Meta["Meta Ads: реклама"] -- трафік --> Browser
   Browser["Браузер<br/>pulsarkids.com: посадкова<br/>play.pulsarkids.com: дитячий хаб<br/>parents.pulsarkids.com: кабінет батьків, адмінка"]
   Browser --> Auth0["Auth0: вхід батьків"]
-  Browser --> Fonts["Google Fonts: шрифти"]
   Browser -- HTTPS --> Vercel
   GitHub["GitHub: пуш у main"] -- деплой --> Vercel
   subgraph Vercel
@@ -38,7 +37,7 @@ flowchart TD
   Resend -- доставляє --> Gmail
 ```
 
-Стрілки показують, хто до кого звертається: браузер бачить лише Vercel, Auth0 і Google Fonts, а решта сервісів схована за API.
+Стрілки показують, хто до кого звертається: браузер бачить лише Vercel і Auth0, а решта сервісів схована за API.
 
 ## Зведена таблиця
 
@@ -50,7 +49,6 @@ flowchart TD
 | Auth0 | Автентифікація | Вхід батьків (пошта + пароль або Google) | `src/pages/auth/Auth0Login.tsx`, `Auth0.java` | Ні: без нього вхід лише за адресою пошти |
 | Google Cloud Text-to-Speech | Озвучення | Природний голос українською, англійською та польською | `TtsController`, `Tts.java` | Ні: запасний варіант — голос браузера |
 | Resend | Пошта | Пересилає листи з форми «Написати листа» власнику, з вкладеннями | `Mail.java`, `FeedbackController` | Ні: без нього текст зберігається, файли губляться |
-| Google Fonts | Шрифти | Baloo 2, Fredoka, Handjet, Press Start 2P | `game/src/styles/global.css`, `site/index.html` | Ні |
 | GitHub | Код і запуск деплою | Два репозиторії; пуш у `main` запускає деплой на Vercel | `scripts/deploy.sh`, `scripts/autopush.sh` | Так |
 | Meta Marketing API | Реклама | Кампанії у Facebook та Instagram | `scripts/ads/meta-ads.mjs` | Ні |
 | Name.com | Реєстратор домену | Реєстрація `pulsarkids.com` (з 2026-10-07, до 2027-10-07) | Поза кодом | Так |
@@ -124,9 +122,9 @@ Auth0 лише підтверджує, що людина володіє пошт
 - **Куди приходить.** На `FEEDBACK_TO` — напряму, не через `hello@` і не через ImprovMX.
 - **Без Resend.** Текст листа зберігається в `wk_feedback`, але нічого не надсилається і вкладення втрачаються.
 
-### Google Fonts
+### Шрифти (власні файли)
 
-Віддає шрифти напряму в браузер: Baloo 2 і Fredoka всюди, піксельні Handjet і Press Start 2P для тем `lego` / `minecraft`. Підключено через `@import` у `game/src/styles/global.css` та `<link>` у `site/index.html`. Ключів не потребує.
+Baloo 2, Fredoka, Handjet і Press Start 2P більше не вантажаться з Google Fonts: з 2026-10-12 це файли з пакетів Fontsource (ліцензія SIL OFL), які збираються разом із сайтом і грою — `packages/brand/fonts.css` (спільні два) і `game/src/styles/theme-fonts.css` (шрифти теми «Світ блоків»). Причина юридична: запит до Google Fonts передає Google IP-адресу відвідувача — і дитини — без згоди. Зовнішнім сервісом шрифти вже не є.
 
 ### GitHub
 
@@ -268,7 +266,6 @@ TXT-запис `google-site-verification` підтверджує володін�
 | Пошта домену | Немає запису DMARC | Листи від `@pulsarkids.com` легше підробити, а Gmail і Outlook частіше кладуть їх у спам |
 | Name.com / Vercel | Домен зареєстровано на один рік, до 2027-10-07 | Без автоподовження зупиняються сайт, вхід через Auth0 і вся пошта |
 | Auth0 | CLI за замовчуванням дивиться на інший тенант (TinyKits) | Команду без `--tenant` буде виконано не в тому тенанті |
-| Google Fonts | Шрифти вантажаться з серверів Google на дитячому сайті | IP відвідувача потрапляє до третьої сторони; локальні файли шрифтів це знімають |
 | GitHub | Скрипти пушать прямо в `main`, CI немає | Тести й `check:content` перед деплоєм не запускаються |
 | Vercel | Вибір мови залежить від заголовка `x-vercel-ip-country` і редиректів у `vercel.json` | Поза Vercel (локально, інший хостинг) країна невідома — лишається мова браузера |
 | Моніторинг | Сервісу збору помилок немає | Помилки видно лише в журналах функцій Vercel |

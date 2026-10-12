@@ -1,11 +1,8 @@
-import { DEFAULT_SITE_URL, LINK_PARAM, TRIAL_PATH, rootHost } from '@pulsar/platform';
+import { LINK_PARAM, TRIAL_PATH, rootHost } from '@pulsar/platform';
 import type { LinkMode } from '@/core/account/api/client';
-import { getPortal } from '@/core/app/portal';
+import { getPortal, siteOrigin } from '@/core/app/portal';
 
-/** The public site's address, without a trailing slash. */
-export function siteOrigin(): string {
-  return getPortal() === 'dev' ? DEFAULT_SITE_URL : `https://${rootHost(window.location.hostname)}`;
-}
+export { siteOrigin };
 
 /** The address of the trial game — on the child's portal, or on this origin where there are no portals. */
 export function trialUrl(): string {

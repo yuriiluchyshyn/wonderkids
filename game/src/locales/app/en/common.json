@@ -644,6 +644,19 @@
       "sending": "Sending…",
       "again": "Send again",
       "change": "Change password"
+    },
+    "data": {
+      "title": "🔒 Your family’s data",
+      "hint": "Everything Pulsar Kids keeps about your family is in this account. You can take a copy of it or delete it all.",
+      "export": "Download the data",
+      "exporting": "Preparing the file…",
+      "exportFailed": "The file could not be prepared. Please try again.",
+      "delete": "Delete the account",
+      "confirm": "The account {email}, every child’s profile and all progress will be deleted for good. This cannot be undone.",
+      "confirmYes": "Yes, delete everything",
+      "confirmNo": "Keep the account",
+      "deleting": "Deleting…",
+      "deleteFailed": "The account could not be deleted. Please try again, or write to {contact}."
     }
   },
   "cm": {
@@ -935,5 +948,11 @@
       "parents": "For parents: progress is not saved in the trial game. Create an account and add your child’s profile — they will keep playing, and their progress will be saved.",
       "login": "We already have an account"
     }
+  },
+  "legal": {
+    "note": "By signing in or creating an account you accept the terms and the privacy policy:",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "label": "Legal information"
   }
 }
