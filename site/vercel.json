@@ -66,7 +66,7 @@
         {
           "type": "header",
           "key": "user-agent",
-          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Lighthouse|[Pp]review|HeadlessChrome).*"
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|meta-external|WhatsApp|Viber|Lighthouse|[Pp]review|HeadlessChrome|Google-InspectionTool|GoogleOther|Google-Read-Aloud|Mediapartners|ChatGPT-User|Claude-User|Perplexity-User|MistralAI-User|cohere-ai|Iframely|Embedly).*"
         }
       ],
       "destination": "/pl/",
@@ -89,7 +89,7 @@
         {
           "type": "header",
           "key": "user-agent",
-          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Lighthouse|[Pp]review|HeadlessChrome).*"
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|meta-external|WhatsApp|Viber|Lighthouse|[Pp]review|HeadlessChrome|Google-InspectionTool|GoogleOther|Google-Read-Aloud|Mediapartners|ChatGPT-User|Claude-User|Perplexity-User|MistralAI-User|cohere-ai|Iframely|Embedly).*"
         },
         {
           "type": "header",
@@ -110,7 +110,7 @@
         {
           "type": "header",
           "key": "user-agent",
-          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|WhatsApp|Lighthouse|[Pp]review|HeadlessChrome).*"
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|Slurp|facebookexternalhit|meta-external|WhatsApp|Viber|Lighthouse|[Pp]review|HeadlessChrome|Google-InspectionTool|GoogleOther|Google-Read-Aloud|Mediapartners|ChatGPT-User|Claude-User|Perplexity-User|MistralAI-User|cohere-ai|Iframely|Embedly).*"
         },
         {
           "type": "header",
@@ -130,6 +130,16 @@
       ],
       "destination": "/en/",
       "permanent": false
+    },
+    {
+      "source": "/en",
+      "destination": "/en/",
+      "permanent": true
+    },
+    {
+      "source": "/pl",
+      "destination": "/pl/",
+      "permanent": true
     },
     {
       "source": "/landing.html",
@@ -190,6 +200,21 @@
       "source": "/admin/:path*",
       "destination": "https://parents.pulsarkids.com/admin/:path*",
       "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/llms.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
     }
   ]
 }

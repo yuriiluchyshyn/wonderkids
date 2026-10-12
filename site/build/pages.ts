@@ -7,7 +7,7 @@ import { DEFAULT_LANG, LANGUAGES, SITE_LANGS, sitePath, type SiteLang } from '..
  * The public page in every language of the site.
  *
  * `index.html` is ONE template: it holds no text of its own, only keys of the
- * site's dictionary (`src/locales/<lang>.json`). The build turns it into a
+ * site's dictionary (`src/locales/<lang>.json` and `src/locales/seo/<lang>.json`). The build turns it into a
  * static page per language, so crawlers get real content at an address of its
  * own:
  *
@@ -20,6 +20,7 @@ import { DEFAULT_LANG, LANGUAGES, SITE_LANGS, sitePath, type SiteLang } from '..
  *   {{{section.key}}}      a text that carries markup of its own (`<span>`, `<small>`)
  *   {{json:section}}       a whole section as a JSON object — the words of a script
  *   {{@lang}} {{@path}} {{@ogLocale}} {{@langShort}}            facts about the page
+ *   {{@langList}}                                               every language of the site, as the items of a JSON list
  *   {{@alternates}} {{@ogAlternates}} {{@langLinks}}            links to its other languages
  *
  * A key the dictionary does not have fails the build. In dev the same pages
@@ -30,9 +31,23 @@ import { DEFAULT_LANG, LANGUAGES, SITE_LANGS, sitePath, type SiteLang } from '..
 
 export type Dictionaries = Record<SiteLang, Dict>;
 
+/**
+ * A language's words come from two files: what the page says to a reader
+ * (`src/locales/<lang>.json`) and what it says to search engines, link
+ * previews and assistants (`src/locales/seo/<lang>.json` — title, description,
+ * Open Graph, the texts of the structured data). The template asks for both
+ * the same way, so a new SEO text is a key in the second file and its
+ * `{{key}}` in `index.html`. A section may live in one file only.
+ */
 export function loadDictionaries(): Dictionaries {
-  const read = (lang: SiteLang): Dict => JSON.parse(readFileSync(new URL(`../src/locales/${lang}.json`, import.meta.url), 'utf8')) as Dict;
-  return Object.fromEntries(SITE_LANGS.map((lang) => [lang, read(lang)])) as Dictionaries;
+  const read = (file: string): Dict => JSON.parse(readFileSync(new URL(`../src/locales/${file}.json`, import.meta.url), 'utf8')) as Dict;
+  const of = (lang: SiteLang): Dict => {
+    const [page, seo] = [read(lang), read(`seo/${lang}`)];
+    const twice = Object.keys(seo).filter((section) => section in page);
+    if (twice.length > 0) throw new Error(`src/locales/${lang}.json and src/locales/seo/${lang}.json both have «${twice.join('», «')}»`);
+    return { ...seo, ...page };
+  };
+  return Object.fromEntries(SITE_LANGS.map((lang) => [lang, of(lang)])) as Dictionaries;
 }
 
 const html = (text: string): string => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -47,7 +62,7 @@ export function renderPage(template: string, lang: SiteLang, site: string, dicti
   const t = createTranslator<string, SiteLang>(dictionaries, DEFAULT_LANG);
   const known = t.keys();
   const text = (key: string): string => {
-    if (!known.has(key)) throw new Error(`index.html asks for «${key}», which src/locales/${DEFAULT_LANG}.json does not have`);
+    if (!known.has(key)) throw new Error(`index.html asks for «${key}», which neither src/locales/${DEFAULT_LANG}.json nor src/locales/seo/${DEFAULT_LANG}.json has`);
     return t(lang, key);
   };
   const section = (name: string): string => {
@@ -62,6 +77,7 @@ export function renderPage(template: string, lang: SiteLang, site: string, dicti
     path: sitePath(lang),
     ogLocale: LANGUAGES[lang].ogLocale,
     langShort: html(LANGUAGES[lang].short),
+    langList: SITE_LANGS.map((code) => JSON.stringify(code)).join(', '),
     langLinks: links.join('\n            '),
     // Every page names all of its languages, itself included; `/` is where a visitor with no language yet lands.
     alternates: [...SITE_LANGS.map((code) => `<link rel="alternate" hreflang="${code}" href="${site}/${sitePath(code)}" />`), `<link rel="alternate" hreflang="x-default" href="${site}/" />`].join('\n    '),

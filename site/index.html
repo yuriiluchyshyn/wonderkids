@@ -8,7 +8,6 @@
       name="description"
       content="{{meta.description}}"
     />
-    <meta name="keywords" content="{{meta.keywords}}" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#1e0a45" />
     <link rel="canonical" href="__SITE_URL__/{{@path}}" />
@@ -50,28 +49,51 @@
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@type": "WebSite",
-            "@id": "__SITE_URL__/{{@path}}#website",
+            "@type": "WebPage",
+            "@id": "__SITE_URL__/{{@path}}#webpage",
             "url": "__SITE_URL__/{{@path}}",
+            "name": "{{meta.title}}",
+            "description": "{{meta.description}}",
+            "inLanguage": "{{@lang}}",
+            "isPartOf": { "@id": "__SITE_URL__/#website" },
+            "about": { "@id": "__SITE_URL__/#app" },
+            "primaryImageOfPage": { "@type": "ImageObject", "url": "__SITE_URL__/og-image.png", "width": 1200, "height": 630 }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "__SITE_URL__/#website",
+            "url": "__SITE_URL__/",
             "name": "Pulsar Kids",
             "alternateName": ["Пульсар Кідс", "PulsarKids"],
-            "inLanguage": "{{@lang}}",
-            "description": "{{ld.siteDescription}}"
+            "inLanguage": [{{@langList}}],
+            "description": "{{ld.siteDescription}}",
+            "publisher": { "@id": "__SITE_URL__/#organization" }
+          },
+          {
+            "@type": "Organization",
+            "@id": "__SITE_URL__/#organization",
+            "name": "Pulsar Kids",
+            "alternateName": ["Пульсар Кідс", "PulsarKids"],
+            "url": "__SITE_URL__/",
+            "logo": { "@type": "ImageObject", "url": "__SITE_URL__/apple-touch-icon.png", "width": 180, "height": 180 }
           },
           {
             "@type": "WebApplication",
-            "@id": "__SITE_URL__/{{@path}}#app",
+            "@id": "__SITE_URL__/#app",
             "name": "Pulsar Kids",
             "url": "__PLAY_URL__/",
+            "description": "{{ld.siteDescription}}",
             "applicationCategory": "EducationalApplication",
             "operatingSystem": "Web",
             "browserRequirements": "{{ld.browser}}",
-            "inLanguage": "{{@lang}}",
+            "inLanguage": [{{@langList}}],
             "isFamilyFriendly": true,
+            "typicalAgeRange": "4-10",
             "audience": { "@type": "EducationalAudience", "educationalRole": "student", "audienceType": "{{ld.audience}}" },
             "educationalUse": "{{ld.use}}",
-            "about": ["{{ld.about.math}}", "{{ld.about.geography}}", "{{ld.about.history}}", "{{ld.about.ecology}}"],
-            "image": "__SITE_URL__/og-image.png"
+            "about": ["{{games.math.title}}", "{{games.language.title}}", "{{games.logic.title}}", "{{games.geography.title}}", "{{games.history.title}}", "{{games.astronomy.title}}", "{{games.ecology.title}}", "{{games.nature.title}}", "{{games.art.title}}"],
+            "image": "__SITE_URL__/og-image.png",
+            "publisher": { "@id": "__SITE_URL__/#organization" }
           }
         ]
       }
@@ -99,9 +121,10 @@
           <a href="#parents">{{nav.parents}}</a>
         </nav>
         <!-- The two ways in, top right; the language last of all. -->
+        <!-- «Play» is the child's door: their login (a child already signed in goes straight on to the hub). The game's bare address would send a visitor without a session to the parents' login. -->
         <div class="bar-actions">
           <a class="btn btn-parent btn-small hide-narrow" data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>
-          <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/">{{cta.play}}</a>
+          <a class="btn btn-play btn-small" data-portal="play" href="__PLAY_URL__/login">{{cta.play}}</a>
           <details class="langs">
             <summary aria-label="{{lang.label}}"><span class="emoji" aria-hidden="true">🌐</span> {{@langShort}}</summary>
             <ul>
@@ -115,8 +138,8 @@
     <main>
       <div class="wrap hero">
         <div>
-          <span class="eyebrow">{{hero.eyebrow}}</span>
-          <h1>{{{hero.title}}}</h1>
+          <!-- One heading: what this is (the words people search by), then what it feels like. -->
+          <h1><small class="eyebrow">{{hero.eyebrow}}</small> {{{hero.title}}}</h1>
           <p class="lead">
             {{hero.lead}}
           </p>
@@ -457,7 +480,7 @@
       <div class="wrap">
         <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}}</p>
         <p>
-          <a data-portal="play" href="__PLAY_URL__/">{{footer.game}}</a>·<a data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>·<a href="#feedback" data-letter-open>{{nav.write}}</a>
+          <a data-portal="play" href="__PLAY_URL__/login">{{footer.game}}</a>·<a data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>·<a href="#feedback" data-letter-open>{{nav.write}}</a>
         </p>
         <ul class="langs-row" aria-label="{{lang.label}}">
           {{@langLinks}}

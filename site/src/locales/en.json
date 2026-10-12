@@ -1,25 +1,4 @@
 {
-  "meta": {
-    "title": "Pulsar Kids — learning games for kids aged 4–10",
-    "description": "Pulsar Kids is a playful learning platform where children aged 4–10 master math, geography, history and ecology — in English. No ads, no tears, no timers: a mistake is just a hint, and parents stay in charge of screen time.",
-    "keywords": "learning games for kids, educational games, math for kids, flags of the world, fractions, learning through play, screen time, Pulsar Kids, pulsarkids",
-    "ogDescription": "Math, language, logic, geography, astronomy, history and nature in 50 games. Your child plays and builds a planet of their own, while you stay in charge of screen time.",
-    "ogTitle": "Pulsar Kids — learning that feels like an adventure",
-    "ogImageAlt": "Pulsar Kids — learning games for kids",
-    "twitterDescription": "50 learning games for kids aged 4–10. No ads, no tears, no timers."
-  },
-  "ld": {
-    "siteDescription": "Learning games for kids aged 4–10: math, language, logic, geography, astronomy, history, nature, ecology and art.",
-    "browser": "A modern browser on a phone, tablet or computer",
-    "audience": "Children aged 4–10",
-    "use": "Practice, self-study",
-    "about": {
-      "math": "Math",
-      "geography": "Geography",
-      "history": "History",
-      "ecology": "Ecology"
-    }
-  },
   "header": {
     "logoLabel": "Pulsar Kids — home",
     "navLabel": "Page sections"

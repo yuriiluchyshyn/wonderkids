@@ -11,18 +11,22 @@
     padding: 70px 0 56px;
   }
 }
+/* The first line of the heading: said small, in a pill of its own, above the big words. */
 .eyebrow {
-  display: inline-block;
+  display: block;
+  width: fit-content;
+  margin-bottom: 14px;
   padding: 6px 14px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: rgba(124, 108, 255, 0.18);
   color: #c9c2ff;
+  font-family: 'Fredoka', system-ui, -apple-system, 'Segoe UI', sans-serif;
   font-weight: 600;
   font-size: 0.95rem;
+  line-height: 1.55;
 }
 h1 {
-  margin-top: 14px;
   font-size: clamp(2.3rem, 7vw, 3.9rem);
   font-weight: 800;
 }

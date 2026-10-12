@@ -1,25 +1,4 @@
 {
-  "meta": {
-    "title": "Pulsar Kids — gry edukacyjne dla dzieci w wieku 4–10 lat",
-    "description": "Pulsar Kids to platforma z grami, dzięki której dzieci w wieku 4–10 lat poznają matematykę, geografię, historię i ekologię — po polsku. Bez reklam, łez i stoperów: błąd to tylko podpowiedź, a czas przed ekranem kontrolują rodzice.",
-    "keywords": "gry edukacyjne dla dzieci, nauka przez zabawę, matematyka dla dzieci, flagi świata, ułamki, gry rozwijające, czas przed ekranem, Pulsar Kids, pulsarkids",
-    "ogDescription": "Matematyka, język, logika, geografia, astronomia, historia i przyroda w 52 grach. Dziecko gra i buduje własną planetę, a rodzice decydują o czasie przed ekranem.",
-    "ogTitle": "Pulsar Kids — nauka, która wciąga jak przygoda",
-    "ogImageAlt": "Pulsar Kids — gry edukacyjne dla dzieci",
-    "twitterDescription": "52 gry edukacyjne dla dzieci w wieku 4–10 lat. Bez reklam, łez i stoperów."
-  },
-  "ld": {
-    "siteDescription": "Gry edukacyjne dla dzieci w wieku 4–10 lat: matematyka, język, logika, geografia, astronomia, historia, przyroda, ekologia i sztuka.",
-    "browser": "Nowoczesna przeglądarka na telefonie, tablecie lub komputerze",
-    "audience": "Dzieci w wieku 4–10 lat",
-    "use": "Ćwiczenia, samodzielna nauka",
-    "about": {
-      "math": "Matematyka",
-      "geography": "Geografia",
-      "history": "Historia",
-      "ecology": "Ekologia"
-    }
-  },
   "header": {
     "logoLabel": "Pulsar Kids — strona główna",
     "navLabel": "Sekcje strony"
