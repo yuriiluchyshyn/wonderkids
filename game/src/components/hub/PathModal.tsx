@@ -8,6 +8,8 @@ import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
 import { subSteps, pathKey } from '@/core/child/progress/path';
 import { hasChest } from '@/core/child/progress/treasures';
+import { hasKey } from '@/core/child/progress/keySteps';
+import { KEY } from '@/core/child/world/stations';
 import type { CatalogEntry } from './catalog';
 import styles from './PathModal.module.css';
 
@@ -61,6 +63,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
   // Hardest at top → easiest (1) at bottom, so the child climbs. Length is
   // per-adventure.
   const totalSteps = entry ? subSteps(entry.sub) : 0;
+  const game = entry ? pathKey(entry.module.id, entry.sub.id) : '';
   const steps = useMemo(
     () => Array.from({ length: totalSteps }, (_, i) => totalSteps - i),
     [totalSteps],
@@ -88,7 +91,7 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
       {entry && (
         <>
           <p className={styles.caption}>
-            {t('path.caption', { chests: theme.chest.closed })}
+            {t('path.caption', { chests: theme.chest.closed, key: KEY })}
           </p>
 
           <div className={styles.path} ref={pathRef}>
@@ -99,6 +102,8 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
               const offset = Math.sin(n * 0.6) * 32;
               const gift = giftTierFor(n, totalSteps);
               const chest = hasChest(n, totalSteps);
+              // A key of knowledge waits on this step (every 3–5 steps, always the same ones).
+              const key = hasKey(game, n, totalSteps);
               const fruit = theme.pathIcons[n % theme.pathIcons.length];
               const content = isCurrent
                 ? theme.mascot.emoji
@@ -129,12 +134,17 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                     disabled={!unlocked}
                     whileTap={unlocked ? { scale: 0.9, transition: { duration: 0.1 } } : undefined}
                     onClick={() => selectStep(n)}
-                    aria-label={`${t('path.step', { n })}${isCurrent ? t('path.current') : chest ? t('path.chest') : unlocked ? '' : t('path.locked')}`}
+                    aria-label={`${t('path.step', { n })}${isCurrent ? t('path.current') : chest ? t('path.chest') : unlocked ? '' : t('path.locked')}${key ? t('path.key') : ''}`}
                   >
                     <span className="emoji" aria-hidden>
                       {content}
                     </span>
                     {!isCurrent && <span className={styles.badge}>{n}</span>}
+                    {key && (
+                      <span className={[styles.key, n < current ? styles.keyTaken : ''].join(' ')} aria-hidden>
+                        {KEY}
+                      </span>
+                    )}
                   </motion.button>
                   </span>
                 </div>

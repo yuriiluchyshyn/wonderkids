@@ -6,7 +6,6 @@ import {
   useGameStore,
   selectPersistable,
   TIP_PREFIX,
-  type CelebrationStyle,
   type ChoicesGridSize,
   type CompanionSpeed,
   type Gender,
@@ -68,14 +67,6 @@ const SPEED_OPTIONS: { id: CompanionSpeed; icon: string }[] = [
   { id: 'slow', icon: '🐢' },
   { id: 'medium', icon: '🚶' },
   { id: 'fast', icon: '⚡' },
-];
-
-const CELEBRATION_OPTIONS: { id: CelebrationStyle; icon: string }[] = [
-  { id: 'balloons', icon: '🎈' },
-  { id: 'balls', icon: '⚽' },
-  { id: 'stars', icon: '🏅' },
-  { id: 'fireworks', icon: '🎆' },
-  { id: 'candy', icon: '🍬' },
 ];
 
 
@@ -414,7 +405,7 @@ export function ParentDashboard() {
         <ThemeGrid />
       </section>
 
-      {/* ---- Companion & celebration ---- */}
+      {/* ---- Companion ---- */}
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>{t('parent.rollback.title')}</h3>
         <p className={styles.hint}>
@@ -438,15 +429,6 @@ export function ParentDashboard() {
       </section>
 
       <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>{t('parent.celebration.title')}</h3>
-        <div className={styles.chipRow}>
-          {CELEBRATION_OPTIONS.map((o) => (
-            <Chip key={o.id} icon={o.icon} label={t(`celebration.${o.id}`)} active={settings.celebration === o.id} onClick={() => updateSettings({ celebration: o.id })} />
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
         <h3 className={styles.sectionTitle}>{t('parent.grid.title')}</h3>
         <p className={styles.hint}>{t('parent.grid.hint')}</p>
         <div className={styles.chipRow}>
@@ -459,21 +441,6 @@ export function ParentDashboard() {
               onClick={() => updateSettings({ choicesGridSize: o.id })}
             />
           ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>{t('parent.facts.title')}</h3>
-        <p className={styles.hint}>
-          {t('parent.facts.hint')}
-        </p>
-        <div className={styles.chipRow}>
-          <Chip
-            icon={settings.funFacts ? '💡' : '⏩'}
-            label={settings.funFacts ? t('parent.facts.on') : t('parent.facts.off')}
-            active={settings.funFacts}
-            onClick={() => updateSettings({ funFacts: !settings.funFacts })}
-          />
         </div>
       </section>
 

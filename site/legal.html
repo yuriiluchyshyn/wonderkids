@@ -64,7 +64,7 @@
     <div class="sky" aria-hidden="true"><i></i><i></i></div>
     <header>
       <div class="wrap bar">
-        <a class="logo" href="/{{@home}}" aria-label="{{header.logoLabel}}">
+        <a class="logo" href="/{{@home}}" data-home aria-label="{{header.logoLabel}}">
           <span class="emoji" aria-hidden="true">🪐</span> Pulsar Kids
         </a>
         <div class="bar-actions">
@@ -82,6 +82,8 @@
 
     <main>
       <article class="wrap legal">
+        <!-- The way back, where a reader looks for it first. -->
+        <p class="legal-back"><a href="/{{@home}}" data-home>← {{footer.home}}</a></p>
         {{@docBody}}
       </article>
     </main>
@@ -90,15 +92,12 @@
       <div class="wrap">
         <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}}</p>
         <p>
-          <a href="/{{@home}}">{{footer.home}}</a>·<a href="/{{@home}}privacy/">{{footer.privacy}}</a>·<a href="/{{@home}}terms/">{{footer.terms}}</a>·<a href="mailto:{{@email}}">{{@email}}</a>
+          <a href="/{{@home}}" data-home>{{footer.home}}</a>·<a href="/{{@home}}privacy/">{{footer.privacy}}</a>·<a href="/{{@home}}terms/">{{footer.terms}}</a>·<a href="mailto:{{@email}}">{{@email}}</a>
         </p>
-        <ul class="langs-row" aria-label="{{lang.label}}">
-          {{@langLinks}}
-        </ul>
       </div>
     </footer>
 
-    <script type="module" src="/src/scripts/legal.ts"></script>
+    <script type="module" src="/src/scripts/inner.ts"></script>
     <!-- Vercel Web Analytics: anonymous page views, no cookies. -->
     <script>
       window.va =

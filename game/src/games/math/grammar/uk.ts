@@ -1,7 +1,10 @@
-import { counted, countWord, num } from '@/core/language/uk';
+import { counted, countWord, num, ordinalWords } from '@/core/language/uk';
+import { clockExplain, partOfDay } from './clockExplain';
 import { CURRENCIES } from '@/core/game/content/currency';
 import { LANGUAGES } from '@/core/language';
 import type { MathTexts, MeasureWords } from '@/games/math/grammar/types';
+import type { MathOp } from '@/games/math/ids';
+import { chainTexts } from './expr';
 import { fill } from '@/core/language/fill';
 import J from '@/locales/app/uk/games/math.json';
 
@@ -35,6 +38,13 @@ function heaps(n: number): string {
   return ones >= 2 && ones <= 4 && !(tens >= 12 && tens <= 14) ? fill(J.heaps[2], { n: num(n, 'f') }) : fill(J.heaps[3], { n: num(n, 'f') });
 }
 
+/** «плюс», «помножити на» — an operation as it is read out. */
+const opWord = (op: MathOp): string => {
+  const words = J.mental.prompt.word;
+  return op === '+' ? words[1] : op === '-' ? words[2] : op === '×' ? words[3] : words[4];
+};
+
+
 export const uk: MathTexts = {
   intro: {
     add: (it) => fill(J.intro.add, { it }),
@@ -49,16 +59,14 @@ export const uk: MathTexts = {
   heaps,
 
   mental: {
-    prompt: (a, b, op) => {
-      const word = op === '+' ? J.mental.prompt.word[1] : op === '-' ? J.mental.prompt.word[2] : op === '×' ? J.mental.prompt.word[3] : J.mental.prompt.word[4];
-      return fill(J.mental.prompt._, { a, word, b });
-    },
+    prompt: (a, b, op) => fill(J.mental.prompt._, { a, word: opWord(op), b }),
     hint: (a, b, op) => {
       if (op === '×') return fill(J.mental.hint[1], { a: heaps(a), b });
       if (op === '÷') return fill(J.mental.hint[2], { a, b });
       if (op === '-') return fill(J.mental.hint[3], { a, b });
       return fill(J.mental.hint[4], { a, b });
     },
+    ...chainTexts(J.mental, opWord),
   },
 
   balance: {
@@ -108,14 +116,12 @@ export const uk: MathTexts = {
       return fill(J.clock.say[5], { h: HOUR[h], m });
     },
     intro: J.clock.intro,
-    hint: ({ h, m }) => {
-      const long = m === 0 ? J.clock.hint.long[1] : fill(J.clock.hint.long[2], { m: m / 5 });
-      const short = m === 0 ? fill(J.clock.hint.short[1], { h }) : fill(J.clock.hint.short[2], { h });
-      return fill(J.clock.hint._, { short, long });
-    },
+    say24: (hour24, m) => (m === 0 ? fill(J.clock.say24[1], { h: ordinalWords(hour24, 'f') }) : fill(J.clock.say24[2], { h: ordinalWords(hour24, 'f'), m })),
+    explain: (time, told, hour24) => clockExplain(J.clock, time, told, hour24),
     yes: (time) => fill(J.clock.yes, { time }),
     find: (time) => fill(J.clock.find, { time }),
     read: J.clock.read,
+    read24: (hour24) => fill(J.clock.read24, { part: J.clock.parts[partOfDay(hour24)] }),
   },
 
   maze: {

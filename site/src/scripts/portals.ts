@@ -4,7 +4,7 @@
  * (`build/seo.ts`), and here they only learn two things — where the game is
  * when both run on a developer's machine, and where the visitor came from.
  */
-import { DEV_PORT, TRIAL_PATH, VIA_PARAM, isLocalHost, queryOfSource, rootHost, sourceOfQuery, type PortalHost, type SignupSource } from '@pulsar/platform';
+import { DEV_PORT, TRIAL_PATH, VIA_PARAM, type VisitVia, isLocalHost, queryOfSource, rootHost, sourceOfQuery, type PortalHost, type SignupSource } from '@pulsar/platform';
 import { readSource, rememberLangChoice, saveSource } from '@pulsar/platform/browser';
 
 /** Where each portal lets a visitor in when the game runs on one origin. */
@@ -37,7 +37,9 @@ function visitorSource(): SignupSource | undefined {
 /**
  * Points every `[data-portal]` link at its portal, carrying the visitor's
  * source and language along. A link marked `data-trial` leads into the trial
- * game (no account) and says that it was this site's button that led there.
+ * game (no account) and says that it was this site's button that led there —
+ * or, on a game's own page, that page's button (the link already names the
+ * game and says `via=page`; what it says is kept).
  */
 export function wirePortalLinks(): void {
   const source = visitorSource();
@@ -48,8 +50,11 @@ export function wirePortalLinks(): void {
   document.querySelectorAll<HTMLAnchorElement>('a[data-portal]').forEach((link) => {
     const portal = link.dataset.portal as PortalHost;
     const trial = 'trial' in link.dataset;
-    const url = new URL((local ? local + (trial ? TRIAL_PATH : LOCAL_ENTRY[portal]) : link.href) + from);
-    if (trial) url.searchParams.set(VIA_PARAM, 'site');
+    const built = new URL(link.href);
+    const url = local ? new URL(local + (trial ? TRIAL_PATH : LOCAL_ENTRY[portal])) : built;
+    // What the link itself says (a game's page names its game) goes along to the dev server too; then the visitor's source.
+    for (const [name, value] of [...built.searchParams, ...new URLSearchParams(from)]) url.searchParams.set(name, value);
+    if (trial && !url.searchParams.has(VIA_PARAM)) url.searchParams.set(VIA_PARAM, 'site' satisfies VisitVia);
     link.href = url.href;
     // Going on from this page, the visitor goes on in its language.
     link.addEventListener('click', () => rememberLangChoice(document.documentElement.lang));

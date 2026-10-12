@@ -6,6 +6,11 @@ import TEXTS from '@/locales/app/uk/games/history.json';
 
 const J = TEXTS.config;
 
+/** The sets the hub and the cabinet show the games in: the world, Ukraine, Poland. */
+const WORLD = { id: 'world', icon: '🌍', label: J.GROUPS.world };
+const UA = { id: 'ua', icon: '🇺🇦', label: J.GROUPS.ua };
+const PL = { id: 'pl', icon: '🇵🇱', label: J.GROUPS.pl };
+
 /** The subject as the hub shows it. */
 export const SUBJECT: SubjectDef = {
   id: 'history',
@@ -34,6 +39,7 @@ export const GAMES: GameCard[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 6,
     mechanics: Mechanics.SorterBins,
+    group: WORLD,
     hasText: true,
   },
   {
@@ -50,6 +56,7 @@ export const GAMES: GameCard[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 6,
     mechanics: [Mechanics.ChronoSequence, Mechanics.GridChoice, Mechanics.SorterBins],
+    group: WORLD,
     hasText: true,
   },
   {
@@ -65,6 +72,7 @@ export const GAMES: GameCard[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
     mechanics: [Mechanics.DragMatch, Mechanics.GridChoice],
+    group: WORLD,
     hasText: true,
   },
   {
@@ -80,6 +88,7 @@ export const GAMES: GameCard[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
     mechanics: [Mechanics.DragMatch, Mechanics.GridChoice],
+    group: UA,
     hasText: true,
   },
   {
@@ -95,6 +104,7 @@ export const GAMES: GameCard[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
     mechanics: [Mechanics.GridChoice, Mechanics.DragMatch],
+    group: WORLD,
     hasText: true,
   },
   {
@@ -110,6 +120,7 @@ export const GAMES: GameCard[] = [
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,
     mechanics: [Mechanics.GridChoice, Mechanics.DragMatch],
+    group: UA,
     hasText: true,
   },
   // The history of Poland (`content/poland.ts`) — in every language, like the history of Ukraine.
@@ -126,6 +137,7 @@ export const GAMES: GameCard[] = [
     publishDate: I18N_RELEASE,
     tasksPerLevel: 10,
     mechanics: [Mechanics.DragMatch, Mechanics.GridChoice],
+    group: PL,
     hasText: true,
   },
   {
@@ -141,6 +153,7 @@ export const GAMES: GameCard[] = [
     publishDate: I18N_RELEASE,
     tasksPerLevel: 10,
     mechanics: [Mechanics.GridChoice, Mechanics.DragMatch],
+    group: PL,
     hasText: true,
   },
 ];

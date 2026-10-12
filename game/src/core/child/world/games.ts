@@ -8,6 +8,7 @@ import { keyBalance, keysEarned, type GameProgress } from './world';
 export function gamesProgress(progress: Record<string, number>): GameProgress[] {
   return moduleRegistry.getAll().flatMap((module) =>
     module.subCategories.map((sub) => ({
+      id: pathKey(module.id, sub.id),
       free: isFreePlay(sub),
       steps: subSteps(sub),
       step: progress[pathKey(module.id, sub.id)] ?? 0,

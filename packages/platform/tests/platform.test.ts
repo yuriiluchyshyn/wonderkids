@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { linkOfQuery, isLocalHost, isPreviewHost, portalHost, portalOfHost, publicUrls, queryOfSource, rootHost, sharedCookieDomain, sourceOfQuery } from '../src/index.ts';
+import { gameOfId, gameOfQuery, linkOfQuery, viaOfQuery, isLocalHost, isPreviewHost, portalHost, portalOfHost, publicUrls, queryOfSource, rootHost, sharedCookieDomain, sourceOfQuery } from '../src/index.ts';
 
 test('hosts: the root domain, its portals, and where there are none', () => {
   assert.equal(rootHost('Play.PulsarKids.com'), 'pulsarkids.com');
@@ -38,6 +38,12 @@ test('a source travels in a link and comes out the same', () => {
 test('the owner’s own link: its code travels with the source, and alone it is the source', () => {
   assert.equal(linkOfQuery('?l=Insta-Bio'), 'insta-bio');
   assert.equal(linkOfQuery('?l=<script>'), undefined);
+  // The game a trial is asked to open in, and how the visitor got there — only what is written the way it should be.
+  assert.deepEqual(gameOfQuery('?game=geography%3Aflags&via=page'), { module: 'geography', sub: 'flags' });
+  assert.equal(gameOfQuery('?game=../admin'), undefined);
+  assert.equal(gameOfId('math:word_problems')?.sub, 'word_problems');
+  assert.equal(viaOfQuery('?via=page'), 'page');
+  assert.equal(viaOfQuery('?via=magic'), 'link');
   assert.deepEqual(sourceOfQuery('?l=insta-bio'), { source: 'insta-bio', medium: 'link', link: 'insta-bio' });
   const both = sourceOfQuery('?utm_source=ig&utm_medium=paid&l=spring');
   assert.deepEqual(both, { source: 'ig', medium: 'paid', campaign: undefined, link: 'spring' });

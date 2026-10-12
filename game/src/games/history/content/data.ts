@@ -102,7 +102,9 @@ export interface Invention {
  * (see its CREDITS.md). The others keep the pictogram: a work still under
  * copyright (Picasso, Prymachenko) or one no honest picture exists for.
  */
-export const PICTURED = new Set(['alexander', 'andersen', 'archimedes', 'armstrong', 'beethoven', 'chaplin', 'cleopatra', 'columbus', 'copernicus', 'cousteau', 'curie', 'darwin', 'davinci', 'edison', 'franko', 'galileo', 'goodall', 'gutenberg', 'joan', 'kadeniuk', 'khmelnytsky', 'korolov', 'leontovych', 'lesia', 'magellan', 'marcopolo', 'michelangelo', 'mozart', 'newton', 'nightingale', 'pythagoras', 'shakespeare', 'shevchenko', 'sikorsky', 'tesla', 'vangogh', 'wright', 'yaroslav']);
+export const PICTURED = new Set(['alexander', 'andersen', 'archimedes', 'armstrong', 'beethoven', 'chaplin', 'cleopatra', 'columbus', 'copernicus', 'cousteau', 'curie', 'darwin', 'davinci', 'edison', 'einstein', 'franko', 'galileo', 'goodall', 'gutenberg', 'joan', 'kadeniuk', 'khmelnytsky', 'korolov', 'leontovych', 'lesia', 'magellan', 'marcopolo', 'michelangelo', 'mozart', 'newton', 'nightingale', 'pythagoras', 'shakespeare', 'shevchenko', 'sikorsky', 'tesla', 'vangogh', 'wright', 'yaroslav',
+  // The history of Poland (Lem's robot tales are still under copyright).
+  'mieszko', 'chopin', 'chrobry', 'kazimierz', 'jadwiga', 'jagiello', 'sobieski', 'kosciuszko', 'mickiewicz', 'matejko', 'korczak', 'hermaszewski', 'szymborska']);
 /** Inventions that have no picture of their own in `public/things/inv_<id>.webp`. */
 export const UNPICTURED_INVENTIONS = new Set<string>([]);
 

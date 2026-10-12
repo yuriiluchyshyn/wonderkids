@@ -1,0 +1,10 @@
+{
+  "name": "@pulsar/catalog",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The catalogue of games, written out by the game for the public site: every game's card and three of its real tasks, per language.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

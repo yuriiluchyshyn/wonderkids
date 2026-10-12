@@ -8,8 +8,8 @@ const J = TEXTS.content.poland;
  * come with the Polish language. The words here are the Ukrainian ones, like
  * the rest of `content/`; Polish and English are in `grammar/`.
  *
- * `picture` borrows a portrait that is already drawn; without it a person is
- * shown by the emoji alone — there are no portraits of these people yet.
+ * Portraits are `public/people/<id>.webp`; `picture` borrows one that is
+ * already there (Kopernik is the world game's Copernicus).
  */
 export const PL_FIGURES: Achiever[] = [
   { id: 'mieszko', name: J.PL_FIGURES.mieszko.name, face: '🤴', symbol: '🦅', symbolName: J.PL_FIGURES.mieszko.symbolName, fact: J.PL_FIGURES.mieszko.fact },
@@ -34,13 +34,13 @@ export const PL_WHO_ASK: Record<string, string> = J.PL_WHO_ASK;
 
 export const PL_INVENTIONS: Invention[] = [
   { id: 'pl_lamp', name: J.PL_INVENTIONS.pl_lamp.name, emoji: '🪔', by: J.PL_INVENTIONS.pl_lamp.by, face: 'lukasiewicz', fact: J.PL_INVENTIONS.pl_lamp.fact },
-  { id: 'pl_vitamins', name: J.PL_INVENTIONS.pl_vitamins.name, ask: J.PL_INVENTIONS.pl_vitamins.ask, emoji: '🍊', by: J.PL_INVENTIONS.pl_vitamins.by, fact: J.PL_INVENTIONS.pl_vitamins.fact },
-  { id: 'pl_radio', name: J.PL_INVENTIONS.pl_radio.name, emoji: '📻', by: J.PL_INVENTIONS.pl_radio.by, fact: J.PL_INVENTIONS.pl_radio.fact },
-  { id: 'pl_detector', name: J.PL_INVENTIONS.pl_detector.name, emoji: '🧲', by: J.PL_INVENTIONS.pl_detector.by, fact: J.PL_INVENTIONS.pl_detector.fact },
-  { id: 'pl_crystal', name: J.PL_INVENTIONS.pl_crystal.name, ask: J.PL_INVENTIONS.pl_crystal.ask, emoji: '💎', by: J.PL_INVENTIONS.pl_crystal.by, fact: J.PL_INVENTIONS.pl_crystal.fact },
-  { id: 'pl_rover', name: J.PL_INVENTIONS.pl_rover.name, emoji: '🌙', by: J.PL_INVENTIONS.pl_rover.by, fact: J.PL_INVENTIONS.pl_rover.fact },
-  { id: 'pl_vaccine', name: J.PL_INVENTIONS.pl_vaccine.name, emoji: '💉', by: J.PL_INVENTIONS.pl_vaccine.by, fact: J.PL_INVENTIONS.pl_vaccine.fact },
-  { id: 'pl_esperanto', name: J.PL_INVENTIONS.pl_esperanto.name, ask: J.PL_INVENTIONS.pl_esperanto.ask, emoji: '💬', by: J.PL_INVENTIONS.pl_esperanto.by, fact: J.PL_INVENTIONS.pl_esperanto.fact },
-  { id: 'pl_enigma', name: J.PL_INVENTIONS.pl_enigma.name, ask: J.PL_INVENTIONS.pl_enigma.ask, emoji: '🔐', by: J.PL_INVENTIONS.pl_enigma.by, fact: J.PL_INVENTIONS.pl_enigma.fact },
-  { id: 'pl_vest', name: J.PL_INVENTIONS.pl_vest.name, emoji: '🦺', by: J.PL_INVENTIONS.pl_vest.by, fact: J.PL_INVENTIONS.pl_vest.fact },
+  { id: 'pl_vitamins', name: J.PL_INVENTIONS.pl_vitamins.name, ask: J.PL_INVENTIONS.pl_vitamins.ask, emoji: '🍊', by: J.PL_INVENTIONS.pl_vitamins.by, face: 'funk', fact: J.PL_INVENTIONS.pl_vitamins.fact },
+  { id: 'pl_radio', name: J.PL_INVENTIONS.pl_radio.name, emoji: '📻', by: J.PL_INVENTIONS.pl_radio.by, face: 'magnuski', fact: J.PL_INVENTIONS.pl_radio.fact },
+  { id: 'pl_detector', name: J.PL_INVENTIONS.pl_detector.name, emoji: '🧲', by: J.PL_INVENTIONS.pl_detector.by, face: 'kosacki', fact: J.PL_INVENTIONS.pl_detector.fact },
+  { id: 'pl_crystal', name: J.PL_INVENTIONS.pl_crystal.name, ask: J.PL_INVENTIONS.pl_crystal.ask, emoji: '💎', by: J.PL_INVENTIONS.pl_crystal.by, face: 'czochralski', fact: J.PL_INVENTIONS.pl_crystal.fact },
+  { id: 'pl_rover', name: J.PL_INVENTIONS.pl_rover.name, emoji: '🌙', by: J.PL_INVENTIONS.pl_rover.by, face: 'bekker', fact: J.PL_INVENTIONS.pl_rover.fact },
+  { id: 'pl_vaccine', name: J.PL_INVENTIONS.pl_vaccine.name, emoji: '💉', by: J.PL_INVENTIONS.pl_vaccine.by, face: 'weigl', fact: J.PL_INVENTIONS.pl_vaccine.fact },
+  { id: 'pl_esperanto', name: J.PL_INVENTIONS.pl_esperanto.name, ask: J.PL_INVENTIONS.pl_esperanto.ask, emoji: '💬', by: J.PL_INVENTIONS.pl_esperanto.by, face: 'zamenhof', fact: J.PL_INVENTIONS.pl_esperanto.fact },
+  { id: 'pl_enigma', name: J.PL_INVENTIONS.pl_enigma.name, ask: J.PL_INVENTIONS.pl_enigma.ask, emoji: '🔐', by: J.PL_INVENTIONS.pl_enigma.by, face: 'rejewski', fact: J.PL_INVENTIONS.pl_enigma.fact },
+  { id: 'pl_vest', name: J.PL_INVENTIONS.pl_vest.name, emoji: '🦺', by: J.PL_INVENTIONS.pl_vest.by, face: 'zeglen', fact: J.PL_INVENTIONS.pl_vest.fact },
 ];

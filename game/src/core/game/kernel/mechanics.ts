@@ -19,4 +19,5 @@ export enum Mechanics {
   DotToDot = 'UI_DOT_TO_DOT',
   ColorMix = 'UI_COLOR_MIX',
   LetterGrid = 'UI_LETTER_GRID',
+  WordSearch = 'UI_WORD_SEARCH',
 }

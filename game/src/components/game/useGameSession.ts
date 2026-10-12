@@ -12,6 +12,7 @@ import type { AnswerResult } from '@/core/game/engine/BaseGameEngine';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { subSteps } from '@/core/child/progress/path';
 import type { CurrencyId } from '@/core/game/content/currency';
+import { cueKey, cuesHidden, hasCues, nextKnown } from '@/core/game/cues/cues';
 
 /**
  * Mistakes on a task before the helper appears (PRD §5). The helper is ONLY
@@ -46,6 +47,11 @@ export interface GameSession {
   baseTotal: number;
   solvedCount: number;
   hintActive: boolean;
+  /**
+   * The association pictures on the answers are hidden: the child knows this
+   * task well enough. They come back after a mistake (`core/game/cues`).
+   */
+  cuesHidden: boolean;
   /** This showing is the one repeat of a task the child missed earlier. */
   isRepeat: boolean;
   /** True when the just-answered task was correct (brief, before advancing). */
@@ -61,6 +67,8 @@ export interface GameSession {
    * task joins the level. False when the level cannot grow any further.
    */
   extendForIdle: () => boolean;
+  /** The child stayed silent on a task that explains itself: raise its help, counted as no mistake. */
+  explainForIdle: () => void;
   /** How many of the level's tasks were added by idle roll-back. */
   idleExtras: number;
   /**
@@ -87,7 +95,8 @@ export function drawCandidates(
   // Made in the language on the screen, and once more in the voice's when that is another.
   return inLanguages(langs, (lang) => {
     const inLang = { ...base, lang };
-    if (module.buildLevel) return module.buildLevel(inLang, count);
+    const own = module.buildLevel?.(inLang, count);
+    if (own) return own;
     const draw = (stepOf: () => number) =>
       Array.from({ length: count * CANDIDATE_FACTOR }, (_, index) =>
         module.generateTask({ ...inLang, step: stepOf(), index }),
@@ -126,6 +135,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   const recordTaskComplete = useGameStore((s) => s.recordTaskComplete);
   const advanceStep = useGameStore((s) => s.advanceStep);
   const recordLevelComplete = useGameStore((s) => s.recordLevelComplete);
+  const setCueCount = useGameStore((s) => s.setCueCount);
 
   // One engine per level. Rebuilt only when the level itself changes.
   const engine = useMemo(() => {
@@ -149,6 +159,8 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   const [hintUsedThisSession, setHintUsedThisSession] = useState(false);
   const [awaitingOutro, setAwaitingOutro] = useState(false);
   const [idleExtras, setIdleExtras] = useState(0);
+  // The queue position whose task is explained because the child stayed silent on it.
+  const [explainedAt, setExplainedAt] = useState(-1);
   // The pending "go to the next task" step, run exactly once.
   const advanceRef = useRef<(() => void) | null>(null);
 
@@ -166,6 +178,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     setHintUsedThisSession(false);
     setAwaitingOutro(false);
     setIdleExtras(0);
+    setExplainedAt(-1);
     advanceRef.current = null;
     advancingRef.current = false;
   }, [engine]);
@@ -178,6 +191,30 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   // had moved on while `finished` was still false, so the shell took the last
   // task for a new one and read its prompt out under the win screen.
   const over = finished || Boolean(engine && engine.total > 0 && engine.isFinished);
+
+  // How well the task on screen is known — read once, when it comes up, so the
+  // answer the child is giving now never changes how it is asked now.
+  const position = engine?.position ?? 0;
+  const cue = useMemo(() => {
+    if (!task || !hasCues(task)) return null;
+    const key = cueKey(moduleId, subCategoryId, taskKey(task));
+    return { key, known: useGameStore.getState().progress[key] ?? 0 };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per showing
+  }, [engine, position, task?.id, moduleId, subCategoryId]);
+  const cueRef = useRef(cue);
+  cueRef.current = cue;
+
+  /** Remember how this showing of a cue task went. */
+  const recordCue = useCallback(
+    (clean: boolean) => {
+      const c = cueRef.current;
+      if (!c) return;
+      const wasHidden = cuesHidden({ known: c.known, mistakes: 0, solved: false });
+      const next = nextKnown(c.known, { clean, wasHidden });
+      if (next !== null && next !== (useGameStore.getState().progress[c.key] ?? 0)) setCueCount(c.key, next);
+    },
+    [setCueCount],
+  );
 
   /** Append one question the level does not ask yet. False once capped. */
   const appendFresh = useCallback((): boolean => {
@@ -204,6 +241,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     if (!current || advancingRef.current) return null;
 
     const result = engine.submitAnswer(current.id, false);
+    recordCue(false);
     const next = mistakesRef.current + 1;
     mistakesRef.current = next;
     setMistakes(next);
@@ -215,7 +253,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     if (next > HINT_THRESHOLD) appendFresh();
     rerender();
     return result;
-  }, [engine, module, appendFresh, rerender]);
+  }, [engine, module, appendFresh, rerender, recordCue]);
 
   const registerSuccess = useCallback(() => {
     if (!engine) return;
@@ -229,6 +267,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     setEarned((e) => e + current.reward);
     awardArtifacts(current.reward);
     recordTaskComplete({ hintUsed: mistakesRef.current >= HINT_THRESHOLD });
+    recordCue(mistakesRef.current === 0);
 
     const advance = () => {
       if (advanceRef.current !== advance) return; // already ran, or level changed
@@ -260,9 +299,19 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     } else {
       window.setTimeout(advance, ADVANCE_DELAY_MS);
     }
-  }, [engine, step, maxSteps, awardArtifacts, recordTaskComplete, advanceStep, recordLevelComplete, moduleId, subCategoryId, rerender]);
+  }, [engine, step, maxSteps, awardArtifacts, recordTaskComplete, recordCue, advanceStep, recordLevelComplete, moduleId, subCategoryId, rerender]);
 
   const outroDone = useCallback(() => advanceRef.current?.(), []);
+
+  /**
+   * The child has not answered for a long while on a task that can explain
+   * itself (`payload.explain`): show the help as if they had asked for it. It
+   * counts as no mistake.
+   */
+  const explainForIdle = useCallback(() => {
+    if (!engine || engine.isFinished || advancingRef.current) return;
+    setExplainedAt(engine.position);
+  }, [engine]);
 
   return {
     module,
@@ -273,7 +322,8 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     total: engine?.total ?? 0,
     baseTotal: engine?.baseTotal ?? 0,
     solvedCount,
-    hintActive: !justSolved && mistakes >= (isRepeat ? REPEAT_HINT_THRESHOLD : HINT_THRESHOLD),
+    hintActive: !justSolved && (mistakes >= (isRepeat ? REPEAT_HINT_THRESHOLD : HINT_THRESHOLD) || explainedAt === (engine?.position ?? -2)),
+    cuesHidden: cue !== null && cuesHidden({ known: cue.known, mistakes, solved: justSolved }),
     isRepeat,
     justSolved,
     finished: over,
@@ -282,6 +332,7 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     registerSuccess,
     registerMistake,
     extendForIdle,
+    explainForIdle,
     idleExtras,
     awaitingOutro,
     outroDone,

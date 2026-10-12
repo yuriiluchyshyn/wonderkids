@@ -24,7 +24,7 @@ const dayOf = (iso: string) => {
 };
 const dayName = (day: string) => day.split('-').reverse().join('.');
 
-const VIA_NAME: Record<MarketingVisit['via'], string> = { link: 'за посиланням', site: 'кнопка на сайті' };
+const VIA_NAME: Record<MarketingVisit['via'], string> = { link: 'за посиланням', site: 'кнопка на сайті', page: 'сторінка гри' };
 const DEVICE_NAME: Record<string, string> = { mobile: '📱 телефон', tablet: '📱 планшет', desktop: '💻 комп’ютер' };
 
 const linkLabel = (visit: MarketingVisit) => (visit.link === null ? '— без посилання' : visit.linkName ? `${visit.linkName} (${visit.link})` : `${visit.link} (видалене)`);
@@ -206,6 +206,7 @@ function Visits({ visits }: { visits: MarketingVisit[] }) {
     { id: 'link', label: 'Посилання', value: linkLabel },
     { id: 'mode', label: 'Режим', value: (v) => MODE_NAME[v.mode] },
     { id: 'via', label: 'Як зайшли', value: (v) => VIA_NAME[v.via] },
+    { id: 'game', label: 'Гра', value: (v) => v.game ?? '' },
     { id: 'country', label: 'Країна', value: (v) => countryName(v.country) },
     { id: 'lang', label: 'Мова', value: (v) => v.lang ?? '—' },
     { id: 'device', label: 'Пристрій', value: (v) => DEVICE_NAME[v.device ?? ''] ?? '—' },

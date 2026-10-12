@@ -59,9 +59,9 @@ test('the whole planet is a long project: thousands of artifacts', () => {
 
 test('every 5th path step is a gift that brings one resident', () => {
   const games = [
-    { free: false, steps: 40, step: 11, plays: 10 }, // steps 5 and 10 passed
-    { free: false, steps: 10, step: 6, plays: 5 }, // step 5 passed
-    { free: true, steps: 1, step: 1, plays: 30 }, // free play gives no gifts
+    { id: 'a', free: false, steps: 40, step: 11, plays: 10 }, // steps 5 and 10 passed
+    { id: 'b', free: false, steps: 10, step: 6, plays: 5 }, // step 5 passed
+    { id: 'c', free: true, steps: 1, step: 1, plays: 30 }, // free play gives no gifts
   ];
   assert.equal(giftsEarned(games), 3);
   const all = ['a', 'b', 'c', 'd'];
@@ -109,30 +109,55 @@ test('the dream build waits for the spaceport too', async () => {
   assert.equal(statusOf(shopState(withPort, new Set([...allButDream, SPACEPORT_ID]), 5000), 'b9').status, 'affordable');
 });
 
-test('a key of knowledge is earned for every new step of any game, and stations are opened with them', async () => {
+test('keys lie on a path every 3–5 steps, always on the same steps of a game', async () => {
+  const { keySteps, hasKey, keysOnPath, KEY_GAP } = await import('../src/core/child/progress/keySteps.ts');
+  for (const game of ['math:clock', 'art:mixer', 'language:uk-words', 'geography:flags']) {
+    const at = keySteps(game, 199);
+    assert.ok(at[0] >= KEY_GAP.min && at[0] <= KEY_GAP.max, `${game}: the first key at ${at[0]}`);
+    at.slice(1).forEach((s, i) => {
+      const gap = s - at[i];
+      assert.ok(gap >= KEY_GAP.min && gap <= KEY_GAP.max, `${game}: a gap of ${gap}`);
+    });
+    // The same game, the same steps — the draw is the game's id, not chance.
+    assert.deepEqual(keySteps(game, 199), at);
+    assert.ok(at.every((s) => hasKey(game, s, 200)));
+    // Passing a key's step earns it; standing on it does not yet.
+    assert.equal(keysOnPath(game, at[0], 200), 0);
+    assert.equal(keysOnPath(game, at[0] + 1, 200), 1);
+  }
+  // Two games do not share one pattern.
+  assert.notDeepEqual(keySteps('math:clock', 199), keySteps('art:mixer', 199));
+});
+
+test('a key of knowledge is earned on the key steps of any game, and stations are opened with them', async () => {
   const { keysEarned, keyBalance, keysSpent, stationCost, stationKey, parseStation, KEYS_PER_FREE_GAME } = await import('../src/core/child/world/world.ts');
-  const path = (step: number, steps = 30) => ({ free: false, steps, step, plays: 99 });
+  const { keySteps } = await import('../src/core/child/progress/keySteps.ts');
+  const path = (step: number, steps = 30) => ({ id: 'math:clock', free: false, steps, step, plays: 99 });
+  const keys = keySteps('math:clock', 29);
   // Never opened and still on the first step: nothing yet; replays earn nothing.
   assert.equal(keysEarned([path(0), path(1)]), 0);
-  assert.equal(keysEarned([path(4), path(11)]), 3 + 10);
-  // The frontier never passes the end of a path.
-  assert.equal(keysEarned([path(40, 30)]), 29);
-  // A free-play game gives a key per level, up to its limit.
-  assert.equal(keysEarned([{ free: true, steps: 1, step: 1, plays: 6 }]), 6);
-  assert.equal(keysEarned([{ free: true, steps: 1, step: 1, plays: 500 }]), KEYS_PER_FREE_GAME);
+  assert.equal(keysEarned([path(11)]), keys.filter((s) => s <= 10).length);
+  // The frontier never passes the end of a path, whose last step carries no key.
+  assert.equal(keysEarned([path(40, 30)]), keys.length);
+  assert.ok(keys.length >= 29 / 5 && keys.length <= 29 / 3);
+  // A free-play game hands keys out over its levels the same way, up to its limit.
+  const free = (plays: number) => ({ id: 'ecology:sort', free: true, steps: 1, step: 1, plays });
+  assert.equal(keysEarned([free(2)]), 0);
+  assert.equal(keysEarned([free(6)]), keySteps('ecology:sort', 100).filter((s) => s <= 6).length);
+  assert.equal(keysEarned([free(5000)]), KEYS_PER_FREE_GAME);
 
   assert.equal(stationKey('k2', 3), 'know:p3:k2');
   assert.deepEqual(parseStation('know:p3:k2'), { planet: 3, id: 'k2' });
   assert.equal(parseStation('world:lego:b3'), null);
-  assert.equal(stationCost('k0'), 2);
-  assert.equal(stationCost('k9'), 16);
-  assert.equal(stationCost('k0', 5), 4);
+  assert.equal(stationCost('k0'), 1);
+  assert.equal(stationCost('k9'), 4);
+  assert.equal(stationCost('k0', 5), 2);
   assert.equal(stationCost('b0'), 0);
   // Stations take keys, never artifacts — and the other way round.
   const owned = [stationKey('k0'), stationKey('k1', 5), ownedKey('lego', 'b0')];
-  assert.equal(keysSpent(owned), 2 + 6);
-  assert.equal(keyBalance(20, owned), 12);
-  assert.equal(keyBalance(5, owned), 0);
+  assert.equal(keysSpent(owned), 1 + 2);
+  assert.equal(keyBalance(20, owned), 17);
+  assert.equal(keyBalance(2, owned), 0);
   assert.equal(spentOn(owned), 30);
 });
 

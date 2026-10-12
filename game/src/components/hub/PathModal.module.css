@@ -97,6 +97,27 @@
   box-shadow: var(--shadow-lg), 0 0 0 4px var(--accent);
 }
 
+/* A key of knowledge waiting on the step, tucked at the corner opposite the number. */
+.key {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm), 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* Already picked up: it stays to show where it was, quieter. */
+.keyTaken {
+  opacity: 0.45;
+  box-shadow: var(--shadow-sm);
+}
+
 /* Steps that hide a treasure chest — a warm glow hints at the reward. */
 .chest {
   background: color-mix(in srgb, var(--accent) 30%, var(--surface));

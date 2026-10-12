@@ -26,6 +26,7 @@ const MECHANICS: Record<MechanicsType, string> = {
   [Mechanics.DotToDot]: 'З’єднай зорі',
   [Mechanics.ColorMix]: 'Змішування фарб',
   [Mechanics.LetterGrid]: 'Таблиця літер',
+  [Mechanics.WordSearch]: 'Пошук слів',
 };
 
 /** Draws per step when a game can only be counted by playing its generator. */

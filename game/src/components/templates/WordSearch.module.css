@@ -1,0 +1,114 @@
+/* The table: square cells as wide as the screen allows; a finger on it draws, never scrolls. */
+.table {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  gap: 3px;
+  /* Never taller than about half the screen: table and words fit a phone together. */
+  width: min(100%, calc(var(--cols) * 52px), 40dvh);
+  align-self: center;
+  padding: 5px;
+  border-radius: var(--radius-lg);
+  background: var(--tile);
+  box-shadow: var(--shadow);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.cell {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm, 8px);
+  background: var(--surface);
+  color: var(--surface-ink);
+  font-weight: 800;
+  /* Smaller letters for a bigger table, so eight fit a phone. */
+  font-size: clamp(1rem, calc(34vw / var(--cols)), 1.6rem);
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Under the finger now. */
+.drawn {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
+/* Part of a word already found — each word in a colour of its own. */
+.found {
+  background: hsl(calc(var(--hue) * 60 + 140) 75% 72%);
+  color: #0f172a;
+}
+
+.found.drawn {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
+/* Helper: the first letter of a word still hidden. */
+.start {
+  animation: wsPulse 1.1s ease-in-out infinite;
+  box-shadow: inset 0 0 0 3px var(--accent);
+}
+
+@keyframes wsPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.88);
+  }
+}
+
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.word {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 34px;
+  padding: 2px 4px 2px 8px;
+  border-radius: 999px;
+  background: var(--tile);
+  color: var(--surface-ink);
+  font-weight: 800;
+  font-size: clamp(0.8rem, 3.6vw, 1rem);
+  box-shadow: var(--shadow-sm);
+}
+
+.word :global(.emoji) {
+  font-size: 1.15rem;
+}
+
+.wordFound {
+  background: hsl(calc(var(--hue) * 60 + 140) 75% 82%);
+  color: #0f172a;
+}
+
+.wordText {
+  letter-spacing: 0.04em;
+}
+
+.blanks {
+  letter-spacing: 0.06em;
+  font-size: 0.85em;
+  color: var(--text-soft);
+}
+
+.wordSpeak {
+  width: 26px;
+  height: 26px;
+  font-size: 0.7rem;
+}

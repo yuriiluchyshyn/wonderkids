@@ -12,10 +12,11 @@ import styles from './Templates.module.css';
 const STIR_MS = 650;
 
 /**
- * Colour mixer — the object is grey; the child pours two paints into the
- * cauldron. The right pair: the cauldron bubbles, the colour flows into the
- * final one and the object gets painted. Another pair: the cauldron empties
- * itself and waits for a new try. Helper: the two right tubes pulse.
+ * Colour mixer — the object is grey; the child pours paints into the
+ * cauldron, as many as the recipe has (two, three, or two and glitter). The
+ * right ones: the cauldron bubbles, the colour flows into the final one and
+ * the object gets painted — a shiny colour sparkles. Others: the cauldron
+ * empties itself and waits for a new try. Helper: the right tubes pulse.
  */
 export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<ColorMixPayload>) {
   const t = useT();
@@ -28,14 +29,15 @@ export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<C
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
-  const busy = solved || poured.length >= 2;
+  const needed = recipe.length;
+  const busy = solved || poured.length >= needed;
 
   const pour = (id: string) => {
     if (busy || poured.includes(id)) return;
     playCode('SND_DROP_SLOT');
     const next = [...poured, id];
     setPoured(next);
-    if (next.length < 2) return;
+    if (next.length < needed) return;
     if (isRecipe(recipe, next)) {
       setSolved(true);
       play('pop');
@@ -51,13 +53,10 @@ export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<C
   };
 
   const colorOf = (id: string) => paints.find((p) => p.id === id)?.color;
-  const liquid = solved
-    ? result.color
-    : poured.length === 2
-      ? `linear-gradient(90deg, ${colorOf(poured[0])} 50%, ${colorOf(poured[1])} 50%)`
-      : poured.length === 1
-        ? colorOf(poured[0])
-        : undefined;
+  // What is in the pot so far: one colour, or bands of each poured one.
+  const bands = poured.map((id, i) => `${colorOf(id)} ${(i * 100) / poured.length}% ${((i + 1) * 100) / poured.length}%`);
+  const liquid = solved ? result.color : poured.length > 1 ? `linear-gradient(90deg, ${bands.join(', ')})` : poured.length === 1 ? colorOf(poured[0]) : undefined;
+  const sparkles = (solved && result.shine) || poured.some((id) => paints.find((p) => p.id === id)?.shine);
 
   return (
     <div className="stack">
@@ -66,7 +65,7 @@ export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<C
       <div className={styles.mixStage}>
         <div className={styles.mixObject}>
           <motion.span
-            className={cn(styles.mixEmoji, 'emoji', solved && styles.mixEmojiOn)}
+            className={cn(styles.mixEmoji, 'emoji', solved && styles.mixEmojiOn, solved && result.shine && styles.mixEmojiShine)}
             animate={solved ? { scale: [1, 1.25, 1] } : { scale: 1 }}
             transition={{ duration: 0.6, delay: 0.35 }}
             aria-hidden
@@ -84,7 +83,12 @@ export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<C
           aria-label={t('tpl.cauldron')}
         >
           <div className={cn(styles.mixLiquid, liquid && styles.mixLiquidOn, solved && styles.mixLiquidDone)} style={{ background: liquid }}>
-            {(solved || poured.length === 2) && (
+            {sparkles && (
+              <span className={cn(styles.mixSparkles, 'loop-breathe')} aria-hidden>
+                ✨
+              </span>
+            )}
+            {(solved || poured.length === needed) && (
               <>
                 <span className={styles.mixBubble} style={{ left: '22%' }} />
                 <span className={styles.mixBubble} style={{ left: '50%', animationDelay: '0.18s' }} />
@@ -96,7 +100,7 @@ export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<C
         </motion.div>
       </div>
 
-      <div className={styles.mixPaints}>
+      <div className={cn(styles.mixPaints, paints.length > 6 && styles.mixPaintsMany)}>
         {paints.map((paint) => {
           const used = poured.includes(paint.id);
           return (
@@ -109,7 +113,13 @@ export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<C
               whileTap={{ scale: 0.92 }}
               aria-label={t('tpl.paint', { name: paint.name })}
             >
-              <span className={styles.mixBlob} style={{ background: paint.color }} />
+              <span className={cn(styles.mixBlob, paint.shine && styles.mixBlobShine)} style={{ background: paint.color }}>
+                {paint.shine && (
+                  <span className={styles.mixBlobTwinkle} aria-hidden>
+                    ✨
+                  </span>
+                )}
+              </span>
               <span className={styles.faceLabel}>{paint.name}</span>
             </motion.button>
           );

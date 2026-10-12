@@ -269,8 +269,10 @@ export interface LearningModule {
    * games (a fixed set of flags, animals, people…) implement this to hand out
    * distinct items; without it the shell calls `generateTask` repeatedly and
    * drops duplicates. May return fewer than `count` — the level then shrinks.
+   * `undefined`: this game has no level of its own, so the shell makes it as without one
+   * (math composes only its mental-arithmetic levels).
    */
-  buildLevel?: (config: Omit<TaskConfig, 'index'>, count: number) => TaskInstance[];
+  buildLevel?: (config: Omit<TaskConfig, 'index'>, count: number) => TaskInstance[] | undefined;
   /** React component that renders the interactive game for a task. */
   GameView: ComponentType<GameViewProps>;
   /**

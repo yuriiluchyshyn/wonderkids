@@ -24,6 +24,9 @@ import { CoachTips } from '@/components/coach/CoachTips';
 import { gameTips } from '@/components/coach/tips';
 import { tellFact } from '@/core/game/content/outro';
 import { IntroDemo } from '@/components/templates/IntroDemo';
+import { explainsOnIdle } from '@/components/templates/TemplateHelper';
+import { CuesHiddenProvider } from '@/components/templates/CueContext';
+import { PauseProvider } from '@/components/templates/PauseContext';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { useGameSession, type GameSessionConfig } from './useGameSession';
 import { useIdleRollback } from './useIdleRollback';
@@ -52,6 +55,9 @@ const GIFT_META: Record<Exclude<GiftTier, null>, { emoji: string; size: string }
   big: { emoji: '🎁', size: '4.4rem' },
   biggest: { emoji: '🏆', size: '5.4rem' },
 };
+
+/** How long a task that explains itself (`payload.explain`) waits for an answer before it does. */
+const EXPLAIN_IDLE_MS = 20_000;
 
 interface GameScreenProps {
   config: GameSessionConfig;
@@ -119,7 +125,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const [reveal, setReveal] = useState<{ treasure: Treasure; isNew: boolean } | null>(null);
   const [revealDone, setRevealDone] = useState(false);
   // An onboarding tip is on screen (the child is reading, not idling).
-  const [coaching, setCoaching] = useState(false);
+  const [coachingTip, setCoaching] = useState(false);
+  // The board opened a lesson (the order of operations, brackets): the same.
+  const [lessonOpen, setLessonOpen] = useState(false);
+  const coaching = coachingTip || lessonOpen;
   // The fact told after this task: the next one from its pool, so a replay of
   // the same task — even its repeat within this level — tells a new story.
   // Picked once per showing; the last one stays up while the level finishes.
@@ -131,9 +140,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     const paired = told?.said !== undefined;
     outroPick.current = { at: session.index, text: told?.text, said: told?.said ?? told?.text, lang: paired ? taskLang : (task.lang ?? session.langs.shown) };
   }
-  // A parent may switch the facts off: then nothing is told and nothing is waited for.
-  const funFacts = useGameStore((s) => s.settings.funFacts);
-  const picked = funFacts ? outroPick.current.text : undefined;
+  const picked = outroPick.current.text;
   const outro = picked ? written(picked) : undefined;
   const outroSpeech = picked ? spoken(outroPick.current.said ?? picked) : undefined;
   const outroLang = outroPick.current.lang ?? taskLang;
@@ -197,6 +204,17 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     onRetreat: () => (extendForIdle() ? 1 / paced : null),
   });
 
+  // A task that explains itself (the clock) does so when the child stays silent
+  // on it for a long while — a child who does not know how to read it should
+  // not have to guess wrong twice to be shown.
+  const { explainForIdle } = session;
+  const idleExplains = explainsOnIdle(task);
+  const explainPaused = phase !== 'play' || blocked || coaching || session.finished || session.justSolved || session.hintActive;
+  useEffect(() => {
+    if (!idleExplains || explainPaused) return;
+    const timer = window.setTimeout(explainForIdle, EXPLAIN_IDLE_MS);
+    return () => window.clearTimeout(timer);
+  }, [session.index, idleExplains, explainPaused, explainForIdle]);
   const boardRef = useRef<HTMLDivElement>(null);
   const helperRef = useRef<HTMLDivElement>(null);
 
@@ -391,7 +409,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const GameView = module.GameView;
   const VisualHelper =
     module.VisualHelper && (module.showsHelper?.(task) ?? true) ? module.VisualHelper : undefined;
-  const tipsEnabled = !session.finished && !session.justSolved && !session.hintActive && !blocked;
+  const tipsEnabled = !session.finished && !session.justSolved && !session.hintActive && !blocked && !lessonOpen;
   // When finished, pin the mascot at the goal (no idle roll-back on the
   // celebration screen); otherwise show progress minus any idle roll-back.
   const progress = session.finished ? 1 : Math.max(0, position - rollback);
@@ -410,6 +428,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         <div className={styles.title} style={{ '--chars': subLabel.length + 3 } as CSSProperties}>
           {module.icon} {subLabel}
         </div>
+        {/* The race and the task count are one gauge: the track sits under the
+            title, and one segment per task right beneath it. A task added
+            while idling adds a segment, and all of them narrow to fit. */}
+        {phase === 'play' && <Companion progress={progress} />}
         {phase === 'play' && (
           <div
             className={styles.dots}
@@ -486,8 +508,6 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     <div className={styles.screen}>
       {header}
 
-      <Companion progress={progress} />
-
       <div className={styles.board} ref={boardRef} data-tip="board">
         {/* A repeated task looks like any other: the child does not need to
             be told it is a repeat. (The voice on/off switch that used to sit
@@ -508,12 +528,17 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         </AnimatePresence>
 
         {/* Keyed by queue position: the repeat of a missed task is a fresh view. */}
-        <GameView
-          key={session.index}
-          task={task}
-          callbacks={callbacks}
-          hintActive={session.hintActive}
-        />
+        {/* A well-known task is asked without its association pictures (`core/game/cues`). */}
+        <CuesHiddenProvider value={session.cuesHidden}>
+          <PauseProvider value={setLessonOpen}>
+            <GameView
+              key={session.index}
+              task={task}
+              callbacks={callbacks}
+              hintActive={session.hintActive}
+            />
+          </PauseProvider>
+        </CuesHiddenProvider>
 
         <AnimatePresence>
           {session.justSolved && outro && showText && (

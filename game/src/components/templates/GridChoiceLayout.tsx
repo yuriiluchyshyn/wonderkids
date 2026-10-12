@@ -3,6 +3,7 @@ import { useMemo, useRef, useState } from 'react';
 import type { GridChoicePayload } from '@/core/game/templates/types';
 import { cn } from '@/core/utils/cn';
 import { CardFace, SHAKE, SHAKE_TRANSITION, Stimulus, type LayoutProps } from './parts';
+import { useRuleLesson } from './RuleLesson';
 import styles from './Templates.module.css';
 
 /**
@@ -13,9 +14,12 @@ import styles from './Templates.module.css';
  * of its clues (`payload.clue`), shown below: then every answer stays.
  * When the task has an unknown drawn in it (the «?» of a sum, the ❓ of a word
  * problem) and the answers are plain numbers, the right one flies into it.
+ * A task that stands on a rule (`payload.lesson`: the order of operations,
+ * brackets) teaches it the first time, and again when its trap is tapped.
  */
-export function GridChoiceLayout({ payload, callbacks, hintActive }: LayoutProps<GridChoicePayload>) {
+export function GridChoiceLayout({ task, payload, callbacks, hintActive }: LayoutProps<GridChoicePayload>) {
   const { options, correctId, cols } = payload;
+  const lesson = useRuleLesson(task, callbacks);
   const [solved, setSolved] = useState(false);
   const [tried, setTried] = useState<string[]>([]);
   const [shake, setShake] = useState<string | null>(null);
@@ -46,6 +50,7 @@ export function GridChoiceLayout({ payload, callbacks, hintActive }: LayoutProps
     setTried((t) => (t.includes(id) ? t : [...t, id]));
     setShake(id);
     callbacks.onMistake();
+    lesson.onTrap(id);
   };
 
   return (
@@ -84,6 +89,7 @@ export function GridChoiceLayout({ payload, callbacks, hintActive }: LayoutProps
           );
         })}
       </div>
+      {lesson.element}
     </div>
   );
 }

@@ -1,0 +1,151 @@
+/* The page of a game, of a galaxy, and of all the games (`build/games.ts`). The cards and the buttons are the main page's. */
+.games-page {
+  padding-block: 22px 40px;
+}
+.games-page section {
+  padding: 30px 0 0;
+}
+.games-page h1 {
+  font-size: clamp(1.9rem, 6vw, 3rem);
+}
+/* A pictogram in a heading is a picture, not the gradient lettering of the main page's slogan. */
+.games-page h1 span.emoji {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: inherit;
+}
+.games-page h2 {
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+}
+.games-page h2 small {
+  margin-left: 6px;
+  font-size: 0.6em;
+  font-weight: 600;
+  color: var(--soft);
+}
+.games-page h2 a,
+.games-page .card h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+.games-page .card h3 a {
+  /* The whole card is the way to the game — a finger need not find the words. */
+  display: block;
+}
+@media (hover: hover) {
+  .games-page h2 a:hover,
+  .games-page .card h3 a:hover {
+    color: var(--accent);
+  }
+}
+.games-page .about {
+  margin-top: 12px;
+  color: var(--soft);
+  max-width: 44em;
+}
+.games-page .try {
+  margin-top: 22px;
+}
+
+/* The way back up: main page › all games › galaxy › game. */
+.games-page nav.crumbs {
+  /* The bar's own `nav` hides on a phone; this one is the way back and stays. */
+  display: block;
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+  color: var(--soft);
+}
+.crumbs a {
+  display: inline-block;
+  padding: 6px 0;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* A task of the game: what is asked, and the answers of the board. */
+.card.task h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--brand-light);
+}
+.task-text {
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+.card .task-text {
+  color: var(--ink);
+  font-size: 1.15rem;
+}
+.task-label {
+  margin-top: 12px;
+  font-size: 0.85rem;
+}
+.card ul.answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.answers li {
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.card .answers li.right {
+  border-color: var(--accent);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* What the game says to a child before play. */
+.tells {
+  margin: 16px 0 0;
+  padding: 16px 20px;
+  border-left: 4px solid var(--brand-light);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface);
+  color: var(--soft);
+  max-width: 44em;
+}
+
+/* About the game: a name and a value to a row. */
+.facts {
+  display: grid;
+  gap: 2px;
+  margin: 18px 0 0;
+  max-width: 44em;
+}
+.facts div {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.4fr) 1fr;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.facts dt {
+  color: var(--soft);
+}
+.facts dd {
+  margin: 0;
+}
+
+/* The other galaxies, as a row of ways out. */
+.galaxies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.galaxies a {
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}

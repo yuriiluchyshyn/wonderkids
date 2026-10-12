@@ -17,9 +17,9 @@ export default defineConfig(({ mode }) => {
     // Bound to the LAN, so the page can be read on a phone beside the game's dev server.
     server: { port: DEV_PORT.site, host: true },
     preview: { port: DEV_PORT.site, host: true },
-    // Two templates: the page itself, and the page a legal text stands in (`build/pages.ts` fills both per language).
+    // Three templates: the page itself, the page a legal text stands in, and the page of a game (`build/pages.ts` fills each per language).
     build: {
-      rollupOptions: { input: { index: `${root}index.html`, legal: `${root}legal.html` } },
+      rollupOptions: { input: { index: `${root}index.html`, legal: `${root}legal.html`, games: `${root}games.html` } },
       // A font is a file of its own, never text inside the stylesheet: a browser then fetches only the subsets a page uses.
       assetsInlineLimit: (file) => (/\.woff2?$/.test(file) ? false : undefined),
     },

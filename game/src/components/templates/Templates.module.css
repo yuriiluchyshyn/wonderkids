@@ -109,8 +109,25 @@
   overflow-wrap: anywhere;
 }
 
+/* A card's speaker sits in the card's top-right corner, out of the flow, so it
+   costs the card no height. The card (the face's parent) is its anchor; :where
+   keeps this at zero specificity so cards that are already positioned keep it. */
 .faceSpeak {
-  margin-top: 2px;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+  font-size: 0.85rem;
+}
+
+.face:has(> .faceSpeak) {
+  position: static;
+}
+
+:where(:has(> .face > .faceSpeak)) {
+  position: relative;
 }
 
 .stimulus {
@@ -136,6 +153,13 @@
 
 .stimulusGlyphs {
   font-size: clamp(1.9rem, 9vw, 2.9rem);
+}
+
+/* A row of four or five numbers («120 + 45 + 67 + 89 = ?»): smaller, and it may wrap. */
+.stimulusGlyphsLong {
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: clamp(1.3rem, 6vw, 2.2rem);
 }
 
 .stimulusCaption {
@@ -999,13 +1023,23 @@
 
 /* ---- Analogue clock (ClockFace) ---- */
 .stimulusClock {
-  width: clamp(120px, 38vw, 170px);
+  width: clamp(110px, 32vw, 160px);
   height: auto;
 }
 
 .faceClock {
   width: clamp(72px, 24vw, 104px);
   height: auto;
+}
+
+/* Six clocks in a 3 × 2 board: the whole task fits a phone's screen without scrolling. */
+.cols3 .choice:has(.faceClock) {
+  min-height: 0;
+  padding: 6px;
+}
+
+.cols3 .faceClock {
+  width: min(100%, clamp(76px, 25vw, 100px));
 }
 
 /* ---- Bigger cell-grid figure as the task's picture ---- */
@@ -1367,10 +1401,13 @@
 
 .mixName {
   position: absolute;
-  inset: auto 0 10px;
+  /* High in the pot, where it is still full width: the rounded bottom clips long names. */
+  inset: 28% 4px auto;
   text-align: center;
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: clamp(0.8rem, 3.6vw, 0.95rem);
+  line-height: 1.1;
+  overflow-wrap: anywhere;
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
@@ -1404,10 +1441,61 @@
 }
 
 .mixBlob {
+  position: relative;
+  display: grid;
+  place-items: center;
   width: 46px;
   height: 46px;
   border: 3px solid rgba(0, 0, 0, 0.18);
   border-radius: 54% 46% 58% 42% / 48% 56% 44% 52%;
+}
+
+/* Many tubes (up to eight on the later steps): four to a row, smaller, so the board still fits a phone. */
+.mixPaintsMany {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.mixPaintsMany .mixPaint {
+  min-height: 76px;
+  padding: 6px 4px;
+  gap: 4px;
+}
+
+.mixPaintsMany .mixBlob {
+  width: 38px;
+  height: 38px;
+}
+
+.mixPaintsMany .faceLabel {
+  font-size: 0.75rem;
+}
+
+/* Glitter: a silvery blob with a twinkle — it is poured like a paint. */
+.mixBlobShine {
+  background-image: linear-gradient(125deg, #f8fafc 10%, #cbd5e1 40%, #f1f5f9 55%, #94a3b8 90%) !important;
+}
+
+.mixBlobTwinkle {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* Sparkles over the pot while glitter is in it, and over the shiny result. */
+.mixSparkles {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  margin-left: -0.7rem;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+/* A thing painted in a shiny colour (gold, silver…) glows a little. */
+.mixEmojiShine {
+  text-shadow:
+    0 0 10px rgba(255, 236, 160, 0.95),
+    0 0 22px rgba(255, 255, 255, 0.8);
 }
 
 /* ---- Numbers of a sum, coloured like their cubes in the counting helper ---- */
@@ -1429,7 +1517,12 @@
 }
 
 .pictureBig {
-  width: clamp(120px, 38vw, 168px);
+  width: clamp(110px, 32vw, 160px);
+}
+
+/* Four portraits with two-line names must fit a phone screen together. */
+.choice .picture {
+  width: clamp(60px, 18vw, 84px);
 }
 
 .placedMini .picture {

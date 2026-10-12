@@ -624,5 +624,27 @@
         }
       }
     }
+  },
+  "wordSearch": {
+    "own": {
+      "blurb": "Znajdź słowa ukryte w tabeli liter",
+      "intro": "W tabeli liter ukryły się słowa! Znajdź każde i przesuń po nim palcem — od pierwszej litery do ostatniej. Możesz też dotknąć pierwszej litery, a potem ostatniej."
+    },
+    "other": {
+      "blurb": "{name}: znajdź słowa ukryte w tabeli liter",
+      "intro": "{name}! W tabeli liter ukryły się słowa z obrazków. Znajdź każde i przesuń po nim palcem — od pierwszej litery do ostatniej. Naciśnij głośnik, żeby usłyszeć słowo."
+    },
+    "ask": "Znajdź w tabeli wszystkie słowa i przesuń po nich palcem.",
+    "askByEar": "Znajdź w tabeli słowa z obrazków. Naciśnij głośnik, żeby usłyszeć słowo.",
+    "hint": {
+      "straight": "Pierwsze litery słów świecą. Prowadź od nich palcem w prawo albo w dół.",
+      "any": "Pierwsze litery słów świecą. Słowo może iść w każdą stronę — na ukos, a nawet od tyłu."
+    },
+    "stage": {
+      "down": "Teraz słowa chowają się nie tylko w rzędach, ale i w kolumnach — z góry na dół.",
+      "slant": "Teraz słowa bywają też na ukos! Prowadź palcem po przekątnej.",
+      "back": "Uwaga: teraz słowa mogą stać od tyłu — od prawej do lewej albo od dołu do góry.",
+      "byEar": "Teraz przy obrazkach nie ma słów. Przypomnij sobie, jak pisze się słowo — albo go posłuchaj — i znajdź je w tabeli."
+    }
   }
 }

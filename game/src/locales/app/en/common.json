@@ -352,11 +352,12 @@
     "music": "Music"
   },
   "path": {
-    "caption": "This is your path — tap a step you have passed to play it again. The {chests} hide treasures!",
+    "caption": "This is your path — tap a step you have passed to play it again. The {chests} hide treasures, and a step with {key} holds a key of knowledge!",
     "step": "Step {n}",
     "current": " (current)",
     "chest": " (hidden treasure)",
-    "locked": " (locked)"
+    "locked": " (locked)",
+    "key": " (a key of knowledge)"
   },
   "drawer": {
     "label": "Profile and treasure box",
@@ -420,8 +421,9 @@
       "UI_NUMBER_MAZE": "Tap the next square to take a step.",
       "UI_BUBBLE_POP": "Pop the bubbles in order: tap the one that comes next.",
       "UI_DOT_TO_DOT": "Tap the stars in order, or slide your finger from star to star — a line will appear between them.",
-      "UI_COLOR_MIX": "Tap two paints to pour them into the cauldron and mix them.",
-      "UI_LETTER_GRID": "Drag each letter to its place in the table. Or tap a letter, and then an empty square."
+      "UI_COLOR_MIX": "Tap the paints to pour them into the cauldron and mix them.",
+      "UI_LETTER_GRID": "Drag each letter to its place in the table. Or tap a letter, and then an empty square.",
+      "UI_WORD_SEARCH": "Slide your finger over a word, from its first letter to its last. Or tap the first letter and then the last one."
     },
     "game": {
       "tts": "Not sure what it says here? Tap the speaker and I will read it to you!",
@@ -478,13 +480,6 @@
     "slow": "Slowly",
     "medium": "Moderately",
     "fast": "Fast"
-  },
-  "celebration": {
-    "balloons": "Balloons",
-    "balls": "Balls",
-    "stars": "Stars",
-    "fireworks": "Fireworks",
-    "candy": "Candy"
   },
   "currency": {
     "UAH": "Hryvnia",
@@ -581,23 +576,14 @@
       "hint": "The first time round, the game explains to your child what each button does. A tip your child has closed does not come back. Tips read: {count}.",
       "reset": "Show them again"
     },
-    "celebration": {
-      "title": "🎉 Victory celebration"
-    },
     "grid": {
       "title": "🔢 Answer grid",
       "label": "Answer grid",
       "hint": "More options make it harder to guess at random."
     },
-    "facts": {
-      "title": "💡 Fun facts",
-      "hint": "After a right answer the game tells a short fact about what your child has just done and waits until it has been read out. Turn it off and the next task starts at once.",
-      "on": "Tell the facts",
-      "off": "No facts"
-    },
     "money": {
-      "title": "💰 Money in the “Shop” game",
-      "hint": "The coins and bills your child pays with in the shop.",
+      "title": "💰 Currency in games",
+      "hint": "The coins and bills your child counts and pays with in the games.",
       "auto": "Until you choose, the money follows the language of the game: hryvnias, dollars or zlotys.",
       "chosen": "You chose the money yourself — changing the language will no longer change it."
     },
@@ -742,14 +728,14 @@
     },
     "stations": {
       "title": "Stations of Knowledge",
-      "hint": "Stations are opened with keys of knowledge {key}. A key is given for every new step in any game. To fly on from the planet {planet}, open at least {need}.",
+      "hint": "Stations are opened with keys of knowledge {key}. A key waits on the path of every game every 3–5 steps — the path shows where. To fly on from the planet {planet}, open at least {need}.",
       "closed": "The planet {planet} is still closed — its stations will open when you fly here. For now, open the stations on the planet {frontier}."
     },
     "keys": {
       "label": "Keys of knowledge: {count}",
       "about": {
-        "one": "You have {count} key of knowledge. A key is given for every new step in any game. Keys open the stations of knowledge.",
-        "other": "You have {count} keys of knowledge. A key is given for every new step in any game. Keys open the stations of knowledge."
+        "one": "You have {count} key of knowledge. A key waits on the path of every game every 3–5 steps — the path shows where. Keys open the stations of knowledge.",
+        "other": "You have {count} keys of knowledge. A key waits on the path of every game every 3–5 steps — the path shows where. Keys open the stations of knowledge."
       }
     },
     "residents": {
@@ -802,7 +788,7 @@
       },
       "stations": {
         "text": "Stations of Knowledge",
-        "how": "Open the stations of knowledge on the planet {planet}: {have} of {need} are open already. They are opened with keys of knowledge 🗝️ — a key is given for every new step in any game.",
+        "how": "Open the stations of knowledge on the planet {planet}: {have} of {need} are open already. They are opened with keys of knowledge 🗝️ — a key waits on the path of every game every 3–5 steps.",
         "go": "To the stations"
       },
       "residents": {
@@ -921,7 +907,14 @@
     "cauldron": "Cauldron",
     "paint": "Paint: {name}",
     "pie": "{filled} of {total} colored in",
-    "readAloud": "Read aloud: {text}"
+    "readAloud": "Read aloud: {text}",
+    "wordTable": "Table of letters",
+    "letters": {
+      "one": "{count} letter",
+      "other": "{count} letters"
+    },
+    "lessonOk": "Got it!",
+    "lessonReplay": "Show me again"
   },
   "map": {
     "north_america": "North America",

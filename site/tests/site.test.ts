@@ -3,9 +3,10 @@ import { CONTACT_EMAIL, LANG_COOKIE, TRIAL_PATH, legalUrl, publicUrls } from '@p
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { ALIKE_LIMIT, GAMES_SLUG, alikeness, catalogNumbers, gamesPages, trialOfGame } from '../build/games.ts';
 import { legalText } from '../build/legal.ts';
 import { markdownToHtml } from '../build/markdown.ts';
-import { loadDictionaries, renderLegalPage, renderPage } from '../build/pages.ts';
+import { loadDictionaries, renderGamesPage, renderLegalPage, renderPage } from '../build/pages.ts';
 import { AI_CRAWLERS, llmsTxt, robotsTxt } from '../build/seo.ts';
 import { DEFAULT_LANG, SITE_LANGS, sitePath } from '../src/languages.ts';
 import { LEGAL_DOCS, LEGAL_UPDATED, legalPath } from '../src/legal.ts';
@@ -16,6 +17,7 @@ const URLS = publicUrls();
 const dictionaries = loadDictionaries();
 const template = read('../index.html');
 const legalTemplate = read('../legal.html');
+const gamesTemplate = read('../games.html');
 
 test('the site’s dictionary says the same things in every language', () => {
   assert.ok(JSON.stringify(dictionaries[DEFAULT_LANG]).length > 5_000, 'the dictionary is loaded');
@@ -95,14 +97,22 @@ test('robots.txt lets the assistants in by name, and vercel.json points each pag
 });
 
 test('every text of the dictionary is used — by the page, or by the form’s script', () => {
-  const inPage = new Set([...(template + legalTemplate).matchAll(/\{\{\{?([\w.]+)\}\}\}?/g)].map((m) => m[1]));
+  const inPage = new Set([...(template + legalTemplate + gamesTemplate).matchAll(/\{\{\{?([\w.]+)\}\}\}?/g)].map((m) => m[1]));
   const scripts = readdirSync(new URL('../src/scripts/letter/', import.meta.url)).map((file) => read(`../src/scripts/letter/${file}`)).join('\n');
+  // The words of the pages of games are asked for by their build (`t('step')`); the names of boards and languages by what a game has.
+  const games = read('../build/games.ts');
+  const PLURAL = /\.(zero|one|two|few|many|other)$/;
   const unused: string[] = [];
   const walk = (dict: Dict, prefix = ''): void => {
     for (const [key, node] of Object.entries(dict)) {
       if (typeof node !== 'string') walk(node, `${prefix}${key}.`);
       // A legal page's description is asked for by the build (`renderLegalPage`), one per text.
-      else if (prefix === 'legalMeta.') assert.ok(LEGAL_DOCS.some((doc) => doc === key), `legalMeta.${key} is a legal text`);
+      else if (prefix.startsWith('catalog.')) {
+        const asked = `${prefix}${key}`.replace(PLURAL, '').slice('catalog.'.length);
+        // A paragraph about a game is asked for by the game's id — and there must be such a game.
+        if (asked.startsWith('about.')) assert.ok(gamesPages(DEFAULT_LANG, URLS, dictionaries).some((page) => page.slug === `${GAMES_SLUG}${asked.slice('about.'.length).replace('.', '/').replaceAll('_', '-')}/`), `catalog.${asked}: no such game`);
+        else if (!/^(mechanics|langNames)\./.test(asked) && !games.includes(`'${asked}'`) && !inPage.has(`catalog.${asked}`)) unused.push(`catalog.${asked}`);
+      } else if (prefix === 'legalMeta.') assert.ok(LEGAL_DOCS.some((doc) => doc === key), `legalMeta.${key} is a legal text`);
       else if (prefix === 'js.' ? !scripts.includes(`words.${key}`) : !inPage.has(`${prefix}${key}`)) unused.push(`${prefix}${key}`);
     }
   };
@@ -142,6 +152,61 @@ test('the legal texts are a page each, in every language, and say the same', () 
   assert.equal(markdownToHtml('## A <b>\n\ntext **bold** [x](/y/)\n\n- one\n- two\n\n| h |\n|---|\n| c |'), '<h2 id="s1">A &lt;b&gt;</h2>\n<p>text <strong>bold</strong> <a href="/y/">x</a></p>\n<ul><li>one</li><li>two</li></ul>\n<div class="table"><table><thead><tr><th>h</th></tr></thead><tbody><tr><td>c</td></tr></tbody></table></div>');
 });
 
+test('every game has a page of its own, with real tasks from it and a way straight into it', () => {
+  for (const lang of SITE_LANGS) {
+    const pages = gamesPages(lang, URLS, dictionaries);
+    const numbers = catalogNumbers(lang);
+    assert.equal(pages.length, 1 + numbers.galaxies + numbers.games, `${lang}: a page for all games, for every galaxy and for every game`);
+    assert.equal(new Set(pages.map((page) => page.slug)).size, pages.length, `${lang}: every page has an address of its own`);
+    assert.equal(pages[0].slug, GAMES_SLUG);
+
+    for (const page of pages) {
+      const html = renderGamesPage(gamesTemplate, lang, page, URLS.site, dictionaries);
+      const name = `${lang}/${page.slug}`;
+      assert.ok(!html.includes('{{'), `${name}: every key is filled`);
+      assert.ok(html.includes(`<html lang="${lang}">`) && html.includes(`rel="canonical" href="__SITE_URL__/${sitePath(lang)}${page.slug}"`), `${name}: says where it lives`);
+      for (const other of page.langs) assert.ok(html.includes(`hreflang="${other}" href="${URLS.site}/${sitePath(other)}${page.slug}"`), `${name}: names its ${other} page`);
+      assert.equal(html.match(/<h1[\s>]/g)?.length, 1, `${name}: one main heading`);
+      assert.ok(page.title.length <= 70 && page.description.length >= 60 && page.description.length <= 180, `${name}: a title of ${page.title.length} and a description of ${page.description.length} characters fit a search result`);
+      const graph = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)?.[1] ?? '')['@graph'] as { '@type': string }[];
+      assert.deepEqual(graph.map((node) => node['@type']), [page.kind === 'game' ? 'LearningResource' : 'CollectionPage', 'BreadcrumbList']);
+      assert.ok(!/undefined|\[object/.test(page.body + page.markdown), `${name}: every line is filled`);
+      // Every address a page of games leads to inside the site is a page that is built.
+      for (const [, href] of page.body.matchAll(/href="(\/[^"]*)"/g)) assert.ok(href === `/${sitePath(lang)}` || pages.some((other) => `/${sitePath(lang)}${other.slug}` === href), `${name}: ${href} leads nowhere`);
+    }
+
+    // A game's page opens THAT game, with no account: the link says which, and that a page sent the visitor.
+    const games = pages.filter((page) => page.kind === 'game');
+    for (const page of games) assert.match(page.body, /class="btn btn-try" data-portal="play" data-trial href="[^"]*\/try\?game=[a-z_]+%3A[a-z0-9_]+&amp;via=page"/);
+    assert.equal(trialOfGame(URLS.play, 'geography:flags'), `${URLS.play}${TRIAL_PATH}?game=geography%3Aflags&via=page`);
+
+    // A page is a game's own: what says mostly the same as the next game's page is not offered to search engines
+    // (it is built and linked, `noindex`, and out of the sitemap).
+    for (const page of games) {
+      assert.equal(page.index, page.alike <= ALIKE_LIMIT, `${lang}/${page.slug}`);
+      assert.ok(renderGamesPage(gamesTemplate, lang, page, URLS.site, dictionaries).includes(`<meta name="robots" content="${page.index ? 'index, follow' : 'noindex, follow'}`), `${lang}/${page.slug}: says whether it is to be listed`);
+    }
+    // That none is closed is `visibility.test.ts`'s business.
+    assert.equal(alikeness('<h2>a</h2><p>own words</p><section class="more"><p>shared</p></section>', '<p>a</p><p>shared</p>'), 1 / 10);
+
+    // What the main page says in numbers is what the catalogue has.
+    // The two big numbers are counted (`{{@gamesCount}}`, `{{@levelsCount}}`); what the copy says in words must agree.
+    const words = dictionaries[lang] as { games: Record<string, { tag?: string } | string>; meta: { description: string }; faq: { what: { text: string } } };
+    for (const text of [words.meta.description, words.faq.what.text]) assert.ok(text.includes(String(numbers.games)), `${lang}: «${text.slice(0, 50)}…» names ${numbers.games} games`);
+    assert.ok(String(words.games.title).includes(String(numbers.games)), `${lang}: games.title names ${numbers.games} games`);
+    for (const [galaxy, count] of Object.entries(numbers.perGalaxy)) {
+      const said = words.games[galaxy] as { tag?: string };
+      const tag = said.tag ?? String(count === 1 ? words.games.oneGame : count === 2 ? words.games.twoGames : '');
+      assert.ok(tag.startsWith(`${count} `), `${lang}: the ${galaxy} card says «${tag}», the catalogue has ${count}`);
+    }
+    // And the main page leads to the pages of games.
+    const home = renderPage(template, lang, URLS.site, dictionaries);
+    assert.ok(home.includes(`<b>${numbers.games}</b>`) && home.includes(`<b>${numbers.steps}</b>`), `${lang}: the main page counts its games and steps`);
+    assert.ok(home.includes(`href="/${sitePath(lang)}${GAMES_SLUG}"`));
+    for (const galaxy of Object.keys(numbers.perGalaxy)) assert.ok(home.includes(`href="/${sitePath(lang)}${GAMES_SLUG}${galaxy}/"`), `${lang}: the main page leads to ${galaxy}`);
+  }
+});
+
 test('the operator is named before the legal pages go out', () => {
   // GDPR art. 13 and the Polish act on electronic services: a policy and terms must say who stands behind the service.
   assert.deepEqual(operatorGaps(), [], 'fill in src/operator.ts — the registered name, address and NIP of whoever runs Pulsar Kids');
@@ -150,7 +215,7 @@ test('the operator is named before the legal pages go out', () => {
 
 test('nothing is fetched from another company’s servers when the page opens', () => {
   // Fonts are our own files (`@pulsar/brand/fonts.css`): a request to Google Fonts hands over the visitor's IP address unasked.
-  for (const page of [template, legalTemplate]) {
+  for (const page of [template, legalTemplate, gamesTemplate]) {
     const foreign = [...page.matchAll(/<(?:link|script|img)\b[^>]*\b(?:href|src)="(https?:[^"]+)"/g)].map((m) => m[1]);
     assert.deepEqual(foreign, []);
   }
@@ -191,7 +256,7 @@ test('vercel.json speaks of the same cookie, languages and portals as the code',
 
   // The game's paths opened on the site go to the portal that serves them.
   assert.equal(toPortal('/login'), `${URLS.play}/login`);
-  // «Play» and the footer's link are the child's door — the child's login, never the game's bare address (which sends a newcomer to the parents').
+  // «Play» is the child's door — the child's login, never the game's bare address (which sends a newcomer to the parents').
   const doors = [...template.matchAll(/data-portal="play"(?: data-trial)? href="([^"]+)"/g)].map((m) => m[1]);
   assert.deepEqual([...new Set(doors)].sort(), ['__PLAY_URL__/login', `__PLAY_URL__${TRIAL_PATH}`]);
   // The trial game is the child portal's; the page's own button leads there too.

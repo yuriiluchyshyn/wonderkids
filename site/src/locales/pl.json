@@ -31,7 +31,7 @@
     }
   },
   "games": {
-    "title": "52 gry w dziewięciu galaktykach",
+    "title": "56 gier w dziewięciu galaktykach",
     "sub": "Przedmioty to tutaj galaktyki, a gry — planety. Oto, co na nich czeka.",
     "math": {
       "1": "Dodawanie, odejmowanie, mnożenie, dzielenie",
@@ -49,7 +49,7 @@
       "2": "Bańki z literami, łańcuszek słów, rymy i zdania",
       "3": "Pięć gier po polsku i te same pięć po angielsku i po ukraińsku — każda z własnym lektorem",
       "4": "50 kroków w każdej grze",
-      "tag": "15 gier",
+      "tag": "18 gier",
       "title": "Język"
     },
     "logic": {
@@ -66,7 +66,7 @@
       "title": "Astronomia"
     },
     "art": {
-      "1": "Mieszanie kolorów: z dwóch farb powstaje nowy kolor",
+      "1": "Mieszanie kolorów: z dwóch lub trzech farb i brokatu powstaje nowy kolor",
       "title": "Sztuka"
     },
     "geography": {
@@ -102,13 +102,11 @@
   },
   "numbers": {
     "games": "gry edukacyjne",
-    "galaxies": "galaktyk-przedmiotów",
+    "galaxies": "przedmiotów",
     "levels": "poziomów we wszystkich grach",
     "ages": "grupy wiekowe",
     "themes": "motywów graficznych",
-    "languages": "języki aplikacji",
-    "gamesCount": "52",
-    "levelsCount": "1551"
+    "languages": "języki aplikacji"
   },
   "world": {
     "title": "Własna planeta, która rośnie",
@@ -123,7 +121,7 @@
     },
     "stations": {
       "title": "Stacje wiedzy",
-      "text": "Za każdy nowy krok w dowolnej grze dziecko dostaje klucz wiedzy. Kluczami otwiera na swojej planecie stacje: obserwatorium, bibliotekę, laboratorium liczb."
+      "text": "Co kilka kroków w dowolnej grze na dziecko czeka klucz wiedzy. Kluczami otwiera na swojej planecie stacje: obserwatorium, bibliotekę, laboratorium liczb."
     },
     "theme": {
       "title": "Ulubiony motyw",
@@ -168,7 +166,7 @@
     "title": "Najczęstsze pytania o Pulsar Kids",
     "what": {
       "title": "Czym jest Pulsar Kids?",
-      "text": "Pulsar Kids to gry edukacyjne dla dzieci w wieku 4–10 lat, w które gra się w przeglądarce na telefonie, tablecie lub komputerze. W 52 grach dziecko ćwiczy matematykę, język, logikę, geografię, historię, astronomię, ekologię, przyrodę i sztukę, a rodzice ustawiają czas przed ekranem."
+      "text": "Pulsar Kids to gry edukacyjne dla dzieci w wieku 4–10 lat, w które gra się w przeglądarce na telefonie, tablecie lub komputerze. W 56 grach dziecko ćwiczy matematykę, język, logikę, geografię, historię, astronomię, ekologię, przyrodę i sztukę, a rodzice ustawiają czas przed ekranem."
     },
     "age": {
       "title": "Dla jakiego wieku jest Pulsar Kids?",
@@ -232,7 +230,6 @@
   },
   "footer": {
     "tagline": "Nauka, która wciąga jak przygoda.",
-    "game": "Gra",
     "updated": "Zaktualizowano",
     "privacy": "Polityka prywatności",
     "terms": "Regulamin",
@@ -272,5 +269,98 @@
     "thanks": "Każda wiadomość jest czytana i każda pomaga ulepszać grę.",
     "failed": "Nie udało się wysłać. Sprawdź połączenie i spróbuj ponownie.",
     "send": "Wyślij"
+  },
+  "catalog": {
+    "home": "Strona główna",
+    "all": "Wszystkie gry",
+    "indexTitle": "Wszystkie gry edukacyjne Pulsar Kids dla dzieci w wieku 4–10 lat",
+    "indexMetaTitle": "Wszystkie gry edukacyjne dla dzieci 4–10 lat",
+    "indexLead": "Pulsar Kids to {games} — galaktyka po galaktyce. Każda gra ma własną stronę z prawdziwymi zadaniami i przycisk, który otwiera właśnie tę grę bez rejestracji.",
+    "indexDescription": "Wszystkie gry edukacyjne Pulsar Kids według przedmiotów: matematyka, język, logika, geografia, historia, astronomia, ekologia, przyroda i sztuka. Bez rejestracji.",
+    "galaxyTitle": "{galaxy}: gry edukacyjne dla dzieci w wieku {from}–{to} lat",
+    "galaxyMetaTitle": "{galaxy} — gry dla dzieci {from}–{to} lat",
+    "galaxyLead": {
+      "one": "{count} gra w galaktyce „{galaxy}”. Ma własną stronę z prawdziwymi zadaniami — i otwiera się bez rejestracji.",
+      "few": "{count} gry w galaktyce „{galaxy}”. Każda ma własną stronę z prawdziwymi zadaniami — i otwiera się bez rejestracji.",
+      "many": "{count} gier w galaktyce „{galaxy}”. Każda ma własną stronę z prawdziwymi zadaniami — i otwiera się bez rejestracji.",
+      "other": "{count} gry w galaktyce „{galaxy}”. Każda ma własną stronę z prawdziwymi zadaniami — i otwiera się bez rejestracji."
+    },
+    "galaxyDescription": "{galaxy} — gry dla dzieci {from}–{to} lat: {games}. Bez reklam i przegrywania, próba bez rejestracji.",
+    "gameMetaTitle": "{game} · {galaxy} · gra dla dzieci {from}–{to} lat",
+    "gameEyebrow": "{galaxy} · gra edukacyjna dla dzieci w wieku {from}–{to} lat",
+    "gameDescription": "„{game}” — {blurb}. {galaxy}, gra dla dzieci {from}–{to} lat; wypróbuj bez rejestracji.",
+    "tells": "Co gra mówi dziecku przed rozpoczęciem",
+    "facts": "O grze",
+    "ages": "Wiek",
+    "agesValue": "{from}–{to} lat",
+    "difficulty": "Trudność",
+    "difficultyValue": "{stars} z 3 gwiazdek",
+    "difficultyRange": "od {from} do {to} z 3 gwiazdek",
+    "size": "Długość",
+    "sizePath": "{steps} kroków, każdy trochę trudniejszy od poprzedniego",
+    "sizeFree": "{tasks} różnych zadań, swobodna gra w dowolnej kolejności",
+    "sizeFreePlain": "swobodna gra, wszystkie zadania dostępne od razu",
+    "level": "Jeden poziom",
+    "levelValue": {
+      "one": "{count} zadanie",
+      "few": "{count} zadania",
+      "many": "{count} zadań",
+      "other": "{count} zadania"
+    },
+    "how": "Jak się gra",
+    "set": "Należy do zestawu",
+    "langs": "Języki gry",
+    "samples": "Zadania z gry",
+    "samplesLead": "To prawdziwe zadania — z pierwszego, środkowego i ostatniego kroku: widać, od czego gra się zaczyna i dokąd prowadzi.",
+    "samplesLeadFree": "Prawdziwe zadania z gry.",
+    "step": "Krok {step} z {steps}",
+    "answers": "Odpowiedzi na planszy",
+    "right": "Poprawna odpowiedź",
+    "try": "Wypróbuj tę grę teraz",
+    "tryNote": "Bez rejestracji i bez płatności — gra otworzy się od razu.",
+    "more": "Więcej gier z galaktyki „{galaxy}”",
+    "otherGalaxies": "Inne galaktyki",
+    "gamesCount": {
+      "one": "{count} gra",
+      "few": "{count} gry",
+      "many": "{count} gier",
+      "other": "{count} gry"
+    },
+    "mechanics": {
+      "UI_GRID_CHOICE": "dotknąć poprawnej odpowiedzi spośród kilku",
+      "UI_DRAG_MATCH": "przeciągnąć każdą rzecz do jej pary",
+      "UI_BALANCE_SCALE": "położyć na wadze właściwy odważnik",
+      "UI_MAP_PUZZLE": "znaleźć miejsce na mapie świata",
+      "UI_SORTER_BINS": "posortować rzeczy do właściwych pojemników",
+      "UI_CHRONO_SEQUENCE": "ułożyć karty we właściwej kolejności",
+      "UI_LETTER_GRID": "ustawić litery na swoich miejscach w tabeli",
+      "UI_WORD_SEARCH": "znaleźć słowa ukryte w tabeli liter",
+      "UI_BUBBLE_POP": "przebijać bańki we właściwej kolejności"
+    },
+    "langNames": {
+      "uk": "ukraiński",
+      "en": "angielski",
+      "pl": "polski"
+    },
+    "board": "Na planszy",
+    "about": {
+      "math": {
+        "add": "Gra uczy dodawania — od 3 + 3 do liczb trzycyfrowych. Na pierwszych krokach sumy mieszczą się w dziesiątce, na dwudziestym jest już 115 + 61, a na ostatnim, czterdziestym — przykłady takie jak 493 + 42. Dziecko wybiera odpowiedź spośród dziewięciu liczb. W każdym poziomie jest dziesięć przykładów: połowa nowych, połowa z wcześniejszych kroków, żeby to, czego się nauczyło, nie uciekło.",
+        "sub": "Gra uczy odejmowania — od 6 − 5 do liczb trzycyfrowych z przekraczaniem progu dziesiątkowego. W połowie drogi to przykłady takie jak 115 − 89, a na ostatnim kroku 493 − 139. Odpowiedź wybiera się spośród dziewięciu liczb, a do nowych przykładów w każdym poziomie dochodzą znajome z wcześniejszych kroków.",
+        "mul": "Gra prowadzi od mnożenia przez 2 do mnożenia liczb dwucyfrowych. Na początku 2 × 5 i 2 × 4, na piętnastym kroku przykłady takie jak 6 × 8 i 7 × 10, a na ostatnim, trzydziestym — 14 × 15. Odpowiedź wybiera się spośród dziewięciu liczb, a to, co już opanowane, wraca w kolejnych poziomach, żeby tabliczka mnożenia została w głowie.",
+        "div": "Gra uczy dzielenia po równo — od 10 : 2 do przykładów takich jak 64 : 8. Najpierw dzieli się przez 2, potem przez 4 i 5, i tak krok po kroku — w sumie jest ich dwadzieścia pięć. Odpowiedź wybiera się spośród dziewięciu liczb, a znajome przykłady wracają w kolejnych poziomach.",
+        "mixed": "Wszystkie cztery działania na zmianę: dziecko nie wie z góry, co trzeba będzie zrobić — dodać, odjąć, pomnożyć czy podzielić. Sześćdziesiąt kroków prowadzi od 6 − 6 i 2 × 4 do przykładów takich jak 1013 − 210. To trening rachunku pamięciowego dla dzieci, które znają już każde działanie z osobna.",
+        "fractions": "Gra oswaja z ułamkami na tym, co dziecko dobrze zna: pizza, placek albo tabliczka czekolady są podzielone na równe kawałki, a część z nich jest zamalowana. Trzeba nazwać tę część — 1/4, 2/3, 3/4 — i wybrać ją spośród dziewięciu ułamków. Gra ma dziesięć kroków.",
+        "fraction_ops": "Ciąg dalszy „Smacznych ułamków” dla dzieci, które już wiedzą, czym jest ułamek. Najpierw dodaje się ułamki o tym samym mianowniku (3/5 + 1/5), potem o różnych (1/5 + 1/2), a dalej odejmuje, mnoży i dzieli. Dwadzieścia kroków; odpowiedź wybiera się spośród kilku ułamków.",
+        "geometry": "Trzy umiejętności w jednej grze. Najpierw dziecko układa obrazek z figur i liczy w nim kwadraty. Potem liczy pole — zamalowane kratki. Na końcu drogi obchodzi figurę wzdłuż brzegu, żeby znaleźć obwód, i szuka figury, która ma największy. Dwadzieścia kroków.",
+        "clock": "Gra uczy odczytywania zegara ze wskazówkami. Na początku tarcza pokazuje pełne godziny — na przykład 11:00 — i trzeba wybrać, która to godzina. Potem pojawiają się minuty (4:10), a na końcu drogi jest odwrotnie: godzina jest podana słowami albo zapisana jako 17:05, a dziecko szuka zegara, który ją pokazuje."
+      },
+      "logic": {
+        "shadows": "Gra ćwiczy wyczucie kształtu: obrazek trzeba rozpoznać po jego czarnej sylwetce. Najpierw są to trzy zupełnie różne rzeczy, potem cztery i pięć, a cienie stają się coraz bardziej podobne — rzeczy z jednej rodziny, później niemal sobowtóry, i to z rozmytym brzegiem. Obrazek przeciąga się na jego cień; w poziomie jest pięć zadań."
+      },
+      "language": {
+        "bubbles": "Trzy gry w jednej, wszystkie o ukraińskich literach. Najpierw dziecko przebija bańki z literami w takiej kolejności, w jakiej stoją w alfabecie. Potem układa słowa z sylab — „по-мі-дор”, „по-не-ді-лок”. Na końcu drogi słucha słowa i samo układa je z liter. Pięćdziesiąt kroków, w każdym poziomie pięć zadań."
+      }
+    }
   }
 }

@@ -1,8 +1,9 @@
 import type { Dict } from '@pulsar/i18n';
 import { CONTACT_EMAIL, TRIAL_PATH, type PublicUrls } from '@pulsar/platform';
 import type { Plugin } from 'vite';
-import { LANGUAGES, SITE_LANGS, sitePath, type SiteLang } from '../src/languages.ts';
+import { DEFAULT_LANG, LANGUAGES, SITE_LANGS, sitePath, type SiteLang } from '../src/languages.ts';
 import { LEGAL_DOCS, LEGAL_UPDATED, legalPath } from '../src/legal.ts';
+import { GAMES_SLUG, gamesPages } from './games.ts';
 import { legalText } from './legal.ts';
 import { loadDictionaries, type Dictionaries } from './pages.ts';
 
@@ -69,10 +70,16 @@ export function llmsTxt(urls: PublicUrls, dictionaries: Dictionaries = loadDicti
     `## ${text(faq, 'title')}`,
     ...answers,
     '',
+    // Every game has a page of its own — with real tasks from it, and a way straight into it.
+    `## ${text(group('catalog'), 'all')}`,
+    '',
+    ...gamesPages(lang, urls, dictionaries).filter((page) => page.kind !== 'index').map((page) => (page.kind === 'galaxy' ? `\n### [${page.name}](${urls.site}/${sitePath(lang)}${page.slug})\n` : `- [${page.name}](${urls.site}/${sitePath(lang)}${page.slug}): ${page.line}`)),
+    '',
     '## Links',
     '',
     ...SITE_LANGS.map((lang) => `- [${text(dictionaries[lang].meta as Dict, 'title')}](${urls.site}/${sitePath(lang)}) — ${LANGUAGES[lang].name}`),
     `- [${text(cta, 'try')}](${urls.play}${TRIAL_PATH}): ${text(hero, 'tryNote')}`,
+    `- [${text(group('catalog'), 'all')}](${urls.site}/${sitePath(lang)}${GAMES_SLUG})`,
     `- [${text(cta, 'parents')}](${urls.parents}/)`,
     // What is done with a family's data, and the rules of the service — in this language.
     ...LEGAL_DOCS.map((doc) => `- [${legalText(lang, doc, urls).title}](${urls.site}/${legalPath(lang, doc)})`),
@@ -116,14 +123,17 @@ export function robotsTxt(site: string): string {
   return ['User-agent: *', 'Allow: /', '', '# AI assistants: their search, pages fetched for a person, and training — all welcome.', ...group(AI_CRAWLERS.search), ...group(AI_CRAWLERS.user), ...group(AI_CRAWLERS.training), `Sitemap: ${site}/sitemap.xml`, ''].join('\n');
 }
 
-export function seo(urls: PublicUrls): Plugin {
+/**
+ * `sitemap.xml`: every page a search engine is offered — the main page, the
+ * legal texts and the pages of games, each in every language it exists in and
+ * naming its other languages. A page of a game that is not to be listed
+ * (`GamesPage.index`) is not here.
+ */
+export function sitemapXml(urls: PublicUrls, dictionaries: Dictionaries = loadDictionaries()): string {
   const { site } = urls;
-
-  const robots = robotsTxt(site);
-
   const today = new Date().toISOString().slice(0, 10);
   const alternates = [...SITE_LANGS.map((lang) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${site}/${sitePath(lang)}"/>`), `<xhtml:link rel="alternate" hreflang="x-default" href="${site}/"/>`].join('');
-  const sitemap = [
+  return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     // The page in each language, every one naming the others.
@@ -133,9 +143,25 @@ export function seo(urls: PublicUrls): Plugin {
       const others = [...SITE_LANGS.map((lang) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${site}/${legalPath(lang, doc)}"/>`), `<xhtml:link rel="alternate" hreflang="x-default" href="${site}/${doc}/"/>`].join('');
       return SITE_LANGS.map((lang) => `  <url><loc>${site}/${legalPath(lang, doc)}</loc>${others}<lastmod>${LEGAL_UPDATED[doc]}</lastmod><priority>0.3</priority></url>`);
     }),
+    // The pages of games: each names only the languages the game is written in.
+    ...SITE_LANGS.flatMap((lang) =>
+      gamesPages(lang, urls, dictionaries).filter((page) => page.index).map((page) => {
+        const others = [...page.langs.map((code) => `<xhtml:link rel="alternate" hreflang="${code}" href="${site}/${sitePath(code)}${page.slug}"/>`), ...(page.langs.includes(DEFAULT_LANG) ? [`<xhtml:link rel="alternate" hreflang="x-default" href="${site}/${page.slug}"/>`] : [])].join('');
+        return `  <url><loc>${site}/${sitePath(lang)}${page.slug}</loc>${others}<lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>${page.kind === 'game' ? '0.7' : '0.8'}</priority></url>`;
+      }),
+    ),
     '</urlset>',
     '',
   ].join('\n');
+}
+
+export function seo(urls: PublicUrls): Plugin {
+  const { site } = urls;
+
+  const robots = robotsTxt(site);
+  const dictionaries = loadDictionaries();
+
+  const sitemap = sitemapXml(urls, dictionaries);
 
   const served: Record<string, [type: string, body: string]> = {
     '/robots.txt': ['text/plain; charset=utf-8', robots],

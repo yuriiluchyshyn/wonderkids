@@ -16,6 +16,7 @@ import { BubblePopLayout } from './BubblePopLayout';
 import { DotToDotLayout } from './DotToDotLayout';
 import { ColorMixLayout } from './ColorMixLayout';
 import { LetterGridLayout } from './LetterGridLayout';
+import { WordSearchLayout } from './WordSearchLayout';
 import { SpeakButton } from './SpeakButton';
 import styles from './Templates.module.css';
 
@@ -35,6 +36,7 @@ const LAYOUTS: Record<TemplatePayload['template'], ComponentType<any>> = {
   [Mechanics.DotToDot]: DotToDotLayout,
   [Mechanics.ColorMix]: ColorMixLayout,
   [Mechanics.LetterGrid]: LetterGridLayout,
+  [Mechanics.WordSearch]: WordSearchLayout,
 };
 
 /**

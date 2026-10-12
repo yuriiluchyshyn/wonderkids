@@ -1807,7 +1807,36 @@
       "2": "Masz {a} — rozłóż kółeczka po równo w {b} rzędach. Policz, ile znajdzie się w jednym rzędzie.",
       "3": "Było {a}. Zabierz {b} — odkładaj po jednym kółeczku. Ile zostało?",
       "4": "Licz kółeczka po jednym: najpierw {a}, a potem dodaj jeszcze {b}. Ile jest razem?"
-    }
+    },
+    "chain": {
+      "prompt": "Ile to jest {expr}?",
+      "hint": "Licz po kolei, od lewej do prawej. Najpierw {first} to {r}. Potem licz dalej od {r} i tak do końca."
+    },
+    "order": {
+      "title": "Co robimy najpierw?",
+      "text": "Kiedy w przykładzie jest mnożenie albo dzielenie razem z dodawaniem albo odejmowaniem, najpierw mnożymy i dzielimy, a dopiero potem dodajemy i odejmujemy. Nawet jeśli mnożenie stoi na samym końcu!",
+      "again": "Pamiętaj zasadę: najpierw mnożenie i dzielenie. Tutaj zacznij od: {first}.",
+      "hint": "Najpierw mnożenie i dzielenie, potem dodawanie i odejmowanie. Zacznij od: {first}."
+    },
+    "brackets": {
+      "title": "Co to są nawiasy?",
+      "text": "Nawias jest jak uścisk: to, co w nim, liczymy najpierw. Tak nawiasy zmieniają kolejność działań, a razem z nią wynik.",
+      "contrast": "Bez nawiasów najpierw mnożymy i wynik jest inny:",
+      "again": "Pamiętaj: najpierw to, co w nawiasie. Tutaj zacznij od: {first}.",
+      "hint": "Najpierw to, co w nawiasie: {first}."
+    },
+    "step": {
+      "+": "{when} dodajemy: {expr} to {r}.",
+      "-": "{when} odejmujemy: {expr} to {r}.",
+      "×": "{when} mnożymy: {expr} to {r}.",
+      "÷": "{when} dzielimy: {expr} to {r}.",
+      "()": "{when} nawias: {expr} to {r}."
+    },
+    "when": {
+      "first": "Najpierw",
+      "then": "Potem"
+    },
+    "open": "w nawiasie"
   },
   "balance": {
     "prompt": "Zrównoważ wagę! Który odważnik waży tyle samo?",
@@ -1942,22 +1971,33 @@
       "hours": "Zegar ma dwie wskazówki. Krótka pokazuje godziny. Kiedy długa wskazówka patrzy prosto w górę, na dwunastkę, jest równa godzina. Zobacz, na co pokazuje krótka!",
       "half": "Kiedy długa wskazówka patrzy w dół, na szóstkę, minęło pół godziny. Krótka wskazówka stoi wtedy między dwiema liczbami.",
       "quarter": "Długa wskazówka na trójce — minął kwadrans. A jeśli jest na dziewiątce, do nowej godziny został kwadrans.",
-      "minutes": "Długa wskazówka pokazuje minuty. Każda liczba na zegarze to kolejne pięć minut: jeden — pięć, dwa — dziesięć, trzy — piętnaście."
-    },
-    "hint": {
-      "long": {
-        "1": "patrzy w górę, na dwunastkę",
-        "2": "pokazuje na {m}"
-      },
-      "short": {
-        "1": "pokazuje na {h}",
-        "2": "minęła już {h}"
-      },
-      "_": "Krótka wskazówka {short}, a długa {long}. Krótka to godziny, długa — minuty."
+      "minutes": "Długa wskazówka pokazuje minuty. Każda liczba na zegarze to kolejne pięć minut: jeden — pięć, dwa — dziesięć, trzy — piętnaście.",
+      "h24": "Po południu zegar elektroniczny liczy godziny dalej: 13, 14, 15… aż do 23. Żeby znaleźć taką godzinę na zwykłym zegarze, odejmij 12: 15 minus 12 to 3, więc 15:00 to trzecia po południu.",
+      "h24minutes": "Teraz w zapisie 24-godzinnym są też minuty. Najpierw znajdź godzinę — krótką wskazówkę, a potem minuty — długą."
     },
     "yes": "Tak, to {time}!",
     "find": "Znajdź zegar, który pokazuje: {time}.",
-    "read": "Która godzina jest na zegarze?"
+    "read": "Która godzina jest na zegarze?",
+    "say24": {
+      "1": "godzina {h}",
+      "2": "{h} {m}"
+    },
+    "read24": "Która godzina? Teraz jest {part}. Wybierz czas taki, jak na zegarze elektronicznym.",
+    "parts": {
+      "morning": "rano",
+      "day": "popołudnie",
+      "evening": "wieczór"
+    },
+    "explain": {
+      "hourOn": "Krótka czarna wskazówka to godziny. Pokazuje na {h}.",
+      "hourPast": "Krótka czarna wskazówka to godziny. Minęła już {h}, ale nie doszła jeszcze do {next} — więc godzina to {h}.",
+      "minuteTop": "Długa czerwona wskazówka to minuty. Patrzy prosto w górę, na 12: równo, zero minut.",
+      "minuteCount": "Długa czerwona wskazówka to minuty. Pokazuje na {n}. Licz co pięć: {count} — to {m} minut.",
+      "minuteTimes": "Długa czerwona wskazówka to minuty. Pokazuje na {n}, a każda liczba to pięć minut: {n} razy po pięć to {m} minut.",
+      "afternoon": "Teraz jest {part}, a po południu godziny liczy się dalej: 12 i jeszcze {h} to {H}.",
+      "morning": "Teraz jest {part}: przed południem zegar elektroniczny pokazuje tę samą godzinę — {H}.",
+      "so": "Czyli jest {time}."
+    }
   },
   "maze": {
     "negatives": " Teraz są tu też liczby ujemne — ze znakiem minus. Dzielą się tak samo: minus dwanaście dzieli się przez trzy, bo dwanaście dzieli się przez trzy.",

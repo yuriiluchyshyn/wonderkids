@@ -1,7 +1,7 @@
 import type { ModuleTexts } from '@/core/game/kernel/types';
-import type { ClockTime } from '@/core/game/templates/types';
+import type { ClockTime, ExplainLine } from '@/core/game/templates/types';
 import type { CurrencyId } from '@/core/game/content/currency';
-import type { MathOp } from '../ids';
+import type { ExprToken, MathOp } from '../ids';
 import type { FractionOpsTier } from '../generators/fractionOps';
 
 /**
@@ -38,6 +38,23 @@ export interface MathTexts {
   mental: {
     prompt(a: number, b: number, op: MathOp): string;
     hint(a: number, b: number, op: MathOp): string;
+    /** «Скільки буде 4 плюс 6 плюс 3?», «Скільки буде (2 плюс 3) помножити на 4?» — a longer row. */
+    chain(tokens: ExprToken[]): string;
+    /** The same for the voice, which cannot see brackets: «…у дужках 2 плюс 3, помножити на 4?». */
+    chainSaid(tokens: ExprToken[]): string;
+    /** Step by step, left to right: the first step (`first` = its result `r`) is worked out, the rest is the child's. */
+    chainHint(first: ExprToken[], r: number): string;
+    /** × and ÷ before + and −: where to start (`first`), no answer. */
+    orderHint(first: ExprToken[]): string;
+    /** Brackets first: where to start (`first`), no answer. */
+    bracketsHint(first: ExprToken[]): string;
+    /** The animated lessons of the order of operations and of brackets (`Lesson`). */
+    lesson: {
+      order: { title: string; text: string; again(first: ExprToken[]): string };
+      brackets: { title: string; text: string; contrast: string; again(first: ExprToken[]): string };
+      /** One worked step: «Спершу множимо: 3 помножити на 4 — це 12.» */
+      step(part: ExprToken[], r: number, first: boolean, inBrackets: boolean): string;
+    };
   };
 
   balance: {
@@ -77,11 +94,16 @@ export interface MathTexts {
 
   clock: {
     say(time: ClockTime): string;
-    intro: { hours: string; half: string; quarter: string; minutes: string };
-    hint(time: ClockTime): string;
+    /** A time in the 24-hour format, said: «п’ятнадцята година», «fifteen thirty». */
+    say24(hour24: number, m: number): string;
+    intro: { hours: string; half: string; quarter: string; minutes: string; h24: string; h24minutes: string };
+    /** How to read this clock, line by line (with `say` marks); `hour24` on a 24-hour step. */
+    explain(time: ClockTime, told: string, hour24?: number): ExplainLine[];
     yes(time: string): string;
     find(time: string): string;
     read: string;
+    /** «Котра година? Зараз вечір…» — a clock read in the 24-hour format. */
+    read24(hour24: number): string;
   };
 
   maze: {

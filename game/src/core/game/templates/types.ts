@@ -48,6 +48,12 @@ export interface ClockTime {
   m: number;
 }
 
+/** A patch of colour (the colour lessons); `shine` makes it glitter like gold or silver. */
+export interface Swatch {
+  color: string;
+  shine?: boolean;
+}
+
 /** Anything a child can look at, tap or drag. */
 export interface Card {
   id: string;
@@ -70,12 +76,19 @@ export interface Card {
   shape?: { cols: number; rows: number; cells: number[] };
   /** A drawn clock face showing this time. */
   clock?: ClockTime;
+  /** A blob of colour instead of a picture (the colour lessons). */
+  swatch?: Swatch;
   /** Draw the pictogram as a black shadow of itself (shadow lotto). */
   silhouette?: boolean;
   /** How soft the edge of that shadow is, in pixels — softer is harder to recognise. */
   blur?: number;
   /** Language the speaker reads this card in. Default: Ukrainian. */
   lang?: SpeechLang;
+  /**
+   * The picture (`image` / `emoji`) is only an association cue for the label.
+   * It fades once the child knows the answer (`core/game/cues`).
+   */
+  cue?: boolean;
 }
 
 /** Languages the voice can read a card in. */
@@ -92,6 +105,8 @@ interface TemplateBase {
     glyphs?: Glyph[];
     /** A drawn clock face showing this time. */
     clock?: ClockTime;
+    /** A splash of colour to name (the colour lessons). */
+    swatch?: Swatch;
     /** A figure drawn on a small cell grid. */
     shape?: { cols: number; rows: number; cells: number[] };
     /** A finished tangram figure, drawn in colour (100×100 canvas). */
@@ -121,6 +136,59 @@ interface TemplateBase {
    * help is something to think with, not fewer answers to guess from.
    */
   clue?: Clue;
+  /**
+   * A worked explanation of the answer, shown below the board once the child
+   * needs help — after mistakes, or after a long while without an answer
+   * (`GameScreen`'s `EXPLAIN_IDLE_MS`): «the short black hand is the hours…».
+   */
+  explain?: Explain;
+  /**
+   * A rule this task stands on (the order of operations, brackets). It is
+   * taught by an animated lesson the first time the child meets it, and again
+   * when the child taps one of its `traps` (`components/templates/RuleLesson`).
+   */
+  lesson?: Lesson;
+}
+
+/** One line of a lesson's worked example: the row as it stands, and the part done next. */
+export interface LessonStep {
+  /** The row: numbers, signs, brackets, `=`. */
+  tokens: string[];
+  /** The tokens `[from, to]` (inclusive) worked out on the way to the next row. */
+  focus?: [number, number];
+  /** What is said about this step: «Спершу множимо: 3 × 4 = 12». */
+  note?: string;
+}
+
+/** A rule taught by an animated lesson (see `TemplateBase.lesson`). */
+export interface Lesson {
+  /** Which rule: remembered per child as the seen tip `lesson.<id>`. */
+  id: string;
+  title: string;
+  /** The rule in words, shown and read out. */
+  text: string;
+  /** A worked example that is never the task itself, so nothing is given away. */
+  steps: LessonStep[];
+  /** For comparison: the same numbers in another order (brackets lesson). */
+  contrast?: LessonStep[];
+  /** What introduces `contrast`: «А без дужок спершу множимо, і відповідь інша:». */
+  contrastText?: string;
+  /** Shown when a trap was tapped: where to start in THIS task (no answer). */
+  again: string;
+  /** Answers that come from doing it in the wrong order. */
+  traps: string[];
+}
+
+/** One line of a worked explanation; `tone` colours its marker like the thing it is about. */
+export interface ExplainLine {
+  tone: 'hour' | 'minute' | 'day' | 'sum';
+  text: string;
+}
+
+/** What `explain` shows: the clock it is about (if any) and the lines that read it. */
+export interface Explain {
+  clock?: ClockTime;
+  lines: ExplainLine[];
 }
 
 /** One thing in a clue picture. */
@@ -318,6 +386,8 @@ export interface Paint {
   name: string;
   /** CSS colour of the paint. */
   color: string;
+  /** Glitter, or a colour that sparkles (gold, silver, the shiny ones). */
+  shine?: boolean;
 }
 
 /**
@@ -332,8 +402,8 @@ export interface ColorMixPayload extends TemplateBase {
   result: Paint;
   /** Tubes on offer. */
   paints: Paint[];
-  /** Ids of the two paints that give `result`. */
-  recipe: [string, string];
+  /** Ids of the paints that give `result` — two or three (glitter counts as one). */
+  recipe: string[];
 }
 
 /**
@@ -369,7 +439,35 @@ export type TemplatePayload =
   | BubblePopPayload
   | DotToDotPayload
   | ColorMixPayload
-  | LetterGridPayload;
+  | LetterGridPayload
+  | WordSearchPayload;
+
+/** One word hidden in a word-search table. */
+export interface HiddenWord {
+  id: string;
+  /** The word as it is written in the table, in capitals. */
+  word: string;
+  emoji: string;
+  /** The cells it lies on, first letter first (row-major indices). */
+  cells: number[];
+  /** Is the word written beside its picture? On the hardest steps only the picture is. */
+  shown: boolean;
+}
+
+/**
+ * Word search (UI_WORD_SEARCH) — a square table of letters with words hidden
+ * in straight lines (across, down, slanting, backwards on later steps). The
+ * child draws a finger over a word, or taps its first and last letter.
+ */
+export interface WordSearchPayload extends TemplateBase {
+  template: Mechanics.WordSearch;
+  cols: number;
+  /** The letters of the table, row after row (`cols × cols`). */
+  letters: string[];
+  words: HiddenWord[];
+  /** The language the words are in — what their speakers read them in. */
+  lang: SpeechLang;
+}
 
 /** Spoken form of a card (for the speaker button), in the language its words are in. */
 export function cardSpeech(card: Card): string {

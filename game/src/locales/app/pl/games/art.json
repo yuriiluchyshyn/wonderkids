@@ -1,208 +1,600 @@
 {
   "PAINTS": {
     "red": {
-      "0": "Czerwony",
-      "1": "czerwoną"
+      "name": "Czerwony",
+      "acc": "czerwoną"
     },
     "yellow": {
-      "0": "Żółty",
-      "1": "żółtą"
+      "name": "Żółty",
+      "acc": "żółtą"
     },
     "blue": {
-      "0": "Niebieski",
-      "1": "niebieską"
+      "name": "Niebieski",
+      "acc": "niebieską"
     },
     "white": {
-      "0": "Biały",
-      "1": "białą"
+      "name": "Biały",
+      "acc": "białą"
     },
     "black": {
-      "0": "Czarny",
-      "1": "czarną"
+      "name": "Czarny",
+      "acc": "czarną"
     },
     "green": {
-      "0": "Zielony",
-      "1": "zieloną"
+      "name": "Zielony",
+      "acc": "zieloną"
     },
     "orange": {
-      "0": "Pomarańczowy",
-      "1": "pomarańczową"
-    }
-  },
-  "MIXES": {
-    "green": {
-      "0": "Zielony",
-      "1": "na zielono"
-    },
-    "orange": {
-      "0": "Pomarańczowy",
-      "1": "na pomarańczowo"
+      "name": "Pomarańczowy",
+      "acc": "pomarańczową"
     },
     "purple": {
-      "0": "Fioletowy",
-      "1": "na fioletowo"
-    },
-    "pink": {
-      "0": "Różowy",
-      "1": "na różowo"
-    },
-    "grey": {
-      "0": "Szary",
-      "1": "na szaro"
-    },
-    "sky": {
-      "0": "Błękitny",
-      "1": "na błękitno"
-    },
-    "navy": {
-      "0": "Granatowy",
-      "1": "na granatowo"
-    },
-    "peach": {
-      "0": "Brzoskwiniowy",
-      "1": "na brzoskwiniowo"
+      "name": "Fioletowy",
+      "acc": "fioletową"
     },
     "brown": {
-      "0": "Brązowy",
-      "1": "na brązowo"
+      "name": "Brązowy",
+      "acc": "brązową"
+    },
+    "glitter": {
+      "name": "Brokat",
+      "acc": "brokat"
+    }
+  },
+  "COLORS": {
+    "red": {
+      "name": "Czerwony",
+      "how": "na czerwono"
+    },
+    "yellow": {
+      "name": "Żółty",
+      "how": "na żółto"
+    },
+    "blue": {
+      "name": "Niebieski",
+      "how": "na niebiesko"
+    },
+    "green": {
+      "name": "Zielony",
+      "how": "na zielono"
+    },
+    "orange": {
+      "name": "Pomarańczowy",
+      "how": "na pomarańczowo"
+    },
+    "purple": {
+      "name": "Fioletowy",
+      "how": "na fioletowo"
+    },
+    "black": {
+      "name": "Czarny",
+      "how": "na czarno"
+    },
+    "white": {
+      "name": "Biały",
+      "how": "na biało"
+    },
+    "pink": {
+      "name": "Różowy",
+      "how": "na różowo"
+    },
+    "brown": {
+      "name": "Brązowy",
+      "how": "na brązowo"
+    },
+    "grey": {
+      "name": "Szary",
+      "how": "na szaro"
+    },
+    "sky": {
+      "name": "Błękitny",
+      "how": "na błękitno"
+    },
+    "navy": {
+      "name": "Granatowy",
+      "how": "na granatowo"
     },
     "lime": {
-      "0": "Seledynowy",
-      "1": "na seledynowo"
+      "name": "Seledynowy",
+      "how": "na seledynowo"
     },
     "forest": {
-      "0": "Ciemnozielony",
-      "1": "na ciemnozielono"
+      "name": "Ciemnozielony",
+      "how": "na ciemnozielono"
+    },
+    "peach": {
+      "name": "Brzoskwiniowy",
+      "how": "na brzoskwiniowo"
+    },
+    "mint": {
+      "name": "Miętowy",
+      "how": "na miętowo"
+    },
+    "turquoise": {
+      "name": "Turkusowy",
+      "how": "na turkusowo"
+    },
+    "lemon": {
+      "name": "Cytrynowy",
+      "how": "na cytrynowo"
+    },
+    "burgundy": {
+      "name": "Bordowy",
+      "how": "na bordowo"
+    },
+    "olive": {
+      "name": "Oliwkowy",
+      "how": "na oliwkowo"
+    },
+    "lilac": {
+      "name": "Liliowy",
+      "how": "na liliowo"
+    },
+    "violetDark": {
+      "name": "Ciemnofioletowy",
+      "how": "na ciemnofioletowo"
+    },
+    "crimson": {
+      "name": "Malinowy",
+      "how": "na malinowo"
+    },
+    "beige": {
+      "name": "Beżowy",
+      "how": "na beżowo"
+    },
+    "chocolate": {
+      "name": "Ciemnobrązowy",
+      "how": "na ciemnobrązowo"
+    },
+    "amber": {
+      "name": "Bursztynowy",
+      "how": "na bursztynowo"
+    },
+    "lavender": {
+      "name": "Lawendowy",
+      "how": "na lawendowo"
+    },
+    "coral": {
+      "name": "Koralowy",
+      "how": "na koralowo"
+    },
+    "lightGreen": {
+      "name": "Jasnozielony",
+      "how": "na jasnozielono"
+    },
+    "plum": {
+      "name": "Śliwkowy",
+      "how": "na śliwkowo"
+    },
+    "graphite": {
+      "name": "Grafitowy",
+      "how": "na grafitowo"
+    },
+    "sand": {
+      "name": "Piaskowy",
+      "how": "na piaskowo"
+    },
+    "brick": {
+      "name": "Ceglasty",
+      "how": "na ceglasto"
+    },
+    "aqua": {
+      "name": "Akwamarynowy",
+      "how": "na akwamarynowo"
+    },
+    "pine": {
+      "name": "Jodłowy",
+      "how": "na jodłowo"
+    },
+    "salmon": {
+      "name": "Łososiowy",
+      "how": "na łososiowo"
+    },
+    "mustard": {
+      "name": "Musztardowy",
+      "how": "na musztardowo"
+    },
+    "gold": {
+      "name": "Złoty",
+      "how": "na złoto"
+    },
+    "silver": {
+      "name": "Srebrny",
+      "how": "na srebrno"
+    },
+    "bronze": {
+      "name": "Miedziany",
+      "how": "na miedziano"
+    },
+    "emerald": {
+      "name": "Szmaragdowy",
+      "how": "na szmaragdowo"
+    },
+    "ice": {
+      "name": "Lodowy",
+      "how": "na lodowy błękit"
+    },
+    "shinyPink": {
+      "name": "Błyszczący różowy",
+      "how": "na błyszczący róż"
+    },
+    "shinyPurple": {
+      "name": "Błyszczący fioletowy",
+      "how": "na błyszczący fiolet"
     }
   },
   "THINGS": {
-    "0": {
-      "0": "Żabka",
-      "1": "żabkę"
+    "frog": {
+      "name": "Żabka",
+      "whom": "żabkę"
     },
-    "1": {
-      "0": "Pomarańcza",
-      "1": "pomarańczę"
+    "orange": {
+      "name": "Pomarańcza",
+      "whom": "pomarańczę"
     },
-    "2": {
-      "0": "Listek",
-      "1": "listek"
+    "leaf": {
+      "name": "Listek",
+      "whom": "listek"
     },
-    "3": {
-      "0": "Marchewka",
-      "1": "marchewkę"
+    "carrot": {
+      "name": "Marchewka",
+      "whom": "marchewkę"
     },
-    "4": {
-      "0": "Winogrona",
-      "1": "winogrona"
+    "grapes": {
+      "name": "Winogrona",
+      "whom": "winogrona"
     },
-    "5": {
-      "0": "Bakłażan",
-      "1": "bakłażan"
+    "eggplant": {
+      "name": "Bakłażan",
+      "whom": "bakłażan"
     },
-    "6": {
-      "0": "Krokodyl",
-      "1": "krokodyla"
+    "crocodile": {
+      "name": "Krokodyl",
+      "whom": "krokodyla"
     },
-    "7": {
-      "0": "Dynia",
-      "1": "dynię"
+    "pumpkin": {
+      "name": "Dynia",
+      "whom": "dynię"
     },
-    "8": {
-      "0": "Ogórek",
-      "1": "ogórek"
+    "cucumber": {
+      "name": "Ogórek",
+      "whom": "ogórek"
     },
-    "9": {
-      "0": "Lisek",
-      "1": "liska"
+    "fox": {
+      "name": "Lisek",
+      "whom": "liska"
     },
-    "10": {
-      "0": "Parasolka",
-      "1": "parasolkę"
+    "umbrella": {
+      "name": "Parasolka",
+      "whom": "parasolkę"
     },
-    "11": {
-      "0": "Świnka",
-      "1": "świnkę"
+    "pig": {
+      "name": "Świnka",
+      "whom": "świnkę"
     },
-    "12": {
-      "0": "Słoń",
-      "1": "słonia"
+    "elephant": {
+      "name": "Słoń",
+      "whom": "słonia"
     },
-    "13": {
-      "0": "Kwiatek",
-      "1": "kwiatek"
+    "flower": {
+      "name": "Kwiatek",
+      "whom": "kwiatek"
     },
-    "14": {
-      "0": "Myszka",
-      "1": "myszkę"
+    "mouse": {
+      "name": "Myszka",
+      "whom": "myszkę"
     },
-    "15": {
-      "0": "Wieloryb",
-      "1": "wieloryba"
+    "whale": {
+      "name": "Wieloryb",
+      "whom": "wieloryba"
     },
-    "16": {
-      "0": "Flaming",
-      "1": "flaminga"
+    "flamingo": {
+      "name": "Flaming",
+      "whom": "flaminga"
     },
-    "17": {
-      "0": "Borówka",
-      "1": "borówkę"
+    "blueberry": {
+      "name": "Borówka",
+      "whom": "borówkę"
     },
-    "18": {
-      "0": "Dżinsy",
-      "1": "dżinsy"
+    "jeans": {
+      "name": "Dżinsy",
+      "whom": "dżinsy"
     },
-    "19": {
-      "0": "Wilk",
-      "1": "wilka"
+    "wolf": {
+      "name": "Wilk",
+      "whom": "wilka"
     },
-    "20": {
-      "0": "Brzoskwinia",
-      "1": "brzoskwinię"
+    "peach": {
+      "name": "Brzoskwinia",
+      "whom": "brzoskwinię"
     },
-    "21": {
-      "0": "Motyl",
-      "1": "motyla"
+    "butterfly": {
+      "name": "Motyl",
+      "whom": "motyla"
     },
-    "22": {
-      "0": "Kokardka",
-      "1": "kokardkę"
+    "bow": {
+      "name": "Kokardka",
+      "whom": "kokardkę"
     },
-    "23": {
-      "0": "Niedźwiedź",
-      "1": "niedźwiedzia"
+    "bear": {
+      "name": "Niedźwiedź",
+      "whom": "niedźwiedzia"
     },
-    "24": {
-      "0": "Kasztan",
-      "1": "kasztan"
+    "chestnut": {
+      "name": "Kasztan",
+      "whom": "kasztan"
     },
-    "25": {
-      "0": "Czekolada",
-      "1": "czekoladę"
+    "chocolate": {
+      "name": "Czekolada",
+      "whom": "czekoladę"
     },
-    "26": {
-      "0": "Jabłko",
-      "1": "jabłko"
+    "apple": {
+      "name": "Jabłko",
+      "whom": "jabłko"
     },
-    "27": {
-      "0": "Gruszka",
-      "1": "gruszkę"
+    "pear": {
+      "name": "Gruszka",
+      "whom": "gruszkę"
     },
-    "28": {
-      "0": "Sałata",
-      "1": "sałatę"
+    "lettuce": {
+      "name": "Sałata",
+      "whom": "sałatę"
     },
-    "29": {
-      "0": "Choinka",
-      "1": "choinkę"
+    "fir": {
+      "name": "Choinka",
+      "whom": "choinkę"
     },
-    "30": {
-      "0": "Brokuł",
-      "1": "brokuł"
+    "broccoli": {
+      "name": "Brokuł",
+      "whom": "brokuł"
     },
-    "31": {
-      "0": "Ziemniak",
-      "1": "ziemniaka"
+    "potato": {
+      "name": "Ziemniak",
+      "whom": "ziemniaka"
+    },
+    "icecream": {
+      "name": "Lody",
+      "whom": "lody"
+    },
+    "fish": {
+      "name": "Rybka",
+      "whom": "rybkę"
+    },
+    "lemon": {
+      "name": "Cytryna",
+      "whom": "cytrynę"
+    },
+    "cherries": {
+      "name": "Wiśnie",
+      "whom": "wiśnie"
+    },
+    "olive": {
+      "name": "Oliwka",
+      "whom": "oliwkę"
+    },
+    "toothbrush": {
+      "name": "Szczoteczka",
+      "whom": "szczoteczkę"
+    },
+    "hyacinth": {
+      "name": "Hiacynt",
+      "whom": "hiacynt"
+    },
+    "crystal": {
+      "name": "Kula",
+      "whom": "kulę"
+    },
+    "lipstick": {
+      "name": "Szminka",
+      "whom": "szminkę"
+    },
+    "camel": {
+      "name": "Wielbłąd",
+      "whom": "wielbłąda"
+    },
+    "log": {
+      "name": "Kłoda",
+      "whom": "kłodę"
+    },
+    "honey": {
+      "name": "Miód",
+      "whom": "miód"
+    },
+    "wave": {
+      "name": "Fala",
+      "whom": "falę"
+    },
+    "unicorn": {
+      "name": "Jednorożec",
+      "whom": "jednorożca"
+    },
+    "peanut": {
+      "name": "Orzeszek",
+      "whom": "orzeszek"
+    },
+    "hedgehog": {
+      "name": "Jeż",
+      "whom": "jeża"
+    },
+    "teddy": {
+      "name": "Miś",
+      "whom": "misia"
+    },
+    "balloon": {
+      "name": "Balonik",
+      "whom": "balonik"
+    },
+    "coral": {
+      "name": "Koral",
+      "whom": "koral"
+    },
+    "caterpillar": {
+      "name": "Gąsienica",
+      "whom": "gąsienicę"
+    },
+    "squirrel": {
+      "name": "Wiewiórka",
+      "whom": "wiewiórkę"
+    },
+    "handbag": {
+      "name": "Torebka",
+      "whom": "torebkę"
+    },
+    "pencil": {
+      "name": "Ołówek",
+      "whom": "ołówek"
+    },
+    "socks": {
+      "name": "Skarpetki",
+      "whom": "skarpetki"
+    },
+    "beach": {
+      "name": "Plaża",
+      "whom": "plażę"
+    },
+    "brick": {
+      "name": "Cegła",
+      "whom": "cegłę"
+    },
+    "balletShoes": {
+      "name": "Baletki",
+      "whom": "baletki"
+    },
+    "octopus": {
+      "name": "Ośmiornica",
+      "whom": "ośmiornicę"
+    },
+    "house": {
+      "name": "Domek",
+      "whom": "domek"
+    },
+    "lizard": {
+      "name": "Jaszczurka",
+      "whom": "jaszczurkę"
+    },
+    "dolphin": {
+      "name": "Delfin",
+      "whom": "delfina"
+    },
+    "cactus": {
+      "name": "Kaktus",
+      "whom": "kaktusa"
+    },
+    "cupcake": {
+      "name": "Babeczka",
+      "whom": "babeczkę"
+    },
+    "salmonFish": {
+      "name": "Ryba",
+      "whom": "rybę"
+    },
+    "hotdog": {
+      "name": "Hot dog",
+      "whom": "hot doga"
+    },
+    "shell": {
+      "name": "Muszla",
+      "whom": "muszlę"
+    },
+    "bubbles": {
+      "name": "Bańki",
+      "whom": "bańki"
+    },
+    "tulip": {
+      "name": "Tulipan",
+      "whom": "tulipana"
+    },
+    "cheese": {
+      "name": "Ser",
+      "whom": "ser"
+    },
+    "crown": {
+      "name": "Korona",
+      "whom": "koronę"
+    },
+    "spoon": {
+      "name": "Łyżka",
+      "whom": "łyżkę"
+    },
+    "trophy": {
+      "name": "Puchar",
+      "whom": "puchar"
+    },
+    "key": {
+      "name": "Klucz",
+      "whom": "klucz"
+    },
+    "purse": {
+      "name": "Portmonetka",
+      "whom": "portmonetkę"
+    },
+    "bell": {
+      "name": "Dzwonek",
+      "whom": "dzwonek"
+    },
+    "medal": {
+      "name": "Medal",
+      "whom": "medal"
+    },
+    "dress": {
+      "name": "Sukienka",
+      "whom": "sukienkę"
+    },
+    "coin": {
+      "name": "Moneta",
+      "whom": "monetę"
+    },
+    "ring": {
+      "name": "Pierścionek",
+      "whom": "pierścionek"
+    },
+    "snowflake": {
+      "name": "Płatek śniegu",
+      "whom": "płatek śniegu"
+    },
+    "icecube": {
+      "name": "Kostka lodu",
+      "whom": "kostkę lodu"
+    },
+    "star": {
+      "name": "Gwiazda",
+      "whom": "gwiazdę"
+    },
+    "robot": {
+      "name": "Robot",
+      "whom": "robota"
+    },
+    "dragon": {
+      "name": "Smok",
+      "whom": "smoka"
+    },
+    "heart": {
+      "name": "Serce",
+      "whom": "serce"
+    },
+    "moon": {
+      "name": "Księżyc",
+      "whom": "księżyc"
+    },
+    "hat": {
+      "name": "Kapelusz",
+      "whom": "kapelusz"
+    },
+    "trumpet": {
+      "name": "Trąbka",
+      "whom": "trąbkę"
+    },
+    "fairy": {
+      "name": "Wróżka",
+      "whom": "wróżkę"
+    },
+    "mountain": {
+      "name": "Góra",
+      "whom": "górę"
+    },
+    "train": {
+      "name": "Lokomotywa",
+      "whom": "lokomotywę"
     }
   },
   "cards": {
@@ -211,15 +603,39 @@
       "mixer": {
         "label": "Mieszanie kolorów",
         "blurb": "Mieszaj farby w kociołku i koloruj obrazki",
-        "intro": "Obrazek jest jeszcze szary — trzeba go pokolorować! Wlej do czarodziejskiego kociołka dwie farby, żeby powstał potrzebny kolor."
+        "intro": "Obrazek jest jeszcze szary — trzeba go pokolorować! Wlej do czarodziejskiego kociołka farby, żeby powstał potrzebny kolor."
+      },
+      "colors": {
+        "label": "Poznajemy kolory",
+        "blurb": "Znajdź właściwy kolor spośród sześciu",
+        "intro": "Ile jest kolorów na świecie! Posłuchaj, jaki kolor trzeba znaleźć, i dotknij go. A potem powiedz, jaki kolor ma obrazek."
       }
     }
   },
   "introFor": {
     "1": "Teraz są też biała i czarna farba. Biała rozjaśnia kolor, a czarna go przyciemnia.",
-    "2": "Najtrudniejsze kolory powstają, gdy gotowy kolor zmieszasz z innym. Spróbuj!"
+    "2": "Najtrudniejsze kolory powstają, gdy gotowy kolor zmieszasz z innym. Spróbuj!",
+    "3": "Nowe kolory: miętowy, turkusowy, bordowy, liliowy… Sprawdź, z jakich dwóch farb powstają.",
+    "4": "Teraz niektóre kolory powstają dopiero z trzech farb! Wlej do kociołka trzy farby, jedną po drugiej.",
+    "5": "Czas na blask! Dodaj do kociołka brokat ✨ — a kolor zrobi się złoty, srebrny albo błyszczący."
   },
-  "prompt": "Pomaluj {at} {mix}. Jakie dwie farby trzeba zmieszać?",
-  "hint": "Kolor {mix} powstanie, gdy zmieszasz farbę {a} i {b}.",
-  "outro": "{a} i {b} razem dają {mix}!"
+  "prompt": {
+    "two": "Pomaluj {at} {mix}. Jakie dwie farby trzeba zmieszać?",
+    "three": "Pomaluj {at} {mix}. Jakie trzy farby trzeba zmieszać?",
+    "shine": "Pomaluj {at} {mix}. Jakie dwie farby zmieszać i co dodać, żeby błyszczało?"
+  },
+  "hint": {
+    "two": "Kolor {mix} powstanie, gdy zmieszasz farbę {a} i {b}.",
+    "three": "Kolor {mix} powstanie, gdy zmieszasz farbę {a}, {b} i {c}.",
+    "shine": "Kolor {mix} powstanie, gdy zmieszasz farbę {a} i {b} i dodasz brokat."
+  },
+  "outro": {
+    "two": "{a} i {b} razem dają {mix}!",
+    "three": "{a}, {b} i {c} razem dają {mix}!",
+    "shine": "{a} i {b} z brokatem dają {mix}!"
+  },
+  "colors": {
+    "pick": "Wybierz kolor {name}.",
+    "name": "Jaki to kolor?"
+  }
 }

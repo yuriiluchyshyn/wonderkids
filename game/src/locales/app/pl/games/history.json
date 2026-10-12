@@ -10,6 +10,11 @@
   },
   "cards": {
     "title": "Historia",
+    "groups": {
+      "world": "Świat",
+      "ua": "Ukraina",
+      "pl": "Polska"
+    },
     "games": {
       "dinosaurs": {
         "label": "Dinozaury",
@@ -102,7 +107,7 @@
   "data": {
     "people": {
       "PEOPLE": {
-        "einstein": "Albert Einstein|Atom i wzory|Albert Einstein to fizyk, który wyjaśnił, jak działają czas, przestrzeń i światło.|Kto wyjaśnił, jak działają czas, przestrzeń i światło?",
+        "einstein": "Albert Einstein|Słynny wzór|Albert Einstein to fizyk, który wyjaśnił, jak działają czas, przestrzeń i światło.|Kto wyjaśnił, jak działają czas, przestrzeń i światło?",
         "davinci": "Leonardo da Vinci|Mona Lisa|Leonardo da Vinci namalował „Mona Lisę” i wymyślał machiny latające.|Kto namalował „Mona Lisę”?",
         "columbus": "Krzysztof Kolumb|Statek do Ameryki|Kolumb przepłynął ocean na żaglowcach i dotarł do Ameryki.|Kto przepłynął ocean i dotarł do Ameryki?",
         "armstrong": "Neil Armstrong|Księżyc|Neil Armstrong jako pierwszy człowiek stanął na Księżycu.|Kto jako pierwszy człowiek stanął na Księżycu?",

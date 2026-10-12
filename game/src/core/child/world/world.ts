@@ -15,6 +15,7 @@
  */
 import type { LangCode } from '../../language/types.ts';
 import { worldWords } from './words/index.ts';
+import { KEY_GAP, keySteps, keysOnPath } from '../progress/keySteps.ts';
 import TEXTS from '../../../locales/app/uk/world.json' with { type: 'json' };
 
 const J = TEXTS.world;
@@ -183,6 +184,8 @@ export function shopState(items: readonly ShopItem[], owned: ReadonlySet<string>
 }
 
 export interface GameProgress {
+  /** The game's path key (`module:sub`) — it decides where its keys lie (`keySteps`). */
+  id: string;
   /** Free-play game (no path). */
   free: boolean;
   /** Path length (ignored for free play). */
@@ -196,25 +199,34 @@ export interface GameProgress {
 // ------------------------------------------------------- Keys of knowledge —
 
 /**
- * Keys of knowledge («ключі знань») are the world's second currency. A key is
- * earned for every path step passed for the first time — in ANY game — and
- * for the first levels of a free-play game. Keys do not know which game they
- * came from: thirty new games are simply thirty more places to earn them, and
- * what they open (stations, later further planets and galaxies, or a share in
- * something a group of children opens together) never has to follow the catalog.
+ * Keys of knowledge («ключі знань») are the world's second currency. A key
+ * lies on some steps of every path — every 3–5 steps, the gaps drawn from the
+ * game's id, so they stay where they are across sessions and reloads
+ * (`keySteps`; the path shows them) — and is earned when its step is passed
+ * for the first time. A free-play game hands them out the same way over its
+ * first levels. Keys do not know which game they came from: thirty new games
+ * are simply thirty more places to earn them, and what they open (stations,
+ * later further planets and galaxies, or a share in something a group of
+ * children opens together) never has to follow the catalog.
  */
 export const KEYS_PER_FREE_GAME = 20;
+
+/** Keys a free-play game gives for this many levels played. */
+function keysOfFreeGame(id: string, plays: number): number {
+  const at = keySteps(id, KEYS_PER_FREE_GAME * KEY_GAP.max);
+  return Math.min(KEYS_PER_FREE_GAME, at.filter((s) => s <= plays).length);
+}
 
 /** Every key the child has earned so far. Replaying a step that is already passed earns none. */
 export function keysEarned(games: readonly GameProgress[]): number {
   return games.reduce(
-    (sum, g) => sum + (g.free ? Math.min(KEYS_PER_FREE_GAME, Math.max(0, g.plays)) : Math.max(0, Math.min(g.steps, g.step) - 1)),
+    (sum, g) => sum + (g.free ? keysOfFreeGame(g.id, Math.max(0, g.plays)) : keysOnPath(g.id, Math.max(0, g.step), g.steps)),
     0,
   );
 }
 
-/** What the ten stations of a planet cost, in keys, in order. */
-export const STATION_COSTS = [2, 3, 4, 5, 6, 8, 10, 12, 14, 16] as const;
+/** What the ten stations of a planet cost, in keys — a key comes every 3–5 steps, not every step. */
+export const STATION_COSTS = [1, 1, 1, 2, 2, 2, 3, 3, 4, 4] as const;
 export const STATION_COUNT = STATION_COSTS.length;
 
 export function stationId(index: number): string {

@@ -210,12 +210,13 @@ export function defineSubject(subject: SubjectDef, games: GameCard[], tasks: Rec
 /**
  * Registers a subject whose tasks are generated one at a time rather than
  * drawn from a pool (Math: sums with random numbers). It plays on the same
- * shared screens; the shell builds its levels from repeated `generateTask`.
+ * shared screens; the shell builds its levels from repeated `generateTask`,
+ * unless `buildLevel` makes a game's level itself.
  */
 export function defineGeneratedSubject(
   subject: SubjectDef,
   games: SubCategory[],
-  made: Pick<LearningModule, 'generateTask' | 'getIntro' | 'texts'>,
+  made: Pick<LearningModule, 'generateTask' | 'getIntro' | 'texts' | 'buildLevel'>,
 ): LearningModule {
   const module: LearningModule = { ...subject, subCategories: games, ...SHARED_SCREENS, ...made };
   moduleRegistry.register(module);

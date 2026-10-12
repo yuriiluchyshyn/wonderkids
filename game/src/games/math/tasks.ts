@@ -10,6 +10,16 @@ import { generateCompare } from './generators/compare';
 import { generateClock } from './generators/clock';
 import { generateWordProblem } from './generators/wordProblems';
 import { MATH_SUB } from './ids';
+import { buildMentalLevel, isMentalGame } from './generators/mentalMath';
+
+/**
+ * The level of a mental-arithmetic game, made as a whole: how many longer
+ * tasks it has is planned step by step (`levelPlan`). The other games make
+ * their tasks one at a time (`undefined`: the shell's way).
+ */
+export function buildLevel(config: Omit<TaskConfig, 'index'>, count: number): TaskInstance[] | undefined {
+  return isMentalGame(config.subCategoryId) ? buildMentalLevel(config, count) : undefined;
+}
 
 /**
  * Makes one task of a game: every game has its own generator in `generators/`.

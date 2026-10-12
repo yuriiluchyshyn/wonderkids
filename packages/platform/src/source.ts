@@ -19,8 +19,35 @@ export const LINK_PARAM = 'l';
 
 /** How the trial game is opened on the child's portal: `play.…/try` (see the game's `core/app/demo.ts`). */
 export const TRIAL_PATH = '/try';
-/** Set on the way from the public site's own button into the trial game: `?via=site`. */
+/** Set on the way from the public site into the trial game: `?via=site` — the site's own button, `?via=page` — the button on a game's page. */
 export const VIA_PARAM = 'via';
+/** How a visitor got into the trial game. */
+export const VISIT_VIAS = ['link', 'site', 'page'] as const;
+export type VisitVia = (typeof VISIT_VIAS)[number];
+/** What `?via=` says, or `link` when it says nothing we know. */
+export const viaOfQuery = (search: string): VisitVia => VISIT_VIAS.find((via) => via === new URLSearchParams(search).get(VIA_PARAM)) ?? 'link';
+
+/**
+ * The query parameter that opens the trial game in ONE game instead of the
+ * hub: `play.…/try?game=geography:flags` — what a game's page on the site
+ * leads to. A game is named as the game names it: `<module>:<sub>`.
+ */
+export const GAME_PARAM = 'game';
+const GAME_ID = /^([a-z][a-z0-9_]{0,29}):([a-z][a-z0-9_]{0,39})$/;
+
+export interface GameRef {
+  module: string;
+  sub: string;
+}
+
+/** The game an id names (`geography:flags`), if it is written the way ids are. */
+export function gameOfId(id: string | null | undefined): GameRef | undefined {
+  const named = GAME_ID.exec(id?.trim() ?? '');
+  return named ? { module: named[1], sub: named[2] } : undefined;
+}
+
+/** The game a query string asks the trial to open in. */
+export const gameOfQuery = (search: string): GameRef | undefined => gameOfId(new URLSearchParams(search).get(GAME_PARAM));
 
 const LINK_CODE = /^[a-z0-9][a-z0-9_-]{1,39}$/;
 

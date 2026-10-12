@@ -27,7 +27,7 @@ function checkPayload(p, validate) {
       unique(ids, 'options');
       assert.ok(ids.includes(p.correctId), `correctId ${p.correctId} not among options`);
       assert.ok(p.options.length >= 2 && p.options.length <= 9, `bad option count ${p.options.length}`);
-      for (const o of p.options) assert.ok(o.emoji || o.label || o.glyphs || o.shape || o.clock, 'option has no face');
+      for (const o of p.options) assert.ok(o.emoji || o.label || o.glyphs || o.shape || o.clock || o.swatch, 'option has no face');
       break;
     }
     case 'UI_DRAG_MATCH': {
@@ -127,9 +127,29 @@ function checkPayload(p, validate) {
     case 'UI_COLOR_MIX': {
       const ids = p.paints.map((x) => x.id);
       unique(ids, 'paints');
-      assert.ok(p.recipe.length === 2 && p.recipe[0] !== p.recipe[1], 'recipe needs two different paints');
+      assert.ok(p.recipe.length >= 2 && p.recipe.length <= 3 && new Set(p.recipe).size === p.recipe.length, 'recipe needs two or three different paints');
       for (const id of p.recipe) assert.ok(ids.includes(id), `paint ${id} is not on the table`);
-      assert.ok(p.paints.length >= 3 && p.paints.length <= 6, `bad paint count ${p.paints.length}`);
+      assert.ok(p.paints.length > p.recipe.length && p.paints.length <= 8, `bad paint count ${p.paints.length}`);
+      break;
+    }
+    case 'UI_WORD_SEARCH': {
+      const cells = p.cols * p.cols;
+      assert.equal(p.letters.length, cells, 'the table is not square');
+      assert.ok(p.cols >= 4 && p.cols <= 8, `bad table size ${p.cols}`);
+      assert.ok(p.words.length >= 1, 'no words to find');
+      unique(p.words.map((w) => w.id), 'words');
+      for (const w of p.words) {
+        assert.ok(w.emoji, `${w.word} has no picture`);
+        assert.equal(w.cells.length, w.word.length, `${w.word} lies on a wrong number of cells`);
+        assert.equal(w.cells.map((c) => p.letters[c]).join(''), w.word, `${w.word} is not where it is said to be`);
+        // A straight line, one cell at a time.
+        const at = (c) => [Math.floor(c / p.cols), c % p.cols];
+        const [r0, c0] = at(w.cells[0]);
+        const [r1, c1] = at(w.cells[1]);
+        const [dr, dc] = [r1 - r0, c1 - c0];
+        assert.ok(Math.abs(dr) <= 1 && Math.abs(dc) <= 1 && (dr || dc), `${w.word} does not run in a line`);
+        w.cells.forEach((c, i) => assert.deepEqual(at(c), [r0 + dr * i, c0 + dc * i], `${w.word} bends`));
+      }
       break;
     }
     case 'UI_LETTER_GRID': {

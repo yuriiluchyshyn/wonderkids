@@ -11,6 +11,7 @@ import { MORE_OCEAN_PLACES, MORE_SEAS, RIVERS, SHORES } from './content/moreOcea
 import { MORE_BIOME_ANIMALS } from './content/moreAnimals';
 import { RECALL_WINDOW, composeLevel } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
+import { asCue } from '@/core/game/cues/cues';
 import { factPool } from '../shared/facts';
 import { geographyTexts } from './grammar';
 import type { GeographyTexts } from './grammar/types';
@@ -371,7 +372,7 @@ function capitals(step: number, config: Config): Tasks {
       {
         template: Mechanics.GridChoice,
         cols: 2,
-        options: withDistractors(c, known, 4, byId).map((o) => card(o.id, o.flag, T.country(o.id))),
+        options: withDistractors(c, known, 4, byId).map((o) => asCue(card(o.id, o.flag, T.country(o.id)))),
         correctId: c.id,
         hint: C.countryHint(c.id),
       },

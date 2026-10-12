@@ -104,7 +104,7 @@ export function isNextBubble(faces: readonly string[], popped: number, tapped: s
   return popped < faces.length && faces[popped] === tapped;
 }
 
-/** Colour mixer: are these exactly the two paints of the recipe (any order)? */
+/** Colour mixer: are these exactly the paints of the recipe (any order)? */
 export function isRecipe(recipe: readonly string[], poured: readonly string[]): boolean {
   return poured.length === recipe.length && [...poured].sort().join('|') === [...recipe].sort().join('|');
 }
@@ -130,4 +130,29 @@ export function withSwap<T>(order: readonly T[], swapped?: readonly [number, num
   const shown = [...order];
   if (swapped) [shown[swapped[0]], shown[swapped[1]]] = [shown[swapped[1]], shown[swapped[0]]];
   return shown;
+}
+
+/**
+ * Word search: the cells of the straight line from cell `a` to cell `b` of a
+ * `cols`-wide table — across, down or slanting at 45° — or null when the two
+ * are not on one line.
+ */
+export function lineCells(cols: number, a: number, b: number): number[] | null {
+  const [ra, ca, rb, cb] = [Math.floor(a / cols), a % cols, Math.floor(b / cols), b % cols];
+  const dr = Math.sign(rb - ra);
+  const dc = Math.sign(cb - ca);
+  const steps = Math.max(Math.abs(rb - ra), Math.abs(cb - ca));
+  if (!(ra === rb || ca === cb || Math.abs(rb - ra) === Math.abs(cb - ca))) return null;
+  return Array.from({ length: steps + 1 }, (_, i) => (ra + dr * i) * cols + ca + dc * i);
+}
+
+/**
+ * Which of the words not found yet a line spells — read either way, so a
+ * word may be drawn from its last letter too. Matched by its letters, not by
+ * where it was hidden: the same word met by chance elsewhere counts as well.
+ */
+export function wordOnLine(letters: readonly string[], cells: readonly number[], words: readonly { id: string; word: string }[], found: readonly string[]): string | null {
+  const text = cells.map((c) => letters[c]).join('');
+  const back = [...text].reverse().join('');
+  return words.find((w) => !found.includes(w.id) && (w.word === text || w.word === back))?.id ?? null;
 }

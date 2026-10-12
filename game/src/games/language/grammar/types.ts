@@ -67,4 +67,19 @@ export interface LanguageTexts {
   sentenceHint(p: PackView, first: string): string;
   /** The two ends of the row of words: «початок», «кінець». */
   ends: [string, string];
+  /** «Пошук слів». */
+  wordSearch: WordSearchTexts;
+}
+
+/** The steps of «Пошук слів» where a new way of hiding words begins. */
+export type WordSearchStage = 'down' | 'slant' | 'back' | 'byEar';
+
+/** What a language of the screen says about «Пошук слів» — never a word of the pack itself. */
+export interface WordSearchTexts {
+  card(p: PackView): { blurb: string; intro: string };
+  /** The task: the words are written beside their pictures (`shown`), or only pictured. */
+  ask(shown: boolean): string;
+  /** Where to look: right or down only, or any way (slanting, backwards). */
+  hint(anyWay: boolean): string;
+  stage(at: WordSearchStage): string;
 }

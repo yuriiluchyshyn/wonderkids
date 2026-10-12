@@ -119,8 +119,6 @@ export interface Settings {
   ttsButtons: boolean;
   /** Anti-guessing grid size (9 = 3×3, default). */
   choicesGridSize: ChoicesGridSize;
-  /** Tell the short fact after a right answer. Off — the next task starts at once. */
-  funFacts: boolean;
   /** The money the shop game counts in — in effect only once the parent has chosen it (`effectiveCurrency`). */
   currency: CurrencyId;
   /**
@@ -255,6 +253,8 @@ export interface GameState extends ActiveChildView, PersistableState {
   advanceStep: (moduleId: string, subCategoryId: string, playedStep: number, maxSteps: number) => void;
   /** Count a finished level of a game (feeds the world the child builds). */
   recordLevelComplete: (moduleId: string, subCategoryId: string) => void;
+  /** How well a task with picture cues is known (`core/game/cues`), under its `cueKey`. */
+  setCueCount: (key: string, count: number) => void;
   setStep: (moduleId: string, subCategoryId: string, step: number, maxSteps: number) => void;
   setMilestones: (milestones: Milestone[]) => void;
   updateSettings: (patch: Partial<Omit<Settings, 'voice' | 'timeControl'>>) => void;
@@ -348,7 +348,6 @@ const DEFAULT_SETTINGS: Settings = {
   minTasksPerLevel: 10,
   choicesGridSize: 9,
   ttsButtons: true,
-  funFacts: true,
   currency: DEFAULT_CURRENCY,
   currencyChosen: false,
   gameLang: null,
@@ -515,7 +514,6 @@ function migrateChild(raw: Record<string, unknown>): ChildState {
     settings: {
       ...base.settings,
       ...settings,
-      funFacts: settings.funFacts ?? base.settings.funFacts,
       currency: isCurrency(settings.currency) ? settings.currency : base.settings.currency,
       // A save from before this flag: money other than the default was somebody's choice.
       currencyChosen: typeof settings.currencyChosen === 'boolean' ? settings.currencyChosen : isCurrency(settings.currency) && settings.currency !== DEFAULT_CURRENCY,
@@ -745,6 +743,9 @@ export const useGameStore = create<GameState>()((set) => ({
         return { ...c, progress: { ...c.progress, [key]: (c.progress[key] ?? 0) + 1 } };
       }),
     ),
+
+  setCueCount: (key, count) =>
+    set((s) => patchActive(s, (c) => ({ ...c, progress: { ...c.progress, [key]: count } }))),
 
   setStep: (moduleId, subCategoryId, step, maxSteps) =>
     set((s) =>

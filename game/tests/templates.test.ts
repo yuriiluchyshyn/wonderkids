@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { isLetterPlace, isNextBubble, isRecipe, minGap, withSwap } from '../src/core/game/templates/validate.ts';
+import { isLetterPlace, isNextBubble, isRecipe, lineCells, minGap, withSwap, wordOnLine } from '../src/core/game/templates/validate.ts';
 
 test('bubble pop: only the next face in order pops', () => {
   const faces = ['МА', 'МА'];
@@ -19,6 +19,10 @@ test('colour mixer: the recipe is two paints in any order', () => {
   assert.equal(isRecipe(['yellow', 'blue'], ['yellow', 'red']), false);
   assert.equal(isRecipe(['yellow', 'blue'], ['yellow']), false);
   assert.equal(isRecipe(['yellow', 'blue'], ['yellow', 'yellow']), false);
+  // Three paints, or two with glitter — any order, nothing left out.
+  assert.equal(isRecipe(['red', 'blue', 'white'], ['white', 'red', 'blue']), true);
+  assert.equal(isRecipe(['red', 'blue', 'white'], ['red', 'blue']), false);
+  assert.equal(isRecipe(['yellow', 'orange', 'glitter'], ['glitter', 'yellow', 'orange']), true);
 });
 
 test('dot-to-dot: smallest gap between stars', () => {
@@ -32,4 +36,20 @@ test('a letter belongs only in its own cell; a swap exchanges exactly two letter
   assert.equal(isLetterPlace(order, 'c', 1), false);
   assert.deepEqual(withSwap(order, [0, 3]), ['d', 'b', 'c', 'a']);
   assert.deepEqual(withSwap(order), order);
+});
+
+test('word search: a line runs across, down or at 45°, and spells a word either way', () => {
+  // A 4-wide table:  К І Т А / О Б Р З / Т Ж Д Ш / Л С Е К
+  const letters = [...'КІТАОБРЗТЖДШЛСЕК'];
+  assert.deepEqual(lineCells(4, 0, 2), [0, 1, 2]);
+  assert.deepEqual(lineCells(4, 0, 8), [0, 4, 8]);
+  assert.deepEqual(lineCells(4, 0, 15), [0, 5, 10, 15]);
+  assert.deepEqual(lineCells(4, 12, 3), [12, 9, 6, 3]);
+  assert.equal(lineCells(4, 0, 6), null, 'a knight’s move is no line');
+  const words = [{ id: 'a', word: 'КІТ' }, { id: 'b', word: 'КОТ' }];
+  assert.equal(wordOnLine(letters, [0, 1, 2], words, []), 'a');
+  // Drawn from the last letter to the first, it is the same word.
+  assert.equal(wordOnLine(letters, [8, 4, 0], words, []), 'b');
+  assert.equal(wordOnLine(letters, [0, 4, 8], words, ['b']), null, 'found once is found');
+  assert.equal(wordOnLine(letters, [0, 5, 10], words, []), null);
 });

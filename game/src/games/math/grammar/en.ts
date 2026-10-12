@@ -1,9 +1,11 @@
 import { LANGUAGES } from '@/core/language';
 import { numberWords } from '@/core/language/en';
+import { clockExplain, partOfDay } from './clockExplain';
 import type { CurrencyId } from '@/core/game/content/currency';
 import type { MathTexts, MeasureWords, Shape } from '@/games/math/grammar/types';
 import { fill } from '@/core/language/fill';
 import J from '@/locales/app/en/games/math.json';
+import { chainTexts } from './expr';
 
 /** The Math galaxy in English. */
 
@@ -48,6 +50,7 @@ export const en: MathTexts = {
       if (op === '-') return fill(J.mental.hint[4], { a, b });
       return fill(J.mental.hint[5], { a, b });
     },
+    ...chainTexts(J.mental, (op) => OPS[op]),
   },
 
   balance: {
@@ -99,14 +102,12 @@ export const en: MathTexts = {
       return `${numberWords(h)} ${m < 10 ? fill(J.clock.say[5], { m: numberWords(m) }) : numberWords(m)}`;
     },
     intro: J.clock.intro,
-    hint: ({ h, m }) => {
-      const long = m === 0 ? J.clock.hint.long[1] : fill(J.clock.hint.long[2], { m: m / 5 });
-      const short = m === 0 ? fill(J.clock.hint.short[1], { h }) : fill(J.clock.hint.short[2], { h });
-      return fill(J.clock.hint._, { short, long });
-    },
+    say24: (hour24, m) => (m === 0 ? fill(J.clock.say24[1], { h: numberWords(hour24) }) : fill(J.clock.say24[2], { h: numberWords(hour24), m: m < 10 ? fill(J.clock.say[5], { m: numberWords(m) }) : numberWords(m) })),
+    explain: (time, told, hour24) => clockExplain(J.clock, time, told, hour24),
     yes: (time) => fill(J.clock.yes, { time }),
     find: (time) => fill(J.clock.find, { time }),
     read: J.clock.read,
+    read24: (hour24) => fill(J.clock.read24, { part: J.clock.parts[partOfDay(hour24)] }),
   },
 
   maze: {

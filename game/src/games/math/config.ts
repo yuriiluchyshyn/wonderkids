@@ -5,7 +5,7 @@ import type { Theme } from '@/core/theme/theme.types';
 import { fractionOpsIntro } from './generators/fractionOps';
 import { GEOMETRY_STEPS, geometryIntro } from './generators/geometry';
 import { MAZE_STEPS, mazeIntro } from './generators/maze';
-import { clockIntro } from './generators/clock';
+import { CLOCK_STEPS, clockIntro } from './generators/clock';
 import { WORD_PROBLEM_STEPS } from './generators/wordProblems';
 import type { SubjectDef } from '../shared/templateModule';
 import { MATH_SUB } from './ids';
@@ -192,8 +192,9 @@ const CARDS: SubCategory[] = [
     label: J.CARDS[12].label,
     icon: '🕰️',
     blurb: J.CARDS[12].blurb,
-    steps: 12,
-    difficulty: [1, 2],
+    // 12 steps of the ordinary clock, then 4 of the 24-hour format («15:30»).
+    steps: CLOCK_STEPS,
+    difficulty: [1, 3],
     publishDate: COMPARE_CLOCK_RELEASE,
     // Six clocks to study on every task: five to a level.
     tasksPerLevel: 5,

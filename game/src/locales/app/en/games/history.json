@@ -2,6 +2,11 @@
   "inSentence": "the ",
   "cards": {
     "title": "History",
+    "groups": {
+      "world": "World",
+      "ua": "Ukraine",
+      "pl": "Poland"
+    },
     "games": {
       "dinosaurs": {
         "label": "Dinosaurs",
@@ -100,7 +105,7 @@
   "data": {
     "people": {
       "PEOPLE": {
-        "einstein": "Albert Einstein|An atom and formulas|Albert Einstein was a physicist who explained how time, space and light work.|Who explained how time, space and light work?",
+        "einstein": "Albert Einstein|A famous formula|Albert Einstein was a physicist who explained how time, space and light work.|Who explained how time, space and light work?",
         "davinci": "Leonardo da Vinci|The Mona Lisa|Leonardo da Vinci painted the Mona Lisa and thought up flying machines.|Who painted the Mona Lisa?",
         "columbus": "Christopher Columbus|A ship to America|Columbus crossed the ocean in sailing ships and reached America.|Who crossed the ocean and reached America?",
         "armstrong": "Neil Armstrong|The Moon|Neil Armstrong was the first person to set foot on the Moon.|Who was the first person to set foot on the Moon?",

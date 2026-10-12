@@ -22,6 +22,7 @@ with them.
 | darwin.webp | [Galapagos_giant_tortoise_Geochelone_elephantopus.jpg](https://commons.wikimedia.org/wiki/File:Galapagos_giant_tortoise_Geochelone_elephantopus.jpg) | CC BY-SA 3.0 | Mfield, Matthew Field, http://www.photography.mattfield.com |
 | davinci.webp | [Mona_Lisa.jpg](https://commons.wikimedia.org/wiki/File:Mona_Lisa.jpg) | Public domain | Leonardo da Vinci |
 | edison.webp | [Gluehlampe_01_KMJ.png](https://commons.wikimedia.org/wiki/File:Gluehlampe_01_KMJ.png) | CC BY-SA 3.0 | KMJ, alpha masking by Edokter |
+| einstein.webp | [Einstein_formula_on_blackboard_20190401.jpg](https://commons.wikimedia.org/wiki/File:Einstein_formula_on_blackboard_20190401.jpg) | CC BY-SA 4.0 | Santeri Viinamäki |
 | franko.webp | [Portrait_of_a_red_fox_in_Rautas_fjällurskog_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Portrait_of_a_red_fox_in_Rautas_fj%C3%A4llurskog_(cropped).jpg) | CC BY-SA 4.0 | ClaudiaTen |
 | galileo.webp | [Zeiss2.jpg](https://commons.wikimedia.org/wiki/File:Zeiss2.jpg) | CC BY-SA 3.0 | Bori64 |
 | goodall.webp | [015_Chimpanzee_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg](https://commons.wikimedia.org/wiki/File:015_Chimpanzee_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg) | CC BY-SA 4.0 | Giles Laurent |
@@ -66,3 +67,26 @@ with them.
 | vangogh.webp | [Vincent_Willem_van_Gogh_127.jpg](https://commons.wikimedia.org/wiki/File:Vincent_Willem_van_Gogh_127.jpg) | Public domain | Vincent van Gogh |
 | wright.webp | [First_flight2.jpg](https://commons.wikimedia.org/wiki/File:First_flight2.jpg) | Public domain | John T. Daniels |
 | yaroslav.webp | [The_instance_Sinodal`niy_of_Pravda_Ruskaya_page_1.jpg](https://commons.wikimedia.org/wiki/File:The_instance_Sinodal%60niy_of_Pravda_Ruskaya_page_1.jpg) | Public domain | Греков Б.Д. |
+| chopin.webp | [Piano-Chopin.jpg](https://commons.wikimedia.org/wiki/File:Piano-Chopin.jpg) | CC BY-SA 4.0 | Charlotte-Jaxa |
+| chrobry.webp | [Szczerbiec_Wawel_crop.jpg](https://commons.wikimedia.org/wiki/File:Szczerbiec_Wawel_crop.jpg) | CC BY-SA 2.0 | metal.beast |
+| hermaszewski.webp | [Sojuz_30.JPG](https://commons.wikimedia.org/wiki/File:Sojuz_30.JPG) | CC BY-SA 3.0 | Kmiecik |
+| inv_pl_crystal.webp | [Monokristalines_Silizium_für_die_Waferherstellung.jpg](https://commons.wikimedia.org/wiki/File:Monokristalines_Silizium_f%C3%BCr_die_Waferherstellung.jpg) | CC BY-SA 3.0 | Saperaud (Wikimedia Commons uploader) |
+| inv_pl_detector.webp | [Ćwiczenia_polskich_saperów_w_Wielkiej_Brytanii_(21-109-2).jpg](https://commons.wikimedia.org/wiki/File:%C4%86wiczenia_polskich_saper%C3%B3w_w_Wielkiej_Brytanii_%2821-109-2%29.jpg) | Public domain | Unknown photographer |
+| inv_pl_enigma.webp | [Enigma_(crittografia)_-_Museo_scienza_e_tecnologia_Milano.jpg](https://commons.wikimedia.org/wiki/File:Enigma_%28crittografia%29_-_Museo_scienza_e_tecnologia_Milano.jpg) | CC BY-SA 4.0 | Alessandro Nassiri |
+| inv_pl_esperanto.webp | [Flag_of_Esperanto.svg](https://commons.wikimedia.org/wiki/File:Flag_of_Esperanto.svg) | Public domain | Richard H. Geoghegan |
+| inv_pl_lamp.webp | [A_kerosene_lamp_produced_by_the_factory_of_Karlskrona_Lampfabrik_in_Sweden_c._1890s.jpg](https://commons.wikimedia.org/wiki/File:A_kerosene_lamp_produced_by_the_factory_of_Karlskrona_Lampfabrik_in_Sweden_c._1890s.jpg) | CC0 | Svante.tiren |
+| inv_pl_radio.webp | [SCR-300_battery-powered_FM_voice_receiver_transmitter,_Motorola,_1940_-_National_Electronics_Museum_-_DSC00176.JPG](https://commons.wikimedia.org/wiki/File:SCR-300_battery-powered_FM_voice_receiver_transmitter%2C_Motorola%2C_1940_-_National_Electronics_Museum_-_DSC00176.JPG) | CC0 | Daderot |
+| inv_pl_rover.webp | [Apollo15LunarRover.jpg](https://commons.wikimedia.org/wiki/File:Apollo15LunarRover.jpg) | Public domain | NASA/Dave Scott; cropped by User:Bubba73 |
+| inv_pl_vaccine.webp | [Weigl_vaccine.jpg](https://commons.wikimedia.org/wiki/File:Weigl_vaccine.jpg) | CC BY-SA 4.0 | LukaszKatlewa |
+| inv_pl_vest.webp | [NIJ_LVLIIIA_Kogelvrij_vest,_BA8001.jpg](https://commons.wikimedia.org/wiki/File:NIJ_LVLIIIA_Kogelvrij_vest%2C_BA8001.jpg) | CC BY-SA 3.0 | PMullahaa |
+| inv_pl_vitamins.webp | [Crystals_of_vitamin_C.jpg](https://commons.wikimedia.org/wiki/File:Crystals_of_vitamin_C.jpg) | CC BY 3.0 | Doc. RNDr. Josef Reischig, CSc. |
+| jadwiga.webp | [Collegium_Maius_2017.jpg](https://commons.wikimedia.org/wiki/File:Collegium_Maius_2017.jpg) | CC BY 3.0 | Robert Rachwał |
+| jagiello.webp | [Jan_Matejko,_Bitwa_pod_Grunwaldem.jpg](https://commons.wikimedia.org/wiki/File:Jan_Matejko%2C_Bitwa_pod_Grunwaldem.jpg) | Public domain | Jan Matejko |
+| kazimierz.webp | [Zamek_wzniesiono_za_Kazimierza_Wielkiego_w_XIV_w_-_panoramio.jpg](https://commons.wikimedia.org/wiki/File:Zamek_wzniesiono_za_Kazimierza_Wielkiego_w_XIV_w_-_panoramio.jpg) | CC BY 3.0 | Adam Chamczyk |
+| korczak.webp | [Karta_tytułowa_Króla_Maciusia_I_Janusza_Korczaka_z_1923.jpg](https://commons.wikimedia.org/wiki/File:Karta_tytu%C5%82owa_Kr%C3%B3la_Maciusia_I_Janusza_Korczaka_z_1923.jpg) | Public domain | Janusz Korczak |
+| kosciuszko.webp | [Jan_Matejko_p0272_-_Kościuszko_pod_Racławicami._II._Kosynierzy.png](https://commons.wikimedia.org/wiki/File:Jan_Matejko_p0272_-_Ko%C5%9Bciuszko_pod_Rac%C5%82awicami._II._Kosynierzy.png) | Public domain | Jan Matejko |
+| matejko.webp | [Prussian_Homage.jpg](https://commons.wikimedia.org/wiki/File:Prussian_Homage.jpg) | Public domain | Jan Matejko |
+| mickiewicz.webp | [Pan_Tadeusz_-_title_page_1834_(93691847)_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Pan_Tadeusz_-_title_page_1834_%2893691847%29_%28cropped%29.jpg) | Public domain | Adam Mickiewicz |
+| mieszko.webp | [Matejko_Christianization_of_Poland.jpg](https://commons.wikimedia.org/wiki/File:Matejko_Christianization_of_Poland.jpg) | Public domain | Jan Matejko |
+| sobieski.webp | [Husarz,_Józef_Brandt,_1890.jpg](https://commons.wikimedia.org/wiki/File:Husarz%2C_J%C3%B3zef_Brandt%2C_1890.jpg) | Public domain | Józef Brandt |
+| szymborska.webp | [PSM_V70_D094_Nobel_prize_medals.jpg](https://commons.wikimedia.org/wiki/File:PSM_V70_D094_Nobel_prize_medals.jpg) | Public domain | Unknown authorUnknown author |

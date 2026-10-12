@@ -7,10 +7,12 @@ import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
 import { LandmarkArt, hasLandmarkArt } from './LandmarkArt';
 import { ClockFace } from './ClockFace';
+import { ColorSwatch } from './ColorSwatch';
 import { PieFood } from './PieFood';
 import { PlanetArt, hasPlanetArt } from './PlanetArt';
 import { PieceShape } from './TangramLayout';
 import { SpeakButton } from './SpeakButton';
+import { useCuesHidden } from './CueContext';
 import styles from './Templates.module.css';
 
 /** Props every template layout receives. */
@@ -53,6 +55,14 @@ export function Glyphs({ glyphs, className, answer }: { glyphs: Glyph[]; classNa
   );
 }
 
+/** Characters a math line may have before it is drawn smaller («4 + 6 + 3 + 4 = ?» still fits). */
+const LONG_LINE = 13;
+
+/** How many characters a math line has, about (a fraction counts as its wider half). */
+function glyphsLength(glyphs: Glyph[]): number {
+  return glyphs.reduce((sum, g) => sum + (typeof g === 'string' ? g.length : 'text' in g ? g.text.length : Math.max(String(g.n).length, String(g.d).length)), 0);
+}
+
 /** A real picture (a portrait); the pictogram takes over if the file does not load. */
 function Picture({ src, emoji, className }: { src: string; emoji?: string; className?: string }) {
   const [broken, setBroken] = useState(false);
@@ -69,17 +79,19 @@ function Picture({ src, emoji, className }: { src: string; emoji?: string; class
 /** The face of a card: pictogram, then math or a label with its speaker. */
 export function CardFace({ card, speaker = true }: { card: Card; speaker?: boolean }) {
   const showText = useShowText();
+  // An association picture that has faded (`core/game/cues`): the name alone is left.
+  const pictured = !(useCuesHidden() && card.cue && card.label);
   // Text is the only face of some cards — never hide it then.
-  const label = card.label && (showText || !card.emoji) ? card.label : null;
+  const label = card.label && (showText || !card.emoji || !pictured) ? card.label : null;
   return (
     <span className={styles.face}>
-      {card.image && <Picture src={card.image} emoji={card.emoji} />}
+      {pictured && card.image && <Picture src={card.image} emoji={card.emoji} />}
       {card.planet && hasPlanetArt(card.planet) && (
         <span className={styles.faceEmoji}>
           <PlanetArt id={card.planet} />
         </span>
       )}
-      {card.emoji && !card.image && !card.planet && (
+      {pictured && card.emoji && !card.image && !card.planet && (
         <span
           className={cn(styles.faceEmoji, 'emoji', card.silhouette && styles.silhouette)}
           style={card.silhouette && card.blur ? ({ '--shadow-blur': `${card.blur}px` } as CSSProperties) : undefined}
@@ -90,6 +102,7 @@ export function CardFace({ card, speaker = true }: { card: Card; speaker?: boole
       )}
       {card.glyphs && <Glyphs glyphs={card.glyphs} />}
       {card.clock && <ClockFace time={card.clock} className={styles.faceClock} />}
+      {card.swatch && <ColorSwatch swatch={card.swatch} />}
       {card.shape && (
         <span
           className={styles.shapeGrid}
@@ -145,6 +158,7 @@ export function Stimulus({
       )}
       {s?.pie && <PieFood {...s.pie} />}
       {s?.clock && <ClockFace time={s.clock} className={styles.stimulusClock} />}
+      {s?.swatch && <ColorSwatch swatch={s.swatch} size="splash" />}
       {s?.shape && (
         <span
           className={cn(styles.shapeGrid, styles.stimulusShape)}
@@ -179,7 +193,7 @@ export function Stimulus({
           ))}
         </span>
       )}
-      {s?.glyphs && <Glyphs glyphs={s.glyphs} className={styles.stimulusGlyphs} answer={answer} />}
+      {s?.glyphs && <Glyphs glyphs={s.glyphs} className={cn(styles.stimulusGlyphs, glyphsLength(s.glyphs) > LONG_LINE && styles.stimulusGlyphsLong)} answer={answer} />}
       {s?.caption && <span className={styles.stimulusCaption}>{s.caption}</span>}
       {children}
     </motion.button>

@@ -1,0 +1,4059 @@
+[
+ {
+  "id": "math",
+  "icon": "🧮",
+  "title": "Math",
+  "games": [
+   {
+    "id": "math:add",
+    "sub": "add",
+    "icon": "➕",
+    "title": "Addition",
+    "blurb": "Putting it all together",
+    "intro": "",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 40,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What is 3 plus 3?",
+      "right": "6",
+      "answers": [
+       "4",
+       "10",
+       "3",
+       "6",
+       "5",
+       "16",
+       "7",
+       "8",
+       "9"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What is 6 plus 1?",
+      "right": "7",
+      "answers": [
+       "6",
+       "8",
+       "9",
+       "5",
+       "12",
+       "11",
+       "7",
+       "4",
+       "10"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "What is 12 plus 127?",
+      "right": "139",
+      "answers": [
+       "141",
+       "138",
+       "139",
+       "129",
+       "128",
+       "140",
+       "151",
+       "136",
+       "144"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "What is 29 plus 38 plus 14 plus 10?",
+      "right": "91",
+      "answers": [
+       "84",
+       "94",
+       "91",
+       "92",
+       "90",
+       "81",
+       "79",
+       "96",
+       "89"
+      ]
+     },
+     {
+      "step": 40,
+      "prompt": "What is 353 plus 20?",
+      "right": "373",
+      "answers": [
+       "383",
+       "375",
+       "377",
+       "393",
+       "372",
+       "373",
+       "371",
+       "385",
+       "374"
+      ]
+     },
+     {
+      "step": 40,
+      "prompt": "What is 99 plus 36 plus 61 plus 86 plus 46?",
+      "right": "328",
+      "answers": [
+       "330",
+       "310",
+       "339",
+       "329",
+       "335",
+       "338",
+       "344",
+       "327",
+       "328"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:sub",
+    "sub": "sub",
+    "icon": "➖",
+    "title": "Subtraction",
+    "blurb": "Taking away bit by bit",
+    "intro": "",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 40,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What is 4 minus 4?",
+      "right": "0",
+      "answers": [
+       "10",
+       "7",
+       "2",
+       "0",
+       "6",
+       "3",
+       "1",
+       "5",
+       "4"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What is 6 minus 5?",
+      "right": "1",
+      "answers": [
+       "4",
+       "5",
+       "0",
+       "3",
+       "8",
+       "7",
+       "1",
+       "6",
+       "2"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "What is 111 minus 45?",
+      "right": "66",
+      "answers": [
+       "68",
+       "67",
+       "64",
+       "65",
+       "73",
+       "62",
+       "66",
+       "56",
+       "55"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "What is 154 minus 40 minus 17 minus 19?",
+      "right": "78",
+      "answers": [
+       "71",
+       "81",
+       "78",
+       "79",
+       "77",
+       "68",
+       "66",
+       "83",
+       "76"
+      ]
+     },
+     {
+      "step": 40,
+      "prompt": "What is 353 minus 24?",
+      "right": "329",
+      "answers": [
+       "339",
+       "331",
+       "333",
+       "349",
+       "328",
+       "329",
+       "327",
+       "341",
+       "330"
+      ]
+     },
+     {
+      "step": 40,
+      "prompt": "What is 567 minus 40 minus 83 minus 148 minus 106?",
+      "right": "190",
+      "answers": [
+       "192",
+       "172",
+       "201",
+       "191",
+       "197",
+       "200",
+       "206",
+       "189",
+       "190"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:mul",
+    "sub": "mul",
+    "icon": "✖️",
+    "title": "Multiplication",
+    "blurb": "Equal heaps together",
+    "intro": "",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 30,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What is 2 times 5?",
+      "right": "10",
+      "answers": [
+       "8",
+       "14",
+       "7",
+       "10",
+       "9",
+       "20",
+       "11",
+       "12",
+       "13"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What is 2 times 4?",
+      "right": "8",
+      "answers": [
+       "7",
+       "9",
+       "10",
+       "6",
+       "13",
+       "12",
+       "8",
+       "5",
+       "11"
+      ]
+     },
+     {
+      "step": 15,
+      "prompt": "What is 2 times 2?",
+      "right": "4",
+      "answers": [
+       "3",
+       "6",
+       "9",
+       "7",
+       "5",
+       "14",
+       "11",
+       "4",
+       "2"
+      ]
+     },
+     {
+      "step": 15,
+      "prompt": "What is 7 times 3?",
+      "right": "21",
+      "answers": [
+       "15",
+       "27",
+       "31",
+       "18",
+       "21",
+       "20",
+       "12",
+       "26",
+       "23"
+      ]
+     },
+     {
+      "step": 30,
+      "prompt": "What is 15 times 2?",
+      "right": "30",
+      "answers": [
+       "30",
+       "28",
+       "31",
+       "40",
+       "29",
+       "19",
+       "16",
+       "32",
+       "21"
+      ]
+     },
+     {
+      "step": 30,
+      "prompt": "What is 3 times 5 times 3 times 3?",
+      "right": "135",
+      "answers": [
+       "135",
+       "134",
+       "136",
+       "133",
+       "146",
+       "145",
+       "122",
+       "123",
+       "129"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:div",
+    "sub": "div",
+    "icon": "➗",
+    "title": "Division",
+    "blurb": "Sharing equally",
+    "intro": "",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 25,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What is 10 divided by 2?",
+      "right": "5",
+      "answers": [
+       "3",
+       "9",
+       "2",
+       "5",
+       "4",
+       "15",
+       "6",
+       "7",
+       "8"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What is 8 divided by 2?",
+      "right": "4",
+      "answers": [
+       "3",
+       "5",
+       "6",
+       "2",
+       "9",
+       "8",
+       "4",
+       "1",
+       "7"
+      ]
+     },
+     {
+      "step": 13,
+      "prompt": "What is 25 divided by 5?",
+      "right": "5",
+      "answers": [
+       "0",
+       "3",
+       "14",
+       "9",
+       "6",
+       "7",
+       "13",
+       "5",
+       "4"
+      ]
+     },
+     {
+      "step": 13,
+      "prompt": "What is 4 divided by 4?",
+      "right": "1",
+      "answers": [
+       "4",
+       "2",
+       "11",
+       "0",
+       "6",
+       "3",
+       "5",
+       "1",
+       "7"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "What is 81 divided by 9?",
+      "right": "9",
+      "answers": [
+       "9",
+       "6",
+       "10",
+       "13",
+       "19",
+       "24",
+       "11",
+       "1",
+       "8"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "What is 84 divided by 3 divided by 2 divided by 2?",
+      "right": "7",
+      "answers": [
+       "15",
+       "17",
+       "6",
+       "5",
+       "8",
+       "14",
+       "13",
+       "0",
+       "7"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:mixed",
+    "sub": "mixed",
+    "icon": "🧮",
+    "title": "Mental Math",
+    "blurb": "All together: +, −, ×, ÷",
+    "intro": "",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 60,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What is 6 minus 6?",
+      "right": "0",
+      "answers": [
+       "3",
+       "5",
+       "6",
+       "8",
+       "0",
+       "2",
+       "4",
+       "1",
+       "7"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What is 2 times 4?",
+      "right": "8",
+      "answers": [
+       "11",
+       "6",
+       "7",
+       "5",
+       "10",
+       "18",
+       "9",
+       "12",
+       "8"
+      ]
+     },
+     {
+      "step": 30,
+      "prompt": "What is 10 minus 8?",
+      "right": "2",
+      "answers": [
+       "13",
+       "4",
+       "0",
+       "10",
+       "9",
+       "2",
+       "12",
+       "3",
+       "19"
+      ]
+     },
+     {
+      "step": 30,
+      "prompt": "What is (36 minus 3) times 4?",
+      "right": "132",
+      "answers": [
+       "139",
+       "128",
+       "142",
+       "134",
+       "132",
+       "140",
+       "130",
+       "24",
+       "133"
+      ]
+     },
+     {
+      "step": 60,
+      "prompt": "What is 721 plus 292?",
+      "right": "1013",
+      "answers": [
+       "1016",
+       "1032",
+       "1015",
+       "997",
+       "1014",
+       "1011",
+       "1012",
+       "1003",
+       "1013"
+      ]
+     },
+     {
+      "step": 60,
+      "prompt": "What is 25 plus (51 minus 21) times 5?",
+      "right": "175",
+      "answers": [
+       "175",
+       "183",
+       "185",
+       "174",
+       "275",
+       "163",
+       "177",
+       "182",
+       "176"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:fractions",
+    "sub": "fractions",
+    "icon": "🍕",
+    "title": "Tasty Fractions",
+    "blurb": "Finding a piece of a treat",
+    "intro": "",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What part of the pie is colored in?",
+      "right": "2/3",
+      "answers": [
+       "1/5",
+       "3/5",
+       "2/3",
+       "1/4",
+       "1/3",
+       "2/4",
+       "2/5",
+       "3/4",
+       "4/5"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What part of the watermelon is colored in?",
+      "right": "1/3",
+      "answers": [
+       "1/5",
+       "4/5",
+       "3/4",
+       "1/3",
+       "2/5",
+       "3/5",
+       "2/4",
+       "1/4",
+       "2/3"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "What part of the pie is colored in?",
+      "right": "1/2",
+      "answers": [
+       "1/4",
+       "3/4",
+       "1/3",
+       "3/5",
+       "4/5",
+       "2/5",
+       "1/5",
+       "2/3",
+       "1/2"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "What part of the apple is colored in?",
+      "right": "1/4",
+      "answers": [
+       "2/4",
+       "2/3",
+       "2/5",
+       "3/5",
+       "1/4",
+       "1/3",
+       "4/5",
+       "1/5",
+       "3/4"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "What part of the pizza is colored in?",
+      "right": "2/3",
+      "answers": [
+       "3/5",
+       "1/4",
+       "2/4",
+       "4/5",
+       "2/5",
+       "1/3",
+       "1/5",
+       "2/3",
+       "3/4"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "What part of the chocolate bar is colored in?",
+      "right": "3/4",
+      "answers": [
+       "3/4",
+       "3/5",
+       "2/3",
+       "1/4",
+       "1/3",
+       "4/5",
+       "2/4",
+       "2/5",
+       "1/5"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:fraction_ops",
+    "sub": "fraction_ops",
+    "icon": "🧁",
+    "title": "Fractions: Operations",
+    "blurb": "Adding, subtracting, multiplying and dividing fractions",
+    "intro": "",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 20,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE",
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Work it out: three fifths plus one fifth",
+      "right": "4/5",
+      "answers": [
+       "4/5",
+       "4/4",
+       "5/6",
+       "4/10"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Work it out: one third plus one third",
+      "right": "2/3",
+      "answers": [
+       "3/4",
+       "3/3",
+       "2/6",
+       "2/3"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "Work it out: one fifth plus one half",
+      "right": "7/10",
+      "answers": [
+       "7/10",
+       "2/5",
+       "7/11",
+       "2/7"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "Work it out: one half plus one third",
+      "right": "5/6",
+      "answers": [
+       "2/5",
+       "2/3",
+       "5/6",
+       "5/7"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "Work it out: three sixths minus one third",
+      "right": "1/6",
+      "answers": [
+       "2/6",
+       "1/6",
+       "2/9",
+       "1/5"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "Work it out: two thirds times two quarters",
+      "right": "1/3",
+      "answers": [
+       "4/12",
+       "8/6",
+       "4/7",
+       "1/3"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:balance",
+    "sub": "balance",
+    "icon": "⚖️",
+    "title": "Math Scales",
+    "blurb": "Find the weight that balances",
+    "intro": "Scales love balance! There is a sum on the left. Drag onto the right pan the weight that weighs just as much.",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 15,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_BALANCE_SCALE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Balance the scales! Which weight weighs the same?",
+      "board": [
+       "10",
+       "13",
+       "22",
+       "12"
+      ]
+     },
+     {
+      "step": 8,
+      "prompt": "Balance the scales! Which weight weighs the same?",
+      "board": [
+       "6",
+       "7",
+       "9",
+       "17"
+      ]
+     },
+     {
+      "step": 15,
+      "prompt": "Balance the scales! Which weight weighs the same?",
+      "board": [
+       "1/3",
+       "3/4",
+       "1/4",
+       "1/5"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:geometry",
+    "sub": "geometry",
+    "icon": "📐",
+    "title": "Shape Builder",
+    "blurb": "Building shapes, counting area and perimeter",
+    "intro": "",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 20,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Look at the picture: a mushroom. How many squares are there?",
+      "right": "1",
+      "answers": [
+       "0",
+       "1",
+       "2",
+       "3"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Build this from the shapes: a mushroom"
+     },
+     {
+      "step": 10,
+      "prompt": "What is the area of this shape? Count the colored squares.",
+      "right": "4",
+      "answers": [
+       "5",
+       "3",
+       "2",
+       "4"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "Find the shape with the biggest perimeter"
+     },
+     {
+      "step": 20,
+      "prompt": "What is the perimeter of this shape? Go around its edge and count the sides of the squares.",
+      "right": "16",
+      "answers": [
+       "15",
+       "14",
+       "6",
+       "16"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:maze",
+    "sub": "maze",
+    "icon": "🧭",
+    "title": "Number Maze",
+    "blurb": "Run only on the right numbers",
+    "intro": "Help your friend run through the maze! You may only step on numbers that fit the rule. Take a step onto a neighboring square.",
+    "stars": [
+     3,
+     3
+    ],
+    "kind": "path",
+    "steps": 16,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Step only on numbers that can be divided by 2"
+     },
+     {
+      "step": 8,
+      "prompt": "Run along the 4 times table: 4, 8, 12 and so on"
+     },
+     {
+      "step": 16,
+      "prompt": "Step only on numbers that can be divided by 8"
+     }
+    ]
+   },
+   {
+    "id": "math:shop",
+    "sub": "shop",
+    "icon": "🛒",
+    "title": "The Shop",
+    "blurb": "Counting pocket money",
+    "intro": "Welcome to the shop! Look at the price tag and put on the counter as much money as the toy costs.",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 12,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Buy a toy: the kite. The price is 13 dollars. Put the money on the counter."
+     },
+     {
+      "step": 1,
+      "prompt": "Buy a toy: the dinosaur. The price is 5 dollars. Put the money on the counter."
+     },
+     {
+      "step": 6,
+      "prompt": "Buy a toy: the toy car. The price is 26 dollars. Put the money on the counter."
+     },
+     {
+      "step": 6,
+      "prompt": "Buy a toy: the yo-yo. The price is 38 dollars. Put the money on the counter."
+     },
+     {
+      "step": 12,
+      "prompt": "Buy a toy: the ball. The price is 28 dollars. Put the money on the counter."
+     },
+     {
+      "step": 12,
+      "prompt": "The teddy bear costs 31 dollars. You pay 50 dollars. What is the change?",
+      "right": "19 $",
+      "answers": [
+       "19 $",
+       "21 $",
+       "22 $",
+       "9 $",
+       "15 $",
+       "20 $"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:compare",
+    "sub": "compare",
+    "icon": "🐥",
+    "title": "Greater, Less, Equal",
+    "blurb": "Comparing numbers, sums and measures",
+    "intro": "Let’s compare! The “greater than” and “less than” sign looks like a bird’s beak: it is always open toward the bigger number. And if both sides are the same, we put “equals”.",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 12,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Compare 5 and 9. Which sign goes between them?",
+      "right": "less",
+      "answers": [
+       "less",
+       "equal",
+       "greater"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Compare 6 and 6. Which sign goes between them?",
+      "right": "equal",
+      "answers": [
+       "less",
+       "equal",
+       "greater"
+      ]
+     },
+     {
+      "step": 6,
+      "prompt": "Compare 2 plus 6 and 8. Which sign goes between them?",
+      "right": "equal",
+      "answers": [
+       "less",
+       "equal",
+       "greater"
+      ]
+     },
+     {
+      "step": 6,
+      "prompt": "Compare 6 plus 1 and 16. Which sign goes between them?",
+      "right": "less",
+      "answers": [
+       "less",
+       "equal",
+       "greater"
+      ]
+     },
+     {
+      "step": 12,
+      "prompt": "Compare 290 centimeters and 3 meters. Which sign goes between them?",
+      "right": "less",
+      "answers": [
+       "less",
+       "equal",
+       "greater"
+      ]
+     },
+     {
+      "step": 12,
+      "prompt": "Compare 3 liters and 3100 milliliters. Which sign goes between them?",
+      "right": "less",
+      "answers": [
+       "less",
+       "equal",
+       "greater"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "math:clock",
+    "sub": "clock",
+    "icon": "🕰️",
+    "title": "What Time Is It?",
+    "blurb": "Learning to read a clock with hands",
+    "intro": "",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 16,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What time is it on the clock?",
+      "right": "11:00",
+      "answers": [
+       "10:00",
+       "3:00",
+       "12:00",
+       "8:00",
+       "11:00",
+       "1:00"
+      ]
+     },
+     {
+      "step": 8,
+      "prompt": "What time is it on the clock?",
+      "right": "4:10",
+      "answers": [
+       "3:10",
+       "2:20",
+       "4:15",
+       "5:10",
+       "4:10",
+       "4:30"
+      ]
+     },
+     {
+      "step": 8,
+      "prompt": "Find the clock that shows three fifty."
+     },
+     {
+      "step": 16,
+      "prompt": "Find the clock that shows 17:05."
+     },
+     {
+      "step": 16,
+      "prompt": "Find the clock that shows 14:05."
+     }
+    ]
+   },
+   {
+    "id": "math:word_problems",
+    "sub": "word_problems",
+    "icon": "📖",
+    "title": "Story Problems",
+    "blurb": "Stories from life: the shop, friends, the road",
+    "intro": "Listen to a little story and answer the question. The pictures show what we know and what is asked. If you need to, tap the speaker and I will read the problem again.",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "There were 2 birds sitting on the branch. Then 3 more flew in. How many birds are on the branch now?",
+      "right": "5",
+      "answers": [
+       "4",
+       "5",
+       "7",
+       "15",
+       "6",
+       "3"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Oscar had 4 stickers. Mom gave him 3 more. How many stickers does he have now?",
+      "right": "7",
+      "answers": [
+       "17",
+       "6",
+       "5",
+       "9",
+       "11",
+       "7"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "One notebook costs 7 dollars. How many dollars do 5 notebooks cost?",
+      "right": "35",
+      "answers": [
+       "40",
+       "33",
+       "35",
+       "37",
+       "45",
+       "34"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "12 pencils were put 4 into each box. How many boxes were needed?",
+      "right": "3",
+      "answers": [
+       "13",
+       "8",
+       "5",
+       "4",
+       "3",
+       "2"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Victor bought 2 cupcakes for 3 dollars each and tea for 14 dollars. How many dollars did he pay?",
+      "right": "20",
+      "answers": [
+       "21",
+       "20",
+       "18",
+       "30",
+       "22",
+       "15"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Sophie thought of a number, doubled it and took away 3, and got 37. What number did Sophie think of?",
+      "right": "20",
+      "answers": [
+       "19",
+       "22",
+       "30",
+       "25",
+       "20",
+       "21"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "geography",
+  "icon": "🌍",
+  "title": "Geography",
+  "games": [
+   {
+    "id": "geography:flags",
+    "sub": "flags",
+    "icon": "🚩",
+    "title": "Guess the Flag",
+    "blurb": "All 192 flags of the world — starting with the best known",
+    "intro": "Every country has a flag of its own. Listen to the name of the country and find its flag among six! On every step there are five new flags, and the ones you know come back so that you don’t forget them.",
+    "stars": [
+     1,
+     1
+    ],
+    "kind": "path",
+    "steps": 39,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Find the flag of the United States.",
+      "right": "🇺🇸",
+      "answers": [
+       "🇬🇧",
+       "🇺🇸",
+       "🇨🇳",
+       "🇮🇹",
+       "🇨🇦",
+       "🇩🇪"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Find the flag of Ukraine.",
+      "right": "🇺🇦",
+      "answers": [
+       "🇮🇹",
+       "🇨🇳",
+       "🇧🇷",
+       "🇯🇵",
+       "🇺🇦",
+       "🇬🇧"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "Find the flag of Montenegro.",
+      "right": "🇲🇪",
+      "answers": [
+       "🇸🇦",
+       "🇮🇷",
+       "🇨🇭",
+       "🇩🇴",
+       "🇸🇮",
+       "🇲🇪"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "Find the flag of Ghana.",
+      "right": "🇬🇭",
+      "answers": [
+       "🇬🇭",
+       "🇭🇹",
+       "🇲🇾",
+       "🇩🇿",
+       "🇳🇴",
+       "🇨🇳"
+      ]
+     },
+     {
+      "step": 39,
+      "prompt": "Find the flag of Micronesia.",
+      "right": "🇫🇲",
+      "answers": [
+       "🇺🇿",
+       "🇮🇪",
+       "🇨🇱",
+       "🇧🇯",
+       "🇬🇪",
+       "🇫🇲"
+      ]
+     },
+     {
+      "step": 39,
+      "prompt": "Find the flag of Fiji.",
+      "right": "🇫🇯",
+      "answers": [
+       "🇫🇯",
+       "🇹🇹",
+       "🇸🇩",
+       "🇨🇳",
+       "🇸🇻",
+       "🇸🇧"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "geography:continents",
+    "sub": "continents",
+    "icon": "🗺️",
+    "title": "Put the Map Together",
+    "blurb": "Put animals and flags on the continents",
+    "intro": "There are seven continents on Earth. Drag the animal or the flag onto the continent where it belongs.",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 12,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_MAP_PUZZLE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Where does the lion live? Drag it onto the map."
+     },
+     {
+      "step": 1,
+      "prompt": "Where does the tiger live? Drag it onto the map."
+     },
+     {
+      "step": 6,
+      "prompt": "Which continent is Czechia on? Drag the flag."
+     },
+     {
+      "step": 6,
+      "prompt": "Where does the giraffe live? Drag it onto the map."
+     },
+     {
+      "step": 12,
+      "prompt": "Which continent is Pakistan on? Drag the flag."
+     },
+     {
+      "step": 12,
+      "prompt": "Which continent is Iceland on? Drag the flag."
+     }
+    ]
+   },
+   {
+    "id": "geography:biomes",
+    "sub": "biomes",
+    "icon": "🐧",
+    "title": "Animals and Natural Zones",
+    "blurb": "82 animals and seven natural zones — from the Arctic to the savanna",
+    "intro": "Every animal loves its own home. Some are happy among the ice, and some in the hot desert. Help them get home! Farther along the way there are new animals, “Who is it?” riddles and “Who is the odd one out?” puzzles.",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_SORTER_BINS",
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Where does the polar bear live?",
+      "board": [
+       "❄️ The Arctic",
+       "🌴 Jungle",
+       "🏜️ Desert",
+       "🌾 Savanna",
+       "🌲 Forest",
+       "🏔️ Mountains"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Where does the tiger live?",
+      "board": [
+       "❄️ The Arctic",
+       "🌴 Jungle",
+       "🏜️ Desert",
+       "🌊 Ocean",
+       "🌾 Savanna",
+       "🏔️ Mountains"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Who is it? A bird that spreads its tail into a huge colorful fan.",
+      "right": "🦚 Peacock",
+      "answers": [
+       "🦂 Scorpion",
+       "🦚 Peacock",
+       "🦙 Llama",
+       "🦩 Flamingo",
+       "🦋 Morpho butterfly",
+       "🐏 Mountain ram"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Who is the odd one out? All the others are neighbors: they live in the same natural zone.",
+      "right": "🐐 Mountain goat",
+      "answers": [
+       "🐍 Snake",
+       "🦎 Lizard",
+       "🐐 Mountain goat",
+       "🦂 Scorpion",
+       "🐪 Camel"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Who is the odd one out? All the others are neighbors: they live in the same natural zone.",
+      "right": "🐂 Yak",
+      "answers": [
+       "🦜 Parrot",
+       "🐂 Yak",
+       "🦧 Orangutan",
+       "🦍 Gorilla",
+       "🐒 Monkey",
+       "🦇 Bat"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Who is it? A spotted mountain cat with a very long fluffy tail.",
+      "right": "🐆 Snow leopard",
+      "answers": [
+       "🪲 Scarab beetle",
+       "🐒 Monkey",
+       "🐆 Snow leopard",
+       "🐺 Wolf",
+       "🦬 European bison",
+       "🦌 Deer"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "geography:oceans",
+    "sub": "oceans",
+    "icon": "⛵",
+    "title": "Seas and Oceans",
+    "blurb": "Five oceans, half a hundred seas and gulfs, islands, countries and rivers",
+    "intro": "There are five oceans on our planet. Listen to where to sail, and tap the right ocean on the map! Farther along the way there are riddles about oceans, seas and gulfs, islands, countries and rivers.",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_MAP_PUZZLE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Sail to the Indian Ocean!"
+     },
+     {
+      "step": 1,
+      "prompt": "Sail to the ocean that surrounds Antarctica!"
+     },
+     {
+      "step": 25,
+      "prompt": "Around which ocean does the “Ring of Fire” of volcanoes run? Sail there!"
+     },
+     {
+      "step": 25,
+      "prompt": "Which ocean washes the shores of Cuba? Sail there!"
+     },
+     {
+      "step": 50,
+      "prompt": "Which ocean washes the shores of Somalia? Sail there!"
+     },
+     {
+      "step": 50,
+      "prompt": "Which ocean do the waters of the Mackenzie flow to? Sail there!"
+     }
+    ]
+   },
+   {
+    "id": "geography:capitals",
+    "sub": "capitals",
+    "icon": "🌐",
+    "title": "Capitals and Time Zones",
+    "blurb": "80 capitals of the world, day and night, and the difference in time",
+    "intro": "Know a capital by its most famous building and by the name of its country. And we will also find out why it is day in some cities when it is night in others, and what time it is there!",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 15,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What is the capital of Japan?",
+      "right": "Tokyo",
+      "answers": [
+       "Tokyo",
+       "Kyiv",
+       "Rome",
+       "Warsaw"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "In which capital can you see Saint Sophia Cathedral?",
+      "right": "Kyiv",
+      "answers": [
+       "Rome",
+       "Paris",
+       "Washington",
+       "Kyiv"
+      ]
+     },
+     {
+      "step": 8,
+      "prompt": "Dublin is the capital of which country?",
+      "right": "🇮🇪 Ireland",
+      "answers": [
+       "🇵🇱 Poland",
+       "🇰🇷 South Korea",
+       "🇧🇬 Bulgaria",
+       "🇮🇪 Ireland"
+      ]
+     },
+     {
+      "step": 8,
+      "prompt": "Madrid is the capital of which country?",
+      "right": "🇪🇸 Spain",
+      "answers": [
+       "🇪🇪 Estonia",
+       "🇪🇸 Spain",
+       "🇭🇷 Croatia",
+       "🇦🇷 Argentina"
+      ]
+     },
+     {
+      "step": 15,
+      "prompt": "What is the capital of Costa Rica?",
+      "right": "San José",
+      "answers": [
+       "Tallinn",
+       "Vienna",
+       "Ljubljana",
+       "San José"
+      ]
+     },
+     {
+      "step": 15,
+      "prompt": "Belgrade is the capital of which country?",
+      "right": "🇷🇸 Serbia",
+      "answers": [
+       "🇷🇸 Serbia",
+       "🇳🇬 Nigeria",
+       "🇫🇷 France",
+       "🇹🇭 Thailand"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ecology",
+  "icon": "♻️",
+  "title": "Ecology",
+  "games": [
+   {
+    "id": "ecology:recycling",
+    "sub": "recycling",
+    "icon": "♻️",
+    "title": "Eco Patrol",
+    "blurb": "Sorting rubbish: a hundred things — glass, paper, plastic, metal and compost",
+    "intro": "The clearing needs tidying up! Glass, paper, plastic, metal and leftover food go into different bins — then new things will be made from them.",
+    "stars": [
+     1,
+     1
+    ],
+    "kind": "free",
+    "steps": 1,
+    "tasksPerLevel": 6,
+    "mechanics": [
+     "UI_SORTER_BINS"
+    ],
+    "tasks": 101,
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Which bin is right for the glass oil bottle?",
+      "board": [
+       "🫙 Glass",
+       "📄 Paper",
+       "🧴 Plastic",
+       "🥫 Metal",
+       "🍂 Compost"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Which bin is right for the piece of wire?",
+      "board": [
+       "🫙 Glass",
+       "📄 Paper",
+       "🧴 Plastic",
+       "🥫 Metal",
+       "🍂 Compost"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Which bin is right for the tuna can?",
+      "board": [
+       "🫙 Glass",
+       "📄 Paper",
+       "🧴 Plastic",
+       "🥫 Metal",
+       "🍂 Compost"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Which bin is right for the berry tray?",
+      "board": [
+       "🫙 Glass",
+       "📄 Paper",
+       "🧴 Plastic",
+       "🥫 Metal",
+       "🍂 Compost"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ecology:why",
+    "sub": "why",
+    "icon": "🌍",
+    "title": "Why Is That?",
+    "blurb": "Why glaciers melt and why fallen leaves must not be burned",
+    "intro": "Nature needs our help. Listen to the question and choose the answer — and I will tell you why it matters: about air, water, animals, rubbish and warmth on the planet.",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Why do we make bird feeders in winter?",
+      "right": "It is hard for birds to find food under the snow"
+     },
+     {
+      "step": 1,
+      "prompt": "Why should you turn off the tap while brushing your teeth?",
+      "right": "So as not to waste clean water"
+     },
+     {
+      "step": 25,
+      "prompt": "How do house plants help at home?",
+      "right": "They freshen the air"
+     },
+     {
+      "step": 25,
+      "prompt": "Why is it better to buy one big pack than many small ones?",
+      "right": "Because less packaging becomes rubbish"
+     },
+     {
+      "step": 50,
+      "prompt": "What is done at a recycling plant?",
+      "right": "Rubbish is sorted and turned into raw material"
+     },
+     {
+      "step": 50,
+      "prompt": "Why do scientists write down the weather every day?",
+      "right": "To see how the climate is changing"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "history",
+  "icon": "🏛️",
+  "title": "History",
+  "games": [
+   {
+    "id": "history:dinosaurs",
+    "sub": "dinosaurs",
+    "icon": "🦖",
+    "title": "Dinosaurs",
+    "blurb": "Fifty dinosaurs: what to feed them and how to tell them apart",
+    "intro": "Meet the dinosaurs! Feed each one what it ate — meat or plants — and know a dinosaur by its special mark.",
+    "set": "🌍 World",
+    "stars": [
+     1,
+     1
+    ],
+    "kind": "free",
+    "steps": 1,
+    "tasksPerLevel": 6,
+    "mechanics": [
+     "UI_SORTER_BINS"
+    ],
+    "tasks": 100,
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Who is it? It had one long horn on its nose and spikes on its bony frill.",
+      "right": "Styracosaurus",
+      "answers": [
+       "Mapusaurus",
+       "Baryonyx",
+       "Protoceratops",
+       "Kentrosaurus",
+       "Ankylosaurus",
+       "Styracosaurus"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What shall we feed Euoplocephalus?",
+      "board": [
+       "🥩 Meat",
+       "🌿 Plants"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What shall we feed Maiasaura?",
+      "board": [
+       "🥩 Meat",
+       "🌿 Plants"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Who is it? It had a thick bony dome on its head, like a helmet.",
+      "right": "Pachycephalosaurus",
+      "answers": [
+       "Lambeosaurus",
+       "Pachycephalosaurus",
+       "Mamenchisaurus",
+       "Spinosaurus",
+       "Carcharodontosaurus",
+       "Allosaurus"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "history:epochs",
+    "sub": "epochs",
+    "icon": "⏳",
+    "title": "Time Machine",
+    "blurb": "Surprise tasks about time: what came earlier and what came later",
+    "intro": "Let’s climb into the time machine! Every time it brings new tasks: put events in order, guess what appeared earlier, and find out when it was. After every task there is a short story.",
+    "set": "🌍 World",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "free",
+    "steps": 1,
+    "tasksPerLevel": 6,
+    "mechanics": [
+     "UI_CHRONO_SEQUENCE",
+     "UI_GRID_CHOICE",
+     "UI_SORTER_BINS"
+    ],
+    "tasks": 100,
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Drawings in a cave — when was that?",
+      "board": [
+       "🪨 Stone Age",
+       "🏛️ Ancient world",
+       "🏰 Middle Ages",
+       "🏙️ Our time"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "A knight’s castle — when was that?",
+      "board": [
+       "🪨 Stone Age",
+       "🏛️ Ancient world",
+       "🏰 Middle Ages",
+       "🏙️ Our time"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Put these in order: the earliest in place 1, the latest in the last place. How people got their food",
+      "board": [
+       "🏹 Hunting and gathering",
+       "🌾 The first fields",
+       "🐂 A plow with oxen",
+       "🚜 Tractor"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Which appeared earlier?",
+      "right": "🧮 Abacus",
+      "answers": [
+       "🧮 Abacus",
+       "📟 Calculator"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "history:world_figures",
+    "sub": "world_figures",
+    "icon": "🌟",
+    "title": "Great People of the World",
+    "blurb": "Who is famous for what",
+    "intro": "Meet the people who changed the world: scientists, artists and explorers. On every step there are new people, and the ones you know come back so that you don’t forget them.",
+    "set": "🌍 World",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_DRAG_MATCH",
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What is Wolfgang Mozart famous for?",
+      "right": "🎹 Music from childhood",
+      "answers": [
+       "🌙 The Moon",
+       "🖼️ The Mona Lisa",
+       "⚛️ A famous formula",
+       "🎹 Music from childhood"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What is Leonardo da Vinci famous for?",
+      "right": "🖼️ The Mona Lisa",
+      "answers": [
+       "🌙 The Moon",
+       "🎹 Music from childhood",
+       "🖼️ The Mona Lisa",
+       "⚛️ A famous formula"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "What is Archimedes famous for?",
+      "right": "🛁 “Eureka!” in the bath",
+      "answers": [
+       "⚛️ A famous formula",
+       "🎹 Music from childhood",
+       "🛁 “Eureka!” in the bath",
+       "🍎 An apple and gravity"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "Match each person with what made them famous",
+      "board": [
+       "🧔 William Shakespeare",
+       "🧑‍🎤 Wolfgang Mozart",
+       "🧑‍🏫 Isaac Newton",
+       "🍎 An apple and gravity",
+       "🎹 Music from childhood",
+       "🎭 The theater"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "What is Steve Jobs famous for?",
+      "right": "📱 A smartphone",
+      "answers": [
+       "📱 A smartphone",
+       "🎩 Silent movies",
+       "🏥 Caring for the sick",
+       "🗺️ A huge empire"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "Match each person with what made them famous",
+      "board": [
+       "🧑‍✈️ Ferdinand Magellan",
+       "🧑‍🔧 Johannes Gutenberg",
+       "👬 The Wright brothers",
+       "🌍 A voyage around the world",
+       "✈️ The first airplane",
+       "📖 A printed book"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "history:ua_figures",
+    "sub": "ua_figures",
+    "icon": "🇺🇦",
+    "title": "Great People of Ukraine",
+    "blurb": "Ukrainians to be proud of",
+    "intro": "Ukraine has many great people: poets, princes, scientists and astronauts. Find out what they are famous for!",
+    "set": "🇺🇦 Ukraine",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_DRAG_MATCH",
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Who wrote down the first laws of Rus and gathered a great library?",
+      "right": "🤴 Yaroslav the Wise",
+      "answers": [
+       "👨‍🚀 Serhii Korolov",
+       "🤴 Yaroslav the Wise",
+       "👩‍🦰 Lesia Ukrainka",
+       "👨‍🦳 Taras Shevchenko"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What is Taras Shevchenko famous for?",
+      "right": "📖 “Kobzar”",
+      "answers": [
+       "🌳 “The Forest Song”",
+       "🚀 A space rocket",
+       "📖 “Kobzar”",
+       "📜 Laws and a library"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "What is Bohdan Khmelnytsky famous for?",
+      "right": "🐎 Hetman of the Cossacks",
+      "answers": [
+       "📜 Laws and a library",
+       "👑 A ruler of Rus",
+       "🐎 Hetman of the Cossacks",
+       "🚁 A helicopter"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "Match each person with what made them famous",
+      "board": [
+       "👸 Princess Olha",
+       "🤴 Yaroslav the Wise",
+       "👩‍🦰 Lesia Ukrainka",
+       "📜 Laws and a library",
+       "🌳 “The Forest Song”",
+       "👑 A ruler of Rus"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "What is Mykola Amosov famous for?",
+      "right": "❤️ Heart operations",
+      "answers": [
+       "👑 A ruler of Rus",
+       "❤️ Heart operations",
+       "🎒 A wandering philosopher",
+       "🌳 “The Forest Song”"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "Match each person with what made them famous",
+      "board": [
+       "🧔‍♂️ Bohdan Khmelnytsky",
+       "🤴 Yaroslav the Wise",
+       "🧑‍🎼 Mykola Leontovych",
+       "🐎 Hetman of the Cossacks",
+       "🔔 “Carol of the Bells”",
+       "📜 Laws and a library"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "history:inventions",
+    "sub": "inventions",
+    "icon": "💡",
+    "title": "Great Inventions of the World",
+    "blurb": "Who invented what",
+    "intro": "The light bulb, the telephone, the airplane — someone once thought up each of them for the very first time. Find the inventor!",
+    "set": "🌍 World",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE",
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Who invented the automobile?",
+      "right": "🧑‍🔬 Karl Benz",
+      "answers": [
+       "🧑‍🔬 Alexander Bell",
+       "🧑‍🔬 Johannes Gutenberg",
+       "🧑‍🔬 The Wright brothers",
+       "🧑‍🔬 Karl Benz"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Who invented the long-lasting light bulb?",
+      "right": "🧑‍🔬 Thomas Edison",
+      "answers": [
+       "🧑‍🔬 Karl Benz",
+       "🧑‍🔬 The Wright brothers",
+       "🧑‍🔬 Thomas Edison",
+       "🧑‍🔬 Alexander Bell"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "Who discovered penicillin — a medicine that beats germs?",
+      "right": "🧑‍🔬 Alexander Fleming",
+      "answers": [
+       "🧑‍🔬 Alexander Bell",
+       "🧑‍🔬 Alexander Fleming",
+       "🧑‍🔬 Karl Benz",
+       "🧑‍🔬 The Wright brothers"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "Who invented the long-lasting light bulb?",
+      "right": "🧑‍🔬 Thomas Edison",
+      "answers": [
+       "🧑‍🔬 Guglielmo Marconi",
+       "🧑‍🔬 Alexander Fleming",
+       "🧑‍🔬 Thomas Edison",
+       "🧑‍🔬 George Stephenson"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "What did Thomas Edison create?",
+      "right": "💡 Light bulb",
+      "answers": [
+       "🌐 Web pages",
+       "💡 Light bulb",
+       "🚂 Steam locomotive",
+       "📖 Printing press"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "What did the Wright brothers create?",
+      "right": "✈️ Airplane",
+      "answers": [
+       "☎️ Telephone",
+       "🚗 Automobile",
+       "✈️ Airplane",
+       "💡 Light bulb"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "history:ua_inventions",
+    "sub": "ua_inventions",
+    "icon": "🚁",
+    "title": "Great Inventions of Ukraine",
+    "blurb": "What Ukrainians gave the world",
+    "intro": "The helicopter, the kerosene lamp, the biggest airplane in the world — all of these were thought up in Ukraine. Meet these inventions!",
+    "set": "🇺🇦 Ukraine",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE",
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Who invented the electric streetcar?",
+      "right": "🧑‍🔬 Fedir Pirotsky"
+     },
+     {
+      "step": 1,
+      "prompt": "Who invented the helicopter?",
+      "right": "🧑‍🔬 Igor Sikorsky"
+     },
+     {
+      "step": 5,
+      "prompt": "Who created “Mriya,” the biggest airplane in the world?",
+      "right": "Antonov’s engineers"
+     },
+     {
+      "step": 5,
+      "prompt": "Who invented the helicopter?",
+      "right": "🧑‍🔬 Igor Sikorsky",
+      "answers": [
+       "🧑‍🔬 Yevhen Paton",
+       "Antonov’s engineers",
+       "🧑‍🔬 Igor Sikorsky",
+       "🧑‍🔬 Waldemar Haffkine"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "What did Igor Sikorsky create?",
+      "right": "🚁 Helicopter"
+     },
+     {
+      "step": 10,
+      "prompt": "What did Yosyp Tymchenko create?",
+      "right": "🎥 Movie camera",
+      "answers": [
+       "🪔 Kerosene lamp",
+       "🚋 Electric streetcar",
+       "🎥 Movie camera",
+       "🚁 Helicopter"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "history:pl_figures",
+    "sub": "pl_figures",
+    "icon": "🇵🇱",
+    "title": "Great People of Poland",
+    "blurb": "Kings, scientists and artists of Poland",
+    "intro": "Poland has many great people: kings and knights, scientists, poets and musicians. Find out what they are famous for!",
+    "set": "🇵🇱 Poland",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 13,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_DRAG_MATCH",
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Who wrote mazurkas and polonaises for the piano?",
+      "right": "🧑‍🎼 Frédéric Chopin",
+      "answers": [
+       "👨‍🏫 Nicolaus Copernicus",
+       "🧑‍🎼 Frédéric Chopin",
+       "👩‍🔬 Maria Skłodowska-Curie",
+       "🤴 Mieszko I"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "What is Mieszko I famous for?",
+      "right": "🦅 The beginning of the Polish state"
+     },
+     {
+      "step": 7,
+      "prompt": "Who fought for the freedom of Poland and of America?",
+      "right": "🧑‍✈️ Tadeusz Kościuszko",
+      "answers": [
+       "🧑‍🎼 Frédéric Chopin",
+       "👑 Bolesław the Brave",
+       "🧑‍✈️ Tadeusz Kościuszko",
+       "👨‍🏫 Nicolaus Copernicus"
+      ]
+     },
+     {
+      "step": 7,
+      "prompt": "Match each person with what made them famous",
+      "board": [
+       "🧔‍♂️ Władysław Jagiełło",
+       "🤴 Mieszko I",
+       "👑 Bolesław the Brave",
+       "⚔️ The first king of Poland",
+       "🛡️ The Battle of Grunwald"
+      ]
+     },
+     {
+      "step": 13,
+      "prompt": "What is Stanisław Lem famous for?",
+      "right": "🤖 Tales about robots",
+      "answers": [
+       "🧒 “King Matt the First”",
+       "🤖 Tales about robots",
+       "📖 “Pan Tadeusz”",
+       "🎹 Mazurkas and polonaises"
+      ]
+     },
+     {
+      "step": 13,
+      "prompt": "Match each person with what made them famous",
+      "board": [
+       "🤴 Mieszko I",
+       "👨‍🎨 Jan Matejko",
+       "👨‍🏫 Nicolaus Copernicus",
+       "☀️ The Sun in the center"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "history:pl_inventions",
+    "sub": "pl_inventions",
+    "icon": "🪔",
+    "title": "Great Inventions of Poland",
+    "blurb": "What Poles gave the world",
+    "intro": "The kerosene lamp, vitamins, the walkie-talkie, the Moon rover — Poles thought up all of these. Find the inventor!",
+    "set": "🇵🇱 Poland",
+    "stars": [
+     2,
+     2
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE",
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Who designed the Moon rover?",
+      "right": "🧑‍🔬 Mieczysław Bekker",
+      "answers": [
+       "🧑‍🔬 Casimir Funk",
+       "🧑‍🔬 Jan Czochralski",
+       "🧑‍🔬 Henryk Magnuski",
+       "🧑‍🔬 Mieczysław Bekker"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Who invented the kerosene lamp?",
+      "right": "🧑‍🔬 Ignacy Łukasiewicz",
+      "answers": [
+       "🧑‍🔬 Mieczysław Bekker",
+       "🧑‍🔬 Henryk Magnuski",
+       "🧑‍🔬 Ignacy Łukasiewicz",
+       "🧑‍🔬 Casimir Funk"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "Who thought up Esperanto, so that people from different countries could understand one another?",
+      "right": "🧑‍🔬 Ludwik Zamenhof",
+      "answers": [
+       "🧑‍🔬 Casimir Funk",
+       "🧑‍🔬 Ludwik Zamenhof",
+       "🧑‍🔬 Mieczysław Bekker",
+       "🧑‍🔬 Henryk Magnuski"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "Who invented the kerosene lamp?",
+      "right": "🧑‍🔬 Ignacy Łukasiewicz",
+      "answers": [
+       "🧑‍🔬 Józef Kosacki",
+       "🧑‍🔬 Ludwik Zamenhof",
+       "🧑‍🔬 Ignacy Łukasiewicz",
+       "🧑‍🔬 Rudolf Weigl"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "What did Ignacy Łukasiewicz create?",
+      "right": "🪔 Kerosene lamp",
+      "answers": [
+       "🔐 The broken Enigma code",
+       "🪔 Kerosene lamp",
+       "💉 Vaccine against typhus",
+       "💎 Crystals for microchips"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "What did Henryk Magnuski create?",
+      "right": "📻 Walkie-talkie",
+      "answers": [
+       "🍊 Vitamins",
+       "🌙 Moon rover",
+       "📻 Walkie-talkie",
+       "🪔 Kerosene lamp"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "language",
+  "icon": "🔤",
+  "title": "Language",
+  "games": [
+   {
+    "id": "language:alphabet",
+    "sub": "alphabet",
+    "icon": "🔠",
+    "title": "Абетка",
+    "blurb": "Ukrainian: put the letters in their places in the alphabet",
+    "intro": "We are learning the Ukrainian alphabet! Its letters stand one after another, always in the same order. A few letters have gone missing — drag each one to its place.",
+    "set": "🇺🇦 Ukrainian",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_LETTER_GRID"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Put the Ukrainian letter in its place in the alphabet.",
+      "board": [
+       "Ї",
+       "Й",
+       "К",
+       "Л",
+       "М",
+       "Н",
+       "О",
+       "П",
+       "Р",
+       "С"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Two Ukrainian letters have swapped places. Tap a letter that is not in its own place.",
+      "board": [
+       "В",
+       "Г",
+       "Ґ",
+       "Д",
+       "Е",
+       "Є",
+       "Ж",
+       "З",
+       "И",
+       "І",
+       "Ї",
+       "Й"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Put the Ukrainian letters in their places in the alphabet.",
+      "board": [
+       "А",
+       "Б",
+       "В",
+       "Г",
+       "Ґ",
+       "Д",
+       "Е",
+       "Є",
+       "Ж",
+       "З",
+       "И",
+       "І"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:bubbles",
+    "sub": "bubbles",
+    "icon": "🫧",
+    "title": "Лопни Бульбашку",
+    "blurb": "Ukrainian: pop the bubbles — the alphabet and words",
+    "intro": "We are learning Ukrainian! There are Ukrainian letters in the bubbles. Pop them in order, as in the Ukrainian alphabet. Tap the speaker to hear a letter.",
+    "set": "🇺🇦 Ukrainian",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_BUBBLE_POP"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Pop the Ukrainian letters in alphabet order — from the first to the last.",
+      "board": [
+       "Ф",
+       "Х"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Put the Ukrainian word together from syllables. It is written under the picture.",
+      "board": [
+       "ПО",
+       "НЕ",
+       "ДІ",
+       "ЛОК"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Listen to the Ukrainian word and spell it from the letters.",
+      "board": [
+       "О",
+       "К",
+       "Р",
+       "А",
+       "С",
+       "З",
+       "Х"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:chain",
+    "sub": "chain",
+    "icon": "🔗",
+    "title": "Ланцюжок Слів",
+    "blurb": "Ukrainian: join words with letters and with one another",
+    "intro": "We are learning Ukrainian words! Join every word with the letter it begins with. Tap the speaker to hear the word.",
+    "set": "🇺🇦 Ukrainian",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Join every Ukrainian word with its first letter.",
+      "board": [
+       "🦁 лев",
+       "🪲 жук",
+       "🌺 мак",
+       "М",
+       "Ж",
+       "Л"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Join the beginning of each Ukrainian word with its ending.",
+      "board": [
+       "МО…",
+       "КО…",
+       "СТІ…",
+       "…РОЗ",
+       "…НИК",
+       "…ЛЕЦЬ"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Join the Ukrainian words that belong together in meaning.",
+      "board": [
+       "🌃 ніч",
+       "🏕️ вогнище",
+       "🧲 магніт",
+       "💨 дим",
+       "🌙 місяць",
+       "🔩 залізо"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:rhymes",
+    "sub": "rhymes",
+    "icon": "🎶",
+    "title": "Шукач Рим",
+    "blurb": "Ukrainian: find the words that rhyme",
+    "intro": "Ukrainian has rhymes too — words that sound alike at the end. Tap the speakers, listen to the words and join the ones that rhyme.",
+    "set": "🇺🇦 Ukrainian",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Find the pairs of Ukrainian words that rhyme.",
+      "board": [
+       "🌺 мак",
+       "☕ чашка",
+       "🪲 жук",
+       "🐦 пташка",
+       "🏹 лук",
+       "🦞 рак"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Find the pairs of Ukrainian words that rhyme.",
+      "board": [
+       "🎽 майка",
+       "корова",
+       "🛋️ диван",
+       "діброва",
+       "океан",
+       "лайка"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Find the pairs of Ukrainian words that rhyme.",
+      "board": [
+       "грива",
+       "читає",
+       "питання",
+       "олива",
+       "питає",
+       "завдання"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:sentences",
+    "sub": "sentences",
+    "icon": "🧱",
+    "title": "Будівельник Речень",
+    "blurb": "Ukrainian: make a sentence out of words",
+    "intro": "We are making sentences in Ukrainian! Put the words in order. The first word is written with a capital letter, and there is a period at the end.",
+    "set": "🇺🇦 Ukrainian",
+    "stars": [
+     3,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_CHRONO_SEQUENCE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Put the Ukrainian words in order to make a sentence.",
+      "board": [
+       "Мишка",
+       "біжить."
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Put the Ukrainian words in order to make a sentence.",
+      "board": [
+       "Мама",
+       "питиме",
+       "сік."
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Put the Ukrainian words in order to make a sentence.",
+      "board": [
+       "Жовте",
+       "курча",
+       "сидітиме",
+       "на",
+       "траві."
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:wordsearch",
+    "sub": "wordsearch",
+    "icon": "🔎",
+    "title": "Пошук слів",
+    "blurb": "Ukrainian: find the words hidden in a table of letters",
+    "intro": "Ukrainian! The words of the pictures are hiding in the table of letters. Find each one and slide your finger over it, from the first letter to the last. Tap the speaker to hear a word.",
+    "set": "🇺🇦 Ukrainian",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_WORD_SEARCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Find all the words in the table and slide your finger over them.",
+      "board": [
+       "🐳",
+       "🔪"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Find all the words in the table and slide your finger over them.",
+      "board": [
+       "⛑️",
+       "🧱",
+       "🥜",
+       "🍋"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Find the words of the pictures in the table. Tap a speaker to hear a word.",
+      "board": [
+       "🕯️",
+       "🚗",
+       "🪐",
+       "🍽️",
+       "🚢"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:en_alphabet",
+    "sub": "en_alphabet",
+    "icon": "🔠",
+    "title": "Alphabet",
+    "blurb": "Put the letters in their places in the alphabet — all twenty-six of them",
+    "intro": "The letters of the alphabet stand one after another, always in the same order. A few letters have gone missing! Drag each one to its place.",
+    "set": "🇬🇧 English",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_LETTER_GRID"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Put the letter in its place in the alphabet.",
+      "board": [
+       "P",
+       "Q",
+       "R",
+       "S",
+       "T",
+       "U",
+       "V",
+       "W",
+       "X",
+       "Y"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Two letters have swapped places. Tap a letter that is not in its own place.",
+      "board": [
+       "F",
+       "G",
+       "H",
+       "I",
+       "J",
+       "K",
+       "L",
+       "M",
+       "N",
+       "O",
+       "P",
+       "Q"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Put the letters in their places in the alphabet.",
+      "board": [
+       "A",
+       "B",
+       "C",
+       "D",
+       "E",
+       "F",
+       "G",
+       "H",
+       "I",
+       "J",
+       "K",
+       "L"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:en_bubbles",
+    "sub": "en_bubbles",
+    "icon": "🫧",
+    "title": "Bubble Pop",
+    "blurb": "Pop the bubbles in order: the alphabet and words",
+    "intro": "Letters are hiding in the soap bubbles! Pop them in order — the way they stand in the alphabet.",
+    "set": "🇬🇧 English",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_BUBBLE_POP"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Pop the letters in alphabet order: from K to L.",
+      "board": [
+       "K",
+       "L"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Pop the letters in alphabet order: from U to V.",
+      "board": [
+       "U",
+       "V"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Put the word together from letters: rim.",
+      "board": [
+       "R",
+       "I",
+       "M"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Put the word together from letters: kit.",
+      "board": [
+       "K",
+       "I",
+       "T"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Spell the word from the letters: violin.",
+      "board": [
+       "V",
+       "I",
+       "O",
+       "L",
+       "N",
+       "X",
+       "Z"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Spell the word from the letters: engine.",
+      "board": [
+       "E",
+       "N",
+       "G",
+       "I",
+       "C",
+       "Z"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:en_chain",
+    "sub": "en_chain",
+    "icon": "🔗",
+    "title": "Word Chain",
+    "blurb": "Join words: the first letter, halves of a word, meaning",
+    "intro": "Every word begins with some letter. Join the word with its first letter!",
+    "set": "🇬🇧 English",
+    "stars": [
+     3,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Join every word with the letter it begins with.",
+      "board": [
+       "🍚 rice",
+       "🐐 goat",
+       "🦁 lion",
+       "L",
+       "G",
+       "R"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Join the beginning of each word with its ending.",
+      "board": [
+       "LADY…",
+       "SKATE…",
+       "DOL…",
+       "🐞 …BUG",
+       "🛹 …BOARD",
+       "🐬 …PHIN"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Join the words that belong together in meaning.",
+      "board": [
+       "🦋 butterfly",
+       "🔭 telescope",
+       "🚗 car",
+       "🌸 flower",
+       "🌠 stars",
+       "🛣️ road"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:en_rhymes",
+    "sub": "en_rhymes",
+    "icon": "🎶",
+    "title": "Rhyme Matcher",
+    "blurb": "Find words that sound alike: cat — hat",
+    "intro": "Some words end in the same way, as if they were singing together: cat — hat. That is a rhyme! Find the rhyme for every word.",
+    "set": "🇬🇧 English",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Find the pairs of words that rhyme.",
+      "board": [
+       "🐱 cat",
+       "🎂 cake",
+       "☀️ sun",
+       "🥯 bun",
+       "🏞️ lake",
+       "🎩 hat"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Find the pairs of words that rhyme.",
+      "board": [
+       "sky",
+       "🐟 fish",
+       "🏞️ lake",
+       "rake",
+       "eye",
+       "swish"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Find the pairs of words that rhyme.",
+      "board": [
+       "pen",
+       "mice",
+       "day",
+       "men",
+       "tray",
+       "dice"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:en_sentences",
+    "sub": "en_sentences",
+    "icon": "🧱",
+    "title": "Sentence Builder",
+    "blurb": "Make a sentence out of words — from two to five",
+    "intro": "The words have scattered! Put them in order to make a sentence. The first word is written with a capital letter, and there is a period at the end.",
+    "set": "🇬🇧 English",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_CHRONO_SEQUENCE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Put the words in order to make a sentence.",
+      "board": [
+       "Kids",
+       "play."
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Put the words in order to make a sentence.",
+      "board": [
+       "Anna",
+       "needs",
+       "help."
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Put the words in order to make a sentence.",
+      "board": [
+       "The",
+       "black",
+       "sheep",
+       "wakes",
+       "up."
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:en_wordsearch",
+    "sub": "en_wordsearch",
+    "icon": "🔎",
+    "title": "Word Search",
+    "blurb": "Find the words hidden in a table of letters",
+    "intro": "Words are hiding in the table of letters! Find each one and slide your finger over it, from the first letter to the last. You can also tap the first letter and then the last one.",
+    "set": "🇬🇧 English",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_WORD_SEARCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Find all the words in the table and slide your finger over them.",
+      "board": [
+       "👔",
+       "🧸"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Find all the words in the table and slide your finger over them.",
+      "board": [
+       "👼",
+       "🦥",
+       "🦷",
+       "🐒"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Find the words of the pictures in the table. Tap a speaker to hear a word.",
+      "board": [
+       "🐢",
+       "🐒",
+       "🎈",
+       "📿",
+       "🛤️"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:pl_alphabet",
+    "sub": "pl_alphabet",
+    "icon": "🔠",
+    "title": "Alfabet",
+    "blurb": "Polish: put the letters in their places in the alphabet",
+    "intro": "We are learning the Polish alphabet! Its letters stand one after another, always in the same order. A few letters have gone missing — drag each one to its place.",
+    "set": "🇵🇱 Polish",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_LETTER_GRID"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Put the Polish letter in its place in the alphabet.",
+      "board": [
+       "O",
+       "Ó",
+       "P",
+       "R",
+       "S",
+       "Ś",
+       "T",
+       "U",
+       "W",
+       "Y"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Two Polish letters have swapped places. Tap a letter that is not in its own place.",
+      "board": [
+       "H",
+       "I",
+       "J",
+       "K",
+       "L",
+       "Ł",
+       "M",
+       "N",
+       "Ń",
+       "O",
+       "Ó",
+       "P"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Two Polish letters have swapped places. Tap a letter that is not in its own place.",
+      "board": [
+       "A",
+       "Ą",
+       "B",
+       "C",
+       "Ć",
+       "D",
+       "E",
+       "Ę",
+       "F",
+       "G",
+       "H",
+       "I"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Put the Polish letters in their places in the alphabet.",
+      "board": [
+       "A",
+       "Ą",
+       "B",
+       "C",
+       "Ć",
+       "D",
+       "E",
+       "Ę",
+       "F",
+       "G",
+       "H",
+       "I"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:pl_bubbles",
+    "sub": "pl_bubbles",
+    "icon": "🫧",
+    "title": "Bańki mydlane",
+    "blurb": "Polish: pop the bubbles — the alphabet and words",
+    "intro": "We are learning Polish! There are Polish letters in the bubbles. Pop them in order, as in the Polish alphabet. Tap the speaker to hear a letter.",
+    "set": "🇵🇱 Polish",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_BUBBLE_POP"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Pop the Polish letters in alphabet order — from the first to the last.",
+      "board": [
+       "T",
+       "U"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Put the Polish word together from syllables. It is written under the picture.",
+      "board": [
+       "KOM",
+       "PU",
+       "TER"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Listen to the Polish word and spell it from the letters.",
+      "board": [
+       "B",
+       "O",
+       "I",
+       "S",
+       "K",
+       "A",
+       "Z"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:pl_chain",
+    "sub": "pl_chain",
+    "icon": "🔗",
+    "title": "Łańcuszek słów",
+    "blurb": "Polish: join words with letters and with one another",
+    "intro": "We are learning Polish words! Join every word with the letter it begins with. Tap the speaker to hear the word.",
+    "set": "🇵🇱 Polish",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Join every Polish word with its first letter.",
+      "board": [
+       "🐶 pies",
+       "🦊 lis",
+       "🧃 sok",
+       "S",
+       "L",
+       "P"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Join the beginning of each Polish word with its ending.",
+      "board": [
+       "PIZ…",
+       "ŚLI…",
+       "ZE…",
+       "🐌 …MAK",
+       "🦓 …BRA",
+       "🍕 …ZA"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Join the Polish words that belong together in meaning.",
+      "board": [
+       "🌋 wulkan",
+       "🧲 magnes",
+       "🎟️ zoo",
+       "♨️ lawa",
+       "🔩 żelazo",
+       "🦁 lew"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:pl_rhymes",
+    "sub": "pl_rhymes",
+    "icon": "🎶",
+    "title": "Szukamy rymów",
+    "blurb": "Polish: find the words that rhyme",
+    "intro": "Polish has rhymes too — words that sound alike at the end. Tap the speakers, listen to the words and join the ones that rhyme.",
+    "set": "🇵🇱 Polish",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Find the pairs of Polish words that rhyme.",
+      "board": [
+       "👃 nos",
+       "🌲 las",
+       "🐱 kot",
+       "pas",
+       "płot",
+       "los"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Find the pairs of Polish words that rhyme.",
+      "board": [
+       "moda",
+       "🐸 żaba",
+       "⛰️ góra",
+       "🫐 jagoda",
+       "dziura",
+       "👵 baba"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Find the pairs of Polish words that rhyme.",
+      "board": [
+       "🏠 dach",
+       "🔨 młotek",
+       "krok",
+       "skok",
+       "płotek",
+       "zamach"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:pl_sentences",
+    "sub": "pl_sentences",
+    "icon": "🧱",
+    "title": "Budujemy zdania",
+    "blurb": "Polish: make a sentence out of words",
+    "intro": "We are making sentences in Polish! Put the words in order. The first word is written with a capital letter, and there is a period at the end.",
+    "set": "🇵🇱 Polish",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_CHRONO_SEQUENCE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Put the Polish words in order to make a sentence.",
+      "board": [
+       "Ryby",
+       "pływają."
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Put the Polish words in order to make a sentence.",
+      "board": [
+       "Tata",
+       "widzi",
+       "gwiazdy."
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Put the Polish words in order to make a sentence.",
+      "board": [
+       "Mądra",
+       "sowa",
+       "bawi",
+       "się",
+       "piłką."
+      ]
+     }
+    ]
+   },
+   {
+    "id": "language:pl_wordsearch",
+    "sub": "pl_wordsearch",
+    "icon": "🔎",
+    "title": "Szukanie słów",
+    "blurb": "Polish: find the words hidden in a table of letters",
+    "intro": "Polish! The words of the pictures are hiding in the table of letters. Find each one and slide your finger over it, from the first letter to the last. Tap the speaker to hear a word.",
+    "set": "🇵🇱 Polish",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_WORD_SEARCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Find all the words in the table and slide your finger over them.",
+      "board": [
+       "🧃",
+       "🦊"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "Find all the words in the table and slide your finger over them.",
+      "board": [
+       "⛵",
+       "☁️",
+       "🌰",
+       "🪙"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Find the words of the pictures in the table. Tap a speaker to hear a word.",
+      "board": [
+       "✏️",
+       "🐧",
+       "🪑",
+       "🎄",
+       "🌙"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "logic",
+  "icon": "🧩",
+  "title": "Logic",
+  "games": [
+   {
+    "id": "logic:patterns",
+    "sub": "patterns",
+    "icon": "🔁",
+    "title": "Rhythm and Patterns",
+    "blurb": "Work out the rule and carry the pattern on",
+    "intro": "The pictures stand in a row by a rule, and they repeat. Work out the rule and say what should stand in place of the question mark!",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Which picture should stand in place of the question mark?",
+      "right": "⭐",
+      "answers": [
+       "🔺",
+       "⭐",
+       "🟣",
+       "🔶",
+       "🟦",
+       "🔷",
+       "🟩",
+       "⬛",
+       "❤️"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "Which picture should stand in place of the question mark?",
+      "right": "🦁",
+      "answers": [
+       "🐘",
+       "🦁",
+       "🐪",
+       "🐒",
+       "🦓",
+       "🦛",
+       "🐊",
+       "🦘",
+       "🦒"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "Which picture should stand in place of the question mark?",
+      "right": "🍪",
+      "answers": [
+       "🍔",
+       "🍪",
+       "🍕",
+       "🍦",
+       "🍭",
+       "🥚",
+       "🧀",
+       "🍞",
+       "🍩"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "logic:shadows",
+    "sub": "shadows",
+    "icon": "👤",
+    "title": "Shadow Lotto",
+    "blurb": "Find the shadow of each picture",
+    "intro": "Every thing has a shadow — a black outline of the very same shape. Drag each picture onto its shadow!",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Find the shadow of each picture.",
+      "board": [
+       "🧣",
+       "🎋",
+       "🛰️"
+      ]
+     },
+     {
+      "step": 5,
+      "prompt": "Find the shadow of each picture.",
+      "board": [
+       "🗼",
+       "🏢",
+       "🏠",
+       "🎢"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "Find the shadow of each picture.",
+      "board": [
+       "🖊️",
+       "📐",
+       "🖌️",
+       "📖",
+       "🎁"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "logic:mirror",
+    "sub": "mirror",
+    "icon": "🪞",
+    "title": "The Mirror",
+    "blurb": "Finish the other half — as in a mirror",
+    "intro": "Only the left half of a picture is drawn here. The right half must be the same, only mirrored. Find it!",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "This is the left half of a picture. Find the right one — just as in a mirror."
+     },
+     {
+      "step": 5,
+      "prompt": "This is the left half of a picture. Find the right one — just as in a mirror."
+     },
+     {
+      "step": 10,
+      "prompt": "This is the left half of a picture. Find the right one — just as in a mirror."
+     }
+    ]
+   },
+   {
+    "id": "logic:riddles",
+    "sub": "riddles",
+    "icon": "🧠",
+    "title": "Logic Riddles",
+    "blurb": "Little stories where you have to think, not count",
+    "intro": "Listen to a short story and think. There is no need to count for long here — you have to work it out! If you need to, tap the speaker and I will read the riddle again.",
+    "stars": [
+     3,
+     3
+    ],
+    "kind": "path",
+    "steps": 50,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "In the box there is a block, a doll or a ball. It is not a doll and not a block. What is in the box?",
+      "right": "⚽ Ball",
+      "answers": [
+       "🪆 Doll",
+       "🧱 Block",
+       "⚽ Ball"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Andrew is taller than Max, and Max is taller than Oscar. Who is the tallest?",
+      "right": "Andrew",
+      "answers": [
+       "Oscar",
+       "Andrew",
+       "Max"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "The blocks in the tower stand like this: green, red, green, red — and so on. What color will the 11th block be?",
+      "right": "🟢 Green",
+      "answers": [
+       "🟡 Yellow",
+       "🔴 Red",
+       "🟢 Green"
+      ]
+     },
+     {
+      "step": 25,
+      "prompt": "The flags on the garland hang like this: yellow, blue, yellow, blue — and so on. What color will the 8th flag be?",
+      "right": "🔵 Blue",
+      "answers": [
+       "🟡 Yellow",
+       "🟢 Green",
+       "🔵 Blue"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "I thought of a number, added 2 to it and got as much as 4 and 4 more. What number did I think of?",
+      "right": "6",
+      "answers": [
+       "5",
+       "16",
+       "6",
+       "4",
+       "10",
+       "7"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Five chess players played one another: each with each, one game. How many games were there?",
+      "right": "10",
+      "answers": [
+       "12",
+       "9",
+       "13",
+       "10",
+       "20",
+       "8"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "astronomy",
+  "icon": "🔭",
+  "title": "Astronomy",
+  "games": [
+   {
+    "id": "astronomy:planets",
+    "sub": "planets",
+    "icon": "🪐",
+    "title": "Parade of Planets",
+    "blurb": "Line up the planets from the Sun and by size, and learn a hundred curious things about them",
+    "intro": "Eight planets circle the Sun. Line them up in order: first the one nearest the Sun!",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 30,
+    "tasksPerLevel": 6,
+    "mechanics": [
+     "UI_CHRONO_SEQUENCE",
+     "UI_DRAG_MATCH",
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Line up the planets: from the nearest to the Sun to the farthest.",
+      "board": [
+       "🌑 Mercury",
+       "🌍 Earth",
+       "🔴 Mars",
+       "☀️ The Sun",
+       "🟡 Venus",
+       "🟠 Jupiter",
+       "🪐 Saturn",
+       "🟢 Uranus",
+       "🔵 Neptune"
+      ]
+     },
+     {
+      "step": 15,
+      "prompt": "On which planet does a year last 84 Earth years?",
+      "right": "🟢 Uranus",
+      "answers": [
+       "🔴 Mars",
+       "🟠 Jupiter",
+       "🌍 Earth",
+       "🪐 Saturn",
+       "🟢 Uranus",
+       "🟡 Venus"
+      ]
+     },
+     {
+      "step": 15,
+      "prompt": "Which planet is the coldest — it gets down to minus 224 degrees there?",
+      "right": "🟢 Uranus",
+      "answers": [
+       "🟡 Venus",
+       "🌑 Mercury",
+       "🔴 Mars",
+       "🟢 Uranus",
+       "🔵 Neptune",
+       "🌍 Earth"
+      ]
+     },
+     {
+      "step": 30,
+      "prompt": "On which planet was ice found under the soil, and where do we look for traces of ancient life?",
+      "right": "🔴 Mars",
+      "answers": [
+       "🔵 Neptune",
+       "🌑 Mercury",
+       "🔴 Mars",
+       "🌍 Earth",
+       "🟢 Uranus",
+       "🟡 Venus"
+      ]
+     },
+     {
+      "step": 30,
+      "prompt": "Which planet rolls along its orbit on its side, like a ball, and has thirteen dark rings?",
+      "right": "🟢 Uranus",
+      "answers": [
+       "🟡 Venus",
+       "🌑 Mercury",
+       "🪐 Saturn",
+       "🌍 Earth",
+       "🔴 Mars",
+       "🟢 Uranus"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "astronomy:constellations",
+    "sub": "constellations",
+    "icon": "✨",
+    "title": "Space Navigator",
+    "blurb": "Join the stars in order, draw constellations and find them in the starry sky",
+    "intro": "In the sky the stars make pictures — constellations. Tap the stars in order, starting from the smallest number, and see what comes out!",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 32,
+    "tasksPerLevel": 5,
+    "mechanics": [
+     "UI_CHRONO_SEQUENCE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "Join the stars in order: from 1 to 4.",
+      "board": [
+       "1",
+       "2",
+       "3",
+       "4"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Join the stars in order: from 1 to 5.",
+      "board": [
+       "1",
+       "2",
+       "3",
+       "4",
+       "5"
+      ]
+     },
+     {
+      "step": 16,
+      "prompt": "Find Cassiopeia in the sky. Its stars are a little bigger than the others — join them with your finger.",
+      "board": [
+       "1",
+       "2",
+       "3",
+       "4",
+       "5"
+      ]
+     },
+     {
+      "step": 16,
+      "prompt": "Join the stars, counting in tens: 10, 20, 30 — and on up to 80.",
+      "board": [
+       "10",
+       "20",
+       "30",
+       "40",
+       "50",
+       "60",
+       "70",
+       "80"
+      ]
+     },
+     {
+      "step": 32,
+      "prompt": "Find Leo in the sky. Its stars are a little bigger than the others — join them with your finger.",
+      "board": [
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8",
+       "9",
+       "10"
+      ]
+     },
+     {
+      "step": 32,
+      "prompt": "Find Cepheus in the sky. Its stars are a little bigger than the others — join them with your finger.",
+      "board": [
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "art",
+  "icon": "🎨",
+  "title": "Art",
+  "games": [
+   {
+    "id": "art:mixer",
+    "sub": "mixer",
+    "icon": "🎨",
+    "title": "Color Mixer",
+    "blurb": "Mix paints in the cauldron and color the pictures",
+    "intro": "The picture is still gray — it needs coloring! Pour paints into the magic cauldron to get the color you need.",
+    "stars": [
+     1,
+     3
+    ],
+    "kind": "path",
+    "steps": 30,
+    "tasksPerLevel": 6,
+    "mechanics": [
+     "UI_DRAG_MATCH"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "The carrot must turn orange. Which two paints should you mix?"
+     },
+     {
+      "step": 1,
+      "prompt": "The orange must turn orange. Which two paints should you mix?"
+     },
+     {
+      "step": 15,
+      "prompt": "The unicorn must turn lilac. Which two paints should you mix?"
+     },
+     {
+      "step": 15,
+      "prompt": "The magic ball must turn dark purple. Which two paints should you mix?"
+     },
+     {
+      "step": 30,
+      "prompt": "The train must turn brick red. Which three paints should you mix?"
+     },
+     {
+      "step": 30,
+      "prompt": "The star must turn gold. Which two paints should you mix, and what makes it sparkle?"
+     }
+    ]
+   },
+   {
+    "id": "art:colors",
+    "sub": "colors",
+    "icon": "🌈",
+    "title": "Learning colors",
+    "blurb": "Find the right color among six",
+    "intro": "There are so many colors in the world! Listen to which color to find and tap it. Then tell which color the picture is.",
+    "stars": [
+     1,
+     2
+    ],
+    "kind": "path",
+    "steps": 20,
+    "tasksPerLevel": 7,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "What color is this?",
+      "right": "Yellow",
+      "answers": [
+       "Blue",
+       "Red",
+       "Yellow",
+       "Orange",
+       "Purple",
+       "Green"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "Choose red."
+     },
+     {
+      "step": 10,
+      "prompt": "Choose beige."
+     },
+     {
+      "step": 10,
+      "prompt": "What color is this?",
+      "right": "Mint",
+      "answers": [
+       "Beige",
+       "Black",
+       "Gray",
+       "Sky blue",
+       "Orange",
+       "Mint"
+      ]
+     },
+     {
+      "step": 20,
+      "prompt": "Choose shiny purple."
+     },
+     {
+      "step": 20,
+      "prompt": "Choose icy blue."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nature",
+  "icon": "🌿",
+  "title": "Nature",
+  "games": [
+   {
+    "id": "nature:seasons",
+    "sub": "seasons",
+    "icon": "🍂",
+    "title": "Seasons and Months",
+    "blurb": "What happens in nature and when, and the twelve months in order",
+    "intro": "A year has four seasons: winter, spring, summer and fall, and each has three months. Look at the picture and show when this happens!",
+    "stars": [
+     1,
+     1
+    ],
+    "kind": "path",
+    "steps": 8,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_SORTER_BINS",
+     "UI_GRID_CHOICE",
+     "UI_CHRONO_SEQUENCE"
+    ],
+    "samples": [
+     {
+      "step": 1,
+      "prompt": "When do watermelons ripen?",
+      "board": [
+       "❄️ Winter",
+       "🌷 Spring",
+       "☀️ Summer",
+       "🍂 Fall"
+      ]
+     },
+     {
+      "step": 1,
+      "prompt": "When do the first little leaves appear?",
+      "board": [
+       "❄️ Winter",
+       "🌷 Spring",
+       "☀️ Summer",
+       "🍂 Fall"
+      ]
+     },
+     {
+      "step": 4,
+      "prompt": "Which month comes after November?",
+      "right": "🎄 December",
+      "answers": [
+       "🌱 March",
+       "🐝 July",
+       "🎄 December",
+       "🌨️ February"
+      ]
+     },
+     {
+      "step": 4,
+      "prompt": "Which season does March belong to?",
+      "board": [
+       "❄️ Winter",
+       "🌷 Spring",
+       "☀️ Summer",
+       "🍂 Fall"
+      ]
+     },
+     {
+      "step": 8,
+      "prompt": "Put the seasons in order. Start with spring.",
+      "board": [
+       "🌷 Spring",
+       "☀️ Summer",
+       "🍂 Fall",
+       "❄️ Winter"
+      ]
+     },
+     {
+      "step": 8,
+      "prompt": "Which month comes after July?",
+      "right": "🌾 August",
+      "answers": [
+       "🎒 September",
+       "🍓 June",
+       "🎄 December",
+       "🌾 August"
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

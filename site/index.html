@@ -222,7 +222,7 @@
           <div class="grid">
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🧮</div>
-              <h3>{{games.math.title}}</h3>
+              <h3><a href="/{{@home}}games/math/">{{games.math.title}}</a></h3>
               <ul>
                 <li>{{games.math.1}}</li>
                 <li>{{games.math.2}}</li>
@@ -236,7 +236,7 @@
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🔤</div>
-              <h3>{{games.language.title}}</h3>
+              <h3><a href="/{{@home}}games/language/">{{games.language.title}}</a></h3>
               <ul>
                 <li>{{games.language.1}}</li>
                 <li>{{games.language.2}}</li>
@@ -247,7 +247,7 @@
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🧩</div>
-              <h3>{{games.logic.title}}</h3>
+              <h3><a href="/{{@home}}games/logic/">{{games.logic.title}}</a></h3>
               <ul>
                 <li>{{games.logic.1}}</li>
                 <li>{{games.logic.2}}</li>
@@ -258,7 +258,7 @@
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🔭</div>
-              <h3>{{games.astronomy.title}}</h3>
+              <h3><a href="/{{@home}}games/astronomy/">{{games.astronomy.title}}</a></h3>
               <ul>
                 <li>{{games.astronomy.1}}</li>
                 <li>{{games.astronomy.2}}</li>
@@ -267,7 +267,7 @@
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🎨</div>
-              <h3>{{games.art.title}}</h3>
+              <h3><a href="/{{@home}}games/art/">{{games.art.title}}</a></h3>
               <ul>
                 <li>{{games.art.1}}</li>
               </ul>
@@ -275,7 +275,7 @@
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🌍</div>
-              <h3>{{games.geography.title}}</h3>
+              <h3><a href="/{{@home}}games/geography/">{{games.geography.title}}</a></h3>
               <ul>
                 <li>{{games.geography.1}}</li>
                 <li>{{games.geography.2}}</li>
@@ -287,7 +287,7 @@
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🏛️</div>
-              <h3>{{games.history.title}}</h3>
+              <h3><a href="/{{@home}}games/history/">{{games.history.title}}</a></h3>
               <ul>
                 <li>{{games.history.1}}</li>
                 <li>{{games.history.2}}</li>
@@ -298,7 +298,7 @@
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">♻️</div>
-              <h3>{{games.ecology.title}}</h3>
+              <h3><a href="/{{@home}}games/ecology/">{{games.ecology.title}}</a></h3>
               <ul>
                 <li>{{games.ecology.1}}</li>
                 <li>{{games.ecology.2}}</li>
@@ -308,7 +308,7 @@
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🌿</div>
-              <h3>{{games.nature.title}}</h3>
+              <h3><a href="/{{@home}}games/nature/">{{games.nature.title}}</a></h3>
               <ul>
                 <li>{{games.nature.1}}</li>
                 <li>{{games.nature.2}}</li>
@@ -317,11 +317,14 @@
             </article>
           </div>
 
+          <!-- Every game has a page of its own, with real tasks from it (`build/games.ts`). -->
+          <p class="all-games"><a class="btn btn-parent" href="/{{@home}}games/">{{catalog.all}} →</a></p>
+
           <div class="band" style="margin-top: 26px">
             <div class="numbers">
-              <div><b>{{numbers.gamesCount}}</b><span>{{numbers.games}}</span></div>
+              <div><b>{{@gamesCount}}</b><span>{{numbers.games}}</span></div>
               <div><b>9</b><span>{{numbers.galaxies}}</span></div>
-              <div><b>{{numbers.levelsCount}}</b><span>{{numbers.levels}}</span></div>
+              <div><b>{{@levelsCount}}</b><span>{{numbers.levels}}</span></div>
               <div><b>3</b><span>{{numbers.ages}}</span></div>
               <div><b>3</b><span>{{numbers.languages}}</span></div>
               <div><b>10</b><span>{{numbers.themes}}</span></div>
@@ -549,16 +552,10 @@
     <footer>
       <div class="wrap">
         <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}} · {{footer.updated}}: <time datetime="{{@updatedIso}}">{{@updated}}</time></p>
-        <p>
-          <a data-portal="play" href="__PLAY_URL__/login">{{footer.game}}</a>·<a data-portal="parents" href="__PARENTS_URL__/">{{cta.parents}}</a>·<a href="#feedback" data-letter-open>{{nav.write}}</a>
-        </p>
         <!-- What the law asks to be said, and where to write. -->
         <p>
           <a href="/{{@home}}privacy/">{{footer.privacy}}</a>·<a href="/{{@home}}terms/">{{footer.terms}}</a>·<a href="mailto:{{@email}}">{{@email}}</a>
         </p>
-        <ul class="langs-row" aria-label="{{lang.label}}">
-          {{@langLinks}}
-        </ul>
       </div>
     </footer>
 

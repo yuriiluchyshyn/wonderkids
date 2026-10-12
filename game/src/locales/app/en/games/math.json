@@ -1420,7 +1420,36 @@
       "3": "row",
       "4": "There were {a}. Take away {b} — remove the dots one at a time. How many are left?",
       "5": "Count the dots one by one: first {a}, then add {b} more. How many are there altogether?"
-    }
+    },
+    "chain": {
+      "prompt": "What is {expr}?",
+      "hint": "Go step by step, from left to right. First, {first} is {r}. Then carry on from {r} to the end."
+    },
+    "order": {
+      "title": "What comes first?",
+      "text": "When a sum has times or divided by together with plus or minus, we multiply and divide first, and only then add and subtract. Even when the times comes at the very end!",
+      "again": "Remember the rule: times and divide come first. Here, start with {first}.",
+      "hint": "Times and divide first, then plus and minus. Start with {first}."
+    },
+    "brackets": {
+      "title": "What are brackets?",
+      "text": "Brackets are like a hug: whatever is inside them is worked out first. That is how brackets change the order, and the answer with it.",
+      "contrast": "Without brackets we multiply first, and the answer is different:",
+      "again": "Remember: what is in the brackets comes first. Here, start with {first}.",
+      "hint": "First, what is in the brackets: {first}."
+    },
+    "step": {
+      "+": "{when} we add: {expr} is {r}.",
+      "-": "{when} we subtract: {expr} is {r}.",
+      "×": "{when} we multiply: {expr} is {r}.",
+      "÷": "{when} we divide: {expr} is {r}.",
+      "()": "{when}, the brackets: {expr} is {r}."
+    },
+    "when": {
+      "first": "First",
+      "then": "Then"
+    },
+    "open": "in brackets"
   },
   "balance": {
     "prompt": "Balance the scales! Which weight weighs the same?",
@@ -1522,22 +1551,33 @@
       "hours": "A clock has two hands. The short one shows the hours. When the long hand points straight up, at twelve, it is exactly on the hour. Look where the short hand is pointing!",
       "half": "When the long hand points down, at six, half an hour has passed. The short hand is then between two numbers.",
       "quarter": "The long hand on three means a quarter of an hour has passed. And when it is on nine, there is a quarter left until the next hour.",
-      "minutes": "The long hand shows the minutes. Each number on the clock is five more minutes: one is five, two is ten, three is fifteen."
-    },
-    "hint": {
-      "long": {
-        "1": "points up, at twelve",
-        "2": "points at {m}"
-      },
-      "short": {
-        "1": "points at {h}",
-        "2": "has already passed {h}"
-      },
-      "_": "The short hand {short}, and the long hand {long}. The short one is for hours, the long one for minutes."
+      "minutes": "The long hand shows the minutes. Each number on the clock is five more minutes: one is five, two is ten, three is fifteen.",
+      "h24": "After noon, a digital clock keeps counting the hours: 13, 14, 15… all the way to 23. To find such an hour on an ordinary clock, take away 12: 15 take away 12 leaves 3, so 15:00 is three o’clock in the afternoon.",
+      "h24minutes": "Now the 24-hour times have minutes too. First find the hour with the short hand, then the minutes with the long one."
     },
     "yes": "Yes, it is {time}!",
     "find": "Find the clock that shows {time}.",
-    "read": "What time is it on the clock?"
+    "read": "What time is it on the clock?",
+    "say24": {
+      "1": "{h} hundred",
+      "2": "{h} {m}"
+    },
+    "read24": "What time is it? It is {part} now. Choose the time as a digital clock shows it.",
+    "parts": {
+      "morning": "morning",
+      "day": "afternoon",
+      "evening": "evening"
+    },
+    "explain": {
+      "hourOn": "The short black hand shows the hours. It points at {h}.",
+      "hourPast": "The short black hand shows the hours. It has passed {h} but has not reached {next} yet — so the hour is {h}.",
+      "minuteTop": "The long red hand shows the minutes. It points straight up, at 12: exactly on the hour, zero minutes.",
+      "minuteCount": "The long red hand shows the minutes. It points at {n}. Count in fives: {count} — that is {m} minutes.",
+      "minuteTimes": "The long red hand shows the minutes. It points at {n}, and each number is five minutes: {n} fives make {m} minutes.",
+      "afternoon": "It is {part} now, and after noon the hours keep counting: 12 and {h} more make {H}.",
+      "morning": "It is {part} now: before noon a digital clock shows the same hour — {H}.",
+      "so": "So the time is {time}."
+    }
   },
   "maze": {
     "negatives": " Now there are negative numbers here too — with a minus sign. They divide in just the same way: minus twelve can be divided by three, because twelve can be divided by three.",

@@ -3,6 +3,7 @@ import type { GameKind } from '@/games/language/tasks';
 import type { LanguageTexts, PackView } from '@/games/language/grammar/types';
 import { fill } from '@/core/language/fill';
 import J from '@/locales/app/pl/games/language.json';
+import { wordSearchTexts } from './wordSearch';
 
 /** The Language galaxy in Polish. */
 
@@ -128,4 +129,5 @@ export const pl: LanguageTexts = {
   sentenceHint: (p, first) =>
     p.native ? fill(J.sentenceHint[1], { first }) : J.sentenceHint[2],
   ends: [J.ends[0], J.ends[1]],
+  wordSearch: wordSearchTexts(J.wordSearch, (lang) => J.packName[lang]),
 };

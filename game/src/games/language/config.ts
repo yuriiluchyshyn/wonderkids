@@ -8,9 +8,12 @@ import { UK } from './content/uk';
 import { languageTexts } from './grammar';
 import type { PackView, Stage } from './grammar/types';
 import { GAME_KINDS, LANGUAGE_STEPS, STAGE, type GameKind, type LangPack } from './tasks';
+import { WORD_SEARCH, WORD_SEARCH_STAGE, WORD_SEARCH_STEPS } from './wordSearch';
 import TEXTS from '@/locales/app/uk/games/language.json';
 
 const J = TEXTS.config;
+/** «Пошук слів»: its name in each pack's own language. */
+const J_WS = TEXTS.wordSearch;
 
 export const PACKS: LangPack[] = [UK, EN, PL];
 
@@ -22,7 +25,10 @@ const textsIn = (lang: LangCode): ModuleTexts => {
   return {
     title: T.title,
     games: Object.fromEntries(
-      PACKS.flatMap((pack) => GAME_KINDS.map((kind) => [`${pack.prefix}${kind}`, { blurb: pack.cards[kind].blurb, ...T.card(view(pack, lang), kind), label: pack.cards[kind].label }])),
+      PACKS.flatMap((pack) => [
+        ...GAME_KINDS.map((kind) => [`${pack.prefix}${kind}`, { blurb: pack.cards[kind].blurb, ...T.card(view(pack, lang), kind), label: pack.cards[kind].label }]),
+        [`${pack.prefix}${WORD_SEARCH}`, { ...T.wordSearch.card(view(pack, lang)), label: J_WS.label[pack.lang] }],
+      ]),
     ),
     groups: Object.fromEntries(PACKS.map((pack) => [pack.lang, T.packName(pack.lang)])),
   };
@@ -76,4 +82,33 @@ function cardsOf(pack: LangPack): GameCard[] {
   }));
 }
 
-export const GAMES: GameCard[] = PACKS.flatMap(cardsOf);
+/** «Пошук слів» came out after the other language games. */
+const WORD_SEARCH_RELEASE = '2026-10-12T00:00:00Z';
+
+/** «Пошук слів» of a pack: its card, in the pack's own name and in Ukrainian words about it. */
+function wordSearchCard(pack: LangPack): GameCard {
+  const card = languageTexts('uk').wordSearch.card(view(pack));
+  return {
+    id: `${pack.prefix}${WORD_SEARCH}`,
+    langs: languageTexts.langs,
+    gameId: `language_${pack.lang}_${WORD_SEARCH}`,
+    label: J_WS.label[pack.lang],
+    icon: '🔎',
+    blurb: card.blurb,
+    intro: card.intro,
+    difficulty: [1, 3],
+    mechanics: Mechanics.WordSearch,
+    // A table holds several words to find: five tables a level.
+    tasksPerLevel: 5,
+    introFor: (step: number, lang?: LangCode) => {
+      const at = (Object.keys(WORD_SEARCH_STAGE) as (keyof typeof WORD_SEARCH_STAGE)[]).find((stage) => WORD_SEARCH_STAGE[stage] === step);
+      return at && languageTexts(lang).wordSearch.stage(at);
+    },
+    steps: WORD_SEARCH_STEPS,
+    group: { id: pack.lang, icon: pack.flag, label: pack.name },
+    publishDate: WORD_SEARCH_RELEASE,
+    hasText: true,
+  };
+}
+
+export const GAMES: GameCard[] = PACKS.flatMap((pack) => [...cardsOf(pack), wordSearchCard(pack)]);

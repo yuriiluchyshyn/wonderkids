@@ -641,5 +641,27 @@
         }
       }
     }
+  },
+  "wordSearch": {
+    "own": {
+      "blurb": "Find the words hidden in a table of letters",
+      "intro": "Words are hiding in the table of letters! Find each one and slide your finger over it, from the first letter to the last. You can also tap the first letter and then the last one."
+    },
+    "other": {
+      "blurb": "{name}: find the words hidden in a table of letters",
+      "intro": "{name}! The words of the pictures are hiding in the table of letters. Find each one and slide your finger over it, from the first letter to the last. Tap the speaker to hear a word."
+    },
+    "ask": "Find all the words in the table and slide your finger over them.",
+    "askByEar": "Find the words of the pictures in the table. Tap a speaker to hear a word.",
+    "hint": {
+      "straight": "The first letters of the words are glowing. Slide from them to the right or down.",
+      "any": "The first letters of the words are glowing. A word can go any way — slanting, and even backwards."
+    },
+    "stage": {
+      "down": "Now the words hide not only in the rows but in the columns too — from top to bottom.",
+      "slant": "Now words can slant too! Slide your finger along the diagonal.",
+      "back": "Careful: now words can stand backwards — from right to left or from bottom to top.",
+      "byEar": "Now there are no words beside the pictures. Remember how the word is spelled — or listen to it — and find it in the table."
+    }
   }
 }

@@ -2,6 +2,7 @@ import type { LangCode } from '@/core/language';
 import type { LanguageTexts, PackView } from '@/games/language/grammar/types';
 import { fill } from '@/core/language/fill';
 import J from '@/locales/app/uk/games/language.json';
+import { wordSearchTexts } from './wordSearch';
 
 /** The Language galaxy in Ukrainian. */
 
@@ -104,4 +105,5 @@ export const uk: LanguageTexts = {
   sentenceHint: (p, first) =>
     p.native ? fill(J.sentenceHint[1], { first }) : J.sentenceHint[2],
   ends: [J.ends[0], J.ends[1]],
+  wordSearch: wordSearchTexts(J.wordSearch, (lang) => J.packName[lang]),
 };

@@ -63,3 +63,26 @@ Images under a CC licence must stay credited — keep this file with them.
 | pulyui.webp | [Іван_Пулюй.png](https://commons.wikimedia.org/wiki/File:%D0%86%D0%B2%D0%B0%D0%BD_%D0%9F%D1%83%D0%BB%D1%8E%D0%B9.png) | Public domain | Unknown authorUnknown author |
 | stephenson.webp | [George_Stephenson_-_Project_Gutenberg_etext_13103.jpg](https://commons.wikimedia.org/wiki/File:George_Stephenson_-_Project_Gutenberg_etext_13103.jpg) | Public domain | Unknown author |
 | tymchenko.webp | [Joseph_Timchenko.jpg](https://commons.wikimedia.org/wiki/File:Joseph_Timchenko.jpg) | Public domain | Unknown authorUnknown author The original uploader was Bogdanov-62 at Russian Wikipedia. |
+| bekker.webp | [Mieczysław_Bekker.png](https://commons.wikimedia.org/wiki/File:Mieczys%C5%82aw_Bekker.png) | Public domain | Autor nieznany |
+| chopin.webp | [Chopin,_by_Wodzinska.JPG](https://commons.wikimedia.org/wiki/File:Chopin%2C_by_Wodzinska.JPG) | Public domain | Maria Wodzińska |
+| chrobry.webp | [Bacciarelli_-_Chrobry.jpeg](https://commons.wikimedia.org/wiki/File:Bacciarelli_-_Chrobry.jpeg) | Public domain | Marcello Bacciarelli |
+| czochralski.webp | [J._Czochralski_ca_1910.jpg](https://commons.wikimedia.org/wiki/File:J._Czochralski_ca_1910.jpg) | Public domain | Unknown authorUnknown author |
+| funk.webp | [Casimir_Funk_01.jpg](https://commons.wikimedia.org/wiki/File:Casimir_Funk_01.jpg) | Public domain | Unknown photographer |
+| hermaszewski.webp | [Miroslaw_H.jpg](https://commons.wikimedia.org/wiki/File:Miroslaw_H.jpg) | Public domain | Unknown authorUnknown author |
+| jadwiga.webp | [Jadwiga_by_Bacciarelli.jpg](https://commons.wikimedia.org/wiki/File:Jadwiga_by_Bacciarelli.jpg) | Public domain | Marcello Bacciarelli |
+| jagiello.webp | [Jogaila_of_Lithuania.Image_from_around_1475-1480.jpg](https://commons.wikimedia.org/wiki/File:Jogaila_of_Lithuania.Image_from_around_1475-1480.jpg) | Public domain | Unknown authorUnknown author |
+| kazimierz.webp | [Kazimierz_III_Wielki_(275138).jpg](https://commons.wikimedia.org/wiki/File:Kazimierz_III_Wielki_%28275138%29.jpg) | Public domain | Jan Matejko |
+| korczak.webp | [Janusz_Korczak_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Janusz_Korczak_%28cropped%29.jpg) | Public domain | portret bezautorski |
+| kosacki.webp | [Józef_Kosacki.jpg](https://commons.wikimedia.org/wiki/File:J%C3%B3zef_Kosacki.jpg) | Public domain | unknown-anonymous |
+| kosciuszko.webp | [Karl_G_Schweikart_-_Tadeusz_Kościuszko_(ÖaL).jpg](https://commons.wikimedia.org/wiki/File:Karl_G_Schweikart_-_Tadeusz_Ko%C5%9Bciuszko_%28%C3%96aL%29.jpg) | Public domain | Karl Gottlieb Schweikart |
+| lem.webp | [St_Lem_resize.jpg](https://commons.wikimedia.org/wiki/File:St_Lem_resize.jpg) | CC BY-SA 3.0 | Courtesy of Lem's secretary, Wojciech Zemek. Resize and digital processing by Masur. |
+| magnuski.webp | [1959-Magnuski-Henryk-W-Portrait.jpg](https://commons.wikimedia.org/wiki/File:1959-Magnuski-Henryk-W-Portrait.jpg) | CC BY-SA 3.0 | Hank Magnuski |
+| matejko.webp | [Matejko_Self-portrait.jpg](https://commons.wikimedia.org/wiki/File:Matejko_Self-portrait.jpg) | Public domain | Jan Matejko |
+| mickiewicz.webp | [Adam_Mickiewicz_według_dagerotypu_paryskiego_z_1842_roku.jpg](https://commons.wikimedia.org/wiki/File:Adam_Mickiewicz_wed%C5%82ug_dagerotypu_paryskiego_z_1842_roku.jpg) | Public domain | Unknown authorUnknown author |
+| mieszko.webp | [Mieszko_I_(274939)_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Mieszko_I_%28274939%29_%28cropped%29.jpg) | Public domain | Jan Matejko |
+| rejewski.webp | [Marian_Rejewski_1932_small.jpg](https://commons.wikimedia.org/wiki/File:Marian_Rejewski_1932_small.jpg) | CC BY-SA 2.5 | Unknown authorUnknown author |
+| sobieski.webp | [John_III_Sobieski_of_Poland.PNG](https://commons.wikimedia.org/wiki/File:John_III_Sobieski_of_Poland.PNG) | Public domain | Marcello Bacciarelli |
+| szymborska.webp | [Wisława_Szymborska_2009.10.23_(1).jpg](https://commons.wikimedia.org/wiki/File:Wis%C5%82awa_Szymborska_2009.10.23_%281%29.jpg) | CC BY 3.0 | Mariusz Kubik |
+| weigl.webp | [Rudolf_Weigl_2.jpg](https://commons.wikimedia.org/wiki/File:Rudolf_Weigl_2.jpg) | Public domain | Unknown authorUnknown author |
+| zamenhof.webp | [Zamenhof_portreto.jpg](https://commons.wikimedia.org/wiki/File:Zamenhof_portreto.jpg) | Public domain | Unknown authorUnknown author |
+| zeglen.webp | [Zeglen200.jpg](https://commons.wikimedia.org/wiki/File:Zeglen200.jpg) | Public domain | Unknown author |

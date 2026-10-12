@@ -1,0 +1,59 @@
+.explain {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.clock {
+  flex: 0 0 auto;
+  width: clamp(84px, 26vw, 120px);
+  height: auto;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.line {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: clamp(0.8rem, 3.5vw, 0.95rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--surface-ink);
+}
+
+/* A short bar in the colour of what the line speaks of — the hands are drawn in these. */
+.mark {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 6px;
+  margin-top: 0.45em;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+/* The hands as they are drawn: the hour hand short and thick, the minute hand long and thin. */
+.line[data-tone='hour'] .mark {
+  height: 8px;
+  background: #0f172a;
+  box-shadow: inset -6px 0 0 var(--surface);
+}
+
+.line[data-tone='minute'] .mark {
+  background: #ef4444;
+}
+
+.line[data-tone='day'] .mark {
+  background: #f59e0b;
+}
+
+.line[data-tone='sum'] {
+  font-weight: 800;
+}

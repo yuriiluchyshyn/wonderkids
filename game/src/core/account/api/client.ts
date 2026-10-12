@@ -8,6 +8,7 @@
  * on this machine, a preview deployment through the rewrite in vercel.json.
  */
 
+import type { VisitVia } from '@pulsar/platform';
 import type { SignupSource } from '@/core/app/attribution';
 import type { LangCode } from '@/core/language';
 
@@ -230,7 +231,7 @@ export const api = {
    * long the trial lasts and, when the visit was counted, the ticket to report
    * later how it ended.
    */
-  visit(arrival: { link: string | null; mode: 'demo'; via: 'link' | 'site'; lang: string; referrer: string | null }) {
+  visit(arrival: { link: string | null; mode: 'demo'; via: VisitVia; lang: string; referrer: string | null; game?: string | null }) {
     return request<{ ok: true; demoMinutes: number; visit?: number; token?: string }>('/api/health', { method: 'POST', body: arrival });
   },
 
@@ -345,8 +346,10 @@ export interface MarketingVisit {
   /** Null when the link has since been deleted. */
   linkName: string | null;
   mode: LinkMode;
-  /** `site` — the trial game was opened with the button on our own site. */
-  via: 'link' | 'site';
+  /** `site` — the trial game was opened with the button on our own site; `page` — with the one on a game's page there. */
+  via: VisitVia;
+  /** The game the trial was opened in (`geography:flags`); null — the hub. */
+  game: string | null;
   country: string | null;
   lang: string | null;
   device: string | null;

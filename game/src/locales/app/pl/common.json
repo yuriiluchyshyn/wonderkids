@@ -374,11 +374,12 @@
     "music": "Muzyka"
   },
   "path": {
-    "caption": "To twoja ścieżka — dotknij kroku, który masz już za sobą, żeby go powtórzyć. {chests} kryją skarby!",
+    "caption": "To twoja ścieżka — dotknij kroku, który masz już za sobą, żeby go powtórzyć. {chests} kryją skarby, a na krokach z {key} czeka klucz wiedzy!",
     "step": "Krok {n}",
     "current": " (obecny)",
     "chest": " (ukryty skarb)",
-    "locked": " (zamknięty)"
+    "locked": " (zamknięty)",
+    "key": " (klucz wiedzy)"
   },
   "drawer": {
     "label": "Profil i skarbonka",
@@ -442,8 +443,9 @@
       "UI_NUMBER_MAZE": "Dotknij sąsiedniej kratki, żeby zrobić krok.",
       "UI_BUBBLE_POP": "Przebijaj bańki po kolei: dotknij tej, która ma być następna.",
       "UI_DOT_TO_DOT": "Dotykaj gwiazdek po kolei albo prowadź palec od gwiazdki do gwiazdki — pojawi się między nimi linia.",
-      "UI_COLOR_MIX": "Dotknij dwóch farb, żeby wlać je do kociołka i zmieszać.",
-      "UI_LETTER_GRID": "Przeciągnij każdą literę na jej miejsce w tabeli. Albo dotknij litery, a potem pustej kratki."
+      "UI_COLOR_MIX": "Dotykaj farb, żeby wlać je do kociołka i zmieszać.",
+      "UI_LETTER_GRID": "Przeciągnij każdą literę na jej miejsce w tabeli. Albo dotknij litery, a potem pustej kratki.",
+      "UI_WORD_SEARCH": "Przesuń palcem po słowie — od pierwszej litery do ostatniej. Albo dotknij pierwszej litery, a potem ostatniej."
     },
     "game": {
       "tts": "Nie wiesz, co tu jest napisane? Dotknij głośnika, a przeczytam!",
@@ -500,13 +502,6 @@
     "slow": "Wolno",
     "medium": "Umiarkowanie",
     "fast": "Szybko"
-  },
-  "celebration": {
-    "balloons": "Baloniki",
-    "balls": "Piłki",
-    "stars": "Gwiazdki",
-    "fireworks": "Fajerwerki",
-    "candy": "Cukierki"
   },
   "currency": {
     "UAH": "Hrywna",
@@ -613,23 +608,14 @@
       "hint": "Przy pierwszym spotkaniu gra tłumaczy dziecku, do czego służy każdy przycisk. Podpowiedź zamknięta przez dziecko już nie wraca. Przeczytane podpowiedzi: {count}.",
       "reset": "Pokaż ponownie"
     },
-    "celebration": {
-      "title": "🎉 Świętowanie zwycięstwa"
-    },
     "grid": {
       "title": "🔢 Siatka odpowiedzi",
       "label": "Siatka odpowiedzi",
       "hint": "Im więcej odpowiedzi, tym trudniej zgadywać na chybił trafił."
     },
-    "facts": {
-      "title": "💡 Ciekawostki",
-      "hint": "Po dobrej odpowiedzi gra opowiada krótką ciekawostkę o tym, co dziecko właśnie zrobiło, i czeka, aż zostanie przeczytana. Po wyłączeniu następne zadanie zaczyna się od razu.",
-      "on": "Opowiadaj ciekawostki",
-      "off": "Bez ciekawostek"
-    },
     "money": {
-      "title": "💰 Pieniądze w grze „Sklep”",
-      "hint": "Jakimi monetami i banknotami dziecko płaci w sklepie.",
+      "title": "💰 Waluta w grach",
+      "hint": "Jakimi monetami i banknotami dziecko liczy i płaci w grach.",
       "auto": "Dopóki nic nie wybierzesz, pieniądze odpowiadają językowi gry: hrywny, dolary albo złote.",
       "chosen": "Pieniądze zostały wybrane ręcznie — zmiana języka już ich nie zmieni."
     },
@@ -773,23 +759,23 @@
         "many": "Otwarcie kosztuje {count} kluczy.",
         "other": "Otwarcie kosztuje {count} klucza."
       },
-      "saving": "{name}. {about} {price} Zbierz jeszcze {missing}: klucze dostaje się za nowe kroki w każdej grze.",
+      "saving": "{name}. {about} {price} Zbierz jeszcze {missing}: klucze czekają na ścieżce każdej gry — widać je na ścieżce 🗝️.",
       "ready": "{name}. {about} {price} Można otwierać!",
       "opened": "{name}. Otwarte!",
       "unlock": "Otwórz"
     },
     "stations": {
       "title": "Stacje wiedzy",
-      "hint": "Stacje otwiera się kluczami wiedzy {key}. Klucz dostaje się za każdy nowy stopień w każdej grze. Żeby polecieć dalej z planety {planet}, otwórz co najmniej {need}.",
+      "hint": "Stacje otwiera się kluczami wiedzy {key}. Klucz czeka na ścieżce każdej gry co 3–5 kroków — widać go na ścieżce. Żeby polecieć dalej z planety {planet}, otwórz co najmniej {need}.",
       "closed": "Planeta {planet} jest jeszcze zamknięta — jej stacje otworzą się, gdy tu dolecisz. Na razie otwieraj stacje na planecie {frontier}."
     },
     "keys": {
       "label": "Klucze wiedzy: {count}",
       "about": {
-        "one": "Masz {count} klucz wiedzy. Klucz dostaje się za każdy nowy krok w każdej grze. Kluczami otwiera się stacje wiedzy.",
-        "few": "Masz {count} klucze wiedzy. Klucz dostaje się za każdy nowy krok w każdej grze. Kluczami otwiera się stacje wiedzy.",
-        "many": "Masz {count} kluczy wiedzy. Klucz dostaje się za każdy nowy krok w każdej grze. Kluczami otwiera się stacje wiedzy.",
-        "other": "Masz {count} klucza wiedzy. Klucz dostaje się za każdy nowy krok w każdej grze. Kluczami otwiera się stacje wiedzy."
+        "one": "Masz {count} klucz wiedzy. Klucze czekają na ścieżce każdej gry co 3–5 kroków. Kluczami otwiera się stacje wiedzy.",
+        "few": "Masz {count} klucze wiedzy. Klucze czekają na ścieżce każdej gry co 3–5 kroków. Kluczami otwiera się stacje wiedzy.",
+        "many": "Masz {count} kluczy wiedzy. Klucze czekają na ścieżce każdej gry co 3–5 kroków. Kluczami otwiera się stacje wiedzy.",
+        "other": "Masz {count} klucza wiedzy. Klucze czekają na ścieżce każdej gry co 3–5 kroków. Kluczami otwiera się stacje wiedzy."
       }
     },
     "residents": {
@@ -842,7 +828,7 @@
       },
       "stations": {
         "text": "Stacje wiedzy",
-        "how": "Otwórz stacje wiedzy na planecie {planet}: jest już {have} z {need}. Otwiera się je kluczami wiedzy 🗝️ — klucz dostaje się za każdy nowy stopień w każdej grze.",
+        "how": "Otwórz stacje wiedzy na planecie {planet}: jest już {have} z {need}. Otwiera się je kluczami wiedzy 🗝️ — klucz czeka na ścieżce każdej gry co 3–5 kroków.",
         "go": "Do stacji"
       },
       "residents": {
@@ -963,7 +949,16 @@
     "cauldron": "Kociołek",
     "paint": "Farba: {name}",
     "pie": "Zamalowano {filled} z {total}",
-    "readAloud": "Przeczytaj na głos: {text}"
+    "readAloud": "Przeczytaj na głos: {text}",
+    "wordTable": "Tabela liter",
+    "letters": {
+      "one": "{count} litera",
+      "few": "{count} litery",
+      "many": "{count} liter",
+      "other": "{count} litery"
+    },
+    "lessonOk": "Rozumiem!",
+    "lessonReplay": "Pokaż jeszcze raz"
   },
   "map": {
     "north_america": "Ameryka Północna",

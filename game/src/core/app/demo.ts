@@ -4,7 +4,9 @@
  * It is opened by an address — `/try` on the child's portal, with the code of
  * the owner's link when it was reached by one (`/try?l=insta-bio`), or
  * `?via=site` when it was the button on our own site. So an ad, a profile or
- * a flyer can lead straight into play.
+ * a flyer can lead straight into play. With `?game=geography:flags` it opens
+ * in that game instead of the hub — what a game's page on the site leads to
+ * (`?via=page`): whoever came for the flags gets the flags.
  *
  * What it keeps:
  *
@@ -20,11 +22,13 @@
  * When the time is up the game stops where it is — mid-task too — and
  * `DemoOver` asks the child, kindly, to call a parent.
  */
-import { TRIAL_PATH, VIA_PARAM, linkOfQuery, queryOfSource } from '@pulsar/platform';
+import { TRIAL_PATH, gameOfQuery, linkOfQuery, queryOfSource, viaOfQuery, type GameRef, type VisitVia } from '@pulsar/platform';
 import { create } from 'zustand';
 import { api } from '@/core/account/api/client';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { signupSource } from '@/core/app/attribution';
+import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
+import { speaks } from '@/core/game/kernel/types';
 import { portalUrl } from '@/core/app/portal';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { tApp, useDeviceLang } from '@/core/translator';
@@ -47,7 +51,7 @@ const GUEST_TIME = { sessionDurationMinutes: 120, cooldownMinutes: 0, maxDailyMi
 interface DemoSession {
   /** The code of the link that led here, if one did. */
   link: string | null;
-  via: 'link' | 'site';
+  via: VisitVia;
   minutes: number;
   /** The counted visit — to report how the trial ended. */
   ticket: { visit: number; token: string } | null;
@@ -104,21 +108,21 @@ export function beginDemo(): void {
   const signedIn = Boolean(useAuthStore.getState().token);
 
   if (asked) {
-    const query = new URLSearchParams(search);
+    const game = playable(gameOfQuery(search));
     const fresh: DemoSession = {
       link: linkOfQuery(search) ?? null,
-      via: query.get(VIA_PARAM) === 'site' ? 'site' : 'link',
+      via: viaOfQuery(search),
       minutes: DEMO_MINUTES_FALLBACK,
       ticket: null,
     };
-    // The address has done its job: the hub lives at «/», and a reload must not count again.
-    window.history.replaceState(null, '', '/');
+    // The address has done its job: a reload must not count again. The hub lives at «/»; a game asked for by name — at its own address.
+    window.history.replaceState(null, '', game ? `/play/${game.module}/${game.sub}` : '/');
     if (!signedIn) {
       writeSession(fresh);
       useDemo.setState({ active: true, minutes: fresh.minutes, session: fresh });
     }
     api
-      .visit({ link: fresh.link, mode: 'demo', via: fresh.via, lang: useDeviceLang.getState().lang, referrer: referrerHost() })
+      .visit({ link: fresh.link, mode: 'demo', via: fresh.via, lang: useDeviceLang.getState().lang, referrer: referrerHost(), game: game ? `${game.module}:${game.sub}` : null })
       .then(({ demoMinutes, visit, token }) => {
         if (signedIn || !useDemo.getState().active) return;
         const counted: DemoSession = { ...fresh, minutes: demoMinutes, ticket: visit && token ? { visit, token } : null };
@@ -135,6 +139,17 @@ export function beginDemo(): void {
   if (!session) return;
   if (signedIn) writeSession(null);
   else useDemo.setState({ active: true, minutes: session.minutes, session });
+}
+
+/**
+ * The game a link names, if the trial can open in it: it exists and is written
+ * in the language this visitor is offered. Anything else — a game since
+ * removed, a typo — and the trial opens in the hub, as it always did.
+ */
+function playable(game: GameRef | undefined): GameRef | undefined {
+  if (!game) return undefined;
+  const sub = moduleRegistry.get(game.module)?.subCategories.find((candidate) => candidate.id === game.sub);
+  return sub && speaks(sub, useDeviceLang.getState().lang) ? game : undefined;
 }
 
 /** The site that sent the visitor here, if the browser tells. */

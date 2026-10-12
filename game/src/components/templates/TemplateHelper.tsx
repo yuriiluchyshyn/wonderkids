@@ -2,13 +2,19 @@ import type { GameViewProps } from '@/core/game/kernel/types';
 import type { TemplatePayload } from '@/core/game/templates/types';
 import { ClueHint } from './ClueHint';
 import { CountingTowers } from './CountingTowers';
+import { ExplainHint } from './ExplainHint';
 import { GroupsHint } from './GroupsHint';
 import styles from './TemplateHelper.module.css';
 
-/** Does this task bring something to count or a picture of its clues? (The shell opens the helper panel only then.) */
+/** Does this task bring something to count, a picture of its clues or a worked explanation? (The shell opens the helper panel only then.) */
 export function hasHelper(task: { payload: unknown }): boolean {
   const payload = task.payload as Partial<TemplatePayload> | null;
-  return Boolean(payload?.counting || payload?.clue);
+  return Boolean(payload?.counting || payload?.clue || payload?.explain);
+}
+
+/** Does this task explain itself when the child has not answered for a long while? */
+export function explainsOnIdle(task: { payload: unknown } | null): boolean {
+  return Boolean((task?.payload as Partial<TemplatePayload> | null)?.explain);
 }
 
 /**
@@ -18,7 +24,14 @@ export function hasHelper(task: { payload: unknown }): boolean {
  * count it out or to look again.
  */
 export function TemplateHelper({ task }: GameViewProps) {
-  const { counting, clue } = task.payload as TemplatePayload;
+  const { counting, clue, explain } = task.payload as TemplatePayload;
+  if (explain) {
+    return (
+      <div className={styles.helper}>
+        <ExplainHint explain={explain} />
+      </div>
+    );
+  }
   if (clue) {
     return (
       <div className={styles.helper}>

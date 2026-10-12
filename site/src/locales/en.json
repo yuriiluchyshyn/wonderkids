@@ -31,7 +31,7 @@
     }
   },
   "games": {
-    "title": "50 games across nine galaxies",
+    "title": "56 games across nine galaxies",
     "sub": "Here subjects are galaxies and games are planets. This is what awaits on them.",
     "math": {
       "1": "Addition, subtraction, multiplication, division",
@@ -49,7 +49,7 @@
       "2": "Letter bubbles, word chains, rhymes and sentences",
       "3": "Five games in English, and the same five in Ukrainian and in Polish — each with a voice of its own",
       "4": "50 steps in every game",
-      "tag": "15 games",
+      "tag": "18 games",
       "title": "Language"
     },
     "logic": {
@@ -66,7 +66,7 @@
       "title": "Astronomy"
     },
     "art": {
-      "1": "Color mixer: two paints make a new color",
+      "1": "Color mixer: two or three paints, or glitter, make a new color",
       "title": "Art"
     },
     "geography": {
@@ -81,9 +81,9 @@
     "history": {
       "1": "“Time Machine”: 100 tasks about what came first",
       "2": "50 dinosaurs: what to feed them and how to tell them apart",
-      "3": "Great people of the world and of Ukraine",
-      "4": "Inventions of the world and of Ukraine",
-      "tag": "6 games",
+      "3": "Great people of the world, of Ukraine and of Poland",
+      "4": "Inventions of the world, of Ukraine and of Poland",
+      "tag": "8 games",
       "title": "History"
     },
     "ecology": {
@@ -102,13 +102,11 @@
   },
   "numbers": {
     "games": "learning games",
-    "galaxies": "subject galaxies",
+    "galaxies": "subject",
     "levels": "levels across all games",
     "ages": "age groups",
     "themes": "visual themes",
-    "languages": "app languages",
-    "gamesCount": "50",
-    "levelsCount": "1528"
+    "languages": "app languages"
   },
   "world": {
     "title": "A planet of their own that keeps growing",
@@ -123,7 +121,7 @@
     },
     "stations": {
       "title": "Stations of knowledge",
-      "text": "Every new step in any game earns a key of knowledge. The keys open stations on the planet: an observatory, a library, a laboratory of numbers."
+      "text": "Every few steps of any game, a key of knowledge waits for the child. The keys open stations on the planet: an observatory, a library, a laboratory of numbers."
     },
     "theme": {
       "title": "A favorite theme",
@@ -168,7 +166,7 @@
     "title": "Questions parents ask about Pulsar Kids",
     "what": {
       "title": "What is Pulsar Kids?",
-      "text": "Pulsar Kids is a set of learning games for kids aged 4–10, played in a browser on a phone, tablet or computer. Across 50 games children practice math, language, logic, geography, history, astronomy, ecology, nature and art, while parents set the screen time."
+      "text": "Pulsar Kids is a set of learning games for kids aged 4–10, played in a browser on a phone, tablet or computer. Across 56 games children practice math, language, logic, geography, history, astronomy, ecology, nature and art, while parents set the screen time."
     },
     "age": {
       "title": "What ages is Pulsar Kids for?",
@@ -232,7 +230,6 @@
   },
   "footer": {
     "tagline": "Learning that feels like an adventure.",
-    "game": "The game",
     "updated": "Updated",
     "privacy": "Privacy policy",
     "terms": "Terms of use",
@@ -272,5 +269,92 @@
     "thanks": "Every message is read, and each one helps make the game better.",
     "failed": "It could not be sent. Check your connection and try again.",
     "send": "Send"
+  },
+  "catalog": {
+    "home": "Home",
+    "all": "All games",
+    "indexTitle": "All Pulsar Kids learning games for kids aged 4–10",
+    "indexMetaTitle": "All learning games for kids aged 4–10",
+    "indexLead": "Pulsar Kids has {games}, galaxy by galaxy. Each game has a page of its own with real tasks from it — and a button that opens that very game with no sign-up.",
+    "indexDescription": "All Pulsar Kids learning games by subject: math, language, logic, geography, history, astronomy, ecology, nature and art. Each opens with no sign-up.",
+    "galaxyTitle": "{galaxy}: learning games for kids aged {from}–{to}",
+    "galaxyMetaTitle": "{galaxy} games for kids aged {from}–{to}",
+    "galaxyLead": {
+      "one": "{count} game in the {galaxy} galaxy. It has a page of its own with real tasks — and it opens with no sign-up.",
+      "other": "{count} games in the {galaxy} galaxy. Each has a page of its own with real tasks — and opens with no sign-up."
+    },
+    "galaxyDescription": "{galaxy} games for kids aged {from}–{to}: {games}. No ads, no losing, no sign-up to try.",
+    "gameMetaTitle": "{game} · {galaxy} game for kids aged {from}–{to}",
+    "gameEyebrow": "{galaxy} · a learning game for ages {from}–{to}",
+    "gameDescription": "{game} — {blurb}. A {galaxy} game for ages {from}–{to}; play with no sign-up.",
+    "tells": "What the game tells a child before play",
+    "facts": "About the game",
+    "ages": "Age",
+    "agesValue": "{from}–{to} years",
+    "difficulty": "Difficulty",
+    "difficultyValue": "{stars} of 3 stars",
+    "difficultyRange": "from {from} to {to} of 3 stars",
+    "size": "Length",
+    "sizePath": "{steps} steps, each a little harder than the one before",
+    "sizeFree": "{tasks} different tasks, free play in any order",
+    "sizeFreePlain": "free play, every task from the start",
+    "level": "One level",
+    "levelValue": {
+      "one": "{count} task",
+      "other": "{count} tasks"
+    },
+    "how": "How it is played",
+    "set": "Part of",
+    "langs": "Played in",
+    "samples": "Tasks from the game",
+    "samplesLead": "These are real tasks, taken from the first, the middle and the last step — so you can see where the game begins and where it leads.",
+    "samplesLeadFree": "Real tasks from the game.",
+    "step": "Step {step} of {steps}",
+    "answers": "Answers on the board",
+    "right": "Right answer",
+    "try": "Try this game now",
+    "tryNote": "No sign-up and no payment — the game opens straight away.",
+    "more": "More games in the {galaxy} galaxy",
+    "otherGalaxies": "Other galaxies",
+    "gamesCount": {
+      "one": "{count} game",
+      "other": "{count} games"
+    },
+    "mechanics": {
+      "UI_GRID_CHOICE": "tap the right answer among several",
+      "UI_DRAG_MATCH": "drag each thing to its pair",
+      "UI_BALANCE_SCALE": "put the right weight on the scales",
+      "UI_MAP_PUZZLE": "find the place on a map of the world",
+      "UI_SORTER_BINS": "sort things into the right bins",
+      "UI_CHRONO_SEQUENCE": "put the cards in the right order",
+      "UI_LETTER_GRID": "put letters in their places in a table",
+      "UI_WORD_SEARCH": "find words hidden in a table of letters",
+      "UI_BUBBLE_POP": "pop the bubbles in the right order"
+    },
+    "langNames": {
+      "uk": "Ukrainian",
+      "en": "English",
+      "pl": "Polish"
+    },
+    "board": "On the board",
+    "about": {
+      "math": {
+        "add": "The game teaches addition — from 3 + 3 to three-digit numbers. The first steps keep the sums within ten, step twenty already asks 115 + 61, and the last one, the fortieth, sums such as 493 + 42. The child picks the answer out of nine numbers. Every level has ten sums: half of them new, half from earlier steps, so that what was learned stays learned.",
+        "sub": "The game teaches subtraction — from 6 − 5 to three-digit numbers with borrowing. Halfway along the path the sums look like 115 − 89, and on the last step like 493 − 139. The answer is picked out of nine numbers, and every level mixes new sums with familiar ones from earlier steps.",
+        "mul": "The game leads from multiplying by 2 to multiplying two-digit numbers. It begins with 2 × 5 and 2 × 4, step fifteen asks sums such as 6 × 8 and 7 × 10, and the last one, the thirtieth, 14 × 15. The answer is picked out of nine numbers, and what was learned comes back in later levels, so the times tables stay in the head.",
+        "div": "The game teaches sharing equally — from 10 ÷ 2 to sums such as 64 ÷ 8. It starts with dividing by 2, then by 4 and by 5, and so on, step after step — twenty-five in all. The answer is picked out of nine numbers, and familiar sums come back in later levels.",
+        "mixed": "All four operations, mixed up: the child never knows beforehand what the next sum will ask — adding, taking away, multiplying or dividing. Sixty steps lead from 6 − 6 and 2 × 4 to sums such as 1013 − 210. It is mental-math practice for children who already know each operation by itself.",
+        "fractions": "The game introduces fractions through things a child knows well: a pizza, a pie or a chocolate bar is cut into equal pieces, and some of them are colored in. The child names that part — 1/4, 2/3, 3/4 — and picks it out of nine fractions. The game has ten steps.",
+        "fraction_ops": "The next game after “Tasty Fractions”, for children who already know what a fraction is. First come sums with the same denominator (3/5 + 1/5), then with different ones (1/5 + 1/2), and after that subtracting, multiplying and dividing. Twenty steps; the answer is picked from several fractions.",
+        "geometry": "Three skills in one game. First the child builds a picture out of shapes and counts the squares in it. Then comes area — counting the colored squares. At the end of the path the child goes around a shape’s edge to find its perimeter, and looks for the shape with the biggest one. Twenty steps.",
+        "clock": "The game teaches reading a clock with hands. At first the face shows whole hours — 11:00, for example — and the child picks what time it is. Then minutes appear (4:10), and at the end of the path it is the other way round: a time is said in words or written as 17:05, and the child finds the clock that shows it."
+      },
+      "logic": {
+        "shadows": "The game trains an eye for shape: a picture has to be recognized by its black outline. At first there are three quite different things, then four and five, and the shadows grow more and more alike — things of one family, later near look-alikes, and with a blurred edge too. Each picture is dragged onto its shadow; a level has five tasks."
+      },
+      "language": {
+        "bubbles": "Three games in one, all about Ukrainian letters. First the child pops bubbles with letters in the order they stand in the alphabet. Then words are put together from syllables — “по-мі-дор”, “по-не-ді-лок”. At the end of the path the child hears a word and spells it from letters. Fifty steps, five tasks in every level."
+      }
+    }
   }
 }

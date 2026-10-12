@@ -61,16 +61,22 @@
   color: var(--text);
 }
 
+/* One row of task segments right under the race track, exactly as wide as
+   it: every segment shares the width, so an added task narrows them all
+   instead of starting a second row. */
 .dots {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  flex-wrap: nowrap;
+  gap: 3px;
+  margin-top: -2px;
+  padding: 0 6px;
 }
 
 .dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+  flex: 1 1 0;
+  min-width: 3px;
+  height: 8px;
+  border-radius: 999px;
   background: color-mix(in srgb, var(--ring) 35%, var(--surface));
 }
 

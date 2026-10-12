@@ -5,6 +5,7 @@ import { shuffle } from '@/core/utils/random';
 import { card, introSteps, templateTask, unlocked, withDistractors, type GameTasks } from '../shared/templateModule';
 import { RECALL_WINDOW, composeLevel } from '@/core/game/engine/recall';
 import { taskKey } from '@/core/game/engine/LevelEngine';
+import { asCue } from '@/core/game/cues/cues';
 import { UA_FIGURES, UA_INVENTIONS, WORLD_FIGURES, WORLD_INVENTIONS, type Achiever, type Invention, PICTURED, UNPICTURED_INVENTIONS } from './content/data';
 import { DINOSAURS } from './content/dinosaurs';
 import { PL_FIGURES, PL_INVENTIONS } from './content/poland';
@@ -15,12 +16,14 @@ import type { HistoryTexts } from './grammar/types';
 type Tasks = TaskInstance<TemplatePayload>[];
 type Config = Pick<TaskConfig, 'lang'>;
 
-/** The people of the Polish games have no portraits of their own yet. */
-const UNPORTRAYED = new Set(PL_FIGURES.filter((p) => !p.picture).map((p) => p.id));
-const portrait = (p: Achiever) => (UNPORTRAYED.has(p.id) ? undefined : `/people/${p.picture ?? p.id}.webp`);
+/** Every person has a portrait; `picture` borrows one drawn for somebody's twin (Kopernik = Copernicus). */
+const portrait = (p: Achiever) => `/people/${p.picture ?? p.id}.webp`;
 /** What the person is known for: a real picture where there is one, the emoji otherwise. */
-const work = (p: Achiever) => (PICTURED.has(p.id) ? `/things/${p.id}.webp` : undefined);
-const invented = (inv: Invention) => (UNPICTURED_INVENTIONS.has(inv.id) || inv.id.startsWith('pl_') ? undefined : `/things/inv_${inv.id}.webp`);
+const work = (p: Achiever) => {
+  const id = p.picture ?? p.id;
+  return PICTURED.has(id) ? `/things/${id}.webp` : undefined;
+};
+const invented = (inv: Invention) => (UNPICTURED_INVENTIONS.has(inv.id) ? undefined : `/things/inv_${inv.id}.webp`);
 const inventor = (inv: Invention) => (inv.face ? `/people/${inv.face}.webp` : undefined);
 const byId = <T extends { id: string }>(a: T, b: T) => a.id === b.id;
 
@@ -169,7 +172,7 @@ function figures(people: Achiever[], atStart: number, perStep: number) {
         template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji: p.face, image: portrait(p), caption: T.person(p.id).name },
-        options: withDistractors(p, known, 4, byId).map((o) => ({ ...card(o.id, o.symbol, T.person(o.id).symbol), image: work(o) })),
+        options: withDistractors(p, known, 4, byId).map((o) => asCue({ ...card(o.id, o.symbol, T.person(o.id).symbol), image: work(o) })),
         correctId: p.id,
         hint: T.person(p.id).fact,
       },
@@ -185,7 +188,7 @@ function figures(people: Achiever[], atStart: number, perStep: number) {
         template: Mechanics.GridChoice,
         cols: 2,
         stimulus: { emoji: p.symbol, image: work(p), caption: T.person(p.id).symbol },
-        options: withDistractors(p, known, 4, byId).map((o) => ({ ...card(o.id, o.face, T.person(o.id).name), image: portrait(o) })),
+        options: withDistractors(p, known, 4, byId).map((o) => asCue({ ...card(o.id, o.face, T.person(o.id).name), image: portrait(o) })),
         correctId: p.id,
         hint: T.person(p.id).hint,
       },
@@ -261,7 +264,7 @@ function inventions(list: Invention[], steps: number) {
           template: Mechanics.GridChoice,
           cols: 2,
           stimulus: { emoji: inv.emoji, image: invented(inv), caption: T.invention(inv.id).name },
-          options: withDistractors(inv, known, 4, byId).map((o) => ({ ...card(o.id, inventor(o) ? '🧑‍🔬' : undefined, T.invention(o.id).by), image: inventor(o) })),
+          options: withDistractors(inv, known, 4, byId).map((o) => asCue({ ...card(o.id, inventor(o) ? '🧑‍🔬' : undefined, T.invention(o.id).by), image: inventor(o) })),
           correctId: inv.id,
           hint: T.invention(inv.id).fact,
         },
@@ -278,7 +281,7 @@ function inventions(list: Invention[], steps: number) {
         {
           template: Mechanics.GridChoice,
           cols: 2,
-          options: withDistractors(inv, known, 4, byId).map((o) => ({ ...card(o.id, o.emoji, T.invention(o.id).name), image: invented(o) })),
+          options: withDistractors(inv, known, 4, byId).map((o) => asCue({ ...card(o.id, o.emoji, T.invention(o.id).name), image: invented(o) })),
           correctId: inv.id,
           hint: T.invention(inv.id).fact,
         },
