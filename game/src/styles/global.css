@@ -228,7 +228,9 @@ h3 {
   font-size: 112.5%;
 }
 
-:root[data-theme='minecraft'] * {
+/* Everything is a block — except what is round by nature and belongs to no theme
+   (the Solar System of the loading scene): mark such a thing with `data-round`. */
+:root[data-theme='minecraft'] *:not([data-round], [data-round] *) {
   border-radius: 0 !important;
 }
 

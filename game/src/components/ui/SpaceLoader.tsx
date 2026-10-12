@@ -21,10 +21,12 @@ const PLANETS = [
  * The loading scene: the Solar System of the site's front page — the Sun and
  * eight planets, the nearer the faster. Pure CSS; `index.html` shows the same
  * scene before the app boots, so there is no flash from one to the other.
+ * It is the same in every theme: `data-round` keeps the Minecraft theme, which
+ * squares every corner, from turning the planets and their orbits into boxes.
  */
 export function SpaceLoader({ label }: { label?: string }) {
   return (
-    <div className={styles.wrap} role="status" aria-live="polite">
+    <div className={styles.wrap} role="status" aria-live="polite" data-round>
       <div className={styles.system} aria-hidden>
         <span className={styles.sun} />
         {PLANETS.map((p) => (
