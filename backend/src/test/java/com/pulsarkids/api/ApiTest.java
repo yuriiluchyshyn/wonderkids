@@ -142,7 +142,7 @@ class ApiTest {
     // A browser of a language we do not speak is answered in the first of its list that we do, else in English.
     assertEquals("Сеанс завершився. Увійдіть ще раз.", call("GET", "/api/state", null, "Accept-Language", "de-DE,de;q=0.9,uk;q=0.8").text("message"));
     assertEquals("Your session has ended. Please sign in again.", call("GET", "/api/state", null, "Accept-Language", "de").text("message"));
-    Answer wrong = call("DELETE", "/api/state", null);
+    Answer wrong = call("DELETE", "/api/health", null);
     assertEquals(405, wrong.status());
     assertEquals("method_not_allowed", wrong.text("error"));
     Answer unreadable = call("POST", "/api/auth/login", "{not json", "Accept-Language", "pl");
@@ -605,5 +605,25 @@ class ApiTest {
     assertEquals(1, asAdmin("GET", "/api/admin/users", null).body().get("accounts").size());
     assertTrue(asParent("GET", "/api/state", null).body().get("state").isNull());
     assertEquals(404, call("POST", "/api/auth/child-login", Map.of("identifier", "marko_speed", "pin", "1234")).status());
+  }
+
+  @Test
+  @Order(16)
+  void aParentDeletesTheirOwnAccountAndAChildCannot() throws Exception {
+    String token = call("POST", "/api/auth/login", Map.of("email", "tato@example.com")).text("token");
+    call("PUT", "/api/state", json("{'state':{'children':[{'id':'kid-9','profile':{'name':'Ігор','nickname':'ihor_fast','pin':'4321'}}]}}"), "Authorization", "Bearer " + token);
+    String child = call("POST", "/api/auth/child-login", Map.of("identifier", "ihor_fast", "pin", "4321")).text("token");
+
+    // A child's session may not remove the family's account, and nobody does it unsigned.
+    Answer refused = call("DELETE", "/api/state", null, "Authorization", "Bearer " + child);
+    assertEquals(403, refused.status());
+    assertEquals("parent_only", refused.text("error"));
+    assertEquals(401, call("DELETE", "/api/state", null).status());
+    assertEquals(200, call("POST", "/api/auth/child-login", Map.of("identifier", "ihor_fast", "pin", "4321")).status());
+
+    // The parent's own does: the account, the child and the child's way in are gone at once.
+    assertEquals(200, call("DELETE", "/api/state", null, "Authorization", "Bearer " + token).status());
+    assertEquals(0, asAdmin("GET", "/api/admin/users", null).body().get("accounts").size());
+    assertEquals(404, call("POST", "/api/auth/child-login", Map.of("identifier", "ihor_fast", "pin", "4321")).status());
   }
 }

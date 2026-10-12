@@ -12,6 +12,7 @@ import com.pulsarkids.api.service.SpeechService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Per-user save →  GET /api/state   (load; `state` is null when empty)
  *                  PUT /api/state   (replace with { state })
- * Both answer 403 `account_disabled` for an account the owner switched off —
+ *                  DELETE /api/state (the parent removes the whole account)
+ * The first two answer 403 `account_disabled` for an account the owner switched off —
  * a session opened before that ends here.
  */
 @RestController
@@ -51,5 +53,21 @@ public class StateController extends ApiController {
     schema.ensure();
     accounts.requireEnabled((int) user.id());
     return ok(Fields.OK, true, Fields.UPDATED_AT, accounts.saveState((int) user.id(), state, messages.lang()));
+  }
+
+  /**
+   * A parent deletes their own account: the children's profiles, progress and
+   * play time go with it (the tables cascade), at once and for good. It is the
+   * right to erasure without writing a letter — the privacy policy on the site
+   * promises it. A child's session cannot do this.
+   */
+  @DeleteMapping
+  public ResponseEntity<Object> delete(HttpServletRequest request) {
+    Auth.User user = Requests.requireUser(request);
+    if (user.childId() != null) throw new HttpError(ApiError.PARENT_ONLY);
+    schema.ensure();
+    // No `requireEnabled`: an account the owner switched off is still its parent's to delete.
+    accounts.deleteParent((int) user.id());
+    return ok(Fields.OK, true);
   }
 }

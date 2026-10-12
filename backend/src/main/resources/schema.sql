@@ -214,3 +214,7 @@ CREATE TABLE IF NOT EXISTS wk_settings (
 );
 -- The language a letter was written in: its sender is answered in it.
 ALTER TABLE wk_feedback ADD COLUMN IF NOT EXISTS lang TEXT;
+-- What is kept only for a while — the privacy policy on the site promises it:
+-- arrivals and the letters from the site (with their replies), two years.
+DELETE FROM wk_visits WHERE created_at < now() - INTERVAL '24 months';
+DELETE FROM wk_feedback WHERE created_at < now() - INTERVAL '24 months';
