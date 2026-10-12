@@ -48,7 +48,7 @@
     },
     "ads": {
       "title": "No ads",
-      "text": "No third-party ads and no in-app purchases. Your child sees only the tasks, their own world and their own achievements."
+      "text": "No third-party ads. Your child sees only the tasks, their own world and their own achievements."
     }
   },
   "games": {
@@ -158,8 +158,8 @@
       "text": "You set the session length, the break and the daily limit. Your child sees no timer — just hourglasses that slowly disappear. A level already started is always finished, and then the hero “goes for a rest”."
     },
     "children": {
-      "title": "Up to five children",
-      "text": "Each child has their own profile, nickname and PIN, their own theme, progress and settings."
+      "title": "A profile for each child",
+      "text": "Their own nickname and PIN, their own theme, progress and settings."
     },
     "goals": {
       "title": "Family goals",

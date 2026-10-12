@@ -48,7 +48,7 @@
     },
     "ads": {
       "title": "Bez reklam",
-      "text": "W grze nie ma obcych reklam ani zakupów. Dziecko widzi tylko zadania, swój świat i swoje osiągnięcia."
+      "text": "W grze nie ma obcych reklam. Dziecko widzi tylko zadania, swój świat i swoje osiągnięcia."
     }
   },
   "games": {
@@ -158,8 +158,8 @@
       "text": "Ustawiasz długość sesji, przerwę i dzienny limit. Dziecko nie widzi stopera, tylko klepsydry, które powoli znikają. Zaczęty poziom zawsze może dokończyć, a potem bohater „idzie odpocząć”."
     },
     "children": {
-      "title": "Do pięciorga dzieci",
-      "text": "Każde dziecko ma własny profil, nick i PIN, swój motyw, swoje postępy i własne ustawienia."
+      "title": "Każde dziecko ma swój profil",
+      "text": "Własny nick i PIN, swój motyw, swoje postępy i własne ustawienia."
     },
     "goals": {
       "title": "Rodzinne cele",
