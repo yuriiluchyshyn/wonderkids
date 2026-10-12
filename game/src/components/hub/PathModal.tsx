@@ -121,9 +121,12 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
                       isSelected ? styles.selected : '',
                     ].join(' ')}
                     disabled={!unlocked}
-                    animate={isCurrent ? { scale: [1, 1.1, 1] } : {}}
-                    transition={{ repeat: Infinity, duration: 1.4 }}
-                    whileTap={unlocked ? { scale: 0.9 } : undefined}
+                    // Only the step the child stands on breathes. (The endless
+                    // repeat used to be every step's transition, so a tapped
+                    // step kept pulsing for ever.)
+                    animate={isCurrent ? { scale: [1, 1.1, 1] } : undefined}
+                    transition={isCurrent ? { repeat: Infinity, duration: 1.4 } : undefined}
+                    whileTap={unlocked ? { scale: 0.9, transition: { duration: 0.1 } } : undefined}
                     onClick={() => selectStep(n)}
                     aria-label={`${t('path.step', { n })}${isCurrent ? t('path.current') : chest ? t('path.chest') : unlocked ? '' : t('path.locked')}`}
                   >

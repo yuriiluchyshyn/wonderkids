@@ -5,8 +5,10 @@
   display: grid;
   place-items: center;
   padding: 18px;
-  background: rgba(20, 8, 40, 0.5);
-  backdrop-filter: blur(4px);
+  /* A plain dim, no `backdrop-filter`: the screens under a sheet never stand
+     still (the hub's cards sway), and blurring a moving picture on every frame
+     makes the whole sheet flicker on Android phones. */
+  background: rgba(20, 8, 40, 0.74);
 }
 
 .sheet {

@@ -2,8 +2,8 @@
   position: fixed;
   inset: 0;
   z-index: 55;
-  background: rgba(20, 8, 40, 0.5);
-  backdrop-filter: blur(4px);
+  /* A plain dim — see Modal.module.css: no blur over the hub's moving cards. */
+  background: rgba(20, 8, 40, 0.74);
 }
 
 .panel {
