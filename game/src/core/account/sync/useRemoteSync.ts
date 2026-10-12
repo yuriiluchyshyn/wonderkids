@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api } from '@/core/account/api/client';
+import { ApiError, api } from '@/core/account/api/client';
 import { speechEngine } from '@/core/audio/SpeechEngine';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { useSyncControl } from '@/core/account/sync/syncControl';
@@ -51,8 +51,12 @@ export function useRemoteSync(): SyncStatus {
         if (childId) useGameStore.getState().setActiveChild(childId);
         setStatus('ready');
       })
-      .catch(() => {
-        if (active) setStatus('error');
+      .catch((err: unknown) => {
+        if (!active) return;
+        // The session is no longer valid (it ran out, or the server's key
+        // changed): that is not «the server is down» — go and sign in again.
+        if (err instanceof ApiError && err.status === 401) useAuthStore.getState().expire();
+        else setStatus('error');
       });
 
     return () => {

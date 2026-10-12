@@ -60,6 +60,8 @@ export interface AuthState {
    * leaves for Auth0 and comes back to the child login).
    */
   logout: () => void;
+  /** The server no longer accepts this session (401): forget it, so the login page takes over. */
+  expire: () => void;
   clearError: () => void;
 }
 
@@ -145,6 +147,13 @@ export const useAuthStore = create<AuthState>()(
         useGameStore.getState().resetAll();
         set({ token: null, user: null, childId: null, since: null, error: null });
         wipeDevice();
+      },
+
+      // Unlike `logout`, the Auth0 session is left alone: a parent whose session
+      // of ours ran out is signed in again by Auth0 without typing anything.
+      expire: () => {
+        useGameStore.getState().resetAll();
+        set({ token: null, user: null, childId: null, since: null, error: null });
       },
 
       clearError: () => set({ error: null }),
