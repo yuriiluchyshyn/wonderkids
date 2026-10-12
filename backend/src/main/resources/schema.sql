@@ -214,6 +214,8 @@ CREATE TABLE IF NOT EXISTS wk_settings (
 );
 -- The language a letter was written in: its sender is answered in it.
 ALTER TABLE wk_feedback ADD COLUMN IF NOT EXISTS lang TEXT;
+-- The game a trial was opened in — a game's page on the site leads straight into it.
+ALTER TABLE wk_visits ADD COLUMN IF NOT EXISTS game TEXT;
 -- What is kept only for a while — the privacy policy on the site promises it:
 -- arrivals and the letters from the site (with their replies), two years.
 DELETE FROM wk_visits WHERE created_at < now() - INTERVAL '24 months';

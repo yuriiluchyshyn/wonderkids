@@ -31,6 +31,9 @@ public class Visit {
   private String lang;
   private String device;
   private String referrer;
+
+  /** The game the trial was opened in: `geography:flags`. */
+  private String game;
   /** A hash of the visitor's address — enough to count different people. */
   private String visitor = "";
   private Instant expiredAt;

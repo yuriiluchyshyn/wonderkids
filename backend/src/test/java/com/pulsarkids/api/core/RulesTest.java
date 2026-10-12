@@ -120,11 +120,16 @@ class RulesTest {
   @Test
   void anArrivalKeepsOnlyWhatIsPlainlyWritten() {
     assertEquals(
-        new Marketing.Visit("insta-bio", LinkMode.SITE, VisitVia.LINK, "pl", "l.instagram.com"),
+        new Marketing.Visit("insta-bio", LinkMode.SITE, VisitVia.LINK, "pl", "l.instagram.com", null),
         Marketing.cleanVisit(json("{'link':'Insta-Bio','mode':'site','via':'link','lang':'PL','referrer':'L.Instagram.com'}")));
     assertEquals(
-        new Marketing.Visit(null, LinkMode.DEMO, VisitVia.LINK, "en", null),
+        new Marketing.Visit(null, LinkMode.DEMO, VisitVia.LINK, "en", null, null),
         Marketing.cleanVisit(json("{'link':'<x>','mode':'admin','via':'magic','lang':'english','referrer':'a b'}")));
+    // A game's page on the site leads straight into that game — and only what is written like a game's id is kept.
+    assertEquals(
+        new Marketing.Visit(null, LinkMode.DEMO, VisitVia.PAGE, "pl", null, "geography:flags"),
+        Marketing.cleanVisit(json("{'mode':'demo','via':'page','lang':'pl','game':' geography:flags '}")));
+    assertNull(Marketing.cleanVisit(json("{'mode':'demo','game':'../admin'}")).game());
     assertEquals(LinkMode.DEMO, Marketing.cleanVisit(null).mode());
   }
 

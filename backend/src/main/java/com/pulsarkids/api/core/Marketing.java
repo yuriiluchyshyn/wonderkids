@@ -43,6 +43,8 @@ public final class Marketing {
   private static final Pattern CODE = Pattern.compile("^[a-z0-9][a-z0-9_-]{1,39}$");
   private static final Pattern LANG = Pattern.compile("^[a-z]{2}$");
   private static final Pattern HOST = Pattern.compile("^[a-z0-9.-]{1,80}$");
+  /** A game as the trial is asked for it: `geography:flags`. */
+  private static final Pattern GAME = Pattern.compile("^[a-z][a-z0-9_]{0,29}:[a-z][a-z0-9_]{0,39}$");
   private static final Pattern TABLET = Pattern.compile("ipad|tablet|android(?!.*mobile)", Pattern.CASE_INSENSITIVE);
   private static final Pattern MOBILE = Pattern.compile("mobi|iphone|ipod|android", Pattern.CASE_INSENSITIVE);
 
@@ -129,9 +131,10 @@ public final class Marketing {
     return ua.isEmpty() ? null : Device.DESKTOP;
   }
 
-  public record Visit(String link, LinkMode mode, VisitVia via, String lang, String referrer) {
+  /** `game` — the game the trial was opened in (a game's page on the site leads straight into it); null — the hub. */
+  public record Visit(String link, LinkMode mode, VisitVia via, String lang, String referrer, String game) {
     public Visit withLink(String code) {
-      return new Visit(code, mode, via, lang, referrer);
+      return new Visit(code, mode, via, lang, referrer, game);
     }
   }
 
@@ -142,11 +145,14 @@ public final class Marketing {
     String lang = rawLang == null ? "" : cut(rawLang.strip().toLowerCase(), 2);
     String rawReferrer = Json.text(body.get(Fields.REFERRER));
     String referrer = rawReferrer == null ? "" : rawReferrer.strip().toLowerCase();
+    String rawGame = Json.text(body.get(Fields.GAME));
+    String game = rawGame == null ? "" : rawGame.strip();
     return new Visit(
         cleanCode(Json.text(body.get(Fields.LINK))),
         Wire.of(LinkMode.class, body.get(Fields.MODE), LinkMode.DEMO),
         Wire.of(VisitVia.class, body.get(Fields.VIA), VisitVia.LINK),
         LANG.matcher(lang).matches() ? lang : null,
-        HOST.matcher(referrer).matches() ? referrer : null);
+        HOST.matcher(referrer).matches() ? referrer : null,
+        GAME.matcher(game).matches() ? game : null);
   }
 }

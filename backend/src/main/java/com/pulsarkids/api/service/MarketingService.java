@@ -191,6 +191,7 @@ public class MarketingService {
     visit.setLang(arrival.lang());
     visit.setDevice(device == null ? null : device.wire());
     visit.setReferrer(arrival.referrer());
+    visit.setGame(arrival.game());
     visit.setVisitor(visitor);
     return visits.save(visit).getId();
   }
@@ -223,6 +224,7 @@ public class MarketingService {
           Fields.LANG, row.getLang(),
           Fields.DEVICE, row.getDevice(),
           Fields.REFERRER, row.getReferrer(),
+          Fields.GAME, row.getGame(),
           // Only to tell visitors apart in the browser — a short piece of the hash.
           Fields.VISITOR, row.getVisitor().length() > 10 ? row.getVisitor().substring(0, 10) : row.getVisitor(),
           Fields.EXPIRED_AT, Json.iso(row.getExpiredAt()),
