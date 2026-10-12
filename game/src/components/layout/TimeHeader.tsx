@@ -36,7 +36,7 @@ export function TimeHeader() {
 
   return (
     <div className={styles.bar} aria-label={t('time.label')} data-tip="time">
-      <TimeBudget pct={token ? fuelPct : demoPct} resting={token ? inCooldown : false} slots={5} />
+      <TimeBudget pct={token ? fuelPct : demoPct} resting={token ? inCooldown : false} slots={10} />
     </div>
   );
 }

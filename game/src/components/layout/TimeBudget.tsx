@@ -21,7 +21,7 @@ interface TimeBudgetProps {
  * drain edge fades gradually (the "slowly, slowly disappearing" egg) rather than
  * blinking out — never a digital countdown (Tech Spec AC-2).
  */
-export function TimeBudget({ pct, slots = 5, resting = false, size = 'md', className }: TimeBudgetProps) {
+export function TimeBudget({ pct, slots = 10, resting = false, size = 'md', className }: TimeBudgetProps) {
   const t = useT();
   const theme = useActiveTheme();
   const token = theme.timeToken.emoji;
