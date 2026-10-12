@@ -72,30 +72,6 @@
         "fuel": "Turbopaliwo"
       }
     },
-    "space": {
-      "name": "Kosmos",
-      "mascot": "Robot Astronauta",
-      "goal": "Planeta",
-      "artifact": "Kosmiczny Meteor",
-      "artifactCount": {
-        "one": "{count} kosmiczny meteor",
-        "few": "{count} kosmiczne meteory",
-        "many": "{count} kosmicznych meteorów",
-        "other": "{count} kosmicznego meteoru"
-      },
-      "timeToken": "Klepsydra",
-      "dreamBuild": "Rakieta",
-      "treasure": {
-        "ufo": "Latający spodek",
-        "planet": "Planeta",
-        "comet": "Kometa",
-        "alien": "Kosmita",
-        "moon": "Księżyc",
-        "satellite": "Satelita",
-        "star": "Gwiazda",
-        "telescope": "Teleskop"
-      }
-    },
     "dinos": {
       "name": "Dinozaury",
       "mascot": "Dinozaurek Rex",
@@ -933,7 +909,7 @@
       "title": "Bajka: Pit stop!",
       "message": "Nasze sportowe auto przejechało wspaniały dystans i pora, żeby odpoczęło! Czas pobiegać po pokoju albo napić się pysznego soku. Wróć za jakiś czas — bak znów będzie pełny!"
     },
-    "space": {
+    "galaxy": {
       "title": "Bajka: Lądowanie na stacji!",
       "message": "Rakieta łagodnie przycumowała do stacji i zapaliła nocną lampkę. Odpocznij chwilę. Wróć za jakiś czas — i polecimy dalej!"
     },

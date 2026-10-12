@@ -34,12 +34,12 @@ function bedtimeScene(theme: Theme, t: T): SceneCopy {
         title: t('rest.cars.title'),
         message: t('rest.cars.message'),
       };
-    case 'space':
+    case 'galaxy':
       return {
         icon: '🚀',
         zzz: '🌙',
-        title: t('rest.space.title'),
-        message: t('rest.space.message'),
+        title: t('rest.galaxy.title'),
+        message: t('rest.galaxy.message'),
       };
     case 'unicorns':
       return {

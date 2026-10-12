@@ -1,15 +1,17 @@
 import { motion } from 'framer-motion';
 import { useLang, useVoiceLang } from '@/core/translator';
 import { localTheme } from '@/core/theme/localTheme';
-import { THEME_LIST } from '@/core/theme/themes';
+import { DEFAULT_THEME_ID, THEME_LIST } from '@/core/theme/themes';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useSound } from '@/core/audio/useSound';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
+import { changeTheme } from '@/core/theme/themeTransition';
 import styles from './ThemeGrid.module.css';
 
 /** Theme chooser grid (PRD §6). Lives in Settings; one tap reskins everything. */
 export function ThemeGrid() {
-  const themeId = useGameStore((s) => s.themeId);
+  // Not chosen yet — the child is in the default theme, so that one is ticked.
+  const themeId = useGameStore((s) => s.themeId) ?? DEFAULT_THEME_ID;
   const setTheme = useGameStore((s) => s.setTheme);
   const { play } = useSound();
   const announce = useVoiceSpeak('selections');
@@ -29,7 +31,7 @@ export function ThemeGrid() {
           whileTap={{ scale: 0.93 }}
           onClick={() => {
             play('success');
-            setTheme(t.id);
+            if (t.id !== themeId) changeTheme(() => setTheme(t.id));
             announce(localTheme(t, voiceLang).name, voiceLang);
           }}
         >

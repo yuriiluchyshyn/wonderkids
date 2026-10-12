@@ -162,7 +162,7 @@ export function HubPage() {
         {/* Small and to the right: the first game should start mid-screen, not below a wall of filters. */}
         <div className={styles.filters}>
           {groups.length > 0 && <GroupFilter groups={groups} value={groupIds} onChange={(ids) => setGroups(galaxyId, ids)} />}
-          <div data-tip="stars">
+          <div data-tip="stars" className={styles.stars}>
             <StarFilter value={stars} onChange={setStars} />
           </div>
         </div>

@@ -66,28 +66,6 @@
         "fuel": "Turbo Fuel"
       }
     },
-    "space": {
-      "name": "Space",
-      "mascot": "Robot Astronaut",
-      "goal": "Planet",
-      "artifact": "Space Meteor",
-      "artifactCount": {
-        "one": "{count} space meteor",
-        "other": "{count} space meteors"
-      },
-      "timeToken": "Hourglass",
-      "dreamBuild": "Rocket",
-      "treasure": {
-        "ufo": "Flying Saucer",
-        "planet": "Planet",
-        "comet": "Comet",
-        "alien": "Alien",
-        "moon": "Moon",
-        "satellite": "Satellite",
-        "star": "Star",
-        "telescope": "Telescope"
-      }
-    },
     "dinos": {
       "name": "Dinosaurs",
       "mascot": "Rex the Little Dino",
@@ -891,7 +869,7 @@
       "title": "Cartoon: Pit stop!",
       "message": "Our sports car has driven a great distance and it’s time for it to rest! Time to run around the room or have some tasty juice. Come back in a while — the tank will be full again!"
     },
-    "space": {
+    "galaxy": {
       "title": "Cartoon: Landing at the station!",
       "message": "The rocket has gently docked at the station and switched on its night light. Have a little rest. Come back in a while — and we’ll fly on!"
     },

@@ -458,42 +458,6 @@
         "Ambulance"
       ]
     },
-    "space": {
-      "name": "Space Colony",
-      "buildings": [
-        "Satellite",
-        "Living Dome",
-        "Space Greenhouse",
-        "Power Station",
-        "Laboratory",
-        "Observatory",
-        "Radio Antenna",
-        "Hangar",
-        "Orbital Bridge"
-      ],
-      "decor": [
-        "Shooting Stars",
-        "Moon Rock",
-        "Flag",
-        "Little Moon",
-        "Searchlight",
-        "Space Cactus",
-        "Robot Gardener",
-        "Fireworks"
-      ],
-      "residents": [
-        "Astronaut",
-        "Robot Helper",
-        "Alien",
-        "Space Dog",
-        "Pixel Guest",
-        "Ship’s Cat",
-        "Scientist",
-        "Monkey Pilot",
-        "Flying Saucer",
-        "Parrot Navigator"
-      ]
-    },
     "dinos": {
       "name": "Dinosaur Valley",
       "buildings": [

@@ -265,6 +265,25 @@ export function ParentDashboard() {
   const years = Array.from({ length: 12 }, (_, i) => currentYear - 3 - i); // ages ~3–14
   const age = computeAge(profile.birthYear, profile.birthMonth);
 
+  // Languages: the cabinet's own, and — for the chosen child — the game's and
+  // the voice's. Below the child's profile when a child is chosen.
+  const languages = (
+    <section className={styles.section}>
+      <h3 className={styles.sectionTitle}>{t('parent.lang.title')}</h3>
+      <p className={styles.hint}>{t('parent.lang.hint')}</p>
+      <label className={styles.fieldLabel}>{t('parent.lang.parent')}</label>
+      <LangChips value={parentLang} onPick={pickParentLang} />
+      {activeChildId && (
+        <>
+          <label className={styles.fieldLabel}>{t('parent.lang.game')}</label>
+          <LangChips value={gameLang} onPick={(lang) => updateSettings({ gameLang: lang })} />
+          <label className={styles.fieldLabel}>{t('parent.lang.voice')}</label>
+          <LangChips value={voiceLang} onPick={(lang) => updateSettings({ voiceLang: lang })} />
+        </>
+      )}
+    </section>
+  );
+
   return (
     <div className="stack">
       {/* ---- Who is signed in; on a wide screen also «Зберегти» and «Вийти» ---- */}
@@ -290,22 +309,6 @@ export function ParentDashboard() {
       </div>
 
       <ChildManager />
-
-      {/* ---- Languages: the cabinet's own, and — for the chosen child — the game's and the voice's ---- */}
-      <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>{t('parent.lang.title')}</h3>
-        <p className={styles.hint}>{t('parent.lang.hint')}</p>
-        <label className={styles.fieldLabel}>{t('parent.lang.parent')}</label>
-        <LangChips value={parentLang} onPick={pickParentLang} />
-        {activeChildId && (
-          <>
-            <label className={styles.fieldLabel}>{t('parent.lang.game')}</label>
-            <LangChips value={gameLang} onPick={(lang) => updateSettings({ gameLang: lang })} />
-            <label className={styles.fieldLabel}>{t('parent.lang.voice')}</label>
-            <LangChips value={voiceLang} onPick={(lang) => updateSettings({ voiceLang: lang })} />
-          </>
-        )}
-      </section>
 
       {activeChildId ? (
         <>
@@ -392,6 +395,8 @@ export function ParentDashboard() {
           </p>
         </div>
       </section>
+
+      {languages}
 
       {/* ---- Audio link (hidden sub-page) ---- */}
       <section className={styles.section}>
@@ -671,11 +676,14 @@ export function ParentDashboard() {
       </section>
         </>
       ) : (
+        <>
+        {languages}
         <section className={styles.section}>
           <p className={styles.hint} style={{ margin: 0, textAlign: 'center' }}>
             {t('parent.pickChild')}
           </p>
         </section>
+        </>
       )}
 
       {/* ---- Password ---- */}

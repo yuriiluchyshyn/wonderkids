@@ -20,8 +20,8 @@
   background: var(--surface);
   color: var(--surface-ink);
   border-radius: var(--radius-xl);
-  /* Extra top padding reserves room for the corner close button. */
-  padding: 22px 22px 26px;
+  /* The same on every side: the corner close button sits inside it, and the title keeps clear of it. */
+  padding: 22px;
   box-shadow: var(--shadow-lg);
 }
 

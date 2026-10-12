@@ -162,6 +162,30 @@ h3 {
   line-height: 1;
 }
 
+/* ---------- a change of theme is a cross-fade, not a jump (core/theme/themeTransition.ts) ---------- */
+:root {
+  --theme-fade: 0.5s;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--theme-fade);
+  animation-timing-function: ease-in-out;
+}
+
+/* Browsers without view transitions: every colour glides for a moment. */
+:root.theme-fade,
+:root.theme-fade *,
+:root.theme-fade *::before,
+:root.theme-fade *::after {
+  transition:
+    background-color var(--theme-fade) ease,
+    color var(--theme-fade) ease,
+    border-color var(--theme-fade) ease,
+    fill var(--theme-fade) ease,
+    box-shadow var(--theme-fade) ease !important;
+}
+
 /* reduce motion respect */
 @media (prefers-reduced-motion: reduce) {
   * {

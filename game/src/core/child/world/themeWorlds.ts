@@ -41,12 +41,6 @@ const WORLDS: Record<ThemeId, ThemeWorldDef> = {
     decor: [['🚧', J.WORLDS.cars.decor[0][1]], ['🛞', J.WORLDS.cars.decor[1][1]], ['🚥', J.WORLDS.cars.decor[2][1]], ['🏁', J.WORLDS.cars.decor[3][1]], ['🌴', J.WORLDS.cars.decor[4][1]], ['🛢️', J.WORLDS.cars.decor[5][1]], ['🏆', J.WORLDS.cars.decor[6][1]], ['🎆', J.WORLDS.cars.decor[7][1]]],
     residents: [['🚓', J.WORLDS.cars.residents[0][1]], ['🚒', J.WORLDS.cars.residents[1][1]], ['🚕', J.WORLDS.cars.residents[2][1]], ['🚜', J.WORLDS.cars.residents[3][1]], ['🚌', J.WORLDS.cars.residents[4][1]], ['🏍️', J.WORLDS.cars.residents[5][1]], ['🚚', J.WORLDS.cars.residents[6][1]], ['👨‍🔧', J.WORLDS.cars.residents[7][1]], ['🚁', J.WORLDS.cars.residents[8][1]], ['🚑', J.WORLDS.cars.residents[9][1]]],
   },
-  space: {
-    name: J.WORLDS.space.name,
-    buildings: [['🛰️', J.WORLDS.space.buildings[0][1]], ['🏠', J.WORLDS.space.buildings[1][1]], ['🌱', J.WORLDS.space.buildings[2][1]], ['🔋', J.WORLDS.space.buildings[3][1]], ['🧪', J.WORLDS.space.buildings[4][1]], ['🔭', J.WORLDS.space.buildings[5][1]], ['📡', J.WORLDS.space.buildings[6][1]], ['🛸', J.WORLDS.space.buildings[7][1]], ['🌉', J.WORLDS.space.buildings[8][1]]],
-    decor: [['🌠', J.WORLDS.space.decor[0][1]], ['🪨', J.WORLDS.space.decor[1][1]], ['🚩', J.WORLDS.space.decor[2][1]], ['🌙', J.WORLDS.space.decor[3][1]], ['🔦', J.WORLDS.space.decor[4][1]], ['🌵', J.WORLDS.space.decor[5][1]], ['🤖', J.WORLDS.space.decor[6][1]], ['🎆', J.WORLDS.space.decor[7][1]]],
-    residents: [['👨‍🚀', J.WORLDS.space.residents[0][1]], ['🤖', J.WORLDS.space.residents[1][1]], ['👽', J.WORLDS.space.residents[2][1]], ['🐕', J.WORLDS.space.residents[3][1]], ['👾', J.WORLDS.space.residents[4][1]], ['🐈', J.WORLDS.space.residents[5][1]], ['🧑‍🔬', J.WORLDS.space.residents[6][1]], ['🐒', J.WORLDS.space.residents[7][1]], ['🛸', J.WORLDS.space.residents[8][1]], ['🦜', J.WORLDS.space.residents[9][1]]],
-  },
   dinos: {
     name: J.WORLDS.dinos.name,
     buildings: [['🥚', J.WORLDS.dinos.buildings[0][1]], ['🌴', J.WORLDS.dinos.buildings[1][1]], ['⛰️', J.WORLDS.dinos.buildings[2][1]], ['🌋', J.WORLDS.dinos.buildings[3][1]], ['🦴', J.WORLDS.dinos.buildings[4][1]], ['🏕️', J.WORLDS.dinos.buildings[5][1]], ['🌉', J.WORLDS.dinos.buildings[6][1]], ['🏞️', J.WORLDS.dinos.buildings[7][1]], ['🗿', J.WORLDS.dinos.buildings[8][1]]],

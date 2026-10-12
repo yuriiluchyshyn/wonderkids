@@ -138,7 +138,6 @@ export interface Theme {
 export type ThemeId =
   | 'unicorns'
   | 'cars'
-  | 'space'
   | 'dinos'
   | 'underwater'
   | 'forest'

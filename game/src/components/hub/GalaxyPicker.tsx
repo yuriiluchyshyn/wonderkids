@@ -58,7 +58,8 @@ export function GalaxyPicker({ galaxyId, onChange }: GalaxyPickerProps) {
         </span>
       </motion.button>
 
-      <Modal open={open} onClose={() => setOpen(false)} title={t('hub.galaxy.pick')} icon="🌌">
+      {/* The sheet stays put with its title and ✕; only the list of galaxies scrolls. */}
+      <Modal open={open} onClose={() => setOpen(false)} title={t('hub.galaxy.pick')} icon="🌌" fit>
         <div className={styles.list}>
           {galaxies.map((g) => (
             <motion.button

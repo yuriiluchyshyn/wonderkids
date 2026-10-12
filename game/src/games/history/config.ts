@@ -112,10 +112,10 @@ export const GAMES: GameCard[] = [
     mechanics: [Mechanics.GridChoice, Mechanics.DragMatch],
     hasText: true,
   },
-  // The history of Poland comes with the Polish language (`content/poland.ts`).
+  // The history of Poland (`content/poland.ts`) — in every language, like the history of Ukraine.
   {
     id: 'pl_figures',
-    langs: ['pl'],
+    langs: historyTexts.langs,
     gameId: 'hist_pl_figures',
     label: J.GAMES.pl_figures.label,
     icon: '🇵🇱',
@@ -130,7 +130,7 @@ export const GAMES: GameCard[] = [
   },
   {
     id: 'pl_inventions',
-    langs: ['pl'],
+    langs: historyTexts.langs,
     gameId: 'hist_pl_inventions',
     label: J.GAMES.pl_inventions.label,
     icon: '🪔',

@@ -1,5 +1,5 @@
-import { useEffect, type ReactNode } from 'react';
-import { useActiveTheme } from './useActiveTheme';
+import { useLayoutEffect, type ReactNode } from 'react';
+import { useScreenTheme } from './useScreenTheme';
 import type { Theme } from './theme.types';
 
 /** Maps a theme palette to the CSS custom properties consumed by the stylesheet. */
@@ -21,14 +21,17 @@ function applyPalette(theme: Theme): void {
 }
 
 /**
- * Applies the active theme's palette to the document root. Kept as a thin
+ * Applies the theme of the screen (`useScreenTheme`: the child's, or the
+ * default one in the parents' cabinet) to the document root. Kept as a thin
  * side-effect wrapper (single responsibility) so the rest of the UI only ever
- * reads CSS variables and never knows which theme is active.
+ * reads CSS variables and never knows which theme is active. A layout effect,
+ * so a change of theme is painted in the same frame as the screen it belongs
+ * to — `changeTheme` relies on it for its cross-fade.
  */
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const theme = useActiveTheme();
+  const theme = useScreenTheme();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     applyPalette(theme);
   }, [theme]);
 

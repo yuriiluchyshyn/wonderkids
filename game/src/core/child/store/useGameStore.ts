@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { ThemeId } from '@/core/theme/theme.types';
+import { THEMES } from '@/core/theme/themes';
 import {
   DEFAULT_VOICE_STATE,
   type VoiceChannel,
@@ -374,7 +375,7 @@ const LAST_THEME_KEY = 'wk-last-theme-v1';
 function readLastTheme(): ThemeId | null {
   try {
     const v = typeof localStorage !== 'undefined' ? localStorage.getItem(LAST_THEME_KEY) : null;
-    return v ? (v as ThemeId) : null;
+    return migrateThemeId(v);
   } catch {
     return null;
   }
@@ -450,6 +451,46 @@ function createChildState(input?: AddChildInput): ChildState {
   };
 }
 
+/**
+ * Themes that are no more, and the one that took each one's place: «Космос»
+ * (`space`) was the same night sky as «Галактика».
+ */
+const RETIRED_THEMES: Record<string, ThemeId> = { space: 'galaxy' };
+
+/** A stored theme id as one that exists: a retired theme gives way to its heir, anything unknown to none. */
+function migrateThemeId(raw: unknown): ThemeId | null {
+  if (typeof raw !== 'string') return null;
+  if (raw in THEMES) return raw as ThemeId;
+  return RETIRED_THEMES[raw] ?? null;
+}
+
+/**
+ * The treasures of a retired theme move to its heir: what was built there
+ * (`world:space:…`) stands in the heir's world, a chest find the heir also
+ * has is the heir's. What the heir already has is dropped — a duplicate
+ * purchase so goes back to the purse — and so is a find the heir does not know.
+ */
+function migrateTreasures(keys: string[]): string[] {
+  const have = new Set(keys);
+  const out: string[] = [];
+  for (const key of keys) {
+    let moved = key;
+    for (const [old, heir] of Object.entries(RETIRED_THEMES)) {
+      if (key.startsWith(`world:${old}:`)) moved = `world:${heir}:${key.slice(`world:${old}:`.length)}`;
+      else if (key.startsWith(`${old}:`)) {
+        const id = key.slice(old.length + 1);
+        moved = THEMES[heir].treasures.some((t) => t.id === id) ? `${heir}:${id}` : '';
+      }
+    }
+    if (moved === key) out.push(key);
+    else if (moved && !have.has(moved)) {
+      have.add(moved);
+      out.push(moved);
+    }
+  }
+  return out;
+}
+
 /** Validate + fill a raw child object (from the server) over fresh defaults. */
 function migrateChild(raw: Record<string, unknown>): ChildState {
   const base = createChildState();
@@ -458,14 +499,14 @@ function migrateChild(raw: Record<string, unknown>): ChildState {
   return {
     id: typeof r.id === 'string' ? r.id : base.id,
     profile: sanitizeProfile({ ...base.profile, ...((r.profile as Partial<ChildProfile>) ?? {}) }),
-    themeId: (r.themeId as ThemeId | null) ?? null,
+    themeId: migrateThemeId(r.themeId),
     artifacts: typeof r.artifacts === 'number' ? r.artifacts : 0,
     tasksCompleted: typeof r.tasksCompleted === 'number' ? r.tasksCompleted : 0,
     hintsSurfaced: typeof r.hintsSurfaced === 'number' ? r.hintsSurfaced : 0,
     progress: r.progress && typeof r.progress === 'object' ? (r.progress as Record<string, number>) : {},
     treasures:
       Array.isArray(r.treasures) && r.treasures.every((t) => typeof t === 'string')
-        ? (r.treasures as string[])
+        ? migrateTreasures(r.treasures as string[])
         : [],
     milestones:
       Array.isArray(r.milestones) &&

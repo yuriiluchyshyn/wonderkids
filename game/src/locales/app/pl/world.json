@@ -458,42 +458,6 @@
         "Karetka"
       ]
     },
-    "space": {
-      "name": "Kosmiczna kolonia",
-      "buildings": [
-        "Satelita",
-        "Kopuła mieszkalna",
-        "Kosmiczna szklarnia",
-        "Elektrownia",
-        "Laboratorium",
-        "Obserwatorium",
-        "Antena łączności",
-        "Hangar",
-        "Most orbitalny"
-      ],
-      "decor": [
-        "Deszcz gwiazd",
-        "Kamień księżycowy",
-        "Flaga",
-        "Księżyc",
-        "Reflektor",
-        "Kosmiczny kaktus",
-        "Robot ogrodnik",
-        "Fajerwerki"
-      ],
-      "residents": [
-        "Kosmonauta",
-        "Robot pomocnik",
-        "Kosmita",
-        "Kosmopies",
-        "Pikselowy gość",
-        "Kot pokładowy",
-        "Uczona",
-        "Małpka pilot",
-        "Latający talerz",
-        "Papuga nawigator"
-      ]
-    },
     "dinos": {
       "name": "Dolina dinozaurów",
       "buildings": [

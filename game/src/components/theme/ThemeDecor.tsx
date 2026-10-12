@@ -1,4 +1,5 @@
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
+import { useScreenTheme } from '@/core/theme/useScreenTheme';
 import styles from './ThemeDecor.module.css';
 
 /** A toy brick drawn from the side: body, studs on top, plastic highlight. */
@@ -105,7 +106,7 @@ export function hasOwnScenery(themeId: string): boolean {
  * Purely decorative: fixed, behind all content, ignores pointer events.
  */
 export function ThemeDecor() {
-  const theme = useActiveTheme();
+  const theme = useScreenTheme();
   if (theme.id === 'lego') return <LegoDecor />;
   if (theme.id === 'minecraft') return <MinecraftDecor />;
   return null;

@@ -211,8 +211,9 @@ export function App() {
   const loginElement = getPortal() === 'parent' ? <LoginPage /> : <ChildLoginPage />;
 
   return (
-    <ThemeProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      {/* Inside the router: the grown-ups' pages wear the default theme, whichever child is chosen. */}
+      <ThemeProvider>
         <VoiceGuard />
         <div className="app-shell">
           <ThemeDecor />
@@ -237,7 +238,7 @@ export function App() {
             <Route path="/*" element={<ProtectedApp />} />
           </Routes>
         </div>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }

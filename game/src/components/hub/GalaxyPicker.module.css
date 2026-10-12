@@ -45,13 +45,19 @@
   flex: 0 0 auto;
 }
 
+/* The one part of the sheet that scrolls (the sheet is `fit`). */
 .list {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .item {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 12px;

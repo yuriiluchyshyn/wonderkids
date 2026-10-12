@@ -11,7 +11,7 @@ import styles from './FuelGauge.module.css';
  */
 const FUEL_ICON: Partial<Record<ThemeId, string>> = {
   cars: '⛽',
-  space: '🔋',
+  galaxy: '🔋',
   unicorns: '🔮',
   dinos: '🥚',
   underwater: '🫧',
