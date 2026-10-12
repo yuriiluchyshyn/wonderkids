@@ -166,7 +166,8 @@ export const api = {
 
   /** Load the signed-in user's saved state (`state` is `null` when empty). */
   getState<T>(token: string) {
-    return request<{ state: T | null; features?: { cloudTts?: boolean } }>('/api/state', { token });
+    // The device's time zone says which day it is for the child: a new day starts with a full tank.
+    return request<{ state: T | null; features?: { cloudTts?: boolean } }>(`/api/state?tz_offset_min=${new Date().getTimezoneOffset()}`, { token });
   },
 
   /** One phrase from the natural cloud voice, as base64 MP3. */

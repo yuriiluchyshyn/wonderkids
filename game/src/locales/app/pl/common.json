@@ -254,8 +254,8 @@
   },
   "app": {
     "loading": "Wczytujemy twoją przygodę",
-    "loadFailed": "Nie udało się wczytać twoich postępów.",
-    "loadFailedHint": "Sprawdź połączenie i spróbuj jeszcze raz."
+    "loadFailed": "Ups!",
+    "loadFailedHint": "Spróbuj później."
   },
   "childLogin": {
     "title": "Logowanie dla dzieci",

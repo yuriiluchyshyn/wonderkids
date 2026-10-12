@@ -146,7 +146,7 @@ public class AccountService {
   }
 
   private Map<String, Object> assembleChild(
-      Child row, ChildSettings s, ChildStats st, ScreenTimeRow sc, List<ChildProgress> progressRows, List<ChildTreasure> treasureRows, List<Milestone> milestoneRows) {
+      Child row, ChildSettings s, ChildStats st, ScreenTimeRow sc, List<ChildProgress> progressRows, List<ChildTreasure> treasureRows, List<Milestone> milestoneRows, int tzOffsetMin) {
     if (s == null) s = new ChildSettings();
     if (st == null) st = new ChildStats();
     if (sc == null) sc = new ScreenTimeRow();
@@ -154,12 +154,18 @@ public class AccountService {
     Map<String, Object> progress = new LinkedHashMap<>();
     for (ChildProgress p : progressRows) progress.put(p.getId().moduleId() + ":" + p.getId().subId(), p.getStep());
 
-    // What the gauge shows before a game opens: the time away has already given
-    // some of the tank back (the row itself is updated by the next /session/start).
+    // What the gauge shows before a game opens. The row holds the day the child
+    // last played: a new day (in the child's own time zone) starts with a full
+    // tank, and the time away has already given some of today's tank back. The
+    // row itself is updated by the next /session/start.
+    long now = System.currentTimeMillis();
     ScreenTime.State rested = ScreenTime.refillIfRested(
-        new ScreenTime.State(sc.getDayKey(), sc.getMinutesUsedToday(), sc.getSessionElapsedMs(), null, sc.getLastSessionEndedAt(), sc.getLastHeartbeatAt()),
+        ScreenTime.peek(
+            new ScreenTime.State(sc.getDayKey(), sc.getMinutesUsedToday(), sc.getSessionElapsedMs(), sc.getCooldownUntil(), sc.getLastSessionEndedAt(), sc.getLastHeartbeatAt()),
+            now,
+            tzOffsetMin),
         new ScreenTime.Limits(s.getSessionDurationMin(), s.getCooldownMin(), s.getMaxDailyMin()),
-        System.currentTimeMillis());
+        now);
 
     Map<String, Object> profile = Json.map(Fields.NAME, row.getName(), Fields.NICKNAME, row.getNickname() == null ? "" : row.getNickname(), Fields.PIN, row.getPin() == null ? "" : row.getPin());
     profile.put(Fields.EMAIL, row.getEmail() == null ? "" : row.getEmail());
@@ -208,18 +214,22 @@ public class AccountService {
         Fields.MILESTONES, milestones,
         Fields.SETTINGS, settings,
         Fields.SCREEN_TIME, Json.map(
-            Fields.DAY_KEY, sc.getDayKey() == null ? "" : sc.getDayKey(),
+            Fields.DAY_KEY, rested.dayKey(),
             Fields.MINUTES_USED_TODAY, Json.tidy(rested.minutesUsedToday()),
             Fields.SESSION_ELAPSED_MS, Json.tidy(rested.sessionElapsedMs()),
             // Never running on load: the client opens a segment via /session/start.
             Fields.SESSION_STARTED_AT, null,
-            Fields.COOLDOWN_UNTIL, sc.getCooldownUntil(),
+            Fields.COOLDOWN_UNTIL, rested.cooldownUntil(),
             Fields.LAST_SESSION_ENDED_AT, sc.getLastSessionEndedAt()));
   }
 
-  /** Load a parent's whole save, reassembled into the client blob (or null for an unknown account). */
+  /**
+   * Load a parent's whole save, reassembled into the client blob (or null for
+   * an unknown account). `tzOffsetMin` is the device's `Date#getTimezoneOffset()`:
+   * it says which day it is for the child.
+   */
   @Transactional(readOnly = true)
-  public Map<String, Object> getState(int userId) {
+  public Map<String, Object> getState(int userId, int tzOffsetMin) {
     Parent parent = parents.findById(userId).orElse(null);
     if (parent == null) return null;
 
@@ -245,7 +255,8 @@ public class AccountService {
             screen.get(row.getId()),
             progress.getOrDefault(row.getId(), List.of()),
             treasures.getOrDefault(row.getId(), List.of()),
-            milestones.getOrDefault(row.getId(), List.of())));
+            milestones.getOrDefault(row.getId(), List.of()),
+            tzOffsetMin));
       }
     }
     return Json.map(Fields.CHILDREN, assembled, Fields.ACTIVE_CHILD_ID, parent.getActiveChildId(), Fields.PARENT_LANG, parent.getLang());

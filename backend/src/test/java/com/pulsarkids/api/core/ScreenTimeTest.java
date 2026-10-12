@@ -149,6 +149,19 @@ class ScreenTimeTest {
   }
 
   @Test
+  void lookingAtAnotherDayShowsAFullTankAndCountsNothing() {
+    State played = new State("2026-10-04", 55, 3 * MIN, T0 - MIN, T0 - 2 * 24 * 60 * MIN, null);
+    State today = ScreenTime.peek(played, T0, TZ);
+    assertEquals("2026-10-06", today.dayKey());
+    assertEquals(0, today.minutesUsedToday());
+    assertEquals(0, today.sessionElapsedMs());
+    assertNull(today.cooldownUntil());
+    // The same day: what was played stays.
+    State same = ScreenTime.peek(new State("2026-10-06", 55, 0, null, null, null), T0, TZ);
+    assertEquals(55, same.minutesUsedToday());
+  }
+
+  @Test
   void zeroMaxDailyMinutesMeansNoDailyCap() {
     Limits l = new Limits(15, 45, 0);
     State s = ScreenTime.startSession(fresh().withUsed(500), l, T0, TZ);

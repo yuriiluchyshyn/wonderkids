@@ -228,7 +228,10 @@ class ApiTest {
     assertEquals(json("['math:shop']"), settings.get("hiddenGames"));
     assertEquals(json("{'hints':false}"), settings.get("voice"));
     assertEquals(json("{'sessionDurationMinutes':20,'cooldownMinutes':30,'maxDailyMinutes':0}"), settings.get("timeControl"));
-    assertEquals(json("{'dayKey':'','minutesUsedToday':0,'sessionElapsedMs':0,'sessionStartedAt':null,'cooldownUntil':null,'lastSessionEndedAt':null}"), marko.get("screenTime"));
+    // A child who has never played: today, a full tank.
+    assertTrue(marko.at("/screenTime/dayKey").asText().matches("\\d{4}-\\d\\d-\\d\\d"));
+    ((com.fasterxml.jackson.databind.node.ObjectNode) marko.get("screenTime")).remove("dayKey");
+    assertEquals(json("{'minutesUsedToday':0,'sessionElapsedMs':0,'sessionStartedAt':null,'cooldownUntil':null,'lastSessionEndedAt':null}"), marko.get("screenTime"));
 
     JsonNode olia = state.at("/children/1");
     assertEquals(json("{'name':'Оля','nickname':'','pin':'','email':'','password':'','gender':'girl'}"), olia.get("profile"));
@@ -327,6 +330,16 @@ class ApiTest {
     Answer reset = asParent("POST", "/api/v1/session/reset", Map.of("child_profile_id", "kid-2", "tz_offset_min", 0));
     assertEquals(15 * 60, reset.body().get("remaining_time_seconds").asInt());
     assertEquals(60 * 60, reset.body().get("daily_remaining_seconds").asInt());
+
+    // A child who has not played today is not shown the minutes of the day they last played.
+    try (var conn = postgres.getPostgresDatabase().getConnection(); var statement = conn.createStatement()) {
+      statement.executeUpdate("UPDATE wk_screen_time SET day_key = '2020-01-01', minutes_used_today = 55, session_elapsed_ms = 120000, cooldown_until = 1 WHERE child_id = 'kid-2'");
+    }
+    JsonNode stale = asParent("GET", "/api/state?tz_offset_min=-180", null).body().at("/state/children/1/screenTime");
+    assertEquals(0, stale.get("minutesUsedToday").asInt(), stale.toString());
+    assertEquals(0, stale.get("sessionElapsedMs").asInt());
+    assertTrue(stale.get("cooldownUntil").isNull());
+    assertTrue(stale.get("dayKey").asText().startsWith("202") && !stale.get("dayKey").asText().equals("2020-01-01"));
 
     // A save never touches what the server has counted.
     asParent("PUT", "/api/state", json(SAVE));

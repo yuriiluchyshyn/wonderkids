@@ -234,8 +234,8 @@
   },
   "app": {
     "loading": "Loading your adventure",
-    "loadFailed": "We couldn’t load your progress.",
-    "loadFailedHint": "Check your connection and try again."
+    "loadFailed": "Oops!",
+    "loadFailedHint": "Try again later."
   },
   "childLogin": {
     "title": "Kids’ login",

@@ -123,6 +123,16 @@ public final class ScreenTime {
     return new State(dayKey, used, elapsed, cooldownUntil, state.lastSessionEndedAt(), lastHeartbeatAt);
   }
 
+  /**
+   * The state as it stands at this moment, nothing counted: a day that has
+   * turned over starts with a full tank, a cooldown that has run out is gone.
+   * What a child's row holds is the day they last played — shown as it is, it
+   * would hand yesterday's minutes to a child who has not played today.
+   */
+  public static State peek(State state, long now, int tzOffsetMin) {
+    return normalise(state, now, tzOffsetMin);
+  }
+
   private static State endSession(State state, Limits limits, long now, int tzOffsetMin) {
     boolean dailyExhausted = remaining(state, limits).dailyRemainingMs() <= 0;
     long cooldownUntil = now + Math.max(0, limits.cooldownMin()) * MIN;

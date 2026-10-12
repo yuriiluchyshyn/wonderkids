@@ -3,6 +3,7 @@ package com.pulsarkids.api.web;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.pulsarkids.api.core.Auth;
 import com.pulsarkids.api.core.Json;
+import com.pulsarkids.api.core.ScreenTime;
 import com.pulsarkids.api.model.ApiError;
 import com.pulsarkids.api.model.Fields;
 import com.pulsarkids.api.service.AccountService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -30,12 +32,12 @@ public class StateController extends ApiController {
   private final SchemaService schema;
 
   @GetMapping
-  public ResponseEntity<Object> load(HttpServletRequest request) {
+  public ResponseEntity<Object> load(HttpServletRequest request, @RequestParam(name = Fields.TZ_OFFSET_MIN, required = false) String tzOffsetMin) {
     Auth.User user = Requests.requireUser(request);
     schema.ensure();
     // `features` tells the client what the account has switched on — never
     // the credentials themselves.
-    return ok(Fields.STATE, accounts.getState((int) user.id()), Fields.FEATURES, Json.map(Fields.CLOUD_TTS, speech.configOf((int) user.id()).enabled()));
+    return ok(Fields.STATE, accounts.getState((int) user.id(), ScreenTime.clampTzOffset(Json.number(tzOffsetMin))), Fields.FEATURES, Json.map(Fields.CLOUD_TTS, speech.configOf((int) user.id()).enabled()));
   }
 
   @PutMapping
