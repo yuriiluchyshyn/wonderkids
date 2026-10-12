@@ -6,7 +6,6 @@ import {
   useGameStore,
   selectPersistable,
   TIP_PREFIX,
-  type ChoicesGridSize,
   type CompanionSpeed,
   type Gender,
   type Milestone,
@@ -70,11 +69,6 @@ const SPEED_OPTIONS: { id: CompanionSpeed; icon: string }[] = [
 ];
 
 
-
-const GRID_OPTIONS: { id: ChoicesGridSize; label: string; icon: string }[] = [
-  { id: 6, label: '6 (3×2)', icon: '⬜' },
-  { id: 9, label: '9 (3×3)', icon: '🔳' },
-];
 
 const SESSION_MIN_OPTIONS = [5, 10, 15, 20, 30];
 const COOLDOWN_MIN_OPTIONS = [15, 30, 45, 60, 90];
@@ -426,22 +420,6 @@ export function ParentDashboard() {
         <Button variant="ghost" icon="🔄" block disabled={tipsSeen === 0} onClick={resetTips}>
           {t('parent.tips.reset')}
         </Button>
-      </section>
-
-      <section className={styles.section}>
-        <h3 className={styles.sectionTitle}>{t('parent.grid.title')}</h3>
-        <p className={styles.hint}>{t('parent.grid.hint')}</p>
-        <div className={styles.chipRow}>
-          {GRID_OPTIONS.map((o) => (
-            <Chip
-              key={o.id}
-              icon={o.icon}
-              label={o.label}
-              active={settings.choicesGridSize === o.id}
-              onClick={() => updateSettings({ choicesGridSize: o.id })}
-            />
-          ))}
-        </div>
       </section>
 
       <section className={styles.section}>

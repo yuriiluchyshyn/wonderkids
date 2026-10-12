@@ -12,8 +12,8 @@ import styles from './DemoOver.module.css';
 const SPEAK_AFTER_MS = 500;
 
 /**
- * The end of the trial game. It takes the game's place the moment the time is
- * up, so nothing runs or speaks underneath.
+ * The end of the trial game. It takes the game's place once the first level is
+ * finished (`finishDemo`), so nothing runs or speaks underneath.
  *
  * The child did nothing wrong, and the screen must not feel like a door shut
  * in their face: it praises, says plainly that this was a trial and that what

@@ -39,9 +39,6 @@ export function ThemeGrid() {
             {t.icon}
           </span>
           <span className={styles.name}>{t.name}</span>
-          <span className={styles.mascot}>
-            {t.mascot.emoji} {t.artifact.emoji}
-          </span>
         </motion.button>
       ))}
     </div>

@@ -139,9 +139,9 @@ export function gamesPages(lang: SiteLang, urls: PublicUrls, dictionaries: Dicti
   const titled = (title: string): string => (title.length + BRAND.length <= TITLE_ROOM ? title + BRAND : title);
 
   /** A game as a card: where it is listed — on its galaxy's page, on the page of all games, beside another game. */
-  const card = (galaxy: CatalogGalaxy, game: CatalogGame): string => {
+  const card = (galaxy: CatalogGalaxy, game: CatalogGame, hidden = false): string => {
     const [from, to] = agesOf(game);
-    return `<article class="card"><div class="icon emoji" aria-hidden="true">${esc(game.icon)}</div><h3><a href="${at(gamePageSlug(galaxy.id, game.sub))}">${esc(game.title)}</a></h3><p>${esc(sentence(game.blurb))}</p><span class="tag">${esc(t('agesValue', { from, to }))}</span></article>`;
+    return `<article class="card"${hidden ? ' hidden' : ''}><div class="icon emoji" aria-hidden="true">${esc(game.icon)}</div><h3><a href="${at(gamePageSlug(galaxy.id, game.sub))}">${esc(game.title)}</a></h3><p>${esc(sentence(game.blurb))}</p><span class="tag">${esc(t('agesValue', { from, to }))}</span></article>`;
   };
 
   const tryButton = (id: string): string =>
@@ -165,6 +165,9 @@ export function gamesPages(lang: SiteLang, urls: PublicUrls, dictionaries: Dicti
     const langs = langsOf((all) => all.some((other) => other.games.some((candidate) => candidate.id === game.id)));
     const trail = crumbs([[t('all'), GAMES_SLUG], [galaxy.title, galaxySlug(galaxy.id)], [game.title, null]]);
     const stars = game.stars[0] === game.stars[1] ? t('difficultyValue', { stars: game.stars[0] }) : t('difficultyRange', { from: game.stars[0], to: game.stars[1] });
+    // On the page the stars themselves, as the game's cards draw them; in words for a screen reader and in the Markdown.
+    const starsHtml = `<span class="stars" role="img" aria-label="${esc(stars)}">${[1, 2, 3].map((n) => `<span class="${n <= game.stars[0] ? 'on' : n <= game.stars[1] ? 'half' : 'off'}" aria-hidden="true">★</span>`).join('')}</span>`;
+    const shownAs: Record<string, string> = { [t('difficulty')]: starsHtml };
     const facts: [string, string][] = [
       [t('ages'), t('agesValue', { from, to })],
       [t('difficulty'), stars],
@@ -176,7 +179,8 @@ export function gamesPages(lang: SiteLang, urls: PublicUrls, dictionaries: Dicti
     ];
     // The games that follow it in its galaxy, round the ring: every page leads to others, and no two to the same four.
     const here = galaxy.games.indexOf(game);
-    const neighbours = Array.from({ length: Math.min(NEIGHBOURS, galaxy.games.length - 1) }, (_, i) => galaxy.games[(here + 1 + i) % galaxy.games.length]);
+    // Without a script these are the ones shown (no two pages lead to the same four); a script draws others at random.
+    const others = Array.from({ length: galaxy.games.length - 1 }, (_, i) => galaxy.games[(here + 1 + i) % galaxy.games.length]);
     const blurb = game.blurb.replace(/[.!?…]$/, '');
     // What a parent is told about the game beyond its card — written for the site (`catalog.about.<module>.<sub>`), where a game has it.
     const aboutKey = `about.${game.id.replace(':', '.')}`;
@@ -190,8 +194,9 @@ export function gamesPages(lang: SiteLang, urls: PublicUrls, dictionaries: Dicti
       tryButton(game.id),
       `<section><h2>${esc(t('samples'))}</h2><p class="sub">${esc(t(game.kind === 'path' ? 'samplesLead' : 'samplesLeadFree'))}</p><div class="grid">${game.samples.map((task) => sampleCard(game, task)).join('')}</div></section>`,
       game.intro ? `<section><h2>${esc(t('tells'))}</h2><blockquote class="tells">${esc(game.intro)}</blockquote></section>` : '',
-      `<section><h2>${esc(t('facts'))}</h2><dl class="facts">${facts.map(([name, value]) => `<div><dt>${esc(name)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl></section>`,
-      neighbours.length > 0 ? `<section class="more"><h2>${esc(t('more', { galaxy: galaxy.title }))}</h2><div class="grid">${neighbours.map((other) => card(galaxy, other)).join('')}</div></section>` : '',
+      `<section><h2>${esc(t('facts'))}</h2><dl class="facts">${facts.map(([name, value]) => `<div><dt>${esc(name)}</dt><dd>${shownAs[name] ?? esc(value)}</dd></div>`).join('')}</dl></section>`,
+      // Every other game of the galaxy is built into the page; a visitor's script shows a few of them, drawn anew each visit (`inner.ts`).
+      others.length > 0 ? `<section class="more"><h2>${esc(t('more', { galaxy: galaxy.title }))}</h2><div class="grid" data-shuffle="${NEIGHBOURS}">${others.map((other, i) => card(galaxy, other, i >= NEIGHBOURS)).join('')}</div></section>` : '',
     ].join('\n');
     const markdown = [
       `# ${game.title}`,

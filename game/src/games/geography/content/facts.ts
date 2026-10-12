@@ -33,5 +33,11 @@ export const OCEAN_POOLS: Record<string, string[]> = {
  */
 export const LANDMARK_FACTS: Record<string, string[]> = J.LANDMARK_FACTS;
 
+/**
+ * Five facts about every capital of «Столиці» (keyed by country code, see
+ * `CAPITAL_OF`) — told after its question is answered.
+ */
+export const CAPITAL_FACTS: Record<string, string[]> = J.CAPITAL_FACTS;
+
 /** Nine stories about day and night; a question's own answer makes the tenth. */
 export const DAY_NIGHT_FACTS = J.DAY_NIGHT_FACTS;

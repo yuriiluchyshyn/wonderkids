@@ -245,7 +245,9 @@
     "1": "Now let’s meet the months. There are twelve of them in a year, and each belongs to its own season.",
     "2": "The months always follow one another. Remember which month is the neighbor!",
     "3": "Put the cards in order. Tap two cards to swap them.",
-    "4": "Every month has a number of its own: January is the first, and December the twelfth."
+    "4": "Every month has a number of its own: January is the first, and December the twelfth.",
+    "5": "The seasons follow one another too. Which one comes earlier, and which one later?",
+    "6": "Every season has three months. Which one does it start with, and which one does it end with?"
   },
   "monthSeason": {
     "ask": "Which season does {m} belong to?",
@@ -278,5 +280,23 @@
   "orderSeasons": {
     "ask": "Put the seasons in order. Start with {said}.",
     "circle": "The seasons go round in a circle: winter, spring, summer, fall — and winter again."
+  },
+  "seasonAfter": {
+    "ask": "Which season comes after {said}?",
+    "fact": "After {said} comes {s}."
+  },
+  "seasonBefore": {
+    "ask": "Which season comes before {said}?",
+    "fact": "Before {said} comes {s}."
+  },
+  "seasonFirst": {
+    "ask": "Which month does {said} start with?",
+    "hint": "Remember the months in order. Which month comes right after {prev} ends?",
+    "fact": "{name} starts in {m}."
+  },
+  "seasonLast": {
+    "ask": "Which month does {said} end with?",
+    "hint": "Remember the months in order. Which month comes just before {next} begins?",
+    "fact": "{name} ends in {m}."
   }
 }

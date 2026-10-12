@@ -28,9 +28,14 @@
         "intro": "Na naszej planecie jest pięć oceanów. Posłuchaj, dokąd płynąć, i dotknij właściwego oceanu na mapie! Dalej na drodze czekają zagadki o oceanach, morzach i zatokach, wyspach, krajach i rzekach."
       },
       "capitals": {
-        "label": "Stolice i strefy czasowe",
-        "blurb": "Stolice świata (jest ich {length}), dzień i noc oraz różnica czasu",
-        "intro": "Rozpoznaj stolicę po jej najsłynniejszej budowli i po nazwie kraju. A jeszcze dowiemy się, dlaczego w jednych miastach jest dzień, kiedy w innych noc, i która jest tam godzina!"
+        "label": "Stolice",
+        "blurb": "Stolice świata (jest ich {length}), ich słynne budowle i ciekawostki",
+        "intro": "Rozpoznaj stolicę po jej najsłynniejszej budowli i po nazwie kraju. Na każdym stopniu czekają nowe stolice, a znajome wracają, żeby nie wyleciały ci z głowy!"
+      },
+      "time": {
+        "label": "Dzień, noc i różnica czasu",
+        "blurb": "Dlaczego w jednych miastach jest dzień, kiedy w innych noc, i która jest tam godzina",
+        "intro": "Ziemia się obraca, a Słońce oświetla raz jedną jej stronę, raz drugą. Dlatego kiedy u nas jest dzień, gdzieś daleko jest noc. Sprawdźmy, gdzie teraz jest dzień, a gdzie noc, i która godzina jest w różnych miastach świata!"
       }
     }
   },
@@ -821,6 +826,568 @@
           "Dziś w Zamku Królewskim jest muzeum.",
           "Stare Miasto w Warszawie jest wpisane na listę dziedzictwa UNESCO.",
           "Symbolem Warszawy jest Syrenka z mieczem i tarczą."
+        ]
+      },
+      "CAPITAL_FACTS": {
+        "ua": [
+          "Kijów leży nad Dnieprem.",
+          "Kijów to jedno z najstarszych miast Europy: ma ponad półtora tysiąca lat.",
+          "Według legendy Kijów założyło trzech braci — Kij, Szczek i Chorew — oraz ich siostra Łybiedź.",
+          "Stacja Arsenalna kijowskiego metra to jedna z najgłębszych na świecie: ponad sto metrów pod ziemią.",
+          "W Ławrze Peczerskiej w Kijowie są jaskinie, w których mnisi mieszkali pod ziemią."
+        ],
+        "us": [
+          "Waszyngton nazwano na cześć Jerzego Waszyngtona — pierwszego prezydenta USA.",
+          "Waszyngton nie należy do żadnego stanu: to osobny Dystrykt Kolumbii.",
+          "Prawa Stanów Zjednoczonych uchwala się na Kapitolu w Waszyngtonie.",
+          "Pośrodku Waszyngtonu wznosi się Pomnik Waszyngtona — wysoki biały kamienny obelisk.",
+          "Wiosną w Waszyngtonie kwitną tysiące wiśni, które podarowała Japonia."
+        ],
+        "gb": [
+          "Londyn leży nad Tamizą.",
+          "Londyńskie metro jest najstarsze na świecie: ma ponad sto sześćdziesiąt lat.",
+          "Londyńczycy żartobliwie nazywają swoje metro „rurą”.",
+          "Słynne londyńskie autobusy są czerwone i piętrowe.",
+          "W Pałacu Buckingham w Londynie mieszkają brytyjscy królowie."
+        ],
+        "fr": [
+          "Paryż leży nad Sekwaną.",
+          "Paryż nazywają „miastem świateł”.",
+          "W paryskim Luwrze — jednym z największych muzeów świata — znajduje się „Mona Lisa”.",
+          "Pod Paryżem ciągną się katakumby — długie podziemne tunele.",
+          "Łuk Triumfalny w Paryżu zaczęto budować na rozkaz Napoleona."
+        ],
+        "de": [
+          "Berlin to największe miasto Niemiec.",
+          "Kiedyś Berlin był podzielony murem na dwie części, a w 1989 roku mur zburzono.",
+          "Symbolem Berlina jest niedźwiedź — widnieje w herbie miasta.",
+          "W Berlinie jest więcej mostów niż w Wenecji.",
+          "Na Wyspie Muzeów w Berlinie stoi pięć wielkich muzeów."
+        ],
+        "it": [
+          "Rzym nazywają „Wiecznym Miastem”.",
+          "Według legendy Rzym założyli bracia Romulus i Remus, których wykarmiła wilczyca.",
+          "Rzym leży na siedmiu wzgórzach.",
+          "Wewnątrz Rzymu jest całe państwo — Watykan, najmniejszy kraj świata.",
+          "Podobno kto wrzuci monetę do fontanny di Trevi, ten wróci do Rzymu."
+        ],
+        "pl": [
+          "Warszawa leży nad Wisłą.",
+          "W Warszawie urodziła się Maria Skłodowska-Curie — słynna uczona.",
+          "Stare Miasto w Warszawie po wojnie odbudowano niemal z ruin.",
+          "W Warszawie dorastał i uczył się kompozytor Fryderyk Chopin.",
+          "Latem w Łazienkach w Warszawie pod pomnikiem Chopina odbywają się koncerty pod gołym niebem."
+        ],
+        "jp": [
+          "Tokio razem z przedmieściami to największe miasto świata: mieszka tam ponad trzydzieści milionów ludzi.",
+          "Kiedyś Tokio nazywało się Edo.",
+          "Nazwa „Tokio” oznacza „wschodnia stolica”.",
+          "Z Tokio przy dobrej pogodzie widać górę Fudżi.",
+          "W Tokio stoi Skytree — najwyższa wieża świata."
+        ],
+        "ca": [
+          "Ottawa leży nad rzeką, która też nazywa się Ottawa.",
+          "Zimą kanał Rideau w Ottawie zamarza i staje się jednym z najdłuższych lodowisk świata.",
+          "Ottawę wybrała na stolicę królowa Wiktoria.",
+          "Co wiosnę w Ottawie kwitną tysiące tulipanów — prezent od Holandii.",
+          "Ottawa to jedna z najzimniejszych stolic świata."
+        ],
+        "es": [
+          "Madryt leży w samym środku Hiszpanii.",
+          "Madryt leży na wysokości ponad sześciuset metrów — wyżej niż inne duże stolice Europy Zachodniej.",
+          "W madryckim muzeum Prado wiszą obrazy wielkich malarzy.",
+          "Symbolem Madrytu jest niedźwiedź sięgający po owoce chruścinu.",
+          "Na placu Puerta del Sol w Madrycie jest „kilometr zero” — od niego liczy się odległości na drogach Hiszpanii."
+        ],
+        "cn": [
+          "Niedaleko Pekinu biegnie Wielki Mur Chiński.",
+          "Nazwa „Pekin” oznacza „północna stolica”.",
+          "Plac Tian’anmen w Pekinie to jeden z największych placów świata.",
+          "W pekińskim zoo mieszkają pandy wielkie.",
+          "Pekin to jedyne miasto, w którym odbyły się i letnie, i zimowe igrzyska olimpijskie."
+        ],
+        "br": [
+          "Brasílię zbudowano w zaledwie kilka lat i otwarto w 1960 roku.",
+          "Z góry Brasília przypomina samolot albo ptaka z rozpostartymi skrzydłami.",
+          "Brasílię zbudowano w głębi kraju, żeby ludzie przenosili się z wybrzeża do środka Brazylii.",
+          "Niezwykłe budynki Brasílii zaprojektował architekt Oscar Niemeyer.",
+          "Przed Brasílią stolicą Brazylii było Rio de Janeiro."
+        ],
+        "tr": [
+          "Ankara została stolicą Turcji w 1923 roku.",
+          "Największym miastem Turcji nie jest Ankara, lecz Stambuł.",
+          "W Ankarze stoi Anıtkabir — mauzoleum Atatürka, założyciela współczesnej Turcji.",
+          "Od dawnej nazwy Ankary — Angora — pochodzą nazwy kotów, kóz i królików angorskich.",
+          "Ankara leży pośrodku Turcji, na wysokim płaskowyżu."
+        ],
+        "gr": [
+          "Ateny nazwano na cześć Ateny — bogini mądrości.",
+          "Ateny mają ponad trzy tysiące lat — to jedno z najstarszych miast świata.",
+          "W Atenach w 1896 roku odbyły się pierwsze nowożytne igrzyska olimpijskie.",
+          "Przed parlamentem w Atenach stoi warta honorowa w spódniczkach i butach z pomponami.",
+          "W Atenach słońce świeci prawie trzysta dni w roku."
+        ],
+        "eg": [
+          "Kair leży nad Nilem — jedną z najdłuższych rzek świata.",
+          "Kair to jedno z największych miast Afryki.",
+          "W Muzeum Egipskim w Kairze przechowuje się skarby faraonów.",
+          "Kair nazywają „miastem tysiąca minaretów”.",
+          "Nazwa „Kair” oznacza „zwycięski”."
+        ],
+        "in": [
+          "Nowe Delhi zbudowano obok starego miasta Delhi.",
+          "W Nowym Delhi stoi Brama Indii — wielki kamienny łuk.",
+          "Nowe Delhi uroczyście otwarto jako stolicę w 1931 roku.",
+          "Latem w Nowym Delhi upał przekracza czasem czterdzieści stopni.",
+          "W Nowym Delhi jest Świątynia Lotosu, podobna do ogromnego białego kwiatu."
+        ],
+        "au": [
+          "Canberrę zbudowano specjalnie, bo Sydney i Melbourne nie mogły się zgodzić, które z nich będzie stolicą.",
+          "Canberrę zaprojektowali architekci Walter i Marion Griffinowie.",
+          "Pośrodku Canberry rozlewa się sztuczne jezioro Burley Griffin.",
+          "Na obrzeżach Canberry można zobaczyć dzikie kangury.",
+          "Nazwa „Canberra” pochodzi zapewne z języka rdzennych Australijczyków i oznacza „miejsce spotkań”."
+        ],
+        "mx": [
+          "Meksyk zbudowano w miejscu dawnego miasta Azteków — Tenochtitlan.",
+          "Meksyk leży wysoko w górach — ponad dwa tysiące metrów nad morzem.",
+          "Meksyk powoli się zapada, bo stoi na dnie dawnego jeziora.",
+          "Meksyk to jedno z największych miast świata.",
+          "Po kanałach Xochimilco w Meksyku pływa się kolorowymi łódkami."
+        ],
+        "ar": [
+          "Nazwa „Buenos Aires” oznacza „dobre powietrze”.",
+          "Buenos Aires to ojczyzna tańca tango.",
+          "W Buenos Aires jest jedna z najszerszych ulic świata — aleja 9 Lipca.",
+          "Buenos Aires leży nad szeroką rzeką La Plata.",
+          "Mieszkańców Buenos Aires nazywa się „porteños” — „ludzie z portu”."
+        ],
+        "ch": [
+          "Symbolem Berna jest niedźwiedź, a w mieście jest park niedźwiedzi.",
+          "Stare Miasto w Bernie wpisano na listę dziedzictwa UNESCO.",
+          "W Bernie Albert Einstein wymyślił swoją słynną teorię względności.",
+          "Berno opływa rzeka Aare, a latem ludzie spływają nią przez samo miasto.",
+          "Wieża zegarowa Zytglogge w Bernie odmierza czas od ponad pięciuset lat."
+        ],
+        "se": [
+          "Sztokholm leży na czternastu wyspach.",
+          "Sztokholm nazywają „Wenecją Północy”.",
+          "W Sztokholmie wręcza się Nagrody Nobla.",
+          "Stacje sztokholmskiego metra pomalowali artyści, dlatego nazywa się je najdłuższą galerią świata.",
+          "W sztokholmskim muzeum Vasa stoi okręt, który zatonął prawie czterysta lat temu."
+        ],
+        "no": [
+          "W Oslo wręcza się Pokojową Nagrodę Nobla.",
+          "Oslo otaczają lasy i morska zatoka — fiord.",
+          "W parku Vigelanda w Oslo stoją setki kamiennych rzeźb ludzi.",
+          "W Oslo przechowuje się prawdziwe statki wikingów.",
+          "Nad Oslo stoi słynna skocznia narciarska Holmenkollen."
+        ],
+        "nl": [
+          "W Amsterdamie jest ponad sto kilometrów kanałów.",
+          "W Amsterdamie jest więcej rowerów niż ludzi.",
+          "Domy Amsterdamu stoją na drewnianych palach wbitych w bagnistą ziemię.",
+          "W Amsterdamie jest muzeum malarza Vincenta van Gogha.",
+          "Amsterdam nazwano od tamy na rzece Amstel."
+        ],
+        "pt": [
+          "Lizbona, tak jak Rzym, leży na siedmiu wzgórzach.",
+          "Stromymi uliczkami Lizbony jeżdżą stare żółte tramwaje.",
+          "W 1755 roku Lizbonę zniszczyło silne trzęsienie ziemi i miasto odbudowano od nowa.",
+          "Z Lizbony wyruszali w dalekie rejsy żeglarze, tacy jak Vasco da Gama.",
+          "Lizboński Most 25 Kwietnia przypomina most Golden Gate w San Francisco."
+        ],
+        "kr": [
+          "W Seulu i wokół niego mieszka połowa wszystkich mieszkańców Korei Południowej.",
+          "Seul leży nad rzeką Han.",
+          "W Seulu zachowało się pięć dawnych pałaców królewskich.",
+          "Seul otaczają góry, a na niektóre z nich wchodzi się prosto z miasta.",
+          "Seul to jedno z miast z najszybszym internetem na świecie."
+        ],
+        "at": [
+          "Wiedeń leży nad Dunajem.",
+          "Wiedeń nazywają stolicą muzyki: mieszkali tu Mozart, Beethoven i Strauss.",
+          "W Wiedniu jest najstarsze na świecie zoo, które wciąż działa.",
+          "Wiedeński diabelski młyn kręci się od ponad stu lat.",
+          "Co zimę w Wiedniu odbywają się setki balów, na których tańczy się walca."
+        ],
+        "cz": [
+          "Pragę nazywają „miastem stu wież”.",
+          "Praski zegar astronomiczny działa od ponad sześciuset lat.",
+          "Hradczany w Pradze to jeden z największych zamków świata.",
+          "Przez Wełtawę w Pradze prowadzi Most Karola z posągami.",
+          "Praga prawie nie ucierpiała w wojnach, więc jej stare domy przetrwały."
+        ],
+        "be": [
+          "W Brukseli działają najważniejsze urzędy Unii Europejskiej.",
+          "Symbolem Brukseli jest mały posąg chłopca — Manneken Pis.",
+          "Bruksela słynie z czekolady i gofrów.",
+          "Atomium w Brukseli to olbrzymi model kryształu żelaza z kulami, do których można wejść.",
+          "Co dwa lata Grand-Place w Brukseli pokrywa się dywanem z kwiatów."
+        ],
+        "dk": [
+          "W Kopenhadze jest Tivoli — jeden z najstarszych parków rozrywki na świecie.",
+          "W Kopenhadze mieszkał bajkopisarz Hans Christian Andersen.",
+          "Mieszkańcy Kopenhagi bardzo dużo jeżdżą na rowerach.",
+          "Nazwa „Kopenhaga” oznacza „kupiecki port”.",
+          "Nabrzeże Nyhavn w Kopenhadze słynie z kolorowych domków."
+        ],
+        "fi": [
+          "Helsinki leżą nad Morzem Bałtyckim, wśród setek wysp.",
+          "Na wyspach koło Helsinek stoi dawna twierdza morska Suomenlinna.",
+          "Latem w Helsinkach prawie nie robi się ciemno, a zimą dzień jest bardzo krótki.",
+          "W Helsinkach jest kościół wykuty w skale.",
+          "Finowie uwielbiają saunę, a w Helsinkach są sauny nad samym morzem."
+        ],
+        "ie": [
+          "Dublin leży nad rzeką Liffey.",
+          "Nazwa „Dublin” oznacza „czarny staw”.",
+          "Siedemnastego marca Dublin świętuje Dzień Świętego Patryka i całe miasto ubiera się na zielono.",
+          "W Dublinie przechowuje się Księgę z Kells — malowany rękopis sprzed ponad tysiąca lat.",
+          "W dublińskim Phoenix Park żyją dzikie jelenie."
+        ],
+        "hu": [
+          "Budapeszt powstał z dwóch miast — Budy i Pesztu — na przeciwnych brzegach Dunaju.",
+          "Pod Budapesztem biją gorące źródła, dlatego jest tu wiele kąpielisk.",
+          "Metro w Budapeszcie jest najstarsze na kontynencie europejskim.",
+          "Gmach parlamentu węgierskiego w Budapeszcie to jeden z największych w Europie.",
+          "W Budapeszcie Ernő Rubik wymyślił swoją słynną kostkę."
+        ],
+        "ro": [
+          "Pałac Parlamentu w Bukareszcie to jeden z największych budynków świata.",
+          "Kiedyś Bukareszt nazywano „małym Paryżem”.",
+          "Bukareszt ma własny Łuk Triumfalny.",
+          "W bukareszteńskim skansenie stoją stare chaty z całej Rumunii.",
+          "Według legendy Bukareszt założył pasterz o imieniu Bucur."
+        ],
+        "bg": [
+          "Sofię nazwano od dawnej cerkwi Świętej Zofii.",
+          "Nad Sofią wznosi się góra Witosza.",
+          "Sofia ma ponad dwa tysiące lat, a dawniej nazywała się Serdika.",
+          "W Sofii stoi sobór Aleksandra Newskiego ze złotymi kopułami.",
+          "W centrum Sofii biją źródła mineralne i każdy może nabrać z nich wody."
+        ],
+        "hr": [
+          "Górne i dolne miasto Zagrzebia łączy jedna z najkrótszych kolejek linowo-terenowych świata.",
+          "Dach kościoła Świętego Marka w Zagrzebiu ułożono z kolorowych dachówek w kształcie herbów.",
+          "Zagrzeb leży nad rzeką Sawą.",
+          "W Zagrzebiu inżynier Slavoljub Penkala wynalazł ołówek automatyczny.",
+          "Nad Zagrzebiem wznosi się Medvednica — „niedźwiedzia góra”."
+        ],
+        "sk": [
+          "Bratysława leży nad Dunajem.",
+          "Bratysława to jedyna stolica, która graniczy od razu z dwoma innymi krajami: Austrią i Węgrami.",
+          "Kiedyś w Bratysławie koronowano królów Węgier.",
+          "Na wzgórzu nad Bratysławą stoi kwadratowy zamek z czterema wieżami.",
+          "Na ulicach Bratysławy stoją zabawne figury z brązu — na przykład robotnik wyglądający ze studzienki."
+        ],
+        "lt": [
+          "Wilno leży tam, gdzie łączą się rzeki Wilia i Wilenka.",
+          "Stare Miasto w Wilnie to jedno z największych w Europie Wschodniej.",
+          "Wileńska dzielnica Užupis żartobliwie nazywa siebie osobną republiką.",
+          "Według legendy książę Giedymin założył Wilno po śnie o żelaznym wilku.",
+          "Z Wieży Giedymina widać całe Stare Miasto w Wilnie."
+        ],
+        "lv": [
+          "Ryga leży nad Dźwiną, niedaleko Morza Bałtyckiego.",
+          "W Rydze jest wiele domów ozdobionych wzorami, twarzami i kwiatami — to secesja.",
+          "Ryga ma ponad osiemset lat.",
+          "Według podania ponad pięćset lat temu w Rydze po raz pierwszy ubrano choinkę.",
+          "Targ Centralny w Rydze urządzono w ogromnych starych hangarach na sterowce."
+        ],
+        "ee": [
+          "Stare Miasto w Tallinnie otacza średniowieczny mur z basztami.",
+          "Iglicę ratusza w Tallinnie zdobi wiatrowskaz „Stary Tomasz” — strażnik miasta.",
+          "W Tallinnie programiści stworzyli Skype’a.",
+          "Tallinn leży nad Zatoką Fińską, naprzeciwko Helsinek.",
+          "Apteka Ratuszowa w Tallinnie działa od ponad pięciuset lat."
+        ],
+        "md": [
+          "Kiszyniów to jedno z najbardziej zielonych miast: jest tu wiele parków i alei.",
+          "Niedaleko Kiszyniowa są ogromne piwnice winne Mileștii Mici — całe podziemne miasto z ulicami.",
+          "W centrum Kiszyniowa stoi Łuk Triumfalny.",
+          "Kiszyniów leży nad rzeką Bîc.",
+          "Kiszyniów po raz pierwszy wspomniano w dawnych dokumentach prawie sześćset lat temu."
+        ],
+        "ge": [
+          "Nazwa „Tbilisi” oznacza „ciepły”: biją tu gorące źródła siarkowe.",
+          "Nad Tbilisi stoi posąg „Matka Gruzja” z czarą wina i mieczem.",
+          "Tbilisi leży nad rzeką Kurą.",
+          "Nad starym Tbilisi wznosi się dawna twierdza Narikala.",
+          "Szklany Most Pokoju w Tbilisi nocą świeci tysiącami światełek."
+        ],
+        "sa": [
+          "Rijad leży pośrodku pustyni.",
+          "Nazwa „Rijad” oznacza „ogrody”.",
+          "Latem w Rijadzie upał przekracza czasem czterdzieści pięć stopni.",
+          "Wieżowiec Kingdom Centre w Rijadzie ma na szczycie most między dwiema wieżami.",
+          "Kiedyś Rijad był małym miasteczkiem z glinianych domów, otoczonym murem."
+        ],
+        "ae": [
+          "Abu Zabi leży na wyspie w Zatoce Perskiej.",
+          "W Abu Zabi jest biały meczet szejka Zajida z dziesiątkami kopuł.",
+          "Nazwa „Abu Zabi” oznacza „ojciec gazeli”.",
+          "Dawniej mieszkańcy Abu Zabi nurkowali po perły na dno morza.",
+          "W parku rozrywki Ferrari World w Abu Zabi jest jedna z najszybszych kolejek górskich świata."
+        ],
+        "th": [
+          "Pełna nazwa Bangkoku to jedna z najdłuższych nazw miast na świecie.",
+          "Sami Tajowie nazywają Bangkok „Krung Thep” — „miasto aniołów”.",
+          "Na pływających targach w Bangkoku handluje się prosto z łodzi.",
+          "W świątyni Wat Pho w Bangkoku leży ogromny złoty posąg Buddy.",
+          "Bangkok to jedna z najgorętszych stolic świata."
+        ],
+        "vn": [
+          "Nazwa „Hanoi” oznacza „miasto między rzekami”.",
+          "Pośrodku Hanoi jest Jezioro Zwróconego Miecza z legendą o czarodziejskim żółwiu.",
+          "Hanoi ma ponad tysiąc lat.",
+          "Ulicami Hanoi jeżdżą miliony motocykli i skuterów.",
+          "W hanojskim teatrze lalek na wodzie lalki tańczą prosto na wodzie."
+        ],
+        "nz": [
+          "Wellington to najbardziej wysunięta na południe stolica świata.",
+          "Wellington nazywają „wietrznym miastem”.",
+          "Niedaleko Wellingtonu kręcono filmy „Władca Pierścieni”.",
+          "Nad ulicami Wellingtonu na wzgórze wjeżdża czerwona kolejka linowo-terenowa.",
+          "W muzeum Te Papa w Wellingtonie przechowuje się olbrzymią kałamarnicę."
+        ],
+        "cu": [
+          "Ulicami Hawany wciąż jeżdżą kolorowe stare amerykańskie samochody.",
+          "Wzdłuż morza w Hawanie ciągnie się długi bulwar Malecón.",
+          "Stara Hawana jest wpisana na listę dziedzictwa UNESCO.",
+          "Hawanę założyli Hiszpanie ponad pięćset lat temu.",
+          "Wejścia do portu w Hawanie strzeże stara twierdza Morro z latarnią morską."
+        ],
+        "jm": [
+          "Kingston leży nad jedną z największych naturalnych zatok portowych świata.",
+          "W Kingston jest muzeum Boba Marleya — słynnego muzyka.",
+          "Nad Kingston wznoszą się Góry Błękitne, gdzie uprawia się kawę.",
+          "Kingston to ojczyzna muzyki reggae.",
+          "Niedaleko Kingston leży Port Royal, który kiedyś był kryjówką piratów."
+        ],
+        "cl": [
+          "Santiago leży u stóp Andów.",
+          "Z Santiago w kilka godzin można dojechać i do ośrodka narciarskiego, i nad ocean.",
+          "Nad Santiago wznosi się wzgórze San Cristóbal z dużym białym posągiem.",
+          "W Santiago stoi Gran Torre — najwyższy wieżowiec Ameryki Łacińskiej.",
+          "Santiago założyli Hiszpanie prawie pięćset lat temu."
+        ],
+        "co": [
+          "Bogota leży wysoko w górach — ponad dwa i pół tysiąca metrów nad morzem.",
+          "W Muzeum Złota w Bogocie są tysiące dawnych złotych ozdób.",
+          "W każdą niedzielę niektóre ulice Bogoty zamyka się dla samochodów i jeżdżą nimi rowerzyści.",
+          "Na górę Monserrate nad Bogotą można wjechać kolejką linową.",
+          "Bogota to jedno z największych miast Ameryki Południowej."
+        ],
+        "pe": [
+          "Lima leży nad Oceanem Spokojnym.",
+          "W Limie prawie nigdy nie pada deszcz.",
+          "Limę założył Hiszpan Francisco Pizarro.",
+          "Lima słynie z ceviche — potrawy z ryby i soku z limonki.",
+          "Pod klasztorem Świętego Franciszka w Limie są stare katakumby."
+        ],
+        "is": [
+          "Reykjavík to najbardziej wysunięta na północ stolica świata.",
+          "Nazwa „Reykjavík” oznacza „dymiąca zatoka” — od pary gorących źródeł.",
+          "Domy w Reykjavíku ogrzewa ciepło gorących źródeł spod ziemi.",
+          "Zimą nad Reykjavíkiem można zobaczyć zorzę polarną.",
+          "Latem w Reykjavíku prawie nie ma nocy."
+        ],
+        "rs": [
+          "Nazwa „Belgrad” oznacza „białe miasto”.",
+          "Belgrad leży tam, gdzie Sawa wpada do Dunaju.",
+          "Nad rzekami w Belgradzie wznosi się dawna twierdza Kalemegdan.",
+          "Belgrad to jedno z najstarszych miast Europy.",
+          "Cerkiew Świętego Sawy w Belgradzie to jedna z największych cerkwi prawosławnych na świecie."
+        ],
+        "si": [
+          "Symbolem Lublany jest smok, a na Smoczym Moście siedzą cztery smoki.",
+          "Na wzgórzu pośrodku Lublany stoi stary zamek.",
+          "Centrum Lublany zamknięto dla samochodów — chodzi się tam pieszo i jeździ rowerem.",
+          "Przez Lublanę płynie rzeka Lublanica z wieloma mostami.",
+          "Niedaleko Lublany znaleziono najstarsze drewniane koło na świecie — ma ponad pięć tysięcy lat."
+        ],
+        "cy": [
+          "Nikozja to największe miasto Cypru.",
+          "Nikozja leży w głębi wyspy, daleko od morza.",
+          "Stare miasto Nikozji otaczają kamienne mury w kształcie gwiazdy.",
+          "Nikozja to jedna z najgorętszych stolic Europy.",
+          "Przez Nikozję biegnie linia podziału, więc miasto jest podzielone na dwie części."
+        ],
+        "mt": [
+          "Valletta to jedna z najmniejszych stolic Europy: można ją obejść pieszo w godzinę.",
+          "Vallettę zbudowali rycerze Zakonu Maltańskiego.",
+          "Vallettę nazwano na cześć wielkiego mistrza zakonu Jeana de la Valette’a.",
+          "Valletta leży na półwyspie między dwoma portami.",
+          "Cała Valletta jest wpisana na listę dziedzictwa UNESCO."
+        ],
+        "kz": [
+          "Astana została stolicą Kazachstanu w 1997 roku, a wcześniej stolicą były Ałmaty.",
+          "Nazwa „Astana” po kazachsku oznacza „stolica”.",
+          "Wieża Bajterek w Astanie przypomina drzewo, które trzyma w gałęziach złote jajo.",
+          "Astana to jedna z najzimniejszych stolic świata.",
+          "W Astanie jest olbrzymi namiot Chan Szatyr, a w środku — plaża."
+        ],
+        "am": [
+          "Erywań to jedno z najstarszych miast świata: ma ponad dwa i pół tysiąca lat.",
+          "Z Erywania widać górę Ararat.",
+          "Wiele domów w Erywaniu zbudowano z różowego kamienia, dlatego nazywa się go „różowym miastem”.",
+          "Kaskada w Erywaniu to olbrzymie schody z fontannami i rzeźbami.",
+          "W erywańskim Matenadaranie przechowuje się tysiące dawnych rękopisów."
+        ],
+        "az": [
+          "Baku leży nad Morzem Kaspijskim.",
+          "Baku to najniżej położona stolica świata: leży poniżej poziomu oceanu.",
+          "Baku nazywają „miastem wiatrów”.",
+          "Wieża Panieńska w Baku to dawna okrągła kamienna wieża.",
+          "Nad Baku wznoszą się trzy Płomienne Wieże, podobne do języków ognia."
+        ],
+        "uz": [
+          "Taszkent to największe miasto Azji Środkowej.",
+          "Nazwa „Taszkent” oznacza „kamienne miasto”.",
+          "Stacje taszkenckiego metra są ozdobione jak pałace.",
+          "Taszkent ma ponad dwa tysiące lat.",
+          "Kiedyś przez Taszkent biegł Jedwabny Szlak."
+        ],
+        "mn": [
+          "Ułan Bator to najzimniejsza stolica świata.",
+          "Nazwa „Ułan Bator” oznacza „czerwony bohater”.",
+          "Wielu ludzi w Ułan Bator mieszka w jurtach — okrągłych namiotach z filcu.",
+          "Niedaleko Ułan Bator stoi ogromny srebrzysty posąg Czyngis-chana na koniu.",
+          "Ułan Bator leży w dolinie wśród gór i stepów."
+        ],
+        "pk": [
+          "Islamabad zbudowano specjalnie jako stolicę w latach sześćdziesiątych XX wieku.",
+          "Nazwa „Islamabad” oznacza „miasto islamu”.",
+          "Meczet Fajsala w Islamabadzie przypomina ogromny namiot.",
+          "Islamabad leży u stóp wzgórz Margalla.",
+          "Islamabad to jedno z najbardziej zielonych miast Pakistanu."
+        ],
+        "ph": [
+          "Manila to jedno z najgęściej zaludnionych miast świata.",
+          "Manila wzięła nazwę od rośliny, która kiedyś rosła na brzegu zatoki.",
+          "W Manili przetrwała stara hiszpańska twierdza Intramuros — „miasto w murach”.",
+          "Ulicami Manili jeżdżą kolorowe jeepneye — busiki, które kiedyś robiono ze starych wojskowych jeepów.",
+          "Manila leży nad Zatoką Manilską, słynną z pięknych zachodów słońca."
+        ],
+        "my": [
+          "W Kuala Lumpur stoją Petronas Towers — kiedyś najwyższe budynki świata.",
+          "Nazwa „Kuala Lumpur” oznacza „mętne ujście rzeki”.",
+          "Do jaskiń Batu koło Kuala Lumpur prowadzą 272 kolorowe schody.",
+          "Kuala Lumpur wyrosło z małej osady górników wydobywających cynę.",
+          "W Kuala Lumpur jest ogromny park ptaków."
+        ],
+        "np": [
+          "Katmandu leży w dolinie wśród Himalajów.",
+          "Z Katmandu wyruszają wędrowcy, którzy chcą wejść na Mount Everest.",
+          "W Katmandu mieszka Kumari — dziewczynka czczona jako żywa bogini.",
+          "Przy świątyni Swayambhunath w Katmandu mieszka wiele małp.",
+          "Nazwa „Katmandu” pochodzi od dawnej drewnianej świątyni w centrum miasta."
+        ],
+        "ir": [
+          "Nad Teheranem wznoszą się góry Elburs, a zimą jeździ się tam na nartach.",
+          "Wieża Milad w Teheranie to jedna z najwyższych wież świata.",
+          "Teheran leży na zboczu, więc północ miasta jest dużo wyżej niż południe.",
+          "W Teheranie przechowuje się klejnoty dawnych władców Persji.",
+          "Teheran to największe miasto Iranu."
+        ],
+        "iq": [
+          "Bagdad leży nad Tygrysem.",
+          "Kiedyś Bagdad był jednym z największych i najbogatszych miast świata.",
+          "W dawnym Bagdadzie był „Dom Mądrości” — wielka biblioteka, do której zjeżdżali uczeni.",
+          "W Bagdadzie dzieje się wiele baśni z „Tysiąca i jednej nocy”.",
+          "Dawno temu Bagdad zbudowano jako okrągłe miasto, otoczone pierścieniem murów."
+        ],
+        "qa": [
+          "Doha leży nad Zatoką Perską.",
+          "Kiedyś Doha była małą osadą poławiaczy pereł.",
+          "Doha gościła piłkarskie mistrzostwa świata w 2022 roku.",
+          "Muzeum Sztuki Islamskiej w Dosze zbudowano na sztucznej wyspie.",
+          "Doha to jedna z najgorętszych stolic świata."
+        ],
+        "jo": [
+          "Amman leży na wzgórzach — kiedyś było ich siedem.",
+          "Dawna nazwa Ammanu to Filadelfia.",
+          "W centrum Ammanu jest rzymski teatr, który ma prawie dwa tysiące lat.",
+          "Domy w Ammanie są przeważnie białe albo beżowe, z kamienia.",
+          "Na wzgórzu nad Ammanem stoją ruiny dawnej świątyni Herkulesa."
+        ],
+        "lb": [
+          "Bejrut leży nad Morzem Śródziemnym.",
+          "Bejrut ma ponad pięć tysięcy lat.",
+          "Przy brzegu Bejrutu z morza wystają Gołębie Skały.",
+          "Kiedyś Bejrut nazywano „Paryżem Bliskiego Wschodu”.",
+          "Na fladze Libanu, którego stolicą jest Bejrut, widnieje zielony cedr."
+        ],
+        "ma": [
+          "Rabat leży nad Oceanem Atlantyckim.",
+          "W Rabacie stoi niedokończona Wieża Hassana, która ma ponad osiemset lat.",
+          "W dawnej twierdzy Kasba Udaja w Rabacie są biało-niebieskie uliczki.",
+          "Największym miastem Maroka nie jest Rabat, lecz Casablanca.",
+          "Rabat jest wpisany na listę dziedzictwa UNESCO."
+        ],
+        "ke": [
+          "Koło Nairobi jest park narodowy, w którym lwy i żyrafy żyją tuż obok wieżowców.",
+          "Nazwa „Nairobi” oznacza „chłodna woda”.",
+          "Nairobi wyrosło ze stacji kolejowej.",
+          "W Nairobi jest schronisko dla osieroconych słoniątek.",
+          "Nairobi leży wysoko — prawie dwa kilometry nad morzem, więc nie jest tam bardzo gorąco."
+        ],
+        "ng": [
+          "Abudżę zbudowano specjalnie w środku kraju, a wcześniej stolicą był Lagos.",
+          "Niedaleko Abudży wznosi się ogromna skała Zuma.",
+          "Abudża została stolicą Nigerii w 1991 roku.",
+          "Abudża to jedno z najmłodszych i najszybciej rosnących miast Afryki.",
+          "W Abudży stoi Meczet Narodowy ze złotą kopułą."
+        ],
+        "et": [
+          "Nazwa „Addis Abeba” oznacza „nowy kwiat”.",
+          "Addis Abeba to jedna z najwyżej położonych stolic świata.",
+          "W muzeum w Addis Abebie przechowuje się szkielet Lucy — dawnej krewnej ludzi sprzed ponad trzech milionów lat.",
+          "Etiopia to ojczyzna kawy, a w Addis Abebie pali się ją i parzy w domu.",
+          "W Addis Abebie działa Unia Afrykańska — związek państw Afryki."
+        ],
+        "gh": [
+          "Akra leży nad Oceanem Atlantyckim.",
+          "Rzemieślnicy w Akrze robią niezwykłe trumny w kształcie ryb, samolotów i samochodów.",
+          "Akra to największe miasto Ghany.",
+          "W Akrze stoi Łuk Niepodległości na cześć wolności Ghany.",
+          "Ghana uprawia bardzo dużo kakao, z którego robi się czekoladę."
+        ],
+        "ve": [
+          "Caracas leży w dolinie otoczonej górami.",
+          "Z góry Ávila nad Caracas widać Morze Karaibskie.",
+          "W Caracas urodził się Simón Bolívar — bohater Ameryki Południowej.",
+          "Caracas leży prawie kilometr nad morzem, więc jest tam ciepło, ale nie upalnie.",
+          "Miasteczko uniwersyteckie w Caracas jest wpisane na listę dziedzictwa UNESCO."
+        ],
+        "uy": [
+          "Montevideo to najbardziej wysunięta na południe stolica obu Ameryk.",
+          "Wzdłuż Montevideo ciągnie się bulwar Rambla długi na ponad dwadzieścia kilometrów.",
+          "W Montevideo w 1930 roku odbyły się pierwsze piłkarskie mistrzostwa świata.",
+          "Montevideo leży nad szeroką rzeką La Plata.",
+          "W Montevideo mieszka ponad jedna trzecia wszystkich mieszkańców Urugwaju."
+        ],
+        "py": [
+          "Asunción to jedno z najstarszych miast Ameryki Południowej.",
+          "Asunción leży nad rzeką Paragwaj.",
+          "Asunción nazywają „matką miast”, bo stąd wyruszano zakładać inne miasta.",
+          "W Asunción mówi się dwoma językami — hiszpańskim i guarani.",
+          "Asunción to jedno z najgorętszych miast Ameryki Południowej."
+        ],
+        "ec": [
+          "Quito to jedna z najwyżej położonych stolic świata: prawie trzy tysiące metrów nad morzem.",
+          "Quito leży tuż przy równiku.",
+          "Koło Quito stoi pomnik „Środek Świata” — na linii równika.",
+          "Nad Quito wznosi się wulkan Pichincha.",
+          "Stare Miasto w Quito jako jedno z pierwszych na świecie wpisano na listę UNESCO."
+        ],
+        "cr": [
+          "San José leży w dolinie wśród wulkanów.",
+          "Kostaryka, której stolicą jest San José, nie ma armii.",
+          "W San José jest Muzeum Złota Prekolumbijskiego.",
+          "San José było jednym z pierwszych miast świata z elektrycznymi latarniami na ulicach.",
+          "Na zboczach wokół San José uprawia się słynną kostarykańską kawę."
         ]
       },
       "DAY_NIGHT": {

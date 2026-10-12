@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import {
   useGameStore,
   selectNicknameTaken,
-  type ChoicesGridSize,
   type Gender,
 } from '@/core/child/store/useGameStore';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
@@ -20,10 +19,6 @@ const GENDER_OPTIONS: { id: Gender; icon: string }[] = [
   { id: 'girl', icon: '👧' },
   { id: 'boy', icon: '👦' },
 ];
-const GRID_OPTIONS: { id: ChoicesGridSize; label: string }[] = [
-  { id: 6, label: '6' },
-  { id: 9, label: '9' },
-];
 
 type NickStatus = 'idle' | 'invalid' | 'checking' | 'available' | 'taken' | 'error';
 
@@ -32,7 +27,6 @@ interface NewChild {
   nickname: string;
   pin: string;
   gender: Gender;
-  choicesGridSize: ChoicesGridSize;
 }
 
 const BLANK: NewChild = {
@@ -40,7 +34,6 @@ const BLANK: NewChild = {
   nickname: '',
   pin: '',
   gender: 'girl',
-  choicesGridSize: 9,
 };
 
 /**
@@ -122,9 +115,6 @@ export function ChildManager() {
         nickname: draft.nickname,
         pin: draft.pin,
         gender: draft.gender,
-      },
-      settings: {
-        choicesGridSize: draft.choicesGridSize,
       },
     });
     setAdding(false);
@@ -248,20 +238,6 @@ export function ChildManager() {
                   label={t(`gender.${g.id}`)}
                   active={draft.gender === g.id}
                   onClick={() => setDraft((d) => ({ ...d, gender: g.id }))}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className={styles.fieldLabel}>{t('parent.grid.label')}</label>
-            <div className={styles.chipRow}>
-              {GRID_OPTIONS.map((o) => (
-                <Chip
-                  key={o.id}
-                  label={o.label}
-                  active={draft.choicesGridSize === o.id}
-                  onClick={() => setDraft((d) => ({ ...d, choicesGridSize: o.id }))}
                 />
               ))}
             </div>

@@ -10,6 +10,7 @@ import { useVoiceStopsOnLeave, voice } from '@/core/audio/voice';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/child/store/useGameStore';
+import { finishDemo, useDemo } from '@/core/app/demo';
 import type { Treasure } from '@/core/theme/theme.types';
 import { hasChest, pickChestTreasure, treasureKey } from '@/core/child/progress/treasures';
 import { cn } from '@/core/utils/cn';
@@ -55,6 +56,9 @@ const GIFT_META: Record<Exclude<GiftTier, null>, { emoji: string; size: string }
   big: { emoji: '🎁', size: '4.4rem' },
   biggest: { emoji: '🏆', size: '5.4rem' },
 };
+
+/** How long the trial's win screen stays, after it has been read out, before the way to an account. */
+const TRIAL_OVER_MS = 2500;
 
 /** How long a task that explains itself (`payload.explain`) waits for an answer before it does. */
 const EXPLAIN_IDLE_MS = 20_000;
@@ -343,6 +347,15 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // Leaving the game takes its voice along.
   useVoiceStopsOnLeave();
 
+  // The trial game is one level: once its win screen has been seen and read
+  // out, the way to an account takes over (`DemoOver`) — or sooner, on «Далі».
+  const trial = useDemo((s) => s.active);
+  useEffect(() => {
+    if (!trial || !(session.finished && revealDone && summarySaid)) return;
+    const id = window.setTimeout(finishDemo, TRIAL_OVER_MS);
+    return () => window.clearTimeout(id);
+  }, [trial, session.finished, revealDone, summarySaid]);
+
   // Arm the bedtime cutscene the moment the tank runs dry during play.
   useEffect(() => {
     if (phase === 'play' && outOfTime && !bedtimeArmed) {
@@ -419,8 +432,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     boardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  // The house, the title and the purse share the top row (the title held to
+  // the left); the race track and its segments run beneath: a grid of three rows.
   const header = (
-    <div className={styles.header}>
+    <div className={cn(styles.header, phase === 'play' && styles.headerPlay)}>
       <button className={styles.back} onClick={onExit} aria-label={t('game.back')} data-tip="home">
         🏠
       </button>
@@ -431,7 +446,11 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         {/* The race and the task count are one gauge: the track sits under the
             title, and one segment per task right beneath it. A task added
             while idling adds a segment, and all of them narrow to fit. */}
-        {phase === 'play' && <Companion progress={progress} />}
+        {phase === 'play' && (
+          <div className={styles.track}>
+            <Companion progress={progress} />
+          </div>
+        )}
         {phase === 'play' && (
           <div
             className={styles.dots}
@@ -654,8 +673,13 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
             {t('game.tasksDone', { count: session.total })} {t('game.win.great')}
           </p>
           <div className={styles.summaryActions}>
-            {/* A next level leads on; replay is offered only once the path is done. */}
-            {config.step < maxSteps ? (
+            {/* The trial is one level: what follows it is the way to an account. */}
+            {trial ? (
+              <Button size="lg" icon="▶️" block onClick={finishDemo}>
+                {t('demo.next')}
+              </Button>
+            ) : /* A next level leads on; replay is offered only once the path is done. */
+            config.step < maxSteps ? (
               <Button size="lg" icon="▶️" block onClick={onContinue}>
                 {t('game.win.next')}
               </Button>
@@ -664,9 +688,11 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
                 {t('game.win.again')}
               </Button>
             )}
-            <Button size="lg" variant="ghost" icon="🏠" block onClick={onExit}>
-              {t('game.win.exit')}
-            </Button>
+            {!trial && (
+              <Button size="lg" variant="ghost" icon="🏠" block onClick={onExit}>
+                {t('game.win.exit')}
+              </Button>
+            )}
           </div>
         </div>
       </Modal>

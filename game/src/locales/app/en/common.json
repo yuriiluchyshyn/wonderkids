@@ -576,11 +576,6 @@
       "hint": "The first time round, the game explains to your child what each button does. A tip your child has closed does not come back. Tips read: {count}.",
       "reset": "Show them again"
     },
-    "grid": {
-      "title": "🔢 Answer grid",
-      "label": "Answer grid",
-      "hint": "More options make it harder to guess at random."
-    },
     "money": {
       "title": "💰 Currency in games",
       "hint": "The coins and bills your child counts and pays with in the games.",
@@ -936,11 +931,12 @@
     "leave": "Leave the trial game",
     "over": {
       "title": "Your trial trip is over!",
-      "text": "You play wonderfully! This was a trial game, so everything you collected is not saved yet. Call Mom or Dad and ask them to create an account for you — then you can keep playing, and everything you collect will stay with you.",
+      "text": "A whole level done — well played! This was a trial game, so everything you collected is not saved yet. Call Mom or Dad and ask them to create an account for you — then you can keep playing, and everything you collect will stay with you.",
       "listen": "Listen again",
       "parents": "For parents: progress is not saved in the trial game. Create an account and add your child’s profile — they will keep playing, and their progress will be saved.",
       "login": "We already have an account"
-    }
+    },
+    "next": "Next"
   },
   "legal": {
     "note": "By signing in or creating an account you accept the terms and the privacy policy:",

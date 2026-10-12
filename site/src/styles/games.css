@@ -133,6 +133,27 @@
   margin: 0;
 }
 
+/* The other games of a galaxy that are not drawn this visit (`data-shuffle`). */
+.more .card[hidden] {
+  display: none;
+}
+
+/* Difficulty as the game's own cards show it: three stars, lit as far as the game goes. */
+.stars {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.22);
+}
+.stars .on {
+  color: #f59e0b;
+}
+/* The upper end of a range: the game grows into these stars. */
+.stars .half {
+  color: #fcd34d;
+}
+
 /* The other galaxies, as a row of ways out. */
 .galaxies {
   display: flex;

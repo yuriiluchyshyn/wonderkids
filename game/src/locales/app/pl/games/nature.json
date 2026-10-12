@@ -3,6 +3,8 @@
     "winter": {
       "name": "Zima",
       "from": "zimy",
+      "after": "zimie",
+      "before": "zimą",
       "of": "zimowe",
       "no": "Brr, zimą tak się nie zdarza!",
       "facts": [
@@ -21,6 +23,8 @@
     "spring": {
       "name": "Wiosna",
       "from": "wiosny",
+      "after": "wiośnie",
+      "before": "wiosną",
       "of": "wiosenne",
       "no": "Nie, wiosną przyroda dopiero się budzi.",
       "facts": [
@@ -39,6 +43,8 @@
     "summer": {
       "name": "Lato",
       "from": "lata",
+      "after": "lecie",
+      "before": "latem",
       "of": "letnie",
       "no": "Latem jest na to za gorąco!",
       "facts": [
@@ -57,6 +63,8 @@
     "autumn": {
       "name": "Jesień",
       "from": "jesieni",
+      "after": "jesieni",
+      "before": "jesienią",
       "of": "jesienne",
       "no": "Jesienią widzimy coś innego.",
       "facts": [
@@ -285,7 +293,9 @@
     "1": "Teraz poznamy miesiące. W roku jest ich dwanaście, a każdy należy do swojej pory roku.",
     "2": "Miesiące zawsze idą jeden po drugim. Przypomnij sobie, który miesiąc jest sąsiedni!",
     "3": "Ustaw karty po kolei. Dotknij dwóch kart, żeby zamienić je miejscami.",
-    "4": "Każdy miesiąc ma swój numer: styczeń jest pierwszy, a grudzień — dwunasty."
+    "4": "Każdy miesiąc ma swój numer: styczeń jest pierwszy, a grudzień — dwunasty.",
+    "5": "Pory roku też idą jedna po drugiej. Która przychodzi wcześniej, a która później?",
+    "6": "Każda pora roku ma trzy miesiące. Którym się zaczyna, a którym kończy?"
   },
   "monthSeason": {
     "ask": "Do jakiej pory roku należy {m}?",
@@ -318,5 +328,23 @@
   "orderSeasons": {
     "ask": "Ustaw pory roku po kolei. Zacznij od {from}.",
     "circle": "Pory roku idą w kółko: zima, wiosna, lato, jesień — i znowu zima."
+  },
+  "seasonAfter": {
+    "ask": "Jaka pora roku przychodzi po {after}?",
+    "fact": "Po {after} przychodzi {s}."
+  },
+  "seasonBefore": {
+    "ask": "Jaka pora roku przychodzi przed {before}?",
+    "fact": "Przed {before} przychodzi {s}."
+  },
+  "seasonFirst": {
+    "ask": "Od jakiego miesiąca zaczyna się {s}?",
+    "hint": "Przypomnij sobie miesiące po kolei. Który miesiąc przychodzi zaraz po tym, jak kończy się {prev}?",
+    "fact": "{name} zaczyna się od {m}."
+  },
+  "seasonLast": {
+    "ask": "Jakim miesiącem kończy się {s}?",
+    "hint": "Przypomnij sobie miesiące po kolei. Po którym miesiącu zaczyna się {next}?",
+    "fact": "{name} kończy się {m}."
   }
 }

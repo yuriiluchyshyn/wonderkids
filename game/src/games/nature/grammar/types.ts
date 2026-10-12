@@ -24,4 +24,12 @@ export interface NatureTexts {
   ends: [first: string, last: string];
   nth: { ask(month: number): string; hint: string; fact(month: number): string };
   orderSeasons: { ask(first: SeasonId): string; circle: string };
+  /** «Яка пора року йде після зими?» — `fact` names the season that follows. */
+  seasonAfter: { ask(season: SeasonId): string; fact(season: SeasonId, next: SeasonId): string };
+  /** «Яка пора року йде перед літом?» — `fact` names the season that comes before. */
+  seasonBefore: { ask(season: SeasonId): string; fact(season: SeasonId, prev: SeasonId): string };
+  /** «З якого місяця починається зима?» — `month` is the answer; `prev` the season that ends then. */
+  seasonFirst: { ask(season: SeasonId): string; hint(prev: SeasonId): string; fact(season: SeasonId, month: number): string };
+  /** «Яким місяцем закінчується зима?» — `month` is the answer; `next` the season that begins then. */
+  seasonLast: { ask(season: SeasonId): string; hint(next: SeasonId): string; fact(season: SeasonId, month: number): string };
 }

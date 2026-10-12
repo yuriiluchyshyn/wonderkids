@@ -27,9 +27,14 @@
         "intro": "There are five oceans on our planet. Listen to where to sail, and tap the right ocean on the map! Farther along the way there are riddles about oceans, seas and gulfs, islands, countries and rivers."
       },
       "capitals": {
-        "label": "Capitals and Time Zones",
-        "blurb": "{length} capitals of the world, day and night, and the difference in time",
-        "intro": "Know a capital by its most famous building and by the name of its country. And we will also find out why it is day in some cities when it is night in others, and what time it is there!"
+        "label": "Capitals",
+        "blurb": "{length} capitals of the world, their famous buildings and fun facts",
+        "intro": "Know a capital by its most famous building and by the name of its country. Every step brings new capitals, and the ones you know come back so that you don’t forget them!"
+      },
+      "time": {
+        "label": "Day, Night and Time Difference",
+        "blurb": "Why it is day in some cities when it is night in others, and what time it is there",
+        "intro": "The Earth turns, and the Sun lights up first one side of it, then the other. So when it is day here, somewhere far away it is night. Let’s find out where it is day and where it is night, and what time it is in cities around the world!"
       }
     }
   },
@@ -819,6 +824,568 @@
           "Today the Royal Castle is a museum.",
           "The Old Town of Warsaw is on the UNESCO World Heritage List.",
           "The symbol of Warsaw is a mermaid with a sword and a shield."
+        ]
+      },
+      "CAPITAL_FACTS": {
+        "ua": [
+          "Kyiv stands on the banks of the Dnipro River.",
+          "Kyiv is one of the oldest cities in Europe: it is more than fifteen hundred years old.",
+          "Legend says Kyiv was founded by three brothers — Kyi, Shchek and Khoryv — and their sister Lybid.",
+          "Arsenalna station of the Kyiv metro is one of the deepest in the world: more than a hundred meters underground.",
+          "The Kyiv Pechersk Lavra has caves where monks once lived underground."
+        ],
+        "us": [
+          "Washington is named after George Washington, the first president of the United States.",
+          "Washington is not part of any state: it is a separate District of Columbia.",
+          "The laws of the United States are made in the Capitol in Washington.",
+          "In the middle of Washington rises the Washington Monument — a tall white stone tower.",
+          "Every spring thousands of cherry trees, a gift from Japan, bloom in Washington."
+        ],
+        "gb": [
+          "London stands on the River Thames.",
+          "The London Underground is the oldest in the world: it is more than one hundred and sixty years old.",
+          "Londoners jokingly call their underground “the Tube”.",
+          "London’s famous buses are red and have two floors.",
+          "British kings and queens live in Buckingham Palace in London."
+        ],
+        "fr": [
+          "Paris stands on the River Seine.",
+          "Paris is called “the City of Light”.",
+          "The Mona Lisa is kept in the Louvre in Paris — one of the biggest museums in the world.",
+          "Under Paris run the catacombs — long underground tunnels.",
+          "The Arc de Triomphe in Paris was begun on Napoleon’s orders."
+        ],
+        "de": [
+          "Berlin is the biggest city in Germany.",
+          "Berlin was once divided in two by a wall, and in 1989 the wall came down.",
+          "The symbol of Berlin is a bear — it is on the city’s coat of arms.",
+          "Berlin has more bridges than Venice.",
+          "Five big museums stand on Museum Island in Berlin."
+        ],
+        "it": [
+          "Rome is called “the Eternal City”.",
+          "Legend says Rome was founded by the brothers Romulus and Remus, who were raised by a she-wolf.",
+          "Rome stands on seven hills.",
+          "Inside Rome there is a whole country — the Vatican, the smallest country in the world.",
+          "People say whoever throws a coin into the Trevi Fountain will come back to Rome."
+        ],
+        "pl": [
+          "Warsaw stands on the Vistula River.",
+          "Marie Skłodowska-Curie, the famous scientist, was born in Warsaw.",
+          "After the war the Old Town of Warsaw was rebuilt almost from ruins.",
+          "The composer Frédéric Chopin grew up and studied in Warsaw.",
+          "In summer, concerts are played in the open air by the Chopin monument in Łazienki Park in Warsaw."
+        ],
+        "jp": [
+          "Tokyo with its suburbs is the biggest city in the world: more than thirty million people live there.",
+          "Tokyo used to be called Edo.",
+          "The name Tokyo means “eastern capital”.",
+          "On a clear day you can see Mount Fuji from Tokyo.",
+          "The Skytree in Tokyo is the tallest tower in the world."
+        ],
+        "ca": [
+          "Ottawa stands on a river that is also called the Ottawa.",
+          "In winter the Rideau Canal in Ottawa freezes and becomes one of the longest skating rinks in the world.",
+          "Ottawa was chosen as the capital by Queen Victoria.",
+          "Every spring thousands of tulips, a gift from the Netherlands, bloom in Ottawa.",
+          "Ottawa is one of the coldest capitals in the world."
+        ],
+        "es": [
+          "Madrid stands right in the middle of Spain.",
+          "Madrid lies more than six hundred meters high — higher than any other big capital of Western Europe.",
+          "The Prado Museum in Madrid has paintings by great artists.",
+          "The symbol of Madrid is a bear reaching up to a strawberry tree.",
+          "On the Puerta del Sol square in Madrid there is “kilometer zero” — the distances along Spain’s roads are counted from it."
+        ],
+        "cn": [
+          "The Great Wall of China runs not far from Beijing.",
+          "The name Beijing means “northern capital”.",
+          "Tiananmen Square in Beijing is one of the biggest squares in the world.",
+          "Giant pandas live in the Beijing Zoo.",
+          "Beijing is the only city that has held both the Summer and the Winter Olympic Games."
+        ],
+        "br": [
+          "Brasília was built in only a few years and opened in 1960.",
+          "From above, Brasília looks like an airplane or a bird with its wings spread.",
+          "Brasília was built deep inside the country so that people would move from the coast to the middle of Brazil.",
+          "The unusual buildings of Brasília were designed by the architect Oscar Niemeyer.",
+          "Before Brasília, the capital of Brazil was Rio de Janeiro."
+        ],
+        "tr": [
+          "Ankara became the capital of Turkey in 1923.",
+          "The biggest city in Turkey is not Ankara but Istanbul.",
+          "In Ankara stands Anıtkabir — the tomb of Atatürk, the founder of modern Turkey.",
+          "Ankara’s old name, Angora, gave its name to Angora cats, goats and rabbits.",
+          "Ankara lies in the middle of Turkey, on a high plateau."
+        ],
+        "gr": [
+          "Athens is named after Athena, the goddess of wisdom.",
+          "Athens is more than three thousand years old — one of the oldest cities in the world.",
+          "The first modern Olympic Games were held in Athens in 1896.",
+          "By the parliament in Athens stands an honor guard in little skirts and shoes with pompoms.",
+          "The sun shines in Athens almost three hundred days a year."
+        ],
+        "eg": [
+          "Cairo stands on the Nile — one of the longest rivers in the world.",
+          "Cairo is one of the biggest cities in Africa.",
+          "The treasures of the pharaohs are kept in the Egyptian Museum in Cairo.",
+          "Cairo is called “the city of a thousand minarets”.",
+          "The name Cairo means “the victorious”."
+        ],
+        "in": [
+          "New Delhi was built next to the old city of Delhi.",
+          "In New Delhi stands India Gate — a big stone arch.",
+          "New Delhi was officially opened as the capital in 1931.",
+          "In summer the heat in New Delhi can be more than forty degrees Celsius.",
+          "New Delhi has the Lotus Temple, which looks like a huge white flower."
+        ],
+        "au": [
+          "Canberra was built on purpose, because Sydney and Melbourne could not agree which of them would be the capital.",
+          "Canberra was planned by the architects Walter and Marion Griffin.",
+          "In the middle of Canberra lies Lake Burley Griffin, made by people.",
+          "On the edges of Canberra you can see wild kangaroos.",
+          "The name Canberra probably comes from a language of the first Australians and means “meeting place”."
+        ],
+        "mx": [
+          "Mexico City was built where the old Aztec city of Tenochtitlan stood.",
+          "Mexico City lies high in the mountains — more than two thousand meters above the sea.",
+          "Mexico City is slowly sinking, because it stands on the bed of an old lake.",
+          "Mexico City is one of the biggest cities in the world.",
+          "On the canals of Xochimilco in Mexico City people ride in colorful boats."
+        ],
+        "ar": [
+          "The name Buenos Aires means “good air”.",
+          "Buenos Aires is the home of the tango dance.",
+          "Buenos Aires has one of the widest streets in the world — 9 de Julio Avenue.",
+          "Buenos Aires stands on the shore of the wide Río de la Plata.",
+          "The people of Buenos Aires are called “porteños” — “people of the port”."
+        ],
+        "ch": [
+          "The symbol of Bern is a bear, and the city has a bear park.",
+          "The Old Town of Bern is on the UNESCO World Heritage list.",
+          "In Bern Albert Einstein came up with his famous theory of relativity.",
+          "The Aare River curves around Bern, and in summer people float down it right through the city.",
+          "The Zytglogge clock tower in Bern has been telling the time for more than five hundred years."
+        ],
+        "se": [
+          "Stockholm stands on fourteen islands.",
+          "Stockholm is called “the Venice of the North”.",
+          "The Nobel Prizes are given out in Stockholm.",
+          "The stations of the Stockholm metro are painted by artists, so it is called the longest gallery in the world.",
+          "The Vasa Museum in Stockholm holds a ship that sank almost four hundred years ago."
+        ],
+        "no": [
+          "The Nobel Peace Prize is given out in Oslo.",
+          "Oslo is surrounded by forests and a long sea inlet — a fjord.",
+          "Vigeland Park in Oslo has hundreds of stone sculptures of people.",
+          "Real Viking ships are kept in Oslo.",
+          "Above Oslo stands the famous Holmenkollen ski jump."
+        ],
+        "nl": [
+          "Amsterdam has more than a hundred kilometers of canals.",
+          "Amsterdam has more bicycles than people.",
+          "The houses of Amsterdam stand on wooden posts driven into marshy ground.",
+          "Amsterdam has a museum of the painter Vincent van Gogh.",
+          "Amsterdam is named after a dam on the Amstel River."
+        ],
+        "pt": [
+          "Like Rome, Lisbon stands on seven hills.",
+          "Old yellow trams climb the steep little streets of Lisbon.",
+          "In 1755 a strong earthquake destroyed Lisbon, and the city was built again.",
+          "Sailors such as Vasco da Gama set off on long voyages from Lisbon.",
+          "Lisbon’s 25 de Abril Bridge looks like the Golden Gate Bridge in San Francisco."
+        ],
+        "kr": [
+          "Half of all the people of South Korea live in and around Seoul.",
+          "Seoul stands on the Han River.",
+          "Five old royal palaces have survived in Seoul.",
+          "Seoul is surrounded by mountains, and people climb some of them straight from the city.",
+          "Seoul is one of the cities with the fastest internet in the world."
+        ],
+        "at": [
+          "Vienna stands on the Danube.",
+          "Vienna is called the capital of music: Mozart, Beethoven and Strauss lived there.",
+          "Vienna has the oldest zoo in the world that is still open.",
+          "The Vienna Ferris wheel has been turning for more than a hundred years.",
+          "Every winter Vienna holds hundreds of balls where people dance the waltz."
+        ],
+        "cz": [
+          "Prague is called “the city of a hundred spires”.",
+          "The astronomical clock in Prague has been working for more than six hundred years.",
+          "Prague Castle is one of the biggest castles in the world.",
+          "Charles Bridge with its statues crosses the Vltava River in Prague.",
+          "Prague was hardly damaged by wars, so its old houses have survived."
+        ],
+        "be": [
+          "The main offices of the European Union work in Brussels.",
+          "The symbol of Brussels is a little statue of a boy — the Manneken Pis.",
+          "Brussels is famous for chocolate and waffles.",
+          "The Atomium in Brussels is a giant model of an iron crystal, with balls you can go inside.",
+          "Every two years the Grand-Place in Brussels is covered with a carpet of flowers."
+        ],
+        "dk": [
+          "Copenhagen has Tivoli — one of the oldest amusement parks in the world.",
+          "The storyteller Hans Christian Andersen lived in Copenhagen.",
+          "The people of Copenhagen ride bicycles a lot.",
+          "The name Copenhagen means “merchants’ harbor”.",
+          "The Nyhavn waterfront in Copenhagen is famous for its colorful little houses."
+        ],
+        "fi": [
+          "Helsinki stands on the shore of the Baltic Sea, among hundreds of islands.",
+          "On islands near Helsinki stands the old sea fortress of Suomenlinna.",
+          "In summer it hardly gets dark in Helsinki, and in winter the days are very short.",
+          "Helsinki has a church carved right into a rock.",
+          "Finns love the sauna, and Helsinki has saunas right on the seashore."
+        ],
+        "ie": [
+          "Dublin stands on the River Liffey.",
+          "The name Dublin means “black pool”.",
+          "On the seventeenth of March Dublin celebrates Saint Patrick’s Day, and the whole city dresses in green.",
+          "The Book of Kells, a painted manuscript more than a thousand years old, is kept in Dublin.",
+          "Wild deer live in Phoenix Park in Dublin."
+        ],
+        "hu": [
+          "Budapest grew out of two towns, Buda and Pest, on opposite banks of the Danube.",
+          "Hot springs flow under Budapest, so the city has many baths.",
+          "The Budapest metro is the oldest on the European mainland.",
+          "The Hungarian Parliament building in Budapest is one of the biggest in Europe.",
+          "Ernő Rubik invented his famous cube in Budapest."
+        ],
+        "ro": [
+          "The Palace of the Parliament in Bucharest is one of the biggest buildings in the world.",
+          "Bucharest was once called “little Paris”.",
+          "Bucharest has an Arc de Triomphe of its own.",
+          "The open-air village museum in Bucharest has old houses from all over Romania.",
+          "Legend says Bucharest was founded by a shepherd named Bucur."
+        ],
+        "bg": [
+          "Sofia is named after the old Church of Saint Sophia.",
+          "Mount Vitosha rises above Sofia.",
+          "Sofia is more than two thousand years old, and long ago it was called Serdica.",
+          "In Sofia stands the Alexander Nevsky Cathedral with golden domes.",
+          "Mineral springs flow in the center of Sofia, and anyone can fill a bottle there."
+        ],
+        "hr": [
+          "The upper and lower towns of Zagreb are joined by one of the shortest funiculars in the world.",
+          "The roof of Saint Mark’s Church in Zagreb is laid with colorful tiles in the shape of coats of arms.",
+          "Zagreb stands on the Sava River.",
+          "In Zagreb the engineer Slavoljub Penkala invented the mechanical pencil.",
+          "Above Zagreb rises Medvednica — “the bear mountain”."
+        ],
+        "sk": [
+          "Bratislava stands on the Danube.",
+          "Bratislava is the only capital that borders two other countries at once: Austria and Hungary.",
+          "Hungarian kings were once crowned in Bratislava.",
+          "On a hill above Bratislava stands a square castle with four towers.",
+          "Funny bronze figures stand in the streets of Bratislava — like a worker peeking out of a manhole."
+        ],
+        "lt": [
+          "Vilnius stands where the Neris and Vilnia rivers meet.",
+          "The Old Town of Vilnius is one of the biggest in Eastern Europe.",
+          "The Užupis district of Vilnius jokingly calls itself a separate republic.",
+          "Legend says Grand Duke Gediminas founded Vilnius after dreaming of an iron wolf.",
+          "From Gediminas Tower you can see the whole Old Town of Vilnius."
+        ],
+        "lv": [
+          "Riga stands on the Daugava River, not far from the Baltic Sea.",
+          "Riga has many houses decorated with patterns, faces and flowers — this style is called Art Nouveau.",
+          "Riga is more than eight hundred years old.",
+          "A story says that more than five hundred years ago a Christmas tree was decorated in Riga for the first time.",
+          "The Central Market of Riga was put into huge old hangars built for airships."
+        ],
+        "ee": [
+          "The Old Town of Tallinn is surrounded by a medieval wall with towers.",
+          "The spire of Tallinn’s town hall is topped by the weather vane “Old Thomas” — the city’s guard.",
+          "Skype was created by programmers in Tallinn.",
+          "Tallinn stands on the shore of the Gulf of Finland, across from Helsinki.",
+          "The Town Hall Pharmacy in Tallinn has been open for more than five hundred years."
+        ],
+        "md": [
+          "Chișinău is one of the greenest cities: it has many parks and alleys.",
+          "Not far from Chișinău are the huge wine cellars of Mileștii Mici — a whole underground town with streets.",
+          "In the center of Chișinău stands a triumphal arch.",
+          "Chișinău stands on the Bîc River.",
+          "Chișinău was first mentioned in old documents almost six hundred years ago."
+        ],
+        "ge": [
+          "The name Tbilisi means “warm”: hot sulfur springs flow there.",
+          "Above Tbilisi stands the statue “Mother of Georgia” with a bowl of wine and a sword.",
+          "Tbilisi stands on the Kura River.",
+          "The old fortress of Narikala rises above old Tbilisi.",
+          "The glass Bridge of Peace in Tbilisi shines with thousands of lights at night."
+        ],
+        "sa": [
+          "Riyadh stands in the middle of a desert.",
+          "The name Riyadh means “gardens”.",
+          "In summer the heat in Riyadh can be more than forty-five degrees Celsius.",
+          "The Kingdom Centre skyscraper in Riyadh has a bridge at the top between its two towers.",
+          "Riyadh was once a small town of mud houses surrounded by a wall."
+        ],
+        "ae": [
+          "Abu Dhabi stands on an island in the Persian Gulf.",
+          "Abu Dhabi has the white Sheikh Zayed Mosque with dozens of domes.",
+          "The name Abu Dhabi means “father of the gazelle”.",
+          "Long ago the people of Abu Dhabi dived to the sea floor for pearls.",
+          "Ferrari World in Abu Dhabi has one of the fastest roller coasters in the world."
+        ],
+        "th": [
+          "The full name of Bangkok is one of the longest city names in the world.",
+          "The Thais themselves call Bangkok “Krung Thep” — “city of angels”.",
+          "At the floating markets of Bangkok people sell things straight from boats.",
+          "In the Wat Pho temple in Bangkok lies a huge golden statue of the Buddha.",
+          "Bangkok is one of the hottest capitals in the world."
+        ],
+        "vn": [
+          "The name Hanoi means “city between rivers”.",
+          "In the middle of Hanoi is the Lake of the Returned Sword, with a legend about a magic turtle.",
+          "Hanoi is more than a thousand years old.",
+          "Millions of motorbikes and scooters ride through the streets of Hanoi.",
+          "At the water puppet theater in Hanoi the puppets dance right on the water."
+        ],
+        "nz": [
+          "Wellington is the southernmost capital in the world.",
+          "Wellington is called “the windy city”.",
+          "The Lord of the Rings films were made near Wellington.",
+          "A red cable car climbs a hill above the streets of Wellington.",
+          "The Te Papa museum in Wellington keeps a giant squid."
+        ],
+        "cu": [
+          "Bright old American cars still drive through the streets of Havana.",
+          "The long Malecón seafront stretches along the sea in Havana.",
+          "Old Havana is on the UNESCO World Heritage list.",
+          "Havana was founded by the Spanish more than five hundred years ago.",
+          "The old Morro fortress with its lighthouse guards the entrance to Havana’s harbor."
+        ],
+        "jm": [
+          "Kingston lies by one of the biggest natural harbors in the world.",
+          "Kingston has a museum of Bob Marley, the famous musician.",
+          "Above Kingston rise the Blue Mountains, where coffee is grown.",
+          "Kingston is the home of reggae music.",
+          "Near Kingston lies Port Royal, which was once a hideout of pirates."
+        ],
+        "cl": [
+          "Santiago stands at the foot of the Andes mountains.",
+          "From Santiago you can drive to a ski resort or to the ocean in a few hours.",
+          "Above Santiago rises San Cristóbal Hill with a big white statue.",
+          "In Santiago stands the Gran Torre — the tallest skyscraper in Latin America.",
+          "Santiago was founded by the Spanish almost five hundred years ago."
+        ],
+        "co": [
+          "Bogotá lies high in the mountains — more than two and a half thousand meters above the sea.",
+          "The Gold Museum in Bogotá has thousands of ancient gold ornaments.",
+          "Every Sunday some streets of Bogotá are closed to cars, and cyclists ride along them.",
+          "You can ride a cable car up Monserrate mountain above Bogotá.",
+          "Bogotá is one of the biggest cities in South America."
+        ],
+        "pe": [
+          "Lima stands on the shore of the Pacific Ocean.",
+          "It almost never rains in Lima.",
+          "Lima was founded by the Spaniard Francisco Pizarro.",
+          "Lima is famous for ceviche — a dish of fish and lime juice.",
+          "Under the Monastery of Saint Francis in Lima there are old catacombs."
+        ],
+        "is": [
+          "Reykjavík is the northernmost capital in the world.",
+          "The name Reykjavík means “smoky bay” — because of the steam from hot springs.",
+          "The houses of Reykjavík are heated by hot springs from under the ground.",
+          "In winter you can see the northern lights above Reykjavík.",
+          "In summer there is almost no night in Reykjavík."
+        ],
+        "rs": [
+          "The name Belgrade means “white city”.",
+          "Belgrade stands where the Sava flows into the Danube.",
+          "The old Kalemegdan fortress rises above the rivers in Belgrade.",
+          "Belgrade is one of the oldest cities in Europe.",
+          "The Church of Saint Sava in Belgrade is one of the biggest Orthodox churches in the world."
+        ],
+        "si": [
+          "The symbol of Ljubljana is a dragon, and four dragons sit on the Dragon Bridge.",
+          "An old castle stands on a hill in the middle of Ljubljana.",
+          "The center of Ljubljana is closed to cars — people walk and ride bicycles there.",
+          "The Ljubljanica River, with many bridges, flows through Ljubljana.",
+          "The oldest wooden wheel in the world, more than five thousand years old, was found near Ljubljana."
+        ],
+        "cy": [
+          "Nicosia is the biggest city on the island of Cyprus.",
+          "Nicosia lies in the middle of the island, far from the sea.",
+          "The old town of Nicosia is surrounded by stone walls in the shape of a star.",
+          "Nicosia is one of the hottest capitals in Europe.",
+          "A dividing line crosses Nicosia, so the city is split into two parts."
+        ],
+        "mt": [
+          "Valletta is one of the smallest capitals in Europe: you can walk around it in an hour.",
+          "Valletta was built by the Knights of Malta.",
+          "Valletta is named after Jean de la Valette, the Grand Master of the knights.",
+          "Valletta stands on a peninsula between two harbors.",
+          "The whole of Valletta is on the UNESCO World Heritage list."
+        ],
+        "kz": [
+          "Astana became the capital of Kazakhstan in 1997; before that the capital was Almaty.",
+          "The name Astana means “capital” in Kazakh.",
+          "The Bayterek tower in Astana looks like a tree holding a golden egg in its branches.",
+          "Astana is one of the coldest capitals in the world.",
+          "Astana has a giant tent called Khan Shatyr, and inside it there is a beach."
+        ],
+        "am": [
+          "Yerevan is one of the oldest cities in the world: it is more than two and a half thousand years old.",
+          "Mount Ararat can be seen from Yerevan.",
+          "Many houses in Yerevan are built of pink stone, so it is called “the pink city”.",
+          "The Cascade in Yerevan is a giant staircase with fountains and sculptures.",
+          "Thousands of ancient manuscripts are kept in the Matenadaran in Yerevan."
+        ],
+        "az": [
+          "Baku stands on the shore of the Caspian Sea.",
+          "Baku is the lowest capital in the world: it lies below the level of the ocean.",
+          "Baku is called “the city of winds”.",
+          "The Maiden Tower in Baku is an old round stone tower.",
+          "Three Flame Towers, shaped like tongues of fire, rise above Baku."
+        ],
+        "uz": [
+          "Tashkent is the biggest city in Central Asia.",
+          "The name Tashkent means “stone city”.",
+          "The stations of the Tashkent metro are decorated like palaces.",
+          "Tashkent is more than two thousand years old.",
+          "The Great Silk Road once passed through Tashkent."
+        ],
+        "mn": [
+          "Ulaanbaatar is the coldest capital in the world.",
+          "The name Ulaanbaatar means “red hero”.",
+          "Many people in Ulaanbaatar live in gers — round felt tents.",
+          "Not far from Ulaanbaatar stands a huge silver statue of Genghis Khan on a horse.",
+          "Ulaanbaatar lies in a valley among mountains and grassy steppes."
+        ],
+        "pk": [
+          "Islamabad was built on purpose as the capital in the 1960s.",
+          "The name Islamabad means “city of Islam”.",
+          "The Faisal Mosque in Islamabad looks like a huge tent.",
+          "Islamabad stands at the foot of the Margalla Hills.",
+          "Islamabad is one of the greenest cities in Pakistan."
+        ],
+        "ph": [
+          "Manila is one of the most crowded cities in the world.",
+          "Manila got its name from a plant that once grew on the shore of the bay.",
+          "The old Spanish fortress of Intramuros — “the city within walls” — still stands in Manila.",
+          "Colorful jeepneys ride through Manila — little buses that were once made from old army jeeps.",
+          "Manila stands on Manila Bay, famous for its beautiful sunsets."
+        ],
+        "my": [
+          "Kuala Lumpur has the Petronas Towers — once the tallest buildings in the world.",
+          "The name Kuala Lumpur means “muddy river mouth”.",
+          "272 colorful steps lead up to the Batu Caves near Kuala Lumpur.",
+          "Kuala Lumpur grew from a small village of tin miners.",
+          "Kuala Lumpur has a huge bird park."
+        ],
+        "np": [
+          "Kathmandu lies in a valley among the Himalayas.",
+          "Travelers who want to climb Mount Everest set off from Kathmandu.",
+          "In Kathmandu lives the Kumari — a girl honored as a living goddess.",
+          "Many monkeys live by the Swayambhunath temple in Kathmandu.",
+          "The name Kathmandu comes from an old wooden temple in the middle of the city."
+        ],
+        "ir": [
+          "The Alborz mountains rise above Tehran, and in winter people ski there.",
+          "The Milad Tower in Tehran is one of the tallest towers in the world.",
+          "Tehran lies on a slope, so the north of the city is much higher than the south.",
+          "The jewels of the old Persian rulers are kept in Tehran.",
+          "Tehran is the biggest city in Iran."
+        ],
+        "iq": [
+          "Baghdad stands on the Tigris River.",
+          "Baghdad was once one of the biggest and richest cities in the world.",
+          "Old Baghdad had the “House of Wisdom” — a great library where scholars gathered.",
+          "Many tales of “One Thousand and One Nights” take place in Baghdad.",
+          "Long ago Baghdad was built round, inside a ring of walls."
+        ],
+        "qa": [
+          "Doha stands on the shore of the Persian Gulf.",
+          "Doha was once a small village of pearl divers.",
+          "Doha hosted the 2022 football World Cup.",
+          "The Museum of Islamic Art in Doha was built on an island made by people.",
+          "Doha is one of the hottest capitals in the world."
+        ],
+        "jo": [
+          "Amman stands on hills — once there were seven of them.",
+          "The old name of Amman is Philadelphia.",
+          "In the center of Amman there is a Roman theater almost two thousand years old.",
+          "The houses of Amman are mostly white or beige, made of stone.",
+          "On a hill above Amman stand the ruins of an old temple of Hercules."
+        ],
+        "lb": [
+          "Beirut stands on the shore of the Mediterranean Sea.",
+          "Beirut is more than five thousand years old.",
+          "The Pigeon Rocks rise out of the sea near the shore of Beirut.",
+          "Beirut was once called “the Paris of the Middle East”.",
+          "The flag of Lebanon, whose capital is Beirut, shows a green cedar tree."
+        ],
+        "ma": [
+          "Rabat stands on the shore of the Atlantic Ocean.",
+          "In Rabat stands the unfinished Hassan Tower, more than eight hundred years old.",
+          "The old Kasbah of the Udayas in Rabat has white and blue little streets.",
+          "The biggest city in Morocco is not Rabat but Casablanca.",
+          "Rabat is on the UNESCO World Heritage list."
+        ],
+        "ke": [
+          "Near Nairobi there is a national park where lions and giraffes live right next to skyscrapers.",
+          "The name Nairobi means “cool water”.",
+          "Nairobi grew out of a railway station.",
+          "Nairobi has a home for orphaned baby elephants.",
+          "Nairobi lies high — almost two kilometers above the sea, so it is not very hot there."
+        ],
+        "ng": [
+          "Abuja was built on purpose in the middle of the country; before it, the capital was Lagos.",
+          "The huge Zuma Rock rises not far from Abuja.",
+          "Abuja became the capital of Nigeria in 1991.",
+          "Abuja is one of the youngest and fastest-growing cities in Africa.",
+          "Abuja has the National Mosque with a golden dome."
+        ],
+        "et": [
+          "The name Addis Ababa means “new flower”.",
+          "Addis Ababa is one of the highest capitals in the world.",
+          "A museum in Addis Ababa keeps the skeleton of Lucy — an ancient relative of people, more than three million years old.",
+          "Ethiopia is the home of coffee, and in Addis Ababa people roast and brew it right at home.",
+          "The African Union — a union of the countries of Africa — works in Addis Ababa."
+        ],
+        "gh": [
+          "Accra stands on the shore of the Atlantic Ocean.",
+          "Craftsmen in Accra make unusual coffins shaped like fish, airplanes and cars.",
+          "Accra is the biggest city in Ghana.",
+          "In Accra stands the Independence Arch, honoring Ghana’s freedom.",
+          "Ghana grows a great deal of cocoa, which chocolate is made from."
+        ],
+        "ve": [
+          "Caracas lies in a valley surrounded by mountains.",
+          "From Ávila mountain above Caracas you can see the Caribbean Sea.",
+          "Simón Bolívar, a hero of South America, was born in Caracas.",
+          "Caracas lies almost a kilometer above the sea, so it is warm there but not hot.",
+          "The University City of Caracas is on the UNESCO World Heritage list."
+        ],
+        "uy": [
+          "Montevideo is the southernmost capital in the Americas.",
+          "The Rambla seafront stretches along Montevideo for more than twenty kilometers.",
+          "The first football World Cup was held in Montevideo in 1930.",
+          "Montevideo stands on the shore of the wide Río de la Plata.",
+          "More than a third of all the people of Uruguay live in Montevideo."
+        ],
+        "py": [
+          "Asunción is one of the oldest cities in South America.",
+          "Asunción stands on the Paraguay River.",
+          "Asunción is called “the mother of cities”, because people set off from it to found other towns.",
+          "In Asunción people speak two languages — Spanish and Guaraní.",
+          "Asunción is one of the hottest cities in South America."
+        ],
+        "ec": [
+          "Quito is one of the highest capitals in the world: almost three thousand meters above the sea.",
+          "Quito lies very close to the equator.",
+          "Near Quito stands the “Middle of the World” monument — on the line of the equator.",
+          "The Pichincha volcano rises above Quito.",
+          "The Old Town of Quito was one of the very first places in the world put on the UNESCO list."
+        ],
+        "cr": [
+          "San José lies in a valley among volcanoes.",
+          "Costa Rica, whose capital is San José, has no army.",
+          "San José has a Museum of Pre-Columbian Gold.",
+          "San José was one of the first cities in the world to light its streets with electric lamps.",
+          "Famous Costa Rican coffee is grown on the slopes around San José."
         ]
       },
       "DAY_NIGHT": {

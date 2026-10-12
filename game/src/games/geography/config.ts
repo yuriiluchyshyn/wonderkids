@@ -1,7 +1,7 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import { V4_RELEASE, type GameCard, type SubjectDef } from '../shared/templateModule';
 import { COUNTRIES } from './content/countries';
-import { FLAG_STEPS, BIOME_STEPS, OCEAN_STEPS, CAPITALS, CAPITAL_STEPS, ZONE_ANIMALS } from './tasks';
+import { FLAG_STEPS, BIOME_STEPS, OCEAN_STEPS, CAPITALS, CAPITAL_STEPS, TIME_STEPS, ZONE_ANIMALS } from './tasks';
 import { geographyTexts } from './grammar';
 import { fill } from '@/core/language/fill';
 import TEXTS from '@/locales/app/uk/games/geography.json';
@@ -83,12 +83,27 @@ export const GAMES: GameCard[] = [
   {
     id: 'capitals',
     langs: geographyTexts.langs,
-    gameId: 'geo_timezones_capitals',
+    gameId: 'geo_capitals',
     label: J.GAMES.capitals.label,
-    icon: '🌐',
+    icon: '🏛️',
     blurb: fill(J.GAMES.capitals.blurb, { length: CAPITALS.length }),
     intro: J.GAMES.capitals.intro,
     steps: CAPITAL_STEPS,
+    difficulty: [2, 3],
+    publishDate: V4_RELEASE,
+    tasksPerLevel: 10,
+    mechanics: Mechanics.GridChoice,
+    hasText: true,
+  },
+  {
+    id: 'time',
+    langs: geographyTexts.langs,
+    gameId: 'geo_day_night_time',
+    label: J.GAMES.time.label,
+    icon: '🌐',
+    blurb: J.GAMES.time.blurb,
+    intro: J.GAMES.time.intro,
+    steps: TIME_STEPS,
     difficulty: [2, 3],
     publishDate: V4_RELEASE,
     tasksPerLevel: 10,

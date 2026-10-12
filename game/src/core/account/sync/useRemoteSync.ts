@@ -72,20 +72,43 @@ export function useRemoteSync(): SyncStatus {
 
     let timer: ReturnType<typeof setTimeout> | undefined;
 
-    const unsubscribe = useGameStore.subscribe((state) => {
+    const save = (keepalive = false) => {
+      timer = undefined;
+      // The parent cabinet pauses auto-save (explicit "Save" button there).
+      if (useSyncControl.getState().paused) return;
+      api.putState(token, selectPersistable(useGameStore.getState()), keepalive).catch(() => {
+        // Best-effort: a dropped save is retried on the next change. The
+        // local store stays authoritative for the session.
+      });
+    };
+
+    const unsubscribe = useGameStore.subscribe((state, prev) => {
+      // A child session follows the player picked on «Хто грає?»: the next
+      // load selects that child, not the one the session signed in as.
+      const auth = useAuthStore.getState();
+      if (state.activeChildId && state.activeChildId !== prev.activeChildId && auth.childId && auth.childId !== state.activeChildId) {
+        useAuthStore.setState({ childId: state.activeChildId });
+      }
       if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        // The parent cabinet pauses auto-save (explicit "Save" button there).
-        if (useSyncControl.getState().paused) return;
-        api.putState(token, selectPersistable(state)).catch(() => {
-          // Best-effort: a dropped save is retried on the next change. The
-          // local store stays authoritative for the session.
-        });
-      }, SAVE_DELAY_MS);
+      timer = setTimeout(save, SAVE_DELAY_MS);
     });
+
+    // A reload or a closed tab must not drop the change still waiting for its debounce.
+    const flush = () => {
+      if (!timer) return;
+      clearTimeout(timer);
+      save(true);
+    };
+    const onHidden = () => {
+      if (document.visibilityState === 'hidden') flush();
+    };
+    window.addEventListener('pagehide', flush);
+    document.addEventListener('visibilitychange', onHidden);
 
     return () => {
       if (timer) clearTimeout(timer);
+      window.removeEventListener('pagehide', flush);
+      document.removeEventListener('visibilitychange', onHidden);
       unsubscribe();
     };
   }, [token, status]);

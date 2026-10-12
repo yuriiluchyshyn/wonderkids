@@ -30,7 +30,7 @@ export const GAMES: GameCard[] = [
       J.GAMES.seasons.intro,
     introFor: (step, lang) => natureTexts(lang).introFor(step),
     langs: natureTexts.langs,
-    steps: 8,
+    steps: 10,
     difficulty: 1,
     publishDate: RELEASE,
     tasksPerLevel: 10,

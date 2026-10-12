@@ -147,8 +147,8 @@
       "permanent": true
     },
     {
-      "source": "/uk/:path*",
-      "destination": "/:path*",
+      "source": "/uk/:path(.*)",
+      "destination": "/:path",
       "permanent": true
     },
     {

@@ -21,6 +21,7 @@ const CITIES: Record<string, string> = J.data.capitals.CITIES;
 const DAY_NIGHT: Record<string, string[]> = J.data.capitals.DAY_NIGHT;
 const LANDMARKS: Record<string, string[]> = J.data.capitals.LANDMARKS;
 const LANDMARK_FACTS: Record<string, string[]> = J.data.capitals.LANDMARK_FACTS;
+const CAPITAL_FACTS: Record<string, string[]> = J.data.capitals.CAPITAL_FACTS;
 const ANIMAL_FACTS: Record<string, string[]> = J.data.animalFacts.ANIMAL_FACTS;
 
 /** The Geography galaxy in English. */
@@ -57,6 +58,7 @@ export const en: GeographyTexts = {
         blurb: fill(J.cards.games.capitals.blurb, { length: Object.keys(CAPITALS).length }),
         intro: J.cards.games.capitals.intro,
       },
+      time: J.cards.games.time,
     },
   },
   country: bare,
@@ -145,6 +147,7 @@ export const en: GeographyTexts = {
         fill(J.capitals.stories[9], { pair }),
       ];
     },
+    facts: (id) => CAPITAL_FACTS[id],
     countryAsk: (id) => fill(J.capitals.countryAsk, { id: CAPITALS[id] }),
     countryHint: (id) => LOOKS[id] ?? fill(J.capitals.countryHint, { id: partOf(id), id2: bare(id)[0] }),
     day: J.capitals.day,

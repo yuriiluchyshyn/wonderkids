@@ -7,8 +7,11 @@ import J from '@/locales/app/pl/games/nature.json';
 
 /** The Nature galaxy in Polish. */
 
-/** A season: its name, «od zimy», the months' adjective («zimowe miesiące»), the answer to a wrong bin, ten facts. */
-const SEASONS: Record<SeasonId, { name: string; from: string; of: string; no: string; facts: string[] }> = J.SEASONS;
+/**
+ * A season: its name, «od zimy», «po zimie», «przed zimą», the months'
+ * adjective («zimowe miesiące»), the answer to a wrong bin, ten facts.
+ */
+const SEASONS: Record<SeasonId, { name: string; from: string; after: string; before: string; of: string; no: string; facts: string[] }> = J.SEASONS;
 
 /**
  * The months: the name, «od stycznia» (genitive), «po styczniu» (locative),
@@ -56,6 +59,7 @@ const SIGNS: [ask: string, label: string, fact: string][] = [
 ];
 
 const low = (at: number) => MONTHS[at][0].toLocaleLowerCase('pl');
+const lowSeason = (id: SeasonId) => SEASONS[id].name.toLocaleLowerCase('pl');
 
 export const pl: NatureTexts = {
   cards: J.cards,
@@ -64,6 +68,8 @@ export const pl: NatureTexts = {
     if (step === 4 || step === 5) return J.introFor[2];
     if (step === 6 || step === 8) return J.introFor[3];
     if (step === 7) return J.introFor[4];
+    if (step === 9) return J.introFor[5];
+    if (step === 10) return J.introFor[6];
     return undefined;
   },
   season: (id) => SEASONS[id],
@@ -98,5 +104,23 @@ export const pl: NatureTexts = {
   orderSeasons: {
     ask: (first) => fill(J.orderSeasons.ask, { from: SEASONS[first].from }),
     circle: J.orderSeasons.circle,
+  },
+  seasonAfter: {
+    ask: (s) => fill(J.seasonAfter.ask, { after: SEASONS[s].after }),
+    fact: (s, next) => fill(J.seasonAfter.fact, { after: SEASONS[s].after, s: lowSeason(next) }),
+  },
+  seasonBefore: {
+    ask: (s) => fill(J.seasonBefore.ask, { before: SEASONS[s].before }),
+    fact: (s, prev) => fill(J.seasonBefore.fact, { before: SEASONS[s].before, s: lowSeason(prev) }),
+  },
+  seasonFirst: {
+    ask: (s) => fill(J.seasonFirst.ask, { s: lowSeason(s) }),
+    hint: (prev) => fill(J.seasonFirst.hint, { prev: lowSeason(prev) }),
+    fact: (s, m) => fill(J.seasonFirst.fact, { name: SEASONS[s].name, m: MONTHS[m][1] }),
+  },
+  seasonLast: {
+    ask: (s) => fill(J.seasonLast.ask, { s: lowSeason(s) }),
+    hint: (next) => fill(J.seasonLast.hint, { next: lowSeason(next) }),
+    fact: (s, m) => fill(J.seasonLast.fact, { name: SEASONS[s].name, m: MONTHS[m][3] }),
   },
 };

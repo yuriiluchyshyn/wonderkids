@@ -61,6 +61,8 @@ export const en: NatureTexts = {
     if (step === 4 || step === 5) return J.introFor[2];
     if (step === 6 || step === 8) return J.introFor[3];
     if (step === 7) return J.introFor[4];
+    if (step === 9) return J.introFor[5];
+    if (step === 10) return J.introFor[6];
     return undefined;
   },
   season: (id) => SEASONS[id],
@@ -95,5 +97,23 @@ export const en: NatureTexts = {
   orderSeasons: {
     ask: (first) => fill(J.orderSeasons.ask, { said: SEASONS[first].said }),
     circle: J.orderSeasons.circle,
+  },
+  seasonAfter: {
+    ask: (s) => fill(J.seasonAfter.ask, { said: SEASONS[s].said }),
+    fact: (s, next) => fill(J.seasonAfter.fact, { said: SEASONS[s].said, s: SEASONS[next].said }),
+  },
+  seasonBefore: {
+    ask: (s) => fill(J.seasonBefore.ask, { said: SEASONS[s].said }),
+    fact: (s, prev) => fill(J.seasonBefore.fact, { said: SEASONS[s].said, s: SEASONS[prev].said }),
+  },
+  seasonFirst: {
+    ask: (s) => fill(J.seasonFirst.ask, { said: SEASONS[s].said }),
+    hint: (prev) => fill(J.seasonFirst.hint, { prev: SEASONS[prev].said }),
+    fact: (s, m) => fill(J.seasonFirst.fact, { name: cap(SEASONS[s].said), m: name(m) }),
+  },
+  seasonLast: {
+    ask: (s) => fill(J.seasonLast.ask, { said: SEASONS[s].said }),
+    hint: (next) => fill(J.seasonLast.hint, { next: SEASONS[next].said }),
+    fact: (s, m) => fill(J.seasonLast.fact, { name: cap(SEASONS[s].said), m: name(m) }),
   },
 };

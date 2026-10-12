@@ -23,6 +23,11 @@
   color: var(--surface-ink);
 }
 
+/* A prompt may put its math row on a line of its own («Скільки буде\n4 + 6 + 3?»). */
+.prompt > span {
+  white-space: pre-line;
+}
+
 /* ---- Speaker button (§2.4 / SND_TTS_CLICK) ---- */
 .speak {
   flex: none;

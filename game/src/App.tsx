@@ -7,7 +7,7 @@ import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useRemoteSync } from '@/core/account/sync/useRemoteSync';
 import { getPortal, portalUrl } from '@/core/app/portal';
-import { demoTick, seatGuest, useDemo } from '@/core/app/demo';
+import { seatGuest, useDemo } from '@/core/app/demo';
 import { signupSource } from '@/core/app/attribution';
 import { queryOfSource } from '@pulsar/platform';
 import { DemoOver } from '@/components/demo/DemoOver';
@@ -134,14 +134,11 @@ function SyncedRoutes() {
   );
 }
 
-/** How often the trial's clock looks at the time. */
-const DEMO_TICK_MS = 1000;
-
 /**
  * The trial game (`core/app/demo.ts`): the child's screens for a guest who
- * lives in memory — no account, no save, no server clock. Its own clock runs
- * while the page is on the screen; when the time is up the game is taken off
- * the screen, wherever it was, and `DemoOver` takes its place.
+ * lives in memory — no account, no save, no clock. Once the first level is
+ * finished (`finishDemo`), `DemoOver` — the way to an account — takes the
+ * game's place.
  */
 function DemoRoutes() {
   const expired = useDemo((s) => s.expired);
@@ -150,17 +147,6 @@ function DemoRoutes() {
   useEffect(() => {
     seatGuest();
     setSeated(true);
-  }, []);
-
-  useEffect(() => {
-    let last = Date.now();
-    const id = window.setInterval(() => {
-      const now = Date.now();
-      // A hidden page plays nothing; a long gap is a sleeping phone, not play.
-      if (!document.hidden) demoTick(Math.min(now - last, 2 * DEMO_TICK_MS));
-      last = now;
-    }, DEMO_TICK_MS);
-    return () => window.clearInterval(id);
   }, []);
 
   if (!seated) return null;
@@ -197,7 +183,9 @@ function ProtectedApp() {
   const token = useAuthStore((s) => s.token);
   const endedAsChild = useAuthStore((s) => s.endedAsChild);
   const demo = useDemo((s) => s.active);
-  if (!token) return demo ? <DemoRoutes /> : <Navigate to={endedAsChild ? '/login' : '/parent-login'} replace />;
+  // The trial is a clean game of its own even for someone signed in: their save is never loaded under it.
+  if (demo) return <DemoRoutes />;
+  if (!token) return <Navigate to={endedAsChild ? '/login' : '/parent-login'} replace />;
   return <SyncedRoutes />;
 }
 

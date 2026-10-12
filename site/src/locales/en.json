@@ -31,7 +31,7 @@
     }
   },
   "games": {
-    "title": "56 games across nine galaxies",
+    "title": "57 games across nine galaxies",
     "sub": "Here subjects are galaxies and games are planets. This is what awaits on them.",
     "math": {
       "1": "Addition, subtraction, multiplication, division",
@@ -74,8 +74,9 @@
       "2": "Continents: who lives where",
       "3": "The oceans on a map of the world",
       "4": "Natural zones and the animals that live there",
-      "5": "Capitals — and why it is day in one place and night in another",
-      "tag": "5 games",
+      "5": "Capitals of the world and fun facts about them",
+      "6": "Why it is day in one place and night in another, and what time it is there",
+      "tag": "6 games",
       "title": "Geography"
     },
     "history": {
@@ -166,7 +167,7 @@
     "title": "Questions parents ask about Pulsar Kids",
     "what": {
       "title": "What is Pulsar Kids?",
-      "text": "Pulsar Kids is a set of learning games for kids aged 4–10, played in a browser on a phone, tablet or computer. Across 56 games children practice math, language, logic, geography, history, astronomy, ecology, nature and art, while parents set the screen time."
+      "text": "Pulsar Kids is a set of learning games for kids aged 4–10, played in a browser on a phone, tablet or computer. Across 57 games children practice math, language, logic, geography, history, astronomy, ecology, nature and art, while parents set the screen time."
     },
     "age": {
       "title": "What ages is Pulsar Kids for?",
@@ -198,7 +199,7 @@
     },
     "try": {
       "title": "Can you try it without signing up?",
-      "text": "Yes. The “Try the game now” button opens a few minutes of the real game with no account and no payment. What is collected in a trial game is not saved — for that, a parent creates an account with an email address."
+      "text": "Yes. The “Try the game now” button opens the first level of the real game with no account and no payment — at the child’s own pace, with no timer. What is collected in a trial game is not saved — for that, a parent creates an account with an email address."
     }
   },
   "feedback": {

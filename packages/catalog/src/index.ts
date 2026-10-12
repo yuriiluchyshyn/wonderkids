@@ -49,7 +49,7 @@ export interface CatalogGame {
   mechanics: string[];
   /** How many different tasks a free-play game has. */
   tasks?: number;
-  /** Two tasks from the first, the middle and the last step — four of a game that has no steps. */
+  /** One task from the first, the middle and the last step — four of a game that has no steps. */
   samples: CatalogSample[];
 }
 

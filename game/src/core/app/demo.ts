@@ -1,5 +1,5 @@
 /**
- * The trial game: a few minutes of the real game with no account.
+ * The trial game: the first level of the real game, with no account.
  *
  * It is opened by an address — `/try` on the child's portal, with the code of
  * the owner's link when it was reached by one (`/try?l=insta-bio`), or
@@ -15,17 +15,16 @@
  * - **Nothing played is saved.** The guest child lives in memory: a reload
  *   starts from an empty purse — and with the clock wound back, which is
  *   accepted: there is nothing to carry over.
- * - **The clock** counts only while the page is on the screen. How long the
- *   trial lasts is the owner's setting (`/admin/settings`), told by the
- *   server when the visit is counted.
+ * - **No clock.** The trial is one whole level, not a few minutes: the child
+ *   plays at their own pace and is never cut off mid-task.
  *
- * When the time is up the game stops where it is — mid-task too — and
- * `DemoOver` asks the child, kindly, to call a parent.
+ * When the first level is finished — its win screen seen — `finishDemo()`
+ * ends the trial and `DemoOver` asks the child, kindly, to call a parent
+ * to create the account.
  */
 import { TRIAL_PATH, gameOfQuery, linkOfQuery, queryOfSource, viaOfQuery, type GameRef, type VisitVia } from '@pulsar/platform';
 import { create } from 'zustand';
 import { api } from '@/core/account/api/client';
-import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { signupSource } from '@/core/app/attribution';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { speaks } from '@/core/game/kernel/types';
@@ -35,9 +34,6 @@ import { tApp, useDeviceLang } from '@/core/translator';
 
 const STORAGE_KEY = 'pulsar-demo-v1';
 
-/** Used until the server says how long the trial lasts (and if it cannot be asked). */
-export const DEMO_MINUTES_FALLBACK = 5;
-
 /**
  * First-run tips the guest is spared (`components/coach/tips.ts`): a tour of
  * every button would eat the trial. What stays is what play cannot do without —
@@ -45,22 +41,23 @@ export const DEMO_MINUTES_FALLBACK = 5;
  */
 const TIPS_SKIPPED = ['hub.galaxy', 'hub.stars', 'hub.artifacts', 'hub.treasures', 'hub.profile', 'hub.time', 'game.tts', 'game.track', 'game.dots', 'game.home'];
 
-/** The guest never meets the game's own rest screen: the trial's clock is the only one. */
+/** The guest never meets the game's own rest screen: the trial is one level, and that is all its limit. */
 const GUEST_TIME = { sessionDurationMinutes: 120, cooldownMinutes: 0, maxDailyMinutes: 240 };
 
 interface DemoSession {
   /** The code of the link that led here, if one did. */
   link: string | null;
   via: VisitVia;
-  minutes: number;
   /** The counted visit — to report how the trial ended. */
   ticket: { visit: number; token: string } | null;
+  /** The first level was finished: a reload shows `DemoOver` again, not another level. */
+  over?: boolean;
 }
 
 function readSession(): DemoSession | null {
   try {
     const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null') as DemoSession | null;
-    return saved && typeof saved.minutes === 'number' ? saved : null;
+    return saved && typeof saved.via === 'string' ? saved : null;
   } catch {
     return null;
   }
@@ -78,18 +75,13 @@ function writeSession(session: DemoSession | null): void {
 interface DemoState {
   /** This tab is playing the trial game. */
   active: boolean;
-  minutes: number;
-  /** Time played in this page load, counted while the page is on the screen. */
-  elapsedMs: number;
-  /** The time is up: the game is replaced by `DemoOver`. */
+  /** The first level is finished: the game is replaced by `DemoOver`. */
   expired: boolean;
   session: DemoSession | null;
 }
 
 export const useDemo = create<DemoState>(() => ({
   active: false,
-  minutes: DEMO_MINUTES_FALLBACK,
-  elapsedMs: 0,
   expired: false,
   session: null,
 }));
@@ -99,46 +91,44 @@ const isTrialPath = (pathname: string): boolean => pathname.replace(/\/+$/, '') 
 /**
  * Called once at start-up, before the first render. An address that asks for
  * the trial starts one (and is counted); a tab already in a trial goes on.
- * Someone who is signed in simply gets their own game — the arrival is still
- * counted, a link was followed.
+ * The trial is the same clean game for everyone: a signed-in child's
+ * theme, progress and settings take no part in it, and nothing of it reaches
+ * their save (`DemoRoutes` never loads or syncs one). Their own game is back
+ * once the trial is left (`endDemo`).
  */
 export function beginDemo(): void {
   const { pathname, search } = window.location;
   const asked = isTrialPath(pathname);
-  const signedIn = Boolean(useAuthStore.getState().token);
 
   if (asked) {
     const game = playable(gameOfQuery(search));
     const fresh: DemoSession = {
       link: linkOfQuery(search) ?? null,
       via: viaOfQuery(search),
-      minutes: DEMO_MINUTES_FALLBACK,
       ticket: null,
     };
     // The address has done its job: a reload must not count again. The hub lives at «/»; a game asked for by name — at its own address.
     window.history.replaceState(null, '', game ? `/play/${game.module}/${game.sub}` : '/');
-    if (!signedIn) {
-      writeSession(fresh);
-      useDemo.setState({ active: true, minutes: fresh.minutes, session: fresh });
-    }
+    writeSession(fresh);
+    useDemo.setState({ active: true, session: fresh });
     api
       .visit({ link: fresh.link, mode: 'demo', via: fresh.via, lang: useDeviceLang.getState().lang, referrer: referrerHost(), game: game ? `${game.module}:${game.sub}` : null })
-      .then(({ demoMinutes, visit, token }) => {
-        if (signedIn || !useDemo.getState().active) return;
-        const counted: DemoSession = { ...fresh, minutes: demoMinutes, ticket: visit && token ? { visit, token } : null };
+      .then(({ visit, token }) => {
+        const { active, session } = useDemo.getState();
+        if (!active || !session) return;
+        const counted: DemoSession = { ...session, ticket: visit && token ? { visit, token } : null };
         writeSession(counted);
-        useDemo.setState({ minutes: demoMinutes, session: counted });
+        useDemo.setState({ session: counted });
       })
       .catch(() => {
-        /* offline or no API: the trial runs its default length, uncounted */
+        /* offline or no API: the trial is played all the same, uncounted */
       });
     return;
   }
 
   const session = readSession();
   if (!session) return;
-  if (signedIn) writeSession(null);
-  else useDemo.setState({ active: true, minutes: session.minutes, session });
+  useDemo.setState({ active: true, expired: Boolean(session.over), session });
 }
 
 /**
@@ -162,10 +152,14 @@ function referrerHost(): string | null {
   }
 }
 
+let guestSeated = false;
+
 /** The guest the trial is played by — made once per page load, kept in memory only. */
 export function seatGuest(): void {
+  // Once per page load — and always over an empty store, whoever is signed in on this device.
+  if (guestSeated) return;
+  guestSeated = true;
   const store = useGameStore.getState();
-  if (store.children.length > 0) return;
   const lang = useDeviceLang.getState().lang;
   store.hydrate({});
   useGameStore.getState().addChild({
@@ -187,26 +181,24 @@ useDeviceLang.subscribe(({ lang }) => {
   if (useGameStore.getState().profile.name !== name) useGameStore.getState().setProfile({ name });
 });
 
-/** Adds played time; the trial ends when it reaches the limit. */
-export function demoTick(ms: number): void {
-  const { active, expired, elapsedMs, minutes, session } = useDemo.getState();
+/**
+ * The first level is done: the trial is over and `DemoOver` (the way to an
+ * account) takes the game's place. Counted as the visit's «played to the end».
+ */
+export function finishDemo(): void {
+  const { active, expired, session } = useDemo.getState();
   if (!active || expired) return;
-  const next = elapsedMs + ms;
-  if (next < minutes * 60_000) {
-    useDemo.setState({ elapsedMs: next });
-    return;
-  }
-  useDemo.setState({ elapsedMs: next, expired: true });
+  const over = session ? { ...session, over: true } : null;
+  writeSession(over);
+  useDemo.setState({ expired: true, session: over });
   if (session?.ticket) api.visitEvent(session.ticket, 'expired').catch(() => {});
 }
 
-/** How much of the trial is left, 0..100 — for the draining gauge at the top. */
-export const demoFuelPct = (elapsedMs: number, minutes: number): number => Math.max(0, Math.min(100, 100 - (elapsedMs / (minutes * 60_000)) * 100));
-
 /** Leave the trial: the guest and everything they collected are gone. */
 export function endDemo(): void {
+  guestSeated = false;
   writeSession(null);
-  useDemo.setState({ active: false, expired: false, elapsedMs: 0, session: null });
+  useDemo.setState({ active: false, expired: false, session: null });
   useGameStore.getState().resetAll();
 }
 

@@ -18,7 +18,8 @@ type ChainTexts = Omit<MathTexts['mental'], 'prompt' | 'hint'>;
 export function chainTexts(J: ChainWords, opWord: (op: MathOp) => string): ChainTexts {
   const shown = (tokens: ExprToken[]) => exprWords(tokens, opWord);
   return {
-    chain: (tokens) => fill(J.chain.prompt, { expr: shown(tokens) }),
+    // On the screen the row is written in signs, on a line of its own: «Скільки буде\n99 + 36 + 61?».
+    chain: (tokens) => fill(J.chain.prompt, { expr: `\n${exprSigns(tokens)}` }),
     chainSaid: (tokens) => fill(J.chain.prompt, { expr: exprWords(tokens, opWord, J.open) }),
     chainHint: (first, r) => fill(J.chain.hint, { first: shown(first), r }),
     orderHint: (first) => fill(J.order.hint, { first: shown(first) }),
@@ -32,6 +33,18 @@ export function chainTexts(J: ChainWords, opWord: (op: MathOp) => string): Chain
       },
     },
   };
+}
+
+/** How a sign is written in a row: a real minus, not a hyphen. */
+const SIGN: Record<MathOp, string> = { '+': '+', '-': '−', '×': '×', '÷': '÷' };
+
+/** A math line in signs, as it is written: «(2 + 3) × 4», «99 + 36 − 61». */
+export function exprSigns(tokens: ExprToken[]): string {
+  return tokens
+    .map((t) => (typeof t === 'number' ? String(t) : t === '(' || t === ')' ? t : SIGN[t]))
+    .join(' ')
+    .replace(/\( /g, '(')
+    .replace(/ \)/g, ')');
 }
 
 /**

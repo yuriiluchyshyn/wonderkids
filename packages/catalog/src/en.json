@@ -39,22 +39,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "What is 6 plus 1?",
-      "right": "7",
-      "answers": [
-       "6",
-       "8",
-       "9",
-       "5",
-       "12",
-       "11",
-       "7",
-       "4",
-       "10"
-      ]
-     },
-     {
       "step": 20,
       "prompt": "What is 12 plus 127?",
       "right": "139",
@@ -71,22 +55,6 @@
       ]
      },
      {
-      "step": 20,
-      "prompt": "What is 29 plus 38 plus 14 plus 10?",
-      "right": "91",
-      "answers": [
-       "84",
-       "94",
-       "91",
-       "92",
-       "90",
-       "81",
-       "79",
-       "96",
-       "89"
-      ]
-     },
-     {
       "step": 40,
       "prompt": "What is 353 plus 20?",
       "right": "373",
@@ -100,22 +68,6 @@
        "371",
        "385",
        "374"
-      ]
-     },
-     {
-      "step": 40,
-      "prompt": "What is 99 plus 36 plus 61 plus 86 plus 46?",
-      "right": "328",
-      "answers": [
-       "330",
-       "310",
-       "339",
-       "329",
-       "335",
-       "338",
-       "344",
-       "327",
-       "328"
       ]
      }
     ]
@@ -155,22 +107,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "What is 6 minus 5?",
-      "right": "1",
-      "answers": [
-       "4",
-       "5",
-       "0",
-       "3",
-       "8",
-       "7",
-       "1",
-       "6",
-       "2"
-      ]
-     },
-     {
       "step": 20,
       "prompt": "What is 111 minus 45?",
       "right": "66",
@@ -187,22 +123,6 @@
       ]
      },
      {
-      "step": 20,
-      "prompt": "What is 154 minus 40 minus 17 minus 19?",
-      "right": "78",
-      "answers": [
-       "71",
-       "81",
-       "78",
-       "79",
-       "77",
-       "68",
-       "66",
-       "83",
-       "76"
-      ]
-     },
-     {
       "step": 40,
       "prompt": "What is 353 minus 24?",
       "right": "329",
@@ -216,22 +136,6 @@
        "327",
        "341",
        "330"
-      ]
-     },
-     {
-      "step": 40,
-      "prompt": "What is 567 minus 40 minus 83 minus 148 minus 106?",
-      "right": "190",
-      "answers": [
-       "192",
-       "172",
-       "201",
-       "191",
-       "197",
-       "200",
-       "206",
-       "189",
-       "190"
       ]
      }
     ]
@@ -271,22 +175,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "What is 2 times 4?",
-      "right": "8",
-      "answers": [
-       "7",
-       "9",
-       "10",
-       "6",
-       "13",
-       "12",
-       "8",
-       "5",
-       "11"
-      ]
-     },
-     {
       "step": 15,
       "prompt": "What is 2 times 2?",
       "right": "4",
@@ -303,22 +191,6 @@
       ]
      },
      {
-      "step": 15,
-      "prompt": "What is 7 times 3?",
-      "right": "21",
-      "answers": [
-       "15",
-       "27",
-       "31",
-       "18",
-       "21",
-       "20",
-       "12",
-       "26",
-       "23"
-      ]
-     },
-     {
       "step": 30,
       "prompt": "What is 15 times 2?",
       "right": "30",
@@ -332,22 +204,6 @@
        "16",
        "32",
        "21"
-      ]
-     },
-     {
-      "step": 30,
-      "prompt": "What is 3 times 5 times 3 times 3?",
-      "right": "135",
-      "answers": [
-       "135",
-       "134",
-       "136",
-       "133",
-       "146",
-       "145",
-       "122",
-       "123",
-       "129"
       ]
      }
     ]
@@ -387,22 +243,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "What is 8 divided by 2?",
-      "right": "4",
-      "answers": [
-       "3",
-       "5",
-       "6",
-       "2",
-       "9",
-       "8",
-       "4",
-       "1",
-       "7"
-      ]
-     },
-     {
       "step": 13,
       "prompt": "What is 25 divided by 5?",
       "right": "5",
@@ -419,22 +259,6 @@
       ]
      },
      {
-      "step": 13,
-      "prompt": "What is 4 divided by 4?",
-      "right": "1",
-      "answers": [
-       "4",
-       "2",
-       "11",
-       "0",
-       "6",
-       "3",
-       "5",
-       "1",
-       "7"
-      ]
-     },
-     {
       "step": 25,
       "prompt": "What is 81 divided by 9?",
       "right": "9",
@@ -448,22 +272,6 @@
        "11",
        "1",
        "8"
-      ]
-     },
-     {
-      "step": 25,
-      "prompt": "What is 84 divided by 3 divided by 2 divided by 2?",
-      "right": "7",
-      "answers": [
-       "15",
-       "17",
-       "6",
-       "5",
-       "8",
-       "14",
-       "13",
-       "0",
-       "7"
       ]
      }
     ]
@@ -503,22 +311,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "What is 2 times 4?",
-      "right": "8",
-      "answers": [
-       "11",
-       "6",
-       "7",
-       "5",
-       "10",
-       "18",
-       "9",
-       "12",
-       "8"
-      ]
-     },
-     {
       "step": 30,
       "prompt": "What is 10 minus 8?",
       "right": "2",
@@ -535,22 +327,6 @@
       ]
      },
      {
-      "step": 30,
-      "prompt": "What is (36 minus 3) times 4?",
-      "right": "132",
-      "answers": [
-       "139",
-       "128",
-       "142",
-       "134",
-       "132",
-       "140",
-       "130",
-       "24",
-       "133"
-      ]
-     },
-     {
       "step": 60,
       "prompt": "What is 721 plus 292?",
       "right": "1013",
@@ -564,22 +340,6 @@
        "1012",
        "1003",
        "1013"
-      ]
-     },
-     {
-      "step": 60,
-      "prompt": "What is 25 plus (51 minus 21) times 5?",
-      "right": "175",
-      "answers": [
-       "175",
-       "183",
-       "185",
-       "174",
-       "275",
-       "163",
-       "177",
-       "182",
-       "176"
       ]
      }
     ]
@@ -619,22 +379,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "What part of the watermelon is colored in?",
-      "right": "1/3",
-      "answers": [
-       "1/5",
-       "4/5",
-       "3/4",
-       "1/3",
-       "2/5",
-       "3/5",
-       "2/4",
-       "1/4",
-       "2/3"
-      ]
-     },
-     {
       "step": 5,
       "prompt": "What part of the pie is colored in?",
       "right": "1/2",
@@ -651,22 +395,6 @@
       ]
      },
      {
-      "step": 5,
-      "prompt": "What part of the apple is colored in?",
-      "right": "1/4",
-      "answers": [
-       "2/4",
-       "2/3",
-       "2/5",
-       "3/5",
-       "1/4",
-       "1/3",
-       "4/5",
-       "1/5",
-       "3/4"
-      ]
-     },
-     {
       "step": 10,
       "prompt": "What part of the pizza is colored in?",
       "right": "2/3",
@@ -680,22 +408,6 @@
        "1/5",
        "2/3",
        "3/4"
-      ]
-     },
-     {
-      "step": 10,
-      "prompt": "What part of the chocolate bar is colored in?",
-      "right": "3/4",
-      "answers": [
-       "3/4",
-       "3/5",
-       "2/3",
-       "1/4",
-       "1/3",
-       "4/5",
-       "2/4",
-       "2/5",
-       "1/5"
       ]
      }
     ]
@@ -731,17 +443,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Work it out: one third plus one third",
-      "right": "2/3",
-      "answers": [
-       "3/4",
-       "3/3",
-       "2/6",
-       "2/3"
-      ]
-     },
-     {
       "step": 10,
       "prompt": "Work it out: one fifth plus one half",
       "right": "7/10",
@@ -753,17 +454,6 @@
       ]
      },
      {
-      "step": 10,
-      "prompt": "Work it out: one half plus one third",
-      "right": "5/6",
-      "answers": [
-       "2/5",
-       "2/3",
-       "5/6",
-       "5/7"
-      ]
-     },
-     {
       "step": 20,
       "prompt": "Work it out: three sixths minus one third",
       "right": "1/6",
@@ -772,17 +462,6 @@
        "1/6",
        "2/9",
        "1/5"
-      ]
-     },
-     {
-      "step": 20,
-      "prompt": "Work it out: two thirds times two quarters",
-      "right": "1/3",
-      "answers": [
-       "4/12",
-       "8/6",
-       "4/7",
-       "1/3"
       ]
      }
     ]
@@ -867,10 +546,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Build this from the shapes: a mushroom"
-     },
-     {
       "step": 10,
       "prompt": "What is the area of this shape? Count the colored squares.",
       "right": "4",
@@ -884,17 +559,6 @@
      {
       "step": 20,
       "prompt": "Find the shape with the biggest perimeter"
-     },
-     {
-      "step": 20,
-      "prompt": "What is the perimeter of this shape? Go around its edge and count the sides of the squares.",
-      "right": "16",
-      "answers": [
-       "15",
-       "14",
-       "6",
-       "16"
-      ]
      }
     ]
    },
@@ -953,33 +617,12 @@
       "prompt": "Buy a toy: the kite. The price is 13 dollars. Put the money on the counter."
      },
      {
-      "step": 1,
-      "prompt": "Buy a toy: the dinosaur. The price is 5 dollars. Put the money on the counter."
-     },
-     {
       "step": 6,
       "prompt": "Buy a toy: the toy car. The price is 26 dollars. Put the money on the counter."
      },
      {
-      "step": 6,
-      "prompt": "Buy a toy: the yo-yo. The price is 38 dollars. Put the money on the counter."
-     },
-     {
       "step": 12,
       "prompt": "Buy a toy: the ball. The price is 28 dollars. Put the money on the counter."
-     },
-     {
-      "step": 12,
-      "prompt": "The teddy bear costs 31 dollars. You pay 50 dollars. What is the change?",
-      "right": "19 $",
-      "answers": [
-       "19 $",
-       "21 $",
-       "22 $",
-       "9 $",
-       "15 $",
-       "20 $"
-      ]
      }
     ]
    },
@@ -1012,16 +655,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Compare 6 and 6. Which sign goes between them?",
-      "right": "equal",
-      "answers": [
-       "less",
-       "equal",
-       "greater"
-      ]
-     },
-     {
       "step": 6,
       "prompt": "Compare 2 plus 6 and 8. Which sign goes between them?",
       "right": "equal",
@@ -1032,28 +665,8 @@
       ]
      },
      {
-      "step": 6,
-      "prompt": "Compare 6 plus 1 and 16. Which sign goes between them?",
-      "right": "less",
-      "answers": [
-       "less",
-       "equal",
-       "greater"
-      ]
-     },
-     {
       "step": 12,
       "prompt": "Compare 290 centimeters and 3 meters. Which sign goes between them?",
-      "right": "less",
-      "answers": [
-       "less",
-       "equal",
-       "greater"
-      ]
-     },
-     {
-      "step": 12,
-      "prompt": "Compare 3 liters and 3100 milliliters. Which sign goes between them?",
       "right": "less",
       "answers": [
        "less",
@@ -1108,16 +721,8 @@
       ]
      },
      {
-      "step": 8,
-      "prompt": "Find the clock that shows three fifty."
-     },
-     {
       "step": 16,
       "prompt": "Find the clock that shows 17:05."
-     },
-     {
-      "step": 16,
-      "prompt": "Find the clock that shows 14:05."
      }
     ]
    },
@@ -1153,19 +758,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Oscar had 4 stickers. Mom gave him 3 more. How many stickers does he have now?",
-      "right": "7",
-      "answers": [
-       "17",
-       "6",
-       "5",
-       "9",
-       "11",
-       "7"
-      ]
-     },
-     {
       "step": 25,
       "prompt": "One notebook costs 7 dollars. How many dollars do 5 notebooks cost?",
       "right": "35",
@@ -1179,19 +771,6 @@
       ]
      },
      {
-      "step": 25,
-      "prompt": "12 pencils were put 4 into each box. How many boxes were needed?",
-      "right": "3",
-      "answers": [
-       "13",
-       "8",
-       "5",
-       "4",
-       "3",
-       "2"
-      ]
-     },
-     {
       "step": 50,
       "prompt": "Victor bought 2 cupcakes for 3 dollars each and tea for 14 dollars. How many dollars did he pay?",
       "right": "20",
@@ -1202,19 +781,6 @@
        "30",
        "22",
        "15"
-      ]
-     },
-     {
-      "step": 50,
-      "prompt": "Sophie thought of a number, doubled it and took away 3, and got 37. What number did Sophie think of?",
-      "right": "20",
-      "answers": [
-       "19",
-       "22",
-       "30",
-       "25",
-       "20",
-       "21"
       ]
      }
     ]
@@ -1258,19 +824,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Find the flag of Ukraine.",
-      "right": "🇺🇦",
-      "answers": [
-       "🇮🇹",
-       "🇨🇳",
-       "🇧🇷",
-       "🇯🇵",
-       "🇺🇦",
-       "🇬🇧"
-      ]
-     },
-     {
       "step": 20,
       "prompt": "Find the flag of Montenegro.",
       "right": "🇲🇪",
@@ -1284,19 +837,6 @@
       ]
      },
      {
-      "step": 20,
-      "prompt": "Find the flag of Ghana.",
-      "right": "🇬🇭",
-      "answers": [
-       "🇬🇭",
-       "🇭🇹",
-       "🇲🇾",
-       "🇩🇿",
-       "🇳🇴",
-       "🇨🇳"
-      ]
-     },
-     {
       "step": 39,
       "prompt": "Find the flag of Micronesia.",
       "right": "🇫🇲",
@@ -1307,19 +847,6 @@
        "🇧🇯",
        "🇬🇪",
        "🇫🇲"
-      ]
-     },
-     {
-      "step": 39,
-      "prompt": "Find the flag of Fiji.",
-      "right": "🇫🇯",
-      "answers": [
-       "🇫🇯",
-       "🇹🇹",
-       "🇸🇩",
-       "🇨🇳",
-       "🇸🇻",
-       "🇸🇧"
       ]
      }
     ]
@@ -1347,24 +874,12 @@
       "prompt": "Where does the lion live? Drag it onto the map."
      },
      {
-      "step": 1,
-      "prompt": "Where does the tiger live? Drag it onto the map."
-     },
-     {
       "step": 6,
       "prompt": "Which continent is Czechia on? Drag the flag."
      },
      {
-      "step": 6,
-      "prompt": "Where does the giraffe live? Drag it onto the map."
-     },
-     {
       "step": 12,
       "prompt": "Which continent is Pakistan on? Drag the flag."
-     },
-     {
-      "step": 12,
-      "prompt": "Which continent is Iceland on? Drag the flag."
      }
     ]
    },
@@ -1400,18 +915,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Where does the tiger live?",
-      "board": [
-       "❄️ The Arctic",
-       "🌴 Jungle",
-       "🏜️ Desert",
-       "🌊 Ocean",
-       "🌾 Savanna",
-       "🏔️ Mountains"
-      ]
-     },
-     {
       "step": 25,
       "prompt": "Who is it? A bird that spreads its tail into a huge colorful fan.",
       "right": "🦚 Peacock",
@@ -1425,18 +928,6 @@
       ]
      },
      {
-      "step": 25,
-      "prompt": "Who is the odd one out? All the others are neighbors: they live in the same natural zone.",
-      "right": "🐐 Mountain goat",
-      "answers": [
-       "🐍 Snake",
-       "🦎 Lizard",
-       "🐐 Mountain goat",
-       "🦂 Scorpion",
-       "🐪 Camel"
-      ]
-     },
-     {
       "step": 50,
       "prompt": "Who is the odd one out? All the others are neighbors: they live in the same natural zone.",
       "right": "🐂 Yak",
@@ -1447,19 +938,6 @@
        "🦍 Gorilla",
        "🐒 Monkey",
        "🦇 Bat"
-      ]
-     },
-     {
-      "step": 50,
-      "prompt": "Who is it? A spotted mountain cat with a very long fluffy tail.",
-      "right": "🐆 Snow leopard",
-      "answers": [
-       "🪲 Scarab beetle",
-       "🐒 Monkey",
-       "🐆 Snow leopard",
-       "🐺 Wolf",
-       "🦬 European bison",
-       "🦌 Deer"
       ]
      }
     ]
@@ -1487,40 +965,28 @@
       "prompt": "Sail to the Indian Ocean!"
      },
      {
-      "step": 1,
-      "prompt": "Sail to the ocean that surrounds Antarctica!"
-     },
-     {
       "step": 25,
       "prompt": "Around which ocean does the “Ring of Fire” of volcanoes run? Sail there!"
      },
      {
-      "step": 25,
-      "prompt": "Which ocean washes the shores of Cuba? Sail there!"
-     },
-     {
       "step": 50,
       "prompt": "Which ocean washes the shores of Somalia? Sail there!"
-     },
-     {
-      "step": 50,
-      "prompt": "Which ocean do the waters of the Mackenzie flow to? Sail there!"
      }
     ]
    },
    {
     "id": "geography:capitals",
     "sub": "capitals",
-    "icon": "🌐",
-    "title": "Capitals and Time Zones",
-    "blurb": "80 capitals of the world, day and night, and the difference in time",
-    "intro": "Know a capital by its most famous building and by the name of its country. And we will also find out why it is day in some cities when it is night in others, and what time it is there!",
+    "icon": "🏛️",
+    "title": "Capitals",
+    "blurb": "80 capitals of the world, their famous buildings and fun facts",
+    "intro": "Know a capital by its most famous building and by the name of its country. Every step brings new capitals, and the ones you know come back so that you don’t forget them!",
     "stars": [
      2,
      3
     ],
     "kind": "path",
-    "steps": 15,
+    "steps": 50,
     "tasksPerLevel": 10,
     "mechanics": [
      "UI_GRID_CHOICE"
@@ -1538,58 +1004,76 @@
       ]
      },
      {
+      "step": 25,
+      "prompt": "What is the capital of the United Arab Emirates?",
+      "right": "Abu Dhabi",
+      "answers": [
+       "Kyiv",
+       "Copenhagen",
+       "Riyadh",
+       "Abu Dhabi"
+      ]
+     },
+     {
+      "step": 50,
+      "prompt": "Quito is the capital of which country?",
+      "right": "🇪🇨 Ecuador",
+      "answers": [
+       "🇪🇨 Ecuador",
+       "🇦🇷 Argentina",
+       "🇪🇹 Ethiopia",
+       "🇪🇸 Spain"
+      ]
+     }
+    ]
+   },
+   {
+    "id": "geography:time",
+    "sub": "time",
+    "icon": "🌐",
+    "title": "Day, Night and Time Difference",
+    "blurb": "Why it is day in some cities when it is night in others, and what time it is there",
+    "intro": "The Earth turns, and the Sun lights up first one side of it, then the other. So when it is day here, somewhere far away it is night. Let’s find out where it is day and where it is night, and what time it is in cities around the world!",
+    "stars": [
+     2,
+     3
+    ],
+    "kind": "path",
+    "steps": 10,
+    "tasksPerLevel": 10,
+    "mechanics": [
+     "UI_GRID_CHOICE"
+    ],
+    "samples": [
+     {
       "step": 1,
-      "prompt": "In which capital can you see Saint Sophia Cathedral?",
-      "right": "Kyiv",
+      "prompt": "It is night in Kyiv now. What about Los Angeles?",
+      "right": "☀️ Day",
       "answers": [
-       "Rome",
-       "Paris",
-       "Washington",
-       "Kyiv"
+       "☀️ Day",
+       "🌙 Night"
       ]
      },
      {
-      "step": 8,
-      "prompt": "Dublin is the capital of which country?",
-      "right": "🇮🇪 Ireland",
+      "step": 5,
+      "prompt": "It is 14:00 in Kyiv. It is 1 hour earlier in Warsaw than in Kyiv. What time is it in Warsaw?",
+      "right": "13:00",
       "answers": [
-       "🇵🇱 Poland",
-       "🇰🇷 South Korea",
-       "🇧🇬 Bulgaria",
-       "🇮🇪 Ireland"
+       "12:00",
+       "15:00",
+       "13:00",
+       "14:00"
       ]
      },
      {
-      "step": 8,
-      "prompt": "Madrid is the capital of which country?",
-      "right": "🇪🇸 Spain",
+      "step": 10,
+      "prompt": "It is 7:00 in Kyiv. In winter it is 7 hours later in Tokyo than in Kyiv. What time is it in Tokyo?",
+      "right": "14:00",
       "answers": [
-       "🇪🇪 Estonia",
-       "🇪🇸 Spain",
-       "🇭🇷 Croatia",
-       "🇦🇷 Argentina"
-      ]
-     },
-     {
-      "step": 15,
-      "prompt": "What is the capital of Costa Rica?",
-      "right": "San José",
-      "answers": [
-       "Tallinn",
-       "Vienna",
-       "Ljubljana",
-       "San José"
-      ]
-     },
-     {
-      "step": 15,
-      "prompt": "Belgrade is the capital of which country?",
-      "right": "🇷🇸 Serbia",
-      "answers": [
-       "🇷🇸 Serbia",
-       "🇳🇬 Nigeria",
-       "🇫🇷 France",
-       "🇹🇭 Thailand"
+       "7:00",
+       "14:00",
+       "15:00",
+       "0:00"
       ]
      }
     ]
@@ -1690,29 +1174,14 @@
       "right": "It is hard for birds to find food under the snow"
      },
      {
-      "step": 1,
-      "prompt": "Why should you turn off the tap while brushing your teeth?",
-      "right": "So as not to waste clean water"
-     },
-     {
       "step": 25,
       "prompt": "How do house plants help at home?",
       "right": "They freshen the air"
      },
      {
-      "step": 25,
-      "prompt": "Why is it better to buy one big pack than many small ones?",
-      "right": "Because less packaging becomes rubbish"
-     },
-     {
       "step": 50,
       "prompt": "What is done at a recycling plant?",
       "right": "Rubbish is sorted and turned into raw material"
-     },
-     {
-      "step": 50,
-      "prompt": "Why do scientists write down the weather every day?",
-      "right": "To see how the climate is changing"
      }
     ]
    }
@@ -1882,17 +1351,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "What is Leonardo da Vinci famous for?",
-      "right": "🖼️ The Mona Lisa",
-      "answers": [
-       "🌙 The Moon",
-       "🎹 Music from childhood",
-       "🖼️ The Mona Lisa",
-       "⚛️ A famous formula"
-      ]
-     },
-     {
       "step": 5,
       "prompt": "What is Archimedes famous for?",
       "right": "🛁 “Eureka!” in the bath",
@@ -1904,18 +1362,6 @@
       ]
      },
      {
-      "step": 5,
-      "prompt": "Match each person with what made them famous",
-      "board": [
-       "🧔 William Shakespeare",
-       "🧑‍🎤 Wolfgang Mozart",
-       "🧑‍🏫 Isaac Newton",
-       "🍎 An apple and gravity",
-       "🎹 Music from childhood",
-       "🎭 The theater"
-      ]
-     },
-     {
       "step": 10,
       "prompt": "What is Steve Jobs famous for?",
       "right": "📱 A smartphone",
@@ -1924,18 +1370,6 @@
        "🎩 Silent movies",
        "🏥 Caring for the sick",
        "🗺️ A huge empire"
-      ]
-     },
-     {
-      "step": 10,
-      "prompt": "Match each person with what made them famous",
-      "board": [
-       "🧑‍✈️ Ferdinand Magellan",
-       "🧑‍🔧 Johannes Gutenberg",
-       "👬 The Wright brothers",
-       "🌍 A voyage around the world",
-       "✈️ The first airplane",
-       "📖 A printed book"
       ]
      }
     ]
@@ -1972,17 +1406,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "What is Taras Shevchenko famous for?",
-      "right": "📖 “Kobzar”",
-      "answers": [
-       "🌳 “The Forest Song”",
-       "🚀 A space rocket",
-       "📖 “Kobzar”",
-       "📜 Laws and a library"
-      ]
-     },
-     {
       "step": 5,
       "prompt": "What is Bohdan Khmelnytsky famous for?",
       "right": "🐎 Hetman of the Cossacks",
@@ -1994,18 +1417,6 @@
       ]
      },
      {
-      "step": 5,
-      "prompt": "Match each person with what made them famous",
-      "board": [
-       "👸 Princess Olha",
-       "🤴 Yaroslav the Wise",
-       "👩‍🦰 Lesia Ukrainka",
-       "📜 Laws and a library",
-       "🌳 “The Forest Song”",
-       "👑 A ruler of Rus"
-      ]
-     },
-     {
       "step": 10,
       "prompt": "What is Mykola Amosov famous for?",
       "right": "❤️ Heart operations",
@@ -2014,18 +1425,6 @@
        "❤️ Heart operations",
        "🎒 A wandering philosopher",
        "🌳 “The Forest Song”"
-      ]
-     },
-     {
-      "step": 10,
-      "prompt": "Match each person with what made them famous",
-      "board": [
-       "🧔‍♂️ Bohdan Khmelnytsky",
-       "🤴 Yaroslav the Wise",
-       "🧑‍🎼 Mykola Leontovych",
-       "🐎 Hetman of the Cossacks",
-       "🔔 “Carol of the Bells”",
-       "📜 Laws and a library"
       ]
      }
     ]
@@ -2062,17 +1461,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Who invented the long-lasting light bulb?",
-      "right": "🧑‍🔬 Thomas Edison",
-      "answers": [
-       "🧑‍🔬 Karl Benz",
-       "🧑‍🔬 The Wright brothers",
-       "🧑‍🔬 Thomas Edison",
-       "🧑‍🔬 Alexander Bell"
-      ]
-     },
-     {
       "step": 5,
       "prompt": "Who discovered penicillin — a medicine that beats germs?",
       "right": "🧑‍🔬 Alexander Fleming",
@@ -2084,17 +1472,6 @@
       ]
      },
      {
-      "step": 5,
-      "prompt": "Who invented the long-lasting light bulb?",
-      "right": "🧑‍🔬 Thomas Edison",
-      "answers": [
-       "🧑‍🔬 Guglielmo Marconi",
-       "🧑‍🔬 Alexander Fleming",
-       "🧑‍🔬 Thomas Edison",
-       "🧑‍🔬 George Stephenson"
-      ]
-     },
-     {
       "step": 10,
       "prompt": "What did Thomas Edison create?",
       "right": "💡 Light bulb",
@@ -2103,17 +1480,6 @@
        "💡 Light bulb",
        "🚂 Steam locomotive",
        "📖 Printing press"
-      ]
-     },
-     {
-      "step": 10,
-      "prompt": "What did the Wright brothers create?",
-      "right": "✈️ Airplane",
-      "answers": [
-       "☎️ Telephone",
-       "🚗 Automobile",
-       "✈️ Airplane",
-       "💡 Light bulb"
       ]
      }
     ]
@@ -2144,41 +1510,14 @@
       "right": "🧑‍🔬 Fedir Pirotsky"
      },
      {
-      "step": 1,
-      "prompt": "Who invented the helicopter?",
-      "right": "🧑‍🔬 Igor Sikorsky"
-     },
-     {
       "step": 5,
       "prompt": "Who created “Mriya,” the biggest airplane in the world?",
       "right": "Antonov’s engineers"
      },
      {
-      "step": 5,
-      "prompt": "Who invented the helicopter?",
-      "right": "🧑‍🔬 Igor Sikorsky",
-      "answers": [
-       "🧑‍🔬 Yevhen Paton",
-       "Antonov’s engineers",
-       "🧑‍🔬 Igor Sikorsky",
-       "🧑‍🔬 Waldemar Haffkine"
-      ]
-     },
-     {
       "step": 10,
       "prompt": "What did Igor Sikorsky create?",
       "right": "🚁 Helicopter"
-     },
-     {
-      "step": 10,
-      "prompt": "What did Yosyp Tymchenko create?",
-      "right": "🎥 Movie camera",
-      "answers": [
-       "🪔 Kerosene lamp",
-       "🚋 Electric streetcar",
-       "🎥 Movie camera",
-       "🚁 Helicopter"
-      ]
      }
     ]
    },
@@ -2214,11 +1553,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "What is Mieszko I famous for?",
-      "right": "🦅 The beginning of the Polish state"
-     },
-     {
       "step": 7,
       "prompt": "Who fought for the freedom of Poland and of America?",
       "right": "🧑‍✈️ Tadeusz Kościuszko",
@@ -2230,17 +1564,6 @@
       ]
      },
      {
-      "step": 7,
-      "prompt": "Match each person with what made them famous",
-      "board": [
-       "🧔‍♂️ Władysław Jagiełło",
-       "🤴 Mieszko I",
-       "👑 Bolesław the Brave",
-       "⚔️ The first king of Poland",
-       "🛡️ The Battle of Grunwald"
-      ]
-     },
-     {
       "step": 13,
       "prompt": "What is Stanisław Lem famous for?",
       "right": "🤖 Tales about robots",
@@ -2249,16 +1572,6 @@
        "🤖 Tales about robots",
        "📖 “Pan Tadeusz”",
        "🎹 Mazurkas and polonaises"
-      ]
-     },
-     {
-      "step": 13,
-      "prompt": "Match each person with what made them famous",
-      "board": [
-       "🤴 Mieszko I",
-       "👨‍🎨 Jan Matejko",
-       "👨‍🏫 Nicolaus Copernicus",
-       "☀️ The Sun in the center"
       ]
      }
     ]
@@ -2295,17 +1608,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Who invented the kerosene lamp?",
-      "right": "🧑‍🔬 Ignacy Łukasiewicz",
-      "answers": [
-       "🧑‍🔬 Mieczysław Bekker",
-       "🧑‍🔬 Henryk Magnuski",
-       "🧑‍🔬 Ignacy Łukasiewicz",
-       "🧑‍🔬 Casimir Funk"
-      ]
-     },
-     {
       "step": 5,
       "prompt": "Who thought up Esperanto, so that people from different countries could understand one another?",
       "right": "🧑‍🔬 Ludwik Zamenhof",
@@ -2317,17 +1619,6 @@
       ]
      },
      {
-      "step": 5,
-      "prompt": "Who invented the kerosene lamp?",
-      "right": "🧑‍🔬 Ignacy Łukasiewicz",
-      "answers": [
-       "🧑‍🔬 Józef Kosacki",
-       "🧑‍🔬 Ludwik Zamenhof",
-       "🧑‍🔬 Ignacy Łukasiewicz",
-       "🧑‍🔬 Rudolf Weigl"
-      ]
-     },
-     {
       "step": 10,
       "prompt": "What did Ignacy Łukasiewicz create?",
       "right": "🪔 Kerosene lamp",
@@ -2336,17 +1627,6 @@
        "🪔 Kerosene lamp",
        "💉 Vaccine against typhus",
        "💎 Crystals for microchips"
-      ]
-     },
-     {
-      "step": 10,
-      "prompt": "What did Henryk Magnuski create?",
-      "right": "📻 Walkie-talkie",
-      "answers": [
-       "🍊 Vitamins",
-       "🌙 Moon rover",
-       "📻 Walkie-talkie",
-       "🪔 Kerosene lamp"
       ]
      }
     ]
@@ -2797,29 +2077,12 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Pop the letters in alphabet order: from U to V.",
-      "board": [
-       "U",
-       "V"
-      ]
-     },
-     {
       "step": 25,
       "prompt": "Put the word together from letters: rim.",
       "board": [
        "R",
        "I",
        "M"
-      ]
-     },
-     {
-      "step": 25,
-      "prompt": "Put the word together from letters: kit.",
-      "board": [
-       "K",
-       "I",
-       "T"
       ]
      },
      {
@@ -2832,18 +2095,6 @@
        "L",
        "N",
        "X",
-       "Z"
-      ]
-     },
-     {
-      "step": 50,
-      "prompt": "Spell the word from the letters: engine.",
-      "board": [
-       "E",
-       "N",
-       "G",
-       "I",
-       "C",
        "Z"
       ]
      }
@@ -3118,24 +2369,6 @@
      {
       "step": 50,
       "prompt": "Two Polish letters have swapped places. Tap a letter that is not in its own place.",
-      "board": [
-       "A",
-       "Ą",
-       "B",
-       "C",
-       "Ć",
-       "D",
-       "E",
-       "Ę",
-       "F",
-       "G",
-       "H",
-       "I"
-      ]
-     },
-     {
-      "step": 50,
-      "prompt": "Put the Polish letters in their places in the alphabet.",
       "board": [
        "A",
        "Ą",
@@ -3603,16 +2836,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Andrew is taller than Max, and Max is taller than Oscar. Who is the tallest?",
-      "right": "Andrew",
-      "answers": [
-       "Oscar",
-       "Andrew",
-       "Max"
-      ]
-     },
-     {
       "step": 25,
       "prompt": "The blocks in the tower stand like this: green, red, green, red — and so on. What color will the 11th block be?",
       "right": "🟢 Green",
@@ -3620,16 +2843,6 @@
        "🟡 Yellow",
        "🔴 Red",
        "🟢 Green"
-      ]
-     },
-     {
-      "step": 25,
-      "prompt": "The flags on the garland hang like this: yellow, blue, yellow, blue — and so on. What color will the 8th flag be?",
-      "right": "🔵 Blue",
-      "answers": [
-       "🟡 Yellow",
-       "🟢 Green",
-       "🔵 Blue"
       ]
      },
      {
@@ -3643,19 +2856,6 @@
        "4",
        "10",
        "7"
-      ]
-     },
-     {
-      "step": 50,
-      "prompt": "Five chess players played one another: each with each, one game. How many games were there?",
-      "right": "10",
-      "answers": [
-       "12",
-       "9",
-       "13",
-       "10",
-       "20",
-       "8"
       ]
      }
     ]
@@ -3716,19 +2916,6 @@
       ]
      },
      {
-      "step": 15,
-      "prompt": "Which planet is the coldest — it gets down to minus 224 degrees there?",
-      "right": "🟢 Uranus",
-      "answers": [
-       "🟡 Venus",
-       "🌑 Mercury",
-       "🔴 Mars",
-       "🟢 Uranus",
-       "🔵 Neptune",
-       "🌍 Earth"
-      ]
-     },
-     {
       "step": 30,
       "prompt": "On which planet was ice found under the soil, and where do we look for traces of ancient life?",
       "right": "🔴 Mars",
@@ -3739,19 +2926,6 @@
        "🌍 Earth",
        "🟢 Uranus",
        "🟡 Venus"
-      ]
-     },
-     {
-      "step": 30,
-      "prompt": "Which planet rolls along its orbit on its side, like a ball, and has thirteen dark rings?",
-      "right": "🟢 Uranus",
-      "answers": [
-       "🟡 Venus",
-       "🌑 Mercury",
-       "🪐 Saturn",
-       "🌍 Earth",
-       "🔴 Mars",
-       "🟢 Uranus"
       ]
      }
     ]
@@ -3785,17 +2959,6 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Join the stars in order: from 1 to 5.",
-      "board": [
-       "1",
-       "2",
-       "3",
-       "4",
-       "5"
-      ]
-     },
-     {
       "step": 16,
       "prompt": "Find Cassiopeia in the sky. Its stars are a little bigger than the others — join them with your finger.",
       "board": [
@@ -3804,20 +2967,6 @@
        "3",
        "4",
        "5"
-      ]
-     },
-     {
-      "step": 16,
-      "prompt": "Join the stars, counting in tens: 10, 20, 30 — and on up to 80.",
-      "board": [
-       "10",
-       "20",
-       "30",
-       "40",
-       "50",
-       "60",
-       "70",
-       "80"
       ]
      },
      {
@@ -3834,18 +2983,6 @@
        "8",
        "9",
        "10"
-      ]
-     },
-     {
-      "step": 32,
-      "prompt": "Find Cepheus in the sky. Its stars are a little bigger than the others — join them with your finger.",
-      "board": [
-       "1",
-       "2",
-       "3",
-       "4",
-       "5",
-       "6"
       ]
      }
     ]
@@ -3880,24 +3017,12 @@
       "prompt": "The carrot must turn orange. Which two paints should you mix?"
      },
      {
-      "step": 1,
-      "prompt": "The orange must turn orange. Which two paints should you mix?"
-     },
-     {
       "step": 15,
       "prompt": "The unicorn must turn lilac. Which two paints should you mix?"
      },
      {
-      "step": 15,
-      "prompt": "The magic ball must turn dark purple. Which two paints should you mix?"
-     },
-     {
       "step": 30,
       "prompt": "The train must turn brick red. Which three paints should you mix?"
-     },
-     {
-      "step": 30,
-      "prompt": "The star must turn gold. Which two paints should you mix, and what makes it sparkle?"
      }
     ]
    },
@@ -3933,33 +3058,12 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "Choose red."
-     },
-     {
       "step": 10,
       "prompt": "Choose beige."
      },
      {
-      "step": 10,
-      "prompt": "What color is this?",
-      "right": "Mint",
-      "answers": [
-       "Beige",
-       "Black",
-       "Gray",
-       "Sky blue",
-       "Orange",
-       "Mint"
-      ]
-     },
-     {
       "step": 20,
       "prompt": "Choose shiny purple."
-     },
-     {
-      "step": 20,
-      "prompt": "Choose icy blue."
      }
     ]
    }
@@ -3982,7 +3086,7 @@
      1
     ],
     "kind": "path",
-    "steps": 8,
+    "steps": 10,
     "tasksPerLevel": 10,
     "mechanics": [
      "UI_SORTER_BINS",
@@ -4001,55 +3105,25 @@
       ]
      },
      {
-      "step": 1,
-      "prompt": "When do the first little leaves appear?",
-      "board": [
-       "❄️ Winter",
-       "🌷 Spring",
-       "☀️ Summer",
-       "🍂 Fall"
-      ]
-     },
-     {
-      "step": 4,
-      "prompt": "Which month comes after November?",
-      "right": "🎄 December",
-      "answers": [
-       "🌱 March",
-       "🐝 July",
-       "🎄 December",
-       "🌨️ February"
-      ]
-     },
-     {
-      "step": 4,
-      "prompt": "Which season does March belong to?",
-      "board": [
-       "❄️ Winter",
-       "🌷 Spring",
-       "☀️ Summer",
-       "🍂 Fall"
-      ]
-     },
-     {
-      "step": 8,
-      "prompt": "Put the seasons in order. Start with spring.",
-      "board": [
-       "🌷 Spring",
-       "☀️ Summer",
-       "🍂 Fall",
-       "❄️ Winter"
-      ]
-     },
-     {
-      "step": 8,
-      "prompt": "Which month comes after July?",
+      "step": 5,
+      "prompt": "Which month was before September?",
       "right": "🌾 August",
       "answers": [
-       "🎒 September",
        "🍓 June",
-       "🎄 December",
+       "🌿 May",
+       "🌱 March",
        "🌾 August"
+      ]
+     },
+     {
+      "step": 10,
+      "prompt": "Which month does spring end with?",
+      "right": "🌿 May",
+      "answers": [
+       "🌾 August",
+       "🍂 November",
+       "🍁 October",
+       "🌿 May"
       ]
      }
     ]

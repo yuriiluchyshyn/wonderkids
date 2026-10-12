@@ -245,7 +245,8 @@ test('vercel.json speaks of the same cookie, languages and portals as the code',
   for (const path of built) assert.equal(toPortal(path.replace(/\/$/, '')), path);
   // A legal text has one address too; and the game, which does not know which language sits at the root, may name any (`legalUrl`).
   for (const doc of LEGAL_DOCS) assert.equal(toPortal(`/${doc}`), `/${doc}/`);
-  assert.equal(toPortal(`/${DEFAULT_LANG}/:path*`), '/:path*');
+  // `(.*)`, not `:path*`: the named wildcard does not match a trailing slash, so `/uk/terms/` was a 404.
+  assert.equal(toPortal(`/${DEFAULT_LANG}/:path(.*)`), '/:path');
   assert.equal(legalUrl(URLS.site, 'pl', 'terms'), `${URLS.site}/${legalPath('pl', 'terms')}`);
   // Crawlers and the assistants' fetchers are never sent away from «/»: it is the Ukrainian page for them.
   const crawlers = new Set(redirects.flatMap((rule) => rule.missing ?? []).filter((when) => when.key === 'user-agent').map((when) => (when as { value?: string }).value));

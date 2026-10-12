@@ -10,6 +10,50 @@
   gap: 12px;
 }
 
+/* In play: the house · title · purse in one row (the title held to the left,
+   all three centred vertically), the race track and its task segments under
+   them across the whole width. */
+.headerPlay {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'back title hud'
+    'track track track'
+    'dots dots dots';
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 5px;
+}
+
+.headerPlay .headerMain {
+  display: contents;
+}
+
+.headerPlay .back {
+  grid-area: back;
+}
+
+.headerPlay .title {
+  grid-area: title;
+  justify-self: start;
+  max-width: 100%;
+  text-align: left;
+}
+
+.headerPlay .track {
+  grid-area: track;
+  min-width: 0;
+}
+
+.headerPlay .dots {
+  grid-area: dots;
+}
+
+.headerPlay .hud {
+  grid-area: hud;
+  margin-left: 0;
+}
+
 .hud {
   margin-left: auto;
   display: flex;

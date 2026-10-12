@@ -27,6 +27,8 @@ const OUTRO_SAFETY_MS = 30_000;
 const ADVANCE_DELAY_MS = 850;
 /** How many candidates to draw per needed task when a module has no `buildLevel`. */
 const CANDIDATE_FACTOR = 5;
+/** Answers on a board of generated numbers (`TaskConfig.choicesCount`). */
+const ANSWERS_DEFAULT = 9;
 
 export interface GameSessionConfig {
   moduleId: string;
@@ -129,7 +131,8 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   const maxSteps = sub ? subSteps(sub) : 30;
   const levelSize = sub ? tasksPerLevel(sub) : 0;
   const free = sub ? isFreePlay(sub) : false;
-  const gridSize = useGameStore((s) => s.settings.choicesGridSize);
+  // How many answers a board has is each game's own (nine, or six for big cards), not a parent's setting.
+  const gridSize = ANSWERS_DEFAULT;
   const currency = useCurrency();
   const awardArtifacts = useGameStore((s) => s.awardArtifacts);
   const recordTaskComplete = useGameStore((s) => s.recordTaskComplete);

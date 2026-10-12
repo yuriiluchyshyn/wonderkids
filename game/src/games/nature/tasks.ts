@@ -24,8 +24,9 @@ function scramble(ids: string[]): string[] {
 
 /**
  * «Пори року і місяці»: what happens when, then the twelve months — their
- * season, their neighbours, their order, their number — and the seasons in a
- * circle. Every word comes from the language of the task (`grammar/`).
+ * season, their neighbours, their order, their number — the seasons in a
+ * circle, the season before and after each, and the month each one begins
+ * and ends with. Every word comes from the language of the task (`grammar/`).
  */
 function seasons(step: number, config: Pick<TaskConfig, 'lang'>): Tasks {
   const T = natureTexts(config.lang);
@@ -169,6 +170,56 @@ function seasons(step: number, config: Pick<TaskConfig, 'lang'>): Tasks {
           },
           step,
           T.orderSeasons.circle,
+        ),
+      );
+    }
+  }
+
+  // The seasons' neighbours: which one comes after, which one before.
+  if (step >= 9) {
+    for (const [i, s] of SEASONS.entries()) {
+      const stimulus = { emoji: s.emoji, caption: T.season(s.id).name };
+      const next = SEASONS[(i + 1) % 4];
+      const prev = SEASONS[(i + 3) % 4];
+      tasks.push(
+        templateTask(
+          `season:next:${s.id}`,
+          T.seasonAfter.ask(s.id),
+          { template: Mechanics.GridChoice, cols: 2, stimulus, options: shuffle(bins), correctId: next.id, hint: T.orderSeasons.circle },
+          step,
+          factPool(T.seasonAfter.fact(s.id, next.id), T.season(next.id).facts),
+        ),
+        templateTask(
+          `season:prev:${s.id}`,
+          T.seasonBefore.ask(s.id),
+          { template: Mechanics.GridChoice, cols: 2, stimulus, options: shuffle(bins), correctId: prev.id, hint: T.orderSeasons.circle },
+          step,
+          factPool(T.seasonBefore.fact(s.id, prev.id), T.season(prev.id).facts),
+        ),
+      );
+    }
+  }
+
+  // Where a season begins and where it ends: its first and its last month.
+  if (step >= 10) {
+    for (const [i, s] of SEASONS.entries()) {
+      const months = monthsOf(s.id);
+      const [first, last] = [months[0], months[2]];
+      const stimulus = { emoji: s.emoji, caption: T.season(s.id).name };
+      tasks.push(
+        templateTask(
+          `season:first:${s.id}`,
+          T.seasonFirst.ask(s.id),
+          { template: Mechanics.GridChoice, cols: 2, stimulus, options: monthOptions(first), correctId: first.id, hint: T.seasonFirst.hint(SEASONS[(i + 3) % 4].id) },
+          step,
+          factPool(T.seasonFirst.fact(s.id, at(first)), T.month(at(first)).fact, T.season(s.id).facts.slice(1)),
+        ),
+        templateTask(
+          `season:last:${s.id}`,
+          T.seasonLast.ask(s.id),
+          { template: Mechanics.GridChoice, cols: 2, stimulus, options: monthOptions(last), correctId: last.id, hint: T.seasonLast.hint(SEASONS[(i + 1) % 4].id) },
+          step,
+          factPool(T.seasonLast.fact(s.id, at(last)), T.month(at(last)).fact, T.season(s.id).facts.slice(1)),
         ),
       );
     }

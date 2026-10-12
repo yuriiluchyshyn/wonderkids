@@ -182,10 +182,11 @@ export const api = {
   },
 
   /** Replace the signed-in user's saved state. */
-  putState(token: string, state: unknown) {
+  putState(token: string, state: unknown, keepalive = false) {
     return request<{ ok: true; updatedAt: string }>('/api/state', {
       method: 'PUT',
       token,
+      keepalive,
       body: { state },
     });
   },

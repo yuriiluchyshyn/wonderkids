@@ -22,7 +22,7 @@ const MAX_ANSWERS = 9;
 const MAX_ANSWER_LENGTH = 32;
 const MAX_BOARD = 12;
 /** How many different tasks a page shows from each step it samples — and from a game with no steps. */
-const PER_STEP = 2;
+const PER_STEP = 1;
 const PER_FREE_GAME = 4;
 
 const out = (lang) => new URL(`../../packages/catalog/src/${lang}.json`, import.meta.url);

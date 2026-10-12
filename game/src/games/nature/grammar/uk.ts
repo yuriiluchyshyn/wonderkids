@@ -12,6 +12,7 @@ import J from '@/locales/app/uk/games/nature.json';
 
 const seasonOf = (id: SeasonId) => SEASONS.find((s) => s.id === id) ?? SEASONS[0];
 const low = (at: number) => MONTHS[at].name.toLowerCase();
+const lowSeason = (id: SeasonId) => seasonOf(id).name.toLowerCase();
 const ORDINAL = J.ORDINAL;
 
 export const uk: NatureTexts = {
@@ -20,6 +21,8 @@ export const uk: NatureTexts = {
     if (step === 4 || step === 5) return J.introFor[2];
     if (step === 6 || step === 8) return J.introFor[3];
     if (step === 7) return J.introFor[4];
+    if (step === 9) return J.introFor[5];
+    if (step === 10) return J.introFor[6];
     return undefined;
   },
   season: (id) => ({ name: seasonOf(id).name, no: seasonOf(id).no, facts: SEASON_FACTS[id] }),
@@ -54,5 +57,24 @@ export const uk: NatureTexts = {
   orderSeasons: {
     ask: (first) => fill(J.orderSeasons.ask, { first: from(inflect(seasonOf(first).word, 'gen')) }),
     circle: J.orderSeasons.circle,
+  },
+  // «після зими» (родовий), «перед зимою» (орудний).
+  seasonAfter: {
+    ask: (s) => fill(J.seasonAfter.ask, { after: inflect(seasonOf(s).word, 'gen') }),
+    fact: (s, next) => fill(J.seasonAfter.fact, { after: inflect(seasonOf(s).word, 'gen'), s: lowSeason(next) }),
+  },
+  seasonBefore: {
+    ask: (s) => fill(J.seasonBefore.ask, { before: inflect(seasonOf(s).word, 'ins') }),
+    fact: (s, prev) => fill(J.seasonBefore.fact, { before: inflect(seasonOf(s).word, 'ins'), s: lowSeason(prev) }),
+  },
+  seasonFirst: {
+    ask: (s) => fill(J.seasonFirst.ask, { s: lowSeason(s) }),
+    hint: (prev) => fill(J.seasonFirst.hint, { prev: lowSeason(prev) }),
+    fact: (s, m) => fill(J.seasonFirst.fact, { name: seasonOf(s).name, m: from(MONTHS[m].after) }),
+  },
+  seasonLast: {
+    ask: (s) => fill(J.seasonLast.ask, { s: lowSeason(s) }),
+    hint: (next) => fill(J.seasonLast.hint, { next: lowSeason(next) }),
+    fact: (s, m) => fill(J.seasonLast.fact, { name: seasonOf(s).name, m: MONTHS[m].before }),
   },
 };

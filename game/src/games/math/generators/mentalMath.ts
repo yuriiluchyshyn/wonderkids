@@ -358,7 +358,8 @@ export function mentalTask(config: TaskConfig, shape: TaskShape): TaskInstance<G
     id: uid('mm'),
     key: keyOf(tokens),
     prompt: T.mental.chain(tokens),
-    ...(tokens.includes('(') ? { speak: T.mental.chainSaid(tokens) } : {}),
+    // Shown in signs, said in words («99 плюс 36…», brackets as «у дужках»).
+    speak: T.mental.chainSaid(tokens),
     reward: rewardForStep(step) + (numbers.length - 2) + (rule ? 1 : 0),
     payload: {
       template: Mechanics.GridChoice,

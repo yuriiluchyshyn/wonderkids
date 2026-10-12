@@ -61,6 +61,8 @@ export interface GeographyTexts {
     ask(country: string): string;
     hint(country: string): string;
     stories(country: string): string[];
+    /** What is interesting about the capital itself — five facts, the same ones in every language. */
+    facts(country: string): string[];
     countryAsk(country: string): string;
     countryHint(country: string): string;
     day: string;

@@ -107,7 +107,7 @@ const cap = (text: string) => `${text[0].toUpperCase()}${text.slice(1)}`;
 /** Path lengths of the three games below — also what their unlocking is paced by. */
 export const BIOME_STEPS = 50;
 export const OCEAN_STEPS = 50;
-export const CAPITAL_STEPS = 15;
+export const CAPITAL_STEPS = 50;
 
 /** Every dweller of the zones, in the order the path meets them. */
 export const ZONE_ANIMALS: BiomeAnimal[] = [...BIOME_ANIMALS, ...MORE_BIOME_ANIMALS];
@@ -323,9 +323,19 @@ function oceans(step: number, config: Config): Tasks {
 /** The countries whose capital is asked about, in the order of the flags. */
 export const CAPITALS: Country[] = COUNTRIES.filter((c) => CAPITAL_OF[c.id]);
 
+/**
+ * «Столиці»: fifty steps. A capital or two arrives on every step (asked as
+ * «Яка столиця …?»), two steps later the same capital is asked the other way
+ * round («… — столиця якої країни?»), and every few steps a famous landmark
+ * joins. What is told after an answer: the capital's own facts first.
+ */
 function capitals(step: number, config: Config): Tasks {
   const T = geographyTexts(config.lang);
   const C = T.capitals;
+  const told = (id: string) => {
+    const [yes, ...more] = C.stories(id);
+    return factPool(yes, C.facts(id), more);
+  };
   const landmarks = unlocked(LANDMARKS, step, CAPITAL_STEPS, 6);
   const landmarkTasks: Tasks = landmarks.map((l) => {
     const words = C.landmark(l.id);
@@ -359,12 +369,13 @@ function capitals(step: number, config: Config): Tasks {
         hint: C.hint(c.id),
       },
       step,
-      factPool(...C.stories(c.id)),
+      told(c.id),
     ),
   );
 
-  // «X — столиця якої країни?» comes two steps after the capital itself was met.
-  const familiar = step >= 3 ? unlocked(CAPITALS, step - 2, CAPITAL_STEPS, 8) : [];
+  // «X — столиця якої країни?» comes two steps after the capital itself was
+  // met, and catches up by the last step: every capital is asked both ways.
+  const familiar = step >= 3 ? unlocked(CAPITALS, step - 2, CAPITAL_STEPS - 2, 8) : [];
   const countryOf: Tasks = familiar.map((c) =>
     templateTask(
       `capital:where:${c.id}`,
@@ -377,11 +388,26 @@ function capitals(step: number, config: Config): Tasks {
         hint: C.countryHint(c.id),
       },
       step,
-      factPool(...C.stories(c.id)),
+      told(c.id),
     ),
   );
 
-  const dayNight: Tasks = (step >= 5 ? DAY_NIGHT : []).map((q) => {
+  return [...landmarkTasks, ...capitalOf, ...countryOf];
+}
+
+/** Path length of «День і ніч та різниця в часі»: first day and night, then the clocks. */
+export const TIME_STEPS = 10;
+/** Steps given to day and night before the first clock. */
+const DAY_NIGHT_STEPS = 4;
+
+/**
+ * «День і ніч та різниця в часі»: when it is day in Kyiv, is it day or night
+ * in another city (steps 1–4, all of them by step 4), then what the clock
+ * shows there — two more cities on every step from 5 to 10.
+ */
+function time(step: number, config: Config): Tasks {
+  const C = geographyTexts(config.lang).capitals;
+  const dayNight: Tasks = unlocked(DAY_NIGHT, step, DAY_NIGHT_STEPS, 8).map((q) => {
     const words = C.dayNight(q.id);
     return templateTask(
       `time:${q.id}`,
@@ -399,7 +425,7 @@ function capitals(step: number, config: Config): Tasks {
     );
   });
 
-  const shifts = step >= 9 ? TIME_SHIFTS.slice(0, 4 + (step - 9) * 2) : [];
+  const shifts = TIME_SHIFTS.slice(0, Math.max(0, step - DAY_NIGHT_STEPS) * 2);
   const clock: Tasks = shifts.flatMap((t) =>
     t.kyiv.map((hour) => {
       const there = hour + t.shift;
@@ -423,7 +449,7 @@ function capitals(step: number, config: Config): Tasks {
     }),
   );
 
-  return [...landmarkTasks, ...capitalOf, ...countryOf, ...dayNight, ...clock];
+  return [...dayNight, ...clock];
 }
 
 export const TASKS: Record<string, GameTasks> = {
@@ -432,4 +458,5 @@ export const TASKS: Record<string, GameTasks> = {
   biomes: { pool: biomes },
   oceans: { pool: oceans },
   capitals: { pool: capitals },
+  time: { pool: time },
 };

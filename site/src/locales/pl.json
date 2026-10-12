@@ -31,7 +31,7 @@
     }
   },
   "games": {
-    "title": "56 gier w dziewięciu galaktykach",
+    "title": "57 gier w dziewięciu galaktykach",
     "sub": "Przedmioty to tutaj galaktyki, a gry — planety. Oto, co na nich czeka.",
     "math": {
       "1": "Dodawanie, odejmowanie, mnożenie, dzielenie",
@@ -74,8 +74,9 @@
       "2": "Kontynenty: kto gdzie mieszka",
       "3": "Oceany na mapie świata",
       "4": "Strefy przyrodnicze i ich mieszkańcy",
-      "5": "Stolice oraz dlaczego gdzieś jest dzień, a gdzieś noc",
-      "tag": "5 gier",
+      "5": "Stolice świata i ciekawostki o nich",
+      "6": "Dlaczego gdzieś jest dzień, a gdzieś noc, i która jest tam godzina",
+      "tag": "6 gier",
       "title": "Geografia"
     },
     "history": {
@@ -166,7 +167,7 @@
     "title": "Najczęstsze pytania o Pulsar Kids",
     "what": {
       "title": "Czym jest Pulsar Kids?",
-      "text": "Pulsar Kids to gry edukacyjne dla dzieci w wieku 4–10 lat, w które gra się w przeglądarce na telefonie, tablecie lub komputerze. W 56 grach dziecko ćwiczy matematykę, język, logikę, geografię, historię, astronomię, ekologię, przyrodę i sztukę, a rodzice ustawiają czas przed ekranem."
+      "text": "Pulsar Kids to gry edukacyjne dla dzieci w wieku 4–10 lat, w które gra się w przeglądarce na telefonie, tablecie lub komputerze. W 57 grach dziecko ćwiczy matematykę, język, logikę, geografię, historię, astronomię, ekologię, przyrodę i sztukę, a rodzice ustawiają czas przed ekranem."
     },
     "age": {
       "title": "Dla jakiego wieku jest Pulsar Kids?",
@@ -198,7 +199,7 @@
     },
     "try": {
       "title": "Czy można wypróbować grę bez rejestracji?",
-      "text": "Tak. Przycisk „Wypróbuj grę teraz” otwiera kilka minut prawdziwej gry bez konta i bez płatności. To, co dziecko zbierze w grze próbnej, nie zapisuje się — do tego rodzic zakłada konto na adres e-mail."
+      "text": "Tak. Przycisk „Wypróbuj grę teraz” otwiera pierwszy poziom prawdziwej gry bez konta i bez płatności — bez pośpiechu i bez stopera. To, co dziecko zbierze w grze próbnej, nie zapisuje się — do tego rodzic zakłada konto na adres e-mail."
     }
   },
   "feedback": {

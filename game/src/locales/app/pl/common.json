@@ -608,11 +608,6 @@
       "hint": "Przy pierwszym spotkaniu gra tłumaczy dziecku, do czego służy każdy przycisk. Podpowiedź zamknięta przez dziecko już nie wraca. Przeczytane podpowiedzi: {count}.",
       "reset": "Pokaż ponownie"
     },
-    "grid": {
-      "title": "🔢 Siatka odpowiedzi",
-      "label": "Siatka odpowiedzi",
-      "hint": "Im więcej odpowiedzi, tym trudniej zgadywać na chybił trafił."
-    },
     "money": {
       "title": "💰 Waluta w grach",
       "hint": "Jakimi monetami i banknotami dziecko liczy i płaci w grach.",
@@ -980,11 +975,12 @@
     "leave": "Zakończ grę próbną",
     "over": {
       "title": "Próbna podróż dobiegła końca!",
-      "text": "Świetnie Ci idzie! To była gra próbna, dlatego wszystko, co udało się zebrać, nie jest jeszcze zapisane. Zawołaj mamę albo tatę i poproś, żeby założyli dla Ciebie konto — wtedy zagrasz dalej, a wszystko, co zbierzesz, zostanie z Tobą.",
+      "text": "Cały poziom za Tobą — brawo! To była gra próbna, dlatego wszystko, co udało się zebrać, nie jest jeszcze zapisane. Zawołaj mamę albo tatę i poproś, żeby założyli dla Ciebie konto — wtedy zagrasz dalej, a wszystko, co zbierzesz, zostanie z Tobą.",
       "listen": "Posłuchaj jeszcze raz",
       "parents": "Dla rodziców: w grze próbnej postępy nie są zapisywane. Załóżcie konto i dodajcie profil dziecka — będzie grać dalej, a jego postępy zostaną zapisane.",
       "login": "Mamy już konto"
-    }
+    },
+    "next": "Dalej"
   },
   "legal": {
     "note": "Logując się lub zakładając konto, akceptujesz regulamin i politykę prywatności:",

@@ -12,5 +12,19 @@ document.querySelectorAll<HTMLAnchorElement>('a[data-home]').forEach((link) => {
   link.addEventListener('click', () => rememberLangChoice(document.documentElement.lang));
 });
 
+// «More games of the galaxy»: every other game is in the page; a few of them, drawn anew on each visit, are shown.
+document.querySelectorAll<HTMLElement>('[data-shuffle]').forEach((grid) => {
+  const shown = Number(grid.dataset.shuffle) || 4;
+  const cards = [...grid.children] as HTMLElement[];
+  for (let i = cards.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  cards.forEach((card, i) => {
+    card.hidden = i >= shown;
+    grid.appendChild(card);
+  });
+});
+
 const year = document.getElementById('year');
 if (year) year.textContent = String(new Date().getFullYear());

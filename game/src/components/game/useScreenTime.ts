@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, type SessionView } from '@/core/account/api/client';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { useDemo } from '@/core/app/demo';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { computeScreenTime } from '@/core/child/time/screenTime';
 
@@ -52,7 +53,10 @@ export function useScreenTime(active: boolean): ScreenTimeStatus {
   const pausePlaySession = useGameStore((s) => s.pausePlaySession);
   const enterCooldown = useGameStore((s) => s.enterCooldown);
   const childId = useGameStore((s) => s.activeChildId);
-  const token = useAuthStore((s) => s.token);
+  // The trial game's guest has no play time on the server, even on a signed-in device.
+  const signedIn = useAuthStore((s) => s.token);
+  const trial = useDemo((s) => s.active);
+  const token = trial ? null : signedIn;
 
   const [now, setNow] = useState(() => Date.now());
   const [synced, setSynced] = useState(() => childId !== null && syncedChild === childId);

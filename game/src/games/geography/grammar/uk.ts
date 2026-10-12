@@ -18,7 +18,7 @@ import {
   type Biome,
   type BiomeId,
 } from '@/games/geography/content/data';
-import { LANDMARK_FACTS, OCEAN_POOLS } from '@/games/geography/content/facts';
+import { CAPITAL_FACTS, LANDMARK_FACTS, OCEAN_POOLS } from '@/games/geography/content/facts';
 import { ANIMAL_CLUES, MORE_ANIMAL_FACTS, MORE_BIOME_ANIMALS, MORE_SIGNS } from '@/games/geography/content/moreAnimals';
 import { MORE_OCEAN_PLACES, MORE_OCEAN_RIDDLES, MORE_SEAS, RIDDLE_FACTS, RIVERS } from '@/games/geography/content/moreOceans';
 import type { GeographyTexts } from '@/games/geography/grammar/types';
@@ -148,6 +148,7 @@ export const uk: GeographyTexts = {
         fill(J.capitals.stories[9], { pair }),
       ];
     },
+    facts: (id) => CAPITAL_FACTS[id],
     countryAsk: (id) => fill(J.capitals.countryAsk, { id: capitalOf(id) }),
     countryHint: (id) => country(id).look ?? fill(J.capitals.countryHint, { continentName: country(id).continentName, id: country(id).name[0] }),
     day: J.capitals.day,
