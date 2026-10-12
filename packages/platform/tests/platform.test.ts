@@ -21,9 +21,10 @@ test('the cookie of a choice is shared by the site and the portals — where a d
 });
 
 test('public addresses: the portals are subdomains of the site unless given their own', () => {
-  assert.deepEqual(publicUrls(), { site: 'https://pulsarkids.com', play: 'https://play.pulsarkids.com', parents: 'https://parents.pulsarkids.com' });
-  assert.deepEqual(publicUrls('https://example.org/'), { site: 'https://example.org', play: 'https://play.example.org', parents: 'https://parents.example.org' });
-  assert.deepEqual(publicUrls('', { play: 'http://localhost:4321/' }), { site: 'https://pulsarkids.com', play: 'http://localhost:4321', parents: 'https://parents.pulsarkids.com' });
+  assert.deepEqual(publicUrls(), { site: 'https://pulsarkids.com', play: 'https://play.pulsarkids.com', parents: 'https://parents.pulsarkids.com', api: 'https://api.pulsarkids.com' });
+  assert.deepEqual(publicUrls('https://example.org/'), { site: 'https://example.org', play: 'https://play.example.org', parents: 'https://parents.example.org', api: 'https://api.example.org' });
+  assert.deepEqual(publicUrls('', { play: 'http://localhost:4321/' }), { site: 'https://pulsarkids.com', play: 'http://localhost:4321', parents: 'https://parents.pulsarkids.com', api: 'https://api.pulsarkids.com' });
+  assert.equal(publicUrls('', { api: 'http://localhost:4323/' }).api, 'http://localhost:4323');
 });
 
 test('a source travels in a link and comes out the same', () => {

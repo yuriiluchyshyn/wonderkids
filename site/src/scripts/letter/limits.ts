@@ -1,6 +1,6 @@
 /**
  * What a letter may carry. These repeat the limits the API enforces
- * (`game/api/_lib/feedback.js`) — change both.
+ * (`backend/…/core/FeedbackRules.java`) — change both.
  */
 export const MAX_FILES = 5;
 export const MAX_FILE = 15 * 1024 * 1024;

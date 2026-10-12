@@ -1,5 +1,5 @@
 /**
- * Sending a letter to the game's API (`game/api/feedback.js`): the text first,
+ * Sending a letter to the API (`backend/…/web/FeedbackController.java`): the text first,
  * then the files in pieces, then the word that it is whole.
  */
 import type { Attachment } from './attachments.ts';
@@ -41,7 +41,8 @@ export class LetterPost {
   constructor(private readonly endpoint: string) {}
 
   private async call(method: 'POST' | 'PUT', body: unknown): Promise<Ticket> {
-    const res = await fetch(this.endpoint, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    // The page's language: the API answers in it, and remembers it to answer the letter in.
+    const res = await fetch(this.endpoint, { method, headers: { 'Content-Type': 'application/json', 'Accept-Language': document.documentElement.lang }, body: JSON.stringify(body) });
     const data = (await res.json().catch(() => ({}))) as Ticket & { error?: string };
     if (!res.ok) throw new LetterError(data.error || `http_${res.status}`);
     return data;

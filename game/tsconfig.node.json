@@ -17,7 +17,6 @@
   },
   "include": [
     "vite.config.ts",
-    "dev-api.ts",
     "seo-plugin.ts"
   ]
 }

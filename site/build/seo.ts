@@ -5,7 +5,7 @@ import { SITE_LANGS, sitePath } from '../src/languages.ts';
 /**
  * The site's SEO plumbing that depends on the public addresses:
  *
- *  - fills `__SITE_URL__`, `__PLAY_URL__` and `__PARENTS_URL__` in the page
+ *  - fills `__SITE_URL__`, `__PLAY_URL__`, `__PARENTS_URL__` and `__API_URL__` in the page
  *    (canonical links, Open Graph, JSON-LD, the links into the game and the
  *    address its letters go to);
  *  - serves / emits `robots.txt` and `sitemap.xml` (the page in every
@@ -35,7 +35,7 @@ export function seo(urls: PublicUrls): Plugin {
   return {
     name: 'pulsar-site-seo',
 
-    transformIndexHtml: (html) => html.replaceAll('__SITE_URL__', site).replaceAll('__PLAY_URL__', urls.play).replaceAll('__PARENTS_URL__', urls.parents),
+    transformIndexHtml: (html) => html.replaceAll('__SITE_URL__', site).replaceAll('__PLAY_URL__', urls.play).replaceAll('__PARENTS_URL__', urls.parents).replaceAll('__API_URL__', urls.api),
 
     configureServer(server) {
       server.middlewares.use((req, res, next) => {

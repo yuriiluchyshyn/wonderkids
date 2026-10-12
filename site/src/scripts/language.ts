@@ -6,7 +6,7 @@
 import { rememberLangChoice } from '@pulsar/platform/browser';
 import { localGameOrigin } from './portals.ts';
 
-/** Where the game's API answers what is offered in the visitor's country: built into the page, or the dev server beside this one. */
+/** Where the API answers what is offered in the visitor's country: built into the page, or the dev server beside this one. */
 function availabilityEndpoint(): string | null {
   const built = document.body.dataset.visitsApi;
   if (!built) return null;
@@ -16,7 +16,7 @@ function availabilityEndpoint(): string | null {
 
 /**
  * The owner may offer only some languages in a country (the admin panel's
- * «Доступність»; the game's `GET /api/health` tells which). The others leave
+ * «Доступність»; the API's `GET /api/health` tells which). The others leave
  * the menu — never the language of the page being read, and nobody is sent
  * anywhere: a page opened by its address stays, for a reader and a crawler alike.
  * With one language left there is nothing to choose, and the menu goes too.

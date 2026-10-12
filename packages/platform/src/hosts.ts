@@ -5,6 +5,7 @@
  *   pulsarkids.com           the public site
  *   play.pulsarkids.com      the child's portal
  *   parents.pulsarkids.com   the parents' portal (and the admin panel)
+ *   api.pulsarkids.com       the API — a deployment of its own (`backend/`), asked by the game and the site
  *
  * Pure: no DOM, so the build plugins and `node --test` can use it too.
  */
@@ -19,7 +20,7 @@ export const DEFAULT_SITE_URL = 'https://pulsarkids.com';
 export const LANG_COOKIE = 'pk_lang';
 
 /** The port each dev server takes, so a page of one can link to the other on the same machine. */
-export const DEV_PORT = { game: 4321, site: 4322 } as const;
+export const DEV_PORT = { game: 4321, site: 4322, api: 4323 } as const;
 
 const LOCAL_HOST = /^(localhost$|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|\[?::1\]?$)|\.local$/;
 const PREVIEW_HOST = /\.vercel\.app$/;
@@ -31,7 +32,7 @@ export const isLocalHost = (host: string): boolean => LOCAL_HOST.test(host.toLow
 export const isPreviewHost = (host: string): boolean => PREVIEW_HOST.test(host.toLowerCase());
 
 /** The root domain of a host, without `www.` or a portal's prefix. */
-export const rootHost = (host: string): string => host.toLowerCase().replace(/^(www|play|parents)\./, '');
+export const rootHost = (host: string): string => host.toLowerCase().replace(/^(www|play|parents|api)\./, '');
 
 /** The portal a host belongs to, if it is one. */
 export const portalOfHost = (host: string): PortalHost | null => PORTAL_HOSTS.find((portal) => host.toLowerCase().startsWith(`${portal}.`)) ?? null;
@@ -52,16 +53,18 @@ export interface PublicUrls {
   site: string;
   play: string;
   parents: string;
+  /** The API's origin; its endpoints are under `/api`. */
+  api: string;
 }
 
 /**
  * The public addresses of a deployment, none with a trailing slash. Only the
- * site's is needed (`VITE_SITE_URL`): the portals are its subdomains unless
- * one is given an address of its own.
+ * site's is needed (`VITE_SITE_URL`): the portals and the API are its
+ * subdomains unless one is given an address of its own.
  */
-export function publicUrls(siteUrl: string | undefined = DEFAULT_SITE_URL, own: Partial<Record<PortalHost, string | undefined>> = {}): PublicUrls {
+export function publicUrls(siteUrl: string | undefined = DEFAULT_SITE_URL, own: Partial<Record<PortalHost | 'api', string | undefined>> = {}): PublicUrls {
   const trim = (url: string): string => url.replace(/\/+$/, '');
   const site = trim(siteUrl || DEFAULT_SITE_URL);
-  const sub = (portal: PortalHost): string => trim(own[portal] || site.replace('://', `://${portal}.`));
-  return { site, play: sub('play'), parents: sub('parents') };
+  const sub = (name: PortalHost | 'api'): string => trim(own[name] || site.replace('://', `://${name}.`));
+  return { site, play: sub('play'), parents: sub('parents'), api: sub('api') };
 }

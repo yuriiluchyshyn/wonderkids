@@ -1,7 +1,7 @@
 /**
  * Counts an arrival by one of the owner's own links (`?l=insta-bio`, made in
  * the admin panel): when, by which link, from which country. The count is kept
- * by the game's API (`game/api/health.js`), on another origin; a link it does
+ * by the API (`backend/`, `POST /api/health`), on another origin; a link it does
  * not know is not counted. A reload of the page is the same arrival.
  */
 import { linkOfQuery, rootHost } from '@pulsar/platform';
@@ -9,7 +9,7 @@ import { localGameOrigin } from './portals.ts';
 
 const SEEN = 'pulsar-visit-';
 
-/** Where arrivals are counted: the address the page was built with, or the game's dev server beside this one. */
+/** Where arrivals are counted: the address the page was built with, or the game's dev server beside this one (it passes `/api` on to the backend). */
 function endpoint(): string | null {
   const built = document.body.dataset.visitsApi;
   if (!built) return null;

@@ -1,0 +1,35 @@
+# The API as a container image — how Vercel runs a Java service: the image is
+# built from this file on every deploy and served as ONE function, scaled with
+# the traffic and put to sleep when there is none (so the service keeps no
+# state between requests — everything lives in PostgreSQL).
+#
+# Local check, if you have Docker:  docker build -f Dockerfile.vercel -t pulsar-api . && docker run -p 4323:80 --env-file ../game/.env.local pulsar-api
+
+# ---- build: the runnable jar -------------------------------------------------
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /src
+# The dependencies first: this layer is reused until pom.xml changes.
+COPY pom.xml .
+RUN mvn -B -q dependency:go-offline
+COPY src src
+# The tests ran before the push (scripts/deploy.sh); they need a PostgreSQL the build does not have.
+RUN mvn -B -q -DskipTests package
+
+# ---- run -----------------------------------------------------------------------
+FROM eclipse-temurin:21-jre
+COPY --from=build /src/target/pulsar-api.jar /build/pulsar-api.jar
+
+# An instance starts when a request is already waiting, so the start is made
+# short: the jar is unpacked (Spring Boot's `extract` → /app/pulsar-api.jar + lib/),
+# and one trial start — it needs no database — leaves an archive of the classes
+# already loaded and checked (CDS), which every real start then maps in instead
+# of doing that work again. The archive is made by the very JVM that will use it.
+RUN java -Djarmode=tools -jar /build/pulsar-api.jar extract --destination /app && rm -rf /build
+WORKDIR /app
+RUN java -XX:ArchiveClassesAtExit=pulsar-api.jsa -Dspring.context.exit=onRefresh -Dspring.main.lazy-initialization=false -jar pulsar-api.jar > /dev/null \
+ && test -s pulsar-api.jsa
+
+# Vercel sends the traffic to port 80.
+ENV PORT=80
+EXPOSE 80
+CMD ["java", "-XX:SharedArchiveFile=pulsar-api.jsa", "-XX:TieredStopAtLevel=1", "-XX:+UseSerialGC", "-Dfile.encoding=UTF-8", "-jar", "pulsar-api.jar"]

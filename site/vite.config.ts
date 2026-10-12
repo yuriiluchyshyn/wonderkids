@@ -10,7 +10,7 @@ const root = fileURLToPath(new URL('.', import.meta.url));
 // The public site: one static page per language, no framework. https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, root, 'VITE_');
-  const urls = publicUrls(env.VITE_SITE_URL, { play: env.VITE_PLAY_URL, parents: env.VITE_PARENTS_URL });
+  const urls = publicUrls(env.VITE_SITE_URL, { play: env.VITE_PLAY_URL, parents: env.VITE_PARENTS_URL, api: env.VITE_API_URL });
 
   return {
     plugins: [brandAssets(), seo(urls), pages(urls.site)],

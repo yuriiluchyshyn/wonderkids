@@ -1,15 +1,23 @@
 /**
  * Thin fetch wrapper around the Pulsar Kids API.
  *
- * In dev the base URL is empty, so requests go to `/api/...` on the Vite dev
- * server, which proxies them to the backend (see vite.config.ts). Set
- * `VITE_API_URL` to call a deployed API directly instead.
+ * The API is a service of its own (`backend/`, Java). The production build
+ * calls it at its own address (`VITE_API_URL`, filled in by vite.config.ts).
+ * Everywhere else the base URL is empty and requests go to `/api/...` on the
+ * page's own origin, which passes them on: the Vite dev server to the backend
+ * on this machine, a preview deployment through the rewrite in vercel.json.
  */
 
 import type { SignupSource } from '@/core/app/attribution';
 import type { LangCode } from '@/core/language';
 
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
+
+/**
+ * The language on the screen right now (`LangProvider` keeps it on `<html lang>`):
+ * the API answers a refusal with a text in it — `{ error, message }`.
+ */
+const screenLang = (): string => (typeof document === 'undefined' ? '' : document.documentElement.lang);
 
 export interface AuthUser {
   id: number;
@@ -33,6 +41,14 @@ export class ApiError extends Error {
     super(code);
     this.name = 'ApiError';
   }
+
+  /**
+   * The server's own words for the person, in the language of the screen —
+   * for a refusal the app has no text of its own for. (`message` stays the code.)
+   */
+  get text(): string | null {
+    return typeof this.data.message === 'string' && this.data.message ? this.data.message : null;
+  }
 }
 
 async function request<T>(
@@ -53,6 +69,7 @@ async function request<T>(
       method,
       headers: {
         ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+        ...(screenLang() ? { 'Accept-Language': screenLang() } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(adminKey ? { 'x-admin-key': adminKey } : {}),
       },
