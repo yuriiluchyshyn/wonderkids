@@ -6,8 +6,21 @@ import { beatCeilingMs, readingMs } from '@/core/game/hints/script';
 import type { HintScript } from '@/core/game/hints/types';
 import { spoken, written } from '@/core/language/marks';
 
-/** The pause between one beat's last word and the next beat. */
-const BEAT_GAP_MS = 260;
+/**
+ * The pause between one beat's last word and the next beat: a help is taken in
+ * a sentence at a time; a solved figure read out part by part is one sentence,
+ * and must sound like one.
+ */
+const BEAT_GAP_MS = { help: 260, told: 40 } as const;
+
+/**
+ * Gets every beat of a script ready to be said at once (the cloud voice is
+ * asked for them all now, together, instead of before each beat) — so a
+ * sentence said part by part does not wait between its parts.
+ */
+export function prefetchScript(script: HintScript | undefined, channel: VoiceChannel, lang?: SpeechLang): void {
+  for (const b of script?.beats ?? []) voice.prefetch(spoken(b.text), channel, lang);
+}
 
 /** What is being played, and for what. */
 export interface HintPlay {
@@ -68,6 +81,8 @@ export function useHintStageState(): HintStage {
 
   const start = useCallback((play: HintPlay) => {
     ticket.current += 1;
+    // The beats after the first are fetched while the first is being said.
+    prefetchScript(play.said ?? play.shown, play.channel ?? 'hint', play.lang);
     setState((s) => ({ play, at: 0, playing: play.shown.beats.length > 0, round: s.round + 1 }));
   }, []);
 
@@ -109,7 +124,7 @@ export function useHintStageState(): HintStage {
           const last = at >= play.shown.beats.length - 1;
           setState((s) => (last ? { ...s, playing: false } : { ...s, at: s.at + 1 }));
           if (last) play.onDone?.();
-        }, BEAT_GAP_MS),
+        }, BEAT_GAP_MS[play.kind]),
       );
     };
     const channel = play.channel ?? 'hint';
@@ -117,7 +132,7 @@ export function useHintStageState(): HintStage {
       voice.speak(spoken(said.text), onward, play.lang);
       timers.push(window.setTimeout(onward, beatCeilingMs(said.text)));
     } else {
-      timers.push(window.setTimeout(onward, readingMs(written(shown.text))));
+      timers.push(window.setTimeout(onward, readingMs(written(shown.text), play.kind)));
     }
     return () => timers.forEach((id) => window.clearTimeout(id));
   }, [play, at, playing, round]);

@@ -1,0 +1,26 @@
+/* The game shell: the screen and the board a task is played on (`GameScreen.tsx`). */
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.board {
+  position: relative;
+  padding: 12px 14px 14px;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.floatReward {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent);
+  pointer-events: none;
+  z-index: 5;
+}

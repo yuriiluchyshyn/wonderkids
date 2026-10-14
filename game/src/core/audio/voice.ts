@@ -56,6 +56,14 @@ export const voice = {
     speechEngine.speak(text, onEnd, lang);
   },
 
+  /**
+   * Gets `text` ready to be said at once, later — if it may be said at all
+   * (the same switches as `say`). Nothing sounds now.
+   */
+  prefetch(text: string, channel?: VoiceChannel, lang?: SpeechLang): void {
+    if (voice.allowed(channel)) speechEngine.prefetch(text, lang);
+  },
+
   /** The language the voice reads in (a phrase may still name its own). */
   get language(): SpeechLang {
     return speechEngine.language;

@@ -1,0 +1,33 @@
+/* What a game shows before play (`IntroCard.tsx`). */
+.introCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 18px;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.introClose {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.introCloseBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--surface-ink);
+  background: color-mix(in srgb, var(--ring) 22%, var(--surface));
+  box-shadow: var(--shadow-sm);
+}
+
+.introText {
+  font-size: 1.2rem;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--surface-ink);
+}

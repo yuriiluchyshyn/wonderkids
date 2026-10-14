@@ -39,6 +39,8 @@ export class SpeechEngine {
   /** The language a phrase is read in when its caller names none. */
   private lang: SpeechLang = DEFAULT_LANG;
   private readonly cloudCache = new Map<string, string>();
+  /** Phrases asked of the cloud and not back yet. */
+  private readonly cloudInFlight = new Map<string, Promise<string>>();
   /**
    * The one `<audio>` element every cloud phrase plays through. iOS only lets
    * an element play without a tap if that same element was once started by a
@@ -203,12 +205,28 @@ export class SpeechEngine {
     }, START_TIMEOUT_MS);
   }
 
+  /**
+   * Fetches a phrase from the cloud voice ahead of time, so it plays at once
+   * when it is said — a sentence said part by part (a hint, a figure read out)
+   * would otherwise wait for the cloud before every part. Nothing is played;
+   * without a cloud voice it does nothing.
+   */
+  prefetch(raw: string, lang: SpeechLang = this.lang): void {
+    if (!this.cloud) return;
+    this.fetchCloud(language(lang).voiced(raw), lang).catch(() => undefined);
+  }
+
   private async fetchCloud(text: string, lang: SpeechLang): Promise<string> {
     const cacheKey = `${lang}|${text}`;
     const cached = this.cloudCache.get(cacheKey);
     if (cached) return cached;
     if (!this.cloud) throw new Error('cloud voice off');
-    const base64 = await this.cloud(text, lang);
+    // Asked for again while on its way (fetched ahead, then said): one request, not two.
+    const inFlight = this.cloudInFlight.get(cacheKey);
+    if (inFlight) return inFlight;
+    const request = this.cloud(text, lang).finally(() => this.cloudInFlight.delete(cacheKey));
+    this.cloudInFlight.set(cacheKey, request);
+    const base64 = await request;
     if (this.cloudCache.size >= CLOUD_CACHE_LIMIT) {
       const oldest = this.cloudCache.keys().next().value;
       if (oldest !== undefined) this.cloudCache.delete(oldest);

@@ -58,8 +58,13 @@ export const helpOnIdle = (payload: unknown): boolean => {
   return Boolean(help && help.by !== 'board' && help.after?.idle);
 };
 
-/** Time to read a beat on the screen when it is not said aloud. */
-export const readingMs = (text: string): number => Math.max(1500, text.length * 60);
+/**
+ * Time to read a beat on the screen when it is not said aloud. A beat of a
+ * help is a sentence to take in; a part of a sentence read out over a solved
+ * board (`told`) is only a few words of it, and gets time by its length alone.
+ */
+export const readingMs = (text: string, kind: 'help' | 'told' = 'help'): number =>
+  kind === 'told' ? Math.max(500, text.length * 50) : Math.max(1500, text.length * 60);
 
 /** However the voice ends, a beat is never held longer than this. */
 export const beatCeilingMs = (text: string): number => Math.max(9000, text.length * 160);
