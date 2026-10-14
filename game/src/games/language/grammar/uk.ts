@@ -71,6 +71,7 @@ export const uk: LanguageTexts = {
 
   runAsk: (p, from, to) => (p.native ? fill(J.runAsk[1], { from, to }) : fill(J.runAsk[2], { p: foreign(p, 0) })),
   runHint: (p, letters) => (p.native ? fill(J.runHint[1], { letters: letters.join(', ') }) : fill(J.runHint[2], { p: foreign(p, 1) })),
+  runHelp: J.runHelp,
   partsAsk: (p, word) => (p.native ? fill(J.partsAsk[1], { word }) : fill(J.partsAsk[2], { p: foreign(p, 2), p2: whole(p) })),
   partsHint: (p, word, parts) =>
     p.native ? fill(J.partsHint[1], { word, parts: parts.join(' — ') }) : fill(J.partsHint[2], { p: p.syllables ? J.partsHint[3] : J.partsHint[4] }),

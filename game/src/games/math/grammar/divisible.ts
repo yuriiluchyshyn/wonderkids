@@ -1,21 +1,20 @@
 import { fill } from '@/core/language/fill';
-import type { Divisible, DivisibleRule } from '@/core/game/templates/types';
+import type { DivisibleRule, HintBeat } from '@/core/game/hints/types';
 
 /**
- * The divisibility lesson of the number maze, put together the same way in
- * every language: the rule for the number being practised, and the lines
- * about the number the child has just stepped on.
+ * The number maze's help, beat by beat, put together the same way in every
+ * language: how many of the divisor fit into the number the child stepped on
+ * and what is left over, why that number is not one of the rule's, and the
+ * rule itself.
  *
- * Those last lines keep their `{holes}` — `{n}` the number stepped on,
- * `{times}` how many of the divisor fit into it, `{left}` what is left over,
- * `{mark}` the thing the rule looks at (the last digit, the sum of the
- * digits). They are filled where the lesson is drawn
- * (`components/templates/DivisibleHint`), because the number is not known
- * when the task is made.
+ * It is a board's script: the beats keep their `{holes}` — `{n}` the number
+ * stepped on, `{times}`, `{left}`, `{mark}` (the thing the rule looks at) —
+ * and say only what fits the number (`if: 'short'` when something is left
+ * over). The board fills them (`components/hints/scenes/DivisibleScene`'s
+ * `divisibleHoles`), because the number is not known when the task is made.
  *
  * A language brings only words (`maze.rule.*` of its `games/math.json`); the
- * branching lives here, so a fourth language is a fourth set of sentences
- * and no code.
+ * branching lives here.
  */
 export interface DivisibleJson {
   /** «На {k} діляться числа, що закінчуються на {marks}.» */
@@ -28,14 +27,13 @@ export interface DivisibleJson {
   pair: string;
   /** No rule worth learning (7): count it out — «{k}, {k2}, {k3}…». */
   count: string;
-  /** «У {n} вміщається {times} по {k}, і {left} залишається.» */
+  /** «{n} — це {times} по {k}, і ще {left} залишається.» */
   left: string;
-  /** «У {n} вміщається рівно {times} по {k} — нічого не залишається.» */
+  /** «{n} — це рівно {times} по {k}.» */
   exact: string;
-  /** Why this number is not a multiple: one line per kind of rule. */
+  /** Why this number is not a multiple, for a rule that looks at a digit — or at all of them. */
   whyEnding: string;
   whyDigits: string;
-  whyOther: string;
   /** What stands before the last of a list of digits: « або ». */
   or: string;
 }
@@ -46,7 +44,7 @@ function listed(marks: number[], or: string): string {
   return marks.length > 1 ? all.replace(/, ([^,]+)$/, `${or}$1`) : all;
 }
 
-export function divisibleWords(J: DivisibleJson, k: number, how: DivisibleRule, marks: number[]): Divisible['words'] {
+export function divisibleBeats(J: DivisibleJson, k: number, how: DivisibleRule, marks: number[]): HintBeat[] {
   const list = listed(marks, J.or);
   const rule =
     how === 'ending'
@@ -58,7 +56,15 @@ export function divisibleWords(J: DivisibleJson, k: number, how: DivisibleRule, 
           : how === 'pair'
             ? fill(J.pair, { k, a: marks[0], b: marks[1] })
             : fill(J.count, { k, k2: k * 2, k3: k * 3 });
-  const why = how === 'ending' ? fill(J.whyEnding, { k, marks: list }) : how === 'digits' ? fill(J.whyDigits, { k }) : fill(J.whyOther, { k });
-  // `{n}`, `{times}`, `{left}` and `{mark}` are left standing: they are the child's own step.
-  return { rule, left: fill(J.left, { k }), exact: fill(J.exact, { k }), why };
+  // What the rule turns on lights while the rule is said: the endings allowed, the sum of the digits, the numbers to try.
+  const ruleFocus = how === 'digits' ? ['div:mark'] : how === 'count' ? ['div:groups'] : ['div:marks'];
+  const why = how === 'ending' ? J.whyEnding : how === 'digits' ? J.whyDigits : undefined;
+  return [
+    // The groups first, and then what will not make one: that is what a remainder is.
+    // (A number smaller than `k` makes no group at all — «1 — це 0 по 2» says nothing; it goes straight to why.)
+    { text: fill(J.left, { k }), focus: ['div:groups', 'div:left'], if: 'parted' },
+    { text: fill(J.exact, { k }), focus: ['div:groups'], if: 'whole' },
+    ...(why ? [{ text: fill(why, { k, marks: list }), focus: ['div:mark'], if: 'off' }] : []),
+    { text: rule, focus: ruleFocus },
+  ];
 }

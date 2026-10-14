@@ -2,7 +2,8 @@ import { useLang, useT } from '@/core/translator';
 import { motion } from 'framer-motion';
 import { useState, type CSSProperties, type ReactNode } from 'react';
 import type { GameViewProps } from '@/core/game/kernel/types';
-import { cardSpeech, glyphSpeech, type Card, type Glyph, type TemplatePayload } from '@/core/game/templates/types';
+import { cardSpeech, glyphSpeech, type Card, type Glyph, type TangramPiece, type TemplatePayload } from '@/core/game/templates/types';
+import { blinkProps, useHintFocus } from '@/components/hints/HintStage';
 import { useShowText } from '@/core/app/ui/useUiPrefs';
 import { cn } from '@/core/utils/cn';
 import { LandmarkArt, hasLandmarkArt } from './LandmarkArt';
@@ -28,30 +29,57 @@ export const PULSE = { scale: [1, 1.14, 1] };
 export const ASK_GLYPH = '?';
 export const ASK_EMOJI = '❓';
 
-/** A math line: numbers/operators as text, fractions stacked vertically. */
-export function Glyphs({ glyphs, className, answer }: { glyphs: Glyph[]; className?: string; answer?: string }) {
+/** One piece of a math line. On the task's own line it blinks while a hint names it (`glyph:<i>`). */
+function GlyphPiece({ g, at, answer, hints }: { g: Glyph; at: number; answer?: string; hints: boolean }) {
+  const named = useHintFocus(`glyph:${at}`);
+  const lit = blinkProps(hints ? named : null);
+  if (typeof g === 'string') {
+    // The unknown of the line: the right answer lands here (`data-ask`).
+    return (
+      <span aria-hidden data-ask={g === ASK_GLYPH ? '' : undefined} className={cn(g === ASK_GLYPH && answer && styles.askFilled, lit.className)} style={lit.style}>
+        {g === ASK_GLYPH && answer ? answer : g}
+      </span>
+    );
+  }
+  if ('text' in g) {
+    return (
+      <span className={cn(g.tone === 'a' ? styles.toneA : styles.toneB, lit.className)} style={lit.style} aria-hidden>
+        {g.text}
+      </span>
+    );
+  }
+  return (
+    <span className={cn(styles.frac, lit.className)} style={lit.style} aria-hidden>
+      <span>{g.n}</span>
+      <span className={styles.fracBar} />
+      <span>{g.d}</span>
+    </span>
+  );
+}
+
+/**
+ * A math line: numbers/operators as text, fractions stacked vertically. The
+ * task's own line (`hints`) lights the pieces a hint's beat names; the lines
+ * on answer cards never do.
+ */
+export function Glyphs({ glyphs, className, answer, hints = false }: { glyphs: Glyph[]; className?: string; answer?: string; hints?: boolean }) {
   const lang = useLang();
   return (
     <span className={cn(styles.glyphs, className)} aria-label={glyphs.map((g) => glyphSpeech(g, lang)).join(' ')}>
-      {glyphs.map((g, i) =>
-        typeof g === 'string' ? (
-          // The unknown of the line: the right answer lands here (`data-ask`).
-          <span key={i} aria-hidden data-ask={g === ASK_GLYPH ? '' : undefined} className={g === ASK_GLYPH && answer ? styles.askFilled : undefined}>
-            {g === ASK_GLYPH && answer ? answer : g}
-          </span>
-        ) : 'text' in g ? (
-          <span key={i} className={g.tone === 'a' ? styles.toneA : styles.toneB} aria-hidden>
-            {g.text}
-          </span>
-        ) : (
-          <span key={i} className={styles.frac} aria-hidden>
-            <span>{g.n}</span>
-            <span className={styles.fracBar} />
-            <span>{g.d}</span>
-          </span>
-        ),
-      )}
+      {glyphs.map((g, i) => (
+        <GlyphPiece key={i} g={g} at={i} answer={answer} hints={hints} />
+      ))}
     </span>
+  );
+}
+
+/** A figure's piece on the task's own picture; it blinks while a beat names it (`piece:<id>`). */
+function FigurePiece({ piece }: { piece: TangramPiece & { id?: string } }) {
+  const lit = blinkProps(useHintFocus(piece.id ? `piece:${piece.id}` : undefined));
+  return (
+    <g transform={`translate(${piece.x} ${piece.y}) rotate(${piece.rotate ?? 0})`}>
+      <PieceShape piece={piece} fill={piece.color} className={lit.className} style={lit.style} />
+    </g>
   );
 }
 
@@ -157,7 +185,7 @@ export function Stimulus({
         )
       )}
       {s?.pie && <PieFood {...s.pie} />}
-      {s?.clock && <ClockFace time={s.clock} className={styles.stimulusClock} />}
+      {s?.clock && <ClockFace time={s.clock} className={styles.stimulusClock} hints />}
       {s?.swatch && <ColorSwatch swatch={s.swatch} size="splash" />}
       {s?.shape && (
         <span
@@ -173,9 +201,7 @@ export function Stimulus({
       {s?.pieces && (
         <svg viewBox="0 0 100 100" className={styles.stimulusFigure} aria-hidden>
           {s.pieces.map((piece) => (
-            <g key={piece.id} transform={`translate(${piece.x} ${piece.y}) rotate(${piece.rotate ?? 0})`}>
-              <PieceShape piece={piece} fill={piece.color} />
-            </g>
+            <FigurePiece key={piece.id} piece={piece} />
           ))}
         </svg>
       )}
@@ -193,7 +219,7 @@ export function Stimulus({
           ))}
         </span>
       )}
-      {s?.glyphs && <Glyphs glyphs={s.glyphs} className={cn(styles.stimulusGlyphs, glyphsLength(s.glyphs) > LONG_LINE && styles.stimulusGlyphsLong)} answer={answer} />}
+      {s?.glyphs && <Glyphs glyphs={s.glyphs} className={cn(styles.stimulusGlyphs, glyphsLength(s.glyphs) > LONG_LINE && styles.stimulusGlyphsLong)} answer={answer} hints />}
       {s?.caption && <span className={styles.stimulusCaption}>{s.caption}</span>}
       {children}
     </motion.button>

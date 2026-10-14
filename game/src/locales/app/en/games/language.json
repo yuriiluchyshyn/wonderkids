@@ -663,5 +663,11 @@
       "back": "Careful: now words can stand backwards — from right to left or from bottom to top.",
       "byEar": "Now there are no words beside the pictures. Remember how the word is spelled — or listen to it — and find it in the table."
     }
+  },
+  "runHelp": {
+    "find": "Find these letters in the alphabet.",
+    "earlier": "{next} comes first — pop it.",
+    "after": "After {prev} comes {next}.",
+    "pop": "Pop {next}."
   }
 }

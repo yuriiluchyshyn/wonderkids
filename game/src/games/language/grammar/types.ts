@@ -44,6 +44,11 @@ export interface LanguageTexts {
 
   runAsk(p: PackView, from: string, to: string): string;
   runHint(p: PackView, letters: string[]): string;
+  /**
+   * The bubbles' help over the alphabet strip, beat by beat. `{next}`, `{prev}`
+   * — the letter due next and the one before it, filled in by the board.
+   */
+  runHelp: { find: string; earlier: string; after: string; pop: string };
   partsAsk(p: PackView, word: string): string;
   partsHint(p: PackView, word: string, parts: string[]): string;
   spellAsk(p: PackView, word: string, byEar: boolean): string;

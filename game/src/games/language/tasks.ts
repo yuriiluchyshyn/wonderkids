@@ -7,6 +7,7 @@ import { shuffle } from '@/core/utils/random';
 import { templateTask, type GameTasks, type TemplateGame } from '../shared/templateModule';
 import { languageTexts } from './grammar';
 import type { PackView } from './grammar/types';
+import type { HintScript } from '@/core/game/hints/types';
 
 type Tasks = TaskInstance<TemplatePayload>[];
 type Config = Pick<TaskConfig, 'lang'>;
@@ -250,6 +251,30 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
     return { T, p, said };
   };
 
+  /**
+   * The help of an alphabet run of bubbles: the whole alphabet drawn under the
+   * board, the run's letters found in it, and then the letter due next — lit
+   * in the strip and on its bubble. Which letter is due depends on how many
+   * are already popped, so the board plays it (`by: 'board'`) and fills
+   * `{prev}`, `{next}` (as said), `{P}`, `{N}` (as written) and `{nextId}`.
+   */
+  const runHelp = (run: string[], T: ReturnType<typeof languageTexts>, p: PackView): HintScript => ({
+    by: 'board',
+    scene: {
+      kind: 'alphabet',
+      letters: pack.alphabet.map(upper),
+      // The child's own alphabet is read by the letters' names; a foreign one as it is written.
+      // Present either way: the task and its twin in the voice's language must be one board (`sameShape`).
+      names: pack.alphabet.map((l) => (p.native ? language(lang).letterName(l) : upper(l))),
+    },
+    beats: [
+      { text: T.runHelp.find, focus: run.map((l) => `abc:${upper(l)}`), unless: 'started' },
+      { text: T.runHelp.earlier, focus: ['abc:{N}', 'bubble:{nextId}'], unless: 'started' },
+      { text: T.runHelp.after, focus: ['abc:{P}', 'abc:{N}'], if: 'started' },
+      { text: T.runHelp.pop, focus: ['abc:{N}', 'bubble:{nextId}'], if: 'started' },
+    ],
+  });
+
   // ---------------------------------------------------------------- Game 0 —
   // Alphabet table: put the missing letters in their places; later — find the
   // two letters that swapped places.
@@ -310,6 +335,7 @@ export function languageTasks(pack: LangPack): Record<string, GameTasks> {
             template: Mechanics.BubblePop,
             bubbles: run.map((l, i) => letterCard(`b${i}`, l)),
             hint: T.runHint(p, run.map(said)),
+            help: runHelp(run, T, p),
           },
           step,
         ),

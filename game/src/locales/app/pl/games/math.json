@@ -1856,7 +1856,12 @@
       "czekolady"
     ],
     "prompt": "Jaka część {food} jest zamalowana?",
-    "hint": "Policzmy zamalowane kawałki: {length}. Wszystkich kawałków jest {denom}. A więc to {filled} z {denom}!"
+    "hint": "Policzmy zamalowane kawałki: {length}. Wszystkich kawałków jest {denom}. A więc to {filled} z {denom}!",
+    "help": {
+      "count": "Policzmy zamalowane kawałki: {length}.",
+      "all": "Wszystkich kawałków jest {denom}.",
+      "so": "A więc to {filled} z {denom}."
+    }
   },
   "fractionOps": {
     "intro": {
@@ -1964,7 +1969,17 @@
     },
     "prompt": "Porównaj: {left} i {right}. Jaki znak postawić między nimi?",
     "yes": "Tak! {verdict}{verdict2}.",
-    "hint": "{rule} Policz, ile jest po lewej, a ile po prawej: po lewej {left}, po prawej {right}."
+    "hint": "{rule} Policz, ile jest po lewej, a ile po prawej: po lewej {left}, po prawej {right}.",
+    "help": {
+      "left": "Po lewej {left}.",
+      "leftWorth": "Po lewej {left}, czyli {worth}.",
+      "right": "Po prawej {right}.",
+      "rightWorth": "Po prawej {right}, czyli {worth}.",
+      "more": "{big} to więcej: jego słupek jest wyższy.",
+      "same": "Tyle samo: słupki są równe.",
+      "sign": "Szeroka strona znaku — do większej: {left} {sign} {right}.",
+      "signSame": "Więc stawiamy znak „równa się”: {left} = {right}."
+    }
   },
   "clock": {
     "say": {
@@ -1996,13 +2011,13 @@
       "evening": "wieczór"
     },
     "explain": {
-      "hourOn": "Krótka czarna wskazówka to godziny. Pokazuje na {h}.",
-      "hourPast": "Krótka czarna wskazówka to godziny. Minęła już {h}, ale nie doszła jeszcze do {next} — więc godzina to {h}.",
-      "minuteTop": "Długa czerwona wskazówka to minuty. Patrzy prosto w górę, na 12: równo, zero minut.",
-      "minuteCount": "Długa czerwona wskazówka to minuty. Pokazuje na {n}. Licz co pięć: {count} — to {m} minut.",
-      "minuteTimes": "Długa czerwona wskazówka to minuty. Pokazuje na {n}, a każda liczba to pięć minut: {n} razy po pięć to {m} minut.",
-      "afternoon": "Teraz jest {part}, a po południu godziny liczy się dalej: 12 i jeszcze {h} to {H}.",
-      "morning": "Teraz jest {part}: przed południem zegar elektroniczny pokazuje tę samą godzinę — {H}.",
+      "hourOn": "Krótka wskazówka to godziny. Pokazuje na {h}.",
+      "hourPast": "Krótka wskazówka to godziny. Minęła {h}: godzina {h}.",
+      "minuteTop": "Długa wskazówka to minuty. Pokazuje na 12: równo.",
+      "minuteCount": "Długa wskazówka to minuty. Licz co pięć: {count}.",
+      "minuteTimes": "Długa wskazówka to minuty. Pokazuje na {n}: to {m} minut.",
+      "afternoon": "Po południu: 12 i jeszcze {h} to {H}.",
+      "morning": "Przed południem godzina jest ta sama — {H}.",
       "so": "Czyli jest {time}."
     }
   },
@@ -2018,18 +2033,17 @@
     },
     "rule": {
       "ending": "Przez {k} dzielą się liczby, które kończą się na {marks}.",
-      "digits": "Przez {k} dzieli się ta liczba, której suma cyfr też dzieli się przez {k}.",
+      "digits": "Przez {k} dzieli się liczba, której suma cyfr dzieli się przez {k}.",
       "twice": {
-        "2": "Przez {k} dzieli się to, co można podzielić przez 2, a potem jeszcze raz przez 2.",
-        "3": "Przez {k} dzieli się to, co można podzielić przez 2, potem jeszcze przez 2 i jeszcze raz przez 2."
+        "2": "Przez {k} dzieli się to, co dzieli się przez 2, a potem jeszcze raz przez 2.",
+        "3": "Przez {k} dzieli się to, co dzieli się przez 2 trzy razy z rzędu."
       },
-      "pair": "Przez {k} dzielą się liczby, które dzielą się i przez {a}, i przez {b} — obie zasady razem.",
-      "count": "Dla {k} nie ma krótkiej zasady: licz po {k} — {k}, {k2}, {k3} i dalej.",
-      "left": "W {n} mieści się {times} razy {k}, a {left} jeszcze zostaje — dlatego {n} nie dzieli się przez {k}.",
-      "exact": "W {n} mieści się dokładnie {times} razy {k} i nic nie zostaje — {n} dzieli się przez {k}.",
-      "whyEnding": "{n} kończy się na {mark}, a takiej cyfry nie ma na liście {marks}.",
-      "whyDigits": "Suma cyfr liczby {n} to {mark}, a {mark} nie dzieli się przez {k}.",
-      "whyOther": "{k} nie mieści się w {n} równo.",
+      "pair": "Przez {k} dzielą się liczby, które dzielą się i przez {a}, i przez {b}.",
+      "count": "Dla {k} licz co {k}: {k}, {k2}, {k3} i dalej.",
+      "left": "{n} to {times} razy {k} i jeszcze {left} zostaje.",
+      "exact": "{n} to dokładnie {times} razy {k}.",
+      "whyEnding": "A {n} kończy się na {mark}.",
+      "whyDigits": "Suma cyfr {n} to {mark}, a {mark} nie dzieli się przez {k}.",
       "or": " lub "
     }
   },
@@ -2055,99 +2069,221 @@
     "figures": {
       "0": {
         "0": "lody",
-        "1": "To lody: okrągła gałka i trójkątny rożek."
+        "1": [
+          "To lody:",
+          "okrągła gałka",
+          "i trójkątny rożek."
+        ]
       },
       "1": {
         "0": "grzyb",
-        "1": "To grzyb: trójkątny kapelusz i kwadratowa nóżka."
+        "1": [
+          "To grzyb:",
+          "trójkątny kapelusz",
+          "i kwadratowa nóżka."
+        ]
       },
       "2": {
         "0": "lizak",
-        "1": "To lizak: okrągły smakołyk na patyku."
+        "1": [
+          "To lizak:",
+          "okrągły smakołyk",
+          "na patyku."
+        ]
       },
       "3": {
         "0": "domek",
-        "1": "To domek: kwadratowe ściany i trójkątny dach."
+        "1": [
+          "To domek:",
+          "kwadratowe ściany",
+          "i trójkątny dach."
+        ]
       },
       "4": {
         "0": "bałwan",
-        "1": "To bałwan: trzy koła — małe, średnie i duże."
+        "1": [
+          "To bałwan:",
+          "trzy koła —",
+          "małe,",
+          "średnie",
+          "i duże."
+        ]
       },
       "5": {
         "0": "cukierek",
-        "1": "To cukierek: okrągły środek i dwa trójkątne ogonki."
+        "1": [
+          "To cukierek:",
+          "okrągły środek",
+          "i dwa trójkątne ogonki."
+        ]
       },
       "6": {
         "0": "choinka",
-        "1": "To choinka: dwa trójkąty i mały pień."
+        "1": [
+          "To choinka:",
+          "dwa trójkąty",
+          "i mały pień."
+        ]
       },
       "7": {
         "0": "rybka",
-        "1": "To rybka: okrągłe ciało i trójkątny ogonek."
+        "1": [
+          "To rybka:",
+          "okrągłe ciało",
+          "i trójkątny ogonek."
+        ]
       },
       "8": {
         "0": "stateczek",
-        "1": "To stateczek: prostokątny kadłub i trójkątny żagiel."
+        "1": [
+          "To stateczek:",
+          "prostokątny kadłub",
+          "i trójkątny żagiel."
+        ]
       },
       "9": {
         "0": "kotek",
-        "1": "To kotek: okrągła głowa, trójkątne uszka i kwadratowe ciało."
+        "1": [
+          "To kotek:",
+          "okrągła głowa,",
+          "trójkątne uszka",
+          "i kwadratowe ciało."
+        ]
       },
       "10": {
         "0": "ciężarówka",
-        "1": "To ciężarówka: długa naczepa, kwadratowa kabina i dwa koła."
+        "1": [
+          "To ciężarówka:",
+          "długa naczepa,",
+          "kwadratowa kabina",
+          "i dwa koła."
+        ]
       },
       "11": {
         "0": "kwiatek",
-        "1": "To kwiatek: trzy okrągłe płatki na łodydze."
+        "1": [
+          "To kwiatek:",
+          "trzy okrągłe płatki",
+          "na łodydze."
+        ]
       },
       "12": {
         "0": "rakieta",
-        "1": "To rakieta: ostry nos, dwa kwadraty i trójkątne skrzydła."
+        "1": [
+          "To rakieta:",
+          "ostry nos,",
+          "dwa kwadraty",
+          "i trójkątne skrzydła."
+        ]
       },
       "13": {
         "0": "pociąg",
-        "1": "To pociąg: długi wagon, kabina i trzy koła."
+        "1": [
+          "To pociąg:",
+          "długi wagon,",
+          "kabina",
+          "i trzy koła."
+        ]
       },
       "14": {
         "0": "motyl",
-        "1": "To motyl: okrągły tułów, główka i dwa trójkątne skrzydła."
+        "1": [
+          "To motyl:",
+          "okrągły tułów,",
+          "główka",
+          "i dwa trójkątne skrzydła."
+        ]
       },
       "15": {
         "0": "robot",
-        "1": "To robot: kwadratowa głowa, tułów, dwie ręce i dwie nogi."
+        "1": [
+          "To robot:",
+          "kwadratowa głowa,",
+          "tułów,",
+          "dwie ręce",
+          "i dwie nogi."
+        ]
       },
       "16": {
         "0": "zamek",
-        "1": "To zamek: długi mur, trzy wieże i dwa spiczaste dachy."
+        "1": [
+          "To zamek:",
+          "długi mur,",
+          "trzy wieże",
+          "i dwa spiczaste dachy."
+        ]
       },
       "17": {
         "0": "miś",
-        "1": "To miś — cały jest z kół: głowa, uszka, tułów i łapki."
+        "1": [
+          "To miś — cały jest z kół:",
+          "głowa,",
+          "uszka,",
+          "tułów",
+          "i łapki."
+        ]
       },
       "18": {
         "0": "kaczątko",
-        "1": "To kaczątko: okrągłe ciało i głowa, dziobek, ogonek i łapki."
+        "1": [
+          "To kaczątko:",
+          "okrągłe ciało i głowa,",
+          "dziobek,",
+          "ogonek",
+          "i łapki."
+        ]
       },
       "19": {
         "0": "autobus",
-        "1": "To autobus: długie nadwozie, trzy koła i dwie walizki na dachu."
+        "1": [
+          "To autobus:",
+          "długie nadwozie,",
+          "trzy koła",
+          "i dwie walizki na dachu."
+        ]
       },
       "20": {
         "0": "ludzik",
-        "1": "To ludzik: okrągła głowa, kwadratowy tułów, ręce i nogi."
+        "1": [
+          "To ludzik:",
+          "okrągła głowa,",
+          "kwadratowy tułów,",
+          "ręce",
+          "i nogi."
+        ]
       },
       "21": {
         "0": "pałac",
-        "1": "To pałac: mur, trzy wieże, dwa dachy i chorągiewka na górze."
+        "1": [
+          "To pałac:",
+          "mur,",
+          "trzy wieże,",
+          "dwa dachy",
+          "i chorągiewka na górze."
+        ]
       },
       "22": {
         "0": "parowóz",
-        "1": "To parowóz: wagon, kabina, trzy koła, komin i obłoczek dymu."
+        "1": [
+          "To parowóz:",
+          "wagon,",
+          "kabina,",
+          "trzy koła,",
+          "komin",
+          "i obłoczek dymu."
+        ]
       },
       "23": {
         "0": "dinozaur",
-        "1": "To dinozaur: długie ciało, szyja, głowa, ogon, nogi i kolce na grzbiecie."
+        "1": [
+          "To dinozaur:",
+          "długie ciało,",
+          "szyja,",
+          "głowa,",
+          "ogon,",
+          "nogi",
+          "i kolce na grzbiecie."
+        ]
       }
     },
     "build": "Ułóż z figur: {name}",

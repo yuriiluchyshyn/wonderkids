@@ -12,6 +12,7 @@ import type { AnswerResult } from '@/core/game/engine/BaseGameEngine';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { subSteps } from '@/core/child/progress/path';
 import type { CurrencyId } from '@/core/game/content/currency';
+import { helpAfter } from '@/core/game/hints/script';
 import { cueKey, cuesHidden, hasCues, nextKnown } from '@/core/game/cues/cues';
 
 /**
@@ -307,9 +308,9 @@ export function useGameSession(config: GameSessionConfig): GameSession {
   const outroDone = useCallback(() => advanceRef.current?.(), []);
 
   /**
-   * The child has not answered for a long while on a task that can explain
-   * itself (`payload.explain`): show the help as if they had asked for it. It
-   * counts as no mistake.
+   * The child has not answered for a long while on a task whose help says it
+   * may come then (`payload.help.after.idle`): show the help as if they had
+   * asked for it. It counts as no mistake.
    */
   const explainForIdle = useCallback(() => {
     if (!engine || engine.isFinished || advancingRef.current) return;
@@ -325,7 +326,11 @@ export function useGameSession(config: GameSessionConfig): GameSession {
     total: engine?.total ?? 0,
     baseTotal: engine?.baseTotal ?? 0,
     solvedCount,
-    hintActive: !justSolved && (mistakes >= (isRepeat ? REPEAT_HINT_THRESHOLD : HINT_THRESHOLD) || explainedAt === (engine?.position ?? -2)),
+    // A task whose help is a script may ask for it sooner (`help.after.mistakes`) — never later than a repeat would.
+    hintActive:
+      !justSolved &&
+      (mistakes >= Math.min(helpAfter(task?.payload, HINT_THRESHOLD), isRepeat ? REPEAT_HINT_THRESHOLD : HINT_THRESHOLD) ||
+        explainedAt === (engine?.position ?? -2)),
     cuesHidden: cue !== null && cuesHidden({ known: cue.known, mistakes, solved: justSolved }),
     isRepeat,
     justSolved,

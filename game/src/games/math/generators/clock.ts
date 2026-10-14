@@ -7,6 +7,7 @@ import type { LangCode } from '@/core/language';
 import { rewardForStep } from '../difficulty';
 import { mathTexts } from '../grammar';
 import { digitalTime, partOfDay } from '../grammar/clockExplain';
+import type { HintScript } from '@/core/game/hints/types';
 
 /** Answers on the board: the right time and five near misses. */
 const OPTIONS = 6;
@@ -79,11 +80,16 @@ export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayloa
   // On the board a time is written in digits and read in words.
   const marked = (t: DayTime) => say(digital(t), told(t));
 
-  const lines = T.explain(time, told(time), time.hour24);
-  const said = lines.map((l) => ({ ...l, text: written(l.text) }));
-  // The clock is drawn beside the lines only when the task shows none (time → clock).
-  const explainWith = (clock: boolean) => ({ ...(clock ? { clock: { h: time.h, m: time.m } } : {}), lines: said });
-  const hint = lines.map((l) => l.text).join(' ');
+  const beats = T.explain(time, told(time), time.hour24);
+  // How to read it, beat by beat — the hand each beat is about blinks. On a task that shows
+  // a clock (clock → time) it is the board's clock that blinks; on one that shows none
+  // (time → clock) the help draws its own. Also offered when the child stays silent a long while.
+  const helpWith = (clock: boolean): HintScript => ({
+    ...(clock ? { scene: { kind: 'clock', time: { h: time.h, m: time.m } } } : {}),
+    beats,
+    after: { idle: true },
+  });
+  const hint = beats.map((b) => b.text).join(' ');
   const base = { id: uid('clk'), reward: rewardForStep(step), outro: T.yes(told(time)) };
 
   const find = step >= 3 && Math.random() < (h24 ? 0.5 : 0.4);
@@ -125,7 +131,7 @@ export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayloa
         options: options.map((t) => ({ id: id(t), clock: t })),
         correctId: id(time),
         hint,
-        explain: explainWith(true),
+        help: helpWith(true),
       },
     };
   }
@@ -166,7 +172,7 @@ export function generateClock(config: TaskConfig): TaskInstance<GridChoicePayloa
       options: options.map((t) => ({ id: digital(t), label: digital(t), speak: told(t) })),
       correctId: digital(time),
       hint,
-      explain: explainWith(false),
+      help: helpWith(false),
     },
   };
 }

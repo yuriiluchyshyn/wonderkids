@@ -5,7 +5,8 @@ import { LANGUAGES } from '@/core/language';
 import type { MathTexts, MeasureWords } from '@/games/math/grammar/types';
 import type { MathOp } from '@/games/math/ids';
 import { chainTexts } from './expr';
-import { divisibleWords } from './divisible';
+import { divisibleBeats } from './divisible';
+import { compareHelp, fractionsHelp } from './helps';
 import { fill } from '@/core/language/fill';
 import J from '@/locales/app/uk/games/math.json';
 
@@ -82,6 +83,7 @@ export const uk: MathTexts = {
     foods: J.fractions.foods,
     prompt: (food) => fill(J.fractions.prompt, { food }),
     hint: (filled, denom) => fill(J.fractions.hint, { length: Array.from({ length: filled }, (_, i) => NUMBER_WORDS[i + 1]).join(', '), denom, filled }),
+    help: (filled, denom) => fractionsHelp(J.fractions.help, Array.from({ length: filled }, (_, i) => NUMBER_WORDS[i + 1]).join(', '), filled, denom),
   },
 
   fractionOps: {
@@ -113,6 +115,7 @@ export const uk: MathTexts = {
     prompt: (left, right) => fill(J.compare.prompt, { left, right }),
     yes: (verdict) => fill(J.compare.yes, { verdict: verdict[0].toUpperCase(), verdict2: verdict.slice(1) }),
     hint: (rule, left, right) => fill(J.compare.hint, { rule, left, right }),
+    help: compareHelp(J.compare.help),
   },
 
   clock: {
@@ -141,7 +144,7 @@ export const uk: MathTexts = {
       fill(J.maze.hint[1], { k }) +
       (deadEnds ? J.maze.hint[2] : '') +
       (negative ? J.maze.hint[3] : ''),
-    divisibleWords: (k, how, marks) => divisibleWords(J.maze.rule, k, how, marks),
+    divisibleBeats: (k, how, marks) => divisibleBeats(J.maze.rule, k, how, marks),
   },
 
   shop: {
@@ -153,32 +156,8 @@ export const uk: MathTexts = {
   },
 
   geometry: {
-    figures: [
-      [J.geometry.figures[0][0], J.geometry.figures[0][1]],
-      [J.geometry.figures[1][0], J.geometry.figures[1][1]],
-      [J.geometry.figures[2][0], J.geometry.figures[2][1]],
-      [J.geometry.figures[3][0], J.geometry.figures[3][1]],
-      [J.geometry.figures[4][0], J.geometry.figures[4][1]],
-      [J.geometry.figures[5][0], J.geometry.figures[5][1]],
-      [J.geometry.figures[6][0], J.geometry.figures[6][1]],
-      [J.geometry.figures[7][0], J.geometry.figures[7][1]],
-      [J.geometry.figures[8][0], J.geometry.figures[8][1]],
-      [J.geometry.figures[9][0], J.geometry.figures[9][1]],
-      [J.geometry.figures[10][0], J.geometry.figures[10][1]],
-      [J.geometry.figures[11][0], J.geometry.figures[11][1]],
-      [J.geometry.figures[12][0], J.geometry.figures[12][1]],
-      [J.geometry.figures[13][0], J.geometry.figures[13][1]],
-      [J.geometry.figures[14][0], J.geometry.figures[14][1]],
-      [J.geometry.figures[15][0], J.geometry.figures[15][1]],
-      [J.geometry.figures[16][0], J.geometry.figures[16][1]],
-      [J.geometry.figures[17][0], J.geometry.figures[17][1]],
-      [J.geometry.figures[18][0], J.geometry.figures[18][1]],
-      [J.geometry.figures[19][0], J.geometry.figures[19][1]],
-      [J.geometry.figures[20][0], J.geometry.figures[20][1]],
-      [J.geometry.figures[21][0], J.geometry.figures[21][1]],
-      [J.geometry.figures[22][0], J.geometry.figures[22][1]],
-      [J.geometry.figures[23][0], J.geometry.figures[23][1]],
-    ],
+    figures: Object.values(J.geometry.figures).map((f) => [f[0], f[1].join(' ')] as const),
+    figureParts: Object.values(J.geometry.figures).map((f) => f[1]),
     build: (name) => fill(J.geometry.build, { name }),
     buildHint: J.geometry.buildHint,
     count: (name, shape) => fill(J.geometry.count, { name, many: SHAPES[shape].many }),

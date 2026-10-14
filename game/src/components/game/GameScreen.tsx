@@ -26,7 +26,9 @@ import { CoachTips } from '@/components/coach/CoachTips';
 import { gameTips } from '@/components/coach/tips';
 import { tellFact } from '@/core/game/content/outro';
 import { IntroDemo } from '@/components/templates/IntroDemo';
-import { explainsOnIdle } from '@/components/templates/TemplateHelper';
+import { HintStageProvider, useHintStageState } from '@/components/hints/HintStage';
+import { HintPanel } from '@/components/hints/HintPanel';
+import { helpOf, helpOnIdle, toldOf } from '@/core/game/hints/script';
 import { CuesHiddenProvider } from '@/components/templates/CueContext';
 import { PauseProvider } from '@/components/templates/PauseContext';
 import type { TemplatePayload } from '@/core/game/templates/types';
@@ -51,7 +53,7 @@ const GIFT_META: Record<Exclude<GiftTier, null>, { emoji: string; size: string }
 /** How long the trial's win screen stays, after it has been read out, before the way to an account. */
 const TRIAL_OVER_MS = 2500;
 
-/** How long a task that explains itself (`payload.explain`) waits for an answer before it does. */
+/** How long a task whose help may come on its own (`payload.help.after.idle`) waits for an answer before it does. */
 const EXPLAIN_IDLE_MS = 20_000;
 
 interface GameScreenProps {
@@ -123,7 +125,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const [coachingTip, setCoaching] = useState(false);
   // The board opened a lesson (the order of operations, brackets): the same.
   const [lessonOpen, setLessonOpen] = useState(false);
-  const coaching = coachingTip || lessonOpen;
+  // The one player of hint scripts (`components/hints`): the help, and what is read out over a solved board.
+  const stage = useHintStageState();
+  // While a help is being said the child is listening, not idling.
+  const coaching = coachingTip || lessonOpen || stage.locked;
   // The fact told after this task: the next one from its pool, so a replay of
   // the same task — even its repeat within this level — tells a new story.
   // Picked once per showing; the last one stays up while the level finishes.
@@ -203,7 +208,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   // on it for a long while — a child who does not know how to read it should
   // not have to guess wrong twice to be shown.
   const { explainForIdle } = session;
-  const idleExplains = explainsOnIdle(task);
+  const idleExplains = helpOnIdle(task?.payload);
   const explainPaused = phase !== 'play' || blocked || coaching || session.finished || session.justSolved || session.hintActive;
   useEffect(() => {
     if (!idleExplains || explainPaused) return;
@@ -225,12 +230,50 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     if (phase === 'play' && task && !session.finished && !blocked) speakPrompt(spokenPrompt(saidOf(task)), taskLang);
   }, [session.index, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Help is due and the task describes its help as a script: play it, beat by beat — unless the
+  // board plays it itself (`by: 'board'`: it depends on what only the board knows).
+  useEffect(() => {
+    if (phase !== 'play' || !task) return;
+    const help = helpOf(task.payload);
+    if (session.hintActive && help && help.by !== 'board') {
+      stage.start({ shown: help, said: helpOf(saidOf(task).payload), lang: taskLang, kind: 'help' });
+    } else if (!session.hintActive && stage.play?.kind === 'help' && stage.play.shown.by !== 'board') {
+      stage.clear();
+    }
+  }, [session.hintActive, session.index, phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Whatever was on the stage belonged to the task before.
+  useEffect(() => {
+    stage.clear();
+  }, [session.index]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A solved task: its help, if still up, has done its job.
+  useEffect(() => {
+    if (session.justSolved && stage.play?.kind === 'help') stage.clear();
+  }, [session.justSolved]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // The help has come up — the shell's or the board's: bring it into sight, the board staying in view.
+  useEffect(() => {
+    if (stage.play?.kind !== 'help') return;
+    const t = window.setTimeout(() => helperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 120);
+    return () => window.clearTimeout(t);
+  }, [stage.round, stage.play?.kind]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // The board is held still while a help is being said: there is nothing to guess at yet.
+  const lockRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const board = lockRef.current as (HTMLDivElement & { inert?: boolean }) | null;
+    if (board) board.inert = stage.locked;
+  }, [stage.locked]);
+
   // When the scaffolding helper appears: scroll to it and speak the how-to.
   useEffect(() => {
     if (!session.hintActive || phase !== 'play') return;
     const t = window.setTimeout(() => {
       helperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       const how = module?.getHintSpeech?.(saidOf(task!));
+      // A board that explains itself keeps the floor: whatever we said here would cut it off.
+      if (how === undefined) return;
       if (how) sayHint('game.hint.with', { how });
       else sayHint('game.hint.plain');
     }, 120);
@@ -247,6 +290,24 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     if (!outro) {
       outroDone();
       return;
+    }
+    // Told part by part, the pieces each part names blinking (`payload.told`); with the voice off,
+    // each part is given time to be read. The level goes on when the last part is over.
+    const told = toldOf(task?.payload);
+    if (told) {
+      const start = window.setTimeout(
+        () =>
+          stage.start({
+            shown: told,
+            said: task ? toldOf(saidOf(task).payload) : undefined,
+            lang: outroLang,
+            kind: 'told',
+            channel: 'taskPrompt',
+            onDone: () => window.setTimeout(outroDone, 350),
+          }),
+        450,
+      );
+      return () => window.clearTimeout(start);
     }
     if (outroVoice && voice.supported) {
       // Let the "correct!" sound land first, then speak.
@@ -413,7 +474,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const GameView = module.GameView;
   const VisualHelper =
     module.VisualHelper && (module.showsHelper?.(task) ?? true) ? module.VisualHelper : undefined;
-  const tipsEnabled = !session.finished && !session.justSolved && !session.hintActive && !blocked && !lessonOpen;
+  // A help told as a script stands in the panel while it is on the stage; any other help while it is due.
+  const scripted = stage.play?.kind === 'help';
+  const helping = scripted || (session.hintActive && Boolean(VisualHelper));
+  const tipsEnabled = !session.finished && !session.justSolved && !session.hintActive && !blocked && !lessonOpen && !stage.playing;
   // When finished, pin the mascot at the goal (no idle roll-back on the
   // celebration screen); otherwise show progress minus any idle roll-back.
   const progress = session.finished ? 1 : Math.max(0, position - rollback);
@@ -515,6 +579,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
   // ---- Play screen ----
   return (
+    <HintStageProvider stage={stage}>
     <div className={styles.screen}>
       {header}
 
@@ -541,12 +606,14 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         {/* A well-known task is asked without its association pictures (`core/game/cues`). */}
         <CuesHiddenProvider value={session.cuesHidden}>
           <PauseProvider value={setLessonOpen}>
-            <GameView
-              key={session.index}
-              task={task}
-              callbacks={callbacks}
-              hintActive={session.hintActive}
-            />
+            <div ref={lockRef} className={cn(stage.locked && styles.boardHeld)} aria-busy={stage.locked}>
+              <GameView
+                key={session.index}
+                task={task}
+                callbacks={callbacks}
+                hintActive={session.hintActive}
+              />
+            </div>
           </PauseProvider>
         </CuesHiddenProvider>
 
@@ -558,13 +625,20 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
-              {outro}
+              {stage.play?.kind === 'told'
+                ? stage.play.shown.beats.map((b, i) => (
+                    <span key={i} className={cn(stage.playing && i === stage.at && styles.outroNow)}>
+                      {i > 0 ? ' ' : ''}
+                      {written(b.text)}
+                    </span>
+                  ))
+                : outro}
             </motion.p>
           )}
         </AnimatePresence>
 
         <AnimatePresence>
-          {session.hintActive && VisualHelper && (
+          {helping && (
             <motion.div
               ref={helperRef}
               initial={{ opacity: 0, height: 0, marginTop: 0 }}
@@ -575,7 +649,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
                 <span className={styles.hintBarLabel}>{t('game.hint.label')}</span>
                 <VoiceToggle channel="hint" />
               </div>
-              <VisualHelper task={task} callbacks={callbacks} hintActive />
+              {scripted ? <HintPanel /> : VisualHelper && <VisualHelper task={task} callbacks={callbacks} hintActive />}
             </motion.div>
           )}
         </AnimatePresence>
@@ -584,7 +658,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
       {/* Bouncing jump-back button so a child who scrolled to the helper can
           return to the answer tiles with one tap. */}
       <AnimatePresence>
-        {session.hintActive && VisualHelper && (
+        {helping && (
           <motion.button
             className={styles.jumpUp}
             aria-label={t('game.hint.back')}
@@ -693,5 +767,6 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
 
       {bedtimeOverlay}
     </div>
+    </HintStageProvider>
   );
 }

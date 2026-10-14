@@ -1,5 +1,7 @@
 import type { ModuleTexts } from '@/core/game/kernel/types';
-import type { ClockTime, Divisible, DivisibleRule, ExplainLine } from '@/core/game/templates/types';
+import type { ClockTime } from '@/core/game/templates/types';
+import type { DivisibleRule, HintBeat } from '@/core/game/hints/types';
+import type { CompareHelpTexts } from './helps';
 import type { CurrencyId } from '@/core/game/content/currency';
 import type { ExprToken, MathOp } from '../ids';
 import type { FractionOpsTier } from '../generators/fractionOps';
@@ -70,13 +72,15 @@ export interface MathTexts {
     foods: readonly string[];
     prompt(food: string): string;
     hint(filled: number, denom: number): string;
+    /** The help, beat by beat: the coloured slices counted, all of them, what that makes. */
+    help(filled: number, denom: number): [count: string, all: string, so: string];
   };
 
   fractionOps: {
     intro: Record<FractionOpsTier, string>;
     /** The sum as it is said: «Обчисли: 1 з 2 плюс 1 з 4». */
     prompt(a: Fraction, op: string, b: Fraction): string;
-    /** The lesson drawn on strips (`FractionBars`), a line to a stage. */
+    /** The help drawn on strips (`StripsScene`), a beat to a stage. */
     barFirst(a: Fraction): string;
     barAdd(b: Fraction): string;
     barTake(b: Fraction): string;
@@ -90,6 +94,8 @@ export interface MathTexts {
   };
 
   compare: {
+    /** The help, beat by beat: each side, which is more, and which way the sign opens. */
+    help: CompareHelpTexts;
     plus(a: number, b: number): string;
     minus(a: number, b: number): string;
     times(a: number, b: number): string;
@@ -108,8 +114,8 @@ export interface MathTexts {
     /** A time in the 24-hour format, said: «п’ятнадцята година», «fifteen thirty». */
     say24(hour24: number, m: number): string;
     intro: { hours: string; half: string; quarter: string; minutes: string; h24: string; h24minutes: string };
-    /** How to read this clock, line by line (with `say` marks); `hour24` on a 24-hour step. */
-    explain(time: ClockTime, told: string, hour24?: number): ExplainLine[];
+    /** How to read this clock, beat by beat (with `say` marks), each blinking its hand; `hour24` on a 24-hour step. */
+    explain(time: ClockTime, told: string, hour24?: number): HintBeat[];
     yes(time: string): string;
     find(time: string): string;
     read: string;
@@ -124,11 +130,11 @@ export interface MathTexts {
     divisible(k: number): string;
     hint(k: number, deadEnds: boolean, negative: boolean): string;
     /**
-     * Why a number is, or is not, a multiple of `k` — the rule, and the lines
-     * about the number the child stepped on. Those keep their `{holes}`
+     * The help after a wrong step, beat by beat: what is left over, why that
+     * number is not one of `k`'s, and the rule. The beats keep their `{holes}`
      * (`{n}`, `{times}`, `{left}`, `{mark}`): the number is not known yet.
      */
-    divisibleWords(k: number, how: DivisibleRule, marks: number[]): Divisible['words'];
+    divisibleBeats(k: number, how: DivisibleRule, marks: number[]): HintBeat[];
   };
 
   shop: {
@@ -143,6 +149,8 @@ export interface MathTexts {
   geometry: {
     /** The twenty-four pictures, in the order of the generator's own list: a name and what to tell about it. */
     figures: readonly (readonly [name: string, say: string])[];
+    /** What is told about each figure, part by part, in the order of `FIGURES` — each part names some of its pieces. */
+    figureParts: readonly (readonly string[])[];
     build(name: string): string;
     buildHint: string;
     count(name: string, shape: Shape): string;

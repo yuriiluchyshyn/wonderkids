@@ -142,11 +142,12 @@ const SHARED_SCREENS: Pick<LearningModule, 'GameView' | 'VisualHelper' | 'showsH
   GameView: TemplateGameView,
   VisualHelper: TemplateHelper,
   showsHelper: hasHelper,
-  // A sum drawn on strips reads itself out, stage by stage, as the picture comes together
-  // (`FractionBars`) — so the shell opens with its short «Ось підказка!» and leaves the talking to it.
+  // A help told as a script (`payload.help`) is said beat by beat by the hint stage, in its own
+  // time. For such a task the shell says nothing of its own — a phrase from the shell would cut
+  // the first beat off half-way, since only one phrase ever sounds at a time.
   getHintSpeech: (task) => {
     const payload = task.payload as TemplatePayload;
-    return payload.bars ? '' : spoken(payload.hint ?? '');
+    return payload.help ? undefined : spoken(payload.hint ?? '');
   },
 };
 

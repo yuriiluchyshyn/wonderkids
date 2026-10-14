@@ -1,0 +1,27 @@
+/* The alphabet strip under the bubbles (`AlphabetScene.tsx`). */
+.alphabet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.letter {
+  display: grid;
+  place-items: center;
+  min-width: 1.9em;
+  height: 1.9em;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface-ink) 6%, var(--surface));
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--surface-ink) 12%, transparent);
+  font-size: clamp(0.85rem, 3.6vw, 1.05rem);
+  font-weight: 800;
+  color: var(--surface-ink);
+}
+
+/* Named by the beat being said: it stands out as well as blinking. */
+.named {
+  background: color-mix(in srgb, var(--primary) 28%, var(--surface));
+  box-shadow: inset 0 0 0 2px var(--primary);
+}

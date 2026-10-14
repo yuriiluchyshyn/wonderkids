@@ -1,12 +1,19 @@
 import { useT } from '@/core/translator';
 import type { ClockTime } from '@/core/game/templates/types';
+import { blinkProps, useHintFocus } from '@/components/hints/HintStage';
 
 /**
  * An analogue clock: twelve numbers, a short hour hand and a long minute hand.
  * The hour hand creeps between numbers as the minutes pass, like a real one.
+ * A clock the help reads (`hints`) blinks the hand its beat is about
+ * (`hand:hour`, `hand:minute`); the clocks on answer cards never do.
  */
-export function ClockFace({ time, className }: { time: ClockTime; className?: string }) {
+export function ClockFace({ time, className, hints = false }: { time: ClockTime; className?: string; hints?: boolean }) {
   const t = useT();
+  const hourLit = useHintFocus('hand:hour');
+  const minuteLit = useHintFocus('hand:minute');
+  const hourHand = blinkProps(hints ? hourLit : null);
+  const minuteHand = blinkProps(hints ? minuteLit : null);
   const minuteAngle = time.m * 6;
   const hourAngle = (time.h % 12) * 30 + time.m * 0.5;
   const hand = (angle: number, length: number) => {
@@ -51,8 +58,8 @@ export function ClockFace({ time, className }: { time: ClockTime; className?: st
           </text>
         );
       })}
-      <line x1="50" y1="50" {...hand(hourAngle, 18)} stroke="#0f172a" strokeWidth="4.5" strokeLinecap="round" />
-      <line x1="50" y1="50" {...hand(minuteAngle, 26.5)} stroke="#ef4444" strokeWidth="2.8" strokeLinecap="round" />
+      <line x1="50" y1="50" {...hand(hourAngle, 18)} stroke="#0f172a" strokeWidth="4.5" strokeLinecap="round" {...hourHand} />
+      <line x1="50" y1="50" {...hand(minuteAngle, 26.5)} stroke="#ef4444" strokeWidth="2.8" strokeLinecap="round" {...minuteHand} />
       <circle cx="50" cy="50" r="3.2" fill="#0f172a" />
     </svg>
   );

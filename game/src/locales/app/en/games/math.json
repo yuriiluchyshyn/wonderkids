@@ -1469,7 +1469,12 @@
       "the chocolate bar"
     ],
     "prompt": "What part of {food} is colored in?",
-    "hint": "Let’s count the colored slices: {length}. There are {denom} slices in all. So it is {filled} out of {denom}!"
+    "hint": "Let’s count the colored slices: {length}. There are {denom} slices in all. So it is {filled} out of {denom}!",
+    "help": {
+      "count": "Let’s count the colored slices: {length}.",
+      "all": "There are {denom} slices in all.",
+      "so": "So it is {filled} out of {denom}."
+    }
   },
   "fractionOps": {
     "intro": {
@@ -1544,7 +1549,17 @@
     },
     "prompt": "Compare {left} and {right}. Which sign goes between them?",
     "yes": "Yes! {verdict}{verdict2}.",
-    "hint": "{rule} Work out how much is on the left and how much on the right: {left} on the left, {right} on the right."
+    "hint": "{rule} Work out how much is on the left and how much on the right: {left} on the left, {right} on the right.",
+    "help": {
+      "left": "On the left: {left}.",
+      "leftWorth": "On the left: {left}, that is {worth}.",
+      "right": "On the right: {right}.",
+      "rightWorth": "On the right: {right}, that is {worth}.",
+      "more": "{big} is more: its bar is taller.",
+      "same": "They are the same: the bars are equal.",
+      "sign": "The wide side of the sign faces the bigger one: {left} {sign} {right}.",
+      "signSame": "So the sign is “equals”: {left} = {right}."
+    }
   },
   "clock": {
     "say": {
@@ -1576,13 +1591,13 @@
       "evening": "evening"
     },
     "explain": {
-      "hourOn": "The short black hand shows the hours. It points at {h}.",
-      "hourPast": "The short black hand shows the hours. It has passed {h} but has not reached {next} yet — so the hour is {h}.",
-      "minuteTop": "The long red hand shows the minutes. It points straight up, at 12: exactly on the hour, zero minutes.",
-      "minuteCount": "The long red hand shows the minutes. It points at {n}. Count in fives: {count} — that is {m} minutes.",
-      "minuteTimes": "The long red hand shows the minutes. It points at {n}, and each number is five minutes: {n} fives make {m} minutes.",
-      "afternoon": "It is {part} now, and after noon the hours keep counting: 12 and {h} more make {H}.",
-      "morning": "It is {part} now: before noon a digital clock shows the same hour — {H}.",
+      "hourOn": "The short hand shows the hours. It points at {h}.",
+      "hourPast": "The short hand shows the hours. It has passed {h}: the hour is {h}.",
+      "minuteTop": "The long hand shows the minutes. It points at 12: exactly on the hour.",
+      "minuteCount": "The long hand shows the minutes. Count in fives: {count}.",
+      "minuteTimes": "The long hand shows the minutes. It points at {n}: that is {m} minutes.",
+      "afternoon": "After noon: 12 and {h} more make {H}.",
+      "morning": "Before noon the hour stays the same — {H}.",
       "so": "So the time is {time}."
     }
   },
@@ -1598,18 +1613,17 @@
     },
     "rule": {
       "ending": "Numbers that divide by {k} end in {marks}.",
-      "digits": "A number divides by {k} when the sum of its digits divides by {k} too.",
+      "digits": "A number divides by {k} when its digits add up to a number that divides by {k}.",
       "twice": {
-        "2": "A number divides by {k} when you can halve it, and halve what is left.",
-        "3": "A number divides by {k} when you can halve it, halve that, and halve it once again."
+        "2": "A number divides by {k} when you can halve it, then halve it again.",
+        "3": "A number divides by {k} when you can halve it three times in a row."
       },
-      "pair": "Numbers that divide by {k} divide by {a} and by {b} — both rules at once.",
-      "count": "There is no short rule for {k}: count in {k}s — {k}, {k2}, {k3} and on.",
-      "left": "{times} lots of {k} fit into {n}, and {left} is still left over — so {n} does not divide by {k}.",
-      "exact": "Exactly {times} lots of {k} fit into {n}, with nothing left over — {n} divides by {k}.",
-      "whyEnding": "{n} ends in {mark}, and {mark} is not in the list {marks}.",
+      "pair": "Numbers that divide by {k} divide by {a} and by {b}.",
+      "count": "For {k}, count in {k}s: {k}, {k2}, {k3} and on.",
+      "left": "{n} is {times} lots of {k}, and {left} is left over.",
+      "exact": "{n} is exactly {times} lots of {k}.",
+      "whyEnding": "But {n} ends in {mark}.",
       "whyDigits": "The digits of {n} add up to {mark}, and {mark} does not divide by {k}.",
-      "whyOther": "Lots of {k} do not fit into {n} evenly.",
       "or": " or "
     }
   },
@@ -1635,99 +1649,221 @@
     "figures": {
       "0": {
         "0": "an ice cream",
-        "1": "This is an ice cream: a round scoop and a triangle cone."
+        "1": [
+          "This is an ice cream:",
+          "a round scoop",
+          "and a triangle cone."
+        ]
       },
       "1": {
         "0": "a mushroom",
-        "1": "This is a mushroom: a triangle cap and a square stem."
+        "1": [
+          "This is a mushroom:",
+          "a triangle cap",
+          "and a square stem."
+        ]
       },
       "2": {
         "0": "a lollipop",
-        "1": "This is a lollipop: a round treat on a stick."
+        "1": [
+          "This is a lollipop:",
+          "a round treat",
+          "on a stick."
+        ]
       },
       "3": {
         "0": "a house",
-        "1": "This is a house: square walls and a triangle roof."
+        "1": [
+          "This is a house:",
+          "square walls",
+          "and a triangle roof."
+        ]
       },
       "4": {
         "0": "a snowman",
-        "1": "This is a snowman: three circles — a small one, a middle one and a big one."
+        "1": [
+          "This is a snowman:",
+          "three circles —",
+          "a small one,",
+          "a middle one",
+          "and a big one."
+        ]
       },
       "5": {
         "0": "a candy",
-        "1": "This is a candy: a round middle and two little triangle tails."
+        "1": [
+          "This is a candy:",
+          "a round middle",
+          "and two little triangle tails."
+        ]
       },
       "6": {
         "0": "a fir tree",
-        "1": "This is a fir tree: two triangles and a small trunk."
+        "1": [
+          "This is a fir tree:",
+          "two triangles",
+          "and a small trunk."
+        ]
       },
       "7": {
         "0": "a fish",
-        "1": "This is a fish: a round body and a triangle tail."
+        "1": [
+          "This is a fish:",
+          "a round body",
+          "and a triangle tail."
+        ]
       },
       "8": {
         "0": "a boat",
-        "1": "This is a boat: a rectangle hull and a triangle sail."
+        "1": [
+          "This is a boat:",
+          "a rectangle hull",
+          "and a triangle sail."
+        ]
       },
       "9": {
         "0": "a cat",
-        "1": "This is a cat: a round head, triangle ears and a square body."
+        "1": [
+          "This is a cat:",
+          "a round head,",
+          "triangle ears",
+          "and a square body."
+        ]
       },
       "10": {
         "0": "a truck",
-        "1": "This is a truck: a long trailer, a square cab and two wheels."
+        "1": [
+          "This is a truck:",
+          "a long trailer,",
+          "a square cab",
+          "and two wheels."
+        ]
       },
       "11": {
         "0": "a flower",
-        "1": "This is a flower: three round petals on a stem."
+        "1": [
+          "This is a flower:",
+          "three round petals",
+          "on a stem."
+        ]
       },
       "12": {
         "0": "a rocket",
-        "1": "This is a rocket: a pointed nose, two squares and triangle wings."
+        "1": [
+          "This is a rocket:",
+          "a pointed nose,",
+          "two squares",
+          "and triangle wings."
+        ]
       },
       "13": {
         "0": "a train",
-        "1": "This is a train: a long car, a cab and three wheels."
+        "1": [
+          "This is a train:",
+          "a long car,",
+          "a cab",
+          "and three wheels."
+        ]
       },
       "14": {
         "0": "a butterfly",
-        "1": "This is a butterfly: a round body, a little head and two triangle wings."
+        "1": [
+          "This is a butterfly:",
+          "a round body,",
+          "a little head",
+          "and two triangle wings."
+        ]
       },
       "15": {
         "0": "a robot",
-        "1": "This is a robot: a square head, a body, two arms and two legs."
+        "1": [
+          "This is a robot:",
+          "a square head,",
+          "a body,",
+          "two arms",
+          "and two legs."
+        ]
       },
       "16": {
         "0": "a castle",
-        "1": "This is a castle: a long wall, three towers and two pointed roofs."
+        "1": [
+          "This is a castle:",
+          "a long wall,",
+          "three towers",
+          "and two pointed roofs."
+        ]
       },
       "17": {
         "0": "a teddy bear",
-        "1": "This is a teddy bear — it is made of circles all over: head, ears, body and paws."
+        "1": [
+          "This is a teddy bear — it is made of circles all over:",
+          "head,",
+          "ears,",
+          "body",
+          "and paws."
+        ]
       },
       "18": {
         "0": "a duckling",
-        "1": "This is a duckling: a round body and head, a beak, a tail and feet."
+        "1": [
+          "This is a duckling:",
+          "a round body and head,",
+          "a beak,",
+          "a tail",
+          "and feet."
+        ]
       },
       "19": {
         "0": "a bus",
-        "1": "This is a bus: a long body, three wheels and two suitcases on the roof."
+        "1": [
+          "This is a bus:",
+          "a long body,",
+          "three wheels",
+          "and two suitcases on the roof."
+        ]
       },
       "20": {
         "0": "a little man",
-        "1": "This is a little man: a round head, a square body, arms and legs."
+        "1": [
+          "This is a little man:",
+          "a round head,",
+          "a square body,",
+          "arms",
+          "and legs."
+        ]
       },
       "21": {
         "0": "a palace",
-        "1": "This is a palace: a wall, three towers, two roofs and a flag on top."
+        "1": [
+          "This is a palace:",
+          "a wall,",
+          "three towers,",
+          "two roofs",
+          "and a flag on top."
+        ]
       },
       "22": {
         "0": "a steam engine",
-        "1": "This is a steam engine: a car, a cab, three wheels, a funnel and a puff of smoke."
+        "1": [
+          "This is a steam engine:",
+          "a car,",
+          "a cab,",
+          "three wheels,",
+          "a funnel",
+          "and a puff of smoke."
+        ]
       },
       "23": {
         "0": "a dinosaur",
-        "1": "This is a dinosaur: a long body, a neck, a head, a tail, legs and spikes on its back."
+        "1": [
+          "This is a dinosaur:",
+          "a long body,",
+          "a neck,",
+          "a head,",
+          "a tail,",
+          "legs",
+          "and spikes on its back."
+        ]
       }
     },
     "build": "Build this from the shapes: {name}",

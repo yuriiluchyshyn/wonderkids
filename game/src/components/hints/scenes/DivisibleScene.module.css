@@ -1,9 +1,9 @@
-/* Why a number is, or is not, a multiple — the number maze's lesson (`DivisibleHint.tsx`). */
-.hint {
+/* Why a number is, or is not, a multiple — the number maze's help (`DivisibleScene.tsx`). */
+.scene {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 /* The number laid out in groups of the divisor. */
@@ -23,12 +23,10 @@
   box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--primary) 34%, transparent);
 }
 
-/* What will not make a whole group: it stands apart, and it keeps bobbing. */
+/* What will not make a whole group: it stands apart. */
 .left {
   background: color-mix(in srgb, #ef4444 16%, transparent);
   box-shadow: inset 0 0 0 2px color-mix(in srgb, #ef4444 46%, transparent);
-  --loop: 1.8s;
-  --loop-y: 3px;
 }
 
 .dot {
@@ -40,6 +38,13 @@
 
 .loose {
   background: #ef4444;
+}
+
+/* A number too big to lay out in counters: the groups are told instead. */
+.counted {
+  font-size: clamp(1rem, 4.4vw, 1.25rem);
+  font-weight: 800;
+  color: var(--surface-ink);
 }
 
 /* The rule drawn on the number: the part it turns on, and what it is measured against. */
@@ -97,18 +102,4 @@
 .markHit {
   background: color-mix(in srgb, #22c55e 24%, transparent);
   box-shadow: inset 0 0 0 2px #22c55e;
-}
-
-.said {
-  margin: 0;
-  text-align: center;
-  font-size: clamp(0.85rem, 3.6vw, 1rem);
-  font-weight: 700;
-  line-height: 1.3;
-  color: var(--surface-ink);
-}
-
-/* The rule itself — what is worth carrying to the next number. */
-.ruleText {
-  font-weight: 800;
 }

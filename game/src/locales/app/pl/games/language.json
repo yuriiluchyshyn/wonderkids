@@ -646,5 +646,11 @@
       "back": "Uwaga: teraz słowa mogą stać od tyłu — od prawej do lewej albo od dołu do góry.",
       "byEar": "Teraz przy obrazkach nie ma słów. Przypomnij sobie, jak pisze się słowo — albo go posłuchaj — i znajdź je w tabeli."
     }
+  },
+  "runHelp": {
+    "find": "Znajdź te litery w alfabecie.",
+    "earlier": "Pierwsza jest {next} — przebij ją.",
+    "after": "Po {prev} jest {next}.",
+    "pop": "Przebij {next}."
   }
 }

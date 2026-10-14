@@ -1,0 +1,78 @@
+/* The help under the board: its picture, and what is said, beat by beat (`HintPanel.tsx`). */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ring) 40%, transparent);
+}
+
+.scene {
+  display: flex;
+  justify-content: center;
+}
+
+.clock {
+  width: clamp(96px, 30vw, 140px);
+  height: auto;
+}
+
+.beats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.beat {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: clamp(0.85rem, 3.6vw, 1rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--surface-ink);
+}
+
+/* The beat being said right now. */
+.now {
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
+}
+
+/* A short bar in the colour of what the line speaks of — the clock's hands are drawn in these. */
+.mark {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 6px;
+  margin-top: 0.45em;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.beat[data-tone='hour'] .mark {
+  height: 8px;
+  background: #0f172a;
+}
+
+.beat[data-tone='minute'] .mark {
+  background: #ef4444;
+}
+
+.beat[data-tone='day'] .mark {
+  background: #f59e0b;
+}
+
+.beat[data-tone='sum'] {
+  font-weight: 800;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+}

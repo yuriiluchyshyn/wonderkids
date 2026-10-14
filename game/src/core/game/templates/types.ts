@@ -1,6 +1,7 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { CurrencyId } from '@/core/game/content/currency';
 import { DEFAULT_LANG, language, type LangCode } from '@/core/language';
+import type { HintScript } from '@/core/game/hints/types';
 /**
  * Declarative task payloads for the CORE UI templates (PRD v4.0 §3.2).
  *
@@ -137,95 +138,24 @@ interface TemplateBase {
    */
   clue?: Clue;
   /**
-   * A worked explanation of the answer, shown below the board once the child
-   * needs help — after mistakes, or after a long while without an answer
-   * (`GameScreen`'s `EXPLAIN_IDLE_MS`): «the short black hand is the hours…».
-   */
-  explain?: Explain;
-  /**
    * A rule this task stands on (the order of operations, brackets). It is
    * taught by an animated lesson the first time the child meets it, and again
    * when the child taps one of its `traps` (`components/templates/RuleLesson`).
    */
   lesson?: Lesson;
   /**
-   * A sum of fractions drawn as strips and worked out stage by stage, shown
-   * below the board once the child needs help — after mistakes, or after a
-   * long while without an answer (`components/templates/FractionBars`).
+   * The help, as a script (`core/game/hints`): what is said beat by beat, what
+   * blinks while each beat is said, and which picture it is drawn on. The
+   * shell plays it when help is due — or the board does, when what it says
+   * depends on the board (`by: 'board'`).
    */
-  bars?: FractionBars;
+  help?: HintScript;
   /**
-   * How to tell a multiple of a number, drawn for the very number the child
-   * stepped on (the number maze — `components/templates/DivisibleHint`).
+   * What is read out once the task is solved, as a script: the same sentence
+   * as `outro`, beat by beat, with the parts of the board each beat names
+   * blinking as it is said («…три круглі пелюстки — на стеблі»).
    */
-  divisible?: Divisible;
-}
-
-/** The words of the fraction-strip lesson: each is said as its stage comes out. */
-export interface FractionBarsWords {
-  /** The first strip: «Візьми 3 шматочки з 7 — так виглядає 3/7.» */
-  first: string;
-  /** The second: «Додай ще 1 такий самий шматочок» / «Забери 2 шматочки». */
-  second: string;
-  /** Only when the bottoms differ: «Шматочки різні — поріжемо обидві смужки по 6.» */
-  cut?: string;
-  /** The result: «Разом 4 шматочки з 7. Низ не змінився — шматочки однакові.» */
-  total: string;
-  /** Only when the result can be written more simply: «4 з 6 — це те саме, що 2 з 3.» */
-  reduced?: string;
-}
-
-/**
- * A sum of fractions drawn as two strips of one length: each cut into as many
- * parts as its bottom number says, with as many of them coloured as its top
- * number says. Strips cut differently cannot be put together, so they are
- * re-cut into the same parts first — which is all «a common denominator»
- * means. Only `+` and `−` are drawn this way.
- */
-export interface FractionBars {
-  op: '+' | '−';
-  a: FractionValue;
-  b: FractionValue;
-  /** The same two fractions on one bottom, when the task's bottoms differ. */
-  same?: { a: FractionValue; b: FractionValue };
-  /** The result, on that bottom. */
-  total: FractionValue;
-  /** The answer as the board writes it, when `total` can be made simpler. */
-  reduced?: FractionValue;
-  words: FractionBarsWords;
-}
-
-/**
- * How a multiple of a number gives itself away — which picture the lesson draws:
- *
- *   `ending`  it ends in one of a few digits (2, 5, 10)
- *   `digits`  its digits add up to a multiple of the number (3, 9)
- *   `twice`   halve it, and halve what is left (4, 8)
- *   `pair`    it divides by both of two smaller numbers (6)
- *   `count`   there is no short rule (7) — count it out
- */
-export type DivisibleRule = 'ending' | 'digits' | 'twice' | 'pair' | 'count';
-
-/**
- * Why a number does, or does not, divide by `by`. The lines are kept with
- * `{holes}` — `{n}`, `{by}`, `{times}`, `{left}`, `{mark}` — because what they
- * are about is the number the child has just stepped on, not the task.
- */
-export interface Divisible {
-  by: number;
-  how: DivisibleRule;
-  /** `ending`: the digits a multiple ends in. `pair`: the two numbers to check. `twice`: the halvings. Otherwise empty. */
-  marks: number[];
-  words: {
-    /** The rule itself: «На 2 діляться числа, що закінчуються на 0, 2, 4, 6 або 8.» */
-    rule: string;
-    /** What is left over: «У 23 вміщається 11 по 2, і 1 залишається.» */
-    left: string;
-    /** When nothing is left: «У 20 вміщається рівно 10 по 2.» */
-    exact: string;
-    /** Why this very number is not a multiple, by the rule above. */
-    why: string;
-  };
+  told?: HintScript;
 }
 
 /** One line of a lesson's worked example: the row as it stands, and the part done next. */
@@ -255,18 +185,6 @@ export interface Lesson {
   again: string;
   /** Answers that come from doing it in the wrong order. */
   traps: string[];
-}
-
-/** One line of a worked explanation; `tone` colours its marker like the thing it is about. */
-export interface ExplainLine {
-  tone: 'hour' | 'minute' | 'day' | 'sum';
-  text: string;
-}
-
-/** What `explain` shows: the clock it is about (if any) and the lines that read it. */
-export interface Explain {
-  clock?: ClockTime;
-  lines: ExplainLine[];
 }
 
 /** One thing in a clue picture. */

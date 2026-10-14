@@ -1,5 +1,7 @@
 import { useT } from '@/core/translator';
 import { motion } from 'framer-motion';
+import { blinkProps, useHintFocus } from '@/components/hints/HintStage';
+import { cn } from '@/core/utils/cn';
 import styles from './PieFood.module.css';
 
 interface PieFoodProps {
@@ -25,6 +27,21 @@ function wedge(index: number, denom: number): string {
   return `M ${CENTER} ${CENTER} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${R} ${R} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`;
 }
 
+/** One slice; it blinks while a hint's beat names it (`slice:<i>`), in the order the beat counts them. */
+function Slice({ index, denom, filled }: { index: number; denom: number; filled: boolean }) {
+  const lit = blinkProps(useHintFocus(`slice:${index}`));
+  return (
+    <motion.path
+      d={wedge(index, denom)}
+      className={cn(filled ? styles.filled : styles.empty, lit.className)}
+      initial={{ opacity: 0, scale: 0.6 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: index * 0.05, type: 'spring', stiffness: 300, damping: 20 }}
+      style={{ transformOrigin: `${CENTER}px ${CENTER}px`, ...lit.style }}
+    />
+  );
+}
+
 /**
  * Sensory fraction plate: a food split into equal slices with `filled` of them
  * highlighted. Pure presentation — the child answers via fraction tiles.
@@ -35,15 +52,7 @@ export function PieFood({ food, denom, filled }: PieFoodProps) {
     <div className={styles.wrap}>
       <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className={styles.pie} role="img" aria-label={t('tpl.pie', { filled, total: denom })}>
         {Array.from({ length: denom }, (_, i) => (
-          <motion.path
-            key={i}
-            d={wedge(i, denom)}
-            className={i < filled ? styles.filled : styles.empty}
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.05, type: 'spring', stiffness: 300, damping: 20 }}
-            style={{ transformOrigin: `${CENTER}px ${CENTER}px` }}
-          />
+          <Slice key={i} index={i} denom={denom} filled={i < filled} />
         ))}
       </svg>
       <span className={`${styles.food} emoji`} aria-hidden>

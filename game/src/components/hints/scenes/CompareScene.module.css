@@ -1,0 +1,83 @@
+/* Two amounts as bars, and the sign between them (`CompareScene.tsx`). */
+.compare {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(10px, 4vw, 26px);
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 64px;
+}
+
+/* The room a bar grows in: every bar stands on the same floor. */
+.well {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 46px;
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  border-radius: 10px 10px 4px 4px;
+}
+
+/* The two colours a sum's numbers are always drawn in. */
+.barA {
+  background: var(--operand-a);
+}
+
+.barB {
+  background: var(--operand-b);
+}
+
+.text {
+  font-size: clamp(1rem, 4.4vw, 1.3rem);
+  font-weight: 800;
+  color: var(--surface-ink);
+  white-space: nowrap;
+}
+
+.worth {
+  font-size: clamp(0.8rem, 3.4vw, 0.95rem);
+  font-weight: 700;
+  color: var(--surface-ink);
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+/* The sign stands level with the middle of the bars. */
+.between {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 120px;
+  margin-bottom: 30px;
+}
+
+.sign {
+  width: 54px;
+  height: 84px;
+  overflow: visible;
+}
+
+.signStroke {
+  fill: none;
+  stroke: var(--surface-ink);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ask {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: var(--surface-ink);
+  opacity: 0.45;
+}

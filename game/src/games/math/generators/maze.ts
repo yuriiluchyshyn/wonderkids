@@ -2,7 +2,8 @@ import type { LangCode } from '@/core/language';
 import { mathTexts } from '../grammar';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
-import type { DivisibleRule, NumberMazePayload } from '@/core/game/templates/types';
+import type { NumberMazePayload } from '@/core/game/templates/types';
+import type { DivisibleRule } from '@/core/game/hints/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import { rewardForStep } from '../difficulty';
 
@@ -172,8 +173,9 @@ export function generateMaze(config: TaskConfig): TaskInstance<NumberMazePayload
       open,
       divisor: k,
       hint: T.hint(k, open.length > 0, negative),
-      // Why a number is, or is not, a multiple of k — drawn about the very number stepped on.
-      divisible: { by: k, ...rule, words: T.divisibleWords(k, rule.how, rule.marks) },
+      // Why a number is, or is not, a multiple of k — about the very number stepped on, so the
+      // board plays it after each wrong step, with that number filled in.
+      help: { by: 'board', scene: { kind: 'divisible', by: k, ...rule }, beats: T.divisibleBeats(k, rule.how, rule.marks) },
     },
   };
 }

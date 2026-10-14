@@ -4,6 +4,7 @@ import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import type { FractionValue, GridChoicePayload } from '@/core/game/templates/types';
 import { fractionDenomMax, rewardForStep } from '../difficulty';
 import { mathTexts } from '../grammar';
+import { beat, ids } from '@/core/game/hints/script';
 
 /** The 7 sensory foods from the PRD "Смачні Дроби" spec (§4.1). */
 /** The foods a slice is cut from; their names are the language's (`fractions.foods`, in this order). */
@@ -46,6 +47,7 @@ export function generateFraction(config: TaskConfig): TaskInstance<GridChoicePay
   const T = mathTexts(config.lang);
   const food = pick(FOODS);
   const answer: FractionValue = { n: filled, d: denom };
+  const [count, all, so] = T.fractions.help(filled, denom);
 
   return {
     id: uid('fr'),
@@ -62,6 +64,8 @@ export function generateFraction(config: TaskConfig): TaskInstance<GridChoicePay
       correctId: `${filled}/${denom}`,
       // Count the highlighted slices aloud: «Один, два, три — з чотирьох!»
       hint: T.fractions.hint(filled, denom),
+      // …and while each beat is said, the slices it counts blink — one after another, as they are counted.
+      help: { beats: [beat(count, ids('slice', filled)), beat(all, ids('slice', denom)), beat(so, ids('slice', filled))] },
     },
   };
 }

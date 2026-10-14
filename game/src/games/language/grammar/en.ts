@@ -92,6 +92,7 @@ export const en: LanguageTexts = {
 
   runAsk: (p, from, to) => (p.native ? fill(J.runAsk[1], { from, to }) : fill(J.runAsk[2], { p: NAME[p.lang] })),
   runHint: (p, letters) => (p.native ? fill(J.runHint[1], { letters: letters.join(', ') }) : fill(J.runHint[2], { p: NAME[p.lang] })),
+  runHelp: J.runHelp,
   partsAsk: (p, word) => (p.native ? fill(J.partsAsk[1], { p: pieces(p), word }) : fill(J.partsAsk[2], { p: NAME[p.lang], p2: pieces(p) })),
   partsHint: (p, word, parts) => (p.native ? fill(J.partsHint[1], { word, parts: parts.join(' — ') }) : fill(J.partsHint[2], { p: pieces(p) })),
   spellAsk: (p, word, byEar) => {

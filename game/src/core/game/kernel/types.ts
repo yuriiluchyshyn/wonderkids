@@ -300,8 +300,14 @@ export interface LearningModule {
   /**
    * Optional spoken, task-aware explanation of HOW to solve the current task,
    * played when the scaffolding hint appears. Keep it short and encouraging.
+   *
+   * An empty string means the task has nothing of its own to say and the shell
+   * reads its own short line instead. `undefined` means the board is already
+   * doing the talking — the fraction strips read themselves out stage by
+   * stage, the maze explains the number just stepped on — and the shell stays
+   * quiet rather than cutting in over it (one phrase sounds at a time).
    */
-  getHintSpeech?: (task: TaskInstance) => string;
+  getHintSpeech?: (task: TaskInstance) => string | undefined;
   /**
    * Optional child-level intro for an adventure, themed to the active skin
    * (e.g. counts in apples / bricks / snowflakes). Overrides SubCategory.intro.

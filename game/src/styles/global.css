@@ -236,6 +236,23 @@ span.loop-breathe {
   display: inline-block;
 }
 
+/* A part of the screen a hint is naming right now (`components/hints/HintStage`):
+   a hand of the clock, a slice, a bubble, a letter. Several named at once light
+   one after another (`--blink-delay`). Only while the beat is being said. */
+.hint-blink {
+  animation: hint-blink 0.9s ease-in-out var(--blink-delay, 0s) infinite;
+}
+
+@keyframes hint-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.28;
+  }
+}
+
 @keyframes loop-bob {
   0%,
   100% {
@@ -301,6 +318,19 @@ span.loop-breathe {
   .loop-sway,
   .loop-breathe {
     animation: none;
+  }
+
+  /* Still pointed at, without the blinking: a ring round it, a bright edge on a drawn part. */
+  .hint-blink {
+    animation: none;
+    outline: 3px solid #f59e0b;
+    outline-offset: 2px;
+  }
+
+  svg .hint-blink {
+    outline: none;
+    stroke: #f59e0b;
+    stroke-width: 3px;
   }
 }
 

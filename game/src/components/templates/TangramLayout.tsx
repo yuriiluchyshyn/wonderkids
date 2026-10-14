@@ -1,5 +1,6 @@
 import { useT } from '@/core/translator';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
+import { blinkProps, useHintFocus } from '@/components/hints/HintStage';
 import { useSound } from '@/core/audio/useSound';
 import type { TangramPayload, TangramPiece } from '@/core/game/templates/types';
 import { cn } from '@/core/utils/cn';
@@ -8,9 +9,9 @@ import { useDragDrop } from './useDragDrop';
 import styles from './Templates.module.css';
 
 /** SVG outline of one piece, centred on (0,0), `size` wide. */
-export function PieceShape({ piece, className, fill }: { piece: Pick<TangramPiece, 'shape' | 'size'>; className?: string; fill?: string }) {
+export function PieceShape({ piece, className, fill, style }: { piece: Pick<TangramPiece, 'shape' | 'size'>; className?: string; fill?: string; style?: CSSProperties }) {
   const h = piece.size / 2;
-  const common = { className, fill };
+  const common = { className, fill, style };
   switch (piece.shape) {
     case 'circle':
       return <circle r={h} {...common} />;
@@ -25,6 +26,23 @@ export function PieceShape({ piece, className, fill }: { piece: Pick<TangramPiec
 
 /** Two pieces are interchangeable when they are the same shape and size. */
 const fits = (a: TangramPiece, b: TangramPiece) => a.shape === b.shape && a.size === b.size;
+
+/**
+ * One place of the figure: a dashed outline until a piece fills it. Once the
+ * figure is finished and read out, the place blinks while its part is named
+ * («…три круглі пелюстки — на стеблі», `piece:<id>`).
+ */
+function Outline({ outline, by, guided }: { outline: TangramPiece; by?: TangramPiece; guided: boolean }) {
+  const lit = blinkProps(useHintFocus(`piece:${outline.id}`));
+  return (
+    <PieceShape
+      piece={outline}
+      fill={by ? by.color : undefined}
+      className={cn(by ? styles.tangramFilled : styles.tangramOutline, !by && guided && styles.tangramGuide, lit.className)}
+      style={lit.style}
+    />
+  );
+}
 
 /**
  * Tangram (UI_DRAG_MATCH family) — rebuild an animal silhouette by dragging
@@ -67,25 +85,19 @@ export function TangramLayout({ payload, callbacks, hintActive }: LayoutProps<Ta
     <div className="stack">
       <div className={styles.tangramWrap}>
         <svg viewBox="0 0 100 100" className={styles.tangram} role="group" aria-label={t('tpl.silhouette', { figure })}>
-          {pieces.map((outline) => {
-            const by = pieces.find((p) => p.id === filled[outline.id]);
-            return (
-              <g
-                key={outline.id}
-                transform={`translate(${outline.x} ${outline.y}) rotate(${outline.rotate ?? 0})`}
-                {...dnd.target(outline.id)}
-              >
-                <PieceShape
-                  piece={outline}
-                  fill={by ? by.color : undefined}
-                  className={cn(
-                    by ? styles.tangramFilled : styles.tangramOutline,
-                    !by && (hintOutline === outline.id || guide === outline.id) && styles.tangramGuide,
-                  )}
-                />
-              </g>
-            );
-          })}
+          {pieces.map((outline) => (
+            <g
+              key={outline.id}
+              transform={`translate(${outline.x} ${outline.y}) rotate(${outline.rotate ?? 0})`}
+              {...dnd.target(outline.id)}
+            >
+              <Outline
+                outline={outline}
+                by={pieces.find((p) => p.id === filled[outline.id])}
+                guided={hintOutline === outline.id || guide === outline.id}
+              />
+            </g>
+          ))}
         </svg>
       </div>
 
