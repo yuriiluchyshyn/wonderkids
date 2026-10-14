@@ -142,7 +142,12 @@ const SHARED_SCREENS: Pick<LearningModule, 'GameView' | 'VisualHelper' | 'showsH
   GameView: TemplateGameView,
   VisualHelper: TemplateHelper,
   showsHelper: hasHelper,
-  getHintSpeech: (task) => spoken((task.payload as TemplatePayload).hint ?? ''),
+  // A sum drawn on strips reads itself out, stage by stage, as the picture comes together
+  // (`FractionBars`) — so the shell opens with its short «Ось підказка!» and leaves the talking to it.
+  getHintSpeech: (task) => {
+    const payload = task.payload as TemplatePayload;
+    return payload.bars ? '' : spoken(payload.hint ?? '');
+  },
 };
 
 /**

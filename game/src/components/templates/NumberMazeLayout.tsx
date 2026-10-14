@@ -1,11 +1,14 @@
 import { Mascot, type Heading } from '@/components/theme/Mascot';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useSound } from '@/core/audio/useSound';
+import { voice } from '@/core/audio/voice';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
+import { saidOf } from '@/core/game/kernel/types';
 import type { NumberMazePayload } from '@/core/game/templates/types';
 import { isAdjacent, nextStepTowards } from '@/core/game/templates/validate';
 import { cn } from '@/core/utils/cn';
+import { DivisibleHint, divisibleSpeech } from './DivisibleHint';
 import { SHAKE, SHAKE_TRANSITION, Stimulus, type LayoutProps } from './parts';
 import styles from './Templates.module.css';
 
@@ -23,9 +26,19 @@ const show = (value: number) => String(value).replace('-', '−');
  * the child just walks back. The helper lights up ONE next step and then
  * steps aside: the child walks on alone, and it comes back only after two
  * more slips from where they stand.
+ *
+ * A wrong step is also answered in words, about the very number stepped on:
+ * how many of the divisor fit into it and what is left over, and then the one
+ * rule that tells a multiple of THIS number at a glance — «на 2 діляться
+ * числа, що закінчуються на 0, 2, 4, 6 або 8» (`DivisibleHint`). The maze
+ * shows it itself rather than through the shell's helper panel, because the
+ * lesson is about the tile the child chose, which only the board knows.
  */
-export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps<NumberMazePayload>) {
-  const { cols, cells, path, open } = payload;
+export function NumberMazeLayout({ task, payload, callbacks, hintActive }: LayoutProps<NumberMazePayload>) {
+  const { cols, cells, path, open, divisible } = payload;
+  // The lesson is read out in the voice's language, which is not always the task's.
+  const said = (saidOf(task).payload as NumberMazePayload).divisible ?? divisible;
+  const saidLang = saidOf(task).lang;
   const theme = useActiveTheme();
   const { play } = useSound();
   const start = path[0];
@@ -38,6 +51,8 @@ export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps
   const [heading, setHeading] = useState<Heading>('right');
   const [walked, setWalked] = useState<ReadonlySet<number>>(() => new Set([start]));
   const [cracked, setCracked] = useState<number | null>(null);
+  // The number of the last wrong step: what the lesson under the board is about.
+  const [missed, setMissed] = useState<number | null>(null);
 
   // The helper is lit for one step at a time. `slips` counts wrong steps since
   // it last went out (or since the child last moved on).
@@ -62,10 +77,16 @@ export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps
       // One step was shown — or made without help: from here the child goes alone.
       setLit(false);
       setSlips(0);
+      setMissed(null);
       if (index === finish) callbacks.onSuccess();
       return;
     }
     setCracked(index);
+    // The lesson turns to the number just stepped on, and says why it is not one of the rule's.
+    if (said) {
+      setMissed(cells[index]);
+      voice.say(divisibleSpeech(said, cells[index]), 'hint', saidLang);
+    }
     // Two slips on the same spot bring the helper back for one more step.
     if (hintActive && slips + 1 >= SLIPS_FOR_HINT) {
       setLit(true);
@@ -115,6 +136,21 @@ export function NumberMazeLayout({ payload, callbacks, hintActive }: LayoutProps
           </motion.button>
         ))}
       </div>
+      {/* After a wrong step — and once the child needs help for any reason — why a number is one of the rule's. */}
+      <AnimatePresence>
+        {divisible && (missed !== null || hintActive) && !done && (
+          <motion.div
+            key={missed ?? 'rule'}
+            className={styles.mazeLesson}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <DivisibleHint divisible={divisible} tried={missed} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -5,23 +5,12 @@ import type { Theme, ThemeId, Treasure } from '@/core/theme/theme.types';
  * 5th/10th/final step, some steps hide a themed treasure chest. Finishing a
  * session on a chest step springs the chest open and reveals a random, not-yet
  * collected treasure that flies into the child's collection.
+ *
+ * Which steps those are is `pathStops.ts`'s business — the one place that
+ * knows what waits on a step.
  */
 
-/** Does this step carry a progression gift? (mirrors the gift logic.) */
-function isGiftStep(step: number, total: number): boolean {
-  if (total > 0 && step === total) return true;
-  return step % 10 === 0 || step % 5 === 0;
-}
-
-/**
- * Whether a treasure chest is hidden on this step. Chests land on every 3rd
- * step that isn't already a gift step (and never the very first step), so the
- * path alternates between gifts and hidden treasures.
- */
-export function hasChest(step: number, total: number): boolean {
-  if (step <= 1) return false;
-  return step % 3 === 0 && !isGiftStep(step, total);
-}
+export { hasChest } from './pathStops.ts';
 
 /** Fully-qualified id for a treasure, namespaced by theme. */
 export function treasureKey(themeId: ThemeId, treasureId: string): string {

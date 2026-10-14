@@ -110,7 +110,8 @@ test('the dream build waits for the spaceport too', async () => {
 });
 
 test('keys lie on a path every 3–5 steps, always on the same steps of a game', async () => {
-  const { keySteps, hasKey, keysOnPath, KEY_GAP } = await import('../src/core/child/progress/keySteps.ts');
+  const { keySteps, keyStepsOnPath, hasKey, keysOnPath, KEY_GAP } = await import('../src/core/child/progress/keySteps.ts');
+  const { isPlainStep } = await import('../src/core/child/progress/pathStops.ts');
   for (const game of ['math:clock', 'art:mixer', 'language:uk-words', 'geography:flags']) {
     const at = keySteps(game, 199);
     assert.ok(at[0] >= KEY_GAP.min && at[0] <= KEY_GAP.max, `${game}: the first key at ${at[0]}`);
@@ -120,13 +121,38 @@ test('keys lie on a path every 3–5 steps, always on the same steps of a game',
     });
     // The same game, the same steps — the draw is the game's id, not chance.
     assert.deepEqual(keySteps(game, 199), at);
-    assert.ok(at.every((s) => hasKey(game, s, 200)));
+
+    // On a path the drawn keys step aside onto the plain steps: a key's badge never covers a gift or a chest.
+    const laid = keyStepsOnPath(game, 200);
+    assert.deepEqual(keyStepsOnPath(game, 200), laid, `${game}: the same path, the same key steps`);
+    assert.equal(laid.length, at.length, `${game}: as many keys as were drawn — none is dropped`);
+    assert.equal(new Set(laid).size, laid.length, `${game}: no two keys on one step`);
+    assert.ok(laid.every((s) => isPlainStep(s, 200)), `${game}: every key stands on a step with nothing drawn on it`);
+    // And none has wandered off: a key moves by two steps at most.
+    at.forEach((drawn, i) => assert.ok(Math.abs(laid[i] - drawn) <= 2, `${game}: a key drawn on ${drawn} ended up on ${laid[i]}`));
+    assert.ok(laid.every((s) => hasKey(game, s, 200)));
     // Passing a key's step earns it; standing on it does not yet.
-    assert.equal(keysOnPath(game, at[0], 200), 0);
-    assert.equal(keysOnPath(game, at[0] + 1, 200), 1);
+    assert.equal(keysOnPath(game, laid[0], 200), 0);
+    assert.equal(keysOnPath(game, laid[0] + 1, 200), 1);
   }
   // Two games do not share one pattern.
   assert.notDeepEqual(keySteps('math:clock', 199), keySteps('art:mixer', 199));
+});
+
+test('what waits on a step is said in one place', async () => {
+  const { giftTierOf, isGiftStep, hasChest, isPlainStep } = await import('../src/core/child/progress/pathStops.ts');
+  const total = 30;
+  assert.equal(giftTierOf(30, total), 'biggest');
+  assert.equal(giftTierOf(20, total), 'big');
+  assert.equal(giftTierOf(25, total), 'small');
+  assert.equal(giftTierOf(26, total), null);
+  // A chest on every third step, never on a gift's and never on the first.
+  assert.equal(hasChest(1, total), false);
+  assert.equal(hasChest(3, total), true);
+  assert.equal(hasChest(15, total), false, 'step 15 is a gift');
+  // A plain step is one with neither.
+  for (let step = 1; step <= total; step += 1) assert.equal(isPlainStep(step, total), !isGiftStep(step, total) && !hasChest(step, total));
+  assert.deepEqual([1, 2, 4, 7, 8].filter((s) => isPlainStep(s, total)), [1, 2, 4, 7, 8]);
 });
 
 test('a key of knowledge is earned on the key steps of any game, and stations are opened with them', async () => {

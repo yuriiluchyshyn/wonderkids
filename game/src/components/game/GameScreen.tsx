@@ -12,7 +12,8 @@ import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { finishDemo, useDemo } from '@/core/app/demo';
 import type { Treasure } from '@/core/theme/theme.types';
-import { hasChest, pickChestTreasure, treasureKey } from '@/core/child/progress/treasures';
+import { pickChestTreasure, treasureKey } from '@/core/child/progress/treasures';
+import { giftTierOf, hasChest, type GiftTier } from '@/core/child/progress/pathStops';
 import { cn } from '@/core/utils/cn';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
@@ -40,16 +41,6 @@ import { KEY } from '@/core/child/world/stations';
 import { spoken, written } from '@/core/language/uk';
 import type { LangCode } from '@/core/language';
 import styles from './GameScreen.module.css';
-
-type GiftTier = 'small' | 'big' | 'biggest' | null;
-
-/** Progression gift earned for completing a 5th / 10th / final step. */
-function giftForStep(step: number, total: number): GiftTier {
-  if (total > 0 && step === total) return 'biggest';
-  if (step % 10 === 0) return 'big';
-  if (step % 5 === 0) return 'small';
-  return null;
-}
 
 const GIFT_META: Record<Exclude<GiftTier, null>, { emoji: string; size: string }> = {
   small: { emoji: '🎀', size: '3.6rem' },
@@ -116,7 +107,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
   const maxSteps = sub ? subSteps(sub) : 0;
   // Free-play games have no ladder: no step gifts, chests or "next level".
   const free = sub ? isFreePlay(sub) : false;
-  const stepGift = free ? null : giftForStep(config.step, maxSteps);
+  const stepGift = free ? null : giftTierOf(config.step, maxSteps);
   // Some steps hide a themed treasure chest the child opens on completion.
   const stepHasChest = !free && hasChest(config.step, maxSteps);
   const collectTreasure = useGameStore((s) => s.collectTreasure);

@@ -1,6 +1,6 @@
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
-import { type Card, type FractionValue, type Glyph, type GridChoicePayload } from '@/core/game/templates/types';
+import { type Card, type FractionBars, type FractionValue, type Glyph, type GridChoicePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import type { LangCode } from '@/core/language';
 import { rewardForStep } from '../difficulty';
@@ -85,6 +85,45 @@ function draw(tier: Exclude<FractionOpsTier, 'mixed'>): Sum {
 
 const same = (x: FractionValue, y: FractionValue) => x.n === y.n && x.d === y.d;
 
+const lcm = (a: number, b: number): number => (a * b) / (gcd(a, b) || 1);
+
+/**
+ * The sum drawn as strips: one strip cut into as many parts as the bottom
+ * number says, as many of them coloured as the top one. Strips cut differently
+ * are re-cut into the same parts first — that is what a common denominator is
+ * to a child. Only `+` and `−` can be shown this way; a product of two
+ * fractions is not one strip beside another.
+ */
+function barsFor(sum: Sum, T: ReturnType<typeof mathTexts>): FractionBars | undefined {
+  const { a, b, op, answer } = sum;
+  if (op !== '+' && op !== '−') return undefined;
+  const W = T.fractionOps;
+  // The one bottom both fractions are written on, and the two of them on it.
+  const d = a.d === b.d ? a.d : lcm(a.d, b.d);
+  const on = (f: FractionValue): FractionValue => ({ n: f.n * (d / f.d), d });
+  const [first, second] = [on(a), on(b)];
+  const total: FractionValue = { n: op === '+' ? first.n + second.n : first.n - second.n, d };
+  // The last stage is the board's own answer, never a simpler one of our own: on a
+  // same-bottom step the answer deliberately keeps its bottom (6/8 stays 6/8 — that is the lesson),
+  // and a strip that ended «and 6/8 is really 3/4» would send the child after a card that is not there.
+  const simpler = same(answer, total) ? undefined : answer;
+  return {
+    op,
+    a,
+    b,
+    ...(a.d === b.d ? {} : { same: { a: first, b: second } }),
+    total,
+    ...(simpler ? { reduced: simpler } : {}),
+    words: {
+      first: W.barFirst(a),
+      second: op === '+' ? W.barAdd(b) : W.barTake(b),
+      ...(a.d === b.d ? {} : { cut: W.barCut(a, b, d) }),
+      total: a.d === b.d ? W.barSameTotal(total) : W.barTotal(total),
+      ...(simpler ? { reduced: W.barReduced(total, simpler) } : {}),
+    },
+  };
+}
+
 /** Near-misses a child makes for real (e.g. adding the denominators too). */
 function distractors({ a, b, op, answer }: Sum): FractionValue[] {
   const typical: FractionValue[] =
@@ -120,6 +159,7 @@ export function generateFractionOps(config: TaskConfig): TaskInstance<GridChoice
   const T = mathTexts(config.lang);
   const tier = fractionOpsTier(config.step);
   const sum = draw(tier === 'mixed' ? pick(['addSame', 'subSame', 'unlike', 'mul', 'div'] as const) : tier);
+  const bars = barsFor(sum, T);
   const glyphs: Glyph[] = [sum.a, sum.op, sum.b, '=', '?'];
   const options: Card[] = shuffle([sum.answer, ...distractors(sum)]).map((f) => ({
     id: `${f.n}/${f.d}`,
@@ -138,6 +178,8 @@ export function generateFractionOps(config: TaskConfig): TaskInstance<GridChoice
       options,
       correctId: `${sum.answer.n}/${sum.answer.d}`,
       hint: T.fractionOps.intro[tier === 'mixed' ? 'unlike' : tier],
+      // Adding and taking away is shown on strips; multiplying and dividing is told in words only.
+      ...(bars ? { bars } : {}),
     },
   };
 }

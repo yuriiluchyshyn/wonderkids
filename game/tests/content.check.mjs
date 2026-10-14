@@ -20,7 +20,74 @@ function unique(ids, what) {
   assert.equal(new Set(ids).size, ids.length, `${what}: duplicate ids ${ids.join(',')}`);
 }
 
+const digitSum = (n) => String(Math.abs(n)).split('').reduce((sum, d) => sum + Number(d), 0);
+/** Divisors whose rule has already been checked against the numbers themselves. */
+const rulesChecked = new Set();
+
+/**
+ * What a task brings to help with itself, whatever its template: a sum of
+ * fractions drawn on strips (`bars`) and the rule for telling a multiple
+ * (`divisible`). Both are read by a child as the truth, so both are measured
+ * against the task's own answer and against arithmetic.
+ */
+function checkHelp(p) {
+  if (p.bars) {
+    const b = p.bars;
+    const [one, two] = b.same ? [b.same.a, b.same.b] : [b.a, b.b];
+    assert.equal(one.d, b.total.d, 'strips: the first fraction is not on the common bottom');
+    assert.equal(two.d, b.total.d, 'strips: the second fraction is not on the common bottom');
+    assert.equal(b.op === '+' ? one.n + two.n : one.n - two.n, b.total.n, 'strips: the coloured parts do not add up');
+    // More than a whole is drawn on a second strip, so only a total of nothing — or of less than nothing — is wrong.
+    assert.ok(b.total.n >= 1, `strips: ${b.total.n}/${b.total.d} colours nothing in`);
+    // Re-cutting only ever cuts the same strip finer — the fraction it stands for does not change.
+    if (b.same) {
+      assert.equal(b.same.a.n * b.a.d, b.a.n * b.same.a.d, 'strips: the first strip changed value when it was re-cut');
+      assert.equal(b.same.b.n * b.b.d, b.b.n * b.same.b.d, 'strips: the second strip changed value when it was re-cut');
+    }
+    // The last thing the lesson says is the answer the board asks for, and no simpler one of its own.
+    const end = b.reduced ?? b.total;
+    assert.equal(`${end.n}/${end.d}`, p.correctId, `strips end on ${end.n}/${end.d}, and the board wants ${p.correctId}`);
+    const lines = [b.words.first, b.words.second, b.words.total, ...(b.same ? [b.words.cut] : []), ...(b.reduced ? [b.words.reduced] : [])];
+    for (const line of lines) assert.ok(line && !line.includes('{'), `strips: an unfilled line «${line}»`);
+  }
+  if (p.divisible) {
+    const d = p.divisible;
+    assert.equal(d.by, p.divisor, 'the lesson is about a different number than the maze');
+    assert.ok(!d.words.rule.includes('{'), `the rule is unfilled: «${d.words.rule}»`);
+    // The lines about the step the child took keep their holes — and only the ones that get filled.
+    for (const [key, line] of Object.entries(d.words)) {
+      for (const hole of line.match(/\{\w+\}/g) ?? []) assert.ok(['{n}', '{times}', '{left}', '{mark}'].includes(hole), `divisible.${key}: ${hole} is never filled`);
+    }
+    // The rule itself must be true of every number, not only of the maze's.
+    if (rulesChecked.has(d.by)) return;
+    rulesChecked.add(d.by);
+    const upTo = 300;
+    switch (d.how) {
+      case 'ending':
+        assert.ok(d.marks.length >= 1 && d.marks.every((m) => m >= 0 && m <= 9), `÷${d.by}: ${d.marks} are not digits`);
+        for (let n = 1; n <= upTo; n += 1) assert.equal(n % d.by === 0, d.marks.includes(n % 10), `÷${d.by}: «ends in ${d.marks}» is wrong about ${n}`);
+        break;
+      case 'digits':
+        for (let n = 1; n <= upTo; n += 1) assert.equal(n % d.by === 0, digitSum(n) % d.by === 0, `÷${d.by}: the sum-of-digits rule is wrong about ${n}`);
+        break;
+      case 'pair':
+        assert.equal(d.marks.length, 2, `÷${d.by}: a pair rule needs two numbers`);
+        for (let n = 1; n <= upTo; n += 1) assert.equal(n % d.by === 0, d.marks.every((m) => n % m === 0), `÷${d.by}: «divides by ${d.marks}» is wrong about ${n}`);
+        break;
+      case 'twice':
+        assert.equal(2 ** d.marks.length, d.by, `÷${d.by}: ${d.marks.length} halvings make ÷${2 ** d.marks.length}`);
+        break;
+      case 'count':
+        assert.equal(d.marks.length, 0, `÷${d.by}: a number counted out has nothing to mark`);
+        break;
+      default:
+        assert.fail(`÷${d.by}: unknown rule ${d.how}`);
+    }
+  }
+}
+
 function checkPayload(p, validate) {
+  checkHelp(p);
   switch (p.template) {
     case 'UI_GRID_CHOICE': {
       const ids = p.options.map((o) => o.id);

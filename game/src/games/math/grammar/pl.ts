@@ -3,6 +3,7 @@ import { num, numberWords, ordinalWords, type Gender } from '@/core/language/pl'
 import { clockExplain, partOfDay } from './clockExplain';
 import type { CurrencyId } from '@/core/game/content/currency';
 import type { MathTexts, MeasureWords, Shape } from '@/games/math/grammar/types';
+import { divisibleWords } from './divisible';
 import { fill } from '@/core/language/fill';
 import J from '@/locales/app/pl/games/math.json';
 import { chainTexts } from './expr';
@@ -84,6 +85,13 @@ export const pl: MathTexts = {
     intro: J.fractionOps.intro,
     // «podzielić przez jedną drugą» — after «przez» a single part stands in the accusative.
     prompt: (a, op, b) => fill(J.fractionOps.prompt[1], { a: fraction(a.n, a.d), op: sign(op), op2: op === '÷' && b.n === 1 ? fill(J.fractionOps.prompt[2], { b: ordinalWords(b.d, 'f-acc') }) : fraction(b.n, b.d) }),
+    barFirst: (a) => fill(J.fractionOps.barFirst, { d: a.d, n: a.n, a: fraction(a.n, a.d) }),
+    barAdd: (b) => fill(J.fractionOps.barAdd, { n: b.n, d: b.d }),
+    barTake: (b) => fill(J.fractionOps.barTake, { n: b.n, d: b.d }),
+    barCut: (a, b, d) => fill(J.fractionOps.barCut, { d, a: fraction(a.n, a.d), b: fraction(b.n, b.d), an: fraction(a.n * (d / a.d), d), bn: fraction(b.n * (d / b.d), d) }),
+    barSameTotal: (total) => fill(J.fractionOps.barSameTotal, { n: total.n, d: total.d }),
+    barTotal: (total) => fill(J.fractionOps.barTotal, { n: total.n, d: total.d }),
+    barReduced: (total, simpler) => fill(J.fractionOps.barReduced, { total: fraction(total.n, total.d), simpler: fraction(simpler.n, simpler.d) }),
   },
 
   compare: {
@@ -133,6 +141,7 @@ export const pl: MathTexts = {
       fill(J.maze.hint[1], { k }) +
       (deadEnds ? J.maze.hint[2] : '') +
       (negative ? J.maze.hint[3] : ''),
+    divisibleWords: (k, how, marks) => divisibleWords(J.maze.rule, k, how, marks),
   },
 
   shop: {

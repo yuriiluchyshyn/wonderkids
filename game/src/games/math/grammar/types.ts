@@ -1,5 +1,5 @@
 import type { ModuleTexts } from '@/core/game/kernel/types';
-import type { ClockTime, ExplainLine } from '@/core/game/templates/types';
+import type { ClockTime, Divisible, DivisibleRule, ExplainLine } from '@/core/game/templates/types';
 import type { CurrencyId } from '@/core/game/content/currency';
 import type { ExprToken, MathOp } from '../ids';
 import type { FractionOpsTier } from '../generators/fractionOps';
@@ -76,6 +76,17 @@ export interface MathTexts {
     intro: Record<FractionOpsTier, string>;
     /** The sum as it is said: «Обчисли: 1 з 2 плюс 1 з 4». */
     prompt(a: Fraction, op: string, b: Fraction): string;
+    /** The lesson drawn on strips (`FractionBars`), a line to a stage. */
+    barFirst(a: Fraction): string;
+    barAdd(b: Fraction): string;
+    barTake(b: Fraction): string;
+    /** Two strips cut differently, re-cut into `d` parts each. */
+    barCut(a: Fraction, b: Fraction, d: number): string;
+    /** The result when the bottoms were the same from the start — the bottom did not move. */
+    barSameTotal(total: Fraction): string;
+    barTotal(total: Fraction): string;
+    /** The same result written more simply: «4 з 6 — це те саме, що 2 з 3.» */
+    barReduced(total: Fraction, simpler: Fraction): string;
   };
 
   compare: {
@@ -112,6 +123,12 @@ export interface MathTexts {
     table(k: number): string;
     divisible(k: number): string;
     hint(k: number, deadEnds: boolean, negative: boolean): string;
+    /**
+     * Why a number is, or is not, a multiple of `k` — the rule, and the lines
+     * about the number the child stepped on. Those keep their `{holes}`
+     * (`{n}`, `{times}`, `{left}`, `{mark}`): the number is not known yet.
+     */
+    divisibleWords(k: number, how: DivisibleRule, marks: number[]): Divisible['words'];
   };
 
   shop: {

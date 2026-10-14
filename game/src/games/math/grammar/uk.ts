@@ -5,6 +5,7 @@ import { LANGUAGES } from '@/core/language';
 import type { MathTexts, MeasureWords } from '@/games/math/grammar/types';
 import type { MathOp } from '@/games/math/ids';
 import { chainTexts } from './expr';
+import { divisibleWords } from './divisible';
 import { fill } from '@/core/language/fill';
 import J from '@/locales/app/uk/games/math.json';
 
@@ -86,6 +87,13 @@ export const uk: MathTexts = {
   fractionOps: {
     intro: J.fractionOps.intro,
     prompt: (a, op, b) => fill(J.fractionOps.prompt, { a: fraction(a.n, a.d), op: sign(op), b: fraction(b.n, b.d) }),
+    barFirst: (a) => fill(J.fractionOps.barFirst, { d: a.d, n: a.n, a: fraction(a.n, a.d) }),
+    barAdd: (b) => fill(J.fractionOps.barAdd, { n: b.n, d: b.d }),
+    barTake: (b) => fill(J.fractionOps.barTake, { n: b.n, d: b.d }),
+    barCut: (a, b, d) => fill(J.fractionOps.barCut, { d, a: fraction(a.n, a.d), b: fraction(b.n, b.d), an: fraction(a.n * (d / a.d), d), bn: fraction(b.n * (d / b.d), d) }),
+    barSameTotal: (total) => fill(J.fractionOps.barSameTotal, { n: total.n, d: total.d }),
+    barTotal: (total) => fill(J.fractionOps.barTotal, { n: total.n, d: total.d }),
+    barReduced: (total, simpler) => fill(J.fractionOps.barReduced, { total: fraction(total.n, total.d), simpler: fraction(simpler.n, simpler.d) }),
   },
 
   compare: {
@@ -133,6 +141,7 @@ export const uk: MathTexts = {
       fill(J.maze.hint[1], { k }) +
       (deadEnds ? J.maze.hint[2] : '') +
       (negative ? J.maze.hint[3] : ''),
+    divisibleWords: (k, how, marks) => divisibleWords(J.maze.rule, k, how, marks),
   },
 
   shop: {

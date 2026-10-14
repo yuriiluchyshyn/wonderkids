@@ -2,7 +2,7 @@ import type { LangCode } from '@/core/language';
 import { mathTexts } from '../grammar';
 import { Mechanics } from '@/core/game/kernel/mechanics';
 import type { TaskConfig, TaskInstance } from '@/core/game/kernel/types';
-import type { NumberMazePayload } from '@/core/game/templates/types';
+import type { DivisibleRule, NumberMazePayload } from '@/core/game/templates/types';
 import { pick, randInt, shuffle, uid } from '@/core/utils/random';
 import { rewardForStep } from '../difficulty';
 
@@ -25,6 +25,35 @@ const FIRST_NEGATIVE = 13;
 export function mazeSize(step: number): number {
   if (step >= FIRST_6X6) return 6;
   return step >= FIRST_5X5 ? 5 : 4;
+}
+
+/**
+ * How a multiple of `k` gives itself away — what the lesson under the board
+ * draws when a step goes wrong. Each divisor of `DIVISORS` has its own tell:
+ * the last digit (2, 5, 10), the sum of the digits (3, 9), halving twice
+ * (4, 8), two smaller numbers at once (6). Seven has none worth learning, so
+ * it is counted out instead.
+ */
+export function divisibleRule(k: number): { how: DivisibleRule; marks: number[] } {
+  switch (k) {
+    case 2:
+      return { how: 'ending', marks: [0, 2, 4, 6, 8] };
+    case 5:
+      return { how: 'ending', marks: [0, 5] };
+    case 10:
+      return { how: 'ending', marks: [0] };
+    case 3:
+    case 9:
+      return { how: 'digits', marks: [] };
+    case 4:
+      return { how: 'twice', marks: [2, 2] };
+    case 8:
+      return { how: 'twice', marks: [2, 2, 2] };
+    case 6:
+      return { how: 'pair', marks: [2, 3] };
+    default:
+      return { how: 'count', marks: [] };
+  }
 }
 
 /** Child-level explanation of what is new at this point of the path. */
@@ -105,6 +134,7 @@ export function generateMaze(config: TaskConfig): TaskInstance<NumberMazePayload
   const T = mathTexts(config.lang).maze;
   const { step } = config;
   const k = DIVISORS[(step - 1) % DIVISORS.length];
+  const rule = divisibleRule(k);
   const size = mazeSize(step);
   const negative = step >= FIRST_NEGATIVE;
   const inOrder = !negative && step > 6 && step % 2 === 0;
@@ -142,6 +172,8 @@ export function generateMaze(config: TaskConfig): TaskInstance<NumberMazePayload
       open,
       divisor: k,
       hint: T.hint(k, open.length > 0, negative),
+      // Why a number is, or is not, a multiple of k — drawn about the very number stepped on.
+      divisible: { by: k, ...rule, words: T.divisibleWords(k, rule.how, rule.marks) },
     },
   };
 }

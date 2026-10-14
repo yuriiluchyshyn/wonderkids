@@ -1870,7 +1870,14 @@
     "prompt": {
       "1": "Oblicz: {a} {op} {op2}",
       "2": "jedną {b}"
-    }
+    },
+    "barFirst": "Oto pasek podzielony na jednakowe części — jest ich {d}. Zamalowane: {n} z {d}, czyli {a}.",
+    "barAdd": "Teraz dołącza drugi pasek: jeszcze {n} z {d}.",
+    "barTake": "Teraz zabieramy {n} z {d}: tyle części gaśnie.",
+    "barCut": "Części są różnej wielkości, więc nie da się ich złożyć. Pokrójmy oba paski na {d}: {a} to {an}, a {b} to {bn}. Teraz części są takie same!",
+    "barSameTotal": "Teraz zamalowane: {n} z {d}. Dolna liczba się nie zmieniła — części są jednakowe, policzyliśmy je tylko razem.",
+    "barTotal": "Razem — {n} z {d}.",
+    "barReduced": "A {total} to dokładnie to samo co {simpler}: ten sam pasek, tylko zapisany krócej."
   },
   "compare": {
     "plus": "{a} plus {b}",
@@ -2008,6 +2015,22 @@
       "1": "Szukaj sąsiedniej kratki z liczbą, która dzieli się przez {k} bez reszty. Podświetlę następny krok.",
       "2": " Jeśli trafisz w ślepy zaułek, wróć.",
       "3": " Znak minus nie przeszkadza: patrz na samą liczbę."
+    },
+    "rule": {
+      "ending": "Przez {k} dzielą się liczby, które kończą się na {marks}.",
+      "digits": "Przez {k} dzieli się ta liczba, której suma cyfr też dzieli się przez {k}.",
+      "twice": {
+        "2": "Przez {k} dzieli się to, co można podzielić przez 2, a potem jeszcze raz przez 2.",
+        "3": "Przez {k} dzieli się to, co można podzielić przez 2, potem jeszcze przez 2 i jeszcze raz przez 2."
+      },
+      "pair": "Przez {k} dzielą się liczby, które dzielą się i przez {a}, i przez {b} — obie zasady razem.",
+      "count": "Dla {k} nie ma krótkiej zasady: licz po {k} — {k}, {k2}, {k3} i dalej.",
+      "left": "W {n} mieści się {times} razy {k}, a {left} jeszcze zostaje — dlatego {n} nie dzieli się przez {k}.",
+      "exact": "W {n} mieści się dokładnie {times} razy {k} i nic nie zostaje — {n} dzieli się przez {k}.",
+      "whyEnding": "{n} kończy się na {mark}, a takiej cyfry nie ma na liście {marks}.",
+      "whyDigits": "Suma cyfr liczby {n} to {mark}, a {mark} nie dzieli się przez {k}.",
+      "whyOther": "{k} nie mieści się w {n} równo.",
+      "or": " lub "
     }
   },
   "shop": {

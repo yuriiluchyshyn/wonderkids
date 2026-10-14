@@ -7,7 +7,7 @@ import { useGameStore } from '@/core/child/store/useGameStore';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { useSound } from '@/core/audio/useSound';
 import { subSteps, pathKey } from '@/core/child/progress/path';
-import { hasChest } from '@/core/child/progress/treasures';
+import { giftTierOf, hasChest, type GiftTier } from '@/core/child/progress/pathStops';
 import { hasKey } from '@/core/child/progress/keySteps';
 import { KEY } from '@/core/child/world/stations';
 import type { CatalogEntry } from './catalog';
@@ -18,16 +18,6 @@ interface PathModalProps {
   onClose: () => void;
   /** Start a session for this entry at the chosen step. */
   onPlay: (entry: CatalogEntry, step: number) => void;
-}
-
-type GiftTier = 'small' | 'big' | 'biggest' | null;
-
-/** Which (if any) progression gift sits on a given step. */
-function giftTierFor(step: number, total: number): GiftTier {
-  if (step === total) return 'biggest';
-  if (step % 10 === 0) return 'big';
-  if (step % 5 === 0) return 'small';
-  return null;
 }
 
 const GIFT_EMOJI: Record<Exclude<GiftTier, null>, string> = {
@@ -100,9 +90,9 @@ export function PathModal({ entry, onClose, onPlay }: PathModalProps) {
               const isCurrent = n === current;
               const isSelected = n === selected;
               const offset = Math.sin(n * 0.6) * 32;
-              const gift = giftTierFor(n, totalSteps);
+              const gift = giftTierOf(n, totalSteps);
               const chest = hasChest(n, totalSteps);
-              // A key of knowledge waits on this step (every 3–5 steps, always the same ones).
+              // A key of knowledge waits on this step — always a plain one, so its badge covers no gift and no chest.
               const key = hasKey(game, n, totalSteps);
               const fruit = theme.pathIcons[n % theme.pathIcons.length];
               const content = isCurrent

@@ -1480,7 +1480,14 @@
       "div": "To divide by a fraction, flip the second fraction and multiply. Dividing by one half is the same as multiplying by two.",
       "mixed": "All the operations are here together. Look carefully at the sign and remember the rule for each one!"
     },
-    "prompt": "Work it out: {a} {op} {b}"
+    "prompt": "Work it out: {a} {op} {b}",
+    "barFirst": "Here is a strip cut into equal parts — {d} of them. Coloured in: {n} out of {d}, which is {a}.",
+    "barAdd": "Now the second strip joins in: {n} more out of {d}.",
+    "barTake": "Now we take {n} out of {d} away: that many parts go out.",
+    "barCut": "The parts are different sizes, so they cannot be put together. Let us cut both strips into {d}: {a} becomes {an}, and {b} becomes {bn}. Now the parts match!",
+    "barSameTotal": "Now it is {n} out of {d}. The bottom number did not move — the parts are the same size, we only counted them together.",
+    "barTotal": "Altogether — {n} out of {d}.",
+    "barReduced": "And {total} is the very same as {simpler}: the same strip, written more shortly."
   },
   "compare": {
     "plus": "{a} plus {b}",
@@ -1588,6 +1595,22 @@
       "1": "Look for a neighboring square with a number that divides by {k} with nothing left over. I will light up the next step.",
       "2": " If you walk into a dead end, go back.",
       "3": " The minus sign does not matter: look at the number itself."
+    },
+    "rule": {
+      "ending": "Numbers that divide by {k} end in {marks}.",
+      "digits": "A number divides by {k} when the sum of its digits divides by {k} too.",
+      "twice": {
+        "2": "A number divides by {k} when you can halve it, and halve what is left.",
+        "3": "A number divides by {k} when you can halve it, halve that, and halve it once again."
+      },
+      "pair": "Numbers that divide by {k} divide by {a} and by {b} — both rules at once.",
+      "count": "There is no short rule for {k}: count in {k}s — {k}, {k2}, {k3} and on.",
+      "left": "{times} lots of {k} fit into {n}, and {left} is still left over — so {n} does not divide by {k}.",
+      "exact": "Exactly {times} lots of {k} fit into {n}, with nothing left over — {n} divides by {k}.",
+      "whyEnding": "{n} ends in {mark}, and {mark} is not in the list {marks}.",
+      "whyDigits": "The digits of {n} add up to {mark}, and {mark} does not divide by {k}.",
+      "whyOther": "Lots of {k} do not fit into {n} evenly.",
+      "or": " or "
     }
   },
   "shop": {
