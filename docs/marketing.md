@@ -226,7 +226,7 @@ Ads Manager: `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=10
 |---|---|---|
 | `ua/v1-2026-10-launch` | Картинка, заставка 12 с, «всередині гри» 24,6 с — оголошення української кампанії вище | завершена |
 | `pl/v1-2026-10-launch`, `en/v1-2026-10-launch` | Картинка, заставка 12 с, ролик «Грати» 18 с | відхилена: зачіпка «займіть дитину» |
-| `pl/v2-2026-10-calm-learning` | Сценарії чотирьох роликів і каруселі (`script.md`) | чернетка |
+| `pl/v2-2026-10-calm-learning` | Ролики «Poznaj Pulsar Kids» і «Gra tłumaczy», статична картинка — поза git, у `WonderKids/wonderkids-marketing-handoff/` | пакет для маркетолога |
 
 Як це зроблено:
 
@@ -259,6 +259,10 @@ node render.mjs 'play.html?lang=en&cuts=/tmp/cuts-en&counts=127,126,127,127' 108
 Рендери запускати **по одному**: два одночасні можуть під'єднатися до одного браузера й зіпсувати кадри одне одному.
 
 Для відео «всередині гри» спершу потрібен запис: запустити застосунок (`npx vite --port 4399`), виконати `. recording/tips.env && node recording/record.mjs /tmp/frames`, а тоді відрендерити `inside.html` з параметрами `frames`, `count`, `speed`, `cues` (описані в самому файлі).
+
+### Ролики v2 (рушій `reel`)
+
+Ролики з v2 і пакет для маркетолога живуть поза git, у `WonderKids/wonderkids-marketing-handoff/`: рушій — `engine/` (як записати гру й зібрати ролик, голос, музика, сервіси — `engine/README.md`), готові матеріали — `marketing-handoff/<мова>/<версія>/`. Ключ ElevenLabs — `engine/.env`.
 
 Обмеження: файл для завантаження через браузерне розширення має бути до 10 МБ; тому бітрейт у `encode.swift` — 3 Мбіт/с.
 
