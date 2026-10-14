@@ -6,9 +6,9 @@ import { test } from 'node:test';
 import { ALIKE_LIMIT, GAMES_SLUG, alikeness, catalogNumbers, gamesPages, trialOfGame } from '../build/games.ts';
 import { legalText } from '../build/legal.ts';
 import { markdownToHtml } from '../build/markdown.ts';
-import { loadDictionaries, renderGamesPage, renderLegalPage, renderPage } from '../build/pages.ts';
+import { countedWords, loadDictionaries, renderGamesPage, renderLegalPage, renderPage } from '../build/pages.ts';
 import { AI_CRAWLERS, llmsTxt, robotsTxt } from '../build/seo.ts';
-import { DEFAULT_LANG, SITE_LANGS, sitePath } from '../src/languages.ts';
+import { DEFAULT_LANG, SITE_LANGS, sitePath, type SiteLang } from '../src/languages.ts';
 import { LEGAL_DOCS, LEGAL_UPDATED, legalPath } from '../src/legal.ts';
 import { OPERATOR, operatorGaps } from '../src/operator.ts';
 
@@ -18,6 +18,10 @@ const dictionaries = loadDictionaries();
 const template = read('../index.html');
 const legalTemplate = read('../legal.html');
 const gamesTemplate = read('../games.html');
+
+/** A text of the dictionary as the page shows it: `{games}`, `{levels}` and `{galaxies}` filled from the catalogue. */
+const counts = Object.fromEntries(SITE_LANGS.map((lang) => [lang, countedWords(lang, dictionaries).params])) as Record<SiteLang, Record<string, string | number>>;
+const filled = (lang: SiteLang, text: unknown): string => String(text).replace(/\{(\w+)\}/g, (all, name: string) => (name in counts[lang] ? String(counts[lang][name]) : all));
 
 test('the site’s dictionary says the same things in every language', () => {
   assert.ok(JSON.stringify(dictionaries[DEFAULT_LANG]).length > 5_000, 'the dictionary is loaded');
@@ -44,8 +48,8 @@ test('the page is made from one template for every language', () => {
     // The questions in the structured data are the ones a reader sees on the page.
     const asked = (graph[4] as unknown as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] }).mainEntity;
     const faq = Object.values(dictionaries[lang].faq as Dict).filter((pair): pair is Dict => typeof pair !== 'string');
-    assert.deepEqual(asked.map((q) => [q.name, q.acceptedAnswer.text]), faq.map((pair) => [pair.title, pair.text]));
-    for (const pair of faq) assert.ok(String(pair.text).length <= 420, `${lang}: «${pair.title}» is answered briefly`);
+    assert.deepEqual(asked.map((q) => [q.name, q.acceptedAnswer.text]), faq.map((pair) => [pair.title, filled(lang, pair.text)]));
+    for (const pair of faq) assert.ok(filled(lang, pair.text).length <= 420, `${lang}: «${pair.title}» is answered briefly`);
     assert.ok(graph[0]['@id'].startsWith(`__SITE_URL__/${sitePath(lang)}#`));
     for (const node of graph.slice(1, 4)) assert.ok(node['@id'].startsWith('__SITE_URL__/#'), `${lang}: ${node['@type']} has one id for every language`);
     assert.deepEqual(graph[1].inLanguage, [...SITE_LANGS]);
@@ -59,7 +63,9 @@ test('the page is made from one template for every language', () => {
 
 test('what a search result shows fits into it', () => {
   for (const lang of SITE_LANGS) {
-    const { title, description } = dictionaries[lang].meta as Record<string, string>;
+    const { title } = dictionaries[lang].meta as Record<string, string>;
+    // Measured as a reader sees it: the counts of the catalogue are already filled in.
+    const description = filled(lang, (dictionaries[lang].meta as Record<string, string>).description);
     assert.ok(title.length <= 62, `${lang}: the title is ${title.length} characters — a search result cuts it at about 60`);
     assert.ok(description.length >= 120 && description.length <= 160, `${lang}: the description is ${description.length} characters — a search result shows 150–160`);
     // What the page is comes first; the name closes the line.
@@ -73,14 +79,17 @@ test('llms.txt tells the page in plain words, with the page’s own numbers', ()
   const text = llmsTxt(URLS, dictionaries);
   assert.ok(text.startsWith('# Pulsar Kids\n'));
   assert.ok(!/<[a-z]/.test(text) && !text.includes('undefined') && !text.includes('[object'), 'plain text, every line filled');
-  const en = dictionaries.en as { games: { title: string; math: { title: string; tag: string } } };
-  assert.ok(text.includes(`## ${en.games.title}`) && text.includes(`### ${en.games.math.title} (${en.games.math.tag})`));
+  const en = dictionaries.en as { games: { title: string; math: { title: string } } };
+  // Its numbers are the catalogue's, counted — the dictionary says `{games}`, never a number of its own.
+  assert.ok(!text.includes('{games}'), 'every number is filled in');
+  assert.ok(text.includes(`## ${en.games.title.replace('{games}', String(catalogNumbers('en').games))}`));
+  assert.ok(text.includes(`### ${en.games.math.title} (${countedWords('en', dictionaries).perGalaxy.countMath})`));
   for (const lang of SITE_LANGS) assert.ok(text.includes(`(${URLS.site}/${sitePath(lang)})`), `names the ${lang} page`);
   assert.ok(text.includes(`(${URLS.play}${TRIAL_PATH})`));
   // Every question of the page, with its answer — in each language's own Markdown.
   for (const lang of SITE_LANGS) {
     const md = llmsTxt(URLS, dictionaries, lang);
-    for (const pair of Object.values(dictionaries[lang].faq as Dict)) if (typeof pair !== 'string') assert.ok(md.includes(`### ${pair.title}\n\n${pair.text}`), `${lang}: ${pair.title}`);
+    for (const pair of Object.values(dictionaries[lang].faq as Dict)) if (typeof pair !== 'string') assert.ok(md.includes(`### ${pair.title}\n\n${filled(lang, pair.text)}`), `${lang}: ${pair.title}`);
   }
 });
 
@@ -189,19 +198,20 @@ test('every game has a page of its own, with real tasks from it and a way straig
     // That none is closed is `visibility.test.ts`'s business.
     assert.equal(alikeness('<h2>a</h2><p>own words</p><section class="more"><p>shared</p></section>', '<p>a</p><p>shared</p>'), 1 / 10);
 
-    // What the main page says in numbers is what the catalogue has.
-    // The two big numbers are counted (`{{@gamesCount}}`, `{{@levelsCount}}`); what the copy says in words must agree.
-    const words = dictionaries[lang] as { games: Record<string, { tag?: string } | string>; meta: { description: string }; faq: { what: { text: string } } };
-    for (const text of [words.meta.description, words.faq.what.text]) assert.ok(text.includes(String(numbers.games)), `${lang}: «${text.slice(0, 50)}…» names ${numbers.games} games`);
-    assert.ok(String(words.games.title).includes(String(numbers.games)), `${lang}: games.title names ${numbers.games} games`);
+    // What the main page says in numbers is what the catalogue has — and not one of those numbers is typed
+    // into a text: the build counts them (`countedWords`), so adding a game to the game changes the page.
+    const words = dictionaries[lang] as { games: Record<string, Record<string, string> | string>; meta: { description: string }; faq: { what: { text: string } } };
+    for (const [where, text] of [['meta.description', words.meta.description], ['faq.what.text', words.faq.what.text], ['games.title', String(words.games.title)]] as const)
+      assert.ok(text.includes('{games}'), `${lang}: ${where} writes down how many games there are — say «{games}» and let the build count them`);
+    const home = renderPage(template, lang, URLS.site, dictionaries);
+    const counted = countedWords(lang, dictionaries);
     for (const [galaxy, count] of Object.entries(numbers.perGalaxy)) {
-      const said = words.games[galaxy] as { tag?: string };
-      const tag = said.tag ?? String(count === 1 ? words.games.oneGame : count === 2 ? words.games.twoGames : '');
-      assert.ok(tag.startsWith(`${count} `), `${lang}: the ${galaxy} card says «${tag}», the catalogue has ${count}`);
+      const tag = counted.perGalaxy[`count${galaxy.charAt(0).toUpperCase()}${galaxy.slice(1)}`];
+      assert.ok(tag?.startsWith(`${count} `), `${lang}: the ${galaxy} card says «${tag}», the catalogue has ${count}`);
+      assert.ok(home.includes(`>${tag}<`), `${lang}: the ${galaxy} card does not show «${tag}» — index.html asks for another key than {{@count…}}`);
     }
     // And the main page leads to the pages of games.
-    const home = renderPage(template, lang, URLS.site, dictionaries);
-    assert.ok(home.includes(`<b>${numbers.games}</b>`) && home.includes(`<b>${numbers.steps}</b>`), `${lang}: the main page counts its games and steps`);
+    assert.ok(home.includes(`<b>${numbers.games}</b>`) && home.includes(`<b>${numbers.steps}</b>`) && home.includes(`<b>${numbers.galaxies}</b>`), `${lang}: the main page counts its games, steps and galaxies`);
     assert.ok(home.includes(`href="/${sitePath(lang)}${GAMES_SLUG}"`));
     for (const galaxy of Object.keys(numbers.perGalaxy)) assert.ok(home.includes(`href="/${sitePath(lang)}${GAMES_SLUG}${galaxy}/"`), `${lang}: the main page leads to ${galaxy}`);
   }

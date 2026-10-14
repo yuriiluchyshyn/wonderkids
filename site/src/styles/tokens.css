@@ -12,5 +12,8 @@
   --accent: var(--pulsar-accent);
   --sun: var(--pulsar-sun);
   --radius: 26px;
+  /* The bar at the top of every page, line under it included: a heading that stays in sight while
+     the page scrolls has to know where the bar ends (`header.css` pins the bar to it, `games.css` sticks under it). */
+  --bar-h: 65px;
   color-scheme: dark;
 }

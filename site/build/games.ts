@@ -138,16 +138,20 @@ export function gamesPages(lang: SiteLang, urls: PublicUrls, dictionaries: Dicti
   /** A search result shows about sixty characters of a title: the name closes it while it fits, and gives way when it does not. */
   const titled = (title: string): string => (title.length + BRAND.length <= TITLE_ROOM ? title + BRAND : title);
 
-  /** A game as a card: where it is listed — on its galaxy's page, on the page of all games, beside another game. */
+  /**
+   * A game as a card: where it is listed — on its galaxy's page, on the page of all games, beside
+   * another game. The pictogram stands beside the words, not above them (`games.css`, `.card-game`),
+   * so the card is a row shorter and a phone shows more of the list at once.
+   */
   const card = (galaxy: CatalogGalaxy, game: CatalogGame, hidden = false): string => {
     const [from, to] = agesOf(game);
-    return `<article class="card"${hidden ? ' hidden' : ''}><div class="icon emoji" aria-hidden="true">${esc(game.icon)}</div><h3><a href="${at(gamePageSlug(galaxy.id, game.sub))}">${esc(game.title)}</a></h3><p>${esc(sentence(game.blurb))}</p><span class="tag">${esc(t('agesValue', { from, to }))}</span></article>`;
+    return `<article class="card card-game"${hidden ? ' hidden' : ''}><div class="icon emoji" aria-hidden="true">${esc(game.icon)}</div><div class="card-body"><h3><a href="${at(gamePageSlug(galaxy.id, game.sub))}">${esc(game.title)}</a></h3><p>${esc(sentence(game.blurb))}</p><span class="tag">${esc(t('agesValue', { from, to }))}</span></div></article>`;
   };
 
   const tryButton = (id: string): string =>
     `<div class="try"><a class="btn btn-try" data-portal="play" data-trial href="${esc(trialOfGame(urls.play, id))}"><span class="emoji" aria-hidden="true">🚀</span> ${esc(t('try'))}</a><p class="try-note"><span class="emoji" aria-hidden="true">✅</span> ${esc(t('tryNote'))}</p></div>`;
 
-  const sampleCard = (game: CatalogGame, task: CatalogSample): string => {
+  const sampleCard = (task: CatalogSample): string => {
     const answers = task.answers
       ? `<p class="task-label">${esc(t('answers'))}</p><ul class="answers">${task.answers.map((answer) => `<li${answer === task.right ? ' class="right"' : ''}>${esc(answer)}${answer === task.right ? ' ✓' : ''}</li>`).join('')}</ul>`
       : task.right
@@ -155,8 +159,8 @@ export function gamesPages(lang: SiteLang, urls: PublicUrls, dictionaries: Dicti
         : task.board
           ? `<p class="task-label">${esc(t('board'))}</p><ul class="answers">${task.board.map((thing) => `<li>${esc(thing)}</li>`).join('')}</ul>`
           : '';
-    const heading = game.kind === 'path' ? `<h3>${esc(t('step', { step: task.step, steps: game.steps }))}</h3>` : '';
-    return `<article class="card task">${heading}<p class="task-text">${esc(task.prompt)}</p>${answers}</article>`;
+    // Which step of the path a task came from is the game's own business — the card shows the task itself.
+    return `<article class="card task"><p class="task-text">${esc(task.prompt)}</p>${answers}</article>`;
   };
 
   const gamePage = (galaxy: CatalogGalaxy, game: CatalogGame): GamesPage => {
@@ -192,7 +196,7 @@ export function gamesPages(lang: SiteLang, urls: PublicUrls, dictionaries: Dicti
       `<p class="lead">${esc(sentence(game.blurb))}</p>`,
       about ? `<p class="about">${esc(about)}</p>` : '',
       tryButton(game.id),
-      `<section><h2>${esc(t('samples'))}</h2><p class="sub">${esc(t(game.kind === 'path' ? 'samplesLead' : 'samplesLeadFree'))}</p><div class="grid">${game.samples.map((task) => sampleCard(game, task)).join('')}</div></section>`,
+      `<section><h2>${esc(t('samples'))}</h2><p class="sub">${esc(t('samplesLead'))}</p><div class="grid">${game.samples.map((task) => sampleCard(task)).join('')}</div></section>`,
       game.intro ? `<section><h2>${esc(t('tells'))}</h2><blockquote class="tells">${esc(game.intro)}</blockquote></section>` : '',
       `<section><h2>${esc(t('facts'))}</h2><dl class="facts">${facts.map(([name, value]) => `<div><dt>${esc(name)}</dt><dd>${shownAs[name] ?? esc(value)}</dd></div>`).join('')}</dl></section>`,
       // Every other game of the galaxy is built into the page; a visitor's script shows a few of them, drawn anew each visit (`inner.ts`).
@@ -213,7 +217,7 @@ export function gamesPages(lang: SiteLang, urls: PublicUrls, dictionaries: Dicti
       '',
       `## ${t('samples')}`,
       '',
-      ...game.samples.map((task) => `- ${game.kind === 'path' ? `${t('step', { step: task.step, steps: game.steps })}: ` : ''}${task.prompt}${task.right ? ` — ${t('right')}: ${task.right}` : task.board ? ` — ${t('board')}: ${task.board.join(', ')}` : ''}`),
+      ...game.samples.map((task) => `- ${task.prompt}${task.right ? ` — ${t('right')}: ${task.right}` : task.board ? ` — ${t('board')}: ${task.board.join(', ')}` : ''}`),
       '',
       `[${t('try')}](${trialOfGame(urls.play, game.id)}) — ${t('tryNote')}`,
       '',
@@ -301,7 +305,8 @@ export function gamesPages(lang: SiteLang, urls: PublicUrls, dictionaries: Dicti
       trail.html,
       `<h1>${esc(t('indexTitle'))}</h1>`,
       `<p class="lead">${esc(lead)}</p>`,
-      ...galaxies.map((galaxy) => `<section><h2><span class="emoji" aria-hidden="true">${esc(galaxy.icon)}</span> <a href="${at(galaxySlug(galaxy.id))}">${esc(galaxy.title)}</a> <small>${esc(t('gamesCount', { count: galaxy.games.length }))}</small></h2><div class="grid">${galaxy.games.map((game) => card(galaxy, game)).join('')}</div></section>`),
+      // A galaxy at a time; its heading stays under the bar while its games scroll by (`games.css`, `.galaxy > h2`).
+      ...galaxies.map((galaxy) => `<section class="galaxy"><h2><span class="emoji" aria-hidden="true">${esc(galaxy.icon)}</span> <a href="${at(galaxySlug(galaxy.id))}">${esc(galaxy.title)}</a> <small>${esc(t('gamesCount', { count: galaxy.games.length }))}</small></h2><div class="grid">${galaxy.games.map((game) => card(galaxy, game)).join('')}</div></section>`),
     ].join('\n');
     return {
       kind: 'index',

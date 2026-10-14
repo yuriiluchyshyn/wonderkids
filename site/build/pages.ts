@@ -1,4 +1,4 @@
-import { createTranslator, type Dict } from '@pulsar/i18n';
+import { createTranslator, type Dict, type Params } from '@pulsar/i18n';
 import { CONTACT_EMAIL, type PublicUrls } from '@pulsar/platform';
 import { readFileSync } from 'node:fs';
 import type { Plugin } from 'vite';
@@ -32,7 +32,13 @@ import { legalText } from './legal.ts';
  *   {{json:section}}       a whole section as a JSON object — the words of a script
  *   {{@lang}} {{@path}} {{@home}} {{@ogLocale}} {{@langShort}}  facts about the page (`@home` — the language's main page; on it the same as `@path`)
  *   {{@email}}                                                  where to write
- *   {{@gamesCount}} {{@levelsCount}}                            how many games and steps the language has (`@pulsar/catalog`)
+ *   {{@gamesCount}} {{@levelsCount}} {{@galaxiesCount}}         how many games, steps and galaxies the language has (`@pulsar/catalog`)
+ *   {{@countMath}} {{@countArt}} …                              how many games a galaxy has, in words («14 ігор»), one fact per galaxy of the catalogue
+ *
+ * How many games there are is never typed into a text either: every text of
+ * the dictionary may say `{games}`, `{levels}` or `{galaxies}`, and the build
+ * fills them from the game's own catalogue — so adding a game to the game
+ * changes what the site says about it (`build/games.ts`, `catalogNumbers`).
  *   {{@docTitle}} {{@docDescription}} {{@docBody}} {{@docUpdatedIso}}   `legal.html` only: the text it holds
  *   {{@pageTitle}} {{@pageDescription}} {{@pageBody}} {{@ld}}           `games.html` only: the page of games it holds
  *   {{@updated}} {{@updatedIso}}                                when the page was built, for a reader and for a machine
@@ -72,6 +78,28 @@ const jsonString = (text: string): string => JSON.stringify(text).slice(1, -1).r
 
 const BUILT = new Date();
 
+/**
+ * What the game's catalogue counts, in `lang` — so that no number of games is
+ * ever typed into the site by hand:
+ *
+ *   `params`     `{games}`, `{levels}` and `{galaxies}`, filled into every
+ *                text of the dictionary that says them
+ *   `perGalaxy`  a galaxy's own count in its language's words, as a fact per
+ *                galaxy: `countMath` → «14 ігор» (`{{@countMath}}`)
+ *
+ * Add a game to the game, run `npm run catalog -w @pulsar/game`, and the site
+ * says the new numbers on its next build.
+ */
+export function countedWords(lang: SiteLang, dictionaries: Dictionaries = loadDictionaries()): { params: Params; perGalaxy: Record<string, string> } {
+  const t = createTranslator<string, SiteLang>(dictionaries, DEFAULT_LANG);
+  const numbers = catalogNumbers(lang);
+  const fact = (galaxy: string): string => `count${galaxy.charAt(0).toUpperCase()}${galaxy.slice(1)}`;
+  return {
+    params: { games: numbers.games, levels: numbers.steps, galaxies: numbers.galaxies },
+    perGalaxy: Object.fromEntries(Object.entries(numbers.perGalaxy).map(([galaxy, count]) => [fact(galaxy), html(t(lang, 'catalog.gamesCount', { count }))])),
+  };
+}
+
 const TOKEN = /\{\{\{([\w.]+)\}\}\}|\{\{json:([\w.]+)\}\}|\{\{@(\w+)\}\}|\{\{([\w.]+)\}\}/g;
 const JSON_LD = /(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/g;
 
@@ -92,15 +120,17 @@ export function renderPage(template: string, lang: SiteLang, site: string, dicti
   const slug = own?.slug ?? '';
   const t = createTranslator<string, SiteLang>(dictionaries, DEFAULT_LANG);
   const known = t.keys();
+  // What the catalogue has, offered to every text of the dictionary: a number of games is counted, never typed.
+  const counted = countedWords(lang, dictionaries);
   const text = (key: string): string => {
     if (!known.has(key)) throw new Error(`index.html asks for «${key}», which neither src/locales/${DEFAULT_LANG}.json nor src/locales/seo/${DEFAULT_LANG}.json has`);
-    return t(lang, key);
+    return t(lang, key, counted.params);
   };
   const section = (name: string): string => {
     const prefix = `${name}.`;
     const keys = [...known.keys()].filter((key) => key.startsWith(prefix));
     if (keys.length === 0) throw new Error(`index.html asks for the section «${name}», which the site dictionary does not have`);
-    return JSON.stringify(Object.fromEntries(keys.map((key) => [key.slice(prefix.length), t(lang, key)]))).replace(/</g, '\\u003c');
+    return JSON.stringify(Object.fromEntries(keys.map((key) => [key.slice(prefix.length), t(lang, key, counted.params)]))).replace(/</g, '\\u003c');
   };
   // A language that does not have this page is offered its main page instead — never an address that is not there.
   const there = own?.langs ?? SITE_LANGS;
@@ -110,9 +140,12 @@ export function renderPage(template: string, lang: SiteLang, site: string, dicti
     path: sitePath(lang) + slug,
     home: sitePath(lang),
     email: CONTACT_EMAIL,
-    // How many games and steps there are — counted from the game's own catalogue, never typed: they change with the game.
-    gamesCount: String(catalogNumbers(lang).games),
-    levelsCount: String(catalogNumbers(lang).steps),
+    // How many games, steps and galaxies there are — counted from the game's own catalogue, never typed: they change with the game.
+    gamesCount: String(counted.params.games),
+    levelsCount: String(counted.params.levels),
+    galaxiesCount: String(counted.params.galaxies),
+    // And how many games each galaxy has, in its language's words: `{{@countMath}}` → «14 ігор».
+    ...counted.perGalaxy,
     ogLocale: LANGUAGES[lang].ogLocale,
     langShort: html(LANGUAGES[lang].short),
     langList: SITE_LANGS.map((code) => JSON.stringify(code)).join(', '),

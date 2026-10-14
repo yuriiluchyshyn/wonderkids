@@ -232,7 +232,7 @@
                 <li>{{games.math.6}}</li>
                 <li>{{games.math.7}}</li>
               </ul>
-              <span class="tag">{{games.math.tag}}</span>
+              <span class="tag">{{@countMath}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🔤</div>
@@ -243,7 +243,7 @@
                 <li>{{games.language.3}}</li>
                 <li>{{games.language.4}}</li>
               </ul>
-              <span class="tag">{{games.language.tag}}</span>
+              <span class="tag">{{@countLanguage}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🧩</div>
@@ -254,7 +254,7 @@
                 <li>{{games.logic.3}}</li>
                 <li>{{games.logic.4}}</li>
               </ul>
-              <span class="tag">{{games.logic.tag}}</span>
+              <span class="tag">{{@countLogic}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🔭</div>
@@ -263,15 +263,16 @@
                 <li>{{games.astronomy.1}}</li>
                 <li>{{games.astronomy.2}}</li>
               </ul>
-              <span class="tag">{{games.twoGames}}</span>
+              <span class="tag">{{@countAstronomy}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🎨</div>
               <h3><a href="/{{@home}}games/art/">{{games.art.title}}</a></h3>
               <ul>
                 <li>{{games.art.1}}</li>
+                <li>{{games.art.2}}</li>
               </ul>
-              <span class="tag">{{games.oneGame}}</span>
+              <span class="tag">{{@countArt}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🌍</div>
@@ -284,7 +285,7 @@
                 <li>{{games.geography.5}}</li>
                 <li>{{games.geography.6}}</li>
               </ul>
-              <span class="tag">{{games.geography.tag}}</span>
+              <span class="tag">{{@countGeography}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🏛️</div>
@@ -295,7 +296,7 @@
                 <li>{{games.history.3}}</li>
                 <li>{{games.history.4}}</li>
               </ul>
-              <span class="tag">{{games.history.tag}}</span>
+              <span class="tag">{{@countHistory}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">♻️</div>
@@ -305,7 +306,7 @@
                 <li>{{games.ecology.2}}</li>
                 <li>{{games.ecology.3}}</li>
               </ul>
-              <span class="tag">{{games.twoGames}}</span>
+              <span class="tag">{{@countEcology}}</span>
             </article>
             <article class="card">
               <div class="icon emoji" aria-hidden="true">🌿</div>
@@ -314,7 +315,7 @@
                 <li>{{games.nature.1}}</li>
                 <li>{{games.nature.2}}</li>
               </ul>
-              <span class="tag">{{games.oneGame}}</span>
+              <span class="tag">{{@countNature}}</span>
             </article>
           </div>
 
@@ -324,7 +325,7 @@
           <div class="band" style="margin-top: 26px">
             <div class="numbers">
               <div><b>{{@gamesCount}}</b><span>{{numbers.games}}</span></div>
-              <div><b>9</b><span>{{numbers.galaxies}}</span></div>
+              <div><b>{{@galaxiesCount}}</b><span>{{numbers.galaxies}}</span></div>
               <div><b>{{@levelsCount}}</b><span>{{numbers.levels}}</span></div>
               <div><b>3</b><span>{{numbers.ages}}</span></div>
               <div><b>3</b><span>{{numbers.languages}}</span></div>

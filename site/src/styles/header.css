@@ -14,6 +14,8 @@ header {
   align-items: center;
   gap: 12px;
   padding: 10px 0;
+  /* As tall as `--bar-h` says, less the line under the bar: what sticks below the bar relies on it. */
+  min-height: calc(var(--bar-h) - 1px);
 }
 .bar-actions {
   display: flex;

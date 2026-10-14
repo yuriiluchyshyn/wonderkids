@@ -12,7 +12,7 @@
   },
   "about": {
     "title": "Po co jest Pulsar Kids",
-    "sub": "Celem Pulsar Kids jest to, żeby dziecko samo chciało się uczyć. Większość aplikacji edukacyjnych karze za błąd: zabiera „życie”, włącza stoper, pokazuje czerwony krzyżyk. Dziecko zaczyna bać się pomyłek i porzuca grę. W Pulsar Kids jest odwrotnie.",
+    "sub": "Celem Pulsar Kids jest to, żeby dziecko samo chciało się uczyć. Prowadzi je ciekawość i poczucie, że idzie do przodu: własna planeta, która rośnie z każdym zadaniem, kryształy, o których wydaniu decyduje samo, klucze wiedzy otwierające stacje i ścieżka z kroków, na której widać, jak daleko już doszło. Nagrodą nie jest tu ocena, a to, co dziecko zbudowało własnymi rękami. Dlatego samo wraca do gry, a nauka dzieje się po drodze.",
     "hint": {
       "title": "Błąd to podpowiedź",
       "text": "Tu nikt nie przegrywa. Po błędzie pojawia się obrazkowa podpowiedź, a zadanie, które się nie udało, wraca jeszcze raz pod koniec poziomu — żeby utrwalić, a nie ukarać."
@@ -31,7 +31,7 @@
     }
   },
   "games": {
-    "title": "57 gier w dziewięciu galaktykach",
+    "title": "{games} gier w dziewięciu galaktykach",
     "sub": "Przedmioty to tutaj galaktyki, a gry — planety. Oto, co na nich czeka.",
     "math": {
       "1": "Dodawanie, odejmowanie, mnożenie, dzielenie",
@@ -41,7 +41,6 @@
       "5": "Sklep: liczenie pieniędzy i reszty",
       "6": "Większe, mniejsze, równe i zegar ze wskazówkami",
       "7": "Zadania z treścią: sklep, przyjaciele, droga",
-      "tag": "14 gier",
       "title": "Matematyka"
     },
     "language": {
@@ -49,7 +48,6 @@
       "2": "Bańki z literami, łańcuszek słów, rymy i zdania",
       "3": "Pięć gier po polsku i te same pięć po angielsku i po ukraińsku — każda z własnym lektorem",
       "4": "50 kroków w każdej grze",
-      "tag": "18 gier",
       "title": "Język"
     },
     "logic": {
@@ -57,7 +55,6 @@
       "2": "Lotto z cieniami: znajdź cień przedmiotu",
       "3": "Lustrzana symetria: druga połówka obrazka",
       "4": "Zagadki logiczne: 150 rodzajów łamigłówek, przy których trzeba pomyśleć",
-      "tag": "4 gry",
       "title": "Logika"
     },
     "astronomy": {
@@ -67,6 +64,7 @@
     },
     "art": {
       "1": "Mieszanie kolorów: z dwóch lub trzech farb i brokatu powstaje nowy kolor",
+      "2": "Poznajemy kolory: znajdź właściwy kolor spośród sześciu",
       "title": "Sztuka"
     },
     "geography": {
@@ -76,7 +74,6 @@
       "4": "Strefy przyrodnicze i ich mieszkańcy",
       "5": "Stolice świata i ciekawostki o nich",
       "6": "Dlaczego gdzieś jest dzień, a gdzieś noc, i która jest tam godzina",
-      "tag": "6 gier",
       "title": "Geografia"
     },
     "history": {
@@ -84,7 +81,6 @@
       "2": "50 dinozaurów: czym je karmić i jak je rozpoznać",
       "3": "Wybitne postacie świata, Polski i Ukrainy",
       "4": "Wynalazki świata, Polski i Ukrainy",
-      "tag": "8 gier",
       "title": "Historia"
     },
     "ecology": {
@@ -97,9 +93,7 @@
       "1": "Pory roku: co i kiedy dzieje się w przyrodzie",
       "2": "Dwanaście miesięcy po kolei",
       "title": "Przyroda"
-    },
-    "twoGames": "2 gry",
-    "oneGame": "1 gra"
+    }
   },
   "numbers": {
     "games": "gry edukacyjne",
@@ -167,7 +161,7 @@
     "title": "Najczęstsze pytania o Pulsar Kids",
     "what": {
       "title": "Czym jest Pulsar Kids?",
-      "text": "Pulsar Kids to gry edukacyjne dla dzieci w wieku 4–10 lat, w które gra się w przeglądarce na telefonie, tablecie lub komputerze. W 57 grach dziecko ćwiczy matematykę, język, logikę, geografię, historię, astronomię, ekologię, przyrodę i sztukę, a rodzice ustawiają czas przed ekranem."
+      "text": "Pulsar Kids to gry edukacyjne dla dzieci w wieku 4–10 lat, w które gra się w przeglądarce na telefonie, tablecie lub komputerze. W {games} grach dziecko ćwiczy matematykę, język, logikę, geografię, historię, astronomię, ekologię, przyrodę i sztukę, a rodzice ustawiają czas przed ekranem."
     },
     "age": {
       "title": "Dla jakiego wieku jest Pulsar Kids?",
@@ -312,9 +306,7 @@
     "set": "Należy do zestawu",
     "langs": "Języki gry",
     "samples": "Zadania z gry",
-    "samplesLead": "To prawdziwe zadania — z pierwszego, środkowego i ostatniego kroku: widać, od czego gra się zaczyna i dokąd prowadzi.",
-    "samplesLeadFree": "Prawdziwe zadania z gry.",
-    "step": "Krok {step} z {steps}",
+    "samplesLead": "Przykłady prawdziwych zadań z gry.",
     "answers": "Odpowiedzi na planszy",
     "right": "Poprawna odpowiedź",
     "try": "Wypróbuj tę grę teraz",

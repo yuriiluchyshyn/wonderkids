@@ -220,18 +220,13 @@ Ads Manager: `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=10
 
 ## Креативи
 
-Готові файли лежать у `scripts/ads/`, вихідники — у `scripts/ads/creative/`.
+Готові файли лежать у `scripts/ads/versions/<ринок>/<версія>/`, по папці на кожну версію креативів. Що актуальне на кожному ринку і що вже історія, показує таблиця в `scripts/ads/versions/README.md`. Кожна версія має свій README: статус, ідея, файли, ідентифікатори оголошень у Meta, результати. Аватарка й обкладинка сторінки Facebook (`pulsar-kids-avatar.png`, `pulsar-kids-cover.png`) лежать у `scripts/ads/brand/`. Вихідники спільні для всіх версій — `scripts/ads/creative/`.
 
-| Файл | Що це | Де використано |
+| Версія | Що в ній | Статус |
 |---|---|---|
-| `pulsar-kids-space.png` | Картинка 1200×630 | Оголошення «Навчання у грі»; та сама, що `app/public/og-image.png` |
-| `pulsar-kids-ad.mp4`, `pulsar-kids-ad-4x5.mp4` | Заставка, 12 с | Оголошення «Відео: заставка» |
-| `pulsar-kids-inside.mp4`, `pulsar-kids-inside-4x5.mp4` | Запис гри в рамці телефона, 24,6 с | Оголошення «Відео: всередині гри» |
-| `pulsar-kids-cover.png` | Обкладинка 1640×624 | Сторінка Facebook |
-| `pulsar-kids-space-en.png`, `-pl.png` | Картинка 1200×630 англійською та польською | Кампанії для США й Польщі |
-| `pulsar-kids-ad-en.mp4`, `-pl.mp4` (і `-4x5`) | Заставка, 12 с, англійською та польською | Кампанії для США й Польщі |
-| `pulsar-kids-play-en.mp4`, `-pl.mp4` (і `-4x5`) | Ролик «Грати», 18 с: зачіпка, нарізка ігор, кнопка | Кампанії для США й Польщі |
-| `pulsar-kids-avatar.png` | Аватарка 720×720 (знак із `app/public/favicon.svg`) | Сторінка Facebook |
+| `ua/v1-2026-10-launch` | Картинка, заставка 12 с, «всередині гри» 24,6 с — оголошення української кампанії вище | завершена |
+| `pl/v1-2026-10-launch`, `en/v1-2026-10-launch` | Картинка, заставка 12 с, ролик «Грати» 18 с | відхилена: зачіпка «займіть дитину» |
+| `pl/v2-2026-10-calm-learning` | Сценарії чотирьох роликів і каруселі (`script.md`) | чернетка |
 
 Як це зроблено:
 
@@ -244,20 +239,21 @@ Ads Manager: `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=10
 Перегенерувати (з `scripts/ads/creative/`):
 
 ```bash
-node render.mjs og.html 1200 630 ../pulsar-kids-space.png
-node render.mjs 'og.html?cover' 1640 624 ../pulsar-kids-cover.png
+V=../versions/ua/v1-2026-10-launch   # папка версії, у яку йдуть файли
+node render.mjs og.html 1200 630 $V/pulsar-kids-space.png
+node render.mjs 'og.html?cover' 1640 624 ../brand/pulsar-kids-cover.png
 
-node render.mjs intro.html 1080 1920 /tmp/intro 12000 && swift encode.swift /tmp/intro ../pulsar-kids-ad.mp4 30
-node render.mjs 'intro.html?h=1350' 1080 1350 /tmp/intro45 12000 && swift encode.swift /tmp/intro45 ../pulsar-kids-ad-4x5.mp4 30
+node render.mjs intro.html 1080 1920 /tmp/intro 12000 && swift encode.swift /tmp/intro $V/pulsar-kids-ad.mp4 30
+node render.mjs 'intro.html?h=1350' 1080 1350 /tmp/intro45 12000 && swift encode.swift /tmp/intro45 $V/pulsar-kids-ad-4x5.mp4 30
 ```
 
-Іншою мовою — те саме з `?lang=en` або `?lang=pl` (`'og.html?lang=pl'`, `'intro.html?lang=en&h=1350'`).
+Нові файли кладуться в папку нової версії, а не поверх старих: файл, що вже був у рекламі, не перезаписується. Іншою мовою — те саме з `?lang=en` або `?lang=pl` (`'og.html?lang=pl'`, `'intro.html?lang=en&h=1350'`).
 
 Ролик «Грати»: запустити гру (`cd app/game && npx vite --port 4399 --host 127.0.0.1`), записати нарізку мовою ролика і відрендерити (числа кадрів — із `cuts.json`):
 
 ```bash
 . recording/tips.env && AD_LANG=en node recording/cuts.mjs /tmp/cuts-en geography:flags:2 math:add:3 logic:mirror:3 logic:patterns:3
-node render.mjs 'play.html?lang=en&cuts=/tmp/cuts-en&counts=127,126,127,127' 1080 1920 /tmp/play-en 18000 && swift encode.swift /tmp/play-en ../pulsar-kids-play-en.mp4 30
+node render.mjs 'play.html?lang=en&cuts=/tmp/cuts-en&counts=127,126,127,127' 1080 1920 /tmp/play-en 18000 && swift encode.swift /tmp/play-en ../versions/en/v1-2026-10-launch/pulsar-kids-play-en.mp4 30
 ```
 
 Рендери запускати **по одному**: два одночасні можуть під'єднатися до одного браузера й зіпсувати кадри одне одному.

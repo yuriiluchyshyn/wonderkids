@@ -23,7 +23,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { ALIKE_LIMIT, GAMES_SLUG, galaxySlug, gamePageSlug, gamesPages, trialOfGame, type GamesPage } from '../build/games.ts';
-import { loadDictionaries, renderGamesPage, renderPage } from '../build/pages.ts';
+import { countedWords, loadDictionaries, renderGamesPage, renderPage } from '../build/pages.ts';
 import { AI_CRAWLERS, llmsTxt, robotsTxt, sitemapXml } from '../build/seo.ts';
 import { DEFAULT_LANG, SITE_LANGS, sitePath, type SiteLang } from '../src/languages.ts';
 import { legalPath } from '../src/legal.ts';
@@ -105,14 +105,15 @@ test('2 · the numbers the main site states are the numbers of games there are',
     const games = galaxies.flatMap((galaxy) => galaxy.games);
     const steps = games.reduce((sum, game) => sum + game.steps, 0);
     const home = renderPage(homeTemplate, lang, URLS.site, dictionaries);
-    const fix = `— a game was added or removed: update site/src/locales/${lang}.json and seo/${lang}.json`;
+    const counted = countedWords(lang, dictionaries);
+    const fix = `— say «{games}» in the text and let the build count them (site/build/pages.ts, countedWords)`;
 
-    // The band of big numbers: games and steps are counted from the catalogue, the galaxies are written in the page.
+    // The band of big numbers: all three are counted from the catalogue.
     assert.ok(home.includes(`<b>${games.length}</b>`), `${lang}: the main page does not show ${games.length} games`);
     assert.ok(home.includes(`<b>${steps}</b>`), `${lang}: the main page does not show ${steps} steps`);
-    assert.ok(home.includes(`<b>${galaxies.length}</b>`), `${lang}: the main page does not show ${galaxies.length} galaxies — site/index.html states their number`);
+    assert.ok(home.includes(`<b>${galaxies.length}</b>`), `${lang}: the main page does not show ${galaxies.length} galaxies`);
 
-    // Wherever the copy says how many games there are, it says the right number — and no other.
+    // Wherever the copy says how many games there are, it asks the catalogue — a number of its own would go stale.
     const said: [where: string, text: unknown][] = [
       ['games.title', words(lang).games.title],
       ['faq.what.text', (words(lang).faq.what as Record<string, unknown>).text],
@@ -120,17 +121,19 @@ test('2 · the numbers the main site states are the numbers of games there are',
       ['meta.ogDescription', words(lang).meta.ogDescription],
       ['meta.twitterDescription', words(lang).meta.twitterDescription],
     ];
-    for (const [where, text] of said) assert.match(String(text), new RegExp(`(^|\\D)${games.length}(\\D|$)`), `${lang}: ${where} does not name ${games.length} games ${fix}`);
+    for (const [where, text] of said) assert.ok(String(text).includes('{games}'), `${lang}: ${where} writes down how many games there are ${fix}`);
+    // And the page comes out with the number, not with the word for it.
+    assert.ok(!home.includes('{games}'), `${lang}: the main page still says «{games}» — the build did not fill it`);
 
-    // Every galaxy has its card on the main page, leading to its page and saying how many games it has.
+    // Every galaxy has its card on the main page, leading to its page and saying how many games it has — counted, never typed.
     for (const galaxy of galaxies) {
-      const card = words(lang).games[galaxy.id] as { title?: string; tag?: string } | undefined;
+      const card = words(lang).games[galaxy.id] as { title?: string } | undefined;
       assert.ok(card?.title, `${lang}: the galaxy «${galaxy.id}» has no card on the main page (games.${galaxy.id} in the dictionary, and its <article> in site/index.html)`);
       assert.ok(home.includes(`href="/${sitePath(lang)}${galaxySlug(galaxy.id)}"`), `${lang}: the main page does not lead to ${galaxySlug(galaxy.id)}`);
       const count = galaxy.games.length;
-      const tag = card.tag ?? String(count === 1 ? words(lang).games.oneGame : count === 2 ? words(lang).games.twoGames : `— no tag for ${count} games`);
-      assert.ok(tag.startsWith(`${count} `), `${lang}: the «${galaxy.id}» card says «${tag}», and the galaxy has ${count} games ${fix} (games.${galaxy.id}.tag)`);
-      assert.ok(home.includes(`>${tag}<`), `${lang}: the «${galaxy.id}» card on the main page does not show «${tag}» — site/index.html uses another key for it`);
+      const tag = counted.perGalaxy[`count${galaxy.id.charAt(0).toUpperCase()}${galaxy.id.slice(1)}`];
+      assert.ok(tag?.startsWith(`${count} `), `${lang}: the «${galaxy.id}» card says «${tag}», and the galaxy has ${count} games`);
+      assert.ok(home.includes(`>${tag}<`), `${lang}: the «${galaxy.id}» card on the main page does not show «${tag}» — site/index.html asks for another key than {{@count…}}`);
     }
 
     // The structured data names every galaxy as a subject of the application.

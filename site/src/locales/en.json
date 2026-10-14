@@ -12,7 +12,7 @@
   },
   "about": {
     "title": "Why Pulsar Kids",
-    "sub": "The goal of Pulsar Kids is for children to want to learn — all by themselves. Most learning apps punish a mistake: they take away a “life”, start a timer, flash a red cross. Children grow afraid of getting it wrong and give up. Pulsar Kids does the opposite.",
+    "sub": "The goal of Pulsar Kids is for children to want to learn — all by themselves. What pulls a child in is curiosity and the feeling of getting somewhere: a planet of their own that grows with every task, crystals they decide how to spend, keys of knowledge that open stations, and a path of steps that shows how far they have already come. The reward here is not a grade — it is what the child built with their own hands. That is why they come back to the game on their own, and the learning happens along the way.",
     "hint": {
       "title": "A mistake is a hint",
       "text": "Nobody loses here. After a mistake a visual hint appears, and the task that didn’t work out comes back once more at the end of the level — to make it stick, not to punish."
@@ -31,7 +31,7 @@
     }
   },
   "games": {
-    "title": "57 games across nine galaxies",
+    "title": "{games} games across nine galaxies",
     "sub": "Here subjects are galaxies and games are planets. This is what awaits on them.",
     "math": {
       "1": "Addition, subtraction, multiplication, division",
@@ -41,7 +41,6 @@
       "5": "The shop: counting money and change",
       "6": "Greater, less, equal — and a clock with hands",
       "7": "Story problems: the shop, friends, the road",
-      "tag": "14 games",
       "title": "Math"
     },
     "language": {
@@ -49,7 +48,6 @@
       "2": "Letter bubbles, word chains, rhymes and sentences",
       "3": "Five games in English, and the same five in Ukrainian and in Polish — each with a voice of its own",
       "4": "50 steps in every game",
-      "tag": "18 games",
       "title": "Language"
     },
     "logic": {
@@ -57,7 +55,6 @@
       "2": "Shadow lotto: find the shadow of the thing",
       "3": "Mirror symmetry: the other half of the picture",
       "4": "Logic riddles: 150 kinds of puzzles that make you think",
-      "tag": "4 games",
       "title": "Logic"
     },
     "astronomy": {
@@ -67,6 +64,7 @@
     },
     "art": {
       "1": "Color mixer: two or three paints, or glitter, make a new color",
+      "2": "Learning colors: find the right color among six",
       "title": "Art"
     },
     "geography": {
@@ -76,7 +74,6 @@
       "4": "Natural zones and the animals that live there",
       "5": "Capitals of the world and fun facts about them",
       "6": "Why it is day in one place and night in another, and what time it is there",
-      "tag": "6 games",
       "title": "Geography"
     },
     "history": {
@@ -84,7 +81,6 @@
       "2": "50 dinosaurs: what to feed them and how to tell them apart",
       "3": "Great people of the world, of Ukraine and of Poland",
       "4": "Inventions of the world, of Ukraine and of Poland",
-      "tag": "8 games",
       "title": "History"
     },
     "ecology": {
@@ -97,9 +93,7 @@
       "1": "The seasons: what happens in nature and when",
       "2": "The twelve months in order",
       "title": "Nature"
-    },
-    "twoGames": "2 games",
-    "oneGame": "1 game"
+    }
   },
   "numbers": {
     "games": "learning games",
@@ -167,7 +161,7 @@
     "title": "Questions parents ask about Pulsar Kids",
     "what": {
       "title": "What is Pulsar Kids?",
-      "text": "Pulsar Kids is a set of learning games for kids aged 4–10, played in a browser on a phone, tablet or computer. Across 57 games children practice math, language, logic, geography, history, astronomy, ecology, nature and art, while parents set the screen time."
+      "text": "Pulsar Kids is a set of learning games for kids aged 4–10, played in a browser on a phone, tablet or computer. Across {games} games children practice math, language, logic, geography, history, astronomy, ecology, nature and art, while parents set the screen time."
     },
     "age": {
       "title": "What ages is Pulsar Kids for?",
@@ -308,9 +302,7 @@
     "set": "Part of",
     "langs": "Played in",
     "samples": "Tasks from the game",
-    "samplesLead": "These are real tasks, taken from the first, the middle and the last step — so you can see where the game begins and where it leads.",
-    "samplesLeadFree": "Real tasks from the game.",
-    "step": "Step {step} of {steps}",
+    "samplesLead": "A few real tasks from the game.",
     "answers": "Answers on the board",
     "right": "Right answer",
     "try": "Try this game now",

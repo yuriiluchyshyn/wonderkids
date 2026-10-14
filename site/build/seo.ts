@@ -5,7 +5,7 @@ import { DEFAULT_LANG, LANGUAGES, SITE_LANGS, sitePath, type SiteLang } from '..
 import { LEGAL_DOCS, LEGAL_UPDATED, legalPath } from '../src/legal.ts';
 import { GAMES_SLUG, gamesPages } from './games.ts';
 import { legalText } from './legal.ts';
-import { loadDictionaries, type Dictionaries } from './pages.ts';
+import { countedWords, loadDictionaries, type Dictionaries } from './pages.ts';
 
 /** The language `llms.txt` is written in: the one an assistant of any country reads. */
 const LLMS_LANG: SiteLang = 'en';
@@ -20,17 +20,22 @@ const LLMS_LANG: SiteLang = 'en';
 export function llmsTxt(urls: PublicUrls, dictionaries: Dictionaries = loadDictionaries(), lang: SiteLang = LLMS_LANG): string {
   const words = dictionaries[lang];
   const group = (name: string): Dict => words[name] as Dict;
-  const text = (of: Dict, key: string): string => String(of[key]).replace(/<[^>]+>/g, '');
+  // How many games there is counted, not written down — here as in the page (`pages.ts`, `countedWords`).
+  const counted = countedWords(lang, dictionaries);
+  const numbers = (line: string): string => line.replace(/\{(\w+)\}/g, (all, name: string) => (name in counted.params ? String(counted.params[name]) : all));
+  const text = (of: Dict, key: string): string => numbers(String(of[key]).replace(/<[^>]+>/g, ''));
   /** The cards of a section — each a `title` and a `text` —, as a list. */
   const cards = (of: Dict): string[] => Object.values(of).flatMap((card) => (typeof card === 'string' ? [] : [`- **${text(card, 'title')}**: ${text(card, 'text')}`]));
   const [meta, hero, about, games, world, parents, start, faq, cta] = ['meta', 'hero', 'about', 'games', 'world', 'parents', 'start', 'faq', 'cta'].map(group);
   /** Questions with their answers: a heading each, so one can be quoted whole. */
   const answers = Object.values(faq).flatMap((pair) => (typeof pair === 'string' ? [] : ['', `### ${text(pair, 'title')}`, '', text(pair, 'text')]));
 
-  const subjects = Object.values(games).flatMap((subject) => {
+  const subjects = Object.entries(games).flatMap(([galaxy, subject]) => {
     if (typeof subject === 'string') return [];
-    const lines = Object.entries(subject).flatMap(([key, line]) => (/^\d+$/.test(key) ? [`- ${line}`] : []));
-    return ['', `### ${text(subject, 'title')}${subject.tag ? ` (${text(subject, 'tag')})` : ''}`, '', ...lines];
+    const lines = Object.entries(subject).flatMap(([key, line]) => (/^\d+$/.test(key) ? [`- ${numbers(String(line))}`] : []));
+    // How many games the galaxy has, from the catalogue — the same words its card on the page shows.
+    const count = counted.perGalaxy[`count${galaxy.charAt(0).toUpperCase()}${galaxy.slice(1)}`];
+    return ['', `### ${text(subject, 'title')}${count ? ` (${count})` : ''}`, '', ...lines];
   });
 
   return [

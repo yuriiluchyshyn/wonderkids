@@ -24,6 +24,21 @@
   font-weight: 600;
   color: var(--soft);
 }
+/* Scrolling through the galaxies, the name of the one being read stays under the bar — so it is
+   always clear which galaxy these games belong to. It lets go when the next galaxy pushes it up. */
+.games-page .galaxy > h2 {
+  position: sticky;
+  top: calc(var(--bar-h) + 6px);
+  z-index: 5;
+  width: fit-content;
+  max-width: 100%;
+  padding: 7px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(30, 10, 69, 0.9);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
 .games-page h2 a,
 .games-page .card h3 a {
   color: inherit;
@@ -46,6 +61,30 @@
 }
 .games-page .try {
   margin-top: 22px;
+}
+
+/* A game as a card: the pictogram stands beside the words, not above them. On a phone that is
+   three rows instead of four — a list of games is read by scrolling, and a shorter card shows more of it. */
+.games-page .card-game {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+}
+.games-page .card-game .icon {
+  flex: none;
+  font-size: 2rem;
+}
+/* A long title breaks instead of widening the card past its column. */
+.games-page .card-game .card-body {
+  min-width: 0;
+}
+.games-page .card-game h3 {
+  margin: 0 0 4px;
+  font-size: 1.15rem;
+}
+.games-page .card-game .tag {
+  margin-top: 8px;
 }
 
 /* The way back up: main page › all games › galaxy › game. */

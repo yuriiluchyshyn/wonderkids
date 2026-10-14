@@ -1,11 +1,11 @@
 {
   "meta": {
     "title": "Online learning games for kids aged 4–10 — Pulsar Kids",
-    "description": "57 learning games for kids aged 4–10: math, language, logic, geography, history and more. No ads, no tears, no timers. Try a game with no sign-up.",
-    "ogDescription": "Math, language, logic, geography, astronomy, history and nature in 57 games. Your child plays and builds a planet of their own, while you stay in charge of screen time.",
+    "description": "{games} learning games for kids aged 4–10: math, language, logic, geography, history and more. No ads, no tears, no timers. Try a game with no sign-up.",
+    "ogDescription": "Math, language, logic, geography, astronomy, history and nature in {games} games. Your child plays and builds a planet of their own, while you stay in charge of screen time.",
     "ogTitle": "Pulsar Kids — learning that feels like an adventure",
     "ogImageAlt": "Pulsar Kids — learning games for kids",
-    "twitterDescription": "57 learning games for kids aged 4–10. No ads, no tears, no timers."
+    "twitterDescription": "{games} learning games for kids aged 4–10. No ads, no tears, no timers."
   },
   "ld": {
     "siteDescription": "Learning games for kids aged 4–10: math, language, logic, geography, astronomy, history, nature, ecology and art.",
