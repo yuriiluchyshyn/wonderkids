@@ -7,6 +7,7 @@ type SfxName =
   | 'tap'
   | 'success'
   | 'gentle'
+  | 'listen'
   | 'sad'
   | 'pop'
   | 'crunch'

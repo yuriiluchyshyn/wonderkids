@@ -1,8 +1,18 @@
 import { useT, useVoiceLang } from '@/core/translator';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { useBalance } from '@/core/child/world/useBalance';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { AnimatePresence, animate, motion } from 'framer-motion';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
+  type SyntheticEvent,
+} from 'react';
 import { saidOf, spokenPrompt, type TaskCallbacks } from '@/core/game/kernel/types';
 import { useSound } from '@/core/audio/useSound';
 import { useSayT, useVoiceSpeak } from '@/core/audio/useSpeech';
@@ -259,12 +269,39 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
     return () => window.clearTimeout(t);
   }, [stage.round, stage.play?.kind]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // The board is held still while a help is being said: there is nothing to guess at yet.
-  const lockRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const board = lockRef.current as (HTMLDivElement & { inert?: boolean }) | null;
-    if (board) board.inert = stage.locked;
-  }, [stage.locked]);
+  // The board is held still while a help is being said: there is nothing to guess at yet. A tap
+  // on it then is caught before any answer sees it (capture phase), and answered — not with the
+  // sound of a mistake, since nothing was answered, but with a soft «listen» and the help brought
+  // into sight, nudged, so the child sees where to look.
+  const attentionRef = useRef<HTMLDivElement>(null);
+  const lastNudge = useRef(0);
+  const nudgeToHelp = () => {
+    const now = Date.now();
+    // One tap is a pointerdown and a click, a held key repeats: one nudge for each.
+    if (now - lastNudge.current < 500) return;
+    lastNudge.current = now;
+    play('listen');
+    helperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (attentionRef.current) animate(attentionRef.current, { scale: [1, 1.04, 1] }, { duration: 0.45, ease: 'easeOut' });
+  };
+  const holdBoard = (e: SyntheticEvent) => {
+    if (!stage.locked) return;
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  const boardGuard = {
+    onPointerDownCapture: (e: ReactPointerEvent) => {
+      if (!stage.locked) return;
+      holdBoard(e);
+      nudgeToHelp();
+    },
+    onClickCapture: holdBoard,
+    onKeyDownCapture: (e: ReactKeyboardEvent) => {
+      if (!stage.locked || (e.key !== 'Enter' && e.key !== ' ')) return;
+      holdBoard(e);
+      nudgeToHelp();
+    },
+  };
 
   // When the scaffolding helper appears: scroll to it and speak the how-to.
   useEffect(() => {
@@ -606,7 +643,7 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
         {/* A well-known task is asked without its association pictures (`core/game/cues`). */}
         <CuesHiddenProvider value={session.cuesHidden}>
           <PauseProvider value={setLessonOpen}>
-            <div ref={lockRef} className={cn(stage.locked && styles.boardHeld)} aria-busy={stage.locked}>
+            <div {...boardGuard} aria-busy={stage.locked}>
               <GameView
                 key={session.index}
                 task={task}
@@ -649,7 +686,10 @@ export function GameScreen({ config, subLabel, onExit, onPlayAgain, onContinue }
                 <span className={styles.hintBarLabel}>{t('game.hint.label')}</span>
                 <VoiceToggle channel="hint" />
               </div>
-              {scripted ? <HintPanel /> : VisualHelper && <VisualHelper task={task} callbacks={callbacks} hintActive />}
+              {/* Nudged when the board is tapped while the help is being said: «look here». */}
+              <div ref={attentionRef}>
+                {scripted ? <HintPanel /> : VisualHelper && <VisualHelper task={task} callbacks={callbacks} hintActive />}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

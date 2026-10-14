@@ -196,6 +196,16 @@ export class AudioEngine {
   }
 
   /**
+   * "Wait — listen first": a tap on the board while a hint is being said. Two
+   * soft bell notes, high and light — an attention cue, not a mistake: it must
+   * not sound like `gentle` or `sad`, since nothing was answered.
+   */
+  listen(): void {
+    this.tone({ freq: 987.77, type: 'triangle', duration: 0.12, gain: 0.2 });
+    this.tone({ freq: 1318.51, type: 'triangle', start: 0.1, duration: 0.2, gain: 0.18 });
+  }
+
+  /**
    * Soft "aww, not quite" cue for a wrong answer — a gentle descending
    * two-note sigh. Clearly reads as "sad / try again" while staying warm and
    * cartoonish, never a harsh buzzer (Zero-Aggression UX).

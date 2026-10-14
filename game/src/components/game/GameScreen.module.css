@@ -298,11 +298,6 @@
   color: var(--primary);
 }
 
-/* A help is being said: the board takes no taps meanwhile (it is also `inert`). */
-.boardHeld {
-  pointer-events: none;
-}
-
 /* Who moved into the child's world with this gift. */
 .residentLine {
   margin: 4px 0 0;
