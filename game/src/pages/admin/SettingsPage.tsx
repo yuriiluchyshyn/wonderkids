@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { adminApi, type ProductSettings } from '@/core/account/api/client';
+import { adminApi, type BillingStatus, type ProductSettings } from '@/core/account/api/client';
 import { errorText } from './shared';
-import { trialUrl } from './links';
+import { siteOrigin, trialUrl } from './links';
 import { Route, Routes } from 'react-router-dom';
 import { SpeechPage } from './SpeechPage';
 import { AvailabilityPage } from './AvailabilityPage';
@@ -80,8 +80,125 @@ function TrialVoice({ adminKey, settings, onSaved }: { adminKey: string; setting
 }
 
 /**
+ * The site's page of prices: shown or hidden. Hidden, its address sends a
+ * visitor to the main page and no link leads to it; the site asks
+ * `GET /api/health` (`features.pricing`), so a change shows within half a minute.
+ */
+function PricingSwitch({ adminKey, settings, onSaved }: { adminKey: string; settings: ProductSettings; onSaved: (next: ProductSettings) => void }) {
+  const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const flip = async (on: boolean) => {
+    setBusy(true);
+    setNote(null);
+    try {
+      onSaved((await adminApi.saveSettings(adminKey, { pricingPage: on })).settings);
+      setNote({ ok: true, text: on ? '✓ Сторінку показано' : '✓ Сторінку сховано' });
+    } catch (err) {
+      setNote({ ok: false, text: errorText(err) });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className={styles.editor}>
+      <h2>💳 Сторінка цін на сайті</h2>
+      <p className={styles.meta}>
+        Тарифи (базовий план і Family Pro) з цінами для України, Польщі, США, Канади та ЄС за адресою{' '}
+        <a href={`${siteOrigin()}/pricing/`} target="_blank" rel="noreferrer">
+          <code>/pricing/</code>
+        </a>{' '}
+        (та <code>/en/pricing/</code>, <code>/pl/pricing/</code>). Вимкнено — посилання «Ціни» на сайті немає, а хто
+        відкриє адресу, потрапить на головну. Зміна діє на сайті протягом пів хвилини.
+      </p>
+      <label className={styles.radio}>
+        <input type="checkbox" checked={settings.pricingPage} disabled={busy} onChange={(e) => void flip(e.target.checked)} />
+        <span>
+          <b>Показувати сторінку цін</b>
+        </span>
+      </label>
+      {note && <p className={note.ok ? styles.noteOk : styles.noteErr}>{note.text}</p>}
+    </div>
+  );
+}
+
+/**
+ * The connection to Stripe, read-only: which mode the server's key is for, the
+ * account it opens, and what the catalogue holds — the plans are edited in
+ * Stripe itself. The key itself never leaves the server.
+ */
+function StripeStatus({ adminKey }: { adminKey: string }) {
+  const [status, setStatus] = useState<BillingStatus | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setError(null);
+    setStatus(null);
+    try {
+      setStatus(await adminApi.billingStatus(adminKey));
+    } catch (err) {
+      setError(errorText(err));
+    }
+  }, [adminKey]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  return (
+    <div className={styles.editor}>
+      <h2>🔌 Stripe</h2>
+      {error && <p className={styles.noteErr}>{error}</p>}
+      {!status && !error && <p className={styles.meta}>Перевіряю з’єднання…</p>}
+      {status && !status.configured && (
+        <p className={styles.noteErr}>
+          На сервері немає ключа <code>STRIPE_SECRET_KEY</code> — оплата вимкнена.
+        </p>
+      )}
+      {status?.configured && status.ok === false && <p className={styles.noteErr}>Stripe не прийняв ключ: {status.detail}</p>}
+      {status?.ok && (
+        <>
+          <p className={styles.meta}>
+            {status.mode === 'live' ? '🟢 Бойовий режим — справжні гроші' : '🧪 Тестовий режим (sandbox) — гроші не списуються'} · акаунт{' '}
+            <code>{status.account?.id}</code>
+            {status.account?.name ? ` (${status.account.name})` : ''}
+            {status.account?.country ? `, ${status.account.country}` : ''}
+          </p>
+          {status.plans ? (
+            <p className={styles.noteOk}>
+              ✓ Планів у каталозі: {status.plans}; регіони цін: {status.regions?.join(', ')}
+            </p>
+          ) : (
+            <p className={styles.noteErr}>
+              У Stripe немає жодного плану Pulsar Kids. Запусти <code>node scripts/stripe-setup.mjs</code>.
+            </p>
+          )}
+          <p className={styles.meta}>
+            Плани, ціни й «що входить» живуть у Stripe — сторінка цін і гра беруть їх звідти (за 5 хвилин після зміни).
+            Редагувати:{' '}
+            <a href={`https://dashboard.stripe.com/${status.mode === 'live' ? '' : 'test/'}products`} target="_blank" rel="noreferrer">
+              Stripe → Product catalog
+            </a>
+            . Тексти трьома мовами — у metadata продукту (<code>name_uk</code>, <code>tagline_pl</code>,{' '}
+            <code>feature_1_en</code>…), числа — <code>daily_minutes</code>, <code>trial_days</code>,{' '}
+            <code>children_included</code>; регіон ціни — у metadata ціни (<code>region</code>, <code>countries</code>).
+          </p>
+        </>
+      )}
+      <div className={styles.actions}>
+        <button type="button" className={styles.btn} onClick={() => void load()}>
+          Перевірити ще раз
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
  * `/admin/settings` — the main settings, kept in the database (`wk_settings`):
- * the voice each language is read in, and the trial game — how long it lasts and its voice.
+ * the voice each language is read in, the trial game — how long it lasts and its voice —,
+ * and whether the site shows its page of prices.
  */
 function MainSettings({ adminKey }: { adminKey: string }) {
   const [settings, setSettings] = useState<ProductSettings | null>(null);
@@ -135,6 +252,16 @@ function MainSettings({ adminKey }: { adminKey: string }) {
       </header>
 
       {error && <p className={styles.noteErr}>{error}</p>}
+
+      {settings && (
+        <section className={styles.gamesSection}>
+          <PricingSwitch adminKey={adminKey} settings={settings} onSaved={show} />
+        </section>
+      )}
+
+      <section className={styles.gamesSection}>
+        <StripeStatus adminKey={adminKey} />
+      </section>
 
       {settings && (
         <section className={styles.gamesSection}>

@@ -388,6 +388,8 @@ export interface ProductSettings {
   voices: Record<SpeechAudience, Record<LangCode, string>>;
   /** The voice of each language when none is chosen. */
   defaultVoices: Record<LangCode, string>;
+  /** Whether the public site shows its page of prices (`/pricing/`). */
+  pricingPage: boolean;
 }
 
 /** Who hears a voice chosen in the settings: every account, or whoever plays the trial game. */
@@ -400,12 +402,25 @@ export interface CloudVoice {
   gender: string | null;
 }
 
+/** `GET /api/admin/billing`: `configured: false` — no key on the server; `ok: false` — Stripe refused it (`detail`). */
+export interface BillingStatus {
+  configured: boolean;
+  ok?: boolean;
+  mode?: 'test' | 'live';
+  account?: { id: string; name: string | null; country: string | null };
+  /** How many plans the catalogue has, and its regions (from the prices' metadata). */
+  plans?: number;
+  regions?: string[];
+  detail?: string;
+}
+
 export interface SettingsChange {
   demoMinutes?: number;
   /** An empty `key` keeps the stored one. */
   trialSpeech?: { enabled: boolean; key?: string };
   /** Only the languages named change; '' goes back to the default voice. */
   voices?: Partial<Record<SpeechAudience, Partial<Record<LangCode, string>>>>;
+  pricingPage?: boolean;
 }
 
 /** A place in a rule: a country (`US`) or a region (`@north-america`). */
@@ -534,6 +549,11 @@ export const adminApi = {
 
   saveSettings(adminKey: string, change: SettingsChange) {
     return request<{ settings: ProductSettings }>('/api/admin/users?part=settings', { method: 'PUT', adminKey, body: change });
+  },
+
+  /** The connection to Stripe: the mode, the account the key opens, which prices of the catalogue it has. */
+  billingStatus(adminKey: string) {
+    return request<BillingStatus>('/api/admin/billing', { adminKey });
   },
 
   getAvailability(adminKey: string) {
