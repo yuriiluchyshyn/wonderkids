@@ -22,6 +22,9 @@ import { SubscriptionPage } from '@/pages/parent/SubscriptionPage';
 import { AudioPage } from '@/pages/child/AudioPage';
 import { ChildSelectPage } from '@/pages/auth/ChildSelectPage';
 import { TimeHeader } from '@/components/layout/TimeHeader';
+import { AccountClock } from '@/components/layout/AccountClock';
+import { ChildBlocked } from '@/components/layout/ChildBlocked';
+import { useLimits } from '@/core/account/billing/useLimits';
 import { SpaceLoader, SpaceScreen } from '@/components/ui/SpaceLoader';
 import { ThemeDecor } from '@/components/theme/ThemeDecor';
 
@@ -90,9 +93,20 @@ function SyncedRoutes() {
   const activeChildId = useGameStore((s) => s.activeChildId);
 
   const portal = getPortal();
+  const blocked = useLimits((s) => s.limits?.blocked === true);
+  const childSession = useAuthStore((s) => s.childId);
 
   if (status === 'error') return <SyncSplash error />;
   if (status !== 'ready') return <SyncSplash />;
+
+  // More children than the plan has room for: the children's accounts are paused until the parents settle it.
+  if (blocked && childSession && portal !== 'parent') {
+    return (
+      <InLang of="game">
+        <ChildBlocked />
+      </InLang>
+    );
+  }
 
   // Parent portal (parents.*): ONLY the parent cabinet — never the child hub,
   // so a parent never lands on "обери пригоду".
@@ -227,6 +241,7 @@ export function App() {
           <ThemeDecor />
           <InLang of="game">
             <TimeHeader />
+            <AccountClock />
           </InLang>
           <Routes>
             <Route path="/login" element={loginElement} />

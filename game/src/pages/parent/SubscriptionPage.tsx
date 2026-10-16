@@ -11,7 +11,9 @@ import { SubPageHeader } from '@/components/layout/SubPageHeader';
 import { AddChildrenDialog } from '@/components/paywall/AddChildrenDialog';
 import { Dialog } from '@/components/paywall/Dialog';
 import { PaywallGate } from '@/components/paywall/PaywallGate';
+import { OverLimitNotice } from '@/components/paywall/OverLimitNotice';
 import { RemoveChildDialog } from '@/components/paywall/RemoveChildDialog';
+import { TrimChildrenDialog } from '@/components/paywall/TrimChildrenDialog';
 import pStyles from '@/components/parent/Parent.module.css';
 import styles from '@/components/paywall/Paywall.module.css';
 
@@ -41,6 +43,7 @@ export function SubscriptionPage() {
   const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
   const [adding, setAdding] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const [trimming, setTrimming] = useState(false);
   const [asked, setAsked] = useState<Question | null>(null);
 
   useEffect(() => {
@@ -89,6 +92,9 @@ export function SubscriptionPage() {
   return (
     <div className="page stack">
       <SubPageHeader title={t('billing.manage.title')} icon="💳" backTo="/parent" />
+
+      {/* More children than the plan has room for: the children's accounts are paused until this is settled. */}
+      <OverLimitNotice />
 
       {/* ---- What the account has ---- */}
       <section className={pStyles.section}>
@@ -177,10 +183,16 @@ export function SubscriptionPage() {
                   className={styles.secondary}
                   disabled={busy}
                   onClick={() =>
-                    ask(
-                      { text: t('billing.manage.confirmDowngrade', { name: freeName, date: date(plan.periodEnd ?? plan.trialEnd) }), yes: t('billing.manage.downgradeYes', { name: freeName }), danger: true },
-                      { cancel: true },
-                    )
+                    setAsked({
+                      // More than one child: the next window asks which of them stay — Basic has room for one.
+                      text: t(profiles > 1 ? 'billing.manage.confirmDowngrade' : 'billing.manage.confirmDowngradeOne', { name: freeName, date: date(plan.periodEnd ?? plan.trialEnd) }),
+                      yes: profiles > 1 ? t('billing.manage.downgradeNext') : t('billing.manage.downgradeYes', { name: freeName }),
+                      danger: true,
+                      run: async () => {
+                        if (profiles > 1) setTrimming(true);
+                        else await change({ cancel: true });
+                      },
+                    })
                   }
                 >
                   {t('billing.section.toFree', { name: freeName })}
@@ -267,6 +279,18 @@ export function SubscriptionPage() {
         />
       )}
       {removing && plan && <RemoveChildDialog plan={plan} catalog={catalog} onClose={() => setRemoving(false)} onDone={(next) => setState(next)} />}
+      {/* Moving to Basic with several children: those ticked are deleted now, and the plan ends with the paid period. */}
+      {trimming && (
+        <TrimChildrenDialog
+          keep={1}
+          downgrade
+          onClose={() => setTrimming(false)}
+          onDone={() => {
+            setTrimming(false);
+            void change({ cancel: true });
+          }}
+        />
+      )}
       {asked && (
         <Dialog title={t('billing.manage.title')} onClose={() => setAsked(null)}>
           <p className={asked.danger ? styles.warn : styles.dialogText}>{asked.text}</p>

@@ -101,6 +101,17 @@ async function request<T>(
   return (await res.json()) as T;
 }
 
+/** The plan's room for children, told with the save (`GET /api/state`). */
+export interface PlanLimits {
+  /** Child profiles the plan has room for; null — any number. */
+  children: number | null;
+  profiles: number;
+  /** More children than the plan has room for: the children's accounts are paused. */
+  blocked: boolean;
+  /** The child's time runs whenever the child's account is open (Basic), not only while the child plays (Family). */
+  openClock: boolean;
+}
+
 /** Server-side play-time view returned by every `/api/v1/session/*` call. */
 export interface SessionView {
   child_profile_id: string;
@@ -112,6 +123,8 @@ export interface SessionView {
   in_cooldown: boolean;
   cooldown_remaining_seconds: number;
   server_time: number;
+  /** More children than the plan has room for: the children's accounts are paused and no time was counted. */
+  blocked?: boolean;
   screen_time: {
     dayKey: string;
     minutesUsedToday: number;
@@ -170,7 +183,7 @@ export const api = {
   /** Load the signed-in user's saved state (`state` is `null` when empty). */
   getState<T>(token: string) {
     // The device's time zone says which day it is for the child: a new day starts with a full tank.
-    return request<{ state: T | null; features?: { cloudTts?: boolean; /** The paid mode (`/admin/settings`): off — the game shows nothing of paying. */ paid?: boolean } }>(`/api/state?tz_offset_min=${new Date().getTimezoneOffset()}`, { token });
+    return request<{ state: T | null; features?: { cloudTts?: boolean; /** The paid mode (`/admin/settings`): off — the game shows nothing of paying. */ paid?: boolean }; limits?: PlanLimits }>(`/api/state?tz_offset_min=${new Date().getTimezoneOffset()}`, { token });
   },
 
   /** One phrase from the natural cloud voice, as base64 MP3. */

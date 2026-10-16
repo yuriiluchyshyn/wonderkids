@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ApiError, api } from '@/core/account/api/client';
 import { speechEngine } from '@/core/audio/SpeechEngine';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { useLimits } from '@/core/account/billing/useLimits';
 import { useSyncControl } from '@/core/account/sync/syncControl';
 import {
   useGameStore,
@@ -39,8 +40,9 @@ export function useRemoteSync(): SyncStatus {
 
     api
       .getState<PersistableState>(token)
-      .then(({ state, features }) => {
+      .then(({ state, features, limits }) => {
         if (!active) return;
+        useLimits.getState().set(limits ?? null);
         // Natural cloud voice, when the admin switched it on for this account.
         speechEngine.setCloudVoice(features?.cloudTts ? (text, lang) => api.tts(token, text, lang) : null);
         // `state` is null for a brand-new user → hydrate falls back to defaults.

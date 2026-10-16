@@ -692,6 +692,8 @@
     "pinOk": "Dziecko loguje się nickiem i tym PIN-em.",
     "pinBad": "✋ PIN ma mieć 3 lub 4 cyfry.",
     "create": "Utwórz profil",
+    "creating": "Tworzę…",
+    "createFailed": "Profil nie został utworzony. Sprawdź połączenie i spróbuj ponownie.",
     "removeTitle": "Usunąć dziecko?",
     "removeHint": "Wszystkie postępy tego profilu zostaną utracone. Tej czynności nie można cofnąć.",
     "removeYes": "Tak, usuń"
@@ -988,6 +990,11 @@
     "terms": "Regulamin",
     "label": "Informacje prawne"
   },
+  "childBlocked": {
+    "title": "Skończyło się paliwo",
+    "message": "Przepraszam, skończyło Ci się paliwo. Podejdź do rodziców, żeby sprawdzili.",
+    "retry": "Spróbuj jeszcze raz"
+  },
   "billing": {
     "paywall": {
       "title": "Plany Pulsar Kids",
@@ -1092,6 +1099,27 @@
       "cancel": "Anuluj",
       "ok": "Potwierdź"
     },
+    "trim": {
+      "title": "Kto zostaje?",
+      "downgrade": "W planie Podstawowym jest miejsce na: {kids}. Zaznacz dzieci do usunięcia, reszta zostanie.",
+      "over": "W Twoim planie jest miejsce na: {kids}. Zaznacz dzieci do usunięcia, aby reszta się zmieściła.",
+      "mark": "Usuń: {name}",
+      "willGo": "zostanie usunięte",
+      "stays": "zostaje",
+      "left": "Zostanie: {left}. Potrzeba: {keep}.",
+      "warn": "Profile zaznaczonych dzieci oraz cały ich postęp, nagrody i ustawienia zostaną usunięte na zawsze.",
+      "approve": "Potwierdź"
+    },
+    "over": {
+      "title": "Dzieci jest więcej, niż pozwala plan",
+      "text": "W panelu jest dzieci: {profiles}, a miejsc w planie: {room}. Konta dzieci są wstrzymane: dzieci widzą, że skończyło się paliwo.",
+      "fixFree": "Dodaj plan z miejscem dla wszystkich dzieci (na przykład {paid}), a wszystko wróci. Albo usuń nadliczbowe i zostaw jedno dziecko.",
+      "fixFamily": "Dodaj miejsca w planie, a wszystko wróci. Albo usuń nadliczbowe dzieci.",
+      "settle": "Rozwiąż to",
+      "seePlans": "Zobacz plany",
+      "addPlaces": "Dodaj miejsca w planie",
+      "remove": "Usuń nadliczbowe"
+    },
     "offer": {
       "current": "Twój obecny plan: {name}.",
       "goals": "Rodzinne cele — nagrody za zebrane dla każdego dziecka — są w planie {paid}.",
@@ -1111,7 +1139,9 @@
       "removeChild": "Usuń dziecko",
       "planTitle": "Plan",
       "giftNote": "Family jest prezentem, więc nic tu nie trzeba zmieniać.",
-      "confirmDowngrade": "Przejść na {name} od {date}? Wszystkie dzieci i informacje o nich (profile, postępy, nagrody i ustawienia) zostaną usunięte. Tego nie można cofnąć.",
+      "confirmDowngrade": "Przejść na {name} od {date}? W planie Podstawowym jest miejsce tylko dla jednego dziecka: w następnym kroku wybierzesz, kto zostaje. Profile i cały postęp pozostałych dzieci zostaną usunięte od razu i na zawsze.",
+      "confirmDowngradeOne": "Przejść na {name} od {date}? Czas ekranowy stanie się stały, a rodzinne cele i dodatkowe dzieci przestaną być dostępne.",
+      "downgradeNext": "Dalej",
       "downgradeYes": "Tak, przejdź na {name}",
       "cardTitle": "Sposób płatności",
       "noCard": "Nie znaleziono karty.",

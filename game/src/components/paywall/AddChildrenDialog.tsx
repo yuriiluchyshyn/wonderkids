@@ -16,10 +16,12 @@ type Stage = 'pick' | 'loading' | 'review' | 'done';
  * approval charges it. The amount shown is sent back with the approval: if it
  * is no longer what Stripe would charge, the server refuses and it is shown anew.
  */
-export function AddChildrenDialog({ token, current, period, region, catalog, onClose, onDone }: {
+export function AddChildrenDialog({ token, current, period, region, catalog, minAdd = 1, onClose, onDone }: {
   token: string;
   /** Children in the plan now. */
   current: number;
+  /** The fewest that may be added (the children that do not fit the plan yet). */
+  minAdd?: number;
   period: Period;
   region: string | null;
   catalog: Catalog | null;
@@ -30,7 +32,7 @@ export function AddChildrenDialog({ token, current, period, region, catalog, onC
   const t = useT();
   const lang = useLang();
   const room = Math.max(0, MAX_CHILDREN - current);
-  const [add, setAdd] = useState(1);
+  const [add, setAdd] = useState(Math.max(1, minAdd));
   const [stage, setStage] = useState<Stage>('pick');
   const [quote, setQuote] = useState<ChildrenQuote | null>(null);
   const [charged, setCharged] = useState(0);
@@ -140,7 +142,7 @@ export function AddChildrenDialog({ token, current, period, region, catalog, onC
       <div className={styles.childrenPick}>
         <span>{t('billing.add.now', { kids: kids(current) })}</span>
         <div className={styles.stepper}>
-          <button type="button" aria-label={t('billing.paywall.fewer')} disabled={add <= 1} onClick={() => setAdd(add - 1)}>
+          <button type="button" aria-label={t('billing.paywall.fewer')} disabled={add <= Math.max(1, minAdd)} onClick={() => setAdd(add - 1)}>
             −
           </button>
           <output aria-live="polite">{add}</output>

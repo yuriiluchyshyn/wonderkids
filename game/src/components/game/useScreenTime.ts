@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, type SessionView } from '@/core/account/api/client';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
+import { useLimits } from '@/core/account/billing/useLimits';
 import { useDemo } from '@/core/app/demo';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { computeScreenTime } from '@/core/child/time/screenTime';
@@ -66,6 +67,11 @@ export function useScreenTime(active: boolean): ScreenTimeStatus {
   const apply = useCallback(
     (view: SessionView) => {
       if (!childId) return;
+      // The server pauses the children when there are more of them than the plan has room for: the game says so at once.
+      if (view.blocked) {
+        const known = useLimits.getState().limits;
+        useLimits.getState().set({ children: known?.children ?? null, profiles: known?.profiles ?? 0, openClock: known?.openClock ?? false, blocked: true });
+      }
       useGameStore.getState().applyServerScreenTime(childId, view, runningRef.current);
     },
     [childId],

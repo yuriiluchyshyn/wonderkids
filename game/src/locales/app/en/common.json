@@ -660,6 +660,8 @@
     "pinOk": "Your child signs in with the nickname and this PIN.",
     "pinBad": "✋ A PIN is 3 or 4 digits.",
     "create": "Create the profile",
+    "creating": "Creating…",
+    "createFailed": "The profile was not created. Check your connection and try again.",
     "removeTitle": "Remove the child?",
     "removeHint": "All the progress of this profile will be lost. This cannot be undone.",
     "removeYes": "Yes, remove"
@@ -944,6 +946,11 @@
     "terms": "Terms of use",
     "label": "Legal information"
   },
+  "childBlocked": {
+    "title": "Out of fuel",
+    "message": "Sorry, you have run out of fuel. Go to your parents so they can check.",
+    "retry": "Try again"
+  },
   "billing": {
     "paywall": {
       "title": "Pulsar Kids plans",
@@ -1042,6 +1049,27 @@
       "cancel": "Cancel",
       "ok": "Confirm"
     },
+    "trim": {
+      "title": "Who stays?",
+      "downgrade": "The Basic plan has room for {kids}. Tick the children to delete; the rest stay.",
+      "over": "Your plan has room for {kids}. Tick the children to delete so that the rest fit.",
+      "mark": "Delete {name}",
+      "willGo": "will be deleted",
+      "stays": "stays",
+      "left": "Left: {left}. Needed: {keep}.",
+      "warn": "The profiles of the ticked children and all their progress, rewards and settings will be deleted for good.",
+      "approve": "Confirm"
+    },
+    "over": {
+      "title": "There are more children than the plan allows",
+      "text": "The cabinet has {profiles} children and the plan has {room} places. The children’s accounts are paused: they see that the fuel has run out.",
+      "fixFree": "Add a plan with room for all the children (for example {paid}) and everything comes back. Or delete the extra ones and keep one child.",
+      "fixFamily": "Add places to the plan and everything comes back. Or delete the extra children.",
+      "settle": "Settle it",
+      "seePlans": "See the plans",
+      "addPlaces": "Add places to the plan",
+      "remove": "Delete the extra ones"
+    },
     "offer": {
       "current": "Your current plan: {name}.",
       "goals": "Family goals — a reward for what each child collects — come with the {paid} plan.",
@@ -1061,7 +1089,9 @@
       "removeChild": "Remove a child",
       "planTitle": "Plan",
       "giftNote": "Family is a gift, so there is nothing to change here.",
-      "confirmDowngrade": "Switch to {name} on {date}? All the children and the information about them (profiles, progress, rewards and settings) will be deleted. This cannot be undone.",
+      "confirmDowngrade": "Switch to {name} on {date}? The Basic plan has room for one child only: in the next step you choose who stays. The profiles and all the progress of the others will be deleted at once, for good.",
+      "confirmDowngradeOne": "Switch to {name} on {date}? Screen time becomes fixed, and family goals and extra children will no longer be available.",
+      "downgradeNext": "Next",
       "downgradeYes": "Yes, switch to {name}",
       "cardTitle": "Payment method",
       "noCard": "No card found.",

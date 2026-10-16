@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   useGameStore,
   selectNicknameTaken,
+  selectPersistable,
   type Gender,
 } from '@/core/child/store/useGameStore';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
@@ -44,7 +45,7 @@ const BLANK: NewChild = {
  * against the whole platform) and a simple PIN. Tapping a child selects it so
  * the settings below edit that child.
  */
-export function ChildManager() {
+export function ChildManager({ onCreated }: { /** The profile was made and saved on the server. */ onCreated?: () => void } = {}) {
   const lang = useLang();
   const t = useT();
   const children = useGameStore((s) => s.children);
@@ -60,6 +61,8 @@ export function ChildManager() {
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
   /** The places the plan had when the window for more of them was opened; null — it is not open. */
   const [toppingUp, setToppingUp] = useState<number | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
   const checkSeq = useRef(0);
 
   // With the paid mode on, a child beyond the plan is the plan's to give (the server holds the same limit: a save that adds
@@ -71,6 +74,7 @@ export function ChildManager() {
 
   /** The form of a new child. */
   const startAdd = () => {
+    setCreateError(null);
     setDraft(BLANK);
     setNickStatus('idle');
     setAdding(true);
@@ -127,9 +131,15 @@ export function ChildManager() {
     (nickStatus === 'available' || nickStatus === 'error') &&
     pinValid;
 
-  const save = () => {
-    if (!canSave) return;
-    addChild({
+  /**
+   * «Створити профіль» makes the profile for real: it is sent to the server at once (the cabinet's
+   * «Зберегти зміни» is for the settings, not for this). If the server refuses — no room for the child in
+   * the plan, no connection — the profile is taken back and the window says why.
+   */
+  const save = async () => {
+    if (!canSave || creating) return;
+    const before = useGameStore.getState().activeChildId;
+    const id = addChild({
       lang,
       profile: {
         name: draft.name,
@@ -140,7 +150,24 @@ export function ChildManager() {
     });
     // Goals are the plan's perk: a new child on the free plan starts with none (the server keeps none for it either).
     if (restricted) useGameStore.getState().setMilestones([]);
-    setAdding(false);
+    if (!token || !id) {
+      setCreateError(t('cm.createFailed'));
+      if (id) removeChild(id);
+      return;
+    }
+    setCreating(true);
+    setCreateError(null);
+    try {
+      await api.putState(token, selectPersistable(useGameStore.getState()));
+      onCreated?.();
+      setAdding(false);
+    } catch (err) {
+      removeChild(id);
+      if (before && useGameStore.getState().children.some((c) => c.id === before)) setActiveChild(before);
+      setCreateError((err instanceof ApiError && err.text) || t('cm.createFailed'));
+    } finally {
+      setCreating(false);
+    }
   };
 
   const NICK_MESSAGE: Record<NickStatus, string> = {
@@ -284,8 +311,14 @@ export function ChildManager() {
             </div>
           </div>
 
-          <Button block size="lg" icon="✅" onClick={save} disabled={!canSave}>
-            {t('cm.create')}
+          {createError && (
+            <p className={styles.nickStatus} role="alert" style={{ color: '#f87171' }}>
+              {createError}
+            </p>
+          )}
+
+          <Button block size="lg" icon="✅" onClick={() => void save()} disabled={!canSave || creating}>
+            {creating ? t('cm.creating') : t('cm.create')}
           </Button>
         </div>
       </Modal>

@@ -32,6 +32,7 @@ import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { BillingSection } from '@/components/paywall/BillingSection';
 import { PlanLock } from '@/components/paywall/PlanLock';
+import { OverLimitNotice } from '@/components/paywall/OverLimitNotice';
 import { useAllowance } from '@/core/account/billing/usePlan';
 import { ChildManager } from './ChildManager';
 import { FamilyData } from './FamilyData';
@@ -302,6 +303,9 @@ export function ParentDashboard() {
         </div>
       </div>
 
+      {/* More children than the plan has room for: the children's accounts are paused — the way to settle it is one tap away. */}
+      <OverLimitNotice compact />
+
       {saveError && (
         <p className={styles.hint} role="alert" style={{ color: '#f87171' }}>
           {saveError}
@@ -311,7 +315,14 @@ export function ParentDashboard() {
       {/* The plan of the account, above the children (paid mode only): what it is, and the way to manage it. */}
       <BillingSection />
 
-      <ChildManager />
+      {/* A new profile is saved on the server when it is made: the dashboard's «unsaved» mark starts from there. */}
+      <ChildManager
+        onCreated={() => {
+          const data = selectPersistable(useGameStore.getState());
+          savedSnapshot.current = data;
+          setSavedJson(settingsJson(data));
+        }}
+      />
 
       {activeChildId ? (
         <>
