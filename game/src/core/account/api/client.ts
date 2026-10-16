@@ -181,6 +181,20 @@ export const api = {
     return audio;
   },
 
+  /** Whether the trial game speaks with the natural cloud voice (the owner's switch and key for it). */
+  trialVoice() {
+    return request<{ enabled: boolean }>('/api/tts/trial');
+  },
+
+  /** One phrase of the trial game from the natural cloud voice, as base64 MP3 — no account needed. */
+  async trialTts(text: string, lang: LangCode = 'uk') {
+    const { audio } = await request<{ audio: string }>('/api/tts/trial', {
+      method: 'POST',
+      body: lang === 'uk' ? { text } : { text, lang },
+    });
+    return audio;
+  },
+
   /** Replace the signed-in user's saved state. */
   putState(token: string, state: unknown, keepalive = false) {
     return request<{ ok: true; updatedAt: string }>('/api/state', {
@@ -368,6 +382,14 @@ export interface ProductSettings {
   demoMinutesDefault: number;
   demoMinutesMin: number;
   demoMinutesMax: number;
+  /** The trial game's own Google key: switched on or not, and the last characters of the key (never the key). */
+  trialSpeech: { enabled: boolean; keyHint: string; readable: boolean };
+}
+
+export interface SettingsChange {
+  demoMinutes?: number;
+  /** An empty `key` keeps the stored one. */
+  trialSpeech?: { enabled: boolean; key?: string };
 }
 
 /** A place in a rule: a country (`US`) or a region (`@north-america`). */
@@ -464,11 +486,15 @@ export const adminApi = {
     return request<{ keys: SpeechKey[] }>(`/api/admin/speech?id=${id}`, { method: 'DELETE', adminKey });
   },
 
-  testSpeechKey(adminKey: string, keyId: number) {
+  /**
+   * Try a stored key — or, with `'trial'`, the trial game's — on a sample phrase,
+   * or on `text` read by the voice of `lang` (stress marks and all).
+   */
+  testSpeechKey(adminKey: string, key: number | 'trial', text?: { text: string; lang: LangCode }) {
     return request<{ ok: boolean; audio?: string; error?: string; detail?: string }>('/api/admin/speech?test=1', {
       method: 'POST',
       adminKey,
-      body: { keyId },
+      body: { ...(key === 'trial' ? { trial: true } : { keyId: key }), ...text },
     });
   },
 
@@ -476,7 +502,7 @@ export const adminApi = {
     return request<{ settings: ProductSettings }>('/api/admin/users?part=settings', { adminKey });
   },
 
-  saveSettings(adminKey: string, change: { demoMinutes: number }) {
+  saveSettings(adminKey: string, change: SettingsChange) {
     return request<{ settings: ProductSettings }>('/api/admin/users?part=settings', { method: 'PUT', adminKey, body: change });
   },
 

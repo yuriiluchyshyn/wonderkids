@@ -23,8 +23,10 @@
  * to create the account.
  */
 import { TRIAL_PATH, gameOfQuery, linkOfQuery, queryOfSource, viaOfQuery, type GameRef, type VisitVia } from '@pulsar/platform';
+import { useEffect } from 'react';
 import { create } from 'zustand';
 import { api } from '@/core/account/api/client';
+import { speechEngine } from '@/core/audio/SpeechEngine';
 import { signupSource } from '@/core/app/attribution';
 import { moduleRegistry } from '@/core/game/kernel/ModuleRegistry';
 import { speaks } from '@/core/game/kernel/types';
@@ -180,6 +182,29 @@ useDeviceLang.subscribe(({ lang }) => {
   const name = tApp(lang, 'child.defaultName');
   if (useGameStore.getState().profile.name !== name) useGameStore.getState().setProfile({ name });
 });
+
+/**
+ * The trial game speaks with the natural cloud voice — stresses and all — when
+ * the owner switched it on for trials (`/admin/settings`, its own key); with
+ * the browser's voice otherwise. Mounted by `DemoRoutes` for as long as the trial lasts.
+ */
+export function useTrialVoice(): void {
+  useEffect(() => {
+    let active = true;
+    api
+      .trialVoice()
+      .then(({ enabled }) => {
+        if (active && enabled) speechEngine.setCloudVoice((text, lang) => api.trialTts(text, lang));
+      })
+      .catch(() => {
+        /* no API: the browser's voice reads */
+      });
+    return () => {
+      active = false;
+      speechEngine.setCloudVoice(null);
+    };
+  }, []);
+}
 
 /**
  * The first level is done: the trial is over and `DemoOver` (the way to an

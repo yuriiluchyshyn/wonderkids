@@ -6,9 +6,9 @@ import styles from './Admin.module.css';
 
 /** Voices offered as suggestions; any valid Google voice name can be typed. */
 const VOICE_SUGGESTIONS = [
-  'uk-UA-Wavenet-A',
-  'uk-UA-Chirp3-HD-Aoede',
   'uk-UA-Chirp3-HD-Kore',
+  'uk-UA-Chirp3-HD-Aoede',
+  'uk-UA-Wavenet-A',
   'uk-UA-Chirp3-HD-Leda',
   'uk-UA-Chirp3-HD-Puck',
   'uk-UA-Chirp3-HD-Charon',
@@ -209,7 +209,7 @@ function KeyEditor({ editing, defaultVoice, accounts, keys, busy, onSave, onCanc
 export function SpeechPage({ adminKey }: { adminKey: string }) {
   const [keys, setKeys] = useState<SpeechKey[]>([]);
   const [accounts, setAccounts] = useState<AdminAccount[]>([]);
-  const [defaultVoice, setDefaultVoice] = useState('uk-UA-Wavenet-A');
+  const [defaultVoice, setDefaultVoice] = useState('uk-UA-Chirp3-HD-Kore');
   /** `null` = list; `'new'` = adding; a number = editing that key. */
   const [mode, setModeRaw] = useState<null | 'new' | number>(null);
   const [busy, setBusy] = useState(false);

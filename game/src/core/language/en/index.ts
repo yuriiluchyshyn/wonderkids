@@ -1,3 +1,4 @@
+import { NO_STRESS } from '../stress.ts';
 import type { Language } from '../types.ts';
 import { config } from './config.ts';
 import { letterName } from './letters.ts';
@@ -8,4 +9,5 @@ export * from './letters.ts';
 export * from './numbers.ts';
 export * from './voice.ts';
 
-export const en: Language = { ...config, voiced, letterName, sign, fraction };
+/** English voices stress English well enough: no dictionary (yet). A `stress.json` here and `stressOf` would add one. */
+export const en: Language = { ...config, voiced, stress: NO_STRESS, letterName, sign, fraction };

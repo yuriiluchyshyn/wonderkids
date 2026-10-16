@@ -7,6 +7,7 @@
  *
  * Deliberately free of React and of `@/` imports so it runs under `node --test`.
  */
+import type { Stress } from './stress.ts';
 
 export const LANG_CODES = ['uk', 'en', 'pl'] as const;
 export type LangCode = (typeof LANG_CODES)[number];
@@ -29,6 +30,11 @@ export interface LanguageConfig {
 export interface Language extends LanguageConfig {
   /** A text as the voice should read it: numbers, dates, clock times and lone letters become words. */
   voiced(text: string): string;
+  /**
+   * Where its words are stressed (`stress.ts`): the cloud voice gets every
+   * phrase with the stresses marked. `NO_STRESS` for a language that needs no dictionary.
+   */
+  stress: Stress;
   /** How a letter of the alphabet is called aloud. */
   letterName(letter: string): string;
   /** A sign of arithmetic as it is said: «+» → «плюс» / «plus». Anything else comes back as it is. */

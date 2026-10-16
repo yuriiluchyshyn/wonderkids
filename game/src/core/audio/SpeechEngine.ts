@@ -1,4 +1,4 @@
-import { DEFAULT_LANG, language, type LangCode } from '@/core/language';
+import { DEFAULT_LANG, language, stressed, type LangCode } from '@/core/language';
 
 /** Language of a phrase — one of the languages of the app (`core/language`). */
 export type SpeechLang = LangCode;
@@ -90,6 +90,8 @@ export class SpeechEngine {
   setCloudVoice(cloud: CloudVoice | null): void {
     this.cloud = cloud;
     if (!cloud) this.cloudCache.clear();
+    // Fetch the dictionary of stress now, not on the first phrase, which waits for the cloud as it is.
+    else void stressed('', this.lang);
   }
 
   get language(): SpeechLang {
@@ -224,7 +226,12 @@ export class SpeechEngine {
     // Asked for again while on its way (fetched ahead, then said): one request, not two.
     const inFlight = this.cloudInFlight.get(cacheKey);
     if (inFlight) return inFlight;
-    const request = this.cloud(text, lang).finally(() => this.cloudInFlight.delete(cacheKey));
+    const cloud = this.cloud;
+    // The cloud voice is told where each word is stressed (`core/language/stress.ts`); the
+    // browser's voice gets the phrase without the marks — it would not read them.
+    const request = stressed(text, lang)
+      .then((marked) => cloud(marked, lang))
+      .finally(() => this.cloudInFlight.delete(cacheKey));
     this.cloudInFlight.set(cacheKey, request);
     const base64 = await request;
     if (this.cloudCache.size >= CLOUD_CACHE_LIMIT) {

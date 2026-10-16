@@ -6,11 +6,81 @@ import { Route, Routes } from 'react-router-dom';
 import { SpeechPage } from './SpeechPage';
 import { AvailabilityPage } from './AvailabilityPage';
 import { Tabs } from './Table';
+import { StressTester } from './StressTester';
 import styles from './Admin.module.css';
 
 /**
- * `/admin/settings` — how long the trial game lasts, kept in the database
- * (`wk_settings`).
+ * The trial game's voice: its own Google key and a switch. On — whoever plays
+ * the trial hears the natural voice, with the stresses of the dictionary; off —
+ * the browser's own voice reads, and nothing is stressed.
+ */
+function TrialVoice({ adminKey, settings, onSaved }: { adminKey: string; settings: ProductSettings; onSaved: (next: ProductSettings) => void }) {
+  const trial = settings.trialSpeech;
+  const [enabled, setEnabled] = useState(trial.enabled);
+  const [key, setKey] = useState('');
+  const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const changed = enabled !== trial.enabled || key.trim() !== '';
+  const keyless = enabled && !trial.readable && key.trim() === '';
+
+  const save = async (e: FormEvent) => {
+    e.preventDefault();
+    setBusy(true);
+    setNote(null);
+    try {
+      const next = (await adminApi.saveSettings(adminKey, { trialSpeech: { enabled, key: key.trim() } })).settings;
+      onSaved(next);
+      setEnabled(next.trialSpeech.enabled);
+      setKey('');
+      setNote({ ok: true, text: '✓ Збережено' });
+    } catch (err) {
+      setNote({ ok: false, text: errorText(err) });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <form className={styles.editor} onSubmit={save}>
+      <h2>🗣️ Голос пробної гри</h2>
+      <p className={styles.meta}>
+        Увімкнено — усі, хто грає пробну гру, чують природний голос Google з наголосами зі словника. Вимкнено — читає
+        голос браузера, і наголоси не враховуються. Кожну фразу сервер озвучує один раз і далі бере з кешу; один
+        відвідувач може замовити не більше кількох сотень нових фраз на годину.
+      </p>
+      <div className={styles.fields}>
+        <label className={styles.field}>
+          <span>API-ключ Google Cloud (Text-to-Speech)</span>
+          <input
+            type="password"
+            autoComplete="off"
+            value={key}
+            onChange={(e) => setKey(e.target.value)}
+            placeholder={trial.readable ? `збережено ${trial.keyHint} — введи новий, щоб замінити` : 'AIza…'}
+          />
+        </label>
+      </div>
+      <label className={styles.radio}>
+        <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
+        <span>
+          <b>Увімкнути голос Google у пробній грі</b>
+        </span>
+      </label>
+      {keyless && <p className={styles.noteErr}>Щоб увімкнути, введи ключ.</p>}
+      <div className={styles.actions}>
+        <button type="submit" className={styles.btnPrimary} disabled={busy || !changed || keyless}>
+          {busy ? 'Зберігаю…' : 'Зберегти'}
+        </button>
+        {note && <span className={note.ok ? styles.noteOk : styles.noteErr}>{note.text}</span>}
+      </div>
+    </form>
+  );
+}
+
+/**
+ * `/admin/settings` — the trial game: how long it lasts and its voice, kept in
+ * the database (`wk_settings`).
  */
 function TrialGame({ adminKey }: { adminKey: string }) {
   const [settings, setSettings] = useState<ProductSettings | null>(null);
@@ -109,6 +179,18 @@ function TrialGame({ adminKey }: { adminKey: string }) {
           </div>
         </form>
       </section>
+
+      {settings && (
+        <section className={styles.gamesSection}>
+          <TrialVoice adminKey={adminKey} settings={settings} onSaved={show} />
+        </section>
+      )}
+
+      {settings && (
+        <section className={styles.gamesSection}>
+          <StressTester adminKey={adminKey} trialReady={settings.trialSpeech.readable} />
+        </section>
+      )}
     </div>
   );
 }

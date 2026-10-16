@@ -7,7 +7,7 @@ import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { useGameStore } from '@/core/child/store/useGameStore';
 import { useRemoteSync } from '@/core/account/sync/useRemoteSync';
 import { getPortal, portalUrl } from '@/core/app/portal';
-import { seatGuest, useDemo } from '@/core/app/demo';
+import { seatGuest, useDemo, useTrialVoice } from '@/core/app/demo';
 import { signupSource } from '@/core/app/attribution';
 import { queryOfSource } from '@pulsar/platform';
 import { DemoOver } from '@/components/demo/DemoOver';
@@ -143,6 +143,7 @@ function SyncedRoutes() {
 function DemoRoutes() {
   const expired = useDemo((s) => s.expired);
   const [seated, setSeated] = useState(false);
+  useTrialVoice();
 
   useEffect(() => {
     seatGuest();

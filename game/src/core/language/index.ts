@@ -12,6 +12,7 @@ import { uk } from './uk/index.ts';
 
 export { LANG_CODES, type LangCode, type Language, type LanguageConfig } from './types.ts';
 export { common, hasOwn, own, say, spoken, written } from './marks.ts';
+export { STRESS, unmarked, type Stress } from './stress.ts';
 
 export const LANGUAGES: Record<LangCode, Language> = { uk, en, pl };
 /** The language the app was written in, and the one every other falls back to. */
@@ -24,6 +25,9 @@ export const language = (code: LangCode): Language => LANGUAGES[code];
 
 /** A text as the voice of `lang` should read it. */
 export const voiced = (text: string, lang: LangCode = DEFAULT_LANG): string => LANGUAGES[lang].voiced(text);
+
+/** A text already made ready for the voice (`voiced`), with its stresses marked — what the cloud voice is sent. Never shown. */
+export const stressed = (text: string, lang: LangCode = DEFAULT_LANG): Promise<string> => LANGUAGES[lang].stress.stressed(text);
 
 /** The language to offer in a country (ISO 3166-1 alpha-2): its own, or the world's. */
 export function langOfCountry(country: string | null | undefined): LangCode {
