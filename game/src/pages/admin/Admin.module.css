@@ -428,6 +428,25 @@ a.btnPrimary {
   overflow-wrap: anywhere;
 }
 
+/* ---- The voice of each language (settings) ---- */
+.voiceLine .fields {
+  flex: 1 1 100%;
+}
+
+.voiceLang {
+  flex: 1 1 100%;
+}
+
+.voicePick {
+  display: flex;
+  gap: 6px;
+}
+
+.voicePick select {
+  flex: 1;
+  min-width: 0;
+}
+
 /* ---- Keys ---- */
 .keyRow {
   display: flex;

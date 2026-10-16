@@ -7,6 +7,7 @@ import { SpeechPage } from './SpeechPage';
 import { AvailabilityPage } from './AvailabilityPage';
 import { Tabs } from './Table';
 import { StressTester } from './StressTester';
+import { VoicePicker } from './VoicePicker';
 import styles from './Admin.module.css';
 
 /**
@@ -79,10 +80,10 @@ function TrialVoice({ adminKey, settings, onSaved }: { adminKey: string; setting
 }
 
 /**
- * `/admin/settings` — the trial game: how long it lasts and its voice, kept in
- * the database (`wk_settings`).
+ * `/admin/settings` — the main settings, kept in the database (`wk_settings`):
+ * the voice each language is read in, and the trial game — how long it lasts and its voice.
  */
-function TrialGame({ adminKey }: { adminKey: string }) {
+function MainSettings({ adminKey }: { adminKey: string }) {
   const [settings, setSettings] = useState<ProductSettings | null>(null);
   const [minutes, setMinutes] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -130,13 +131,20 @@ function TrialGame({ adminKey }: { adminKey: string }) {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1>🚀 Пробна гра</h1>
+        <h1>⚙️ Основні налаштування</h1>
       </header>
 
       {error && <p className={styles.noteErr}>{error}</p>}
 
+      {settings && (
+        <section className={styles.gamesSection}>
+          <VoicePicker adminKey={adminKey} settings={settings} onSaved={show} />
+        </section>
+      )}
+
       <section className={styles.gamesSection}>
         <form className={styles.editor} onSubmit={save}>
+          <h2>🚀 Пробна гра</h2>
           <p className={styles.meta}>
             Гра без акаунта за адресою <code>{trialUrl()}</code>. Коли час спливає, гра зупиняється — навіть посеред
             завдання — і дитину просять покликати батьків, щоб ті створили акаунт. Набране в пробній грі не
@@ -196,21 +204,21 @@ function TrialGame({ adminKey }: { adminKey: string }) {
 }
 
 const TABS = [
-  { to: '/admin/settings', label: '🚀 Пробна гра' },
+  { to: '/admin/settings', label: '⚙️ Основне' },
   { to: '/admin/settings/speech', label: '🗣️ Google Speech' },
   { to: '/admin/settings/availability', label: '🌍 Доступність' },
 ];
 
 /**
  * `/admin/settings/*` — everything the owner sets for the whole product, a tab
- * each: the trial game, the Google Speech keys, what is offered where.
+ * each: the main settings (voices, the trial game), the Google Speech keys, what is offered where.
  */
 export function SettingsPage({ adminKey }: { adminKey: string }) {
   return (
     <>
       <Tabs label="Налаштування" tabs={TABS} />
       <Routes>
-        <Route index element={<TrialGame adminKey={adminKey} />} />
+        <Route index element={<MainSettings adminKey={adminKey} />} />
         <Route path="speech" element={<SpeechPage adminKey={adminKey} />} />
         <Route path="availability" element={<AvailabilityPage adminKey={adminKey} />} />
       </Routes>

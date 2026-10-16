@@ -384,12 +384,28 @@ export interface ProductSettings {
   demoMinutesMax: number;
   /** The trial game's own Google key: switched on or not, and the last characters of the key (never the key). */
   trialSpeech: { enabled: boolean; keyHint: string; readable: boolean };
+  /** The voice the owner chose for each language — for every account and for the trial game; '' — none, the default reads. */
+  voices: Record<SpeechAudience, Record<LangCode, string>>;
+  /** The voice of each language when none is chosen. */
+  defaultVoices: Record<LangCode, string>;
+}
+
+/** Who hears a voice chosen in the settings: every account, or whoever plays the trial game. */
+export type SpeechAudience = 'accounts' | 'trial';
+
+/** A voice Google offers. */
+export interface CloudVoice {
+  name: string;
+  /** `FEMALE`, `MALE` or `NEUTRAL`. */
+  gender: string | null;
 }
 
 export interface SettingsChange {
   demoMinutes?: number;
   /** An empty `key` keeps the stored one. */
   trialSpeech?: { enabled: boolean; key?: string };
+  /** Only the languages named change; '' goes back to the default voice. */
+  voices?: Partial<Record<SpeechAudience, Partial<Record<LangCode, string>>>>;
 }
 
 /** A place in a rule: a country (`US`) or a region (`@north-america`). */
@@ -495,6 +511,20 @@ export const adminApi = {
       method: 'POST',
       adminKey,
       body: { ...(key === 'trial' ? { trial: true } : { keyId: key }), ...text },
+    });
+  },
+
+  /** The voices Google offers for each of our languages (asked with whatever key is stored). */
+  listCloudVoices(adminKey: string) {
+    return request<{ ok: boolean; voices?: Record<LangCode, CloudVoice[]>; error?: string; detail?: string }>('/api/admin/speech?voices=1', { adminKey });
+  },
+
+  /** Hear a voice as `audience` would in `lang` — the chosen one, or `voice` before it is chosen — on a sample phrase. */
+  hearVoice(adminKey: string, audience: SpeechAudience, lang: LangCode, voice: string) {
+    return request<{ ok: boolean; audio?: string; error?: string; detail?: string }>('/api/admin/speech?test=1', {
+      method: 'POST',
+      adminKey,
+      body: { audience, lang, ...(voice ? { voice } : {}) },
     });
   },
 

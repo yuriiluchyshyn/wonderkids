@@ -128,7 +128,7 @@ function KeyEditor({ editing, defaultVoice, accounts, keys, busy, onSave, onCanc
           />
         </label>
         <label className={styles.field}>
-          <span>Голос</span>
+          <span>Голос (діє, доки в «Основне → Голоси озвучки» для мови не вибрано інший)</span>
           <input list="wk-voices" value={draft.voice} onChange={(e) => patch({ voice: e.target.value })} spellCheck={false} />
         </label>
       </div>
