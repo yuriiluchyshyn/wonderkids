@@ -15,6 +15,9 @@ public interface ChildRepository extends JpaRepository<Child, String> {
 
   boolean existsByIdAndParentId(String id, Integer parentId);
 
+  /** How many child profiles an account has. */
+  long countByParentId(Integer parentId);
+
   /** Does any of these ids name a child of ANOTHER account? */
   boolean existsByIdInAndParentIdNot(Collection<String> ids, Integer parentId);
 

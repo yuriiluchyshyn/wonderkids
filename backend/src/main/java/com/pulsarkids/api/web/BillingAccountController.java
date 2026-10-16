@@ -36,7 +36,10 @@ import org.springframework.web.bind.annotation.RestController;
  *        Stripe charges it at once and the children are added → the state as `me` + { charged: { amount, currency } };
  *        409 `price_changed` when the amount is no longer that, 402 `payment_failed` when the card is declined
  *        (then nothing changes). A letter about it goes to the parent.
- *   POST /api/billing/portal         → { url }   Stripe's portal: the card, the invoices
+ *   GET  /api/billing/details        → { card: { brand, last4, expMonth, expYear } | null, invoices: [{ id, number, created, amount, currency, status, hostedUrl, pdfUrl }] }
+ *                                    the card the subscription is paid with and the latest invoices (Stripe's)
+ *   POST /api/billing/portal         { flow?: "card" } → { url }   Stripe's portal: the card, the invoices; `card` — straight at changing the card
+ *   (PUT subscription refuses with 409 `children_in_use` to give up a place a child's profile is in)
  *
  * A parent's session only (403 `parent_only` for a child's). The changes need
  * the paid mode on (503 `billing_off`); `me` always answers — with `paidMode: false`.
@@ -45,6 +48,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class BillingAccountController extends ApiController {
   private static final String CABINET = "/parent";
+  private static final String CABINET_SUBSCRIPTION = "/parent/subscription";
 
   private final SubscriptionService subscriptions;
   private final BillingService billing;
@@ -139,12 +143,26 @@ public class BillingAccountController extends ApiController {
     }
   }
 
-  @PostMapping(Routes.BILLING_PORTAL)
-  public ResponseEntity<Object> portal(HttpServletRequest request) {
+  @GetMapping(Routes.BILLING_DETAILS)
+  public ResponseEntity<Object> details(HttpServletRequest request) {
     Auth.User user = CheckoutController.requireParent(request);
     requireOn();
     try {
-      return CheckoutController.fresh(Json.map(Fields.URL, subscriptions.portal((int) user.id(), CheckoutController.parentsOrigin(request) + CABINET)));
+      return CheckoutController.fresh(subscriptions.details((int) user.id()));
+    } catch (StripeException err) {
+      log.error("[billing] details not read: {}", err.getMessage());
+      throw new HttpError(ApiError.BILLING_UNREACHABLE);
+    }
+  }
+
+  @PostMapping(Routes.BILLING_PORTAL)
+  public ResponseEntity<Object> portal(HttpServletRequest request, @RequestBody(required = false) JsonNode body) {
+    Auth.User user = CheckoutController.requireParent(request);
+    requireOn();
+    // `flow: "card"` opens the portal straight at changing the card, and brings the parent back to the subscription's page.
+    boolean card = "card".equals(Json.text(Json.at(body, Fields.FLOW)));
+    try {
+      return CheckoutController.fresh(Json.map(Fields.URL, subscriptions.portal((int) user.id(), CheckoutController.parentsOrigin(request) + (card ? CABINET_SUBSCRIPTION : CABINET), card)));
     } catch (StripeException err) {
       log.error("[billing] portal not opened: {}", err.getMessage());
       throw new HttpError(ApiError.BILLING_UNREACHABLE);

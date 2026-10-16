@@ -437,7 +437,7 @@ class ApiTest {
     asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", false));
     // The paid mode off: every part of paying is off — even for an account that chose a plan.
     assertEquals(json("{'paidMode':false,'access':'none','mustChoose':false,'plan':null,'gift':null}"), asParent("GET", "/api/billing/me", null).body());
-    for (String[] off : new String[][] {{"POST", "/api/billing/choose"}, {"PUT", "/api/billing/subscription"}, {"POST", "/api/billing/portal"}, {"POST", "/api/billing/children"}, {"POST", "/api/billing/children/preview"}, {"POST", "/api/billing/checkout"}, {"GET", "/api/billing/plans"}})
+    for (String[] off : new String[][] {{"POST", "/api/billing/choose"}, {"PUT", "/api/billing/subscription"}, {"POST", "/api/billing/portal"}, {"POST", "/api/billing/children"}, {"POST", "/api/billing/children/preview"}, {"GET", "/api/billing/details"}, {"POST", "/api/billing/checkout"}, {"GET", "/api/billing/plans"}})
       assertEquals("billing_off", asParent(off[0], off[1], off[0].equals("GET") ? null : Map.of("plan", "free", "children", 3)).text("error"), off[0] + " " + off[1]);
     // A child's session has no say in the plan.
     assertEquals("parent_only", call("GET", "/api/billing/me", null, "Authorization", "Bearer " + childToken).text("error"));

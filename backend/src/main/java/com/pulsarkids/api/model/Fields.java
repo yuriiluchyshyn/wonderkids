@@ -37,6 +37,7 @@ public final class Fields {
   public static final String CELEBRATION = "celebration";
   public static final String CH = "ch";
   public static final String CHARGING_SUBSCRIPTIONS = "chargingSubscriptions";
+  public static final String CARD = "card";
   public static final String CHARGED = "charged";
   public static final String CHILDREN = "children";
   public static final String CHILDREN_AFTER = "childrenAfter";
@@ -115,6 +116,15 @@ public final class Fields {
   public static final String HINTS_SURFACED = "hintsSurfaced";
   public static final String I = "i";
   public static final String ID = "id";
+  public static final String INVOICES = "invoices";
+  public static final String HOSTED_URL = "hostedUrl";
+  public static final String PDF_URL = "pdfUrl";
+  public static final String NUMBER = "number";
+  public static final String BRAND = "brand";
+  public static final String LAST4 = "last4";
+  public static final String EXP_MONTH = "expMonth";
+  public static final String EXP_YEAR = "expYear";
+  public static final String FLOW = "flow";
   public static final String IDENTIFIER = "identifier";
   public static final String ID_TOKEN = "idToken";
   public static final String INVOICE_EMAILS = "invoiceEmails";

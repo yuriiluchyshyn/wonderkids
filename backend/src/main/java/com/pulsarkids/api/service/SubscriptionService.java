@@ -8,6 +8,7 @@ import com.pulsarkids.api.core.Plans;
 import com.pulsarkids.api.data.entity.BillingAccount;
 import com.pulsarkids.api.data.entity.Parent;
 import com.pulsarkids.api.data.repo.BillingAccountRepository;
+import com.pulsarkids.api.data.repo.ChildRepository;
 import com.pulsarkids.api.data.repo.ParentRepository;
 import com.pulsarkids.api.model.Access;
 import com.pulsarkids.api.model.ApiError;
@@ -26,12 +27,16 @@ import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 import com.stripe.model.InvoiceLineItem;
+import com.stripe.model.PaymentMethod;
 import com.stripe.model.PromotionCode;
 import com.stripe.model.Subscription;
 import com.stripe.model.SubscriptionItem;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
+import com.stripe.param.CustomerRetrieveParams;
 import com.stripe.param.InvoiceCreatePreviewParams;
+import com.stripe.param.InvoiceListParams;
+import com.stripe.param.SubscriptionRetrieveParams;
 import com.stripe.param.PromotionCodeListParams;
 import com.stripe.param.PromotionCodeRetrieveParams;
 import com.stripe.param.SubscriptionUpdateParams;
@@ -75,6 +80,7 @@ public class SubscriptionService {
 
   private final BillingAccountRepository accounts;
   private final ParentRepository parents;
+  private final ChildRepository childProfiles;
   private final BillingService billing;
   private final MarketingService marketing;
   private final SchemaService schema;
@@ -263,6 +269,8 @@ public class SubscriptionService {
     Catalog.View view = billing.catalog();
     BillingPeriod nextPeriod = period != null ? period : Wire.of(BillingPeriod.class, account.getPeriod());
     int nextChildren = children != null ? children : (account.getChildren() == null ? Catalog.childrenIncluded(view, account.getPlanId()) : account.getChildren());
+    // A place in the plan cannot be given up while a child's profile is in it: the profile goes first.
+    if (children != null && nextChildren < tx.execute((status) -> childProfiles.countByParentId(parentId))) throw new HttpError(ApiError.CHILDREN_IN_USE);
     Catalog.OrderResult result = Catalog.order(view, account.getPlanId(), account.getRegion(), nextPeriod, nextChildren);
     if (result.refusal() == Catalog.Refusal.BAD_CHILDREN) throw new HttpError(ApiError.INVALID_CHILDREN);
     if (result.order() == null) throw new HttpError(ApiError.INVALID_PLAN);
@@ -441,14 +449,67 @@ public class SubscriptionService {
     sync(billing.client().v1().subscriptions().update(account.getStripeSubscriptionId(), SubscriptionUpdateParams.builder().setCancelAtPeriodEnd(cancel).build()));
   }
 
-  /** Stripe's customer portal: the card, the invoices. */
-  public String portal(int parentId, String returnUrl) throws StripeException {
+  /** Stripe's customer portal: the card, the invoices. With `cardOnly` it opens straight at changing the card, and comes back to `returnUrl` when that is done. */
+  public String portal(int parentId, String returnUrl, boolean cardOnly) throws StripeException {
     BillingAccount account = load(parentId);
     if (account.getStripeCustomerId() == null) throw new HttpError(ApiError.NO_SUBSCRIPTION);
-    return billing.client().v1().billingPortal().sessions().create(com.stripe.param.billingportal.SessionCreateParams.builder()
+    com.stripe.param.billingportal.SessionCreateParams.Builder params = com.stripe.param.billingportal.SessionCreateParams.builder()
         .setCustomer(account.getStripeCustomerId())
-        .setReturnUrl(returnUrl)
-        .build()).getUrl();
+        .setReturnUrl(returnUrl);
+    if (cardOnly) {
+      params.setFlowData(com.stripe.param.billingportal.SessionCreateParams.FlowData.builder()
+          .setType(com.stripe.param.billingportal.SessionCreateParams.FlowData.Type.PAYMENT_METHOD_UPDATE)
+          .setAfterCompletion(com.stripe.param.billingportal.SessionCreateParams.FlowData.AfterCompletion.builder()
+              .setType(com.stripe.param.billingportal.SessionCreateParams.FlowData.AfterCompletion.Type.REDIRECT)
+              .setRedirect(com.stripe.param.billingportal.SessionCreateParams.FlowData.AfterCompletion.Redirect.builder().setReturnUrl(returnUrl).build())
+              .build())
+          .build());
+    }
+    return billing.client().v1().billingPortal().sessions().create(params.build()).getUrl();
+  }
+
+  /** How many invoices the cabinet lists. */
+  private static final long INVOICES_SHOWN = 24;
+
+  /**
+   * What the cabinet's «Підписка» shows besides the plan: the card the
+   * subscription is paid with (its brand, last four digits and expiry — never
+   * the number) and the latest invoices, newest first, with their pages and PDFs.
+   */
+  public Map<String, Object> details(int parentId) throws StripeException {
+    BillingAccount account = load(parentId);
+    if (account.getStripeCustomerId() == null) return Json.map(Fields.CARD, null, Fields.INVOICES, List.of());
+
+    // The card: the subscription's own, else the customer's default.
+    PaymentMethod method = null;
+    if (account.getStripeSubscriptionId() != null) {
+      method = billing.client().v1().subscriptions().retrieve(account.getStripeSubscriptionId(), SubscriptionRetrieveParams.builder().addExpand("default_payment_method").build()).getDefaultPaymentMethodObject();
+    }
+    if (method == null) {
+      Customer customer = billing.client().v1().customers().retrieve(account.getStripeCustomerId(), CustomerRetrieveParams.builder().addExpand("invoice_settings.default_payment_method").build());
+      if (customer.getInvoiceSettings() != null) method = customer.getInvoiceSettings().getDefaultPaymentMethodObject();
+    }
+    Object card = method == null || method.getCard() == null ? null : Json.map(
+        Fields.BRAND, method.getCard().getBrand(),
+        Fields.LAST4, method.getCard().getLast4(),
+        Fields.EXP_MONTH, method.getCard().getExpMonth(),
+        Fields.EXP_YEAR, method.getCard().getExpYear());
+
+    List<Object> invoices = new ArrayList<>();
+    for (Invoice invoice : billing.client().v1().invoices().list(InvoiceListParams.builder().setCustomer(account.getStripeCustomerId()).setLimit(INVOICES_SHOWN).build()).getData()) {
+      if ("draft".equals(invoice.getStatus())) continue;
+      long amount = "paid".equals(invoice.getStatus()) && invoice.getAmountPaid() != null ? invoice.getAmountPaid() : invoice.getTotal() == null ? 0 : invoice.getTotal();
+      invoices.add(Json.map(
+          Fields.ID, invoice.getId(),
+          Fields.NUMBER, invoice.getNumber(),
+          Fields.CREATED, Json.iso(invoice.getCreated() == null ? null : Instant.ofEpochSecond(invoice.getCreated())),
+          Fields.AMOUNT, amount,
+          Fields.CURRENCY, invoice.getCurrency(),
+          Fields.STATUS, invoice.getStatus(),
+          Fields.HOSTED_URL, invoice.getHostedInvoiceUrl(),
+          Fields.PDF_URL, invoice.getInvoicePdf()));
+    }
+    return Json.map(Fields.CARD, card, Fields.INVOICES, invoices);
   }
 
   /** The owner gives Family as a gift, or takes the gift back (admin panel). */
