@@ -56,6 +56,8 @@ public enum ApiError {
   OFFER_INACTIVE(400, "offer_inactive"),
   NO_SUBSCRIPTION(409, "no_subscription"),
   ALREADY_PAID(409, "already_paid"),
+  PRICE_CHANGED(409, "price_changed"),
+  PAYMENT_FAILED(402, "payment_failed"),
   INVALID_PARENT_ID(400, "invalid_parent_id"),
   INVALID_SPEECH_ENABLED(400, "invalid_speech_enabled"),
   INVALID_ENABLED(400, "invalid_enabled"),

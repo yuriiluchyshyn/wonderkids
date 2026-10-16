@@ -18,6 +18,7 @@ public final class Fields {
   public static final String ACCOUNTS = "accounts";
   public static final String ACCOUNT_IDS = "accountIds";
   public static final String ACTIVE_CHILD_ID = "activeChildId";
+  public static final String ADD = "add";
   public static final String AMOUNT = "amount";
   public static final String ARTIFACTS = "artifacts";
   public static final String AUDIENCE = "audience";
@@ -36,7 +37,9 @@ public final class Fields {
   public static final String CELEBRATION = "celebration";
   public static final String CH = "ch";
   public static final String CHARGING_SUBSCRIPTIONS = "chargingSubscriptions";
+  public static final String CHARGED = "charged";
   public static final String CHILDREN = "children";
+  public static final String CHILDREN_AFTER = "childrenAfter";
   public static final String CHILD_ID = "childId";
   public static final String CHILD_PROFILE_ID = "child_profile_id";
   public static final String CHOICES_GRID_SIZE = "choicesGridSize";
@@ -156,6 +159,7 @@ public final class Fields {
   public static final String N = "n";
   public static final String NAME = "name";
   public static final String NICK = "nick";
+  public static final String NEXT_CHARGE = "nextCharge";
   public static final String NICKNAME = "nickname";
   public static final String NOTE = "note";
   public static final String O = "o";
@@ -178,6 +182,7 @@ public final class Fields {
   public static final String PLAYED_TODAY_MINUTES = "playedTodayMinutes";
   public static final String PLAYING = "playing";
   public static final String PRICES = "prices";
+  public static final String PRORATION_DATE = "prorationDate";
   public static final String PROFILE = "profile";
   public static final String PROGRESS = "progress";
   public static final String PROMO = "promo";
@@ -235,6 +240,7 @@ public final class Fields {
   public static final String TRIAL = "trial";
   public static final String TRIAL_END = "trialEnd";
   public static final String TRIAL_SPEECH = "trialSpeech";
+  public static final String TRIALING = "trialing";
   public static final String TS = "ts";
   public static final String TTS_BUTTONS = "ttsButtons";
   public static final String TYPE = "type";

@@ -13,6 +13,8 @@ public final class Routes {
   public static final String AUTH_LOGIN = "/api/auth/login";
   public static final String BILLING_CHECKOUT = "/api/billing/checkout";
   public static final String BILLING_CHOOSE = "/api/billing/choose";
+  public static final String BILLING_CHILDREN = "/api/billing/children";
+  public static final String BILLING_CHILDREN_PREVIEW = "/api/billing/children/preview";
   public static final String BILLING_ME = "/api/billing/me";
   public static final String BILLING_PORTAL = "/api/billing/portal";
   public static final String BILLING_SUBSCRIPTION = "/api/billing/subscription";

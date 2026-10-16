@@ -1,7 +1,9 @@
 package com.pulsarkids.api.service;
 
+import com.pulsarkids.api.core.Billing;
 import com.pulsarkids.api.core.Catalog;
 import com.pulsarkids.api.core.Json;
+import com.pulsarkids.api.core.Mail;
 import com.pulsarkids.api.core.Plans;
 import com.pulsarkids.api.data.entity.BillingAccount;
 import com.pulsarkids.api.data.entity.Parent;
@@ -15,21 +17,31 @@ import com.pulsarkids.api.model.GiftSource;
 import com.pulsarkids.api.model.Lang;
 import com.pulsarkids.api.model.PlanChoice;
 import com.pulsarkids.api.model.PlanKind;
+import com.pulsarkids.api.model.Text;
 import com.pulsarkids.api.model.Wire;
 import com.pulsarkids.api.web.HttpError;
+import com.stripe.exception.CardException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
+import com.stripe.model.Invoice;
+import com.stripe.model.InvoiceLineItem;
 import com.stripe.model.PromotionCode;
 import com.stripe.model.Subscription;
 import com.stripe.model.SubscriptionItem;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
+import com.stripe.param.InvoiceCreatePreviewParams;
 import com.stripe.param.PromotionCodeListParams;
 import com.stripe.param.PromotionCodeRetrieveParams;
 import com.stripe.param.SubscriptionUpdateParams;
 import com.stripe.param.checkout.SessionCreateParams;
 import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
@@ -57,12 +69,16 @@ public class SubscriptionService {
   private static final String EXPAND_PROMO_COUPON = "promotion.coupon";
   private static final String EXPAND_LIST_PROMO_COUPON = "data.promotion.coupon";
   private static final String INTEGRATION = "pulsar_family_";
+  private static final String EXPAND_LATEST_INVOICE = "latest_invoice";
+  /** How long the moment a quote was worked out at may be used for the charge. */
+  private static final long PRORATION_DATE_TTL_SECONDS = 30 * 60;
 
   private final BillingAccountRepository accounts;
   private final ParentRepository parents;
   private final BillingService billing;
   private final MarketingService marketing;
   private final SchemaService schema;
+  private final Messages messages;
   private final TransactionTemplate tx;
 
   private record GiftCheck(boolean valid, long at) {}
@@ -253,20 +269,169 @@ public class SubscriptionService {
     Catalog.Order order = result.order();
 
     SubscriptionUpdateParams.Builder update = SubscriptionUpdateParams.builder().setProrationBehavior(SubscriptionUpdateParams.ProrationBehavior.CREATE_PRORATIONS);
+    for (ItemChange change : itemChanges(subscription, view, order)) update.addItem(updateItem(change));
+    sync(billing.client().v1().subscriptions().update(subscription.getId(), update.build()));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Adding children: shown first (what is due now), charged when the parent approves
+  // ---------------------------------------------------------------------------
+
+  /** One line of a subscription as it should be after a change: the plan's, or the extra children's (a new one has no `id`). */
+  private record ItemChange(String id, String price, Long quantity, boolean deleted) {}
+
+  /** The lines a subscription needs for an order: the plan's price, and the extra-child line — kept, made, or taken away. */
+  private static List<ItemChange> itemChanges(Subscription subscription, Catalog.View view, Catalog.Order order) {
+    List<ItemChange> out = new ArrayList<>();
     boolean extraKept = false;
     for (SubscriptionItem item : subscription.getItems().getData()) {
       PlanKind kind = Catalog.kindOf(view, item.getPrice().getProduct());
       if (kind == PlanKind.PAID) {
-        update.addItem(SubscriptionUpdateParams.Item.builder().setId(item.getId()).setPrice(order.planPriceId()).build());
+        out.add(new ItemChange(item.getId(), order.planPriceId(), null, false));
       } else if (kind == PlanKind.EXTRA_CHILD) {
         extraKept = order.extraChildren() > 0;
-        update.addItem(extraKept
-            ? SubscriptionUpdateParams.Item.builder().setId(item.getId()).setPrice(order.extraPriceId()).setQuantity((long) order.extraChildren()).build()
-            : SubscriptionUpdateParams.Item.builder().setId(item.getId()).setDeleted(true).build());
+        out.add(extraKept ? new ItemChange(item.getId(), order.extraPriceId(), (long) order.extraChildren(), false) : new ItemChange(item.getId(), null, null, true));
       }
     }
-    if (!extraKept && order.extraChildren() > 0) update.addItem(SubscriptionUpdateParams.Item.builder().setPrice(order.extraPriceId()).setQuantity((long) order.extraChildren()).build());
-    sync(billing.client().v1().subscriptions().update(subscription.getId(), update.build()));
+    if (!extraKept && order.extraChildren() > 0) out.add(new ItemChange(null, order.extraPriceId(), (long) order.extraChildren(), false));
+    return out;
+  }
+
+  private static SubscriptionUpdateParams.Item updateItem(ItemChange change) {
+    SubscriptionUpdateParams.Item.Builder item = SubscriptionUpdateParams.Item.builder();
+    if (change.id() != null) item.setId(change.id());
+    if (change.deleted()) return item.setDeleted(true).build();
+    item.setPrice(change.price());
+    if (change.quantity() != null) item.setQuantity(change.quantity());
+    return item.build();
+  }
+
+  private static InvoiceCreatePreviewParams.SubscriptionDetails.Item previewItem(ItemChange change) {
+    InvoiceCreatePreviewParams.SubscriptionDetails.Item.Builder item = InvoiceCreatePreviewParams.SubscriptionDetails.Item.builder();
+    if (change.id() != null) item.setId(change.id());
+    if (change.deleted()) return item.setDeleted(true).build();
+    item.setPrice(change.price());
+    if (change.quantity() != null) item.setQuantity(change.quantity());
+    return item.build();
+  }
+
+  /**
+   * What adding `add` children costs now, as Stripe works it out: the extra
+   * children's price for the days left of the period, tax included where it is
+   * added on top. `prorationDate` fixes the moment the days are counted from —
+   * the same date is given to Stripe again when the parent approves, so what
+   * was shown is what is charged. A trial charges nothing now: the children
+   * are in the first charge after it.
+   */
+  public record ChildrenQuote(int add, int children, int childrenAfter, long amount, String currency, long prorationDate, boolean trialing, Instant nextCharge) {}
+
+  private record Quoted(ChildrenQuote quote, Subscription subscription, List<ItemChange> changes) {}
+
+  private Quoted quote(int parentId, int add, Long givenDate) throws StripeException {
+    BillingAccount account = load(parentId);
+    if (account.getStripeSubscriptionId() == null || account.isCancelAtPeriodEnd() || Plans.accessOf(account.getPlan(), account.getStatus(), account.getGift()) != Access.FAMILY) throw new HttpError(ApiError.NO_SUBSCRIPTION);
+    if (add < 1) throw new HttpError(ApiError.INVALID_CHILDREN);
+    Subscription subscription = billing.client().v1().subscriptions().retrieve(account.getStripeSubscriptionId());
+    Catalog.View view = billing.catalog();
+    int now = account.getChildren() == null ? Catalog.childrenIncluded(view, account.getPlanId()) : account.getChildren();
+    Catalog.OrderResult result = Catalog.order(view, account.getPlanId(), account.getRegion(), Wire.of(BillingPeriod.class, account.getPeriod()), now + add);
+    if (result.refusal() == Catalog.Refusal.BAD_CHILDREN) throw new HttpError(ApiError.INVALID_CHILDREN);
+    if (result.order() == null) throw new HttpError(ApiError.INVALID_PLAN);
+    List<ItemChange> changes = itemChanges(subscription, view, result.order());
+
+    long date = givenDate != null ? givenDate : Instant.now().getEpochSecond();
+    InvoiceCreatePreviewParams.SubscriptionDetails.Builder details = InvoiceCreatePreviewParams.SubscriptionDetails.builder()
+        .setProrationBehavior(InvoiceCreatePreviewParams.SubscriptionDetails.ProrationBehavior.ALWAYS_INVOICE)
+        .setProrationDate(date);
+    for (ItemChange change : changes) details.addItem(previewItem(change));
+    Invoice preview = billing.client().v1().invoices().createPreview(InvoiceCreatePreviewParams.builder()
+        .setCustomer(subscription.getCustomer())
+        .setSubscription(subscription.getId())
+        .setSubscriptionDetails(details.build())
+        .build());
+
+    boolean trialing = "trialing".equals(subscription.getStatus());
+    long amount = 0;
+    if (!trialing && preview.getLines() != null) {
+      // Only the prorations are due now; the lines of the next renewal wait for it.
+      for (InvoiceLineItem line : preview.getLines().getData()) {
+        if (!isProration(line)) continue;
+        long due = line.getAmount() == null ? 0 : line.getAmount();
+        if (line.getDiscountAmounts() != null) for (InvoiceLineItem.DiscountAmount discount : line.getDiscountAmounts()) due -= discount.getAmount() == null ? 0 : discount.getAmount();
+        if (line.getTaxes() != null) for (InvoiceLineItem.Tax tax : line.getTaxes()) if ("exclusive".equals(tax.getTaxBehavior()) && tax.getAmount() != null) due += tax.getAmount();
+        amount += due;
+      }
+    }
+    Instant next = trialing ? account.getTrialEnd() : account.getPeriodEnd();
+    return new Quoted(new ChildrenQuote(add, now, now + add, Math.max(0, amount), preview.getCurrency(), date, trialing, next), subscription, changes);
+  }
+
+  private static boolean isProration(InvoiceLineItem line) {
+    return line.getParent() != null && line.getParent().getSubscriptionItemDetails() != null && Boolean.TRUE.equals(line.getParent().getSubscriptionItemDetails().getProration());
+  }
+
+  /** What adding `add` children would cost now (nothing is charged or changed). */
+  public ChildrenQuote quoteChildren(int parentId, int add) throws StripeException {
+    return quote(parentId, add, null).quote();
+  }
+
+  /** What was charged for the children added. */
+  public record ChildrenAdded(long charged, String currency) {}
+
+  /**
+   * The parent approved: the children are added and the amount shown is
+   * charged by Stripe at once (an invoice of the prorations, paid with the card
+   * on the subscription). If the amount is no longer what was shown, or the
+   * card is declined, nothing changes. The parent gets a letter about it.
+   */
+  public ChildrenAdded addChildren(int parentId, int add, long prorationDate, long shownAmount, Lang lang) throws StripeException {
+    long now = Instant.now().getEpochSecond();
+    if (prorationDate > now + 60 || prorationDate < now - PRORATION_DATE_TTL_SECONDS) throw new HttpError(ApiError.PRICE_CHANGED);
+    Quoted quoted = quote(parentId, add, prorationDate);
+    if (quoted.quote().amount() != shownAmount) throw new HttpError(ApiError.PRICE_CHANGED);
+
+    SubscriptionUpdateParams.Builder update = SubscriptionUpdateParams.builder()
+        .setProrationBehavior(SubscriptionUpdateParams.ProrationBehavior.ALWAYS_INVOICE)
+        .setProrationDate(prorationDate)
+        // A payment that does not go through leaves the subscription as it was.
+        .setPaymentBehavior(SubscriptionUpdateParams.PaymentBehavior.ERROR_IF_INCOMPLETE)
+        .addExpand(EXPAND_LATEST_INVOICE);
+    for (ItemChange change : quoted.changes()) update.addItem(updateItem(change));
+    Subscription updated;
+    try {
+      updated = billing.client().v1().subscriptions().update(quoted.subscription().getId(), update.build());
+    } catch (CardException err) {
+      log.warn("[billing] children not added for account {}: {}", parentId, err.getMessage());
+      throw new HttpError(ApiError.PAYMENT_FAILED);
+    } catch (StripeException err) {
+      if (err.getCode() != null && err.getCode().startsWith("subscription_payment_intent")) throw new HttpError(ApiError.PAYMENT_FAILED);
+      throw err;
+    }
+    sync(updated);
+    Invoice invoice = updated.getLatestInvoiceObject();
+    long charged = quoted.quote().trialing() || invoice == null || invoice.getAmountPaid() == null ? 0 : invoice.getAmountPaid();
+    mailChildrenAdded(parentId, add, charged, quoted.quote().currency(), invoice, lang);
+    return new ChildrenAdded(charged, quoted.quote().currency());
+  }
+
+  /** The letter about the children added; a letter that cannot go never undoes the payment. */
+  private void mailChildrenAdded(int parentId, int add, long charged, String currency, Invoice invoice, Lang lang) {
+    try {
+      Parent parent = tx.execute((status) -> parents.findById(parentId).orElse(null));
+      if (parent == null || parent.getEmail() == null || parent.getEmail().isBlank()) return;
+      BillingAccount account = load(parentId);
+      Instant next = "trialing".equals(account.getStatus()) ? account.getTrialEnd() : account.getPeriodEnd();
+      String date = next == null ? "—" : DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(lang.locale()).withZone(ZoneOffset.UTC).format(next);
+      String children = String.valueOf(account.getChildren() == null ? "" : account.getChildren());
+      String link = invoice == null || invoice.getHostedInvoiceUrl() == null ? "—" : invoice.getHostedInvoiceUrl();
+      String subject = messages.of(Text.MAIL_CHILDREN_SUBJECT, lang);
+      String body = charged > 0
+          ? messages.of(Text.MAIL_CHILDREN_BODY, lang, String.valueOf(add), children, Billing.formatAmount(charged, currency, lang), link, date)
+          : messages.of(Text.MAIL_CHILDREN_BODY_TRIAL, lang, String.valueOf(add), children, "", "", date);
+      Mail.send(parent.getEmail(), subject, body, Mail.ownerMailbox().isEmpty() ? null : Mail.ownerMailbox(), List.of());
+    } catch (Exception err) {
+      log.error("[billing] letter about the children of account {} not sent: {}", parentId, err.getMessage());
+    }
   }
 
   /** Go to the free plan at the end of the paid period (`cancel`), or keep Family after all. */
