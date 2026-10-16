@@ -35,6 +35,24 @@ export const errorFor = (code: string | undefined) => ERRORS[code ?? ''] ?? 'Н�
 export const formatDate = (iso: string | number | null) =>
   iso ? new Date(iso).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
 
+/** «щойно», «12 хв тому», «3 год тому», «вчора», «5 днів тому», then the date. */
+export function timeAgo(when: string | number | null, now = Date.now()): string {
+  if (!when) return '—';
+  const ms = now - new Date(when).getTime();
+  const minutes = Math.round(ms / 60_000);
+  if (minutes < 1) return 'щойно';
+  const say = new Intl.RelativeTimeFormat('uk', { numeric: 'auto', style: 'short' });
+  if (minutes < 60) return say.format(-minutes, 'minute');
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return say.format(-hours, 'hour');
+  const days = Math.round(hours / 24);
+  if (days < 30) return say.format(-days, 'day');
+  return formatDate(when);
+}
+
+/** The exact moment, for a tooltip. */
+export const formatMoment = (when: string | number | null) => (when ? new Date(when).toLocaleString('uk-UA', { dateStyle: 'medium', timeStyle: 'short' }) : '—');
+
 /** Which voice an account really gets, and why. */
 export interface SpeechStatus {
   /** The key in effect (own key first, then the global one), if any. */

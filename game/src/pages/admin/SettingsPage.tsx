@@ -88,16 +88,25 @@ function TrialVoice({ adminKey, settings, onSaved }: { adminKey: string; setting
  * the game learn it from `GET /api/health` (`features.paid`) within half a minute.
  */
 function PaidModeSwitch({ adminKey, settings, onSaved }: { adminKey: string; settings: ProductSettings; onSaved: (next: ProductSettings) => void }) {
+  const saved = settings.paidMode === true;
+  const [wanted, setWanted] = useState(saved);
   const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
+  const changed = wanted !== saved;
 
-  const flip = async (on: boolean) => {
-    if (on && !window.confirm('Увімкнути платний режим? На сайті з’явиться сторінка цін, а далі — оплата й ліміт безкоштовного плану.')) return;
+  // What the server has is what the box shows once it has answered.
+  useEffect(() => setWanted(saved), [saved]);
+
+  const save = async (e: FormEvent) => {
+    e.preventDefault();
     setBusy(true);
     setNote(null);
     try {
-      onSaved((await adminApi.saveSettings(adminKey, { paidMode: on })).settings);
-      setNote({ ok: true, text: on ? '✓ Платний режим увімкнено' : '✓ Платний режим вимкнено — усе безкоштовно' });
+      const next = (await adminApi.saveSettings(adminKey, { paidMode: wanted })).settings;
+      onSaved(next);
+      // An API older than this switch answers without it: say so rather than pretend it was kept.
+      if (next.paidMode !== wanted) setNote({ ok: false, text: 'Сервер не зберіг перемикач — схоже, запущено стару версію API. Перезбери й перезапусти бекенд.' });
+      else setNote({ ok: true, text: wanted ? '✓ Платний режим увімкнено' : '✓ Платний режим вимкнено — усе безкоштовно' });
     } catch (err) {
       setNote({ ok: false, text: errorText(err) });
     } finally {
@@ -106,8 +115,8 @@ function PaidModeSwitch({ adminKey, settings, onSaved }: { adminKey: string; set
   };
 
   return (
-    <div className={styles.editor}>
-      <h2>💳 Платний режим {settings.paidMode ? '— увімкнено' : '— вимкнено'}</h2>
+    <form className={styles.editor} onSubmit={save}>
+      <h2>💳 Платний режим {saved ? '— увімкнено' : '— вимкнено'}</h2>
       <p className={styles.meta}>
         <b>Вимкнено</b> — Pulsar Kids повністю безкоштовний, і про оплату ніде нічого не видно: на сайті немає сторінки
         цін і посилань на неї, API не віддає плани, у грі немає ліміту й пейволу.
@@ -121,13 +130,44 @@ function PaidModeSwitch({ adminKey, settings, onSaved }: { adminKey: string; set
         через Stripe, ліміт безкоштовного плану й пейвол у грі. Зміна діє на сайті й у грі протягом пів хвилини.
       </p>
       <label className={styles.radio}>
-        <input type="checkbox" checked={settings.paidMode} disabled={busy} onChange={(e) => void flip(e.target.checked)} />
+        <input
+          type="checkbox"
+          checked={wanted}
+          disabled={busy}
+          onChange={(e) => {
+            setWanted(e.target.checked);
+            setNote(null);
+          }}
+        />
         <span>
           <b>Увімкнути платний режим</b>
         </span>
       </label>
-      {note && <p className={note.ok ? styles.noteOk : styles.noteErr}>{note.text}</p>}
-    </div>
+      {changed && wanted && (
+        <p className={styles.warn}>
+          ⚠️ Після збереження всі відвідувачі побачать на сайті сторінку цін і посилання «Ціни», а API почне віддавати
+          плани зі Stripe. Коли буде зроблено оплату, ліміт і пейвол, вони теж запрацюють одразу. Переконайся, що ціни й
+          тексти в Stripe готові.
+        </p>
+      )}
+      {changed && !wanted && (
+        <p className={styles.warn}>
+          ⚠️ Після збереження сторінка цін і посилання на неї зникнуть, плани перестануть віддаватися, і Pulsar Kids знову
+          стане повністю безкоштовним для всіх.
+        </p>
+      )}
+      <div className={styles.actions}>
+        <button type="submit" className={styles.btnPrimary} disabled={busy || !changed}>
+          {busy ? 'Зберігаю…' : 'Зберегти'}
+        </button>
+        {changed && (
+          <button type="button" className={styles.btn} disabled={busy} onClick={() => setWanted(saved)}>
+            Скасувати
+          </button>
+        )}
+        {note && <span className={note.ok ? styles.noteOk : styles.noteErr}>{note.text}</span>}
+      </div>
+    </form>
   );
 }
 

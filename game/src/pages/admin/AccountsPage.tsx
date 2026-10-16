@@ -7,7 +7,7 @@ import { subSteps } from '@/core/child/progress/path';
 import { playsKey } from '@/core/child/progress/plays';
 import type { ThemeId } from '@/core/theme/theme.types';
 import { computeAge } from '@/core/utils/age';
-import { errorText, formatDate, lookalikes, speechStatus } from './shared';
+import { errorText, formatDate, formatMoment, lookalikes, speechStatus, timeAgo } from './shared';
 import { SortTable, type Column } from './Table';
 import { channelName, channelOf } from './SourcesPage';
 import styles from './Admin.module.css';
@@ -78,6 +78,11 @@ function ChildRow({ child }: { child: AdminChild }) {
           <span title="Підказок показано">💡 {child.hintsSurfaced}</span>
           <span title="Ігор розпочато">🎮 {gamesStarted}</span>
           <span title={`Зіграно ${child.playedDay || 'сьогодні'}`}>⏳ {Math.round(child.playedTodayMinutes)} хв</span>
+          {child.playing ? (
+            <span className={styles.pillOn}>▶️ грає зараз</span>
+          ) : (
+            <span title={formatMoment(child.lastPlayedAt)}>🕹️ {child.lastPlayedAt ? timeAgo(child.lastPlayedAt) : 'ще не грав'}</span>
+          )}
         </span>
         <span className={styles.caret} aria-hidden>
           {open ? '▴' : '▾'}
@@ -86,7 +91,7 @@ function ChildRow({ child }: { child: AdminChild }) {
       {open && (
         <>
           <p className={styles.meta}>
-            Створено {formatDate(child.createdAt)} · остання сесія {formatDate(child.lastSessionEndedAt)}
+            Створено {formatDate(child.createdAt)} · остання гра {formatMoment(child.lastPlayedAt)}
           </p>
           <ChildProgress child={child} />
         </>
@@ -114,8 +119,33 @@ function RowButton({ icon, label, on, danger, busy, onClick }: { icon: string; l
   );
 }
 
-/** When any child of the account last finished a session; 0 — never. */
-const lastPlayed = (account: AdminAccount) => Math.max(0, ...account.children.map((c) => c.lastSessionEndedAt ?? 0));
+/** When any child of the account last played; 0 — never. */
+const lastPlayed = (account: AdminAccount) => Math.max(0, ...account.children.map((c) => c.lastPlayedAt ?? 0));
+/** When the account was last here at all — seen, or a child playing; 0 — never. */
+const lastActive = (account: AdminAccount) => Math.max(lastPlayed(account), account.lastSeenAt ? new Date(account.lastSeenAt).getTime() : 0);
+/** How the table sorts by activity: playing now first, then online, then by the last visit. */
+const activityRank = (account: AdminAccount) => (account.playing ? 2e13 : account.online ? 1e13 : 0) + lastActive(account);
+
+/** How often the page asks again while it is open: who is online changes by the minute. */
+const REFRESH_MS = 30_000;
+
+/** Who is playing or online now, or when the account was last here. */
+function ActivityCell({ account }: { account: AdminAccount }) {
+  if (account.playing) {
+    const who = account.children.filter((c) => c.playing).map((c) => c.name);
+    return <span className={styles.pillOn} title="Дитина зараз проходить рівень">▶️ грає: {who.join(', ')}</span>;
+  }
+  if (account.online) return <span className={styles.pillOn} title={`Відкрито гру або кабінет · ${formatMoment(account.lastSeenAt)}`}>🟢 онлайн</span>;
+  const played = lastPlayed(account);
+  const active = lastActive(account);
+  if (!active) return <span className={styles.meta}>—</span>;
+  return (
+    <span title={`Востаннє заходили: ${formatMoment(account.lastSeenAt)}\nВостаннє грали: ${formatMoment(played || null)}`}>
+      {timeAgo(active)}
+      {played > 0 && played < active - 60_000 && <span className={styles.meta}> · гра {timeAgo(played)}</span>}
+    </span>
+  );
+}
 const tasksDone = (account: AdminAccount) => account.children.reduce((n, c) => n + c.tasksCompleted, 0);
 
 /**
@@ -133,9 +163,10 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
   const [query, setQuery] = useState('');
   /** The account a button is working on, so it cannot be pressed twice. */
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [onlineOnly, setOnlineOnly] = useState(false);
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (quiet = false) => {
+    if (!quiet) setLoading(true);
     setError(null);
     try {
       const [users, speech] = await Promise.all([adminApi.listAccounts(adminKey), adminApi.listSpeechKeys(adminKey)]);
@@ -150,17 +181,23 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
 
   useEffect(() => {
     void load();
+    // Who is online changes by the minute: the page asks again quietly while it is open and in sight.
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible') void load(true);
+    }, REFRESH_MS);
+    return () => window.clearInterval(timer);
   }, [load]);
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return accounts;
-    return accounts.filter(
+    const here = onlineOnly ? accounts.filter((a) => a.online) : accounts;
+    if (!q) return here;
+    return here.filter(
       (a) =>
         a.email.toLowerCase().includes(q) ||
         a.children.some((c) => c.name.toLowerCase().includes(q) || c.nickname.toLowerCase().includes(q)),
     );
-  }, [accounts, query]);
+  }, [accounts, query, onlineOnly]);
 
   /** One change of one account: the row waits, a failure is said above the table. */
   const act = async (account: AdminAccount, work: () => Promise<AdminAccount | null>) => {
@@ -199,6 +236,8 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
   const childCount = accounts.reduce((n, a) => n + a.children.length, 0);
   const voiceOn = accounts.filter((a) => speechStatus(a, keys).live).length;
   const off = accounts.filter((a) => a.disabled).length;
+  const playingNow = accounts.filter((a) => a.playing).length;
+  const onlineNow = accounts.filter((a) => a.online).length;
 
   const columns: Column<AdminAccount>[] = [
     {
@@ -216,7 +255,7 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
     { id: 'created', label: 'Створено', value: (a) => new Date(a.createdAt).getTime(), render: (a) => formatDate(a.createdAt) },
     { id: 'children', label: 'Дітей', value: (a) => a.children.length },
     { id: 'tasks', label: 'Завдань', value: tasksDone },
-    { id: 'played', label: 'Остання гра', value: lastPlayed, render: (a) => formatDate(lastPlayed(a) || null) },
+    { id: 'activity', label: 'Активність', value: activityRank, render: (a) => <ActivityCell account={a} /> },
     { id: 'source', label: 'Звідки', value: (a) => channelName(channelOf(a)), render: (a) => (a.signup ? channelName(channelOf(a)) : '—') },
     {
       id: 'voice',
@@ -287,6 +326,8 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
           <span>🧒 Дітей: {childCount}</span>
           <span>🗣️ Google Speech: {voiceOn}</span>
           {off > 0 && <span>⏻ Вимкнено: {off}</span>}
+          <span title="Діти, що зараз проходять рівень">▶️ Грають зараз: {playingNow}</span>
+          <span title="Гра або кабінет відкриті протягом останніх 5 хвилин">🟢 Онлайн: {onlineNow}</span>
         </div>
         <button type="button" className={styles.btn} onClick={() => void load()} disabled={loading}>
           ↻ Оновити
@@ -301,6 +342,10 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
         placeholder="Пошук за email, іменем або ніком дитини"
         aria-label="Пошук"
       />
+      <label className={styles.radio}>
+        <input type="checkbox" checked={onlineOnly} onChange={(e) => setOnlineOnly(e.target.checked)} />
+        <span>Лише ті, хто зараз онлайн ({onlineNow})</span>
+      </label>
       {error && <p className={styles.noteErr}>{error}</p>}
       {!loading && visible.length === 0 && <p className={styles.empty}>Нікого не знайдено.</p>}
 

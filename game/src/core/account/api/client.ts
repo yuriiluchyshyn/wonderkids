@@ -283,6 +283,10 @@ export interface AdminChild {
   playedTodayMinutes: number;
   playedDay: string;
   lastSessionEndedAt: number | null;
+  /** When the child last played (the last heartbeat or the end of the last session), ms; null — never. */
+  lastPlayedAt: number | null;
+  /** Playing a level right now: the game's heartbeats are coming. */
+  playing: boolean;
   /** `${moduleId}:${subId}` → path step (or `…#plays` → sessions played). */
   progress: Record<string, number>;
 }
@@ -295,6 +299,12 @@ export interface AdminAccount {
   duplicateMailbox: boolean;
   /** Switched off by the owner: nobody signs in to it until it is switched on again. */
   disabled: boolean;
+  /** When the account's game or cabinet last loaded or saved its state; null — not since this was recorded. */
+  lastSeenAt: string | null;
+  /** Seen within the last few minutes, or a child is playing. */
+  online: boolean;
+  /** One of its children is playing a level right now. */
+  playing: boolean;
   /** Google Speech switched off for this account specifically. */
   speechOff: boolean;
   /** The key assigned to this account, if any (otherwise the global key applies). */
