@@ -137,7 +137,7 @@ public class AdminUsersController extends ApiController {
         Fields.TRIAL_SPEECH, trialSpeechView(speech.trialSpeech()),
         Fields.VOICES, speech.chosenVoices(),
         Fields.DEFAULT_VOICES, defaultVoices(),
-        Fields.PAID_MODE, marketing.paidModeOn());
+        Fields.PAID_MODE, marketing.paidModeStored());
   }
 
   /** The voice each language is read in when the owner chose none. */

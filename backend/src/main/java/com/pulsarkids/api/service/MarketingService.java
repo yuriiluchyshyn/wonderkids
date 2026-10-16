@@ -49,6 +49,12 @@ public class MarketingService {
 
   /** The owner's rules are read at most this often by one running instance; a change shows within it. */
   private static final long RULES_TTL_MS = 30_000;
+  /**
+   * The paid mode is read at most this often by one running instance. Vercel runs
+   * several instances at once and a save reaches only one of them, so the others
+   * learn it within this — kept short, the switch is pressed and looked at.
+   */
+  private static final long PAID_MODE_TTL_MS = 10_000;
 
   private final SettingRepository settings;
   private final LinkRepository links;
@@ -91,17 +97,15 @@ public class MarketingService {
   }
 
   /**
-   * Whether the paid mode is on. Read at most every 30 s, like the rules of what
-   * is offered where; never throws — with the database out of reach everything
+   * Whether the paid mode is on, for the site and the game: read at most every
+   * `PAID_MODE_TTL_MS`; never throws — with the database out of reach everything
    * stays free, as it is until the owner switches the mode on.
    */
   public boolean paidModeOn() {
     Boolean kept = paidMode;
-    if (kept != null && System.currentTimeMillis() - paidModeAt < RULES_TTL_MS) return kept;
+    if (kept != null && System.currentTimeMillis() - paidModeAt < PAID_MODE_TTL_MS) return kept;
     try {
-      schema.ensure();
-      JsonNode value = tx.execute((status) -> settings.findById(PAID_MODE_KEY).map((row) -> row.getValue()).orElse(null));
-      boolean on = value != null && value.isBoolean() && value.booleanValue();
+      boolean on = paidModeStored();
       paidMode = on;
       paidModeAt = System.currentTimeMillis();
       return on;
@@ -111,7 +115,18 @@ public class MarketingService {
     }
   }
 
-  /** The owner switched the paid mode on or off: this instance knows it at once. */
+  /**
+   * The paid mode as the database has it this moment, never a cached copy — what
+   * the admin panel shows: an instance that has not yet re-read the switch must
+   * not show the owner the old value just after they saved the new one.
+   */
+  public boolean paidModeStored() {
+    schema.ensure();
+    JsonNode value = tx.execute((status) -> settings.findById(PAID_MODE_KEY).map((row) -> row.getValue()).orElse(null));
+    return value != null && value.isBoolean() && value.booleanValue();
+  }
+
+  /** The owner switched the paid mode on or off: this instance knows it at once, the others within `PAID_MODE_TTL_MS`. */
   public void setPaidMode(boolean on) {
     setSetting(PAID_MODE_KEY, BooleanNode.valueOf(on));
     paidMode = on;
