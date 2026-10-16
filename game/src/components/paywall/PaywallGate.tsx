@@ -14,7 +14,9 @@ import { Paywall } from './Paywall';
  *  - a link offered a plan (the site's «Розпочати пригоду», an owner's link —
  *    `core/app/offer.ts`): the paid plan → straight to its payment, with the
  *    children and period of the link and its promotion code; the free plan →
- *    it is made theirs and nothing shows;
+ *    it is made theirs, and a parent who had no plan yet (a new account) is
+ *    invited once to Family — the plans, which close with ✕. Once the free
+ *    plan is theirs the account is no longer `none`, so it never comes again;
  *  - no plan chosen, and not the first sign-in (`mustChoose` from the server):
  *    the plans, which cannot be closed until one is chosen;
  *  - Stripe brought the parent back from a payment that had to leave the page
@@ -52,7 +54,9 @@ export function PaywallGate() {
       if (offer) {
         dropOffer();
         if (offer.plan === 'free') {
-          if (state.access === 'none') setState(await billingApi.chooseFree(token));
+          if (state.access !== 'none') return;
+          setState(await billingApi.chooseFree(token));
+          if (catalog && paidPlan(catalog)) open({ reason: 'upsell', step: 'plans', view: null });
           return;
         }
         if (catalog && (state.access === 'none' || state.access === 'free')) {

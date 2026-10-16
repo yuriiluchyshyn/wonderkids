@@ -8,8 +8,12 @@ import { create } from 'zustand';
 import type { Catalog, View } from '@pulsar/plans';
 import { billingApi, type PlanState } from '@/core/account/api/client';
 
-/** Why the paywall is open: it must be answered (no plan, a second sign-in), an offer from a link, or the parent asked. */
-export type PaywallReason = 'mustChoose' | 'offer' | 'upgrade';
+/**
+ * Why the paywall is open: it must be answered (no plan, a second sign-in), an
+ * offer from a link, the one invitation to Family after a link made the free
+ * plan theirs (`upsell`), or the parent asked.
+ */
+export type PaywallReason = 'mustChoose' | 'offer' | 'upsell' | 'upgrade';
 
 export interface Paywall {
   reason: PaywallReason;

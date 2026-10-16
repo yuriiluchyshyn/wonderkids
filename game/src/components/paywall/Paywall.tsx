@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { firstView, paidPlan, planName, type View } from '@pulsar/plans';
+import { firstView, freePlan, paidPlan, planName, type View } from '@pulsar/plans';
 import { billingApi } from '@/core/account/api/client';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { usePlan } from '@/core/account/billing/usePlan';
 import { useLang, useT } from '@/core/translator';
+import { GalaxyLoader } from '@/components/ui/GalaxyLoader';
 import { CheckoutStep, preloadStripe } from './CheckoutStep';
 import { PlanCards } from './PlanCards';
 import styles from './Paywall.module.css';
@@ -32,6 +33,8 @@ export function Paywall() {
   const mandatory = paywall?.reason === 'mustChoose' && paywall.step !== 'done' && paywall.step !== 'gift';
   const view: View | null = paywall?.view ?? (catalog ? firstView(catalog, lang) : null);
   const paid = catalog ? paidPlan(catalog) : undefined;
+  const free = catalog ? freePlan(catalog) : undefined;
+  const upsell = paywall?.reason === 'upsell' && paywall.step === 'plans';
 
   const chooseFree = async () => {
     if (!token) return;
@@ -79,7 +82,9 @@ export function Paywall() {
             transition={{ type: 'spring', stiffness: 300, damping: 28 }}
           >
             <div className={styles.head}>
-              <h2 id="paywall-title">{mandatory ? t('billing.paywall.chooseTitle') : t('billing.paywall.title')}</h2>
+              <h2 id="paywall-title">
+                {mandatory ? t('billing.paywall.chooseTitle') : upsell ? t('billing.paywall.upsellTitle', { name: paid ? planName(paid, lang) : '' }) : t('billing.paywall.title')}
+              </h2>
               {!mandatory && (
                 <button type="button" className={styles.close} onClick={close} aria-label={t('billing.paywall.close')}>
                   ✕
@@ -91,6 +96,7 @@ export function Paywall() {
                 (catalog && view && catalog.plans.length ? (
                   <>
                     {mandatory && <p className={styles.hint}>{t('billing.paywall.chooseHint')}</p>}
+                    {upsell && <p className={styles.hint}>{t('billing.paywall.upsellHint', { free: free ? planName(free, lang) : '', name: paid ? planName(paid, lang) : '' })}</p>}
                     <PlanCards
                       catalog={catalog}
                       view={view}
@@ -103,7 +109,7 @@ export function Paywall() {
                     />
                   </>
                 ) : (
-                  <p className={styles.hint}>{catalog ? t('billing.paywall.unavailable') : t('billing.paywall.loading')}</p>
+                  catalog ? <p className={styles.hint}>{t('billing.paywall.unavailable')}</p> : <GalaxyLoader label={t('billing.paywall.loading')} />
                 ))}
               {paywall.step === 'checkout' && token && catalog && view && (
                 <CheckoutStep token={token} catalog={catalog} view={view} promo={paywall.promo} onBack={() => update({ step: 'plans', promo: undefined })} onDone={() => void finished()} onGift={() => void gifted()} />

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import type { StripeCheckoutElementsSdk, StripeCheckoutLoadActionsSuccess, StripeCheckoutSession } from '@stripe/stripe-js';
 import { paidPlan, planName, type Catalog, type View } from '@pulsar/plans';
 import { ApiError, billingApi, type CheckoutBegun } from '@/core/account/api/client';
+import { GalaxyLoader } from '@/components/ui/GalaxyLoader';
 import { useLang, useT } from '@/core/translator';
 import styles from './Paywall.module.css';
 
@@ -129,7 +130,7 @@ export function CheckoutStep({ token, catalog, view, promo, onBack, onDone, onGi
           <div ref={addressRef} className={styles.stripeField} />
           <h3>{t('billing.checkout.card')}</h3>
           <div ref={paymentRef} className={styles.stripeField} />
-          {!actions && !error && <p className={styles.note}>{t('billing.checkout.loading')}</p>}
+          {!actions && !error && <GalaxyLoader label={t('billing.checkout.loading')} />}
           {error && <p className={styles.error}>{error}</p>}
           <button type="submit" className={styles.primary} disabled={!actions || paying || session?.canConfirm === false}>
             {paying ? t('billing.checkout.paying') : t('billing.checkout.pay')}
@@ -172,16 +173,6 @@ export function CheckoutStep({ token, catalog, view, promo, onBack, onDone, onGi
                 <span>{t('billing.checkout.todayDue')}</span>
                 <b>{session.total.total.amount}</b>
               </p>
-              {session.recurring && (
-                <p className={styles.note}>
-                  {trial ? `${t('billing.checkout.trial', { days: t('billing.days', { count: trial.trialPeriodDays }) })}. ` : ''}
-                  {t('billing.checkout.then', {
-                    amount: session.recurring.dueNext.total.amount,
-                    per: per(session.recurring.interval),
-                    date: date(trial ? trial.trialEnd : session.recurring.dueNext.billingCycleAnchor ?? Date.now() / 1000),
-                  })}
-                </p>
-              )}
               {!promo && (
                 <div className={styles.promo}>
                   {discounts.length ? (
@@ -199,9 +190,20 @@ export function CheckoutStep({ token, catalog, view, promo, onBack, onDone, onGi
                   {codeNote && <p className={styles.error}>{codeNote}</p>}
                 </div>
               )}
+              {/* At the bottom of the summary: when the money is taken next, and how much. */}
+              {session.recurring && (
+                <div className={styles.nextCharge}>
+                  <span>{t('billing.checkout.nextCharge')}</span>
+                  <b>{date(trial ? trial.trialEnd : session.recurring.dueNext.billingCycleAnchor ?? Date.now() / 1000)}</b>
+                  <small>
+                    {trial ? `${t('billing.checkout.trial', { days: t('billing.days', { count: trial.trialPeriodDays }) })}. ` : ''}
+                    {t('billing.checkout.nextChargeSum', { amount: session.recurring.dueNext.total.amount, per: per(session.recurring.interval) })}
+                  </small>
+                </div>
+              )}
             </>
           ) : (
-            <p className={styles.note}>{t('billing.checkout.loading')}</p>
+            <GalaxyLoader label={t('billing.checkout.loading')} />
           )}
         </aside>
       </div>

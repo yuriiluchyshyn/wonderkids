@@ -5,15 +5,15 @@
   z-index: 60;
   display: grid;
   place-items: center;
-  padding: 12px;
+  padding: 8px;
   background: rgba(8, 6, 24, 0.66);
 }
 
 .sheet {
   display: flex;
   flex-direction: column;
-  width: min(100%, 1040px);
-  max-height: calc(100dvh - 24px);
+  width: min(100%, 1080px);
+  max-height: calc(100dvh - 16px);
   border-radius: var(--radius-lg);
   background: var(--surface);
   color: var(--surface-ink);
@@ -45,8 +45,11 @@
   cursor: pointer;
 }
 
+/* The body takes what the screen leaves and is compact enough to fit it; it scrolls only where it cannot. */
 .body {
-  padding: 18px 22px 24px;
+  flex: 1;
+  min-height: 0;
+  padding: clamp(8px, 2vh, 18px) 22px clamp(12px, 2.4vh, 24px);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -61,7 +64,7 @@
 .periods {
   display: flex;
   justify-content: center;
-  margin: 8px 0 18px;
+  margin: 4px 0 clamp(8px, 2vh, 18px);
 }
 
 .seg {
@@ -120,7 +123,7 @@
 
 .cards {
   display: grid;
-  gap: 16px;
+  gap: clamp(10px, 1.8vh, 16px);
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   align-items: stretch;
 }
@@ -128,8 +131,8 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 20px;
+  gap: clamp(4px, 1vh, 8px);
+  padding: clamp(12px, 2.2vh, 20px);
   border: 1px solid rgba(127, 127, 127, 0.25);
   border-radius: var(--radius);
   background: var(--bg-1);
@@ -159,7 +162,7 @@
 }
 
 .planName {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 3vh, 1.5rem);
 }
 
 .tagline,
@@ -172,11 +175,11 @@
 /* The trial, said big. */
 .trialBanner {
   margin: 4px 0;
-  padding: 10px 14px;
+  padding: clamp(4px, 1vh, 10px) 14px;
   border-radius: var(--radius-sm);
   background: linear-gradient(135deg, #fde047, #ffb347);
   color: #2a1060;
-  font-size: 1.45rem;
+  font-size: clamp(1.15rem, 3.2vh, 1.45rem);
   font-weight: 800;
   line-height: 1.15;
   text-align: center;
@@ -215,7 +218,7 @@
 }
 
 .price b {
-  font-size: 2.2rem;
+  font-size: clamp(1.8rem, 4.8vh, 2.2rem);
   line-height: 1;
 }
 
@@ -228,13 +231,57 @@
   color: var(--text-soft);
 }
 
+/* The paid card's prices stand in the middle: the crossed-out month, the month it comes to, and the real price small beneath. */
+.cardPro .priceBlock,
+.cardPro .extra {
+  align-items: center;
+  text-align: center;
+}
+
+.cardPro .priceBlock .price,
+.cardPro .priceBlock .pricePlan {
+  justify-content: center;
+}
+
+.real {
+  margin: 2px 0 0;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+/* A child beyond those included: the same three prices, smaller. */
+.extra {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.93rem;
+}
+
+.extraEach {
+  display: block;
+  margin-top: 2px;
+}
+
+.extra b {
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+.extra s {
+  text-decoration-thickness: 2px;
+}
+
+.extra small {
+  display: block;
+  font-size: 0.85rem;
+}
+
 .childrenPick {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 6px;
-  padding: 8px 8px 8px 14px;
+  margin-top: 4px;
+  padding: 4px 8px 4px 14px;
   border-radius: var(--radius-sm);
   background: rgba(127, 127, 127, 0.12);
   font-weight: 600;
@@ -247,8 +294,8 @@
 }
 
 .stepper button {
-  width: 44px;
-  height: 44px;
+  width: clamp(36px, 4.6vh, 44px);
+  height: clamp(36px, 4.6vh, 44px);
   border: 0;
   border-radius: 50%;
   background: rgba(127, 127, 127, 0.2);
@@ -271,12 +318,13 @@
 }
 
 .features {
-  margin: 6px 0 10px;
+  margin: 4px 0 clamp(4px, 1vh, 10px);
   padding-left: 1.2em;
+  font-size: clamp(0.84rem, 1.9vh, 1rem);
 }
 
 .features li {
-  margin: 5px 0;
+  margin: clamp(2px, 0.6vh, 5px) 0;
   color: var(--text-soft);
 }
 
@@ -367,8 +415,7 @@
 }
 
 .summary {
-  position: sticky;
-  top: 0;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -419,6 +466,31 @@
   gap: 8px;
 }
 
+/* At the bottom of the summary: when the money is taken next. */
+.nextCharge {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(127, 127, 127, 0.14);
+}
+
+.nextCharge span {
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+.nextCharge b {
+  font-size: 1.2rem;
+}
+
+.nextCharge small {
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
 .promo input {
   flex: 1;
   min-width: 140px;
@@ -467,6 +539,20 @@
 
 .done .primary {
   padding-inline: 40px;
+}
+
+/* On a phone the paywall is the whole screen. */
+@media (max-width: 640px) {
+  .overlay {
+    padding: 0;
+  }
+
+  .sheet {
+    width: 100%;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

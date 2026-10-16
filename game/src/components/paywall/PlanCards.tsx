@@ -117,17 +117,29 @@ function PaidPrice({ catalog, view }: { catalog: Catalog; view: View }) {
   const total = totalOf(catalog, view);
   if (!total) return null;
   const year = view.period === 'year' ? yearAgainstMonths(catalog, view) : null;
+  const monthly = year ? totalOf(catalog, { ...view, period: 'month' }) : null;
   return (
     <div className={styles.priceBlock}>
       <p className={styles.pricePlan}>
         {t(view.period === 'year' ? 'billing.paywall.yearPlan' : 'billing.paywall.monthPlan')}
         {year?.saving ? <span className={styles.savePill}>{t('billing.paywall.save', { percent: year.saving })}</span> : null}
       </p>
-      <p className={styles.price}>
-        {year?.saving ? <s>{formatPrice(year.full, total.currency, lang)}</s> : null} <b>{formatPrice(total.amount, total.currency, lang)}</b>{' '}
-        <span>{t(view.period === 'year' ? 'billing.paywall.perYear' : 'billing.paywall.perMonth')}</span>
-      </p>
-      {view.period === 'year' && <p className={styles.note}>{t('billing.paywall.monthlyEq', { price: formatPrice(Math.round(total.amount / 12), total.currency, lang) })}</p>}
+      {view.period === 'year' ? (
+        <>
+          {/* Three prices, in the middle: the month as the monthly plan charges it (crossed out), the month the year comes to, and — small — what is really paid, once a year. */}
+          <p className={styles.price}>
+            {year?.saving && monthly ? <s>{formatPrice(monthly.amount, total.currency, lang)}</s> : null} <b>{formatPrice(Math.round(total.amount / 12), total.currency, lang)}</b>{' '}
+            <span>{t('billing.paywall.perMonth')}</span>
+          </p>
+          <p className={styles.real}>
+            {formatPrice(total.amount, total.currency, lang)} {t('billing.paywall.perYear')}
+          </p>
+        </>
+      ) : (
+        <p className={styles.price}>
+          <b>{formatPrice(total.amount, total.currency, lang)}</b> <span>{t('billing.paywall.perMonth')}</span>
+        </p>
+      )}
       {!total.taxIncluded && <p className={styles.note}>{t('billing.paywall.taxExtra')}</p>}
     </div>
   );
@@ -139,6 +151,7 @@ function ChildrenPick({ catalog, view, onView }: { catalog: Catalog; view: View;
   const total = totalOf(catalog, view);
   if (!total?.extra) return null;
   const least = childrenIncluded(catalog);
+  const monthlyExtra = view.period === 'year' ? totalOf(catalog, { ...view, period: 'month' })?.extra : undefined;
   return (
     <>
       <div className={styles.childrenPick}>
@@ -153,12 +166,25 @@ function ChildrenPick({ catalog, view, onView }: { catalog: Catalog; view: View;
           </button>
         </div>
       </div>
-      <p className={styles.note}>
-        {t('billing.paywall.extra', {
-          included: t('billing.kids', { count: least }),
-          price: formatPrice(total.extra.amount, total.extra.currency, lang),
-          per: t(view.period === 'year' ? 'billing.paywall.perYear' : 'billing.paywall.perMonth'),
-        })}
+      <p className={styles.extra}>
+        {t('billing.paywall.extraIncluded', { included: t('billing.kids', { count: least }) })}
+        <span className={styles.extraEach}>
+          {t('billing.paywall.extraEach')}{' '}
+          {view.period === 'year' ? (
+            <>
+              {/* The same three prices for a child beyond those included. */}
+              {monthlyExtra && monthlyExtra.amount * 12 > total.extra.amount ? <s>{formatPrice(monthlyExtra.amount, total.extra.currency, lang)}</s> : null}{' '}
+              <b>+{formatPrice(Math.round(total.extra.amount / 12), total.extra.currency, lang)}</b> {t('billing.paywall.perMonth')}
+              <small>
+                {formatPrice(total.extra.amount, total.extra.currency, lang)} {t('billing.paywall.perYear')}
+              </small>
+            </>
+          ) : (
+            <>
+              <b>+{formatPrice(total.extra.amount, total.extra.currency, lang)}</b> {t('billing.paywall.perMonth')}
+            </>
+          )}
+        </span>
       </p>
     </>
   );
