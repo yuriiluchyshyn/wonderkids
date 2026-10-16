@@ -219,6 +219,8 @@ public class SubscriptionService {
         .setCustomerUpdate(SessionCreateParams.CustomerUpdate.builder().setAddress(SessionCreateParams.CustomerUpdate.Address.AUTO).setName(SessionCreateParams.CustomerUpdate.Name.AUTO).build())
         .setClientReferenceId(String.valueOf(parentId))
         .setBillingAddressCollection(SessionCreateParams.BillingAddressCollection.REQUIRED)
+        // A card only — Apple Pay and Google Pay come with it as its wallets; no Link and its «optional» sign-up block.
+        .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
         .setAutomaticTax(SessionCreateParams.AutomaticTax.builder().setEnabled(billing.taxReady()).build())
         .setIntegrationIdentifier(INTEGRATION + BillingService.randomLetters(8))
         .addLineItem(SessionCreateParams.LineItem.builder().setPrice(order.planPriceId()).setQuantity(1L).build())
