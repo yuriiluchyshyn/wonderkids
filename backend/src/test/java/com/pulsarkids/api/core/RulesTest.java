@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pulsarkids.api.model.ApiError;
+import com.pulsarkids.api.model.BillingMode;
 import com.pulsarkids.api.model.Device;
 import com.pulsarkids.api.model.FeedbackKind;
 import com.pulsarkids.api.model.Lang;
@@ -24,6 +25,55 @@ import org.junit.jupiter.api.Test;
 class RulesTest {
   private static JsonNode json(String text) {
     return Json.parse(text.replace('\'', '"'));
+  }
+
+  // ---- billing ---------------------------------------------------------------
+
+  @Test
+  void aKeySaysWhichSideOfStripeItOpens() {
+    assertEquals(BillingMode.TEST, Billing.modeOf("sk_test_abc"));
+    assertEquals(BillingMode.TEST, Billing.modeOf("rk_test_abc"));
+    assertEquals(BillingMode.LIVE, Billing.modeOf("rk_live_abc"));
+    assertEquals(BillingMode.TEST, Billing.modeOf(null));
+  }
+
+  @Test
+  void thePlansAreReadFromStripesProductsAndPrices() {
+    Catalog.Product free = new Catalog.Product("pulsar_basic", "Basic", true,
+        Map.of("app", "pulsar-kids", "kind", "free", "order", "1", "name_uk", "Базовий", "feature_2_uk", "Друге", "feature_1_uk", "Перше", "daily_minutes", "15"), List.of("First", "Second"));
+    Catalog.Product pro = new Catalog.Product("pulsar_family_pro", "Family Pro", true,
+        Map.of("app", "pulsar-kids", "kind", "paid", "order", "2", "trial_days", "14", "children_included", "2", "badge_en", "For the family"), List.of());
+    Catalog.Product extra = new Catalog.Product("pulsar_extra_child", "Extra child", true, Map.of("app", "pulsar-kids", "kind", "extra_child", "plan", "pulsar_family_pro"), List.of());
+    Catalog.Product foreign = new Catalog.Product("other", "Not ours", true, Map.of("kind", "paid"), List.of());
+    List<Catalog.Price> prices = List.of(
+        new Catalog.Price("pulsar_family_pro", "uah", "month", 7900, true, Map.of("region", "ua", "countries", "UA", "langs", "uk")),
+        new Catalog.Price("pulsar_family_pro", "usd", "year", 5999, true, Map.of("region", "US", "fallback", "true", "langs", "en")),
+        new Catalog.Price("pulsar_family_pro", "eur", "year", 5999, true, Map.of("region", "EU", "countries", "de, fr")),
+        new Catalog.Price("pulsar_family_pro", "usd", "month", 100, false, Map.of("region", "US")),
+        new Catalog.Price("pulsar_extra_child", "uah", "month", 1900, true, Map.of("region", "UA")),
+        new Catalog.Price("other", "usd", "month", 1, true, Map.of("region", "US")));
+
+    Catalog.View view = Catalog.build(List.of(pro, extra, foreign, free), prices);
+    // Ours only, in their order; an extra-child slot is not a plan of its own.
+    assertEquals(List.of("pulsar_basic", "pulsar_family_pro"), view.plans().stream().map((p) -> p.get("id")).toList());
+    Map<String, Object> basic = view.plans().get(0);
+    assertEquals("Базовий", ((Map<?, ?>) basic.get("name")).get("uk"));
+    assertEquals("Basic", ((Map<?, ?>) basic.get("name")).get("en"), "a language with no name of its own takes the product's");
+    assertEquals(List.of("Перше", "Друге"), ((Map<?, ?>) basic.get("features")).get("uk"));
+    assertEquals(List.of("First", "Second"), ((Map<?, ?>) basic.get("features")).get("pl"), "else the product's marketing features");
+    assertEquals(Map.of("dailyMinutes", 15), basic.get("facts"));
+    Map<String, Object> family = view.plans().get(1);
+    assertEquals(Map.of("trialDays", 14, "childrenIncluded", 2), family.get("facts"));
+    assertEquals(3, ((List<?>) family.get("prices")).size(), "the archived price is not offered");
+    assertEquals(List.of(Map.of("region", "UA", "period", "month", "amount", 1900L, "currency", "UAH")), family.get("extraChild"));
+
+    // The regions are named by the prices; a visitor's is the one that names their country, else the fallback.
+    assertEquals(List.of("EU", "UA", "US"), view.regions().stream().map(Catalog.Region::id).toList());
+    assertEquals("EU", Catalog.regionFor(view.regions(), "fr").id());
+    assertEquals("UA", Catalog.regionFor(view.regions(), "UA").id());
+    assertEquals("US", Catalog.regionFor(view.regions(), "JP").id());
+    assertNull(Catalog.regionFor(view.regions(), null), "an unknown country leaves it to the page's language");
+    assertEquals(List.of("uk"), view.regions().get(1).langs());
   }
 
   // ---- mailboxes -----------------------------------------------------------

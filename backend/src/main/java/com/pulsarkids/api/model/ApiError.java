@@ -47,6 +47,8 @@ public enum ApiError {
   NO_KEY(200, "no_key"),
   ADMIN_NOT_CONFIGURED(503, "admin_not_configured"),
   INVALID_ADMIN_KEY(401, "invalid_admin_key"),
+  BILLING_OFF(503, "billing_off"),
+  BILLING_UNREACHABLE(502, "billing_unreachable"),
   INVALID_PARENT_ID(400, "invalid_parent_id"),
   INVALID_SPEECH_ENABLED(400, "invalid_speech_enabled"),
   INVALID_ENABLED(400, "invalid_enabled"),

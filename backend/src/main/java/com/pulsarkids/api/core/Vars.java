@@ -44,6 +44,8 @@ public final class Vars {
   public static final String RESEND_ENDPOINT = "RESEND_ENDPOINT";
   /** Encrypts stored Google keys; never changes once keys are saved. */
   public static final String SECRETS_KEY = "SECRETS_KEY";
+  /** Stripe's secret (or restricted) key — sk_test_/rk_test_ in the sandbox, sk_live_/rk_live_ in production. Without it billing is off. */
+  public static final String STRIPE_SECRET_KEY = "STRIPE_SECRET_KEY";
   /** Set by Vercel: the service is deployed, not on a developer's machine. */
   public static final String VERCEL = "VERCEL";
   /** Auth0's client id — the same public value the game is built with. */

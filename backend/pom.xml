@@ -50,6 +50,12 @@
       <artifactId>bcprov-jdk18on</artifactId>
       <version>1.79</version>
     </dependency>
+    <!-- Stripe: the catalogue, Checkout, the customer portal and webhooks (billing spec §6). -->
+    <dependency>
+      <groupId>com.stripe</groupId>
+      <artifactId>stripe-java</artifactId>
+      <version>33.4.0</version>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>

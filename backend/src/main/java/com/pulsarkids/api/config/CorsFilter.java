@@ -27,7 +27,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  *  - OUR OWN pages — the site, the portals of the game, a developer's machine —
  *    may send everything, the session token and the admin key included;
  *  - ANY page may use the PUBLIC endpoints (what is offered where, counting an
- *    arrival, sending a letter): no session, no cookie, and only
+ *    arrival, sending a letter, the plans and their prices): no session, no cookie, and only
  *    `Content-Type` as a header — so the owner's side of those addresses stays
  *    out of reach of a foreign page, because `x-admin-key` is not a header it
  *    is allowed to send.
@@ -39,7 +39,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter extends OncePerRequestFilter {
   private static final String DEFAULT_ORIGINS = "pulsarkids.com,wonderkids.yluch.app";
-  private static final Set<String> PUBLIC_PATHS = Set.of(Routes.HEALTH, Routes.FEEDBACK);
+  private static final Set<String> PUBLIC_PATHS = Set.of(Routes.HEALTH, Routes.FEEDBACK, Routes.BILLING_PLANS);
   private static final String ANY_ORIGIN = "*";
   private static final String OUR_METHODS = "GET, POST, PUT, DELETE, OPTIONS";
   private static final String PUBLIC_METHODS = "GET, POST, PUT, OPTIONS";

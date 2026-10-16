@@ -1,6 +1,7 @@
 package com.pulsarkids.api.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pulsarkids.api.core.Availability;
 import com.pulsarkids.api.core.Json;
@@ -38,6 +39,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class MarketingService {
   public static final String DEMO_MINUTES_KEY = "demo_minutes";
   public static final String AVAILABILITY_KEY = "availability";
+  /** Whether the site shows its page of prices (`/pricing/`) — off until the owner switches it on. */
+  public static final String PRICING_PAGE_KEY = "pricing_page";
 
   /** The owner's rules are read at most this often by one running instance; a change shows within it. */
   private static final long RULES_TTL_MS = 30_000;
@@ -51,6 +54,8 @@ public class MarketingService {
 
   private volatile ObjectNode rules;
   private volatile long rulesAt;
+  private volatile Boolean pricingPage;
+  private volatile long pricingPageAt;
 
   // ---------------------------------------------------------------------------
   // Settings
@@ -78,6 +83,34 @@ public class MarketingService {
   public int demoMinutes() {
     Integer minutes = Marketing.cleanDemoMinutes(tx.execute((status) -> settings.findById(DEMO_MINUTES_KEY).map((row) -> row.getValue()).orElse(null)));
     return minutes == null ? Marketing.DEMO_MINUTES_DEFAULT : minutes;
+  }
+
+  /**
+   * Whether the site shows its page of prices. Read at most every 30 s, like the
+   * rules of what is offered where; never throws — with the database out of reach
+   * the page stays hidden, as it is until the owner switches it on.
+   */
+  public boolean pricingPageOn() {
+    Boolean kept = pricingPage;
+    if (kept != null && System.currentTimeMillis() - pricingPageAt < RULES_TTL_MS) return kept;
+    try {
+      schema.ensure();
+      JsonNode value = tx.execute((status) -> settings.findById(PRICING_PAGE_KEY).map((row) -> row.getValue()).orElse(null));
+      boolean on = value != null && value.isBoolean() && value.booleanValue();
+      pricingPage = on;
+      pricingPageAt = System.currentTimeMillis();
+      return on;
+    } catch (Exception err) {
+      log.error("[pricing] switch not read: {}", err.getMessage());
+      return false;
+    }
+  }
+
+  /** The owner switched the page of prices on or off: this instance knows it at once. */
+  public void setPricingPage(boolean on) {
+    setSetting(PRICING_PAGE_KEY, BooleanNode.valueOf(on));
+    pricingPage = on;
+    pricingPageAt = System.currentTimeMillis();
   }
 
   // ---------------------------------------------------------------------------

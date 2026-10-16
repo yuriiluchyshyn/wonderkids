@@ -44,10 +44,11 @@ import org.springframework.web.bind.annotation.RestController;
  * With `?part=…` the same address serves the owner's side of the product:
  *
  *   GET    ?part=settings                        → { settings }
- *   PUT    ?part=settings  { demoMinutes?, trialSpeech?: { enabled, key? }, voices? }  → { settings }
+ *   PUT    ?part=settings  { demoMinutes?, trialSpeech?: { enabled, key? }, voices?, pricingPage? }  → { settings }
  *          (`trialSpeech` — the trial game's own Google key and its switch; an empty `key` keeps the stored one;
  *          `voices` — `{ accounts?: { uk?: "uk-UA-…" | "" }, trial?: { … } }`, the voice each language is read in
- *          for every account and for the trial game, "" back to the default; languages not named stay as they are)
+ *          for every account and for the trial game, "" back to the default; languages not named stay as they are;
+ *          `pricingPage` — whether the site shows its page of prices)
  *   GET    ?part=links[&days=30]                 → { links, visits }   (days=0 — all time)
  *   POST   ?part=links     { name, mode, code?, note? }   a new link
  *   PUT    ?part=links     { id, name, note? }             rename one
@@ -135,7 +136,8 @@ public class AdminUsersController extends ApiController {
         Fields.DEMO_MINUTES_MAX, Marketing.DEMO_MINUTES_MAX,
         Fields.TRIAL_SPEECH, trialSpeechView(speech.trialSpeech()),
         Fields.VOICES, speech.chosenVoices(),
-        Fields.DEFAULT_VOICES, defaultVoices());
+        Fields.DEFAULT_VOICES, defaultVoices(),
+        Fields.PRICING_PAGE, marketing.pricingPageOn());
   }
 
   /** The voice each language is read in when the owner chose none. */
@@ -183,9 +185,11 @@ public class AdminUsersController extends ApiController {
       JsonNode rawMinutes = Json.at(body, Fields.DEMO_MINUTES);
       JsonNode trial = Json.at(body, Fields.TRIAL_SPEECH);
       JsonNode voices = Json.at(body, Fields.VOICES);
+      JsonNode pricing = Json.at(body, Fields.PRICING_PAGE);
       boolean hasMinutes = Json.present(rawMinutes);
       Integer minutes = hasMinutes ? Marketing.cleanDemoMinutes(rawMinutes) : null;
-      if ((hasMinutes || !(Json.present(trial) || Json.present(voices))) && minutes == null) return refuse(ApiError.INVALID_DEMO_MINUTES);
+      if ((hasMinutes || !(Json.present(trial) || Json.present(voices) || Json.present(pricing))) && minutes == null) return refuse(ApiError.INVALID_DEMO_MINUTES);
+      if (Json.present(pricing) && !pricing.isBoolean()) return refuse(ApiError.INVALID_ENABLED);
       Map<SpeechAudience, Map<Lang, String>> voiceChanges = Json.present(voices) ? voiceChanges(voices) : Map.of();
       if (voiceChanges == null) return refuse(ApiError.INVALID_VOICE);
       if (Json.present(trial)) {
@@ -200,6 +204,7 @@ public class AdminUsersController extends ApiController {
       }
       if (!voiceChanges.isEmpty()) speech.saveVoices(voiceChanges);
       if (minutes != null) marketing.setSetting(MarketingService.DEMO_MINUTES_KEY, IntNode.valueOf(minutes));
+      if (Json.present(pricing)) marketing.setPricingPage(pricing.booleanValue());
       return ok(Fields.SETTINGS, settingsView());
     }
     return notAllowed(RequestMethod.GET, RequestMethod.PUT);
