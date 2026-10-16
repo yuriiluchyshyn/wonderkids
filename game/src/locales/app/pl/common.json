@@ -1013,6 +1013,7 @@
       "more": "Więcej dzieci",
       "extraIncluded": "W pakiecie: {included}.",
       "extraEach": "Każde kolejne dziecko:",
+      "extraSum": "Dodatkowo za {children}:",
       "loading": "Wczytuję plany…",
       "unavailable": "Nie udało się wczytać planów. Spróbuj ponownie za minutę.",
       "close": "Zamknij",

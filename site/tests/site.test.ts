@@ -284,7 +284,11 @@ test('the page of prices draws Stripe’s plans in the visitor’s region, and i
   assert.equal(totalOf(PLANS, { ...view, children: 4 })?.amount, 59900 + 2 * 13900);
   const two = renderPlans(PLANS, view, 'uk', words);
   assert.ok(/data-children="-1"[^>]*disabled/.test(two), 'no fewer than the included two');
-  assert.ok(renderPlans(PLANS, { ...view, children: 3 }, 'uk', words).includes(formatPrice(59900 + 13900, 'UAH', 'uk')), 'the total follows the children');
+  // A child beyond those included is said apart from the plan's price — never added into it.
+  const three = renderPlans(PLANS, { ...view, children: 3 }, 'uk', words);
+  assert.ok(three.includes('class="price-more"') && three.includes(`${formatPrice(13900, 'UAH', 'uk')} на рік`), 'the extra child is said beside the price');
+  assert.ok(!three.includes(formatPrice(59900 + 13900, 'UAH', 'uk')), 'the plan’s price does not take the children in');
+  assert.ok(!two.includes('class="price-more"'), 'nothing extra with the included children');
   // A year is shown against twelve months of the same: the twelve crossed out, the year's price, what it saves; the trial said big.
   const yearCard = renderPlans(PLANS, view, 'uk', words);
   // Three prices: the month on the monthly plan (crossed out), the month the year comes to, and the year's real price, small.

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import type { StripeCheckoutElementsSdk, StripeCheckoutLoadActionsSuccess, StripeCheckoutSession } from '@stripe/stripe-js';
-import { paidPlan, planName, type Catalog, type View } from '@pulsar/plans';
+import { formatPrice, paidPlan, planName, type Catalog, type View } from '@pulsar/plans';
 import { ApiError, billingApi, type CheckoutBegun } from '@/core/account/api/client';
 import { GalaxyLoader } from '@/components/ui/GalaxyLoader';
 import { useLang, useT } from '@/core/translator';
+import { STRIPE_OPTIONS, stripeAppearance } from './stripeLook';
 import styles from './Paywall.module.css';
 
 /** Stripe.js from js.stripe.com — as PCI asks, never bundled — and only once per page. */
@@ -12,7 +13,7 @@ export function preloadStripe(): void {
   stripeJs ??= import('@stripe/stripe-js/pure');
   // With the key known at build time the script itself is fetched now, while the parent looks at the plans.
   const key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY as string | undefined;
-  if (key) void stripeJs.then(({ loadStripe }) => loadStripe(key));
+  if (key) void stripeJs.then(({ loadStripe }) => loadStripe(key, STRIPE_OPTIONS));
 }
 
 /**
@@ -67,11 +68,11 @@ export function CheckoutStep({ token, catalog, view, promo, onBack, onDone, onGi
       if (gone) return;
       if (started.gift) return onGift();
       const { loadStripe } = await (stripeJs ??= import('@stripe/stripe-js/pure'));
-      const stripe = await loadStripe(started.publishableKey ?? '');
+      const stripe = await loadStripe(started.publishableKey ?? '', STRIPE_OPTIONS);
       if (!stripe || gone || !started.clientSecret) throw new Error('stripe');
       sdk = stripe.initCheckoutElementsSdk({
         clientSecret: started.clientSecret,
-        elementsOptions: { appearance: { theme: 'stripe', variables: { borderRadius: '12px', fontSizeBase: '16px' } } },
+        elementsOptions: { appearance: stripeAppearance() },
       });
       sdk.on('change', (next) => setSession(next));
       if (addressRef.current) sdk.createBillingAddressElement().mount(addressRef.current);
@@ -145,15 +146,18 @@ export function CheckoutStep({ token, catalog, view, promo, onBack, onDone, onGi
             <>
               {trial ? <p className={styles.trialBanner}>{t('billing.paywall.freeDays', { count: trial.trialPeriodDays })}</p> : null}
               <ul className={styles.lines}>
+                {/* The plan's own price, then the children beyond those included, each apart.
+                    In a trial today's sum is nothing: a line shows what it costs a period. */}
                 {session.lineItems.map((line) => (
                   <li key={line.id}>
-                    <span>{line.name}</span>
-                    {/* In a trial today's sum is nothing: the line shows what the plan costs a period. */}
-                    <span>
-                      {line.quantity > 1 ? `${line.quantity} × ` : ''}
-                      {line.unitAmount.amount}
-                      {line.recurring ? ` ${per(line.recurring.interval)}` : ''}
+                    <span className={styles.lineName}>
+                      <span>{line.name}</span>
+                      <small>
+                        {line.quantity > 1 ? `${line.quantity} × ${line.unitAmount.amount}` : ''}
+                        {line.recurring ? `${line.quantity > 1 ? ' ' : ''}${per(line.recurring.interval)}` : ''}
+                      </small>
                     </span>
+                    <span>{formatPrice(line.unitAmount.minorUnitsAmount * line.quantity, session.currency.toUpperCase(), lang)}</span>
                   </li>
                 ))}
                 {discounts.map((discount) => (

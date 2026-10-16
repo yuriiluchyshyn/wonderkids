@@ -243,6 +243,24 @@
   justify-content: center;
 }
 
+/* «+ …» for the children beyond those included: beside the plan's price, never in it. */
+.more {
+  margin: 6px 0 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(127, 127, 127, 0.16);
+  color: var(--text-soft);
+  font-size: 0.92rem;
+}
+
+.more b {
+  color: var(--text);
+}
+
+.more small {
+  font-size: 0.85rem;
+}
+
 .real {
   margin: 2px 0 0;
   color: var(--text-soft);
@@ -319,13 +337,25 @@
 
 .features {
   margin: 4px 0 clamp(4px, 1vh, 10px);
-  padding-left: 1.2em;
+  padding-left: 0;
+  list-style: none;
   font-size: clamp(0.84rem, 1.9vh, 1rem);
 }
 
 .features li {
+  position: relative;
   margin: clamp(2px, 0.6vh, 5px) 0;
+  padding-left: 1.7em;
   color: var(--text-soft);
+}
+
+/* A green tick, not a dot. */
+.features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #22c55e;
+  font-weight: 800;
 }
 
 .primary,
@@ -395,9 +425,10 @@
   flex-direction: column;
   gap: 10px;
   padding: 18px;
+  border: 1px solid rgba(127, 127, 127, 0.25);
   border-radius: var(--radius);
-  background: #fff;
-  color: #1a1035;
+  background: var(--bg-1);
+  color: var(--text);
 }
 
 .formSide h3,
@@ -406,12 +437,23 @@
   margin: 4px 0 0;
 }
 
-.formSide .note {
-  color: #5b5577;
-}
-
 .stripeField {
   min-height: 44px;
+}
+
+/* The summary's lines: the plan, then the children beyond those included, each with its sum. */
+.lines li {
+  align-items: baseline;
+}
+
+.lineName {
+  display: flex;
+  flex-direction: column;
+}
+
+.lineName small {
+  color: var(--text-soft);
+  font-size: 0.85rem;
 }
 
 .summary {

@@ -969,6 +969,7 @@
       "more": "More kids",
       "extraIncluded": "{included} included.",
       "extraEach": "Each additional kid:",
+      "extraSum": "Plus for {children}:",
       "loading": "Loading plans…",
       "unavailable": "The plans did not load. Please try again in a minute.",
       "close": "Close",

@@ -119,6 +119,21 @@ export function totalOf(catalog: Catalog, view: View): { amount: number; currenc
   return { amount: price.amount + (extra ? extra.amount * beyond : 0), currency: price.currency, taxIncluded: price.taxIncluded !== false, extra };
 }
 
+/**
+ * The plan's own price for the period, with the children it includes — the children beyond them are NOT in it: they are
+ * said apart (`extraOf`). This is the price a card shows big.
+ */
+export function baseOf(catalog: Catalog, view: View): ReturnType<typeof totalOf> {
+  return totalOf(catalog, { ...view, children: childrenIncluded(catalog) });
+}
+
+/** What the children beyond those included cost for the chosen period, apart from the plan; null when there are none. */
+export function extraOf(catalog: Catalog, view: View): { count: number; amount: number; currency: string } | null {
+  const total = totalOf(catalog, view);
+  const count = Math.max(0, view.children - childrenIncluded(catalog));
+  return total?.extra && count > 0 ? { count, amount: total.extra.amount * count, currency: total.extra.currency } : null;
+}
+
 /** A year against twelve months of the same choice: the twelve, and what the year saves in per cent (0 — nothing). */
 export function yearAgainstMonths(catalog: Catalog, view: View): { full: number; saving: number } | null {
   const year = totalOf(catalog, { ...view, period: 'year' });

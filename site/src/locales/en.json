@@ -365,6 +365,7 @@
     "perMonth": "per month",
     "extraIncluded": "{children} included.",
     "extraEach": "Each additional kid:",
+    "extraSum": "Plus for {children}:",
     "trial": "The trial lasts {days}. The first charge comes right after it; cancel any time before then.",
     "unit": {
       "minutes": {

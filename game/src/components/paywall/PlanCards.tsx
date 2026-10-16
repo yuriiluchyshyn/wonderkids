@@ -1,13 +1,14 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   MAX_CHILDREN,
+  baseOf,
   childrenIncluded,
+  extraOf,
   formatPrice,
   freePlan,
   paidPlan,
   planName,
   totalOf,
-  yearAgainstMonths,
   yearSaving,
   type Catalog,
   type CatalogPlan,
@@ -114,10 +115,13 @@ function Features({ plan, lang }: { plan: CatalogPlan; lang: string }) {
 function PaidPrice({ catalog, view }: { catalog: Catalog; view: View }) {
   const t = useT();
   const lang = useLang();
-  const total = totalOf(catalog, view);
+  // The big price is the plan's own; the children beyond those included are said apart, never added into it.
+  const total = baseOf(catalog, view);
   if (!total) return null;
-  const year = view.period === 'year' ? yearAgainstMonths(catalog, view) : null;
-  const monthly = year ? totalOf(catalog, { ...view, period: 'month' }) : null;
+  const monthly = view.period === 'year' ? baseOf(catalog, { ...view, period: 'month' }) : null;
+  const full = monthly ? monthly.amount * 12 : 0;
+  const year = monthly ? { saving: full > total.amount ? Math.round((1 - total.amount / full) * 100) : 0 } : null;
+  const more = extraOf(catalog, view);
   return (
     <div className={styles.priceBlock}>
       <p className={styles.pricePlan}>
@@ -138,6 +142,24 @@ function PaidPrice({ catalog, view }: { catalog: Catalog; view: View }) {
       ) : (
         <p className={styles.price}>
           <b>{formatPrice(total.amount, total.currency, lang)}</b> <span>{t('billing.paywall.perMonth')}</span>
+        </p>
+      )}
+      {/* «+ …» for the children chosen beyond those included — beside the plan's price, not in it. */}
+      {more && (
+        <p className={styles.more}>
+          {t('billing.paywall.extraSum', { children: t('billing.kids', { count: more.count }) })}{' '}
+          {view.period === 'year' ? (
+            <>
+              <b>+{formatPrice(Math.round(more.amount / 12), more.currency, lang)}</b> {t('billing.paywall.perMonth')}{' '}
+              <small>
+                ({formatPrice(more.amount, more.currency, lang)} {t('billing.paywall.perYear')})
+              </small>
+            </>
+          ) : (
+            <>
+              <b>+{formatPrice(more.amount, more.currency, lang)}</b> {t('billing.paywall.perMonth')}
+            </>
+          )}
         </p>
       )}
       {!total.taxIncluded && <p className={styles.note}>{t('billing.paywall.taxExtra')}</p>}

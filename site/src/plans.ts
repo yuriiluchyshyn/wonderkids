@@ -12,7 +12,7 @@
  * No DOM here: the build and the page's script both use it.
  */
 
-import { MAX_CHILDREN, PERIODS, childrenIncluded, formatPrice, paidPlan, totalOf, yearSaving, type Catalog, type CatalogPlan, type View } from '@pulsar/plans';
+import { MAX_CHILDREN, PERIODS, baseOf, childrenIncluded, extraOf, formatPrice, paidPlan, totalOf, yearSaving, type Catalog, type CatalogPlan, type View } from '@pulsar/plans';
 
 // The plans' data and sums are shared with the game's paywall (`@pulsar/plans`); here they are only drawn.
 export { MAX_CHILDREN, PERIODS, childrenIncluded, firstView, formatPrice, paidPlan, regionOfLang, totalOf } from '@pulsar/plans';
@@ -68,13 +68,14 @@ function planCard(plan: CatalogPlan, catalog: Catalog, view: View, lang: string,
   } else {
     // The trial, said big: the first thing a parent should see on the paid card.
     if (facts.days) lines.push(`<p class="trial-banner">${esc(say(words, 'freeDays', facts))}</p>`);
-    const total = totalOf(catalog, view);
+    // The big price is the plan's own; the children beyond those included are said apart, never added into it.
+    const total = baseOf(catalog, view);
     if (total) {
       const block: string[] = [`<div class="price-block${swap(animate)}">`];
       if (view.period === 'year') {
         // Three prices, in the middle: the month as the monthly plan would charge it (crossed out), the month the year comes to
         // (the big one), and — small, under them — what is really paid, once a year.
-        const monthly = totalOf(catalog, { ...view, period: 'month' });
+        const monthly = baseOf(catalog, { ...view, period: 'month' });
         const full = monthly ? monthly.amount * 12 : 0;
         const saving = full > total.amount ? Math.round((1 - total.amount / full) * 100) : 0;
         block.push(`<p class="price-plan">${esc(say(words, 'yearPlan'))}${saving ? ` <span class="save-pill">${esc(say(words, 'save', { percent: saving }))}</span>` : ''}</p>`);
@@ -83,6 +84,15 @@ function planCard(plan: CatalogPlan, catalog: Catalog, view: View, lang: string,
       } else {
         block.push(`<p class="price-plan">${esc(say(words, 'monthPlan'))}</p>`);
         block.push(`<p class="price"><b>${esc(formatPrice(total.amount, total.currency, lang))}</b> <span>${esc(say(words, 'perMonth'))}</span></p>`);
+      }
+      // «+ …» for the children chosen beyond those included — beside the plan's price, not in it.
+      const more = extraOf(catalog, view);
+      if (more) {
+        const kids = esc(say(words, 'extraSum', { children: counted(words, 'children', more.count, lang) }));
+        const sum = view.period === 'year'
+          ? `<b>+${esc(formatPrice(Math.round(more.amount / 12), more.currency, lang))}</b> ${esc(say(words, 'perMonth'))} <small>(${esc(formatPrice(more.amount, more.currency, lang))} ${esc(say(words, 'perYear'))})</small>`
+          : `<b>+${esc(formatPrice(more.amount, more.currency, lang))}</b> ${esc(say(words, 'perMonth'))}`;
+        block.push(`<p class="price-more">${kids} ${sum}</p>`);
       }
       if (!total.taxIncluded) block.push(`<p class="price-note">${esc(say(words, 'taxExtra'))}</p>`);
       block.push('</div>');

@@ -145,15 +145,22 @@
 }
 .plan-features {
   margin: 8px 0 12px;
-  padding-left: 1.2em;
+  padding-left: 0;
+  list-style: none;
 }
 .plan-features li {
+  position: relative;
   margin: 6px 0;
+  padding-left: 1.7em;
   color: var(--soft);
 }
-.plan-features li::marker {
-  content: '✓  ';
-  color: var(--accent);
+/* A green tick, not a dot (drawn, not a ::marker: Safari does not set a marker's content). */
+.plan-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #22c55e;
+  font-weight: 800;
 }
 .plan-trial {
   margin: 0 0 12px;
@@ -396,6 +403,21 @@
 .plan-pro .price-block .price,
 .plan-pro .price-block .price-plan {
   justify-content: center;
+}
+/* «+ …» for the children beyond those included: beside the plan's price, never in it. */
+.plan .price-more {
+  margin: 6px 0 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(53, 214, 232, 0.12);
+  color: var(--soft);
+  font-size: 0.92rem;
+}
+.price-more b {
+  color: var(--ink);
+}
+.price-more small {
+  font-size: 0.85rem;
 }
 .plan .price-real {
   margin: 2px 0 0;
