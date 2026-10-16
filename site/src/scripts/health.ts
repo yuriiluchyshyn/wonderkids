@@ -10,7 +10,7 @@ export interface Health {
   country?: string | null;
   availability?: { langs?: { site?: string[] | null } };
   /** The owner's switches (`/admin/settings`). */
-  features?: { pricing?: boolean };
+  features?: { paid?: boolean };
 }
 
 /** An address of the API as the page was built with it — or, on a developer's machine, the same path on the game's dev server, which passes `/api` on. */
@@ -41,8 +41,8 @@ export function health(): Promise<Health | null> {
   return asked;
 }
 
-/** The links to the page of prices (`[data-pricing-link]`) are built hidden and shown only while the owner offers the page. */
+/** The links to the page of prices (`[data-pricing-link]`) are built hidden and shown only while the paid mode is on. */
 export async function showPricingLinks(): Promise<void> {
-  if (!(await health())?.features?.pricing) return;
+  if (!(await health())?.features?.paid) return;
   document.querySelectorAll<HTMLElement>('[data-pricing-link]').forEach((link) => (link.hidden = false));
 }

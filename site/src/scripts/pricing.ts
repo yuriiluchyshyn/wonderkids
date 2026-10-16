@@ -5,8 +5,8 @@
  * until they pick another, for the period picked. What the build drew stays
  * when the API cannot be reached.
  *
- * The page is the owner's to show or hide (`/admin/settings` → `features.pricing`
- * of `GET /api/health`): while hidden, a visitor is sent to the main page. With
+ * The page exists only in the paid mode (`/admin/settings` → `features.paid` of
+ * `GET /api/health`): while it is off, a visitor is sent to the main page. With
  * the API out of reach the page is shown — it is only prices.
  */
 import { regionOfLang, renderPricing, type Catalog, type Period, type View, type Words } from '../plans.ts';
@@ -73,7 +73,7 @@ const waited = window.setTimeout(reveal, GATE_WAIT_MS);
 
 void health().then((answer) => {
   window.clearTimeout(waited);
-  if (answer?.features?.pricing === false) {
+  if (answer?.features?.paid === false) {
     window.location.replace(main?.dataset.homeUrl ?? '/');
     return;
   }
