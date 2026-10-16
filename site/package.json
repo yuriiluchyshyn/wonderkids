@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Pulsar Kids \u2014 the public site: a static page per language",
+  "description": "Pulsar Kids — the public site: a static page per language",
   "engines": {
     "node": ">=22.18"
   },
@@ -17,7 +17,8 @@
     "@pulsar/brand": "*",
     "@pulsar/catalog": "*",
     "@pulsar/i18n": "*",
-    "@pulsar/platform": "*"
+    "@pulsar/platform": "*",
+    "@stripe/stripe-js": "^10.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.20.4",

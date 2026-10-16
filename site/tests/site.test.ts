@@ -12,7 +12,7 @@ import { AI_CRAWLERS, llmsTxt, robotsTxt } from '../build/seo.ts';
 import { DEFAULT_LANG, SITE_LANGS, sitePath, type SiteLang } from '../src/languages.ts';
 import { LEGAL_DOCS, LEGAL_UPDATED, legalPath } from '../src/legal.ts';
 import { OPERATOR, operatorGaps } from '../src/operator.ts';
-import { formatPrice, regionOfLang, renderPricing, type Catalog, type Words } from '../src/plans.ts';
+import { firstView, formatPrice, orderLine, regionOfLang, renderPlans, totalOf, type Catalog, type Words } from '../src/plans.ts';
 
 const read = (file: string): string => readFileSync(new URL(file, import.meta.url), 'utf8');
 const URLS = publicUrls();
@@ -116,7 +116,7 @@ test('every text of the dictionary is used — by the page, or by the form’s s
   // The words of the pages of games are asked for by their build (`t('step')`); the names of boards and languages by what a game has.
   const games = read('../build/games.ts');
   // The words of the page of prices are asked for by its build, by their whole key — a region's name and a question by their id.
-  const pricing = read('../src/plans.ts') + read('../build/pricing.ts');
+  const pricing = read('../src/plans.ts') + read('../build/pricing.ts') + read('../src/scripts/pricing/flow.ts');
   const askedByPricing = (key: string): boolean => {
     if (key.startsWith('pricingMeta.')) return pricing.includes(`.${key.slice('pricingMeta.'.length)}`);
     const path = key.slice('pricing.'.length).replace(PLURAL, '');
@@ -236,10 +236,10 @@ test('every game has a page of its own, with real tasks from it and a way straig
   }
 });
 
-test('the page of prices draws Stripe’s plans — every price, in every language — and is reached only while the owner shows it', () => {
+test('the page of prices draws Stripe’s plans in the visitor’s region, and is reached only in the paid mode', () => {
   for (const lang of SITE_LANGS) {
     const page = renderPricingPage(pricingTemplate, lang, URLS, PLANS, dictionaries);
-    // (The words handed to the page's script keep their holes: it fills them from Stripe in the browser.)
+    // (The words handed to the window's script keep their holes: it fills them from Stripe in the browser.)
     const drawn = page.replace(/<script type="application\/json" id="pricing-words">[\s\S]*?<\/script>/, '');
     assert.ok(!drawn.includes('{{') && !/undefined|NaN|\[object|\{\w+\}/.test(drawn), `${lang}: every key and hole is filled`);
     assert.ok(page.includes(`<html lang="${lang}">`) && page.includes(`rel="canonical" href="__SITE_URL__/${sitePath(lang)}${PRICING_SLUG}"`));
@@ -247,38 +247,53 @@ test('the page of prices draws Stripe’s plans — every price, in every langua
     assert.equal(page.match(/<h1[\s>]/g)?.length, 1, `${lang}: one main heading`);
     const description = /<meta name="description" content="([^"]*)"/.exec(page)?.[1] ?? '';
     assert.ok(description.length >= 120 && description.length <= 160, `${lang}: the description is ${description.length} characters`);
-    // Every price Stripe has is in the page as text — and as an offer of the structured data.
-    const graph = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(page)?.[1] ?? '')['@graph'] as { '@type': string; offers?: { price: string; priceCurrency: string }[] }[];
-    assert.deepEqual(graph.map((node) => node['@type']), ['WebPage', 'Product', 'Product', 'FAQPage']);
+    // No table of every country and no questions: one region's prices, the language's until the visitor's country is known.
+    assert.ok(!page.includes('<table') && !page.includes('pricing-faq') && !page.includes('data-region-pick'), `${lang}: no table, no questions, no currency to pick`);
+    const region = regionOfLang(PLANS, lang)!;
     const paid = PLANS.plans.find((plan) => plan.kind === 'paid')!;
-    for (const price of [...paid.prices, ...paid.extraChild]) {
-      if (price.period === 'month' || paid.extraChild.includes(price)) assert.ok(page.includes(formatPrice(price.amount, price.currency, lang)), `${lang}: ${price.region} ${price.period} ${price.amount} is in the table`);
-    }
+    const yearly = paid.prices.find((price) => price.region === region && price.period === 'year')!;
+    assert.ok(drawn.includes(formatPrice(yearly.amount, yearly.currency, lang)), `${lang}: the ${region} yearly price is shown`);
+    // Every price is still there for a machine — the offers of the structured data.
+    const graph = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(page)?.[1] ?? '')['@graph'] as { '@type': string; offers?: { price: string; priceCurrency: string }[] }[];
+    assert.deepEqual(graph.map((node) => node['@type']), ['WebPage', 'Product', 'Product']);
     for (const price of paid.prices) assert.ok(graph[2].offers?.some((offer) => offer.price === (price.amount / 100).toFixed(2) && offer.priceCurrency === price.currency), `${lang}: an offer for ${price.region} ${price.period}`);
     // The plans' names and «what is included» are Stripe's, in the page's language.
     for (const plan of PLANS.plans) for (const line of [plan.name[lang], ...plan.features[lang]]) assert.ok(page.includes(line.replace(/&/g, '&amp;').replace(/"/g, '&quot;')), `${lang}: «${line}» from Stripe`);
-    // The page shows its language's region first.
-    const region = regionOfLang(PLANS, lang);
-    assert.ok(page.includes(`<option value="${region}" selected>`), `${lang}: ${region} is chosen`);
+    // One way on: «start the adventure» on the paid plan; no «create an account», no «start the trial».
+    assert.equal(drawn.match(/data-start/g)?.length, 1, `${lang}: one start button`);
+    assert.ok(!/data-portal="parents" href="[^"]*">/.test(drawn.slice(drawn.indexOf('data-plans'), drawn.indexOf('class="final"'))), `${lang}: the plans lead to no account page`);
     // Copy rules: never «unlimited».
     assert.ok(!/безліміт|unlimited|bez ograniczeń|nielimit/i.test(page), `${lang}: no «unlimited»`);
-    // The links to it are hidden until the owner shows it.
-    for (const [name, html] of [['main', renderPage(template, lang, URLS.site, dictionaries)], ['legal', renderLegalPage(legalTemplate, lang, 'privacy', URLS, dictionaries)]] as const)
+    // Every page carries the words of the window, and its links to prices are hidden until the paid mode is on.
+    for (const [name, html] of [['main', renderPage(template, lang, URLS.site, dictionaries)], ['legal', renderLegalPage(legalTemplate, lang, 'privacy', URLS, dictionaries)]] as const) {
+      assert.ok(html.includes('id="pricing-words"'), `${lang}/${name}: carries the window's words`);
       for (const link of html.match(/<[^>]*data-pricing-link[^>]*>/g) ?? []) assert.ok(/\shidden[\s>]/.test(link), `${lang}/${name}: ${link} is hidden until shown`);
-
+    }
     // Without the plans (the API out of reach at build time) the page is built all the same and says it is loading.
     const bare = renderPricingPage(pricingTemplate, lang, URLS, null, dictionaries);
     assert.ok(!bare.includes('{{') && bare.includes('data-plans-state'), `${lang}: built without prices`);
   }
-  // The site types no number of the plans: the page's words have holes, Stripe fills them.
+  // The site types no number of the plans: the words have holes, Stripe fills them.
   for (const lang of SITE_LANGS) assert.ok(!/\b(15|14|79|599|6\.99)\b/.test(JSON.stringify(dictionaries[lang].pricing)), `${lang}: a number of a plan is typed into pricing.*`);
-  // A plan changed in Stripe changes the page: another trial, another price.
+
+  // Children: from those included up; every one beyond adds its slot to the total.
   const words = dictionaries.uk.pricing as Words;
+  const view = firstView({ ...PLANS, region: 'UA' }, 'uk')!;
+  assert.deepEqual(view, { region: 'UA', period: 'year', children: 2 });
+  assert.equal(totalOf(PLANS, view)?.amount, 59900);
+  assert.equal(totalOf(PLANS, { ...view, children: 4 })?.amount, 59900 + 2 * 13900);
+  const two = renderPlans(PLANS, view, 'uk', words);
+  assert.ok(/data-children="-1"[^>]*disabled/.test(two), 'no fewer than the included two');
+  assert.ok(renderPlans(PLANS, { ...view, children: 3 }, 'uk', words).includes(formatPrice(59900 + 13900, 'UAH', 'uk')), 'the total follows the children');
+  assert.equal(orderLine(PLANS, { ...view, children: 3 }, 'uk', words), `Family Pro · 3 дитини · ${formatPrice(73800, 'UAH', 'uk')} на рік`);
+  // The visitor's own region wins over the page's language.
+  assert.equal(firstView({ ...PLANS, region: 'EU' }, 'uk')?.region, 'EU');
+  // A plan changed in Stripe changes the page: another trial, another price.
   const edited = structuredClone(PLANS);
   const paid = edited.plans.find((plan) => plan.kind === 'paid')!;
   paid.facts.trialDays = 21;
   paid.prices.find((price) => price.region === 'UA' && price.period === 'year')!.amount = 49900;
-  const html = renderPricing(edited, { region: 'UA', period: 'year' }, 'uk', words, { parents: URLS.parents, trial: URLS.play });
+  const html = renderPlans(edited, view, 'uk', words);
   assert.ok(html.includes('21 день') && html.includes('499 ₴'), 'the trial and the price follow Stripe');
 
   assert.equal(formatPrice(7900, 'UAH', 'uk'), '79 ₴');

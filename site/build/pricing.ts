@@ -1,16 +1,18 @@
 import type { Dict } from '@pulsar/i18n';
 import { TRIAL_PATH, type PublicUrls } from '@pulsar/platform';
 import { sitePath, type SiteLang } from '../src/languages.ts';
-import { pricingLd, regionOfLang, renderPricing, type Catalog, type Words } from '../src/plans.ts';
+import { firstView, pricingLd, renderLead, renderPlans, say, type Catalog, type Words } from '../src/plans.ts';
 import type { Dictionaries } from './pages.ts';
 
 /**
  * The page of prices, `/pricing/` (and `/en/pricing/`, `/pl/pricing/`). The
  * plans, prices and «what is included» are Stripe's: the build asks the API
  * for them (`GET /api/billing/plans`) and draws them into the page with
- * `src/plans.ts`, so a crawler reads every price in the HTML; in the browser
+ * `src/plans.ts`, so a crawler reads every price of the language's region in
+ * the HTML (and every region's in the JSON-LD); in the browser
  * `src/scripts/pricing.ts` asks again and draws the visitor's region — an
- * edit in Stripe shows without a new build. When the build cannot reach the
+ * edit in Stripe shows without a new build — and «Розпочати пригоду» opens
+ * the window of paying (`src/scripts/pricing/flow.ts`). When the build cannot reach the
  * API the page is built without prices and the browser fills them in.
  *
  * Whether the page is offered at all is the owner's switch (`/admin/settings`,
@@ -43,8 +45,6 @@ export interface PricingPage {
   body: string;
   /** The structured data. */
   ld: string;
-  /** The dictionary's `pricing` section, for the page's script. */
-  words: string;
 }
 
 export function pricingPage(lang: SiteLang, urls: PublicUrls, dictionaries: Dictionaries, catalog: Catalog | null): PricingPage {
@@ -52,9 +52,13 @@ export function pricingPage(lang: SiteLang, urls: PublicUrls, dictionaries: Dict
   const meta = dictionaries[lang].pricingMeta as Dict;
   const title = String(meta.title);
   const description = String(meta.description);
-  const region = catalog ? regionOfLang(catalog, lang) : null;
-  const links = { parents: urls.parents, trial: urls.play + TRIAL_PATH };
-  const body = renderPricing(catalog, region ? { region, period: 'year' } : null, lang, words, links);
+  // The build asks from a server, whose country is nobody's: the page shows its language's region until the browser knows the visitor's.
+  const esc = (text: string): string => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const body = [
+    `<div class="wrap pricing-hero"><h1><small class="eyebrow">${esc(say(words, 'eyebrow'))}</small> ${esc(say(words, 'title'))}</h1><div data-plans-lead>${renderLead(catalog, lang, words)}</div></div>`,
+    `<section class="plans"><div class="wrap" data-plans>${renderPlans(catalog, catalog ? firstView({ ...catalog, region: null }, lang) : null, lang, words)}</div></section>`,
+    `<section class="final"><div class="wrap band"><h2>${esc(say(words, 'final.title'))}</h2><p class="sub" style="margin-inline: auto">${esc(say(words, 'final.sub'))}</p><div class="cta"><a class="btn btn-try" data-portal="play" data-trial href="${esc(urls.play + TRIAL_PATH)}"><span class="emoji" aria-hidden="true">🚀</span> ${esc(say(words, 'final.cta'))}</a></div></div></section>`,
+  ].join('\n');
   const url = `${urls.site}/${sitePath(lang)}${PRICING_SLUG}`;
-  return { title, description, body, ld: pricingLd(catalog, lang, words, url, urls.site, title, description), words: JSON.stringify(words).replace(/</g, '\\u003c') };
+  return { title, description, body, ld: pricingLd(catalog, lang, url, urls.site, title, description) };
 }

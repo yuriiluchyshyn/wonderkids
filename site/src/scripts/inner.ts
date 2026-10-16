@@ -2,11 +2,13 @@
 import { rememberLangChoice } from '@pulsar/platform/browser';
 import { showPricingLinks } from './health.ts';
 import { wireLanguageMenu } from './language.ts';
+import { wirePricingLinks } from './pricing-links.ts';
 import { wirePortalLinks } from './portals.ts';
 
 wirePortalLinks();
 wireLanguageMenu();
 void showPricingLinks();
+wirePricingLinks();
 
 // Going back to the main page, the reader stays in the language of the page: without
 // this «/» would send them by their country (`vercel.json`) — from a Ukrainian page to the Polish one.

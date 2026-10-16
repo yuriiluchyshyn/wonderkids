@@ -27,6 +27,7 @@ Pytania i żądania dotyczące danych osobowych: [{{operator.email}}](mailto:{{o
 | **Wejścia z linków Pulsar Kids i gry próbne**: czas, link, kraj (ustalony na podstawie adresu IP), język, rodzaj urządzenia, strona odsyłająca oraz skrót adresu IP utworzony z tajnym kluczem, z którego nie da się odtworzyć adresu; w grze próbnej — czy zagrano do końca i czy naciśnięto „załóż konto”. | Liczenie wejść i gier próbnych bez identyfikowania kogokolwiek. | Prawnie uzasadniony interes — art. 6 ust. 1 lit. f | 24 miesiące |
 | **Wiadomości z formularza na stronie**: treść, rodzaj, adres e-mail (jeśli podano), załączone zdjęcia lub filmy, skrót adresu IP utworzony z tajnym kluczem i rodzaj przeglądarki. | Odpowiedź, poprawianie gry, ochrona formularza przed nadużyciami. | Prawnie uzasadniony interes — art. 6 ust. 1 lit. f | 24 miesiące. Załączniki nie są przechowywane na serwerze: trafiają razem z wiadomością na skrzynkę Pulsar Kids. |
 | **Logi techniczne**: adres IP, czas, żądany adres, rodzaj przeglądarki. | Wyświetlanie stron i bezpieczeństwo usługi. | Prawnie uzasadniony interes — art. 6 ust. 1 lit. f | Do 30 dni, u dostawcy hostingu |
+| **Płatność za subskrypcję** (tylko gdy rodzic ją wykupuje): adres e-mail, imię i nazwisko, adres rozliczeniowy, wybrany plan i liczba dzieci. Dane karty wpisuje się w okno Stripe i nie trafiają do Pulsar Kids. | Założenie i odnawianie subskrypcji, wystawianie faktur i ustalenie kraju nabywcy na potrzeby podatków. | Umowa — art. 6 ust. 1 lit. b; obowiązek prawny (podatki) — art. 6 ust. 1 lit. c | Przez czas trwania subskrypcji, faktury — tak długo, jak wymaga prawo podatkowe (5 lat) |
 | **Anonimowe statystyki stron** (Vercel Web Analytics): strona, strona odsyłająca, kraj, rodzaj urządzenia i przeglądarki. Bez plików cookie i bez identyfikatora, który trwałby dłużej niż dobę. | Żeby wiedzieć, które strony są czytane. | Prawnie uzasadniony interes — art. 6 ust. 1 lit. f | Tylko jako sumy |
 
 Wystarczy imię dziecka albo nick. Lepiej nie wpisywać nazwiska, adresu, szkoły ani zdjęcia — gra ich nie potrzebuje. Adres e-mail jest niezbędny, żeby mieć konto; reszta danych w profilu zależy od rodzica.
@@ -52,6 +53,7 @@ Pulsar Kids nie używa reklamowych ani analitycznych plików cookie, dlatego nie
 |---|---|---|---|
 | pk_lang | Cookie, pulsarkids.com i subdomeny | Język wybrany dla strony i gry | 1 rok |
 | wk-auth | Cookie, pulsarkids.com i subdomeny | Odnotowuje zalogowanie lub wylogowanie, żeby gra dziecka i panel rodzica razem kończyły starą sesję | 400 dni |
+| __stripe_mid, __stripe_sid | Cookie, pulsarkids.com | Stripe ustawia je tylko przy otwartym oknie płatności, aby wykrywać oszukańcze płatności | 1 rok i 30 minut |
 | Pliki cookie Auth0 | Cookie, auth.pulsarkids.com | Przeprowadzają rodzica przez logowanie | Sesja logowania |
 | wonderkids-auth-v1 | Pamięć lokalna, gra | Utrzymuje zalogowanie rodzica lub dziecka | Do wylogowania, najdłużej 30 dni |
 | pulsar-lang-v1, pulsar-availability-v1, wk-last-theme-v1, wk-outro-v1 | Pamięć lokalna, gra i strona | Wybrany język, gry dostępne w danym kraju, ostatni motyw (na ekran ładowania), ostatnio opowiedziana ciekawostka | Do wyczyszczenia w przeglądarce; wszystko poza językiem także przy wylogowaniu |
@@ -70,6 +72,7 @@ Pulsar Kids korzysta z dostawców usług, którzy przetwarzają dane w jego imie
 | Neon, Inc. (Databricks) | Baza danych z kontami, profilami i postępami | USA |
 | Okta, Inc. (Auth0) | Logowanie rodziców | USA |
 | Google Ireland Ltd. / Google LLC | Czytanie tekstów na głos (sam tekst); skrzynka pocztowa Pulsar Kids | UE i USA |
+| Stripe Payments Europe, Ltd. | Przyjmuje płatności za subskrypcję, przechowuje dane karty, wystawia faktury | UE i USA |
 | Resend, Inc. | Wysyła wiadomości z formularza na skrzynkę oraz odpowiedzi do ich nadawców | USA i UE |
 | ImprovMX | Przekazuje pocztę wysłaną na adresy w domenie pulsarkids.com | UE i USA |
 

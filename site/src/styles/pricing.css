@@ -1,4 +1,4 @@
-/* The page of prices (`build/pricing.ts`): two plans side by side, every region's prices in a table below. */
+/* The plans (`src/plans.ts`) — on the page of prices and in the window every page opens — and the window of paying. */
 
 /* Hidden by the owner, a page that runs scripts stays out of sight until the API has answered (`pricing.html`). */
 :root[data-gate] main.pricing {
@@ -58,24 +58,6 @@
   background: rgba(30, 10, 69, 0.18);
   color: var(--bg-1);
 }
-.region-pick {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--soft);
-  font-weight: 600;
-}
-.region-pick select {
-  min-height: 48px;
-  max-width: 100%;
-  padding: 0 14px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--surface);
-  color: var(--ink);
-  font: 600 1rem 'Fredoka', system-ui, sans-serif;
-}
-
 /* The two plans. */
 .plans {
   padding-top: 24px;
@@ -159,45 +141,190 @@
   color: var(--sun);
 }
 
-/* Every region's prices: what a crawler and an assistant read, and a reader abroad compares. */
-.pricing-table .table {
-  overflow-x: auto;
-  margin-top: 20px;
+
+/* Whose prices these are: the visitor's region, nothing to pick. */
+.region-note {
+  margin: 0;
+  color: var(--soft);
+  font-size: 0.95rem;
+}
+
+/* How many children: from those the plan includes up. */
+.children-pick {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 8px 8px 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.children-label {
+  font-weight: 600;
+}
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.stepper button {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ink);
+  font: 700 1.3rem 'Fredoka', system-ui, sans-serif;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.stepper button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+@media (hover: hover) {
+  .stepper button:not(:disabled):hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+}
+.stepper output {
+  min-width: 2ch;
+  text-align: center;
+  font: 800 1.5rem 'Baloo 2', sans-serif;
+}
+.plan [data-start] {
+  margin-top: auto;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---- the window of prices and of paying ---- */
+.pricing-modal {
+  width: min(100% - 24px, 1000px);
+  max-height: calc(100dvh - 24px);
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: linear-gradient(160deg, #2a1464, var(--bg-1));
+  color: var(--ink);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  overscroll-behavior: contain;
 }
-.pricing-table table {
-  width: 100%;
-  min-width: 600px;
-  border-collapse: collapse;
+.pricing-modal::backdrop {
+  background: rgba(5, 8, 20, 0.72);
 }
-.pricing-table th,
-.pricing-table td {
-  padding: 12px 14px;
-  text-align: left;
+.pricing-modal[open] {
+  animation: modal-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.pricing-modal[open]::backdrop {
+  animation: fade-in 0.32s ease;
+}
+.pricing-modal.closing {
+  animation: modal-out 0.2s ease forwards;
+}
+.pricing-modal.closing::backdrop {
+  animation: fade-out 0.2s ease forwards;
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+}
+@keyframes modal-out {
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pricing-modal[open],
+  .pricing-modal[open]::backdrop {
+    animation: none;
+  }
+}
+.pricing-modal-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 12px 14px 22px;
   border-bottom: 1px solid var(--line);
+  background: #2a1464;
+}
+.pricing-modal-head h2 {
+  margin-right: auto;
+  font-size: 1.5rem;
+}
+.pricing-modal-body {
+  padding: 20px 22px 26px;
+}
+.pricing-modal-body .lead {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+.pricing-modal .plans-grid {
+  margin-top: 18px;
+}
+
+/* The payment: what is paid for, then Stripe's Checkout on white, as Stripe draws it. */
+.checkout-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+}
+.checkout-order {
+  margin: 0;
+  font-weight: 700;
+}
+.checkout-note {
+  margin: 12px 0 0;
   color: var(--soft);
-  white-space: nowrap;
+  font-size: 0.92rem;
 }
-.pricing-table thead th {
-  color: var(--ink);
-  font-size: 0.9rem;
-  white-space: normal;
+.checkout-note[hidden] {
+  display: none;
 }
-.pricing-table tbody th {
-  color: var(--ink);
-}
-.pricing-table tr:last-child > * {
-  border-bottom: 0;
-}
-.pricing-table tr.here > * {
-  background: rgba(53, 214, 232, 0.1);
-  color: var(--ink);
-}
-.pricing-table small {
+.checkout-test {
   color: var(--sun);
 }
-.pricing-faq h3 {
-  margin-top: 0;
+.checkout-mount {
+  min-height: 420px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 20px;
+  background: #fff;
+  color: #1e0a45;
+}
+.checkout-wait {
+  margin: 40px 0;
+  text-align: center;
+}
+.checkout-done {
+  padding: 30px 0 10px;
+  text-align: center;
+}
+.checkout-done h3 {
+  font-size: 1.6rem;
+}
+.checkout-done p {
+  margin: 12px auto 22px;
+  max-width: 34em;
+  color: var(--soft);
 }

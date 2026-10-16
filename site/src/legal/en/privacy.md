@@ -27,6 +27,7 @@ Questions and requests about personal data are answered at [{{operator.email}}](
 | **Arrivals by a Pulsar Kids link and trial games**: time, the link, country (worked out from the IP address), language, type of device, the referring site, and a keyed hash of the IP address that cannot be turned back into the address; for a trial game — whether it was played to the end and whether “create an account” was pressed. | To count visits and trial games without identifying anyone. | Legitimate interest — art. 6(1)(f) | 24 months |
 | **Messages from the site's form**: the text, its kind, an email address if given, attached photos or videos, a keyed hash of the IP address and the type of browser. | To answer, to fix the game, and to stop abuse of the form. | Legitimate interest — art. 6(1)(f) | 24 months. Attachments are not stored on the server: they are forwarded to the Pulsar Kids mailbox with the message. |
 | **Technical logs**: IP address, time, the address requested, type of browser. | To deliver the pages and keep the service secure. | Legitimate interest — art. 6(1)(f) | Up to 30 days, at the hosting provider |
+| **Subscription payment** (only when a parent subscribes): email address, name, billing address, the chosen plan and number of kids. Card details are typed into Stripe's window and never reach Pulsar Kids. | To set up and renew the subscription, issue invoices and determine the buyer's country for tax. | Contract — art. 6(1)(b); legal obligation (tax) — art. 6(1)(c) | While the subscription lasts; invoices as long as tax law requires (5 years in Poland) |
 | **Anonymous page statistics** (Vercel Web Analytics): the page, the referring site, country, type of device and browser. No cookies, and no identifier that lasts longer than a day. | To see which pages are read. | Legitimate interest — art. 6(1)(f) | Only as totals |
 
 A child's first name or a nickname is enough. Please do not enter a surname, an address, a school or a photo — the game needs none of them. An email address is needed to have an account; everything else in a profile is the parent's choice.
@@ -52,6 +53,7 @@ Pulsar Kids uses no advertising cookies and no analytics cookies, so there is no
 |---|---|---|---|
 | pk_lang | Cookie, pulsarkids.com and its subdomains | The language chosen for the site and the game | 1 year |
 | wk-auth | Cookie, pulsarkids.com and its subdomains | Notes a sign-in or sign-out, so that the child's game and the parents' area end an old session together | 400 days |
+| __stripe_mid, __stripe_sid | Cookie, pulsarkids.com | Set by Stripe only when the payment window is open, to detect fraudulent payments | 1 year and 30 minutes |
 | Auth0 cookies | Cookies, auth.pulsarkids.com | Carry a parent through the sign-in | The sign-in session |
 | wonderkids-auth-v1 | Local storage, game | Keeps the parent or the child signed in | Until sign-out, 30 days at most |
 | pulsar-lang-v1, pulsar-availability-v1, wk-last-theme-v1, wk-outro-v1 | Local storage, game and site | The chosen language, which games are offered in the country, the last theme (for the loading screen), which fact was told last | Until cleared in the browser; all but the language also at sign-out |
@@ -70,6 +72,7 @@ Pulsar Kids uses service providers that process data on its behalf and under con
 | Neon, Inc. (Databricks) | The database with accounts, profiles and progress | USA |
 | Okta, Inc. (Auth0) | Sign-in of parents | USA |
 | Google Ireland Ltd. / Google LLC | Reading texts aloud (text only); the Pulsar Kids mailbox | EU and USA |
+| Stripe Payments Europe, Ltd. | Takes subscription payments, keeps card details, issues invoices | EU and USA |
 | Resend, Inc. | Sends messages from the site's form to the mailbox and replies to their senders | USA and EU |
 | ImprovMX | Forwards mail sent to addresses at pulsarkids.com | EU and USA |
 

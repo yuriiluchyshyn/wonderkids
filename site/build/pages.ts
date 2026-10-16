@@ -45,7 +45,7 @@ import type { Catalog } from '../src/plans.ts';
  * changes what the site says about it (`build/games.ts`, `catalogNumbers`).
  *   {{@docTitle}} {{@docDescription}} {{@docBody}} {{@docUpdatedIso}}   `legal.html` only: the text it holds
  *   {{@pageTitle}} {{@pageDescription}} {{@pageBody}} {{@ld}}           `games.html` and `pricing.html` only: the page it holds
- *   {{@pricingWords}}                                           `pricing.html` only: the words its script draws the plans with
+ *   {{@pricingWords}}                                           the words of the window of prices (every page can open it)
  *   {{@updated}} {{@updatedIso}}                                when the page was built, for a reader and for a machine
  *   {{@langList}}                                               every language of the site, as the items of a JSON list
  *   {{@alternates}} {{@ogAlternates}} {{@langLinks}}            links to its other languages
@@ -154,6 +154,8 @@ export function renderPage(template: string, lang: SiteLang, site: string, dicti
     ogLocale: LANGUAGES[lang].ogLocale,
     langShort: html(LANGUAGES[lang].short),
     langList: SITE_LANGS.map((code) => JSON.stringify(code)).join(', '),
+    // The words of the window of prices, which every page can open (`src/scripts/pricing/flow.ts`).
+    pricingWords: JSON.stringify(dictionaries[lang].pricing ?? dictionaries[DEFAULT_LANG].pricing).replace(/</g, '\\u003c'),
     // When the page was last built — it is rebuilt only when it changed (`vercel.json`'s `ignoreCommand`).
     updatedIso: BUILT.toISOString().slice(0, 10),
     updated: html(new Intl.DateTimeFormat(lang, { dateStyle: 'long', timeZone: 'UTC' }).format(BUILT)),
@@ -207,7 +209,7 @@ export function renderPricingPage(template: string, lang: SiteLang, urls: Public
   const page = pricingPage(lang, urls, dictionaries, catalog);
   return renderPage(template, lang, urls.site, dictionaries, {
     slug: PRICING_SLUG,
-    facts: { pageBody: page.body, ld: page.ld, pricingWords: page.words },
+    facts: { pageBody: page.body, ld: page.ld },
     texts: { pageTitle: page.title, pageDescription: page.description },
   });
 }

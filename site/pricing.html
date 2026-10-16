@@ -56,10 +56,11 @@
       </div>
     </header>
 
-    <!-- The plans are Stripe's (`GET /api/billing/plans`): drawn here at build time and again by the page's script. -->
-    <main class="pricing" data-home-url="/{{@home}}" data-plans-api="__API_URL__/api/billing/plans" data-parents="__PARENTS_URL__" data-trial="__PLAY_URL__/try">
+    <!-- The plans are Stripe's (`GET /api/billing/plans`): drawn here at build time and again by the page's script, which also opens the window of paying. -->
+    <main class="pricing" data-home-url="/{{@home}}">
       {{@pageBody}}
     </main>
+    <!-- The words of the plans and of the window of paying (src/scripts/pricing/flow.ts). -->
     <script type="application/json" id="pricing-words">{{@pricingWords}}</script>
 
     <footer>

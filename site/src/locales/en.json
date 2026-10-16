@@ -362,17 +362,14 @@
     "year": "Yearly",
     "month": "Monthly",
     "save": "Save {percent}%",
-    "currencyLabel": "Currency",
     "otherCountries": "{region} and other countries",
     "forever": "forever",
     "perYear": "per year",
     "perMonth": "per month",
     "monthly": "that is {price} a month",
-    "extraYear": "+{price} per year for each additional kid ({children} included)",
-    "extraMonth": "+{price} per month for each additional kid ({children} included)",
+    "extraYear": "{children} included; each additional kid +{price} per year",
+    "extraMonth": "{children} included; each additional kid +{price} per month",
     "trial": "The trial lasts {days}. The first charge comes right after it; cancel any time before then.",
-    "ctaFree": "Create an account",
-    "ctaPaid": "Start the trial",
     "unit": {
       "minutes": {
         "one": "{count} minute",
@@ -387,46 +384,26 @@
         "other": "{count} kids"
       }
     },
-    "table": {
-      "title": "Prices in every country",
-      "sub": "The price depends on the country the family lives in.",
-      "region": "Country",
-      "month": "Month",
-      "year": "Year",
-      "extraMonth": "Additional kid, month",
-      "extraYear": "Additional kid, year"
-    },
-    "faq": {
-      "title": "Questions about paying",
-      "limit": {
-        "title": "What does {minutes} a day mean?",
-        "text": "On the {free} plan the whole family plays up to {minutes} a day together, however many kids there are. A level already started is always finished. The time comes back the next day."
-      },
-      "trial": {
-        "title": "How does the trial work?",
-        "text": "For the first {days} {paid} works in full. The first charge comes right after them. Cancel before then and the family simply stays on the {free} plan."
-      },
-      "cancel": {
-        "title": "How do I cancel?",
-        "text": "In the parents’ area, in two clicks. {paid} keeps working until the end of the paid period, then the family moves to the {free} plan. You can renew at any time."
-      },
-      "progress": {
-        "title": "What happens to my child’s progress?",
-        "text": "Nothing disappears: stars, steps, the planet and rewards stay — on the {free} plan and after cancelling."
-      },
-      "children": {
-        "title": "How many kids does {paid} include?",
-        "text": "{children} are included. Each additional kid can be added separately; there is no upper limit."
-      },
-      "currency": {
-        "title": "Why do prices differ between countries?",
-        "text": "The price takes into account the country the family lives in. Switch the currency at the top of this page; at checkout Stripe shows the price."
-      }
-    },
     "final": {
       "title": "Try it first",
       "sub": "The trial game opens with no sign-up and no payment.",
       "cta": "Try the game now"
-    }
+    },
+    "regionNote": "Prices for: {region}",
+    "children": "How many kids",
+    "fewer": "Fewer kids",
+    "more": "More kids",
+    "start": "Start the adventure",
+    "modalTitle": "Pulsar Kids plans",
+    "close": "Close",
+    "back": "← Back to plans",
+    "checkoutLoading": "Opening checkout…",
+    "checkoutError": "Checkout could not be opened right now. Please try again in a minute.",
+    "secure": "Payment by Stripe: your card details never reach Pulsar Kids. You are charged only after the trial, and you can cancel any time.",
+    "testMode": "Test mode: no real money is charged. Card 4242 4242 4242 4242, any future date and CVC.",
+    "doneTitle": "The adventure has begun! 🚀",
+    "doneText": "A confirmation went to {email}. Sign in to the parents’ area with that address and the kids can play.",
+    "doneTextNoEmail": "A confirmation went to your email. Sign in to the parents’ area with the same address and the kids can play.",
+    "doneCta": "Open the parents’ area"
   }
 }

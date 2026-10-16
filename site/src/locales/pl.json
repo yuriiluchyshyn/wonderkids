@@ -368,17 +368,14 @@
     "year": "Rocznie",
     "month": "Co miesiąc",
     "save": "−{percent}%",
-    "currencyLabel": "Waluta",
     "otherCountries": "{region} i inne kraje",
     "forever": "na zawsze",
     "perYear": "rocznie",
     "perMonth": "miesięcznie",
     "monthly": "to {price} miesięcznie",
-    "extraYear": "+{price} rocznie za każde kolejne dziecko (w pakiecie: {children})",
-    "extraMonth": "+{price} miesięcznie za każde kolejne dziecko (w pakiecie: {children})",
+    "extraYear": "W pakiecie: {children}; każde kolejne dziecko +{price} rocznie",
+    "extraMonth": "W pakiecie: {children}; każde kolejne dziecko +{price} miesięcznie",
     "trial": "Okres próbny trwa {days}. Pierwsza płatność jest zaraz po nim; anulować można w dowolnym momencie przed nią.",
-    "ctaFree": "Załóż konto",
-    "ctaPaid": "Rozpocznij okres próbny",
     "unit": {
       "minutes": {
         "one": "{count} minuta",
@@ -399,46 +396,26 @@
         "other": "{count} dziecka"
       }
     },
-    "table": {
-      "title": "Ceny we wszystkich krajach",
-      "sub": "Cena zależy od kraju, w którym mieszka rodzina.",
-      "region": "Kraj",
-      "month": "Miesiąc",
-      "year": "Rok",
-      "extraMonth": "Kolejne dziecko, miesiąc",
-      "extraYear": "Kolejne dziecko, rok"
-    },
-    "faq": {
-      "title": "Pytania o płatność",
-      "limit": {
-        "title": "Co znaczy {minutes} dziennie?",
-        "text": "W planie {free} cała rodzina gra razem do {minutes} dziennie, bez względu na liczbę dzieci. Rozpoczęty poziom dziecko zawsze kończy. Następnego dnia czas wraca."
-      },
-      "trial": {
-        "title": "Jak działa okres próbny?",
-        "text": "Przez pierwsze {days} {paid} działa w pełni. Pierwsza płatność jest zaraz po nich. Po anulowaniu wcześniej rodzina po prostu zostaje w planie {free}."
-      },
-      "cancel": {
-        "title": "Jak anulować subskrypcję?",
-        "text": "W panelu rodzica, dwoma kliknięciami. {paid} działa do końca opłaconego okresu, potem rodzina przechodzi na plan {free}. Subskrypcję można wznowić w dowolnym momencie."
-      },
-      "progress": {
-        "title": "Co z postępami dziecka?",
-        "text": "Nic nie znika: gwiazdki, stopnie, planeta i nagrody zostają — w planie {free} i po anulowaniu."
-      },
-      "children": {
-        "title": "Ile dzieci obejmuje {paid}?",
-        "text": "Pakiet obejmuje {children}. Każde kolejne można dodać osobno; górnego limitu nie ma."
-      },
-      "currency": {
-        "title": "Dlaczego ceny różnią się między krajami?",
-        "text": "Cena uwzględnia kraj, w którym mieszka rodzina. Walutę na tej stronie można przełączyć u góry, a przy płatności cenę pokaże Stripe."
-      }
-    },
     "final": {
       "title": "Najpierw wypróbuj",
       "sub": "Gra próbna otwiera się bez rejestracji i bez płatności.",
       "cta": "Wypróbuj grę teraz"
-    }
+    },
+    "regionNote": "Ceny dla: {region}",
+    "children": "Ile dzieci",
+    "fewer": "Mniej dzieci",
+    "more": "Więcej dzieci",
+    "start": "Rozpocznij przygodę",
+    "modalTitle": "Plany Pulsar Kids",
+    "close": "Zamknij",
+    "back": "← Do planów",
+    "checkoutLoading": "Otwieram płatność…",
+    "checkoutError": "Nie udało się teraz otworzyć płatności. Spróbuj ponownie za minutę.",
+    "secure": "Płatność przez Stripe: dane karty nie trafiają do Pulsar Kids. Opłata dopiero po okresie próbnym, anulować można w każdej chwili.",
+    "testMode": "Tryb testowy: prawdziwe pieniądze nie są pobierane. Karta 4242 4242 4242 4242, dowolna przyszła data i CVC.",
+    "doneTitle": "Przygoda się zaczęła! 🚀",
+    "doneText": "Potwierdzenie wysłano na {email}. Zaloguj się do panelu rodzica tym adresem — i dzieci mogą grać.",
+    "doneTextNoEmail": "Potwierdzenie wysłano na Twój e-mail. Zaloguj się do panelu rodzica tym samym adresem — i dzieci mogą grać.",
+    "doneCta": "Otwórz panel rodzica"
   }
 }
