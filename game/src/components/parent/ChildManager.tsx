@@ -138,6 +138,8 @@ export function ChildManager() {
         gender: draft.gender,
       },
     });
+    // Goals are the plan's perk: a new child on the free plan starts with none (the server keeps none for it either).
+    if (restricted) useGameStore.getState().setMilestones([]);
     setAdding(false);
   };
 
