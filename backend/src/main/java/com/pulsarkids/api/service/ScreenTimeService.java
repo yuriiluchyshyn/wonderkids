@@ -18,6 +18,7 @@ public class ScreenTimeService {
   private final ChildRepository children;
   private final ChildSettingsRepository settingsRepo;
   private final ScreenTimeRepository screenRepo;
+  private final SubscriptionService subscriptions;
 
   public record Tracked(ScreenTime.State state, ScreenTime.Limits limits) {}
 
@@ -31,7 +32,8 @@ public class ScreenTimeService {
   public Tracked track(int userId, String childId, BiFunction<ScreenTime.State, ScreenTime.Limits, ScreenTime.State> transition) {
     if (!children.existsByIdAndParentId(childId, userId)) return null;
     ChildSettings s = settingsRepo.findById(childId).orElseGet(ChildSettings::new);
-    ScreenTime.Limits limits = new ScreenTime.Limits(s.getSessionDurationMin(), s.getCooldownMin(), s.getMaxDailyMin());
+    // The parents' own limits — or, where their plan does not let them set any, the plan's.
+    ScreenTime.Limits limits = subscriptions.allowanceOf(userId).limits(new ScreenTime.Limits(s.getSessionDurationMin(), s.getCooldownMin(), s.getMaxDailyMin()));
 
     screenRepo.insertIfAbsent(childId);
     ScreenTimeRow row = screenRepo.lock(childId).orElseThrow();

@@ -5,6 +5,7 @@ import com.pulsarkids.api.core.Catalog;
 import com.pulsarkids.api.core.Json;
 import com.pulsarkids.api.core.Mail;
 import com.pulsarkids.api.core.Plans;
+import com.pulsarkids.api.core.ScreenTime;
 import com.pulsarkids.api.data.entity.BillingAccount;
 import com.pulsarkids.api.data.entity.Parent;
 import com.pulsarkids.api.data.repo.BillingAccountRepository;
@@ -13,6 +14,7 @@ import com.pulsarkids.api.data.repo.ParentRepository;
 import com.pulsarkids.api.model.Access;
 import com.pulsarkids.api.model.ApiError;
 import com.pulsarkids.api.model.BillingPeriod;
+import com.pulsarkids.api.model.Defaults;
 import com.pulsarkids.api.model.Fields;
 import com.pulsarkids.api.model.GiftSource;
 import com.pulsarkids.api.model.Lang;
@@ -123,22 +125,67 @@ public class SubscriptionService {
    * what a package includes, Family is not held to a number it cannot be told.
    */
   public Integer childLimit(int parentId) {
-    if (!marketing.paidModeOn()) return null;
-    BillingAccount account = load(parentId);
-    dropTakenBackGift(account);
-    return switch (Plans.accessOf(account.getPlan(), account.getStatus(), account.getGift())) {
-      case NONE, FREE -> 1;
-      case GIFT -> null;
+    return allowanceOf(parentId).children();
+  }
+
+  /**
+   * What an account's plan lets it do. No plan chosen and the free plan are the
+   * same: one child, no family goals of the parents' own, no setting of the screen
+   * time (the plan's `dailyMinutes` a day, with the default session and break).
+   * Family sets goals and screen time and has as many children as the plan has
+   * places; a gift has no limits; with the paid mode off nothing is limited.
+   *
+   * @param children   child profiles allowed; null — any number
+   * @param goals      the parents may set goals for the path
+   * @param screenTime the parents may set the screen time (and top the tank up)
+   * @param dailyMinutes the day's play when they may not
+   */
+  public record Allowance(Integer children, boolean goals, boolean screenTime, int dailyMinutes) {
+    static final Allowance UNLIMITED = new Allowance(null, true, true, 0);
+
+    /** The limits a child plays by: the parents' own, or — where they may not set them — the plan's. */
+    public ScreenTime.Limits limits(ScreenTime.Limits own) {
+      return screenTime ? own : new ScreenTime.Limits(Math.min(Defaults.SESSION_MINUTES, dailyMinutes), Defaults.COOLDOWN_MINUTES, dailyMinutes);
+    }
+  }
+
+  public Allowance allowanceOf(int parentId) {
+    if (!marketing.paidModeOn()) return Allowance.UNLIMITED;
+    // Only read here (this runs inside read-only loads too): no row yet is an account that never chose.
+    BillingAccount account = tx.execute((status) -> accounts.findById(parentId).orElse(null));
+    String gift = account == null ? null : account.getGift();
+    // A gift of a promotion code taken back in Stripe no longer counts (the row itself is cleaned up by `stateOf`).
+    if (gift != null && Plans.giftSource(gift) == GiftSource.PROMO) {
+      String codeId = Plans.giftCodeId(gift);
+      if (codeId == null || !giftStillValid(codeId)) gift = null;
+    }
+    Access access = account == null ? Access.NONE : Plans.accessOf(account.getPlan(), account.getStatus(), gift);
+    return switch (access) {
+      case NONE, FREE -> new Allowance(1, false, false, freeDailyMinutes());
+      case GIFT -> Allowance.UNLIMITED;
       case FAMILY -> {
-        if (account.getChildren() != null) yield account.getChildren();
-        try {
-          yield account.getPlanId() == null ? null : Catalog.childrenIncluded(billing.catalog(), account.getPlanId());
-        } catch (StripeException err) {
-          log.error("[billing] places of the plan not read for account {}: {}", parentId, err.getMessage());
-          yield null;
+        Integer places = account.getChildren();
+        if (places == null && account.getPlanId() != null) {
+          try {
+            places = Catalog.childrenIncluded(billing.catalog(), account.getPlanId());
+          } catch (StripeException err) {
+            // Stripe out of reach: Family is not held to a number it cannot be told.
+            log.error("[billing] places of the plan not read for account {}: {}", parentId, err.getMessage());
+          }
         }
+        yield new Allowance(places, true, true, 0);
       }
     };
+  }
+
+  /** A day's play on the free plan: Stripe's `daily_minutes`, else the default. */
+  private int freeDailyMinutes() {
+    if (!billing.configured()) return Defaults.FREE_DAILY_MINUTES;
+    try {
+      return Catalog.dailyMinutes(billing.catalog(), Defaults.FREE_DAILY_MINUTES);
+    } catch (StripeException err) {
+      return Defaults.FREE_DAILY_MINUTES;
+    }
   }
 
   /**

@@ -151,7 +151,9 @@ public class AccountService {
   }
 
   private Map<String, Object> assembleChild(
-      Child row, ChildSettings s, ChildStats st, ScreenTimeRow sc, List<ChildProgress> progressRows, List<ChildTreasure> treasureRows, List<Milestone> milestoneRows, int tzOffsetMin) {
+      Child row, ChildSettings s, ChildStats st, ScreenTimeRow sc, List<ChildProgress> progressRows, List<ChildTreasure> treasureRows, List<Milestone> milestoneRows, int tzOffsetMin, SubscriptionService.Allowance allowance) {
+    // Where the parents may not set the screen time, the child plays by the plan's — and is shown it.
+    ScreenTime.Limits limits = allowance.limits(new ScreenTime.Limits(s.getSessionDurationMin(), s.getCooldownMin(), s.getMaxDailyMin()));
     if (s == null) s = new ChildSettings();
     if (st == null) st = new ChildStats();
     if (sc == null) sc = new ScreenTimeRow();
@@ -169,7 +171,7 @@ public class AccountService {
             new ScreenTime.State(sc.getDayKey(), sc.getMinutesUsedToday(), sc.getSessionElapsedMs(), sc.getCooldownUntil(), sc.getLastSessionEndedAt(), sc.getLastHeartbeatAt()),
             now,
             tzOffsetMin),
-        new ScreenTime.Limits(s.getSessionDurationMin(), s.getCooldownMin(), s.getMaxDailyMin()),
+        limits,
         now);
 
     Map<String, Object> profile = Json.map(Fields.NAME, row.getName(), Fields.NICKNAME, row.getNickname() == null ? "" : row.getNickname(), Fields.PIN, row.getPin() == null ? "" : row.getPin());
@@ -198,9 +200,9 @@ public class AccountService {
     settings.put(Fields.HIDDEN_GAMES, s.getHiddenGames() != null && s.getHiddenGames().isArray() ? s.getHiddenGames() : Json.array());
     settings.put(Fields.VOICE, s.getVoice() != null && !s.getVoice().isNull() ? s.getVoice() : Json.object());
     settings.put(Fields.TIME_CONTROL, Json.map(
-        Fields.SESSION_DURATION_MINUTES, s.getSessionDurationMin(),
-        Fields.COOLDOWN_MINUTES, s.getCooldownMin(),
-        Fields.MAX_DAILY_MINUTES, s.getMaxDailyMin()));
+        Fields.SESSION_DURATION_MINUTES, limits.sessionMin(),
+        Fields.COOLDOWN_MINUTES, limits.cooldownMin(),
+        Fields.MAX_DAILY_MINUTES, limits.maxDailyMin()));
 
     List<String> treasures = new ArrayList<>();
     for (ChildTreasure t : treasureRows) treasures.add(t.getId().treasureKey());
@@ -241,6 +243,7 @@ public class AccountService {
     List<Child> rows = children.findByParentIdOrderBySortIndexAscCreatedAtAsc(userId);
     List<Map<String, Object>> assembled = new ArrayList<>();
     if (!rows.isEmpty()) {
+      SubscriptionService.Allowance allowance = subscriptions.allowanceOf(userId);
       List<String> ids = rows.stream().map((c) -> c.getId()).toList();
       Map<String, ChildSettings> settings = new HashMap<>();
       for (ChildSettings s : settingsRepo.findAllById(ids)) settings.put(s.getChildId(), s);
@@ -261,7 +264,8 @@ public class AccountService {
             progress.getOrDefault(row.getId(), List.of()),
             treasures.getOrDefault(row.getId(), List.of()),
             milestones.getOrDefault(row.getId(), List.of()),
-            tzOffsetMin));
+            tzOffsetMin,
+            allowance));
       }
     }
     return Json.map(Fields.CHILDREN, assembled, Fields.ACTIVE_CHILD_ID, parent.getActiveChildId(), Fields.PARENT_LANG, parent.getLang());
@@ -331,7 +335,9 @@ public class AccountService {
 
     // The plan's room for children: a save that ADDS a child beyond it is refused whole. A save that only edits or
     // removes (an account that had more before the limit, or before a plan went down) is never refused for it.
-    Integer limit = subscriptions.childLimit(userId);
+    // What the plan allows besides: where the parents may not set goals or the screen time, what they send of those is ignored.
+    SubscriptionService.Allowance allowance = subscriptions.allowanceOf(userId);
+    Integer limit = allowance.children();
     if (limit != null && childIds.size() > limit) {
       Set<String> kept = children.findByParentIdOrderBySortIndexAscCreatedAtAsc(userId).stream().map(Child::getId).collect(Collectors.toSet());
       if (!kept.containsAll(childIds)) throw new HttpError(ApiError.CHILD_LIMIT, Map.of(Fields.LIMIT, limit));
@@ -389,9 +395,13 @@ public class AccountService {
       settings.setMinTasksPerLevel(whole(s.get(Fields.MIN_TASKS_PER_LEVEL), Defaults.MIN_TASKS_PER_LEVEL));
       settings.setChoicesGridSize(whole(s.get(Fields.CHOICES_GRID_SIZE), Defaults.CHOICES_GRID_SIZE));
       settings.setVoice(Json.present(s.get(Fields.VOICE)) ? s.get(Fields.VOICE) : Json.object());
-      settings.setSessionDurationMin(whole(tc.get(Fields.SESSION_DURATION_MINUTES), Defaults.SESSION_MINUTES));
-      settings.setCooldownMin(whole(tc.get(Fields.COOLDOWN_MINUTES), Defaults.COOLDOWN_MINUTES));
-      settings.setMaxDailyMin(whole(tc.get(Fields.MAX_DAILY_MINUTES), Defaults.MAX_DAILY_MINUTES));
+      ScreenTime.Limits asked = allowance.limits(new ScreenTime.Limits(
+          whole(tc.get(Fields.SESSION_DURATION_MINUTES), Defaults.SESSION_MINUTES),
+          whole(tc.get(Fields.COOLDOWN_MINUTES), Defaults.COOLDOWN_MINUTES),
+          whole(tc.get(Fields.MAX_DAILY_MINUTES), Defaults.MAX_DAILY_MINUTES)));
+      settings.setSessionDurationMin(asked.sessionMin());
+      settings.setCooldownMin(asked.cooldownMin());
+      settings.setMaxDailyMin(asked.maxDailyMin());
       settings.setTtsButtons(bool(s.get(Fields.TTS_BUTTONS), true));
       settings.setFunFacts(bool(s.get(Fields.FUN_FACTS), true));
       settings.setCurrency(Wire.of(Currency.class, s.get(Fields.CURRENCY), Currency.DEFAULT).wire());
@@ -446,20 +456,23 @@ public class AccountService {
       }
       treasureRepo.saveAll(treasureKeys.stream().map((key) -> new ChildTreasure(id, key)).toList());
 
-      milestoneRepo.deleteOf(id);
-      List<Milestone> milestones = new ArrayList<>();
-      JsonNode milestonesNode = c.get(Fields.MILESTONES);
-      if (milestonesNode != null && milestonesNode.isArray()) {
-        int m = 0;
-        for (JsonNode ms : milestonesNode) {
-          int place = m++;
-          String milestoneId = str(Json.at(ms, Fields.ID), "");
-          if (milestoneId.isEmpty()) continue;
-          int amount = whole(Json.at(ms, Fields.AMOUNT), 1);
-          milestones.add(new Milestone(id, milestoneId, amount == 0 ? 1 : amount, str(Json.at(ms, Fields.REWARD), ""), place));
+      // The family's goals are the parents' to set only where the plan gives them that; otherwise the goals stay as they were.
+      if (allowance.goals()) {
+        milestoneRepo.deleteOf(id);
+        List<Milestone> milestones = new ArrayList<>();
+        JsonNode milestonesNode = c.get(Fields.MILESTONES);
+        if (milestonesNode != null && milestonesNode.isArray()) {
+          int m = 0;
+          for (JsonNode ms : milestonesNode) {
+            int place = m++;
+            String milestoneId = str(Json.at(ms, Fields.ID), "");
+            if (milestoneId.isEmpty()) continue;
+            int amount = whole(Json.at(ms, Fields.AMOUNT), 1);
+            milestones.add(new Milestone(id, milestoneId, amount == 0 ? 1 : amount, str(Json.at(ms, Fields.REWARD), ""), place));
+          }
         }
+        milestoneRepo.saveAll(milestones);
       }
-      milestoneRepo.saveAll(milestones);
 
       index += 1;
     }

@@ -18,6 +18,8 @@ public final class Defaults {
   public static final int SESSION_MINUTES = 15;
   public static final int COOLDOWN_MINUTES = 45;
   public static final int MAX_DAILY_MINUTES = 60;
+  /** A day's play on the free plan when Stripe's `daily_minutes` is not there to say. */
+  public static final int FREE_DAILY_MINUTES = 15;
   /** The most games a parent's list of put-away games is kept with. */
   public static final int MAX_HIDDEN_GAMES = 500;
 }

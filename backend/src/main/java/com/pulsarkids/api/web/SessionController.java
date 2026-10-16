@@ -10,6 +10,7 @@ import com.pulsarkids.api.model.SessionEnd;
 import com.pulsarkids.api.model.Wire;
 import com.pulsarkids.api.service.SchemaService;
 import com.pulsarkids.api.service.ScreenTimeService;
+import com.pulsarkids.api.service.SubscriptionService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class SessionController extends ApiController {
 
   private final ScreenTimeService screenTime;
   private final SchemaService schema;
+  private final SubscriptionService subscriptions;
 
   /** A play segment begins. Body: { tz_offset_min, child_profile_id? }. */
   @PostMapping(Routes.START)
@@ -61,6 +63,9 @@ public class SessionController extends ApiController {
   /** Parent top-up: refills the tank and clears the cooldown. Parent sessions only — a child token is rejected. */
   @PostMapping(Routes.RESET)
   public ResponseEntity<Object> reset(HttpServletRequest request, @RequestBody(required = false) JsonNode body) {
+    // Topping the tank up is the parents' hand on the screen time: not where the plan holds it itself (403 `plan_required`).
+    Auth.User user = Requests.requireUser(request);
+    if (user.childId() == null && !subscriptions.allowanceOf((int) user.id()).screenTime()) throw new HttpError(ApiError.PLAN_REQUIRED);
     return handle(request, body, true, (state, limits, now, tz, b) -> ScreenTime.resetSession(now, tz));
   }
 

@@ -441,7 +441,25 @@ class ApiTest {
     assertEquals("child_limit", crowded.text("error"));
     assertEquals(1, crowded.body().get("limit").asInt());
     assertEquals(before, asParent("GET", "/api/state", null).body().at("/state/children").size(), "nothing of the refused save was kept");
+    // No plan and the free plan alike: the screen time is the plan's (15 minutes a day) whatever the parents send, their goals are not kept,
+    // and topping the tank up — their hand on the screen time — is refused.
+    Answer ruled = asParent("PUT", "/api/state", json("""
+        {'state': {'activeChildId': 'kid-1', 'children': [
+          { 'id': 'kid-1', 'profile': { 'name': 'Марко', 'nickname': 'marko_speed', 'pin': '1234' },
+            'settings': { 'timeControl': { 'sessionDurationMinutes': 30, 'cooldownMinutes': 15, 'maxDailyMinutes': 120 } },
+            'progress': { 'math:add': 5 }, 'treasures': ['tip:hub'], 'milestones': [ { 'id': 'g1', 'amount': 5, 'reward': 'x' } ] } ] } }"""));
+    assertEquals(200, ruled.status(), ruled.body().toString());
+    JsonNode rules = asParent("GET", "/api/state", null).body().at("/state/children/0");
+    assertEquals(15, rules.at("/settings/timeControl/maxDailyMinutes").asInt());
+    assertEquals(15, rules.at("/settings/timeControl/sessionDurationMinutes").asInt());
+    assertEquals(0, rules.get("milestones").size(), "goals are a plan's perk");
+    assertEquals("plan_required", asParent("POST", "/api/v1/session/reset", Map.of("child_profile_id", "kid-1", "tz_offset_min", 0)).text("error"));
     asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", false));
+    // The paid mode off: nothing of it holds, and the save goes back as it was.
+    asParent("PUT", "/api/state", json("""
+        {'state': {'activeChildId': 'kid-1', 'children': [
+          { 'id': 'kid-1', 'profile': { 'name': 'Марко', 'nickname': 'marko_speed', 'pin': '1234' },
+            'progress': { 'math:add': 5 }, 'treasures': ['tip:hub'], 'milestones': [] } ] } }"""));
     // The paid mode off: every part of paying is off — even for an account that chose a plan.
     assertEquals(json("{'paidMode':false,'access':'none','mustChoose':false,'plan':null,'gift':null}"), asParent("GET", "/api/billing/me", null).body());
     for (String[] off : new String[][] {{"POST", "/api/billing/choose"}, {"PUT", "/api/billing/subscription"}, {"POST", "/api/billing/portal"}, {"POST", "/api/billing/children"}, {"POST", "/api/billing/children/preview"}, {"GET", "/api/billing/details"}, {"POST", "/api/billing/checkout"}, {"GET", "/api/billing/plans"}})

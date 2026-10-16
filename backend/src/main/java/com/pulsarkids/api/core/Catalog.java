@@ -131,6 +131,14 @@ public final class Catalog {
     return plan != null && facts(plan).get(PlanFact.CHILDREN_INCLUDED.wire()) instanceof Integer n ? n : 1;
   }
 
+  /** The minutes a day the free plan allows (its `daily_minutes`), or `fallback` when the catalogue does not say. */
+  public static int dailyMinutes(View view, int fallback) {
+    return view.products().stream()
+        .filter((p) -> p.active() && isOurs(p) && kindOf(p) == PlanKind.FREE)
+        .findFirst()
+        .map((p) -> facts(p).get(PlanFact.DAILY_MINUTES.wire()) instanceof Integer n && n > 0 ? n : fallback)
+        .orElse(fallback);
+  }
   /** The region a price is of (its metadata), or null. */
   public static String regionOf(Price price) {
     String region = price.metadata() == null ? null : price.metadata().get(REGION);
