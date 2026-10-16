@@ -60,6 +60,8 @@ public final class Catalog {
   private static final String FALLBACK = "fallback";
   private static final String LANGS = "langs";
   private static final String TRUE = "true";
+  /** Stripe's word for a price the tax is added on top of. */
+  private static final String EXCLUSIVE = "exclusive";
   private static final String LIST_SEPARATOR = ",";
   private static final String LANG_SEPARATOR = "_";
   private static final int MAX_FEATURES = 20;
@@ -68,7 +70,7 @@ public final class Catalog {
   public record Product(String id, String name, boolean active, Map<String, String> metadata, List<String> marketingFeatures) {}
 
   /** A Stripe price of a recurring plan. */
-  public record Price(String id, String productId, String currency, String interval, long amount, boolean active, Map<String, String> metadata) {}
+  public record Price(String id, String productId, String currency, String interval, long amount, boolean active, Map<String, String> metadata, String taxBehavior) {}
 
   /** A region whose prices a family pays. */
   public record Region(String id, String currency, List<String> countries, boolean fallback, List<String> langs) {}
@@ -111,6 +113,28 @@ public final class Catalog {
     }
     Integer trial = facts.get(PlanFact.TRIAL_DAYS.wire()) instanceof Integer days && days > 0 ? days : null;
     return new OrderResult(new Order(plan.id(), region, period, children, price.id(), extraPriceId, extra, trial), null);
+  }
+
+  /** A price of the catalogue by its Stripe id, or null. */
+  public static Price priceById(View view, String priceId) {
+    return view.prices().stream().filter((price) -> price.id().equals(priceId)).findFirst().orElse(null);
+  }
+
+  /** What a product of the catalogue is, or null for one that is not ours. */
+  public static PlanKind kindOf(View view, String productId) {
+    return view.products().stream().filter((p) -> p.id().equals(productId) && isOurs(p)).findFirst().map(Catalog::kindOf).orElse(null);
+  }
+
+  /** How many children a paid plan includes before a slot is added (1 when it does not say). */
+  public static int childrenIncluded(View view, String planId) {
+    Product plan = view.products().stream().filter((p) -> p.id().equals(planId)).findFirst().orElse(null);
+    return plan != null && facts(plan).get(PlanFact.CHILDREN_INCLUDED.wire()) instanceof Integer n ? n : 1;
+  }
+
+  /** The region a price is of (its metadata), or null. */
+  public static String regionOf(Price price) {
+    String region = price.metadata() == null ? null : price.metadata().get(REGION);
+    return region == null ? null : region.strip().toUpperCase(Locale.ROOT);
   }
 
   private static Price priceFor(List<Price> prices, String productId, String region, BillingPeriod period) {
@@ -231,7 +255,8 @@ public final class Catalog {
       String id = region.strip().toUpperCase(Locale.ROOT);
       String currency = price.currency().toUpperCase(Locale.ROOT);
       regions.putIfAbsent(id, new Region(id, currency, list(price.metadata().get(COUNTRIES), true), TRUE.equals(price.metadata().get(FALLBACK)), list(price.metadata().get(LANGS), false)));
-      out.add(Json.map(Fields.REGION, id, Fields.PERIOD, period.wire(), Fields.AMOUNT, price.amount(), Fields.CURRENCY, currency));
+      // Tax is in the price unless Stripe says it is added on top (the US: sales tax by state).
+      out.add(Json.map(Fields.REGION, id, Fields.PERIOD, period.wire(), Fields.AMOUNT, price.amount(), Fields.CURRENCY, currency, Fields.TAX_INCLUDED, !EXCLUSIVE.equals(price.taxBehavior())));
     }
     return out;
   }

@@ -49,6 +49,8 @@ public final class Vars {
   /** Stripe's publishable key (pk_test_/pk_live_) — handed to the page that shows Checkout. `VITE_STRIPE_PUBLISHABLE_KEY` is read when it is not set. */
   public static final String STRIPE_PUBLISHABLE_KEY = "STRIPE_PUBLISHABLE_KEY";
   public static final String VITE_STRIPE_PUBLISHABLE_KEY = "VITE_STRIPE_PUBLISHABLE_KEY";
+  /** The signing secret of the Stripe webhook endpoint (whsec_…) — without it `POST /api/billing/webhook` refuses every event. */
+  public static final String STRIPE_WEBHOOK_SECRET = "STRIPE_WEBHOOK_SECRET";
   /** Set by Vercel: the service is deployed, not on a developer's machine. */
   public static final String VERCEL = "VERCEL";
   /** Auth0's client id — the same public value the game is built with. */

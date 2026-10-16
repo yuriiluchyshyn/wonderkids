@@ -17,6 +17,7 @@ import com.pulsarkids.api.service.AccountService;
 import com.pulsarkids.api.service.MarketingService;
 import com.pulsarkids.api.service.SchemaService;
 import com.pulsarkids.api.service.SpeechService;
+import com.pulsarkids.api.service.SubscriptionService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Admin: accounts →  GET    /api/admin/users
  *                    PUT    /api/admin/users  { parentId, speechEnabled }
  *                    PUT    /api/admin/users  { parentId, enabled }
+ *                    PUT    /api/admin/users  { parentId, gift }   Family as a gift on/off
  *                    DELETE /api/admin/users?id=…   (with all children and their data)
  * The PUT switches Google Speech — or, with `enabled`, the whole account —
  * on/off for one account. Keys themselves are managed in /api/admin/speech.
@@ -44,11 +46,12 @@ import org.springframework.web.bind.annotation.RestController;
  * With `?part=…` the same address serves the owner's side of the product:
  *
  *   GET    ?part=settings                        → { settings }
- *   PUT    ?part=settings  { demoMinutes?, trialSpeech?: { enabled, key? }, voices?, paidMode? }  → { settings }
+ *   PUT    ?part=settings  { demoMinutes?, trialSpeech?: { enabled, key? }, voices?, paidMode?, invoiceEmails? }  → { settings }
  *          (`trialSpeech` — the trial game's own Google key and its switch; an empty `key` keeps the stored one;
  *          `voices` — `{ accounts?: { uk?: "uk-UA-…" | "" }, trial?: { … } }`, the voice each language is read in
  *          for every account and for the trial game, "" back to the default; languages not named stay as they are;
- *          `paidMode` — the paid mode on or off: off, everything is free and nothing of paying is seen)
+ *          `paidMode` — the paid mode on or off: off, everything is free and nothing of paying is seen;
+ *          `invoiceEmails` — whether a family gets a letter with its invoice after every payment)
  *   GET    ?part=links[&days=30]                 → { links, visits }   (days=0 — all time)
  *   POST   ?part=links     { name, mode, code?, note? }   a new link
  *   PUT    ?part=links     { id, name, note? }             rename one
@@ -67,6 +70,7 @@ public class AdminUsersController extends ApiController {
   private final MarketingService marketing;
   private final SpeechService speech;
   private final SchemaService schema;
+  private final SubscriptionService subscriptions;
 
   private ResponseEntity<Object> notAllowed(RequestMethod... allowed) {
     String allow = Arrays.stream(allowed).map(Enum::name).collect(Collectors.joining(", "));
@@ -102,11 +106,22 @@ public class AdminUsersController extends ApiController {
 
     switch (method) {
       case GET:
-        return ok(Fields.ACCOUNTS, accounts.listAccounts());
+        // Each account with its plan (the admin page's «План» column and the gift switch).
+        Map<Integer, Map<String, Object>> plans = subscriptions.adminViews();
+        java.util.List<Map<String, Object>> list = accounts.listAccounts();
+        for (Map<String, Object> account : list) account.put(Fields.BILLING, plans.get(((Number) account.get(Fields.ID)).intValue()));
+        return ok(Fields.ACCOUNTS, list);
       case PUT: {
         JsonNode parentId = Json.at(body, Fields.PARENT_ID);
         JsonNode speechEnabled = Json.at(body, Fields.SPEECH_ENABLED);
         if (!Json.isInt(parentId)) return refuse(ApiError.INVALID_PARENT_ID);
+        JsonNode gift = Json.at(body, Fields.GIFT);
+        if (!gift.isMissingNode()) {
+          // Family as a gift, no payment (spec §3.6) — or the gift taken back.
+          if (!gift.isBoolean()) return refuse(ApiError.INVALID_ENABLED);
+          subscriptions.setAdminGift((int) Json.intOf(parentId), gift.booleanValue());
+          return ok(Fields.OK, true, Fields.PARENT_ID, Json.intOf(parentId), Fields.GIFT, gift.booleanValue());
+        }
         JsonNode enabled = Json.at(body, Fields.ENABLED);
         if (!enabled.isMissingNode()) {
           if (!enabled.isBoolean()) return refuse(ApiError.INVALID_ENABLED);
@@ -137,7 +152,9 @@ public class AdminUsersController extends ApiController {
         Fields.TRIAL_SPEECH, trialSpeechView(speech.trialSpeech()),
         Fields.VOICES, speech.chosenVoices(),
         Fields.DEFAULT_VOICES, defaultVoices(),
-        Fields.PAID_MODE, marketing.paidModeStored());
+        Fields.PAID_MODE, marketing.paidModeStored(),
+        Fields.INVOICE_EMAILS, marketing.invoiceEmailsOn(),
+        Fields.CHARGING_SUBSCRIPTIONS, subscriptions.chargingSubscriptions());
   }
 
   /** The voice each language is read in when the owner chose none. */
@@ -186,10 +203,11 @@ public class AdminUsersController extends ApiController {
       JsonNode trial = Json.at(body, Fields.TRIAL_SPEECH);
       JsonNode voices = Json.at(body, Fields.VOICES);
       JsonNode paid = Json.at(body, Fields.PAID_MODE);
+      JsonNode invoices = Json.at(body, Fields.INVOICE_EMAILS);
       boolean hasMinutes = Json.present(rawMinutes);
       Integer minutes = hasMinutes ? Marketing.cleanDemoMinutes(rawMinutes) : null;
-      if ((hasMinutes || !(Json.present(trial) || Json.present(voices) || Json.present(paid))) && minutes == null) return refuse(ApiError.INVALID_DEMO_MINUTES);
-      if (Json.present(paid) && !paid.isBoolean()) return refuse(ApiError.INVALID_ENABLED);
+      if ((hasMinutes || !(Json.present(trial) || Json.present(voices) || Json.present(paid) || Json.present(invoices))) && minutes == null) return refuse(ApiError.INVALID_DEMO_MINUTES);
+      if ((Json.present(paid) && !paid.isBoolean()) || (Json.present(invoices) && !invoices.isBoolean())) return refuse(ApiError.INVALID_ENABLED);
       Map<SpeechAudience, Map<Lang, String>> voiceChanges = Json.present(voices) ? voiceChanges(voices) : Map.of();
       if (voiceChanges == null) return refuse(ApiError.INVALID_VOICE);
       if (Json.present(trial)) {
@@ -205,6 +223,7 @@ public class AdminUsersController extends ApiController {
       if (!voiceChanges.isEmpty()) speech.saveVoices(voiceChanges);
       if (minutes != null) marketing.setSetting(MarketingService.DEMO_MINUTES_KEY, IntNode.valueOf(minutes));
       if (Json.present(paid)) marketing.setPaidMode(paid.booleanValue());
+      if (Json.present(invoices)) marketing.setInvoiceEmails(invoices.booleanValue());
       return ok(Fields.SETTINGS, settingsView());
     }
     return notAllowed(RequestMethod.GET, RequestMethod.PUT);

@@ -59,8 +59,10 @@ public class LoginController extends ApiController {
     return ApiError.LOGIN_FAILED;
   }
 
-  private static ResponseEntity<Object> session(Parent user, boolean created) {
+  private ResponseEntity<Object> session(Parent user, boolean created) {
     if (user.isDisabled()) throw new HttpError(ApiError.ACCOUNT_DISABLED);
+    // Counted for the plan: from the second sign-in on a parent with no plan is asked to choose one.
+    accounts.countLogin(user.getId());
     return ok(Fields.TOKEN, Auth.signToken(user.getId(), user.getEmail()), Fields.USER, Json.map(Fields.ID, user.getId(), Fields.EMAIL, user.getEmail()), Fields.CREATED, created);
   }
 

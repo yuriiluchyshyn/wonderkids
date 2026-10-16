@@ -220,5 +220,47 @@ ALTER TABLE wk_feedback ADD COLUMN IF NOT EXISTS lang TEXT;
 ALTER TABLE wk_visits ADD COLUMN IF NOT EXISTS game TEXT;
 -- What is kept only for a while — the privacy policy on the site promises it:
 -- arrivals and the letters from the site (with their replies), two years.
+-- Every paid invoice of a subscription, as Stripe sent it (`invoice.paid`), and whether its letter went.
+-- Kept as long as tax law asks (5 years in Poland) — the privacy policy says so.
+CREATE TABLE IF NOT EXISTS wk_billing_invoices (
+  stripe_invoice_id  TEXT PRIMARY KEY,
+  stripe_customer_id TEXT,
+  email              TEXT,
+  number             TEXT,
+  amount_paid        BIGINT NOT NULL,
+  currency           TEXT NOT NULL,
+  hosted_url         TEXT,
+  pdf_url            TEXT,
+  lang               TEXT,
+  mailed_at          TIMESTAMPTZ,
+  mail_error         TEXT,
+  created_at         TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+DELETE FROM wk_billing_invoices WHERE created_at < now() - INTERVAL '6 years';
+
+-- The plan of each account (billing spec §6.2): chosen free, paid through Stripe (synced from its webhooks),
+-- or Family as a gift — from the admin panel or a promotion code of a coupon that is free for ever.
+CREATE TABLE IF NOT EXISTS wk_billing_accounts (
+  parent_id              INTEGER PRIMARY KEY REFERENCES wk_parents(id) ON DELETE CASCADE,
+  plan                   TEXT,
+  stripe_customer_id     TEXT,
+  stripe_subscription_id TEXT,
+  status                 TEXT,
+  plan_id                TEXT,
+  period                 TEXT,
+  region                 TEXT,
+  children               INTEGER,
+  trial_end              TIMESTAMPTZ,
+  period_end             TIMESTAMPTZ,
+  cancel_at_period_end   BOOLEAN NOT NULL DEFAULT FALSE,
+  gift                   TEXT,
+  gift_code              TEXT,
+  chosen_at              TIMESTAMPTZ,
+  updated_at             TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS wk_billing_accounts_subscription ON wk_billing_accounts (stripe_subscription_id);
+-- How many times the parent signed in: the plan is asked for from the second sign-in on.
+ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS logins INTEGER NOT NULL DEFAULT 0;
+
 DELETE FROM wk_visits WHERE created_at < now() - INTERVAL '24 months';
 DELETE FROM wk_feedback WHERE created_at < now() - INTERVAL '24 months';

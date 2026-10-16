@@ -46,6 +46,8 @@ public class MarketingService {
    * feature asks `paidModeOn()` first.
    */
   public static final String PAID_MODE_KEY = "paid_mode";
+  /** Whether a family gets a letter with its invoice after every payment — on unless the owner switched it off. */
+  public static final String INVOICE_EMAILS_KEY = "invoice_emails";
 
   /** The owner's rules are read at most this often by one running instance; a change shows within it. */
   private static final long RULES_TTL_MS = 30_000;
@@ -124,6 +126,17 @@ public class MarketingService {
     schema.ensure();
     JsonNode value = tx.execute((status) -> settings.findById(PAID_MODE_KEY).map((row) -> row.getValue()).orElse(null));
     return value != null && value.isBoolean() && value.booleanValue();
+  }
+
+  /** Whether invoices are mailed to the families: on unless the owner switched it off. Read anew each time — a webhook is rare. */
+  public boolean invoiceEmailsOn() {
+    schema.ensure();
+    JsonNode value = tx.execute((status) -> settings.findById(INVOICE_EMAILS_KEY).map((row) -> row.getValue()).orElse(null));
+    return value == null || !value.isBoolean() || value.booleanValue();
+  }
+
+  public void setInvoiceEmails(boolean on) {
+    setSetting(INVOICE_EMAILS_KEY, BooleanNode.valueOf(on));
   }
 
   /** The owner switched the paid mode on or off: this instance knows it at once, the others within `PAID_MODE_TTL_MS`. */

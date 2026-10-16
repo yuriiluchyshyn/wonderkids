@@ -461,6 +461,12 @@ public class AccountService {
   // Admin
   // ---------------------------------------------------------------------------
 
+  /** The parent signed in once more. */
+  @Transactional
+  public void countLogin(int parentId) {
+    parents.countLogin(parentId);
+  }
+
   /** The account was just seen — its game or cabinet loaded or saved its state (`Activity`). */
   @Transactional
   public void markSeen(int parentId) {

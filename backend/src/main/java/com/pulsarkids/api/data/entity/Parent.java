@@ -44,4 +44,7 @@ public class Parent {
 
   /** When the account's game or cabinet last loaded or saved its state (`AccountService.markSeen`). */
   private Instant lastSeenAt;
+
+  /** How many times the parent signed in (`POST /api/auth/login`); the plan is asked for from the second on. */
+  private int logins;
 }

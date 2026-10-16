@@ -22,6 +22,8 @@ public enum Text {
   MAIL_LETTER_ANSWER_AT("mail.letter.answerAt"),
   MAIL_REPLY_SUBJECT("mail.reply.subject"),
   MAIL_REPLY_YOU_WROTE("mail.reply.youWrote"),
+  MAIL_INVOICE_SUBJECT("mail.invoice.subject"),
+  MAIL_INVOICE_BODY("mail.invoice.body"),
   SPEECH_SAMPLE("speech.sample"),
   CHILD_DEFAULT_NAME("child.defaultName");
 

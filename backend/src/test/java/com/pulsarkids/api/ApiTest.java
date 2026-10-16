@@ -42,6 +42,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ApiTest {
   private static final String ADMIN_KEY = "test-admin-key";
+  private static final String WEBHOOK_SECRET = "whsec_test_secret";
   private static final HttpClient HTTP = HttpClient.newHttpClient();
 
   private static EmbeddedPostgres postgres;
@@ -98,6 +99,7 @@ class ApiTest {
     Env.set("FEEDBACK_TO", "owner@example.com");
     Env.set("FEEDBACK_FROM", "");
     Env.set("PARENTS_URL", "");
+    Env.set("STRIPE_WEBHOOK_SECRET", WEBHOOK_SECRET);
   }
 
   @AfterAll
@@ -409,7 +411,36 @@ class ApiTest {
     assertFalse(asAdmin("GET", "/api/admin/billing", null).body().get("configured").asBoolean());
     assertEquals(401, call("GET", "/api/admin/billing", null).status());
     assertEquals("billing_off", call("GET", "/api/billing/plans", null).text("error"));
-    assertEquals("billing_off", call("POST", "/api/billing/checkout", Map.of("plan", "pulsar_family_pro", "period", "year", "children", 2)).text("error"));
+    // Paying is a signed-in parent's business, and it is off without Stripe.
+    assertEquals(401, call("POST", "/api/billing/checkout", Map.of("plan", "pulsar_family_pro", "period", "year", "children", 2)).status());
+    assertEquals("billing_off", asParent("POST", "/api/billing/checkout", Map.of("plan", "pulsar_family_pro", "period", "year", "children", 2)).text("error"));
+
+    // The plan of the account: nothing chosen yet, nothing asked while the paid mode is off.
+    JsonNode me = asParent("GET", "/api/billing/me", null).body();
+    assertFalse(me.get("paidMode").asBoolean());
+    assertEquals("none", me.get("access").asText());
+    assertFalse(me.get("mustChoose").asBoolean());
+    assertEquals("billing_off", asParent("POST", "/api/billing/choose", Map.of("plan", "free")).text("error"));
+    // In the paid mode a parent who signed in more than once must choose; the free plan is chosen without Stripe.
+    asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", true));
+    assertEquals("invalid_plan", asParent("POST", "/api/billing/choose", Map.of("plan", "paid")).text("error"));
+    JsonNode chosen = asParent("POST", "/api/billing/choose", Map.of("plan", "free")).body();
+    assertEquals("free", chosen.get("access").asText());
+    assertFalse(chosen.get("mustChoose").asBoolean());
+    // The owner gives Family as a gift — and takes it back; the admin page shows it.
+    asAdmin("PUT", "/api/admin/users", Map.of("parentId", parentId, "gift", true));
+    assertEquals("gift", asParent("GET", "/api/billing/me", null).body().get("access").asText());
+    JsonNode listed = asAdmin("GET", "/api/admin/users", null).body().get("accounts");
+    for (JsonNode account : listed) if (account.get("id").asLong() == parentId) assertEquals("gift", account.at("/billing/access").asText());
+    asAdmin("PUT", "/api/admin/users", Map.of("parentId", parentId, "gift", false));
+    assertEquals("free", asParent("GET", "/api/billing/me", null).body().get("access").asText(), "back to what was chosen");
+    asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", false));
+    // The paid mode off: every part of paying is off — even for an account that chose a plan.
+    assertEquals(json("{'paidMode':false,'access':'none','mustChoose':false,'plan':null,'gift':null}"), asParent("GET", "/api/billing/me", null).body());
+    for (String[] off : new String[][] {{"POST", "/api/billing/choose"}, {"PUT", "/api/billing/subscription"}, {"POST", "/api/billing/portal"}, {"POST", "/api/billing/checkout"}, {"GET", "/api/billing/plans"}})
+      assertEquals("billing_off", asParent(off[0], off[1], off[0].equals("GET") ? null : Map.of("plan", "free", "children", 3)).text("error"), off[0] + " " + off[1]);
+    // A child's session has no say in the plan.
+    assertEquals("parent_only", call("GET", "/api/billing/me", null, "Authorization", "Bearer " + childToken).text("error"));
     assertEquals("unknown_part", asAdmin("GET", "/api/admin/users?part=nonsense", null).text("error"));
   }
 
@@ -674,5 +705,73 @@ class ApiTest {
     assertEquals(200, call("DELETE", "/api/state", null, "Authorization", "Bearer " + token).status());
     assertEquals(0, asAdmin("GET", "/api/admin/users", null).body().get("accounts").size());
     assertEquals(404, call("POST", "/api/auth/child-login", Map.of("identifier", "ihor_fast", "pin", "4321")).status());
+  }
+  /** An event as Stripe would send it, signed with the webhook's secret. */
+  private Answer stripeEvent(String type, String object, String secret) throws Exception {
+    String payload = "{\"id\":\"evt_" + System.nanoTime() + "\",\"object\":\"event\",\"api_version\":\"" + com.stripe.Stripe.API_VERSION + "\",\"type\":\"" + type + "\",\"data\":{\"object\":" + object + "}}";
+    long at = System.currentTimeMillis() / 1000;
+    String signature = "t=" + at + ",v1=" + com.stripe.net.Webhook.Util.computeHmacSha256(secret, at + "." + payload);
+    return call("POST", "/api/billing/webhook", payload, "Stripe-Signature", signature);
+  }
+
+  private long asAdminAccountId(String email) throws Exception {
+    for (JsonNode account : asAdmin("GET", "/api/admin/users", null).body().get("accounts")) if (account.get("email").asText().equals(email)) return account.get("id").asLong();
+    return -1;
+  }
+
+  private static String invoice(String id, long amount, String email) {
+    return json("{'id':'" + id + "','object':'invoice','amount_paid':" + amount + ",'currency':'pln','customer':'cus_1','customer_email':'" + email + "','number':'PK-0001','hosted_invoice_url':'https://invoice.stripe.com/i/x','invoice_pdf':'https://pay.stripe.com/invoice/x/pdf',"
+        + "'parent':{'type':'subscription_details','subscription_details':{'subscription':'sub_1','metadata':{'lang':'pl'}}}}").toString();
+  }
+
+  @Test
+  @Order(20)
+  void everyPaidInvoiceIsMailedOnceUnlessTheOwnerSwitchedTheLettersOff() throws Exception {
+    long before = mailed.stream().filter((m) -> m.at("/to/0").asText().equals("rodzic@example.com")).count();
+    // Only Stripe's signature is believed.
+    assertEquals("invalid_signature", stripeEvent("invoice.paid", invoice("in_1", 12999, "rodzic@example.com"), "whsec_someone_else").text("error"));
+
+    assertTrue(stripeEvent("invoice.paid", invoice("in_1", 12999, "rodzic@example.com"), WEBHOOK_SECRET).body().get("received").asBoolean());
+    List<JsonNode> letters = mailed.stream().filter((m) -> m.at("/to/0").asText().equals("rodzic@example.com")).toList();
+    assertEquals(before + 1, letters.size());
+    JsonNode letter = letters.get(letters.size() - 1);
+    assertEquals("Pulsar Kids · faktura PK-0001", letter.get("subject").asText(), "in the language of the page the family paid on");
+    assertTrue(letter.get("text").asText().contains("129,99") && letter.get("text").asText().contains("https://pay.stripe.com/invoice/x/pdf"));
+
+    // Stripe sends an event again when it is not sure it arrived: the invoice is not mailed twice.
+    stripeEvent("invoice.paid", invoice("in_1", 12999, "rodzic@example.com"), WEBHOOK_SECRET);
+    // The start of a trial is an invoice of nothing: no letter.
+    stripeEvent("invoice.paid", invoice("in_0", 0, "rodzic@example.com"), WEBHOOK_SECRET);
+    assertEquals(before + 1, mailed.stream().filter((m) -> m.at("/to/0").asText().equals("rodzic@example.com")).count());
+
+    // The owner switched the letters off: a new invoice is kept, not mailed.
+    assertTrue(asAdmin("GET", "/api/admin/users?part=settings", null).body().at("/settings/invoiceEmails").asBoolean(), "on by default");
+    assertFalse(asAdmin("PUT", "/api/admin/users?part=settings", Map.of("invoiceEmails", false)).body().at("/settings/invoiceEmails").asBoolean());
+    stripeEvent("invoice.paid", invoice("in_2", 12999, "rodzic@example.com"), WEBHOOK_SECRET);
+    assertEquals(before + 1, mailed.stream().filter((m) -> m.at("/to/0").asText().equals("rodzic@example.com")).count());
+    asAdmin("PUT", "/api/admin/users?part=settings", Map.of("invoiceEmails", true));
+    // A subscription made in Stripe for an account: the account follows it — Family while it is in trial.
+    String payer = call("POST", "/api/auth/login", Map.of("email", "payer@example.com", "create", true)).text("token");
+    long payerId = call("GET", "/api/state", null, "Authorization", "Bearer " + payer).status() == 200 ? asAdminAccountId("payer@example.com") : -1;
+    String subscription = json("{'id':'sub_e2e','object':'subscription','customer':'cus_e2e','status':'trialing','trial_end':1893456000,'cancel_at_period_end':false,"
+        + "'metadata':{'parent_id':'" + payerId + "'},'items':{'object':'list','data':[{'id':'si_1','object':'subscription_item','current_period_end':1893456000,'quantity':1,"
+        + "'price':{'id':'price_x','object':'price','product':'pulsar_family_pro','recurring':{'interval':'year'}}}]}}").toString();
+    // Stripe's events are kept even while the paid mode is off (its subscriptions go on charging) — shown only with it on.
+    assertEquals(200, stripeEvent("customer.subscription.created", subscription, WEBHOOK_SECRET).status());
+    assertEquals("none", call("GET", "/api/billing/me", null, "Authorization", "Bearer " + payer).body().get("access").asText(), "nothing of paying while the mode is off");
+    asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", true));
+    assertEquals(1, asAdmin("GET", "/api/admin/users?part=settings", null).body().at("/settings/chargingSubscriptions").asInt(), "the owner is warned of what Stripe goes on charging");
+    JsonNode paid = call("GET", "/api/billing/me", null, "Authorization", "Bearer " + payer).body();
+    assertEquals("family", paid.get("access").asText());
+    assertEquals("trialing", paid.at("/plan/status").asText());
+    assertTrue(paid.at("/plan/trialEnd").asText().startsWith("2030-01-01"));
+    // It ended (payments given up on, or cancelled and the period over): back to the free plan, nothing else lost.
+    assertEquals(200, stripeEvent("customer.subscription.deleted", subscription.replace("\"trialing\"", "\"canceled\""), WEBHOOK_SECRET).status());
+    assertEquals("free", call("GET", "/api/billing/me", null, "Authorization", "Bearer " + payer).body().get("access").asText());
+    asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", false));
+    // An account that is gone: the event is taken and nothing breaks.
+    assertEquals(200, stripeEvent("customer.subscription.updated", subscription.replace("'parent_id':'" + payerId + "'", "'parent_id':'999999'").replace("\"parent_id\":\"" + payerId + "\"", "\"parent_id\":\"999999\""), WEBHOOK_SECRET).status());
+    // Other events are acknowledged and left alone.
+    assertEquals(200, stripeEvent("customer.created", "{\"id\":\"cus_2\",\"object\":\"customer\"}", WEBHOOK_SECRET).status());
   }
 }

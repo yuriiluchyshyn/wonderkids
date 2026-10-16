@@ -19,4 +19,6 @@ public final class Headers {
   public static final String FORWARDED_HOST = "x-forwarded-host";
   /** The visitor's country (ISO 3166-1 alpha-2), set by Vercel's edge. */
   public static final String COUNTRY = "x-vercel-ip-country";
+  /** Stripe’s signature of a webhook event. */
+  public static final String STRIPE_SIGNATURE = "Stripe-Signature";
 }

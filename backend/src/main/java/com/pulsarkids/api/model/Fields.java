@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public final class Fields {
   public static final String A = "a";
   public static final String ABCDEFGHJKMNPQRSTUVWXYZ23456789 = "abcdefghjkmnpqrstuvwxyz23456789";
+  public static final String ACCESS = "access";
   public static final String ACCOUNT = "account";
   public static final String ACCOUNTS = "accounts";
   public static final String ACCOUNT_IDS = "accountIds";
@@ -25,12 +26,16 @@ public final class Fields {
   public static final String AVAILABLE = "available";
   public static final String B = "b";
   public static final String BADGE = "badge";
+  public static final String BILLING = "billing";
   public static final String BIRTH_MONTH = "birthMonth";
   public static final String BIRTH_YEAR = "birthYear";
   public static final String BODY = "body";
   public static final String CAMPAIGN = "campaign";
+  public static final String CANCEL = "cancel";
+  public static final String CANCEL_AT_PERIOD_END = "cancelAtPeriodEnd";
   public static final String CELEBRATION = "celebration";
   public static final String CH = "ch";
+  public static final String CHARGING_SUBSCRIPTIONS = "chargingSubscriptions";
   public static final String CHILDREN = "children";
   public static final String CHILD_ID = "childId";
   public static final String CHILD_PROFILE_ID = "child_profile_id";
@@ -69,6 +74,7 @@ public final class Fields {
   public static final String DETAIL = "detail";
   public static final String DEVICE = "device";
   public static final String DISABLED = "disabled";
+  public static final String DONE = "done";
   public static final String DUPLICATE_MAILBOX = "duplicateMailbox";
   public static final String E = "e";
   public static final String EMAIL = "email";
@@ -99,6 +105,8 @@ public final class Fields {
   public static final String GAME_LANG = "gameLang";
   public static final String GAME_MODE = "gameMode";
   public static final String GENDER = "gender";
+  public static final String GIFT = "gift";
+  public static final String GIFT_CODE = "giftCode";
   public static final String H = "h";
   public static final String HIDDEN_GAMES = "hiddenGames";
   public static final String HINTS_SURFACED = "hintsSurfaced";
@@ -106,6 +114,7 @@ public final class Fields {
   public static final String ID = "id";
   public static final String IDENTIFIER = "identifier";
   public static final String ID_TOKEN = "idToken";
+  public static final String INVOICE_EMAILS = "invoiceEmails";
   public static final String IN_COOLDOWN = "in_cooldown";
   public static final String IS_GLOBAL = "isGlobal";
   public static final String ITEMS = "items";
@@ -143,6 +152,7 @@ public final class Fields {
   public static final String MIN_TASKS_PER_LEVEL = "minTasksPerLevel";
   public static final String MISSING = "missing";
   public static final String MODE = "mode";
+  public static final String MUST_CHOOSE = "mustChoose";
   public static final String N = "n";
   public static final String NAME = "name";
   public static final String NICK = "nick";
@@ -159,18 +169,22 @@ public final class Fields {
   public static final String PART = "part";
   public static final String PASSWORD = "password";
   public static final String PERIOD = "period";
+  public static final String PERIOD_END = "periodEnd";
   public static final String PIN = "pin";
   public static final String PLAN = "plan";
   public static final String PLANS = "plans";
+  public static final String PLAN_ID = "planId";
   public static final String PLAYED_DAY = "playedDay";
   public static final String PLAYED_TODAY_MINUTES = "playedTodayMinutes";
   public static final String PLAYING = "playing";
   public static final String PRICES = "prices";
   public static final String PROFILE = "profile";
   public static final String PROGRESS = "progress";
+  public static final String PROMO = "promo";
   public static final String PUBLISHABLE_KEY = "publishableKey";
   public static final String R = "r";
   public static final String READABLE = "readable";
+  public static final String RECEIVED = "received";
   public static final String REFERRER = "referrer";
   public static final String REGION = "region";
   public static final String REGIONS = "regions";
@@ -178,6 +192,7 @@ public final class Fields {
   public static final String REPLIES = "replies";
   public static final String REPLY = "reply";
   public static final String RESEND = "resend";
+  public static final String RETURN_URL = "returnUrl";
   public static final String REWARD = "reward";
   public static final String S = "s";
   public static final String SCOPE = "scope";
@@ -209,6 +224,7 @@ public final class Fields {
   public static final String T = "t";
   public static final String TAGLINE = "tagline";
   public static final String TASKS_COMPLETED = "tasksCompleted";
+  public static final String TAX_INCLUDED = "taxIncluded";
   public static final String TEST = "test";
   public static final String TEXT = "text";
   public static final String THEME_ID = "themeId";
@@ -217,6 +233,7 @@ public final class Fields {
   public static final String TRAP = "trap";
   public static final String TREASURES = "treasures";
   public static final String TRIAL = "trial";
+  public static final String TRIAL_END = "trialEnd";
   public static final String TRIAL_SPEECH = "trialSpeech";
   public static final String TS = "ts";
   public static final String TTS_BUTTONS = "ttsButtons";
@@ -224,6 +241,7 @@ public final class Fields {
   public static final String TZ_OFFSET_MIN = "tz_offset_min";
   public static final String U = "u";
   public static final String UPDATED_AT = "updatedAt";
+  public static final String URL = "url";
   public static final String USER = "user";
   public static final String USER_AGENT = "userAgent";
   public static final String V = "v";

@@ -12,7 +12,12 @@ public final class Routes {
   public static final String AUTH_CHILD_LOGIN = "/api/auth/child-login";
   public static final String AUTH_LOGIN = "/api/auth/login";
   public static final String BILLING_CHECKOUT = "/api/billing/checkout";
+  public static final String BILLING_CHOOSE = "/api/billing/choose";
+  public static final String BILLING_ME = "/api/billing/me";
+  public static final String BILLING_PORTAL = "/api/billing/portal";
+  public static final String BILLING_SUBSCRIPTION = "/api/billing/subscription";
   public static final String BILLING_PLANS = "/api/billing/plans";
+  public static final String BILLING_WEBHOOK = "/api/billing/webhook";
   public static final String FEEDBACK = "/api/feedback";
   public static final String HEALTH = "/api/health";
   public static final String NICKNAME = "/api/nickname";
