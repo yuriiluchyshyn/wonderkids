@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Pulsar Kids \u2014 the game: the child's portal, the parents' cabinet and the admin panel",
+  "description": "Pulsar Kids — the game: the child's portal, the parents' cabinet and the admin panel",
   "engines": {
     "node": ">=22.18"
   },
@@ -22,7 +22,9 @@
     "@fontsource/press-start-2p": "^5.3.0",
     "@pulsar/brand": "*",
     "@pulsar/i18n": "*",
+    "@pulsar/plans": "*",
     "@pulsar/platform": "*",
+    "@stripe/stripe-js": "^10.1.0",
     "@vercel/analytics": "^2.0.1",
     "canvas-confetti": "^1.9.3",
     "framer-motion": "^11.11.17",

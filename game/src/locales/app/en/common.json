@@ -943,5 +943,100 @@
     "privacy": "Privacy policy",
     "terms": "Terms of use",
     "label": "Legal information"
+  },
+  "billing": {
+    "paywall": {
+      "title": "Pulsar Kids plans",
+      "chooseTitle": "Choose a plan to continue",
+      "chooseHint": "Both plans open every game. You can change the plan any time in the parents’ area.",
+      "current": "Your current plan",
+      "yearly": "Yearly",
+      "monthly": "Monthly",
+      "save": "Save {percent}%",
+      "forever": "forever",
+      "chooseFree": "Choose {name}",
+      "stayFree": "Stay on {name}",
+      "start": "Start the adventure",
+      "yearPlan": "Yearly plan",
+      "monthPlan": "Monthly plan",
+      "perYear": "per year",
+      "perMonth": "per month",
+      "monthlyEq": "that is {price} a month",
+      "taxExtra": "+ sales tax where your state charges it",
+      "children": "How many kids",
+      "fewer": "Fewer kids",
+      "more": "More kids",
+      "extra": "{included} included; each additional kid +{price} {per}",
+      "loading": "Loading plans…",
+      "unavailable": "The plans did not load. Please try again in a minute.",
+      "close": "Close",
+      "freeDays": {
+        "one": "{count} day free",
+        "other": "{count} days free"
+      }
+    },
+    "days": {
+      "one": "{count} day",
+      "other": "{count} days"
+    },
+    "kids": {
+      "one": "{count} kid",
+      "other": "{count} kids"
+    },
+    "checkout": {
+      "back": "← Back to plans",
+      "address": "Billing address",
+      "card": "Payment method",
+      "summary": "Your order",
+      "discount": "Discount",
+      "tax": "Tax",
+      "total": "Total",
+      "todayDue": "Due today",
+      "trial": "Trial — {days}",
+      "then": "Then {amount} {per} from {date}",
+      "promo": "Promotion code",
+      "promoApply": "Apply",
+      "promoRemove": "Remove",
+      "promoInvalid": "Unfortunately, your offer is not active",
+      "pay": "Start the adventure",
+      "paying": "Processing the payment…",
+      "secure": "🔒 Payment by Stripe: your card details never reach Pulsar Kids. Cancel any time in the parents’ area.",
+      "loading": "Preparing checkout…",
+      "error": "Checkout could not be opened right now. Please try again in a minute."
+    },
+    "done": {
+      "title": "The adventure has begun! 🚀",
+      "text": "{name} is on. A confirmation went to your email.",
+      "trialText": "The trial lasts until {date}. A confirmation went to your email.",
+      "cta": "Continue"
+    },
+    "gift": {
+      "title": "{name} as a gift 🎁",
+      "text": "With the code {code}, {name} is free — no payment and no limits."
+    },
+    "section": {
+      "title": "Subscription",
+      "none": "No plan chosen yet.",
+      "current": "Current plan: {name}",
+      "trial": "Trial until {date}",
+      "next": "Next charge — {date}",
+      "pastDue": "The payment did not go through. Update your card to keep {name}.",
+      "cancelled": "Your account will move to the free plan on {date}. You can renew at any time.",
+      "gift": "{name} is a gift — no payment.",
+      "giftCode": "Code: {code}",
+      "upgrade": "Switch to {name}",
+      "choose": "Choose a plan",
+      "children": "Kids in the plan",
+      "apply": "Apply",
+      "period": "Billing: {period}",
+      "toYearly": "Switch to yearly billing",
+      "toMonthly": "Switch to monthly billing",
+      "toFree": "Switch to {name}",
+      "resume": "Renew the subscription",
+      "portal": "Card and invoices",
+      "saved": "✓ Changed",
+      "confirmToFree": "Switch to {name} at the end of the paid period ({date})? The kids’ progress is kept.",
+      "confirmChange": "Change the subscription? Stripe adjusts the amount for the days left."
+    }
   }
 }

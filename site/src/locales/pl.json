@@ -360,15 +360,12 @@
   "pricing": {
     "eyebrow": "Cennik Pulsar Kids",
     "title": "Wszystkie gry w obu planach. Ile grać, decydujesz Ty",
-    "lead": "Plan {free} daje całej rodzinie do {minutes} gry dziennie. {paid} znosi ten limit: długość sesji, przerwę i dzienny limit ustawiasz Ty. Pierwsze {days} {paid} to okres próbny.",
-    "leadNoTrial": "Plan {free} daje całej rodzinie do {minutes} gry dziennie. {paid} znosi ten limit: długość sesji, przerwę i dzienny limit ustawiasz Ty.",
     "loading": "Wczytuję ceny…",
     "unavailable": "Nie udało się wczytać cen. Odśwież stronę za minutę.",
     "periodLabel": "Płatność",
     "year": "Rocznie",
     "month": "Co miesiąc",
     "save": "−{percent}%",
-    "otherCountries": "{region} i inne kraje",
     "forever": "na zawsze",
     "perYear": "rocznie",
     "perMonth": "miesięcznie",
@@ -401,21 +398,15 @@
       "sub": "Gra próbna otwiera się bez rejestracji i bez płatności.",
       "cta": "Wypróbuj grę teraz"
     },
-    "regionNote": "Ceny dla: {region}",
     "children": "Ile dzieci",
     "fewer": "Mniej dzieci",
     "more": "Więcej dzieci",
     "start": "Rozpocznij przygodę",
     "modalTitle": "Plany Pulsar Kids",
     "close": "Zamknij",
-    "back": "← Do planów",
-    "checkoutLoading": "Otwieram płatność…",
-    "checkoutError": "Nie udało się teraz otworzyć płatności. Spróbuj ponownie za minutę.",
-    "secure": "Płatność przez Stripe: dane karty nie trafiają do Pulsar Kids. Opłata dopiero po okresie próbnym, anulować można w każdej chwili.",
-    "testMode": "Tryb testowy: prawdziwe pieniądze nie są pobierane. Karta 4242 4242 4242 4242, dowolna przyszła data i CVC.",
-    "doneTitle": "Przygoda się zaczęła! 🚀",
-    "doneText": "Potwierdzenie wysłano na {email}. Zaloguj się do panelu rodzica tym adresem — i dzieci mogą grać.",
-    "doneTextNoEmail": "Potwierdzenie wysłano na Twój e-mail. Zaloguj się do panelu rodzica tym samym adresem — i dzieci mogą grać.",
-    "doneCta": "Otwórz panel rodzica"
+    "taxExtra": "+ podatek od sprzedaży, jeśli obowiązuje w Twoim stanie",
+    "yearPlan": "Plan roczny",
+    "monthPlan": "Plan miesięczny",
+    "freeDays": "{days} za darmo"
   }
 }

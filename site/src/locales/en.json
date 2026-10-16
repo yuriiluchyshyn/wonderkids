@@ -354,15 +354,12 @@
   "pricing": {
     "eyebrow": "Pulsar Kids pricing",
     "title": "Every game in both plans. You decide how long they play",
-    "lead": "The {free} plan gives the whole family up to {minutes} of play a day. {paid} lifts that cap: you set the session length, the break and the daily limit. The first {days} of {paid} are a trial.",
-    "leadNoTrial": "The {free} plan gives the whole family up to {minutes} of play a day. {paid} lifts that cap: you set the session length, the break and the daily limit.",
     "loading": "Loading prices…",
     "unavailable": "The prices did not load. Please refresh the page in a minute.",
     "periodLabel": "Billing",
     "year": "Yearly",
     "month": "Monthly",
     "save": "Save {percent}%",
-    "otherCountries": "{region} and other countries",
     "forever": "forever",
     "perYear": "per year",
     "perMonth": "per month",
@@ -389,21 +386,15 @@
       "sub": "The trial game opens with no sign-up and no payment.",
       "cta": "Try the game now"
     },
-    "regionNote": "Prices for: {region}",
     "children": "How many kids",
     "fewer": "Fewer kids",
     "more": "More kids",
     "start": "Start the adventure",
     "modalTitle": "Pulsar Kids plans",
     "close": "Close",
-    "back": "← Back to plans",
-    "checkoutLoading": "Opening checkout…",
-    "checkoutError": "Checkout could not be opened right now. Please try again in a minute.",
-    "secure": "Payment by Stripe: your card details never reach Pulsar Kids. You are charged only after the trial, and you can cancel any time.",
-    "testMode": "Test mode: no real money is charged. Card 4242 4242 4242 4242, any future date and CVC.",
-    "doneTitle": "The adventure has begun! 🚀",
-    "doneText": "A confirmation went to {email}. Sign in to the parents’ area with that address and the kids can play.",
-    "doneTextNoEmail": "A confirmation went to your email. Sign in to the parents’ area with the same address and the kids can play.",
-    "doneCta": "Open the parents’ area"
+    "taxExtra": "+ sales tax where your state charges it",
+    "yearPlan": "Yearly plan",
+    "monthPlan": "Monthly plan",
+    "freeDays": "{days} free"
   }
 }

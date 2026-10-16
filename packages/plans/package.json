@@ -1,0 +1,13 @@
+{
+  "name": "@pulsar/plans",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The plans as the API reads them from Stripe (GET /api/billing/plans) and the sums the site's window of prices and the game's paywall both make of them — no words, no markup.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.ts\""
+  }
+}

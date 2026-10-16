@@ -148,6 +148,29 @@ function ActivityCell({ account }: { account: AdminAccount }) {
 }
 const tasksDone = (account: AdminAccount) => account.children.reduce((n, c) => n + c.tasksCompleted, 0);
 
+/** The plan as the admin page says it. */
+const PLAN_NAME: Record<string, string> = { none: '— не вибрано', free: 'Базовий', family: 'Family', gift: '🎁 Подарунок' };
+const planRank = (account: AdminAccount) => ({ gift: 3, family: 2, free: 1, none: 0 } as Record<string, number>)[account.billing?.access ?? 'none'] ?? 0;
+
+function PlanCell({ account }: { account: AdminAccount }) {
+  const billing = account.billing;
+  const access = billing?.access ?? 'none';
+  const details = [
+    billing?.status === 'trialing' && billing.trialEnd ? `тріал до ${formatDate(billing.trialEnd)}` : null,
+    billing?.status && billing.status !== 'trialing' && access === 'family' ? billing.status : null,
+    billing?.children ? `${billing.children} діт.` : null,
+    billing?.period === 'year' ? 'рік' : billing?.period === 'month' ? 'місяць' : null,
+    billing?.cancelAtPeriodEnd ? `→ Базовий ${formatDate(billing.periodEnd)}` : null,
+    billing?.gift === 'promo' && billing.giftCode ? `код ${billing.giftCode}` : null,
+  ].filter(Boolean);
+  return (
+    <span title={details.join(' · ')}>
+      <span className={access === 'family' || access === 'gift' ? styles.pillOn : styles.pillOff}>{PLAN_NAME[access]}</span>
+      {details.length > 0 && <span className={styles.meta}> {details.join(' · ')}</span>}
+    </span>
+  );
+}
+
 /**
  * Admin home: every registered parent as a row of a table — a tap on a row
  * unfolds the account (where it came from, its children and each child's
@@ -213,6 +236,16 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
     }
   };
 
+  const toggleGift = (account: AdminAccount) => {
+    const on = account.billing?.gift !== 'admin';
+    if (on && !window.confirm(`Подарувати Family акаунту ${account.email}? Без оплати й без обмежень, доки не забереш подарунок.`)) return;
+    void act(account, async () => {
+      await adminApi.setGift(adminKey, account.id, on);
+      const billing = account.billing ?? { access: 'none' as const, status: null, period: null, children: null, periodEnd: null, trialEnd: null, cancelAtPeriodEnd: false, gift: null, giftCode: null };
+      return { ...account, billing: { ...billing, gift: on ? 'admin' : null, access: on ? 'gift' : billing.status && ['trialing', 'active', 'past_due'].includes(billing.status) ? 'family' : billing.access === 'gift' ? 'none' : billing.access } };
+    });
+  };
+
   const toggleSpeech = (account: AdminAccount) =>
     act(account, async () => ({ ...account, speechOff: (await adminApi.setSpeechEnabled(adminKey, account.id, account.speechOff)).speechOff }));
 
@@ -256,6 +289,7 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
     { id: 'children', label: 'Дітей', value: (a) => a.children.length },
     { id: 'tasks', label: 'Завдань', value: tasksDone },
     { id: 'activity', label: 'Активність', value: activityRank, render: (a) => <ActivityCell account={a} /> },
+    { id: 'plan', label: 'План', value: planRank, render: (a) => <PlanCell account={a} /> },
     { id: 'source', label: 'Звідки', value: (a) => channelName(channelOf(a)), render: (a) => (a.signup ? channelName(channelOf(a)) : '—') },
     {
       id: 'voice',
@@ -278,6 +312,7 @@ export function AccountsPage({ adminKey }: { adminKey: string }) {
       render: (a) => (
         // A button acts on the account; it must not also unfold the row.
         <div className={styles.rowActions} onClick={(e: MouseEvent) => e.stopPropagation()}>
+          <RowButton icon="🎁" on={a.billing?.gift === 'admin'} busy={busyId === a.id} label={a.billing?.gift === 'admin' ? 'Family у подарунок — забрати' : 'Подарувати Family (без оплати)'} onClick={() => toggleGift(a)} />
           <RowButton icon="🗣️" on={!a.speechOff} busy={busyId === a.id} label={a.speechOff ? 'Google Speech вимкнено — увімкнути' : 'Google Speech увімкнено — вимкнути'} onClick={() => void toggleSpeech(a)} />
           <RowButton icon="⏻" on={!a.disabled} busy={busyId === a.id} label={a.disabled ? 'Акаунт вимкнено — увімкнути' : 'Акаунт увімкнено — вимкнути'} onClick={() => toggleAccount(a)} />
           <RowButton icon="🗑️" danger busy={busyId === a.id} label="Видалити акаунт" onClick={() => remove(a)} />

@@ -30,6 +30,7 @@ import { cn } from '@/core/utils/cn';
 import { Button } from '@/components/ui/Button';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
+import { BillingSection } from '@/components/paywall/BillingSection';
 import { ChildManager } from './ChildManager';
 import { FamilyData } from './FamilyData';
 import { GoalRow } from './GoalRow';
@@ -295,6 +296,9 @@ export function ParentDashboard() {
       </div>
 
       <ChildManager />
+
+      {/* The plan of the account (paid mode only). */}
+      <BillingSection />
 
       {activeChildId ? (
         <>

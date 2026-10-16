@@ -12,7 +12,7 @@ import { AI_CRAWLERS, llmsTxt, robotsTxt } from '../build/seo.ts';
 import { DEFAULT_LANG, SITE_LANGS, sitePath, type SiteLang } from '../src/languages.ts';
 import { LEGAL_DOCS, LEGAL_UPDATED, legalPath } from '../src/legal.ts';
 import { OPERATOR, operatorGaps } from '../src/operator.ts';
-import { firstView, formatPrice, orderLine, regionOfLang, renderPlans, totalOf, type Catalog, type Words } from '../src/plans.ts';
+import { firstView, formatPrice, regionOfLang, renderPlans, totalOf, type Catalog, type Words } from '../src/plans.ts';
 
 const read = (file: string): string => readFileSync(new URL(file, import.meta.url), 'utf8');
 const URLS = publicUrls();
@@ -285,7 +285,13 @@ test('the page of prices draws Stripe’s plans in the visitor’s region, and i
   const two = renderPlans(PLANS, view, 'uk', words);
   assert.ok(/data-children="-1"[^>]*disabled/.test(two), 'no fewer than the included two');
   assert.ok(renderPlans(PLANS, { ...view, children: 3 }, 'uk', words).includes(formatPrice(59900 + 13900, 'UAH', 'uk')), 'the total follows the children');
-  assert.equal(orderLine(PLANS, { ...view, children: 3 }, 'uk', words), `Family Pro · 3 дитини · ${formatPrice(73800, 'UAH', 'uk')} на рік`);
+  // A year is shown against twelve months of the same: the twelve crossed out, the year's price, what it saves; the trial said big.
+  const yearCard = renderPlans(PLANS, view, 'uk', words);
+  assert.ok(yearCard.includes(`<s>${formatPrice(7900 * 12, 'UAH', 'uk')}</s>`) && yearCard.includes('Річний план') && yearCard.includes('−37%'), 'the yearly price against twelve months');
+  assert.ok(yearCard.includes('class="trial-banner">7 днів безкоштовно<'), 'the trial, big');
+  assert.ok(!renderPlans(PLANS, { ...view, period: 'month' }, 'uk', words).includes('<s>'), 'nothing crossed out monthly');
+  // No lead and no «prices for» line any more.
+  assert.ok(!yearCard.includes('region-note') && !yearCard.includes('class="lead"'));
   // The visitor's own region wins over the page's language.
   assert.equal(firstView({ ...PLANS, region: 'EU' }, 'uk')?.region, 'EU');
   // A plan changed in Stripe changes the page: another trial, another price.
@@ -295,6 +301,9 @@ test('the page of prices draws Stripe’s plans in the visitor’s region, and i
   paid.prices.find((price) => price.region === 'UA' && price.period === 'year')!.amount = 49900;
   const html = renderPlans(edited, view, 'uk', words);
   assert.ok(html.includes('21 день') && html.includes('499 ₴'), 'the trial and the price follow Stripe');
+  // In the US the sales tax is added on top, and the card says so; elsewhere the price is final.
+  assert.ok(renderPlans(PLANS, { region: 'US', period: 'year', children: 2 }, 'en', dictionaries.en.pricing as Words).includes((dictionaries.en.pricing as Record<string, string>).taxExtra));
+  assert.ok(!html.includes((dictionaries.uk.pricing as Record<string, string>).taxExtra), 'no tax line where the price is final');
 
   assert.equal(formatPrice(7900, 'UAH', 'uk'), '79 ₴');
   assert.equal(formatPrice(1499, 'PLN', 'pl'), '14,99 zł');

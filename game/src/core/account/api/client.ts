@@ -12,6 +12,8 @@ import type { VisitVia } from '@pulsar/platform';
 import type { SignupSource } from '@/core/app/attribution';
 import type { LangCode } from '@/core/language';
 
+import type { Catalog, Period } from '@pulsar/plans';
+
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
 
 /**
@@ -311,6 +313,18 @@ export interface AdminAccount {
   speechKeyId: number | null;
   /** The channel that brought the account (utm_* labels); null when it had none. */
   signup: { source: string; medium: string | null; campaign: string | null; link?: string | null } | null;
+  /** The account's plan, as kept (null — never touched the plans). */
+  billing: {
+    access: Access;
+    status: string | null;
+    period: string | null;
+    children: number | null;
+    periodEnd: string | null;
+    trialEnd: string | null;
+    cancelAtPeriodEnd: boolean;
+    gift: 'admin' | 'promo' | null;
+    giftCode: string | null;
+  } | null;
   children: AdminChild[];
 }
 
@@ -400,6 +414,10 @@ export interface ProductSettings {
   defaultVoices: Record<LangCode, string>;
   /** The paid mode: off — Pulsar Kids is wholly free and nothing of paying is seen (no page of prices, no plans, no paywall). */
   paidMode: boolean;
+  /** Whether a family gets a letter with its invoice after every payment (on by default). */
+  invoiceEmails: boolean;
+  /** Accounts whose Stripe subscription still charges — Stripe goes on charging them whatever the paid mode. */
+  chargingSubscriptions: number;
 }
 
 /** Who hears a voice chosen in the settings: every account, or whoever plays the trial game. */
@@ -431,6 +449,7 @@ export interface SettingsChange {
   /** Only the languages named change; '' goes back to the default voice. */
   voices?: Partial<Record<SpeechAudience, Partial<Record<LangCode, string>>>>;
   paidMode?: boolean;
+  invoiceEmails?: boolean;
 }
 
 /** A place in a rule: a country (`US`) or a region (`@north-america`). */
@@ -493,6 +512,11 @@ export const adminApi = {
   },
 
   /** Switch a whole account off or back on; nothing of it is deleted. */
+  /** Family as a gift — no payment — or the gift taken back (billing spec §3.6). */
+  setGift(adminKey: string, parentId: number, gift: boolean) {
+    return request<{ ok: true; gift: boolean }>('/api/admin/users', { method: 'PUT', adminKey, body: { parentId, gift } });
+  },
+
   setAccountEnabled(adminKey: string, parentId: number, enabled: boolean) {
     return request<{ ok: true; disabled: boolean }>('/api/admin/users', {
       method: 'PUT',
@@ -604,5 +628,64 @@ export const adminApi = {
 
   deleteFeedback(adminKey: string, id: number) {
     return request<FeedbackList>(`/api/feedback?id=${id}`, { method: 'DELETE', adminKey });
+  },
+};
+
+// ---------------------------------------------------------------------------
+// The plan of the account (billing spec): the paywall and the cabinet
+// ---------------------------------------------------------------------------
+
+/** What an account has: nothing chosen yet, the free plan, Family paid, or Family as a gift. */
+export type Access = 'none' | 'free' | 'family' | 'gift';
+
+/** `GET /api/billing/me`. */
+export interface PlanState {
+  /** The owner's switch: off — nothing of paying is shown. */
+  paidMode: boolean;
+  access: Access;
+  /** The parent must choose a plan now (the paid mode is on, nothing is chosen, not the first sign-in). */
+  mustChoose: boolean;
+  /** The paid subscription, as Stripe last told it; null without one. */
+  plan: {
+    planId: string | null;
+    period: Period | null;
+    region: string | null;
+    children: number | null;
+    /** Stripe's status: trialing, active, past_due, canceled… */
+    status: string | null;
+    trialEnd: string | null;
+    periodEnd: string | null;
+    cancelAtPeriodEnd: boolean;
+  } | null;
+  gift: { source: 'admin' | 'promo' | null; code: string | null } | null;
+}
+
+/** What beginning a payment answers: Stripe's session, or — for a code free for ever — a gift and nothing to pay. */
+export interface CheckoutBegun {
+  sessionId?: string;
+  clientSecret?: string;
+  publishableKey?: string;
+  gift?: boolean;
+}
+
+export const billingApi = {
+  /** The plans and their prices, from Stripe (public). */
+  plans() {
+    return request<Catalog>('/api/billing/plans');
+  },
+  me(token: string) {
+    return request<PlanState>('/api/billing/me', { token });
+  },
+  chooseFree(token: string) {
+    return request<PlanState>('/api/billing/choose', { method: 'POST', token, body: { plan: 'free' } });
+  },
+  checkout(token: string, body: { plan: string; period: Period; children: number; region: string; promo?: string; lang: string }) {
+    return request<CheckoutBegun>('/api/billing/checkout', { method: 'POST', token, body });
+  },
+  change(token: string, body: { children?: number; period?: Period; cancel?: boolean }) {
+    return request<PlanState>('/api/billing/subscription', { method: 'PUT', token, body });
+  },
+  portal(token: string) {
+    return request<{ url: string }>('/api/billing/portal', { method: 'POST', token });
   },
 };

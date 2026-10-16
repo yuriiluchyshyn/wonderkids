@@ -152,10 +152,90 @@ function PaidModeSwitch({ adminKey, settings, onSaved }: { adminKey: string; set
       )}
       {changed && !wanted && (
         <p className={styles.warn}>
-          ⚠️ Після збереження сторінка цін і посилання на неї зникнуть, плани перестануть віддаватися, і Pulsar Kids знову
-          стане повністю безкоштовним для всіх.
+          ⚠️ Після збереження вимкнеться все, що стосується оплати: сторінка цін і посилання на неї, вікно з планами й
+          оплата в кабінеті батьків, вибір і зміна плану, портал Stripe — і Pulsar Kids стане повністю безкоштовним для
+          всіх.
+          {settings.chargingSubscriptions > 0 && (
+            <>
+              {' '}
+              <b>
+                Але {settings.chargingSubscriptions} підписок у Stripe продовжать списувати гроші — вимкнення режиму їх не
+                скасовує.
+              </b>{' '}
+              Скасуй їх у Stripe (Billing → Subscriptions), якщо треба. Рахунки за списання й далі надходитимуть сім’ям.
+            </>
+          )}
         </p>
       )}
+      <div className={styles.actions}>
+        <button type="submit" className={styles.btnPrimary} disabled={busy || !changed}>
+          {busy ? 'Зберігаю…' : 'Зберегти'}
+        </button>
+        {changed && (
+          <button type="button" className={styles.btn} disabled={busy} onClick={() => setWanted(saved)}>
+            Скасувати
+          </button>
+        )}
+        {note && <span className={note.ok ? styles.noteOk : styles.noteErr}>{note.text}</span>}
+      </div>
+    </form>
+  );
+}
+
+/**
+ * The letters with invoices: after every payment Stripe makes an invoice (its
+ * number, PDF, page) and the API mails its links to the family (`invoice.paid`
+ * → `InvoiceService`). On by default; the owner may switch the letters off —
+ * the invoices are still made and kept.
+ */
+function InvoiceEmails({ adminKey, settings, onSaved }: { adminKey: string; settings: ProductSettings; onSaved: (next: ProductSettings) => void }) {
+  const saved = settings.invoiceEmails !== false;
+  const [wanted, setWanted] = useState(saved);
+  const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+  const changed = wanted !== saved;
+
+  useEffect(() => setWanted(saved), [saved]);
+
+  const save = async (e: FormEvent) => {
+    e.preventDefault();
+    setBusy(true);
+    setNote(null);
+    try {
+      const next = (await adminApi.saveSettings(adminKey, { invoiceEmails: wanted })).settings;
+      onSaved(next);
+      if (next.invoiceEmails !== wanted) setNote({ ok: false, text: 'Сервер не зберіг перемикач — схоже, запущено стару версію API.' });
+      else setNote({ ok: true, text: '✓ Збережено' });
+    } catch (err) {
+      setNote({ ok: false, text: errorText(err) });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <form className={styles.editor} onSubmit={save}>
+      <h2>🧾 Рахунки на пошту {saved ? '— надсилаються' : '— не надсилаються'}</h2>
+      <p className={styles.meta}>
+        Після кожної оплати Stripe створює рахунок (номер, PDF, сторінка рахунку), і сім’я отримує лист із посиланнями
+        на нього — мовою сторінки, на якій платила. Пробний період (рахунок на 0) листа не дає. Рахунки створюються й
+        зберігаються в будь-якому разі; перемикач стосується лише листів.
+      </p>
+      <label className={styles.radio}>
+        <input
+          type="checkbox"
+          checked={wanted}
+          disabled={busy}
+          onChange={(e) => {
+            setWanted(e.target.checked);
+            setNote(null);
+          }}
+        />
+        <span>
+          <b>Надсилати рахунок на пошту після кожної оплати</b>
+        </span>
+      </label>
+      {changed && !wanted && <p className={styles.warn}>⚠️ Після збереження сім’ї більше не отримуватимуть листів із рахунками. Самі рахунки можна буде знайти в Stripe і в порталі клієнта.</p>}
       <div className={styles.actions}>
         <button type="submit" className={styles.btnPrimary} disabled={busy || !changed}>
           {busy ? 'Зберігаю…' : 'Зберегти'}
@@ -304,6 +384,12 @@ function MainSettings({ adminKey }: { adminKey: string }) {
       {settings && (
         <section className={styles.gamesSection}>
           <PaidModeSwitch adminKey={adminKey} settings={settings} onSaved={show} />
+        </section>
+      )}
+
+      {settings && (
+        <section className={styles.gamesSection}>
+          <InvoiceEmails adminKey={adminKey} settings={settings} onSaved={show} />
         </section>
       )}
 

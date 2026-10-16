@@ -29,4 +29,4 @@ void health().then((answer) => {
 });
 
 const plans = document.querySelector<HTMLElement>('[data-plans]');
-if (plans) void pricingFlow().mountInline(plans, document.querySelector<HTMLElement>('[data-plans-lead]'));
+if (plans) void pricingFlow().mountInline(plans);

@@ -1,7 +1,7 @@
 import type { Dict } from '@pulsar/i18n';
 import { TRIAL_PATH, type PublicUrls } from '@pulsar/platform';
 import { sitePath, type SiteLang } from '../src/languages.ts';
-import { firstView, pricingLd, renderLead, renderPlans, say, type Catalog, type Words } from '../src/plans.ts';
+import { firstView, pricingLd, renderPlans, say, type Catalog, type Words } from '../src/plans.ts';
 import type { Dictionaries } from './pages.ts';
 
 /**
@@ -55,7 +55,7 @@ export function pricingPage(lang: SiteLang, urls: PublicUrls, dictionaries: Dict
   // The build asks from a server, whose country is nobody's: the page shows its language's region until the browser knows the visitor's.
   const esc = (text: string): string => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const body = [
-    `<div class="wrap pricing-hero"><h1><small class="eyebrow">${esc(say(words, 'eyebrow'))}</small> ${esc(say(words, 'title'))}</h1><div data-plans-lead>${renderLead(catalog, lang, words)}</div></div>`,
+    `<div class="wrap pricing-hero"><h1><small class="eyebrow">${esc(say(words, 'eyebrow'))}</small> ${esc(say(words, 'title'))}</h1></div>`,
     `<section class="plans"><div class="wrap" data-plans>${renderPlans(catalog, catalog ? firstView({ ...catalog, region: null }, lang) : null, lang, words)}</div></section>`,
     `<section class="final"><div class="wrap band"><h2>${esc(say(words, 'final.title'))}</h2><p class="sub" style="margin-inline: auto">${esc(say(words, 'final.sub'))}</p><div class="cta"><a class="btn btn-try" data-portal="play" data-trial href="${esc(urls.play + TRIAL_PATH)}"><span class="emoji" aria-hidden="true">🚀</span> ${esc(say(words, 'final.cta'))}</a></div></div></section>`,
   ].join('\n');

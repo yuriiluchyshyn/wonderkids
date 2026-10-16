@@ -987,5 +987,106 @@
     "privacy": "Polityka prywatności",
     "terms": "Regulamin",
     "label": "Informacje prawne"
+  },
+  "billing": {
+    "paywall": {
+      "title": "Plany Pulsar Kids",
+      "chooseTitle": "Wybierz plan, aby kontynuować",
+      "chooseHint": "Oba plany otwierają wszystkie gry. Plan można zmienić w każdej chwili w panelu rodzica.",
+      "current": "Twój obecny plan",
+      "yearly": "Rocznie",
+      "monthly": "Co miesiąc",
+      "save": "−{percent}%",
+      "forever": "na zawsze",
+      "chooseFree": "Wybierz {name}",
+      "stayFree": "Zostań przy planie {name}",
+      "start": "Rozpocznij przygodę",
+      "yearPlan": "Plan roczny",
+      "monthPlan": "Plan miesięczny",
+      "perYear": "rocznie",
+      "perMonth": "miesięcznie",
+      "monthlyEq": "to {price} miesięcznie",
+      "taxExtra": "+ podatek od sprzedaży, jeśli obowiązuje w Twoim stanie",
+      "children": "Ile dzieci",
+      "fewer": "Mniej dzieci",
+      "more": "Więcej dzieci",
+      "extra": "W pakiecie: {included}; każde kolejne dziecko +{price} {per}",
+      "loading": "Wczytuję plany…",
+      "unavailable": "Nie udało się wczytać planów. Spróbuj ponownie za minutę.",
+      "close": "Zamknij",
+      "freeDays": {
+        "one": "{count} dzień za darmo",
+        "few": "{count} dni za darmo",
+        "many": "{count} dni za darmo",
+        "other": "{count} dnia za darmo"
+      }
+    },
+    "days": {
+      "one": "{count} dzień",
+      "few": "{count} dni",
+      "many": "{count} dni",
+      "other": "{count} dnia"
+    },
+    "kids": {
+      "one": "{count} dziecko",
+      "few": "{count} dzieci",
+      "many": "{count} dzieci",
+      "other": "{count} dziecka"
+    },
+    "checkout": {
+      "back": "← Do planów",
+      "address": "Adres rozliczeniowy",
+      "card": "Metoda płatności",
+      "summary": "Twoje zamówienie",
+      "discount": "Rabat",
+      "tax": "Podatek",
+      "total": "Razem",
+      "todayDue": "Do zapłaty dziś",
+      "trial": "Okres próbny — {days}",
+      "then": "Potem {amount} {per} od {date}",
+      "promo": "Kod promocyjny",
+      "promoApply": "Zastosuj",
+      "promoRemove": "Usuń",
+      "promoInvalid": "Niestety, Twoja oferta nie jest aktywna",
+      "pay": "Rozpocznij przygodę",
+      "paying": "Przetwarzam płatność…",
+      "secure": "🔒 Płatność przez Stripe: dane karty nie trafiają do Pulsar Kids. Anulować można w każdej chwili w panelu rodzica.",
+      "loading": "Przygotowuję płatność…",
+      "error": "Nie udało się teraz otworzyć płatności. Spróbuj ponownie za minutę."
+    },
+    "done": {
+      "title": "Przygoda się zaczęła! 🚀",
+      "text": "{name} już działa. Potwierdzenie wysłano na Twój e-mail.",
+      "trialText": "Okres próbny trwa do {date}. Potwierdzenie wysłano na Twój e-mail.",
+      "cta": "Dalej"
+    },
+    "gift": {
+      "title": "{name} w prezencie 🎁",
+      "text": "Z kodem {code} {name} działa za darmo — bez płatności i bez ograniczeń."
+    },
+    "section": {
+      "title": "Subskrypcja",
+      "none": "Plan nie został jeszcze wybrany.",
+      "current": "Obecny plan: {name}",
+      "trial": "Okres próbny do {date}",
+      "next": "Następna płatność — {date}",
+      "pastDue": "Płatność nie przeszła. Zaktualizuj kartę, aby zachować {name}.",
+      "cancelled": "Twoje konto przejdzie na plan bezpłatny {date}. Subskrypcję można wznowić w dowolnym momencie.",
+      "gift": "{name} działa jako prezent — bez płatności.",
+      "giftCode": "Kod: {code}",
+      "upgrade": "Przejdź na {name}",
+      "choose": "Wybierz plan",
+      "children": "Dzieci w planie",
+      "apply": "Zastosuj",
+      "period": "Płatność: {period}",
+      "toYearly": "Przejdź na płatność roczną",
+      "toMonthly": "Przejdź na płatność miesięczną",
+      "toFree": "Przejdź na {name}",
+      "resume": "Wznów subskrypcję",
+      "portal": "Karta i faktury",
+      "saved": "✓ Zmieniono",
+      "confirmToFree": "Przejść na {name} na koniec opłaconego okresu ({date})? Postępy dzieci zostaną zachowane.",
+      "confirmChange": "Zmienić subskrypcję? Stripe przeliczy kwotę proporcjonalnie do pozostałych dni."
+    }
   }
 }

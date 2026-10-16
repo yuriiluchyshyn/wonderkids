@@ -100,19 +100,22 @@
       },
       "features": {
         "uk": [
-          "До 15 хвилин гри на день — спільні для всієї сім’ї",
+          "Один профіль дитини",
+          "До 15 хвилин гри на день",
           "Усі ігри та всі сходинки шляху",
           "Контроль часу: сеанс, перерва й денний ліміт у межах 15 хвилин",
           "Прогрес, планета й нагороди зберігаються"
         ],
         "en": [
-          "Up to 15 minutes of play a day, shared by the whole family",
+          "One child profile",
+          "Up to 15 minutes of play a day",
           "Every game and every step of the path",
           "Time controls: session, break and daily limit within the 15 minutes",
           "Progress, the planet and rewards are kept"
         ],
         "pl": [
-          "Do 15 minut gry dziennie — wspólnie dla całej rodziny",
+          "Jeden profil dziecka",
+          "Do 15 minut gry dziennie",
           "Wszystkie gry i wszystkie stopnie ścieżki",
           "Kontrola czasu: sesja, przerwa i dzienny limit w ramach 15 minut",
           "Postępy, planeta i nagrody są zachowane"
@@ -128,9 +131,9 @@
       "id": "pulsar_family_pro",
       "kind": "paid",
       "name": {
-        "uk": "Family Pro",
-        "en": "Family Pro",
-        "pl": "Family Pro"
+        "uk": "Family",
+        "en": "Family",
+        "pl": "Family"
       },
       "tagline": {
         "uk": "Для сімей, у яких гра стала щоденною звичкою.",
@@ -166,7 +169,7 @@
         ]
       },
       "facts": {
-        "trialDays": 14,
+        "trialDays": 7,
         "childrenIncluded": 2
       },
       "prices": [
@@ -174,61 +177,71 @@
           "region": "EU",
           "period": "month",
           "amount": 699,
-          "currency": "EUR"
+          "currency": "EUR",
+          "taxIncluded": true
         },
         {
           "region": "EU",
           "period": "year",
           "amount": 5999,
-          "currency": "EUR"
+          "currency": "EUR",
+          "taxIncluded": true
         },
         {
           "region": "CA",
           "period": "month",
           "amount": 899,
-          "currency": "CAD"
+          "currency": "CAD",
+          "taxIncluded": true
         },
         {
           "region": "CA",
           "period": "year",
           "amount": 7999,
-          "currency": "CAD"
+          "currency": "CAD",
+          "taxIncluded": true
         },
         {
           "region": "US",
           "period": "month",
           "amount": 699,
-          "currency": "USD"
+          "currency": "USD",
+          "taxIncluded": false
         },
         {
           "region": "US",
           "period": "year",
           "amount": 5999,
-          "currency": "USD"
+          "currency": "USD",
+          "taxIncluded": false
         },
         {
           "region": "PL",
           "period": "month",
           "amount": 1499,
-          "currency": "PLN"
+          "currency": "PLN",
+          "taxIncluded": true
         },
         {
           "region": "PL",
           "period": "year",
           "amount": 12999,
-          "currency": "PLN"
+          "currency": "PLN",
+          "taxIncluded": true
         },
         {
           "region": "UA",
           "period": "month",
           "amount": 7900,
-          "currency": "UAH"
+          "currency": "UAH",
+          "taxIncluded": true
         },
         {
           "region": "UA",
           "period": "year",
           "amount": 59900,
-          "currency": "UAH"
+          "currency": "UAH",
+          "taxIncluded": true
         }
       ],
       "extraChild": [
@@ -236,61 +249,71 @@
           "region": "EU",
           "period": "month",
           "amount": 149,
-          "currency": "EUR"
+          "currency": "EUR",
+          "taxIncluded": true
         },
         {
           "region": "EU",
           "period": "year",
           "amount": 1499,
-          "currency": "EUR"
+          "currency": "EUR",
+          "taxIncluded": true
         },
         {
           "region": "CA",
           "period": "month",
           "amount": 199,
-          "currency": "CAD"
+          "currency": "CAD",
+          "taxIncluded": true
         },
         {
           "region": "CA",
           "period": "year",
           "amount": 1999,
-          "currency": "CAD"
+          "currency": "CAD",
+          "taxIncluded": true
         },
         {
           "region": "US",
           "period": "month",
           "amount": 149,
-          "currency": "USD"
+          "currency": "USD",
+          "taxIncluded": false
         },
         {
           "region": "US",
           "period": "year",
           "amount": 1499,
-          "currency": "USD"
+          "currency": "USD",
+          "taxIncluded": false
         },
         {
           "region": "PL",
           "period": "month",
           "amount": 399,
-          "currency": "PLN"
+          "currency": "PLN",
+          "taxIncluded": true
         },
         {
           "region": "PL",
           "period": "year",
           "amount": 3499,
-          "currency": "PLN"
+          "currency": "PLN",
+          "taxIncluded": true
         },
         {
           "region": "UA",
           "period": "month",
           "amount": 1900,
-          "currency": "UAH"
+          "currency": "UAH",
+          "taxIncluded": true
         },
         {
           "region": "UA",
           "period": "year",
           "amount": 13900,
-          "currency": "UAH"
+          "currency": "UAH",
+          "taxIncluded": true
         }
       ]
     }

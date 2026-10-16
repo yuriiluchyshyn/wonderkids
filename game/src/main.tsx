@@ -5,6 +5,7 @@ import { App } from './App';
 import { inject } from '@vercel/analytics';
 import { adoptChildHandoff, dropStaleSession, watchSession } from '@/core/account/auth/useAuthStore';
 import { rememberSource } from '@/core/app/attribution';
+import { rememberOffer } from '@/core/app/offer';
 import { beginDemo } from '@/core/app/demo';
 import { loadAvailability } from '@/core/app/availability';
 import { markPlatform } from '@/core/app/platform';
@@ -31,6 +32,10 @@ watchSession();
 // The channel that brought the visitor (utm_* in the address), kept for the
 // moment a parent account is created.
 rememberSource();
+
+// The plan a link offered (the site's window of prices, an owner's link with a promotion code), kept for the
+// paywall once the parent has signed in.
+rememberOffer();
 
 // The trial game: an address that asks for it (`/try`), or a tab already in one.
 beginDemo();

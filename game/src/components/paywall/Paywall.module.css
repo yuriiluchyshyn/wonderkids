@@ -1,0 +1,476 @@
+/* The paywall of the parents' portal: a wide window over the cabinet (the grown-ups' pages wear the default theme). */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: rgba(8, 6, 24, 0.66);
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 1040px);
+  max-height: calc(100dvh - 24px);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 14px 14px 22px;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+}
+
+.head h2 {
+  margin-right: auto;
+  font-size: 1.35rem;
+}
+
+.close {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(127, 127, 127, 0.14);
+  color: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.body {
+  padding: 18px 22px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.hint {
+  margin: 0 0 6px;
+  text-align: center;
+  color: var(--text-soft);
+}
+
+/* ---- the plans ---- */
+.periods {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 18px;
+}
+
+.seg {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(127, 127, 127, 0.14);
+}
+
+/* The pill slides under the period chosen. */
+.seg::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: 999px;
+  background: var(--primary);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.seg[data-period='month']::before {
+  transform: translateX(100%);
+}
+
+.seg button {
+  position: relative;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--surface-ink);
+  font: inherit;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.seg button[aria-pressed='true'] {
+  color: var(--primary-ink);
+}
+
+.saveTag {
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.82rem;
+}
+
+.cards {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  align-items: stretch;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: var(--radius);
+  background: var(--bg-1);
+  color: var(--text);
+}
+
+.cardPro {
+  border: 2px solid var(--primary);
+}
+
+.badge,
+.currentTag {
+  align-self: flex-start;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.badge {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.currentTag {
+  background: rgba(127, 127, 127, 0.18);
+}
+
+.planName {
+  font-size: 1.5rem;
+}
+
+.tagline,
+.note {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.93rem;
+}
+
+/* The trial, said big. */
+.trialBanner {
+  margin: 4px 0;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #fde047, #ffb347);
+  color: #2a1060;
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pricePlan {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 0;
+  font-weight: 700;
+}
+
+.savePill {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #fde047;
+  color: #2a1060;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+}
+
+.price b {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.price s {
+  color: var(--text-soft);
+  font-size: 1.15rem;
+}
+
+.price span {
+  color: var(--text-soft);
+}
+
+.childrenPick {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+  padding: 8px 8px 8px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(127, 127, 127, 0.12);
+  font-weight: 600;
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stepper button {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(127, 127, 127, 0.2);
+  color: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stepper button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.stepper output {
+  min-width: 2ch;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.features {
+  margin: 6px 0 10px;
+  padding-left: 1.2em;
+}
+
+.features li {
+  margin: 5px 0;
+  color: var(--text-soft);
+}
+
+.primary,
+.secondary {
+  min-height: var(--touch);
+  margin-top: auto;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary {
+  background: linear-gradient(135deg, #fde047, #ffb347);
+  color: #2a1060;
+  font-size: 1.1rem;
+}
+
+.secondary {
+  background: rgba(127, 127, 127, 0.18);
+  color: inherit;
+}
+
+.primary:disabled,
+.secondary:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* ---- the payment: Stripe's fields on the left, the summary on the right ---- */
+.checkoutHead {
+  margin-bottom: 12px;
+}
+
+.back,
+.linkButton {
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.checkoutGrid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .checkoutGrid {
+    grid-template-columns: 1fr;
+  }
+  /* On a phone the summary comes first: what is paid for, then how. */
+  .summary {
+    order: -1;
+  }
+}
+
+.formSide {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: #fff;
+  color: #1a1035;
+}
+
+.formSide h3,
+.summary h3 {
+  font-size: 1.05rem;
+  margin: 4px 0 0;
+}
+
+.formSide .note {
+  color: #5b5577;
+}
+
+.stripeField {
+  min-height: 44px;
+}
+
+.summary {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: var(--bg-1);
+  color: var(--text);
+}
+
+.summaryPlan {
+  margin: 0;
+  font-weight: 700;
+}
+
+.lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+}
+
+.discountLine {
+  color: #16a34a;
+}
+
+.totalLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 4px 0 0;
+  font-size: 1.1rem;
+}
+
+.totalLine b {
+  font-size: 1.5rem;
+}
+
+.promo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.promo input {
+  flex: 1;
+  min-width: 140px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid rgba(127, 127, 127, 0.4);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.promo .secondary {
+  min-height: 44px;
+  margin: 0;
+}
+
+.warn {
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 0.93rem;
+}
+
+.done {
+  padding: 26px 0 8px;
+  text-align: center;
+}
+
+.done h3 {
+  font-size: 1.6rem;
+}
+
+.done p {
+  margin: 12px auto 22px;
+  max-width: 34em;
+  color: var(--text-soft);
+}
+
+.done .primary {
+  padding-inline: 40px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seg::before {
+    transition: none;
+  }
+}

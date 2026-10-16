@@ -49,3 +49,14 @@ test('the owner’s own link: its code travels with the source, and alone it is 
   assert.deepEqual(both, { source: 'ig', medium: 'paid', campaign: undefined, link: 'spring' });
   assert.deepEqual(sourceOfQuery(queryOfSource(both!)), both);
 });
+
+test('an offer in a link: the plan, period, children and a promotion code — and back into a link', async () => {
+  const { offerOfQuery, queryOfOffer } = await import('../src/offer.ts');
+  assert.deepEqual(offerOfQuery('?plan=family&period=month&children=3&offer=SUMMER30'), { plan: 'paid', period: 'month', children: 3, promo: 'SUMMER30' });
+  assert.deepEqual(offerOfQuery('?plan=basic'), { plan: 'free' });
+  assert.deepEqual(offerOfQuery('?offer=FRIENDS'), { plan: 'paid', promo: 'FRIENDS' }, 'a code alone offers the paid plan');
+  assert.deepEqual(offerOfQuery('?plan=pulsar_family_pro'), { plan: 'paid', planId: 'pulsar_family_pro' });
+  assert.equal(offerOfQuery('?utm_source=fb'), null);
+  assert.deepEqual(offerOfQuery('?plan=family&children=999&period=week'), { plan: 'paid' }, 'what is not sound is dropped');
+  assert.equal(queryOfOffer({ plan: 'paid', period: 'year', children: 3 }), 'plan=family&period=year&children=3');
+});
