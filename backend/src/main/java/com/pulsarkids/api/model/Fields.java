@@ -148,6 +148,8 @@ public final class Fields {
   public static final String O = "o";
   public static final String OK = "ok";
   public static final String P = "p";
+  public static final String PAID = "paid";
+  public static final String PAID_MODE = "paidMode";
   public static final String PARENT_ID = "parentId";
   public static final String PARENT_LANG = "parentLang";
   public static final String PART = "part";
@@ -158,8 +160,6 @@ public final class Fields {
   public static final String PLAYED_DAY = "playedDay";
   public static final String PLAYED_TODAY_MINUTES = "playedTodayMinutes";
   public static final String PRICES = "prices";
-  public static final String PRICING = "pricing";
-  public static final String PRICING_PAGE = "pricingPage";
   public static final String PROFILE = "profile";
   public static final String PROGRESS = "progress";
   public static final String R = "r";

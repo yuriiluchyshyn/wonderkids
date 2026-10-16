@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Liveness probe, what is offered to the visitor, and the public counting of
  * arrivals. Open to any origin: the public site asks here too.
  *
- *   GET  /api/health  → { ok, country, availability, features: { pricing } }
+ *   GET  /api/health  → { ok, country, availability, features: { paid } }
  *   POST /api/health  { link?, mode, via?, lang?, referrer? }  an arrival by one of the
  *                     owner's links, or into the trial game → { ok, demoMinutes, visit?, token? }
  *   PUT  /api/health  { visit, token, event }                  how that trial game ended
@@ -35,9 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
  * `country` (ISO 3166-1 alpha-2, or null off Vercel) is where the request came
  * from, as Vercel's edge saw it: the app offers the language of that country
  * to a visitor who has not chosen one. `availability` is what the owner offers
- * there (`Availability`) — never the rules themselves. `features.pricing` says
- * whether the site shows its page of prices (the owner's switch in
- * `/admin/settings`).
+ * there (`Availability`) — never the rules themselves. `features.paid` says
+ * whether the paid mode is on (the owner's switch in `/admin/settings`): off,
+ * the site shows nothing of prices and the game nothing of paying.
  */
 @RestController
 @RequiredArgsConstructor
@@ -68,7 +68,7 @@ public class HealthController extends ApiController {
   public ResponseEntity<Object> health(HttpServletRequest request) {
     String country = Requests.country(request);
     return fresh(Fields.OK, true, Fields.COUNTRY, country, Fields.AVAILABILITY, marketing.availabilityOf(country),
-        Fields.FEATURES, Json.map(Fields.PRICING, marketing.pricingPageOn()));
+        Fields.FEATURES, Json.map(Fields.PAID, marketing.paidModeOn()));
   }
 
   /**

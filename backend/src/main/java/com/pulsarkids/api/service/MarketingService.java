@@ -39,8 +39,13 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class MarketingService {
   public static final String DEMO_MINUTES_KEY = "demo_minutes";
   public static final String AVAILABILITY_KEY = "availability";
-  /** Whether the site shows its page of prices (`/pricing/`) — off until the owner switches it on. */
-  public static final String PRICING_PAGE_KEY = "pricing_page";
+  /**
+   * The paid mode — off until the owner switches it on (`/admin/settings`). Off,
+   * Pulsar Kids is wholly free and nothing of paying is seen anywhere: no page of
+   * prices, no links to it, no plans served, no limit, no paywall. Every paid
+   * feature asks `paidModeOn()` first.
+   */
+  public static final String PAID_MODE_KEY = "paid_mode";
 
   /** The owner's rules are read at most this often by one running instance; a change shows within it. */
   private static final long RULES_TTL_MS = 30_000;
@@ -54,8 +59,8 @@ public class MarketingService {
 
   private volatile ObjectNode rules;
   private volatile long rulesAt;
-  private volatile Boolean pricingPage;
-  private volatile long pricingPageAt;
+  private volatile Boolean paidMode;
+  private volatile long paidModeAt;
 
   // ---------------------------------------------------------------------------
   // Settings
@@ -86,31 +91,31 @@ public class MarketingService {
   }
 
   /**
-   * Whether the site shows its page of prices. Read at most every 30 s, like the
-   * rules of what is offered where; never throws — with the database out of reach
-   * the page stays hidden, as it is until the owner switches it on.
+   * Whether the paid mode is on. Read at most every 30 s, like the rules of what
+   * is offered where; never throws — with the database out of reach everything
+   * stays free, as it is until the owner switches the mode on.
    */
-  public boolean pricingPageOn() {
-    Boolean kept = pricingPage;
-    if (kept != null && System.currentTimeMillis() - pricingPageAt < RULES_TTL_MS) return kept;
+  public boolean paidModeOn() {
+    Boolean kept = paidMode;
+    if (kept != null && System.currentTimeMillis() - paidModeAt < RULES_TTL_MS) return kept;
     try {
       schema.ensure();
-      JsonNode value = tx.execute((status) -> settings.findById(PRICING_PAGE_KEY).map((row) -> row.getValue()).orElse(null));
+      JsonNode value = tx.execute((status) -> settings.findById(PAID_MODE_KEY).map((row) -> row.getValue()).orElse(null));
       boolean on = value != null && value.isBoolean() && value.booleanValue();
-      pricingPage = on;
-      pricingPageAt = System.currentTimeMillis();
+      paidMode = on;
+      paidModeAt = System.currentTimeMillis();
       return on;
     } catch (Exception err) {
-      log.error("[pricing] switch not read: {}", err.getMessage());
+      log.error("[billing] paid mode not read: {}", err.getMessage());
       return false;
     }
   }
 
-  /** The owner switched the page of prices on or off: this instance knows it at once. */
-  public void setPricingPage(boolean on) {
-    setSetting(PRICING_PAGE_KEY, BooleanNode.valueOf(on));
-    pricingPage = on;
-    pricingPageAt = System.currentTimeMillis();
+  /** The owner switched the paid mode on or off: this instance knows it at once. */
+  public void setPaidMode(boolean on) {
+    setSetting(PAID_MODE_KEY, BooleanNode.valueOf(on));
+    paidMode = on;
+    paidModeAt = System.currentTimeMillis();
   }
 
   // ---------------------------------------------------------------------------

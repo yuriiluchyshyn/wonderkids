@@ -393,13 +393,13 @@ class ApiTest {
     assertEquals("The trial game lasts a whole number of minutes, from 1 to 60.", tooLong.text("message"), "the limits in a text are the rule's own");
     assertEquals(8, asAdmin("PUT", "/api/admin/users?part=settings", Map.of("demoMinutes", 8)).body().at("/settings/demoMinutes").asInt());
 
-    // The site's page of prices is hidden until the owner switches it on; the switch reaches the site through /api/health.
-    assertFalse(call("GET", "/api/health", null).body().at("/features/pricing").asBoolean());
-    assertEquals("invalid_enabled", asAdmin("PUT", "/api/admin/users?part=settings", Map.of("pricingPage", "yes")).text("error"));
-    assertTrue(asAdmin("PUT", "/api/admin/users?part=settings", Map.of("pricingPage", true)).body().at("/settings/pricingPage").asBoolean());
-    assertTrue(call("GET", "/api/health", null).body().at("/features/pricing").asBoolean());
+    // The paid mode is off until the owner switches it on; the switch reaches the site and the game through /api/health.
+    assertFalse(call("GET", "/api/health", null).body().at("/features/paid").asBoolean());
+    assertEquals("invalid_enabled", asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", "yes")).text("error"));
+    assertTrue(asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", true)).body().at("/settings/paidMode").asBoolean());
+    assertTrue(call("GET", "/api/health", null).body().at("/features/paid").asBoolean());
     assertEquals(8, asAdmin("GET", "/api/admin/users?part=settings", null).body().at("/settings/demoMinutes").asInt(), "the switch leaves the rest alone");
-    assertFalse(asAdmin("PUT", "/api/admin/users?part=settings", Map.of("pricingPage", false)).body().at("/settings/pricingPage").asBoolean());
+    assertFalse(asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", false)).body().at("/settings/paidMode").asBoolean());
     // Without STRIPE_SECRET_KEY billing is off, and says so; the owner's side only.
     assertFalse(asAdmin("GET", "/api/admin/billing", null).body().get("configured").asBoolean());
     assertEquals(401, call("GET", "/api/admin/billing", null).status());

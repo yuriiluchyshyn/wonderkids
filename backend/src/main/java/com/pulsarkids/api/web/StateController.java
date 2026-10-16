@@ -7,6 +7,7 @@ import com.pulsarkids.api.core.ScreenTime;
 import com.pulsarkids.api.model.ApiError;
 import com.pulsarkids.api.model.Fields;
 import com.pulsarkids.api.service.AccountService;
+import com.pulsarkids.api.service.MarketingService;
 import com.pulsarkids.api.service.SchemaService;
 import com.pulsarkids.api.service.SpeechService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StateController extends ApiController {
   private final AccountService accounts;
   private final SpeechService speech;
+  private final MarketingService marketing;
   private final SchemaService schema;
 
   @GetMapping
@@ -41,8 +43,9 @@ public class StateController extends ApiController {
     schema.ensure();
     accounts.requireEnabled((int) user.id());
     // `features` tells the client what the account has switched on — never
-    // the credentials themselves.
-    return ok(Fields.STATE, accounts.getState((int) user.id(), ScreenTime.clampTzOffset(Json.number(tzOffsetMin))), Fields.FEATURES, Json.map(Fields.CLOUD_TTS, speech.configOf((int) user.id()).enabled()));
+    // the credentials themselves — and whether the paid mode is on (off: the game shows nothing of paying).
+    return ok(Fields.STATE, accounts.getState((int) user.id(), ScreenTime.clampTzOffset(Json.number(tzOffsetMin))),
+        Fields.FEATURES, Json.map(Fields.CLOUD_TTS, speech.configOf((int) user.id()).enabled(), Fields.PAID, marketing.paidModeOn()));
   }
 
   @PutMapping

@@ -2,6 +2,7 @@ package com.pulsarkids.api.web;
 
 import com.pulsarkids.api.model.ApiError;
 import com.pulsarkids.api.service.BillingService;
+import com.pulsarkids.api.service.MarketingService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
  *                               plans: [{ id, kind, name, tagline, badge, features, facts, prices, extraChild }] }
  *
  * `region` is the visitor's (by `x-vercel-ip-country`). 503 `billing_off`
- * without a Stripe key, 502 `billing_unreachable` when Stripe cannot be read.
+ * while the paid mode is off (`/admin/settings`) or without a Stripe key —
+ * nothing of paying is offered then —, 502 `billing_unreachable` when Stripe
+ * cannot be read.
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(Routes.BILLING_PLANS)
 public class BillingController extends ApiController {
   private final BillingService billing;
+  private final MarketingService marketing;
 
   @GetMapping
   public ResponseEntity<Object> plans(HttpServletRequest request) {
-    if (!billing.configured()) throw new HttpError(ApiError.BILLING_OFF);
+    if (!billing.configured() || !marketing.paidModeOn()) throw new HttpError(ApiError.BILLING_OFF);
     try {
       // The answer depends on the visitor's country: a browser may keep it a little, a shared cache not.
       return ResponseEntity.ok().cacheControl(CacheControl.maxAge(5, TimeUnit.MINUTES).cachePrivate()).body(billing.plansFor(Requests.country(request)));
