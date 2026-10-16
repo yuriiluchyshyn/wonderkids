@@ -675,6 +675,26 @@ export interface ChildrenQuote {
   nextCharge: string | null;
 }
 
+/** One invoice of the subscription (Stripe's): its page and PDF are Stripe's too. Amounts are in minor units. */
+export interface BillingInvoice {
+  id: string;
+  number: string | null;
+  created: string | null;
+  amount: number;
+  currency: string;
+  /** Stripe's status: paid, open, void, uncollectible. */
+  status: string;
+  hostedUrl: string | null;
+  pdfUrl: string | null;
+}
+
+/** `GET /api/billing/details`. */
+export interface BillingDetails {
+  /** The card the subscription is paid with — never the number, only its last four digits. */
+  card: { brand: string; last4: string; expMonth: number; expYear: number } | null;
+  invoices: BillingInvoice[];
+}
+
 /** What beginning a payment answers: Stripe's session, or — for a code free for ever — a gift and nothing to pay. */
 export interface CheckoutBegun {
   sessionId?: string;
@@ -708,7 +728,12 @@ export const billingApi = {
   addChildren(token: string, body: { add: number; prorationDate: number; amount: number }) {
     return request<PlanState & { charged: { amount: number; currency: string } }>('/api/billing/children', { method: 'POST', token, body });
   },
-  portal(token: string) {
-    return request<{ url: string }>('/api/billing/portal', { method: 'POST', token });
+  /** Stripe's portal; `card` opens it straight at changing the card (and comes back to the subscription's page). */
+  portal(token: string, flow?: 'card') {
+    return request<{ url: string }>('/api/billing/portal', { method: 'POST', token, body: flow ? { flow } : {} });
+  },
+  /** The card the subscription is paid with and the latest invoices. */
+  details(token: string) {
+    return request<BillingDetails>('/api/billing/details', { token });
   },
 };

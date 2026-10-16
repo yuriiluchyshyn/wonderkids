@@ -372,7 +372,6 @@
     "extraIncluded": "W pakiecie: {children}.",
     "extraEach": "Każde kolejne dziecko:",
     "extraSum": "Dodatkowo za {children}:",
-    "trial": "Okres próbny trwa {days}. Pierwsza płatność jest zaraz po nim; anulować można w dowolnym momencie przed nią.",
     "unit": {
       "minutes": {
         "one": "{count} minuta",

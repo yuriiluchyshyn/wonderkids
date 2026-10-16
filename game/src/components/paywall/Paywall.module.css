@@ -21,6 +21,132 @@
   overflow: hidden;
 }
 
+/* ---- the subscription's own page: the card, the invoices, the child to remove ---- */
+.cardLine {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.cardLine small {
+  color: var(--text-soft);
+}
+
+.invoiceList {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.invoiceList li {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) auto auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+}
+
+.invoiceList li:last-child {
+  border-bottom: 0;
+}
+
+.invoiceMain {
+  display: flex;
+  flex-direction: column;
+}
+
+.invoiceMain small {
+  color: var(--text-soft);
+}
+
+.invoiceSum {
+  font-weight: 700;
+}
+
+.invoiceStatus {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(127, 127, 127, 0.18);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.invoiceStatus[data-status='paid'] {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.invoiceLinks {
+  display: flex;
+  gap: 10px;
+}
+
+.invoiceLinks a {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (max-width: 560px) {
+  .invoiceList li {
+    grid-template-columns: 1fr auto;
+  }
+
+  .invoiceLinks {
+    grid-column: 1 / -1;
+  }
+}
+
+.pickList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pickItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--touch);
+  padding: 8px 14px;
+  border: 2px solid rgba(127, 127, 127, 0.3);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pickItem small {
+  color: var(--text-soft);
+}
+
+.pickItemOn {
+  border-color: var(--primary);
+  background: rgba(127, 127, 127, 0.14);
+}
+
+/* A step that cannot be undone. */
+.danger {
+  min-height: var(--touch);
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.danger:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 /* ---- small windows: the cabinet's confirmations and the adding of children ---- */
 .dialog {
   display: flex;

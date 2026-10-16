@@ -199,12 +199,11 @@ export function CheckoutStep({ token, catalog, view, promo, onBack, onDone, onGi
                 <div className={styles.nextCharge}>
                   <span>{t('billing.checkout.nextCharge')}</span>
                   <b>{date(trial ? trial.trialEnd : session.recurring.dueNext.billingCycleAnchor ?? Date.now() / 1000)}</b>
-                  <small>
-                    {trial ? `${t('billing.checkout.trial', { days: t('billing.days', { count: trial.trialPeriodDays }) })}. ` : ''}
-                    {t('billing.checkout.nextChargeSum', { amount: session.recurring.dueNext.total.amount, per: per(session.recurring.interval) })}
-                  </small>
+                  <small>{t('billing.checkout.nextChargeSum', { amount: session.recurring.dueNext.total.amount, per: per(session.recurring.interval) })}</small>
                 </div>
               )}
+              {/* The terms of the trial are said here, where the parent pays — not on the plan's card. */}
+              {trial && <p className={styles.note}>{t('billing.checkout.trialTerms', { days: t('billing.days', { count: trial.trialPeriodDays }) })}</p>}
             </>
           ) : (
             <GalaxyLoader label={t('billing.checkout.loading')} />

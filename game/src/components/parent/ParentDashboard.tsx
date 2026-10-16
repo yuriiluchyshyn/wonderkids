@@ -295,10 +295,10 @@ export function ParentDashboard() {
         </div>
       </div>
 
-      <ChildManager />
-
-      {/* The plan of the account (paid mode only). */}
+      {/* The plan of the account, above the children (paid mode only): what it is, and the way to manage it. */}
       <BillingSection />
+
+      <ChildManager />
 
       {activeChildId ? (
         <>

@@ -1,4 +1,4 @@
-/* A small spiral galaxy: two arms turning round a bright core. Standalone colours, as the full-screen loader. */
+/* A small spiral galaxy: stars wound in three arms round a bright core (`@pulsar/brand/galaxy`). */
 .wrap {
   display: flex;
   flex-direction: column;
@@ -9,31 +9,15 @@
 }
 
 .galaxy {
-  position: relative;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  overflow: visible;
 }
 
-.galaxy::before,
-.galaxy::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-}
-
-.galaxy::before {
-  background: conic-gradient(from 0deg, transparent 0 8%, rgba(53, 214, 232, 0.9) 24%, transparent 46%, transparent 58%, rgba(124, 108, 255, 0.95) 74%, transparent 96%);
-  -webkit-mask: radial-gradient(circle, transparent 14%, #000 22%, #000 62%, transparent 72%);
-  mask: radial-gradient(circle, transparent 14%, #000 22%, #000 62%, transparent 72%);
-  animation: turn 1.6s linear infinite;
-}
-
-.galaxy::after {
-  inset: 38%;
-  background: radial-gradient(circle, #fff 0 30%, #fde047 60%, transparent 100%);
-  box-shadow: 0 0 12px 3px rgba(253, 224, 71, 0.55);
+.spin {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: turn 3.2s linear infinite;
 }
 
 .label {
@@ -50,7 +34,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   /* Slower, not stopped: it still has to say «loading». */
-  .galaxy::before {
-    animation-duration: 6s;
+  .spin {
+    animation-duration: 12s;
   }
 }

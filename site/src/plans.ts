@@ -12,6 +12,7 @@
  * No DOM here: the build and the page's script both use it.
  */
 
+import { galaxySvg } from '@pulsar/brand/galaxy';
 import { MAX_CHILDREN, PERIODS, baseOf, childrenIncluded, extraOf, formatPrice, paidPlan, totalOf, yearSaving, type Catalog, type CatalogPlan, type View } from '@pulsar/plans';
 
 // The plans' data and sums are shared with the game's paywall (`@pulsar/plans`); here they are only drawn.
@@ -125,8 +126,8 @@ function planCard(plan: CatalogPlan, catalog: Catalog, view: View, lang: string,
 
   const features = plan.features[lang] ?? plan.features.en ?? [];
   if (features.length > 0) lines.push(`<ul class="plan-features">${features.map((line) => `<li>${esc(line)}</li>`).join('')}</ul>`);
+  // The terms of the trial are said where the parent pays (the game's payment step), not on the card.
   if (paid) {
-    if (facts.days) lines.push(`<p class="plan-trial">${esc(say(words, 'trial', facts))}</p>`);
     lines.push(`<button type="button" class="btn btn-try" data-start>${esc(say(words, 'start'))} <span class="emoji" aria-hidden="true">🚀</span></button>`);
   }
   lines.push('</article>');
@@ -157,7 +158,7 @@ export function renderPeriods(catalog: Catalog, view: View, words: Words): strin
  */
 export function renderPlans(catalog: Catalog | null, view: View | null, lang: string, words: Words): string {
   // While the prices load, a small galaxy turns above the words (`.galaxy-loader` in pricing.css).
-  if (!catalog || !view || catalog.plans.length === 0) return `<p class="lead plans-state" data-plans-state>${catalog === null ? '<span class="galaxy-loader" aria-hidden="true"></span>' : ''}${esc(say(words, catalog === null ? 'loading' : 'unavailable'))}</p>`;
+  if (!catalog || !view || catalog.plans.length === 0) return `<p class="lead plans-state" data-plans-state>${catalog === null ? galaxySvg() : ''}${esc(say(words, catalog === null ? 'loading' : 'unavailable'))}</p>`;
   return `${renderPeriods(catalog, view, words)}<div data-grid>${renderGrid(catalog, view, lang, words)}</div>`;
 }
 

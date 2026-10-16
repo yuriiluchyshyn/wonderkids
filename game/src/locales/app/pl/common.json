@@ -1045,7 +1045,7 @@
       "tax": "Podatek",
       "total": "Razem",
       "todayDue": "Do zapłaty dziś",
-      "trial": "Okres próbny — {days}",
+      "trialTerms": "Okres próbny trwa {days}. Pierwsza płatność jest zaraz po nim; anulować można w dowolnym momencie przed nią.",
       "nextCharge": "Następna płatność",
       "nextChargeSum": "{amount} {per}",
       "promo": "Kod promocyjny",
@@ -1086,14 +1086,52 @@
       "toMonthly": "Przejdź na płatność miesięczną",
       "toFree": "Przejdź na {name}",
       "resume": "Wznów subskrypcję",
-      "portal": "Karta i faktury",
+      "manage": "Zarządzaj subskrypcją",
       "saved": "✓ Zmieniono",
-      "confirmToFree": "Przejść na {name} na koniec opłaconego okresu ({date})? Postępy dzieci zostaną zachowane.",
       "confirmPeriod": "Zmienić częstotliwość płatności? Niewykorzystane dni Stripe uwzględni w następnej fakturze."
     },
     "dialog": {
       "cancel": "Anuluj",
       "ok": "Potwierdź"
+    },
+    "manage": {
+      "title": "Zarządzanie subskrypcją",
+      "current": "Obecna subskrypcja",
+      "kidsTitle": "Dzieci w planie",
+      "kidsLine": "W planie: {places}; profili dzieci: {profiles}.",
+      "removeChild": "Usuń dziecko",
+      "planTitle": "Plan",
+      "giftNote": "Family jest prezentem, więc nic tu nie trzeba zmieniać.",
+      "confirmDowngrade": "Przejść na {name} od {date}? Wszystkie dzieci i informacje o nich (profile, postępy, nagrody i ustawienia) zostaną usunięte. Tego nie można cofnąć.",
+      "downgradeYes": "Tak, przejdź na {name}",
+      "cardTitle": "Sposób płatności",
+      "noCard": "Nie znaleziono karty.",
+      "changeCard": "Zmień kartę",
+      "loading": "Wczytuję…",
+      "invoicesTitle": "Faktury"
+    },
+    "invoice": {
+      "paid": "Opłacona",
+      "open": "Czeka na płatność",
+      "void": "Anulowana",
+      "uncollectible": "Nieopłacona",
+      "view": "Otwórz"
+    },
+    "remove": {
+      "title": "Usuń dziecko",
+      "working": "Chwileczkę…",
+      "doneTitle": "Gotowe ✓",
+      "doneChild": "Profil dziecka został usunięty, a plan zaktualizowany.",
+      "donePlace": "Puste miejsce zostało usunięte z planu.",
+      "nothing": "W planie jest co najmniej {included}, a te miejsca wchodzą w pakiet, więc nie ma czego usuwać.",
+      "freePlace": "W planie: {places}, a profili dzieci: {profiles}. Puste miejsce można usunąć: w planie będzie {after}.",
+      "credit": "Niewykorzystane dni Stripe uwzględni w następnej fakturze.",
+      "givePlace": "Usuń miejsce",
+      "choose": "Wszystkie miejsca w planie są zajęte. Które dziecko usunąć?",
+      "warn": "Profil „{name}” oraz wszystkie postępy, nagrody i ustawienia tego dziecka zostaną usunięte na zawsze.",
+      "confirm": "Usuń: {name}",
+      "confirmNone": "Wybierz dziecko",
+      "profileGone": "Profil został usunięty, ale plan się nie zmienił."
     },
     "add": {
       "title": "Dodaj dziecko",

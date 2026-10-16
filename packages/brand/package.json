@@ -5,6 +5,7 @@
   "type": "module",
   "description": "The look Pulsar Kids is known by, shared by the site and the game: its icons, its typefaces and the colours of its night sky.",
   "exports": {
+    "./galaxy": "./galaxy.ts",
     "./vite": "./vite.ts",
     "./night-sky.css": "./night-sky.css",
     "./fonts.css": "./fonts.css"

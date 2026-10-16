@@ -162,12 +162,6 @@
   color: #22c55e;
   font-weight: 800;
 }
-.plan-trial {
-  margin: 0 0 12px;
-  font-size: 0.95rem;
-  color: var(--sun);
-}
-
 
 /* How many children: from those the plan includes up. */
 .children-pick {
@@ -304,47 +298,11 @@
   overscroll-behavior: contain;
 }
 /* Fit the screen: on a lower window every gap and line of the cards shrinks with its height (no scrolling where it can be helped). */
-.pricing-modal .pricing-controls {
+.pricing-controls {
   margin-top: clamp(0px, 1vh, 10px);
 }
-.pricing-modal .seg button {
+.seg button {
   min-height: clamp(40px, 5.4vh, 48px);
-}
-.pricing-modal .plans-grid {
-  gap: clamp(10px, 1.8vh, 18px);
-}
-.pricing-modal .plan {
-  gap: clamp(4px, 1vh, 10px);
-  padding: clamp(12px, 2.2vh, 24px);
-}
-.pricing-modal .plan h2 {
-  font-size: clamp(1.3rem, 3vh, 1.7rem);
-}
-.pricing-modal .plan .trial-banner {
-  padding: clamp(4px, 1vh, 10px) 14px;
-  font-size: clamp(1.25rem, 3.4vh, 2rem);
-}
-.pricing-modal .price b {
-  font-size: clamp(2rem, 5.2vh, 3rem);
-}
-.pricing-modal .stepper button {
-  width: clamp(36px, 4.6vh, 44px);
-  height: clamp(36px, 4.6vh, 44px);
-}
-.pricing-modal .children-pick {
-  margin-top: 4px;
-  padding-block: 4px;
-}
-.pricing-modal .plan-features {
-  margin: 4px 0 clamp(4px, 1vh, 12px);
-  font-size: clamp(0.84rem, 1.9vh, 1rem);
-}
-.pricing-modal .plan-features li {
-  margin: clamp(2px, 0.6vh, 6px) 0;
-}
-.pricing-modal .plan-trial {
-  margin-bottom: clamp(4px, 1vh, 12px);
-  font-size: clamp(0.84rem, 1.8vh, 0.95rem);
 }
 .pricing-modal-body .lead {
   margin: 0 0 6px;
@@ -354,14 +312,48 @@
   margin-top: 18px;
 }
 
+/*
+ * The cards are the same on the page of prices and in the window of prices — and the
+ * same as in the game's paywall: compact, so that both plans fit a screen. Every gap and
+ * line shrinks with the window's height (no scrolling where it can be helped).
+ */
+.plans-grid {
+  gap: clamp(10px, 1.8vh, 18px);
+}
+.plans-grid .plan {
+  gap: clamp(4px, 1vh, 10px);
+  padding: clamp(12px, 2.2vh, 24px);
+}
+.plans-grid .plan h2 {
+  font-size: clamp(1.3rem, 3vh, 1.7rem);
+}
+.plans-grid .price b {
+  font-size: clamp(2rem, 5.2vh, 3rem);
+}
+.plans-grid .stepper button {
+  width: clamp(36px, 4.6vh, 44px);
+  height: clamp(36px, 4.6vh, 44px);
+}
+.plans-grid .children-pick {
+  margin-top: 4px;
+  padding-block: 4px;
+}
+.plans-grid .plan-features {
+  margin: 4px 0 clamp(4px, 1vh, 12px);
+  font-size: clamp(0.84rem, 1.9vh, 1rem);
+}
+.plans-grid .plan-features li {
+  margin: clamp(2px, 0.6vh, 6px) 0;
+}
+
 /* The trial, said big on the paid card — a ribbon across it (`.plan` raises it over `.card p`). */
 .plan .trial-banner {
   margin: 4px 0 2px;
-  padding: 10px 16px;
+  padding: clamp(4px, 1vh, 10px) 16px;
   border-radius: 16px;
   background: linear-gradient(135deg, var(--sun), #ffb347);
   color: var(--bg-1);
-  font: 800 clamp(1.5rem, 4.4vw, 2rem) 'Baloo 2', sans-serif;
+  font: 800 clamp(1.25rem, 3.4vh, 2rem) 'Baloo 2', sans-serif;
   line-height: 1.1;
   text-align: center;
   text-transform: uppercase;
@@ -452,31 +444,14 @@
   padding: 28px 0;
   text-align: center;
 }
-.galaxy-loader {
-  position: relative;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+.galaxy-svg {
+  overflow: visible;
 }
-.galaxy-loader::before,
-.galaxy-loader::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-}
-/* Two spiral arms, turning. */
-.galaxy-loader::before {
-  background: conic-gradient(from 0deg, transparent 0 8%, rgba(53, 214, 232, 0.9) 24%, transparent 46%, transparent 58%, rgba(124, 108, 255, 0.95) 74%, transparent 96%);
-  -webkit-mask: radial-gradient(circle, transparent 14%, #000 22%, #000 62%, transparent 72%);
-  mask: radial-gradient(circle, transparent 14%, #000 22%, #000 62%, transparent 72%);
-  animation: galaxy-turn 1.6s linear infinite;
-}
-/* The bright core, with a glow. */
-.galaxy-loader::after {
-  inset: 38%;
-  background: radial-gradient(circle, #fff 0 30%, var(--sun) 60%, transparent 100%);
-  box-shadow: 0 0 12px 3px rgba(253, 224, 71, 0.55);
+/* The arms of stars turn round the core (`@pulsar/brand/galaxy`). */
+.galaxy-spin {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: galaxy-turn 3.2s linear infinite;
 }
 @keyframes galaxy-turn {
   to {
@@ -484,8 +459,8 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .galaxy-loader::before {
-    animation-duration: 6s;
+  .galaxy-spin {
+    animation-duration: 12s;
   }
 }
 /* What a choice changed fades in where it stands (transform and opacity only — docs/browser-support.md). */

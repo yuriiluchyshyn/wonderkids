@@ -995,7 +995,7 @@
       "tax": "Tax",
       "total": "Total",
       "todayDue": "Due today",
-      "trial": "Trial — {days}",
+      "trialTerms": "The trial lasts {days}. The first charge comes right after it; cancel any time before then.",
       "nextCharge": "Next charge",
       "nextChargeSum": "{amount} {per}",
       "promo": "Promotion code",
@@ -1036,14 +1036,52 @@
       "toMonthly": "Switch to monthly billing",
       "toFree": "Switch to {name}",
       "resume": "Renew the subscription",
-      "portal": "Card and invoices",
+      "manage": "Manage subscription",
       "saved": "✓ Changed",
-      "confirmToFree": "Switch to {name} at the end of the paid period ({date})? The kids’ progress is kept.",
       "confirmPeriod": "Change how often you pay? Stripe counts the unused days into your next invoice."
     },
     "dialog": {
       "cancel": "Cancel",
       "ok": "Confirm"
+    },
+    "manage": {
+      "title": "Manage subscription",
+      "current": "Current subscription",
+      "kidsTitle": "Kids in the plan",
+      "kidsLine": "The plan has {places}; child profiles: {profiles}.",
+      "removeChild": "Remove a child",
+      "planTitle": "Plan",
+      "giftNote": "Family is a gift, so there is nothing to change here.",
+      "confirmDowngrade": "Switch to {name} on {date}? All the children and the information about them (profiles, progress, rewards and settings) will be deleted. This cannot be undone.",
+      "downgradeYes": "Yes, switch to {name}",
+      "cardTitle": "Payment method",
+      "noCard": "No card found.",
+      "changeCard": "Change card",
+      "loading": "Loading…",
+      "invoicesTitle": "Invoices"
+    },
+    "invoice": {
+      "paid": "Paid",
+      "open": "Awaiting payment",
+      "void": "Cancelled",
+      "uncollectible": "Unpaid",
+      "view": "Open"
+    },
+    "remove": {
+      "title": "Remove a child",
+      "working": "One moment…",
+      "doneTitle": "Done ✓",
+      "doneChild": "The child’s profile is deleted and the plan is updated.",
+      "donePlace": "The empty place is removed from the plan.",
+      "nothing": "The plan has at least {included}, and those places come with the package, so there is nothing to remove.",
+      "freePlace": "The plan has {places} and there are {profiles} child profiles. The empty place can be removed: the plan will have {after}.",
+      "credit": "Stripe counts the unused days into your next invoice.",
+      "givePlace": "Remove the place",
+      "choose": "Every place in the plan is taken. Which child should be removed?",
+      "warn": "The profile “{name}” and all of this child’s progress, rewards and settings will be deleted for good.",
+      "confirm": "Delete {name}",
+      "confirmNone": "Choose a child",
+      "profileGone": "The profile is deleted, but the plan did not change."
     },
     "add": {
       "title": "Add a child",

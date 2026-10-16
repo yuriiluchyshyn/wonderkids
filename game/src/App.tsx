@@ -18,6 +18,7 @@ import { GamePage } from '@/pages/child/GamePage';
 import { VaultPage } from '@/pages/child/VaultPage';
 import { WorldPage } from '@/pages/child/WorldPage';
 import { ParentPage } from '@/pages/parent/ParentPage';
+import { SubscriptionPage } from '@/pages/parent/SubscriptionPage';
 import { AudioPage } from '@/pages/child/AudioPage';
 import { ChildSelectPage } from '@/pages/auth/ChildSelectPage';
 import { TimeHeader } from '@/components/layout/TimeHeader';
@@ -100,6 +101,7 @@ function SyncedRoutes() {
       <InLang of="parent">
         <Routes>
           <Route path="/parent" element={<ParentPage />} />
+          <Route path="/parent/subscription" element={<SubscriptionPage />} />
           <Route path="/parent/audio" element={<AudioPage />} />
           <Route path="*" element={<Navigate to="/parent" replace />} />
         </Routes>
@@ -118,6 +120,7 @@ function SyncedRoutes() {
     <InLang of="game">
     <Routes>
       {canReachParent && <Route path="/parent" element={<InLang of="parent"><ParentPage /></InLang>} />}
+      {canReachParent && <Route path="/parent/subscription" element={<InLang of="parent"><SubscriptionPage /></InLang>} />}
       {canReachParent && <Route path="/parent/audio" element={<InLang of="parent"><AudioPage /></InLang>} />}
       <Route path="/who" element={<ChildSelectPage />} />
 
