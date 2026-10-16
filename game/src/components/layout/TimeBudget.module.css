@@ -10,7 +10,7 @@
   font-size: clamp(1.05rem, 4.8vw, 1.6rem);
   line-height: 1;
   /* Smooth melt as the active token drains second-by-second. */
-  transition: opacity 0.9s linear, transform 0.9s ease, filter 0.4s ease;
+  transition: opacity 0.9s linear, transform 0.9s ease;
   transform-origin: center bottom;
 }
 

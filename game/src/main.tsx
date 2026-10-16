@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { MotionConfig } from 'framer-motion';
 import { App } from './App';
 import { inject } from '@vercel/analytics';
 import { adoptChildHandoff, dropStaleSession, watchSession } from '@/core/account/auth/useAuthStore';
@@ -48,6 +49,10 @@ if (!rootEl) throw new Error('Root element #root not found');
 
 createRoot(rootEl).render(
   <StrictMode>
-    <App />
+    {/* A device set to reduce motion gets framer-motion's moves as fades too,
+        as the stylesheets already do for CSS (`prefers-reduced-motion`). */}
+    <MotionConfig reducedMotion="user">
+      <App />
+    </MotionConfig>
   </StrictMode>,
 );

@@ -40,7 +40,7 @@ export function FuelGauge({ pct }: FuelGaugeProps) {
       <div className={styles.bar}>
         <div
           className={cn(styles.fill, low && styles.low)}
-          style={{ width: `${clamped}%` }}
+          style={{ transform: `translateX(${clamped - 100}%)` }}
         />
       </div>
       <span className={styles.pct}>{clamped}%</span>

@@ -22,7 +22,9 @@ export function ProgressBar({ value, label }: ProgressBarProps) {
         <motion.div
           className={styles.fill}
           initial={false}
-          animate={{ width: `${pct}%` }}
+          // The fill is as wide as the track and slides in from the left: a
+          // transform, never `width`, which would lay the page out every frame.
+          animate={{ x: `${pct - 100}%` }}
           transition={{ type: 'spring', stiffness: 120, damping: 20 }}
         >
           <div className={styles.shine} />

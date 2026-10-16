@@ -1,21 +1,30 @@
-/* The planet as it really looks (PlanetArt), under the things built on it. */
+/* The planet as it really looks (PlanetArt), under the things built on it.
+   Everything here is stood at its place by `placedAt` (a transform from the
+   box's corner), so it starts at the corner. */
+.art,
+.lock,
+.pin,
+.walker {
+  left: 0;
+  top: 0;
+}
+
 .art {
   position: absolute;
   height: auto;
-  transform: translate(-50%, -50%);
   pointer-events: none;
 }
 
-/* A planet the child cannot build on yet: there, but in the dark. */
+/* A planet the child cannot build on yet: there, but in the dark — greyed by
+   PlanetArt's `dim`, never a `filter` on a surface that turns every frame. */
 .artLocked {
-  filter: grayscale(0.6) brightness(0.55);
+  opacity: 0.7;
 }
 
 .lock {
   position: absolute;
   z-index: 300;
   line-height: 1;
-  transform: translate(-50%, -50%);
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   pointer-events: none;
 }
@@ -33,7 +42,6 @@
   color: #fff;
   font-family: inherit;
   line-height: 1;
-  transform: translate(-50%, -88%);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -88,6 +96,5 @@
 .walker {
   position: absolute;
   line-height: 1;
-  transform: translate(-50%, -85%);
   pointer-events: none;
 }

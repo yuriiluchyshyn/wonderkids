@@ -143,3 +143,31 @@
 .rewardLocked {
   opacity: 0.6;
 }
+
+/* A weaker device: the steps keep their rings but lose their soft shadows. The
+   list is forty steps tall and is drawn anew as it scrolls; forty blurred
+   shadows (and their badges' and keys') made the phone late with it, and a
+   part not drawn in time shows as a hole in the sheet (docs/browser-support.md). */
+:global(:root[data-perf='lite']) .node,
+:global(:root[data-perf='lite']) .badge,
+:global(:root[data-perf='lite']) .key,
+:global(:root[data-perf='lite']) .keyTaken {
+  box-shadow: none;
+}
+
+:global(:root[data-perf='lite']) .current {
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--ring) 55%, transparent);
+}
+
+:global(:root[data-perf='lite']) .big,
+:global(:root[data-perf='lite']) .chest {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+:global(:root[data-perf='lite']) .biggest {
+  box-shadow: 0 0 0 4px var(--accent);
+}
+
+:global(:root[data-perf='lite']) .key {
+  outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+}

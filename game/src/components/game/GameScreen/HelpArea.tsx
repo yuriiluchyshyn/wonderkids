@@ -17,9 +17,11 @@ export function HelpArea({ open, helperRef, attentionRef, onBack, children }: { 
         <motion.div
           ref={helperRef}
           className={styles.help}
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
+          // Fades and rises in; never `height: 'auto'`, which lays the whole
+          // board out again on every frame.
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 16 }}
         >
           <div className={styles.hintBar}>
             <span className={styles.hintBarLabel}>{t('game.hint.label')}</span>

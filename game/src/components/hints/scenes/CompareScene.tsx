@@ -18,8 +18,9 @@ function Side({ side, max, tone, focus }: { side: Scene['left']; max: number; to
       <div className={styles.well} style={{ height: TALLEST }}>
         <motion.span
           className={cn(styles.bar, tone === 'a' ? styles.barA : styles.barB)}
-          initial={{ height: 0 }}
-          animate={{ height }}
+          style={{ height, originY: 1 }}
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
           transition={{ type: 'spring', stiffness: 120, damping: 16 }}
         />
       </div>

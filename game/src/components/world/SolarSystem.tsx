@@ -11,7 +11,7 @@ import { tellFact } from '@/core/game/content/outro';
 import { useVoiceSpeak } from '@/core/audio/useSpeech';
 import { spoken, written } from '@/core/language';
 import { cn } from '@/core/utils/cn';
-import { Globe } from './Globe';
+import { Globe, placedAt } from './Globe';
 import { RAD } from './places';
 import { useGestures } from './useGestures';
 import styles from './SolarSystem.module.css';
@@ -211,7 +211,7 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
           <button
             type="button"
             className={styles.sun}
-            style={{ left: sun.left, top: sun.top, width: sunSize, height: sunSize }}
+            style={{ ...placedAt(sun.left, sun.top), width: sunSize, height: sunSize }}
             aria-label={t('world.sun.name')}
             onClick={() => {
               if (wasDrag()) return;
@@ -225,13 +225,13 @@ export function SolarSystem({ world, onClose }: SolarSystemProps) {
             return (
               <div key={p.id} className={styles.planet}>
                 {p.planet === world.frontier && (
-                  <span className={styles.here} style={{ left: p.left, top: p.top, width: p.radius * 2 + 10, height: p.radius * 2 + 10 }} aria-hidden />
+                  <span className={styles.here} style={{ ...placedAt(p.left, p.top), width: p.radius * 2 + 10, height: p.radius * 2 + 10 }} aria-hidden />
                 )}
                 {/* The whole planet is a button: tap to fly up to it. */}
                 <button
                   type="button"
                   className={styles.touch}
-                  style={{ left: p.left, top: p.top, width: touch, height: touch }}
+                  style={{ ...placedAt(p.left, p.top), width: touch, height: touch }}
                   aria-label={p.name}
                   onClick={() => {
                     if (wasDrag()) return;

@@ -80,3 +80,36 @@ test('nothing on a child\'s screen is blurred from behind', () => {
   const found = styles.flatMap((f) => (!grownUps.test(f.path) && f.path !== 'styles/global.css' && /^\s*(-webkit-)?backdrop-filter\s*:/m.test(f.text) ? [f.path] : []));
   assert.deepEqual(found, []);
 });
+
+test('a keyframe moves only what the compositor moves', () => {
+  // Anything else — `box-shadow`, `filter`, `fill`, `stroke-width`, `height` —
+  // is painted (or laid out) anew on every frame of the loop. The loading dots
+  // change their text, which is what they are.
+  const allowed = new Set(['transform', 'translate', 'rotate', 'scale', 'opacity', 'visibility']);
+  const found = styles.flatMap((f) =>
+    [...f.text.matchAll(/@keyframes\s+([\w-]+)\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}/g)].flatMap(([, name, body]) =>
+      [...body.matchAll(/([a-z-]+)\s*:/g)]
+        .map((m) => m[1])
+        .filter((prop) => !allowed.has(prop) && !(f.path === 'components/ui/SpaceLoader.module.css' && prop === 'content'))
+        .map((prop) => `${f.path}: @keyframes ${name} → ${prop}`),
+    ),
+  );
+  assert.deepEqual(found, []);
+});
+
+test('nothing grows by its width or height, or glides a shadow or a filter', () => {
+  // A transition or a framer-motion move of these lays the page out, or paints it, on every frame.
+  const css = styles.flatMap((f) =>
+    [...f.text.matchAll(/transition(?:-property)?\s*:([^;]*);/g)]
+      .filter(([, value]) => /\b(width|height|top|left|right|bottom|margin|padding|box-shadow|filter)\b/.test(value))
+      // The theme's colour glide where a browser has no view transitions (`.theme-fade`).
+      .filter(() => f.path !== 'styles/global.css')
+      .map(([, value]) => `${f.path}: transition:${value.replace(/\s+/g, ' ')}`),
+  );
+  const motion = code.flatMap((f) =>
+    [...f.text.matchAll(/\b(?:initial|animate|exit|whileTap|whileHover)=\{\{([^}]*)\}\}/g)]
+      .filter(([, value]) => /\b(width|height|top|left|boxShadow|filter)\s*:/.test(value))
+      .map(([, value]) => `${f.path}: ${value.trim()}`),
+  );
+  assert.deepEqual([...css, ...motion], []);
+});

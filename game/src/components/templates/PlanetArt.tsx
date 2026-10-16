@@ -147,7 +147,7 @@ export const hasPlanetArt = (id: string): boolean => id in SURFACE;
  * inside the disc while the light stays put. Saturn wears its rings and Uranus
  * lies on its side, as they do.
  */
-export function PlanetArt({ id, className, style, turned }: { id: string; className?: string; style?: CSSProperties; /** Held at this many turns (any number) instead of spinning by itself — for a planet the child turns by hand. */ turned?: number }) {
+export function PlanetArt({ id, className, style, turned, dim }: { id: string; className?: string; style?: CSSProperties; /** Held at this many turns (any number) instead of spinning by itself — for a planet the child turns by hand. */ turned?: number; /** Greyed: a planet not reached yet. Drawn in, not a `filter` — the surface moves every frame and a filter would be redone each time. */ dim?: boolean }) {
   const clip = useId();
   const turn = TURN[id] ?? 16;
   const held = turned === undefined ? undefined : (((turned % 1) + 1) % 1) * 200 - 200;
@@ -184,6 +184,7 @@ export function PlanetArt({ id, className, style, turned }: { id: string; classN
         <g transform={id === 'uranus' ? 'rotate(82 50 50)' : undefined}>{surface}</g>
       </g>
       <circle cx="50" cy="50" r="50" fill={`url(#${clip}s)`} />
+      {dim && <circle cx="50" cy="50" r="50" fill="#475569" opacity="0.6" />}
       {id === 'saturn' && (
         <g transform="rotate(-18 50 50)" fill="none">
           <path d="M-28 50A78 19 0 0 0 128 50" stroke="#bfa772" strokeWidth="9" />

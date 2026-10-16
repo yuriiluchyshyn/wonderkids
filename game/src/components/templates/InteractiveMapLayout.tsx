@@ -23,7 +23,8 @@ function RegionShape({ region, className, ...rest }: { region: MapRegion; classN
 /**
  * UI_MAP_PUZZLE — an interactive SVG world map. `tap` mode: touch the region
  * the voice names (the ship sails there). `drag` mode: drag the marker/flag
- * into its slot. The helper makes the target softly pulse with colour.
+ * into its slot. The helper makes the target softly pulse with colour (an
+ * overlay whose opacity pulses — the map under it is not painted again).
  */
 export function InteractiveMapLayout({ payload, callbacks, hintActive }: LayoutProps<MapPuzzlePayload>) {
   const t = useT();
@@ -90,6 +91,12 @@ export function InteractiveMapLayout({ payload, callbacks, hintActive }: LayoutP
             </motion.text>
           )}
         </svg>
+        {/* The hint's pulse: the target once more, on a layer of its own (`mapGlow`). */}
+        {hintActive && !solved && target && (
+          <svg viewBox="0 0 200 100" className={styles.mapGlow} aria-hidden>
+            <RegionShape region={target} className="" />
+          </svg>
+        )}
       </div>
 
       {!solved && (

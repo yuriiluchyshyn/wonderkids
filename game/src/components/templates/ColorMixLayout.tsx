@@ -71,6 +71,7 @@ export function ColorMixLayout({ payload, callbacks, hintActive }: LayoutProps<C
             aria-hidden
           >
             {object.emoji}
+            <span className={styles.mixEmojiGrey}>{object.emoji}</span>
           </motion.span>
           {object.label && <span className={styles.faceLabel}>{object.label}</span>}
         </div>

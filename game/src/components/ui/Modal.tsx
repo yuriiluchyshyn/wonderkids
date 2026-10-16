@@ -1,6 +1,6 @@
 import { useT } from '@/core/translator';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { voice } from '@/core/audio/voice';
 import { perf } from '@/core/app/platform';
@@ -26,12 +26,14 @@ interface ModalProps {
  * How a sheet comes and goes. A weaker device slides it without resizing it:
  * a sheet that changes size is drawn anew on every frame of the spring, and on
  * an Android phone the frames that are late show as holes in the sheet
- * (docs/browser-support.md).
+ * (docs/browser-support.md). Nor does it fade on its own there: the dim
+ * around it already fades, and a fading layer inside a fading layer needs one
+ * more full-screen picture in the phone's memory for every frame.
  */
 const SHEET = perf.lite
   ? {
-      from: { y: 28, opacity: 0 },
-      to: { y: 0, opacity: 1 },
+      from: { y: 28 },
+      to: { y: 0 },
       transition: { duration: 0.18, ease: 'easeOut' },
     }
   : {
@@ -59,7 +61,16 @@ function useRestingPage(open: boolean): void {
 /** Spring-animated bottom-safe modal sheet. */
 export function Modal({ open, onClose, title, icon, children, dismissible = true, fit = false }: ModalProps) {
   const t = useT();
-  useRestingPage(open);
+  // The page rests until the sheet is gone — not from the moment it starts to
+  // leave: everything under it waking up while it still fades out made the
+  // whole screen flicker on Android.
+  const [leaving, setLeaving] = useState(false);
+  const [wasOpen, setWasOpen] = useState(open);
+  if (wasOpen !== open) {
+    setWasOpen(open);
+    setLeaving(!open);
+  }
+  useRestingPage(open || leaving);
   // Put away by the child (✕ or a tap beside it): whatever was being read out in it stops.
   const dismiss = () => {
     voice.stop();
@@ -71,7 +82,7 @@ export function Modal({ open, onClose, title, icon, children, dismissible = true
   // decided anew on every frame: parts of the page kept showing through the
   // sheet (docs/browser-support.md).
   return createPortal(
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={() => setLeaving(false)}>
       {open && (
         <motion.div
           className={`${styles.overlay} modal-layer`}

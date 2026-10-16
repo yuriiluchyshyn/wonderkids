@@ -1,10 +1,20 @@
 import { motion } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import { useT } from '@/core/translator';
 import { PlanetArt } from '@/components/templates/PlanetArt';
 import { cn } from '@/core/utils/cn';
 import type { Inhabitant, ItemState, WorldPlanetId } from '@/core/child/world/world';
 import { RESIDENTS_SHOWN, itemPlace, project, residentPlace, type Place } from './places';
 import styles from './Globe.module.css';
+
+/**
+ * Stands a thing at (x, y) of the surrounding box, `shift` being which point of
+ * it is there. A transform, not `left` / `top`: a turning globe and the solar
+ * system move everything on every frame, and a transform needs no layout.
+ */
+export const placedAt = (x: number, y: number, shift = '-50%, -50%'): CSSProperties => ({
+  transform: `translate(${x}px, ${y}px) translate(${shift})`,
+});
 
 /** How big things stand, as a share of the planet's radius — so zooming in makes them bigger too. */
 const BUILDING_SIZE = 0.34;
@@ -52,7 +62,7 @@ export function Globe({ planetId, cx, cy, radius, yaw, pitch, items, residents, 
 
   return (
     <>
-      <PlanetArt id={planetId} turned={yaw / (2 * Math.PI)} className={cn(styles.art, locked && styles.artLocked)} style={{ left: cx, top: cy, width: radius * 3.36 }} />
+      <PlanetArt id={planetId} turned={yaw / (2 * Math.PI)} dim={locked} className={cn(styles.art, locked && styles.artLocked)} style={{ ...placedAt(cx, cy), width: radius * 3.36 }} />
 
       {detail &&
         residents.slice(0, RESIDENTS_SHOWN).map((resident, i) => {
@@ -62,7 +72,7 @@ export function Globe({ planetId, cx, cy, radius, yaw, pitch, items, residents, 
             <span
               key={resident.id}
               className={cn(styles.walker, 'emoji')}
-              style={{ left: p.left, top: p.top, fontSize: radius * RESIDENT_SIZE * p.scale, zIndex: Math.round(p.depth * 100) }}
+              style={{ ...placedAt(p.left, p.top, '-50%, -85%'), fontSize: radius * RESIDENT_SIZE * p.scale, zIndex: Math.round(p.depth * 100) }}
               aria-hidden
             >
               {resident.emoji}
@@ -82,8 +92,7 @@ export function Globe({ planetId, cx, cy, radius, yaw, pitch, items, residents, 
               type="button"
               className={cn(styles.pin, !onTap && styles.inert, !built && styles.ghost, selectedId === item.id && styles.selected, built && level > 1 && styles.upgraded)}
               style={{
-                left: p.left,
-                top: p.top,
+                ...placedAt(p.left, p.top, '-50%, -88%'),
                 fontSize: radius * (item.kind === 'building' ? BUILDING_SIZE : DECOR_SIZE) * p.scale,
                 zIndex: 100 + Math.round(p.depth * 100),
               }}
@@ -105,7 +114,7 @@ export function Globe({ planetId, cx, cy, radius, yaw, pitch, items, residents, 
         })}
 
       {locked && (
-        <span className={cn(styles.lock, 'emoji')} style={{ left: cx, top: cy, fontSize: radius * 0.7 }} aria-hidden>
+        <span className={cn(styles.lock, 'emoji')} style={{ ...placedAt(cx, cy), fontSize: radius * 0.7 }} aria-hidden>
           🔒
         </span>
       )}

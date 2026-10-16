@@ -51,16 +51,29 @@
 
 .speaking {
   background: #fde047;
-  animation: halo 0.9s ease-in-out infinite;
+}
+
+/* The halo of a speaker that is talking: a ring that swells and fades. Drawn
+   as a ring of its own moved by `transform` / `opacity` — an animated
+   `box-shadow` is painted anew on every frame, for as long as the voice goes on. */
+.speaking::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid rgba(250, 204, 21, 0.85);
+  pointer-events: none;
+  animation: halo 0.9s ease-out infinite;
 }
 
 @keyframes halo {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.75);
+  from {
+    transform: scale(1);
+    opacity: 1;
   }
-  50% {
-    box-shadow: 0 0 0 10px rgba(250, 204, 21, 0);
+  to {
+    transform: scale(1.55);
+    opacity: 0;
   }
 }
 
@@ -250,17 +263,31 @@
 }
 
 .pulsing {
-  animation: pulse 1.1s ease-in-out infinite;
+  position: relative;
   border-color: var(--accent);
 }
 
+/* «Here»: a ring that swells out of the thing and fades — `transform` and
+   `opacity` of a ring of its own, never an animated `box-shadow` (painted anew
+   on every frame of a hint that can stay up for a long time). */
+.pulsing::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 3px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  pointer-events: none;
+  animation: pulse 1.1s ease-out infinite;
+}
+
 @keyframes pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
+  from {
+    transform: scale(1);
+    opacity: 1;
   }
-  50% {
-    box-shadow: 0 0 0 12px color-mix(in srgb, var(--accent) 0%, transparent);
+  to {
+    transform: scale(1.1);
+    opacity: 0;
   }
 }
 
@@ -520,16 +547,37 @@
 }
 
 .mapPulse {
-  animation: mapPulse 1.1s ease-in-out infinite;
+  fill: #fde68a;
 }
 
-@keyframes mapPulse {
+/* The hinted region once more, in a picture of its own laid over the map: it
+   is that picture's `opacity` that pulses, so the map itself — every coast of
+   the world — is not painted again on each frame. */
+.mapWrap {
+  position: relative;
+}
+
+.mapGlow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: mapGlow 1.1s ease-in-out infinite;
+}
+
+.mapGlow * {
+  fill: #fb923c;
+  stroke: none;
+}
+
+@keyframes mapGlow {
   0%,
   100% {
-    fill: #fde68a;
+    opacity: 0;
   }
   50% {
-    fill: #fb923c;
+    opacity: 1;
   }
 }
 
@@ -555,12 +603,27 @@
   border-radius: 50%;
   background: #cbd5e1;
   z-index: 2;
-  transition: background 0.3s, box-shadow 0.3s;
+  transition: background 0.3s;
+}
+
+/* Its glow is there all the time and only shows (`opacity`): a `box-shadow`
+   that grows is painted anew on every frame. */
+.scaleLamp::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 14px 4px rgba(34, 197, 94, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .scaleLampOn {
   background: #22c55e;
-  box-shadow: 0 0 14px 4px rgba(34, 197, 94, 0.6);
+}
+
+.scaleLampOn::after {
+  opacity: 1;
 }
 
 /* The post the beam pivots on, with a foot. */
@@ -862,13 +925,8 @@
 .tangramGuide {
   stroke: var(--accent);
   stroke-width: 1.4;
-  animation: dash 0.7s linear infinite;
-}
-
-@keyframes dash {
-  to {
-    stroke-dashoffset: -8.4;
-  }
+  /* It blinks (`opacity`) rather than marching its dashes (`stroke-dashoffset`). */
+  animation: hint-blink 0.9s ease-in-out infinite;
 }
 
 .tangramPiece {
@@ -1228,6 +1286,13 @@
   .popBob {
     animation: none;
   }
+
+  /* The rings and the map's glow stand still where they are seen best. */
+  .speaking::after,
+  .pulsing::after,
+  .mapGlow {
+    animation: none;
+  }
 }
 
 /* ---- UI_DOT_TO_DOT ---- */
@@ -1264,19 +1329,11 @@
 
 .skyDotNext {
   fill: #fb923c;
-  animation: starPulse 1s ease-in-out infinite;
-}
-
-@keyframes starPulse {
-  0%,
-  100% {
-    stroke: rgba(251, 146, 60, 0.9);
-    stroke-width: 0;
-  }
-  50% {
-    stroke: rgba(251, 146, 60, 0.35);
-    stroke-width: 5;
-  }
+  stroke: rgba(251, 146, 60, 0.45);
+  stroke-width: 3;
+  /* Blinks by `opacity`; a stroke that grows and shrinks repaints its sky
+     with heavier work on every frame. */
+  animation: hint-blink 1s ease-in-out infinite;
 }
 
 .skyLabel {
@@ -1334,16 +1391,25 @@
 }
 
 .mixEmoji {
+  position: relative;
   font-size: clamp(3.6rem, 18vw, 5.2rem);
   line-height: 1.05;
-  /* Unpainted: a grey outline of itself. */
-  filter: grayscale(1) brightness(1.25) contrast(0.7);
-  transition: filter 0.9s ease 0.3s;
 }
 
-.mixEmojiOn {
-  filter: none;
+/* Unpainted: a grey copy of itself lies over the coloured one and fades away
+   once the colour is mixed — an `opacity` that runs on the compositor, where a
+   `filter` sliding to `none` was worked out again on every frame. */
+.mixEmojiGrey {
+  position: absolute;
+  inset: 0;
+  filter: grayscale(1) brightness(1.25) contrast(0.7);
+  transition: opacity 0.9s ease 0.3s;
 }
+
+.mixEmojiOn .mixEmojiGrey {
+  opacity: 0;
+}
+
 
 .mixPot {
   position: relative;
@@ -1363,20 +1429,23 @@
 .mixLiquid {
   position: relative;
   width: 100%;
-  height: 18%;
+  /* Always as tall as a full pot, and pushed down out of sight by what is not
+     poured yet: the level rises by `transform`, not by `height`. */
+  height: 86%;
   border-radius: 8px 8px 46% 46% / 8px 8px 60% 60%;
   background: #4b5563;
+  transform: translateY(79%);
   transition:
-    height 0.45s ease,
+    transform 0.45s ease,
     background 0.9s ease;
 }
 
 .mixLiquidOn {
-  height: 62%;
+  transform: translateY(28%);
 }
 
 .mixLiquidDone {
-  height: 86%;
+  transform: none;
 }
 
 .mixBubble {
