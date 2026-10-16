@@ -11,7 +11,7 @@ import {
   type Milestone,
   type PersistableState,
 } from '@/core/child/store/useGameStore';
-import { api } from '@/core/account/api/client';
+import { api, ApiError } from '@/core/account/api/client';
 import { useSyncControl } from '@/core/account/sync/syncControl';
 import { computeAge } from '@/core/utils/age';
 import { subSteps, pathKey } from '@/core/child/progress/path';
@@ -138,6 +138,7 @@ export function ParentDashboard() {
   const hasPassword = useAuthStore((s) => s.user?.provider) === 'auth0';
   const [saving, setSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [timeReset, setTimeReset] = useState(false);
 
   useEffect(() => {
@@ -163,8 +164,10 @@ export function ParentDashboard() {
       setSavedJson(settingsJson(data));
       setJustSaved(true);
       window.setTimeout(() => setJustSaved(false), 2500);
-    } catch {
-      /* keep editing; the parent can retry */
+      setSaveError(null);
+    } catch (err) {
+      // Keep editing; the parent can retry. A refusal of the server (no room for the child in the plan) is told in its own words.
+      setSaveError(err instanceof ApiError ? err.text : null);
     } finally {
       setSaving(false);
     }
@@ -294,6 +297,12 @@ export function ParentDashboard() {
           </button>
         </div>
       </div>
+
+      {saveError && (
+        <p className={styles.hint} role="alert" style={{ color: '#f87171' }}>
+          {saveError}
+        </p>
+      )}
 
       {/* The plan of the account, above the children (paid mode only): what it is, and the way to manage it. */}
       <BillingSection />

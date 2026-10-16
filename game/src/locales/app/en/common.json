@@ -1045,7 +1045,8 @@
     "limit": {
       "basic": "Basic",
       "free": "Your plan: {name}. This plan allows only one child.",
-      "none": "No plan is chosen yet. Until there is one, only one child is allowed."
+      "none": "No plan is chosen yet. Until there is one, only one child is allowed.",
+      "family": "The plan has {places}, and every place is taken. To add another child, first add a place to the plan."
     },
     "manage": {
       "title": "Manage subscription",

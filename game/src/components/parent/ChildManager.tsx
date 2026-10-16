@@ -1,5 +1,6 @@
 import { useLang, useT } from '@/core/translator';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   useGameStore,
   selectNicknameTaken,
@@ -64,13 +65,15 @@ export function ChildManager() {
   const checkSeq = useRef(0);
 
   // With the paid mode on, the Basic plan — or none chosen yet — has room for one child only.
+  // (The server holds the same limit: a save that adds a child beyond it is refused.) Family has as many as the plan has places.
   const { state: plan, catalog, open: openPaywall } = usePlan();
-  const oneChildOnly = plan?.paidMode === true && (plan.access === 'none' || plan.access === 'free');
+  const navigate = useNavigate();
+  const room = !plan?.paidMode ? null : plan.access === 'none' || plan.access === 'free' ? 1 : plan.access === 'family' ? (plan.plan?.children ?? null) : null;
   const basic = catalog ? freePlan(catalog) : undefined;
   const family = catalog ? paidPlan(catalog) : undefined;
 
   const openAdd = () => {
-    if (oneChildOnly && children.length >= 1) {
+    if (room !== null && children.length >= room) {
       setLimited(true);
       return;
     }
@@ -190,9 +193,11 @@ export function ChildManager() {
       {limited && (
         <Dialog title={t('cm.add')} onClose={() => setLimited(false)}>
           <p className={payStyles.dialogText}>
-            {plan?.access === 'free'
-              ? t('billing.limit.free', { name: basic ? planName(basic, lang) : t('billing.limit.basic') })
-              : t('billing.limit.none')}
+            {plan?.access === 'family'
+              ? t('billing.limit.family', { places: t('billing.kids', { count: room ?? 0 }) })
+              : plan?.access === 'free'
+                ? t('billing.limit.free', { name: basic ? planName(basic, lang) : t('billing.limit.basic') })
+                : t('billing.limit.none')}
           </p>
           <div className={payStyles.dialogActions}>
             <button type="button" className={payStyles.secondary} onClick={() => setLimited(false)}>
@@ -203,10 +208,11 @@ export function ChildManager() {
               className={payStyles.primary}
               onClick={() => {
                 setLimited(false);
-                openPaywall({ reason: 'upgrade', step: 'plans', view: null });
+                if (plan?.access === 'family') navigate('/parent/subscription');
+                else openPaywall({ reason: 'upgrade', step: 'plans', view: null });
               }}
             >
-              {plan?.access === 'free' ? t('billing.section.upgrade', { name: family ? planName(family, lang) : '' }) : t('billing.section.choose')}
+              {plan?.access === 'family' ? t('billing.section.manage') : plan?.access === 'free' ? t('billing.section.upgrade', { name: family ? planName(family, lang) : '' }) : t('billing.section.choose')}
             </button>
           </div>
         </Dialog>

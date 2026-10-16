@@ -1095,7 +1095,8 @@
     "limit": {
       "basic": "Podstawowy",
       "free": "Wybrany plan: {name}. W tym planie można mieć tylko jedno dziecko.",
-      "none": "Plan nie został jeszcze wybrany. Dopóki go nie ma, można mieć tylko jedno dziecko."
+      "none": "Plan nie został jeszcze wybrany. Dopóki go nie ma, można mieć tylko jedno dziecko.",
+      "family": "W planie: {places}, a wszystkie miejsca są zajęte. Aby dodać kolejne dziecko, najpierw dodaj miejsce w planie."
     },
     "manage": {
       "title": "Zarządzanie subskrypcją",
