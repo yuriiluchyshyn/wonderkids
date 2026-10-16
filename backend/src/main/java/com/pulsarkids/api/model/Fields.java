@@ -120,6 +120,8 @@ public final class Fields {
   public static final String LANG = "lang";
   public static final String LANGS = "langs";
   public static final String LANG_RULES = "langRules";
+  public static final String LAST_PLAYED_AT = "lastPlayedAt";
+  public static final String LAST_SEEN_AT = "lastSeenAt";
   public static final String LAST_SESSION_ENDED_AT = "lastSessionEndedAt";
   public static final String LAST_VISIT_AT = "lastVisitAt";
   public static final String LETTERS = "letters";
@@ -147,6 +149,7 @@ public final class Fields {
   public static final String NOTE = "note";
   public static final String O = "o";
   public static final String OK = "ok";
+  public static final String ONLINE = "online";
   public static final String P = "p";
   public static final String PAID = "paid";
   public static final String PAID_MODE = "paidMode";
@@ -159,6 +162,7 @@ public final class Fields {
   public static final String PLANS = "plans";
   public static final String PLAYED_DAY = "playedDay";
   public static final String PLAYED_TODAY_MINUTES = "playedTodayMinutes";
+  public static final String PLAYING = "playing";
   public static final String PRICES = "prices";
   public static final String PROFILE = "profile";
   public static final String PROGRESS = "progress";

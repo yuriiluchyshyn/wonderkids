@@ -85,6 +85,8 @@ CREATE TABLE IF NOT EXISTS wk_screen_time (
 -- Server-authoritative play time (PRD v4.0 §2.2).
 ALTER TABLE wk_screen_time ADD COLUMN IF NOT EXISTS session_elapsed_ms BIGINT NOT NULL DEFAULT 0;
 ALTER TABLE wk_screen_time ADD COLUMN IF NOT EXISTS last_heartbeat_at BIGINT;
+-- When the account's game or cabinet last loaded or saved its state — what the admin page calls «online» (`Activity`).
+ALTER TABLE wk_parents ADD COLUMN IF NOT EXISTS last_seen_at TIMESTAMPTZ;
 -- One account per MAILBOX: email_key is the canonical form of the address
 -- (see emailKey in email.js — Gmail dots / +tags / googlemail collapse).
 -- Backfill is collision-proof: if two old rows share a mailbox, only the

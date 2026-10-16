@@ -41,4 +41,7 @@ public class Parent {
   private String signupMedium;
   private String signupCampaign;
   private String signupLink;
+
+  /** When the account's game or cabinet last loaded or saved its state (`AccountService.markSeen`). */
+  private Instant lastSeenAt;
 }

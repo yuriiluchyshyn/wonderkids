@@ -76,6 +76,23 @@ class RulesTest {
     assertEquals(List.of("uk"), view.regions().get(1).langs());
   }
 
+  // ---- who is here now ---------------------------------------------------------
+
+  @Test
+  void aChildPlaysWhileHeartbeatsComeAndAnAccountIsOnlineWhileItIsSeen() {
+    long now = 10_000_000L;
+    assertTrue(Activity.isPlaying(now - 30_000, now));
+    assertFalse(Activity.isPlaying(now - ScreenTime.HEARTBEAT_MAX_GAP_MS - 1, now));
+    assertFalse(Activity.isPlaying(null, now));
+    assertEquals(500L, Activity.lastPlayedAt(500L, 200L));
+    assertEquals(700L, Activity.lastPlayedAt(500L, 700L));
+    assertEquals(200L, Activity.lastPlayedAt(null, 200L));
+    assertNull(Activity.lastPlayedAt(null, null));
+    assertTrue(Activity.isOnline(Instant.ofEpochMilli(now - 60_000), now));
+    assertFalse(Activity.isOnline(Instant.ofEpochMilli(now - Activity.ONLINE_MS - 1), now));
+    assertFalse(Activity.isOnline(null, now));
+  }
+
   // ---- mailboxes -----------------------------------------------------------
 
   @Test

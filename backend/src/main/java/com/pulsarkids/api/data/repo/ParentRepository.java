@@ -47,6 +47,11 @@ public interface ParentRepository extends JpaRepository<Parent, Integer> {
   @Query("UPDATE Parent p SET p.ttsKeyId = :keyId WHERE p.id IN :ids")
   int assignKey(@Param("keyId") Integer keyId, @Param("ids") Collection<Integer> ids);
 
+  /** Note that the account was just seen — at most once per `since`, so a save every few seconds is not a write every few seconds. */
+  @Modifying
+  @Query("UPDATE Parent p SET p.lastSeenAt = :now WHERE p.id = :id AND (p.lastSeenAt IS NULL OR p.lastSeenAt < :since)")
+  int markSeen(@Param("id") Integer id, @Param("now") java.time.Instant now, @Param("since") java.time.Instant since);
+
   /** Accounts each link has brought: [signup_link, count]. */
   @Query("SELECT p.signupLink, COUNT(p) FROM Parent p WHERE p.signupLink IS NOT NULL GROUP BY p.signupLink")
   List<Object[]> countBySignupLink();

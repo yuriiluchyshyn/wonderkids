@@ -2,6 +2,7 @@ package com.pulsarkids.api.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.pulsarkids.api.core.Activity;
 import com.pulsarkids.api.core.Emails;
 import com.pulsarkids.api.core.Json;
 import com.pulsarkids.api.core.ScreenTime;
@@ -460,9 +461,17 @@ public class AccountService {
   // Admin
   // ---------------------------------------------------------------------------
 
-  /** Every account with its children and their progress, newest first. */
+  /** The account was just seen — its game or cabinet loaded or saved its state (`Activity`). */
+  @Transactional
+  public void markSeen(int parentId) {
+    Instant now = Instant.now();
+    parents.markSeen(parentId, now, now.minusMillis(Activity.SEEN_EVERY_MS));
+  }
+
+  /** Every account with its children, their progress and who is here now, newest first. */
   @Transactional(readOnly = true)
   public List<Map<String, Object>> listAccounts() {
+    long now = System.currentTimeMillis();
     Map<String, ChildStats> stats = new HashMap<>();
     for (ChildStats s : statsRepo.findAll()) stats.put(s.getChildId(), s);
     Map<String, ScreenTimeRow> screen = new HashMap<>();
@@ -491,11 +500,15 @@ public class AccountService {
           Fields.PLAYED_TODAY_MINUTES, Json.tidy(sc.getMinutesUsedToday() + sc.getSessionElapsedMs() / 60_000.0),
           Fields.PLAYED_DAY, sc.getDayKey() == null ? "" : sc.getDayKey(),
           Fields.LAST_SESSION_ENDED_AT, sc.getLastSessionEndedAt(),
+          Fields.LAST_PLAYED_AT, Activity.lastPlayedAt(sc.getLastHeartbeatAt(), sc.getLastSessionEndedAt()),
+          Fields.PLAYING, Activity.isPlaying(sc.getLastHeartbeatAt(), now),
           Fields.PROGRESS, progressByChild.getOrDefault(c.getId(), Map.of())));
     }
 
     List<Map<String, Object>> accounts = new ArrayList<>();
     for (Parent p : parents.findAllByOrderByCreatedAtDesc()) {
+      List<Map<String, Object>> kids = childrenByParent.getOrDefault(p.getId(), List.of());
+      boolean playing = kids.stream().anyMatch((kid) -> Boolean.TRUE.equals(kid.get(Fields.PLAYING)));
       accounts.add(Json.map(
           Fields.ID, p.getId(),
           Fields.EMAIL, p.getEmail(),
@@ -503,13 +516,16 @@ public class AccountService {
           // NULL key = an older row that shares its mailbox with another account.
           Fields.DUPLICATE_MAILBOX, p.getEmailKey() == null,
           Fields.DISABLED, p.isDisabled(),
+          Fields.LAST_SEEN_AT, Json.iso(p.getLastSeenAt()),
+          Fields.ONLINE, playing || Activity.isOnline(p.getLastSeenAt(), now),
+          Fields.PLAYING, playing,
           Fields.SPEECH_OFF, p.isTtsOff(),
           Fields.SPEECH_KEY_ID, p.getTtsKeyId(),
           // The channel that brought the account; null for one registered without a label.
           Fields.SIGNUP, p.getSignupSource() == null || p.getSignupSource().isEmpty()
               ? null
               : Json.map(Fields.SOURCE, p.getSignupSource(), Fields.MEDIUM, p.getSignupMedium(), Fields.CAMPAIGN, p.getSignupCampaign(), Fields.LINK, p.getSignupLink()),
-          Fields.CHILDREN, childrenByParent.getOrDefault(p.getId(), List.of())));
+          Fields.CHILDREN, kids));
     }
     return accounts;
   }

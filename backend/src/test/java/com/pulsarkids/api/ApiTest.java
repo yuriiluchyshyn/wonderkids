@@ -383,6 +383,11 @@ class ApiTest {
     assertEquals(json("{'source':'instagram','medium':'social','campaign':null,'link':'insta-bio'}"), mama.get("signup"));
     assertFalse(mama.get("duplicateMailbox").asBoolean());
     assertTrue(mama.get("createdAt").asText().endsWith("Z"));
+    // Mama's game loaded and saved its state earlier: she is online, and her last visit is known; no child plays a level now.
+    assertTrue(mama.get("online").asBoolean());
+    assertTrue(mama.get("lastSeenAt").asText().endsWith("Z"));
+    assertFalse(mama.get("playing").asBoolean());
+    assertFalse(mama.at("/children/0/playing").asBoolean());
     assertEquals("marko_speed", mama.at("/children/0/nickname").asText());
     assertEquals(json("{'math:add':5}"), mama.at("/children/0/progress"));
     assertTrue(mama.at("/children/0/birthYear").isNull());

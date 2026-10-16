@@ -42,6 +42,7 @@ public class StateController extends ApiController {
     Auth.User user = Requests.requireUser(request);
     schema.ensure();
     accounts.requireEnabled((int) user.id());
+    accounts.markSeen((int) user.id());
     // `features` tells the client what the account has switched on — never
     // the credentials themselves — and whether the paid mode is on (off: the game shows nothing of paying).
     return ok(Fields.STATE, accounts.getState((int) user.id(), ScreenTime.clampTzOffset(Json.number(tzOffsetMin))),
@@ -55,6 +56,7 @@ public class StateController extends ApiController {
     if (!state.isObject()) throw new HttpError(ApiError.INVALID_STATE);
     schema.ensure();
     accounts.requireEnabled((int) user.id());
+    accounts.markSeen((int) user.id());
     return ok(Fields.OK, true, Fields.UPDATED_AT, accounts.saveState((int) user.id(), state, messages.lang()));
   }
 
