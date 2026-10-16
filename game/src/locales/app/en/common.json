@@ -1030,8 +1030,7 @@
       "giftCode": "Code: {code}",
       "upgrade": "Switch to {name}",
       "choose": "Choose a plan",
-      "children": "Kids in the plan",
-      "apply": "Apply",
+      "addChild": "Add a child",
       "period": "Billing: {period}",
       "toYearly": "Switch to yearly billing",
       "toMonthly": "Switch to monthly billing",
@@ -1040,7 +1039,34 @@
       "portal": "Card and invoices",
       "saved": "✓ Changed",
       "confirmToFree": "Switch to {name} at the end of the paid period ({date})? The kids’ progress is kept.",
-      "confirmChange": "Change the subscription? Stripe adjusts the amount for the days left."
+      "confirmPeriod": "Change how often you pay? Stripe counts the unused days into your next invoice."
+    },
+    "dialog": {
+      "cancel": "Cancel",
+      "ok": "Confirm"
+    },
+    "add": {
+      "title": "Add a child",
+      "pickHint": "How many kids do you want to add to the plan?",
+      "now": "In the plan now: {kids}",
+      "after": "After: {kids}",
+      "each": "Each additional kid: +{price} {per}",
+      "submit": "Add",
+      "reviewTitle": "Confirm the extra payment",
+      "changeLine": "Kids in the plan",
+      "due": "Due now",
+      "dueNothing": "Nothing is charged today",
+      "prorated": "This is the amount for the days left until {date}. After that the extra kids are part of every charge.",
+      "trialNote": "Your trial is on. The extra kids are included in the first charge, on {date}.",
+      "back": "Back",
+      "confirm": "Confirm and pay {amount}",
+      "confirmTrial": "Confirm",
+      "paying": "Charging…",
+      "loading": "Working out the amount…",
+      "doneTitle": "Done ✓",
+      "doneText": "Your plan now has {kids}. {amount} was charged. A confirmation was sent to your email.",
+      "doneTrial": "Your plan now has {kids}. Nothing was charged today. A confirmation was sent to your email.",
+      "close": "Close"
     }
   }
 }

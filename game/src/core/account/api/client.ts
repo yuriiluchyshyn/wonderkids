@@ -660,6 +660,21 @@ export interface PlanState {
   gift: { source: 'admin' | 'promo' | null; code: string | null } | null;
 }
 
+/** `POST /api/billing/children/preview`: what adding children costs now. Amounts are in minor units. */
+export interface ChildrenQuote {
+  add: number;
+  children: number;
+  childrenAfter: number;
+  /** Due now: the extra children's price for the days left of the period (0 in a trial). */
+  amount: number;
+  currency: string;
+  /** The moment the days were counted from; sent back with the approval so the charge is what was shown. */
+  prorationDate: number;
+  trialing: boolean;
+  /** When the next regular charge is (the end of the trial, or of the period). */
+  nextCharge: string | null;
+}
+
 /** What beginning a payment answers: Stripe's session, or — for a code free for ever — a gift and nothing to pay. */
 export interface CheckoutBegun {
   sessionId?: string;
@@ -684,6 +699,14 @@ export const billingApi = {
   },
   change(token: string, body: { children?: number; period?: Period; cancel?: boolean }) {
     return request<PlanState>('/api/billing/subscription', { method: 'PUT', token, body });
+  },
+  /** What adding `add` children costs now (nothing is charged). */
+  previewChildren(token: string, add: number) {
+    return request<ChildrenQuote>('/api/billing/children/preview', { method: 'POST', token, body: { add } });
+  },
+  /** The parent approved the amount shown: Stripe charges it and the children are added. */
+  addChildren(token: string, body: { add: number; prorationDate: number; amount: number }) {
+    return request<PlanState & { charged: { amount: number; currency: string } }>('/api/billing/children', { method: 'POST', token, body });
   },
   portal(token: string) {
     return request<{ url: string }>('/api/billing/portal', { method: 'POST', token });

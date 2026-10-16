@@ -1080,8 +1080,7 @@
       "giftCode": "Kod: {code}",
       "upgrade": "Przejdź na {name}",
       "choose": "Wybierz plan",
-      "children": "Dzieci w planie",
-      "apply": "Zastosuj",
+      "addChild": "Dodaj dziecko",
       "period": "Płatność: {period}",
       "toYearly": "Przejdź na płatność roczną",
       "toMonthly": "Przejdź na płatność miesięczną",
@@ -1090,7 +1089,34 @@
       "portal": "Karta i faktury",
       "saved": "✓ Zmieniono",
       "confirmToFree": "Przejść na {name} na koniec opłaconego okresu ({date})? Postępy dzieci zostaną zachowane.",
-      "confirmChange": "Zmienić subskrypcję? Stripe przeliczy kwotę proporcjonalnie do pozostałych dni."
+      "confirmPeriod": "Zmienić częstotliwość płatności? Niewykorzystane dni Stripe uwzględni w następnej fakturze."
+    },
+    "dialog": {
+      "cancel": "Anuluj",
+      "ok": "Potwierdź"
+    },
+    "add": {
+      "title": "Dodaj dziecko",
+      "pickHint": "Ile dzieci dodać do planu?",
+      "now": "Teraz w planie: {kids}",
+      "after": "Po zmianie: {kids}",
+      "each": "Każde dodatkowe dziecko: +{price} {per}",
+      "submit": "Dodaj",
+      "reviewTitle": "Potwierdź dopłatę",
+      "changeLine": "Dzieci w planie",
+      "due": "Do zapłaty teraz",
+      "dueNothing": "Dziś nic nie jest pobierane",
+      "prorated": "To kwota za dni pozostałe do {date}. Potem dodatkowe dzieci wchodzą w każdą kolejną płatność.",
+      "trialNote": "Trwa okres próbny. Dodatkowe dzieci wliczymy w pierwszą płatność, {date}.",
+      "back": "Wstecz",
+      "confirm": "Potwierdź i zapłać {amount}",
+      "confirmTrial": "Potwierdź",
+      "paying": "Pobieram…",
+      "loading": "Liczę kwotę…",
+      "doneTitle": "Gotowe ✓",
+      "doneText": "W planie jest teraz {kids}. Pobrano {amount}. Potwierdzenie wysłaliśmy na Twój e-mail.",
+      "doneTrial": "W planie jest teraz {kids}. Dziś nic nie pobrano. Potwierdzenie wysłaliśmy na Twój e-mail.",
+      "close": "Zamknij"
     }
   }
 }

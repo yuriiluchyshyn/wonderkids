@@ -21,6 +21,81 @@
   overflow: hidden;
 }
 
+/* ---- small windows: the cabinet's confirmations and the adding of children ---- */
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(100%, 440px);
+  max-height: calc(100dvh - 16px);
+  padding: 22px;
+  overflow-y: auto;
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--surface-ink);
+  box-shadow: var(--shadow-lg);
+}
+
+.dialogTitle {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.dialogText {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+}
+
+.dialogActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.dialogActions .primary,
+.dialogActions .secondary {
+  margin-top: 0;
+}
+
+.dialogLines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(127, 127, 127, 0.14);
+}
+
+.dialogLines div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dialogLines dt {
+  color: var(--text-soft);
+}
+
+.dialogLines dd {
+  margin: 0;
+}
+
+.dialogDue dt {
+  color: inherit;
+  font-weight: 700;
+}
+
+.dialogDue dd {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
 .head {
   display: flex;
   align-items: center;

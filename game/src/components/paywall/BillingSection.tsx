@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import { MAX_CHILDREN, childrenIncluded, freePlan, paidPlan, planName, type Period } from '@pulsar/plans';
+import { MAX_CHILDREN, freePlan, paidPlan, planName, type Period } from '@pulsar/plans';
 import { ApiError, billingApi } from '@/core/account/api/client';
 import { useAuthStore } from '@/core/account/auth/useAuthStore';
 import { usePlan } from '@/core/account/billing/usePlan';
 import { useLang, useT } from '@/core/translator';
 import pStyles from '@/components/parent/Parent.module.css';
+import { AddChildrenDialog } from './AddChildrenDialog';
+import { Dialog } from './Dialog';
 import styles from './Paywall.module.css';
 
 /**
  * «Підписка» in the parents' cabinet: the account's plan and what can be done
- * with it — choose a plan, move up to the paid one (the paywall), change how
- * many children or the period (Stripe prorates), go to the free plan at the
- * end of the paid period or keep the paid one after all, and Stripe's portal
+ * with it — choose a plan, move up to the paid one (the paywall), add children
+ * (a window to choose how many, then one with the amount due now, which Stripe
+ * charges once the parent approves), change the period, go to the free plan at
+ * the end of the paid period or keep the paid one after all, and Stripe's portal
  * for the card and the invoices. A gift is only shown. Nothing in the free mode.
  */
 export function BillingSection() {
@@ -19,15 +22,14 @@ export function BillingSection() {
   const lang = useLang();
   const token = useAuthStore((s) => s.token);
   const { state, catalog, load, setState, open } = usePlan();
-  const [children, setChildren] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
+  const [adding, setAdding] = useState(false);
+  const [asked, setAsked] = useState<{ text: string; run: () => Promise<void> } | null>(null);
 
   useEffect(() => {
     if (token && !state) void load(token);
   }, [token, state, load]);
-
-  useEffect(() => setChildren(state?.plan?.children ?? null), [state?.plan?.children]);
 
   if (!token || !state?.paidMode) return null;
   const paid = catalog ? paidPlan(catalog) : undefined;
@@ -37,8 +39,7 @@ export function BillingSection() {
   const date = (iso: string | null | undefined) => (iso ? new Intl.DateTimeFormat(lang, { dateStyle: 'long' }).format(new Date(iso)) : '');
   const plan = state.plan;
 
-  const act = async (work: () => Promise<void>, confirmText?: string) => {
-    if (confirmText && !window.confirm(confirmText)) return;
+  const act = async (work: () => Promise<void>) => {
     setBusy(true);
     setNote(null);
     try {
@@ -51,14 +52,13 @@ export function BillingSection() {
       setBusy(false);
     }
   };
-  const change = (body: { children?: number; period?: Period; cancel?: boolean }, confirmText?: string) =>
-    act(async () => setState(await billingApi.change(token, body)), confirmText);
+  const change = (body: { period?: Period; cancel?: boolean }) => act(async () => setState(await billingApi.change(token, body)));
+  // A question in the cabinet's own window (not the browser's): the work is done once the parent says yes.
+  const ask = (text: string, body: { period?: Period; cancel?: boolean }) => setAsked({ text, run: () => change(body) });
   const portal = () =>
     act(async () => {
       window.location.assign((await billingApi.portal(token)).url);
     });
-
-  const least = catalog ? childrenIncluded(catalog) : 1;
 
   return (
     <section className={pStyles.section}>
@@ -93,7 +93,7 @@ export function BillingSection() {
         <div className={styles.priceBlock} style={{ gap: 10 }}>
           <p>
             <b>{t('billing.section.current', { name: paidName })}</b>
-            {children ? ` · ${t('billing.kids', { count: plan.children ?? children })}` : ''}
+            {plan.children ? ` · ${t('billing.kids', { count: plan.children })}` : ''}
           </p>
           {plan.status === 'trialing' && plan.trialEnd && <p className={pStyles.hint}>{t('billing.section.trial', { date: date(plan.trialEnd) })}</p>}
           {plan.status === 'active' && !plan.cancelAtPeriodEnd && plan.periodEnd && <p className={pStyles.hint}>{t('billing.section.next', { date: date(plan.periodEnd) })}</p>}
@@ -105,29 +105,14 @@ export function BillingSection() {
           )}
           <p className={pStyles.hint}>{t('billing.section.period', { period: t(plan.period === 'year' ? 'billing.paywall.yearly' : 'billing.paywall.monthly') })}</p>
 
-          {!plan.cancelAtPeriodEnd && children !== null && (
-            <div className={styles.childrenPick}>
-              <span>{t('billing.section.children')}</span>
-              <div className={styles.stepper}>
-                <button type="button" aria-label={t('billing.paywall.fewer')} disabled={busy || children <= least} onClick={() => setChildren(children - 1)}>
-                  −
-                </button>
-                <output aria-live="polite">{children}</output>
-                <button type="button" aria-label={t('billing.paywall.more')} disabled={busy || children >= MAX_CHILDREN} onClick={() => setChildren(children + 1)}>
-                  +
-                </button>
-              </div>
-            </div>
-          )}
-          {children !== null && children !== plan.children && (
-            <button type="button" className={styles.primary} disabled={busy} onClick={() => void change({ children }, t('billing.section.confirmChange'))}>
-              {t('billing.section.apply')}
-            </button>
-          )}
-
           <div className={pStyles.chipRow}>
+            {!plan.cancelAtPeriodEnd && (plan.children ?? 0) < MAX_CHILDREN && (
+              <button type="button" className={styles.primary} disabled={busy} onClick={() => setAdding(true)}>
+                <span className="emoji" aria-hidden>➕</span> {t('billing.section.addChild')}
+              </button>
+            )}
             {!plan.cancelAtPeriodEnd && (
-              <button type="button" className={styles.secondary} disabled={busy} onClick={() => void change({ period: plan.period === 'year' ? 'month' : 'year' }, t('billing.section.confirmChange'))}>
+              <button type="button" className={styles.secondary} disabled={busy} onClick={() => ask(t('billing.section.confirmPeriod'), { period: plan.period === 'year' ? 'month' : 'year' })}>
                 {t(plan.period === 'year' ? 'billing.section.toMonthly' : 'billing.section.toYearly')}
               </button>
             )}
@@ -136,7 +121,7 @@ export function BillingSection() {
                 {t('billing.section.resume')}
               </button>
             ) : (
-              <button type="button" className={styles.secondary} disabled={busy} onClick={() => void change({ cancel: true }, t('billing.section.confirmToFree', { name: freeName, date: date(plan.periodEnd ?? plan.trialEnd) }))}>
+              <button type="button" className={styles.secondary} disabled={busy} onClick={() => ask(t('billing.section.confirmToFree', { name: freeName, date: date(plan.periodEnd ?? plan.trialEnd) }), { cancel: true })}>
                 {t('billing.section.toFree', { name: freeName })}
               </button>
             )}
@@ -148,6 +133,39 @@ export function BillingSection() {
       )}
 
       {note && <p className={note.ok ? pStyles.hint : styles.error}>{note.text}</p>}
+
+      {adding && plan && (
+        <AddChildrenDialog
+          token={token}
+          current={plan.children ?? 1}
+          period={plan.period ?? 'year'}
+          region={plan.region}
+          catalog={catalog}
+          onClose={() => setAdding(false)}
+          onDone={(next) => setState(next)}
+        />
+      )}
+      {asked && (
+        <Dialog title={t('billing.section.title')} onClose={() => setAsked(null)}>
+          <p className={styles.dialogText}>{asked.text}</p>
+          <div className={styles.dialogActions}>
+            <button type="button" className={styles.secondary} onClick={() => setAsked(null)}>
+              {t('billing.dialog.cancel')}
+            </button>
+            <button
+              type="button"
+              className={styles.primary}
+              onClick={() => {
+                const { run } = asked;
+                setAsked(null);
+                void run();
+              }}
+            >
+              {t('billing.dialog.ok')}
+            </button>
+          </div>
+        </Dialog>
+      )}
     </section>
   );
 }
