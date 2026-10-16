@@ -178,6 +178,32 @@ public class SubscriptionService {
     };
   }
 
+  /**
+   * Whether there are more child profiles than the plan has room for — after a
+   * switch to Basic, a subscription that ended, a change the owner made. Then
+   * the children's accounts are paused until the parents add places in a plan or
+   * remove the children that do not fit.
+   */
+  public boolean overLimit(int parentId) {
+    Integer limit = allowanceOf(parentId).children();
+    return limit != null && tx.execute((status) -> childProfiles.countByParentId(parentId)) > limit;
+  }
+
+  /**
+   * What the clients are told of the plan's room, next to the save: how many children it has room for (null — any),
+   * how many there are, whether the children are paused for it, and whether the child's time runs whenever the
+   * child's account is open (Basic) and not only while the child plays (Family).
+   */
+  public Map<String, Object> limitsOf(int parentId) {
+    Allowance allowance = allowanceOf(parentId);
+    long profiles = tx.execute((status) -> childProfiles.countByParentId(parentId));
+    return Json.map(
+        Fields.CHILDREN, allowance.children(),
+        Fields.PROFILES, profiles,
+        Fields.BLOCKED, allowance.children() != null && profiles > allowance.children(),
+        Fields.OPEN_CLOCK, !allowance.screenTime());
+  }
+
   /** A day's play on the free plan: Stripe's `daily_minutes`, else the default. */
   private int freeDailyMinutes() {
     if (!billing.configured()) return Defaults.FREE_DAILY_MINUTES;

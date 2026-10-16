@@ -454,6 +454,24 @@ class ApiTest {
     assertEquals(15, rules.at("/settings/timeControl/sessionDurationMinutes").asInt());
     assertEquals(0, rules.get("milestones").size(), "goals are a plan's perk");
     assertEquals("plan_required", asParent("POST", "/api/v1/session/reset", Map.of("child_profile_id", "kid-1", "tz_offset_min", 0)).text("error"));
+    // More children than the plan has room for (two saved while nothing limited them, then the paid mode came on): the children
+    // are paused — their saves and their play time are refused — and the state says why, until the parents remove the extra one.
+    asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", false));
+    String two = """
+        {'state': {'activeChildId': 'kid-1', 'children': [
+          { 'id': 'kid-1', 'profile': { 'name': 'Марко', 'nickname': 'marko_speed', 'pin': '1234' } },
+          { 'id': 'kid-extra', 'profile': { 'name': 'Зайва' } } ] } }""";
+    assertEquals(200, asParent("PUT", "/api/state", json(two)).status());
+    asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", true));
+    JsonNode paused = asParent("GET", "/api/state", null).body().get("limits");
+    assertTrue(paused.get("blocked").asBoolean());
+    assertEquals(2, paused.get("profiles").asInt());
+    assertEquals(1, paused.get("children").asInt());
+    assertTrue(paused.get("openClock").asBoolean(), "on the free plan the time runs while the child's account is open");
+    assertEquals("children_blocked", call("PUT", "/api/state", json("{'state':{'children':[]}}"), "Authorization", "Bearer " + childToken).text("error"));
+    assertTrue(call("POST", "/api/v1/session/start", Map.of("tz_offset_min", 0), "Authorization", "Bearer " + childToken).body().get("blocked").asBoolean());
+    assertEquals(200, asParent("PUT", "/api/state", json("{'state':{'activeChildId':'kid-1','children':[{'id':'kid-1','profile':{'name':'Марко','nickname':'marko_speed','pin':'1234'}}]}}")).status(), "removing is never refused");
+    assertFalse(asParent("GET", "/api/state", null).body().at("/limits/blocked").asBoolean());
     asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", false));
     // The paid mode off: nothing of it holds, and the save goes back as it was.
     asParent("PUT", "/api/state", json("""

@@ -20,7 +20,8 @@ public class ScreenTimeService {
   private final ScreenTimeRepository screenRepo;
   private final SubscriptionService subscriptions;
 
-  public record Tracked(ScreenTime.State state, ScreenTime.Limits limits) {}
+  /** `blocked` — the children are paused (more of them than the plan has room for): nothing was counted. */
+  public record Tracked(ScreenTime.State state, ScreenTime.Limits limits, boolean blocked) {}
 
   /**
    * Apply a screen-time transition for one child inside a row-locked
@@ -33,19 +34,21 @@ public class ScreenTimeService {
     if (!children.existsByIdAndParentId(childId, userId)) return null;
     ChildSettings s = settingsRepo.findById(childId).orElseGet(ChildSettings::new);
     // The parents' own limits — or, where their plan does not let them set any, the plan's.
-    ScreenTime.Limits limits = subscriptions.allowanceOf(userId).limits(new ScreenTime.Limits(s.getSessionDurationMin(), s.getCooldownMin(), s.getMaxDailyMin()));
+    SubscriptionService.Allowance allowance = subscriptions.allowanceOf(userId);
+    ScreenTime.Limits limits = allowance.limits(new ScreenTime.Limits(s.getSessionDurationMin(), s.getCooldownMin(), s.getMaxDailyMin()));
 
     screenRepo.insertIfAbsent(childId);
     ScreenTimeRow row = screenRepo.lock(childId).orElseThrow();
-    ScreenTime.State state = transition.apply(
-        new ScreenTime.State(
-            row.getDayKey() == null ? "" : row.getDayKey(),
-            row.getMinutesUsedToday(),
-            row.getSessionElapsedMs(),
-            row.getCooldownUntil(),
-            row.getLastSessionEndedAt(),
-            row.getLastHeartbeatAt()),
-        limits);
+    ScreenTime.State before = new ScreenTime.State(
+        row.getDayKey() == null ? "" : row.getDayKey(),
+        row.getMinutesUsedToday(),
+        row.getSessionElapsedMs(),
+        row.getCooldownUntil(),
+        row.getLastSessionEndedAt(),
+        row.getLastHeartbeatAt());
+    // More children than the plan has room for: they are paused, and no time is counted while they are.
+    if (subscriptions.overLimit(userId)) return new Tracked(before, limits, true);
+    ScreenTime.State state = transition.apply(before, limits);
 
     row.setDayKey(state.dayKey());
     row.setMinutesUsedToday(state.minutesUsedToday());
@@ -54,6 +57,6 @@ public class ScreenTimeService {
     row.setLastSessionEndedAt(state.lastSessionEndedAt());
     row.setLastHeartbeatAt(state.lastHeartbeatAt());
     row.setSessionStartedAt(null);
-    return new Tracked(state, limits);
+    return new Tracked(state, limits, false);
   }
 }

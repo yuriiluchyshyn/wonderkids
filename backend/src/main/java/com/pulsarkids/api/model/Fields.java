@@ -19,6 +19,10 @@ public final class Fields {
   public static final String ACCOUNT_IDS = "accountIds";
   public static final String ACTIVE_CHILD_ID = "activeChildId";
   public static final String ADD = "add";
+  public static final String BLOCKED = "blocked";
+  public static final String LIMITS = "limits";
+  public static final String OPEN_CLOCK = "openClock";
+  public static final String PROFILES = "profiles";
   public static final String LIMIT = "limit";
   public static final String AMOUNT = "amount";
   public static final String ARTIFACTS = "artifacts";

@@ -10,6 +10,7 @@ import com.pulsarkids.api.service.AccountService;
 import com.pulsarkids.api.service.MarketingService;
 import com.pulsarkids.api.service.SchemaService;
 import com.pulsarkids.api.service.SpeechService;
+import com.pulsarkids.api.service.SubscriptionService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ public class StateController extends ApiController {
   private final SpeechService speech;
   private final MarketingService marketing;
   private final SchemaService schema;
+  private final SubscriptionService subscriptions;
 
   @GetMapping
   public ResponseEntity<Object> load(HttpServletRequest request, @RequestParam(name = Fields.TZ_OFFSET_MIN, required = false) String tzOffsetMin) {
@@ -46,7 +48,9 @@ public class StateController extends ApiController {
     // `features` tells the client what the account has switched on — never
     // the credentials themselves — and whether the paid mode is on (off: the game shows nothing of paying).
     return ok(Fields.STATE, accounts.getState((int) user.id(), ScreenTime.clampTzOffset(Json.number(tzOffsetMin))),
-        Fields.FEATURES, Json.map(Fields.CLOUD_TTS, speech.configOf((int) user.id()).enabled(), Fields.PAID, marketing.paidModeOn()));
+        Fields.FEATURES, Json.map(Fields.CLOUD_TTS, speech.configOf((int) user.id()).enabled(), Fields.PAID, marketing.paidModeOn()),
+        // The plan's room for children, and whether the children are paused for want of it.
+        Fields.LIMITS, subscriptions.limitsOf((int) user.id()));
   }
 
   @PutMapping
@@ -56,6 +60,8 @@ public class StateController extends ApiController {
     if (!state.isObject()) throw new HttpError(ApiError.INVALID_STATE);
     schema.ensure();
     accounts.requireEnabled((int) user.id());
+    // A child's session saves nothing while the children are paused (more of them than the plan has room for).
+    if (user.childId() != null && subscriptions.overLimit((int) user.id())) throw new HttpError(ApiError.CHILDREN_BLOCKED);
     accounts.markSeen((int) user.id());
     return ok(Fields.OK, true, Fields.UPDATED_AT, accounts.saveState((int) user.id(), state, messages.lang()));
   }

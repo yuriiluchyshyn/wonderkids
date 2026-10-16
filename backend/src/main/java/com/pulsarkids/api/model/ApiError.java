@@ -61,6 +61,7 @@ public enum ApiError {
   CHILDREN_IN_USE(409, "children_in_use"),
   CHILD_LIMIT(403, "child_limit"),
   PLAN_REQUIRED(403, "plan_required"),
+  CHILDREN_BLOCKED(403, "children_blocked"),
   INVALID_PARENT_ID(400, "invalid_parent_id"),
   INVALID_SPEECH_ENABLED(400, "invalid_speech_enabled"),
   INVALID_ENABLED(400, "invalid_enabled"),

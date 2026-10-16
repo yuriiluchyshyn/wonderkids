@@ -84,6 +84,8 @@ public class SessionController extends ApiController {
 
     Map<String, Object> view = Json.map(Fields.CHILD_PROFILE_ID, childId);
     view.putAll(ScreenTime.describe(result.state(), result.limits(), now));
+    // Paused for more children than the plan has room for: the child's game says so.
+    view.put(Fields.BLOCKED, result.blocked());
     return ok(view);
   }
 }
