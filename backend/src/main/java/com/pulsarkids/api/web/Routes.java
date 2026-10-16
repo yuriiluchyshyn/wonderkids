@@ -15,6 +15,7 @@ public final class Routes {
   public static final String NICKNAME = "/api/nickname";
   public static final String STATE = "/api/state";
   public static final String TTS = "/api/tts";
+  public static final String TRIAL = "/trial";
   public static final String V1_SESSION = "/api/v1/session";
   public static final String HEARTBEAT = "/heartbeat";
   public static final String RESET = "/reset";

@@ -43,6 +43,7 @@ public enum ApiError {
   TTS_FAILED(502, "tts_failed"),
   TTS_UNREACHABLE(502, "tts_unreachable"),
   TTS_KEY_REJECTED(502, "tts_key_rejected"),
+  TTS_BUSY(429, "tts_busy"),
   NO_KEY(200, "no_key"),
   ADMIN_NOT_CONFIGURED(503, "admin_not_configured"),
   INVALID_ADMIN_KEY(401, "invalid_admin_key"),

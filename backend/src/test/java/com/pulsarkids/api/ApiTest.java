@@ -489,7 +489,7 @@ class ApiTest {
     assertEquals(json("[" + parentId + "]"), scoped.body().at("/keys/0/accountIds"));
     assertFalse(scoped.body().at("/keys/0/isGlobal").asBoolean());
     assertEquals("…1234", scoped.body().at("/keys/0/keyHint").asText(), "an empty key keeps the stored secret");
-    assertEquals("uk-UA-Wavenet-A", scoped.body().at("/keys/0/voice").asText());
+    assertEquals("uk-UA-Chirp3-HD-Kore", scoped.body().at("/keys/0/voice").asText());
     assertTrue(asParent("GET", "/api/state", null).body().at("/features/cloudTts").asBoolean());
     assertEquals(404, asAdmin("PUT", "/api/admin/speech", Map.of("id", 9999, "scope", "global")).status());
 

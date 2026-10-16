@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Lang implements Wire {
-  UK("uk", "uk-UA-Wavenet-A"),
+  UK("uk", "uk-UA-Chirp3-HD-Kore"),
   EN("en", "en-US-Wavenet-F"),
   PL("pl", "pl-PL-Wavenet-A");
 

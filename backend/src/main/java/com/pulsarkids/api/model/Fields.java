@@ -189,6 +189,8 @@ public final class Fields {
   public static final String TOKEN = "token";
   public static final String TRAP = "trap";
   public static final String TREASURES = "treasures";
+  public static final String TRIAL = "trial";
+  public static final String TRIAL_SPEECH = "trialSpeech";
   public static final String TS = "ts";
   public static final String TTS_BUTTONS = "ttsButtons";
   public static final String TYPE = "type";

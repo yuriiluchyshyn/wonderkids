@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.IntNode;
 import com.pulsarkids.api.core.Availability;
 import com.pulsarkids.api.core.Json;
 import com.pulsarkids.api.core.Marketing;
+import com.pulsarkids.api.core.Secrets;
 import com.pulsarkids.api.model.AdminPart;
 import com.pulsarkids.api.model.ApiError;
 import com.pulsarkids.api.model.Fields;
@@ -12,6 +13,7 @@ import com.pulsarkids.api.model.Wire;
 import com.pulsarkids.api.service.AccountService;
 import com.pulsarkids.api.service.MarketingService;
 import com.pulsarkids.api.service.SchemaService;
+import com.pulsarkids.api.service.SpeechService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Map;
@@ -37,7 +39,8 @@ import org.springframework.web.bind.annotation.RestController;
  * With `?part=…` the same address serves the owner's side of the product:
  *
  *   GET    ?part=settings                        → { settings }
- *   PUT    ?part=settings  { demoMinutes }       → { settings }
+ *   PUT    ?part=settings  { demoMinutes?, trialSpeech?: { enabled, key? } }  → { settings }
+ *          (`trialSpeech` — the trial game's own Google key and its switch; an empty `key` keeps the stored one)
  *   GET    ?part=links[&days=30]                 → { links, visits }   (days=0 — all time)
  *   POST   ?part=links     { name, mode, code?, note? }   a new link
  *   PUT    ?part=links     { id, name, note? }             rename one
@@ -54,6 +57,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminUsersController extends ApiController {
   private final AccountService accounts;
   private final MarketingService marketing;
+  private final SpeechService speech;
   private final SchemaService schema;
 
   private ResponseEntity<Object> notAllowed(RequestMethod... allowed) {
@@ -121,15 +125,40 @@ public class AdminUsersController extends ApiController {
         Fields.DEMO_MINUTES, marketing.demoMinutes(),
         Fields.DEMO_MINUTES_DEFAULT, Marketing.DEMO_MINUTES_DEFAULT,
         Fields.DEMO_MINUTES_MIN, Marketing.DEMO_MINUTES_MIN,
-        Fields.DEMO_MINUTES_MAX, Marketing.DEMO_MINUTES_MAX);
+        Fields.DEMO_MINUTES_MAX, Marketing.DEMO_MINUTES_MAX,
+        Fields.TRIAL_SPEECH, trialSpeechView(speech.trialSpeech()));
+  }
+
+  /** The trial game's voice as the admin panel sees it — never the key, only its last 4 characters. */
+  private static Map<String, Object> trialSpeechView(SpeechService.TrialSpeech trial) {
+    String plain = Secrets.decrypt(trial.encryptedKey());
+    boolean readable = plain != null && !plain.isEmpty();
+    return Json.map(
+        Fields.ENABLED, trial.enabled(),
+        Fields.KEY_HINT, readable ? "…" + plain.substring(Math.max(0, plain.length() - 4)) : "",
+        // False when there is no key, or it can no longer be decrypted (SECRETS_KEY changed).
+        Fields.READABLE, readable);
   }
 
   private ResponseEntity<Object> settings(RequestMethod method, JsonNode body) {
     if (method == RequestMethod.GET) return ok(Fields.SETTINGS, settingsView());
     if (method == RequestMethod.PUT) {
-      Integer minutes = Marketing.cleanDemoMinutes(Json.at(body, Fields.DEMO_MINUTES));
-      if (minutes == null) return refuse(ApiError.INVALID_DEMO_MINUTES);
-      marketing.setSetting(MarketingService.DEMO_MINUTES_KEY, IntNode.valueOf(minutes));
+      JsonNode rawMinutes = Json.at(body, Fields.DEMO_MINUTES);
+      JsonNode trial = Json.at(body, Fields.TRIAL_SPEECH);
+      boolean hasMinutes = Json.present(rawMinutes);
+      Integer minutes = hasMinutes ? Marketing.cleanDemoMinutes(rawMinutes) : null;
+      if ((hasMinutes || !Json.present(trial)) && minutes == null) return refuse(ApiError.INVALID_DEMO_MINUTES);
+      if (Json.present(trial)) {
+        JsonNode enabled = Json.at(trial, Fields.ENABLED);
+        if (!enabled.isBoolean()) return refuse(ApiError.INVALID_ENABLED);
+        String rawKey = Json.text(Json.at(trial, Fields.KEY));
+        String secret = rawKey == null ? "" : rawKey.strip();
+        if (secret.length() > 200) return refuse(ApiError.INVALID_KEY);
+        // Switched on with no key to speak with: nothing would be heard.
+        if (enabled.booleanValue() && secret.isEmpty() && Secrets.decrypt(speech.trialSpeech().encryptedKey()) == null) return refuse(ApiError.INVALID_KEY);
+        speech.saveTrialSpeech(enabled.booleanValue(), secret.isEmpty() ? null : Secrets.encrypt(secret));
+      }
+      if (minutes != null) marketing.setSetting(MarketingService.DEMO_MINUTES_KEY, IntNode.valueOf(minutes));
       return ok(Fields.SETTINGS, settingsView());
     }
     return notAllowed(RequestMethod.GET, RequestMethod.PUT);

@@ -41,6 +41,10 @@ public final class Tts {
   /** The voice a key reads in when none is stored with it (each language's own is named in `Lang`). */
   public static final String DEFAULT_VOICE = Lang.DEFAULT.getCloudVoice();
   public static final int MAX_TTS_CHARS = 400;
+  /** How many phrases one visitor of the trial game may have made anew (not from the cache) in an hour. */
+  public static final int TRIAL_PHRASES_PER_HOUR = 300;
+  /** The mark of a stressed vowel the game puts into a phrase for the voice (U+0301). */
+  private static final String STRESS = "́";
   /** Slightly slower than normal — clearer for small listeners. */
   private static final double SPEAKING_RATE = 0.95;
 
@@ -60,6 +64,11 @@ public final class Tts {
 
   private static String endpoint() {
     return Env.get(Vars.GOOGLE_TTS_ENDPOINT, GOOGLE_URL);
+  }
+
+  /** The length of a phrase as it is read: the stress marks are not letters. */
+  public static int lengthOf(String text) {
+    return text.replace(STRESS, "").length();
   }
 
   public static String normaliseVoice(String voice) {

@@ -7,6 +7,7 @@ import com.pulsarkids.api.core.Tts;
 import com.pulsarkids.api.data.entity.TtsKey;
 import com.pulsarkids.api.model.ApiError;
 import com.pulsarkids.api.model.Fields;
+import com.pulsarkids.api.model.Lang;
 import com.pulsarkids.api.model.SpeechScope;
 import com.pulsarkids.api.model.Text;
 import com.pulsarkids.api.model.Wire;
@@ -33,7 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
  *   POST   /api/admin/speech  { label, key, voice, scope, accountIds }
  *   PUT    /api/admin/speech  { id, label, key?, voice, scope, accountIds }
  *   DELETE /api/admin/speech?id=…
- *   POST   /api/admin/speech?test=1  { keyId }   try a stored key
+ *   POST   /api/admin/speech?test=1  { keyId | trial: true, text?, lang? }   try a stored key (or the
+ *          trial game's) — on a sample phrase of the voice's language, or on `text` read in `lang`
  * `scope`: "global" (serves every account; there is one global key at a time)
  * or "accounts" (serves exactly `accountIds`). Requires `x-admin-key`.
  */
@@ -98,15 +100,30 @@ public class AdminSpeechController extends ApiController {
    * Google's reason.
    */
   private ResponseEntity<Object> testKey(JsonNode body) {
-    JsonNode keyId = Json.at(body, Fields.KEY_ID);
-    if (!Json.isInt(keyId)) return refuse(ApiError.INVALID_ID);
-    TtsKey key = speech.key((int) Json.intOf(keyId));
-    String apiKey = key == null ? null : Secrets.decrypt(key.getEncryptedKey());
+    boolean trial = Json.at(body, Fields.TRIAL).asBoolean(false);
+    String apiKey;
+    String voice;
+    if (trial) {
+      apiKey = Secrets.decrypt(speech.trialSpeech().encryptedKey());
+      voice = null;
+    } else {
+      JsonNode keyId = Json.at(body, Fields.KEY_ID);
+      if (!Json.isInt(keyId)) return refuse(ApiError.INVALID_ID);
+      TtsKey key = speech.key((int) Json.intOf(keyId));
+      apiKey = key == null ? null : Secrets.decrypt(key.getEncryptedKey());
+      voice = key == null ? null : key.getVoice();
+    }
     if (apiKey == null || apiKey.isEmpty()) return ok(Fields.OK, false, Fields.ERROR, ApiError.NO_KEY.getCode(), Fields.DETAIL, messages.of(ApiError.NO_KEY));
-    String voice = Tts.normaliseVoice(key.getVoice());
+
+    String raw = Json.text(Json.at(body, Fields.TEXT));
+    String text = raw == null ? "" : raw.replaceAll("(?U)\\s+", " ").strip();
+    if (Tts.lengthOf(text) > Tts.MAX_TTS_CHARS) return refuse(ApiError.INVALID_TEXT);
+    Lang lang = Wire.of(Lang.class, Json.at(body, Fields.LANG), null);
+    // Read by the voice of `lang` when one is named (the key's own when it is of that language), else by the key's voice.
+    String reader = lang != null ? Tts.voiceFor(lang, voice) : Tts.normaliseVoice(voice);
     try {
-      // The sample is in the language the voice reads: a Polish voice says a Polish phrase.
-      return ok(Fields.OK, true, Fields.AUDIO, Tts.synthesize(apiKey, voice, messages.of(Text.SPEECH_SAMPLE, Tts.langOfVoice(voice))));
+      String said = text.isEmpty() ? messages.of(Text.SPEECH_SAMPLE, Tts.langOfVoice(reader)) : text;
+      return ok(Fields.OK, true, Fields.AUDIO, Tts.synthesize(apiKey, reader, said));
     } catch (Tts.Failed err) {
       return ok(Fields.OK, false, Fields.ERROR, err.getError().getCode(), Fields.DETAIL, err.getMessage());
     }

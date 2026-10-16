@@ -1,13 +1,18 @@
 package com.pulsarkids.api.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pulsarkids.api.core.Json;
 import com.pulsarkids.api.data.entity.Parent;
+import com.pulsarkids.api.data.entity.Setting;
 import com.pulsarkids.api.data.entity.TtsCache;
 import com.pulsarkids.api.data.entity.TtsKey;
 import com.pulsarkids.api.data.repo.ParentRepository;
+import com.pulsarkids.api.data.repo.SettingRepository;
 import com.pulsarkids.api.data.repo.TtsCacheRepository;
 import com.pulsarkids.api.data.repo.TtsKeyRepository;
 import com.pulsarkids.api.model.Fields;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
  * Which key an account gets is decided in one place, `configOf`: the key
  * assigned to the account wins; otherwise the single GLOBAL key applies; and
  * `Parent.ttsOff` switches the account off regardless.
+ *
+ * The trial game (no account) has a key of its own, kept with the product's
+ * settings (`wk_settings`, `trial_speech`): `{ enabled, key }`, the key
+ * encrypted like the others.
  */
 @Service
 @RequiredArgsConstructor
@@ -30,6 +39,15 @@ public class SpeechService {
   private final ParentRepository parents;
   private final TtsKeyRepository keys;
   private final TtsCacheRepository cache;
+  private final SettingRepository settings;
+
+  /** The setting the trial game's voice is kept in, and its fields. */
+  public static final String TRIAL_SPEECH_KEY = "trial_speech";
+  /** One running instance reads the trial's voice at most this often; a change shows within it. */
+  private static final long TRIAL_TTL_MS = 30_000;
+
+  private volatile TrialSpeech trial;
+  private volatile long trialAt;
 
   /** The cloud voice an account actually gets. The key is still encrypted here. */
   public record Config(boolean enabled, String encryptedKey, String voice) {}
@@ -41,6 +59,49 @@ public class SpeechService {
     TtsKey key = parent.getTtsKeyId() != null ? keys.findById(parent.getTtsKeyId()).orElse(null) : keys.findFirstByGlobalTrueOrderByIdAsc().orElse(null);
     String secret = key == null ? null : key.getEncryptedKey();
     return new Config(!parent.isTtsOff() && secret != null && !secret.isEmpty(), secret, key == null ? null : key.getVoice());
+  }
+
+  /** The voice of the trial game: switched on or not, and its key (encrypted; null when none was given). */
+  public record TrialSpeech(boolean enabled, String encryptedKey) {
+    /** It speaks: switched on, and there is a key to speak with. */
+    public boolean live() {
+      return enabled && encryptedKey != null && !encryptedKey.isEmpty();
+    }
+  }
+
+  /** The trial game's voice, as the owner set it (read anew at most every 30 s). */
+  @Transactional(readOnly = true)
+  public TrialSpeech trialSpeech() {
+    TrialSpeech kept = trial;
+    if (kept != null && System.currentTimeMillis() - trialAt < TRIAL_TTL_MS) return kept;
+    JsonNode stored = settings.findById(TRIAL_SPEECH_KEY).map((row) -> row.getValue()).orElse(null);
+    String key = Json.text(Json.at(stored, Fields.KEY));
+    TrialSpeech read = new TrialSpeech(Json.at(stored, Fields.ENABLED).asBoolean(false), key == null || key.isEmpty() ? null : key);
+    trial = read;
+    trialAt = System.currentTimeMillis();
+    return read;
+  }
+
+  /** Switch the trial game's voice on or off; `encryptedKey` null keeps the stored key. */
+  @Transactional
+  public TrialSpeech saveTrialSpeech(boolean enabled, String encryptedKey) {
+    trial = null;
+    TrialSpeech before = trialSpeech();
+    String key = encryptedKey != null ? encryptedKey : before.encryptedKey();
+    ObjectNode value = Json.object();
+    value.put(Fields.ENABLED, enabled);
+    if (key != null) value.put(Fields.KEY, key);
+    Setting row = settings.findById(TRIAL_SPEECH_KEY).orElseGet(() -> {
+      Setting made = new Setting();
+      made.setKey(TRIAL_SPEECH_KEY);
+      return made;
+    });
+    row.setValue(value);
+    row.setUpdatedAt(Instant.now());
+    settings.save(row);
+    trial = new TrialSpeech(enabled, key);
+    trialAt = System.currentTimeMillis();
+    return trial;
   }
 
   /** One stored key by id (encrypted), for the admin's "test" button; null when there is none. */
