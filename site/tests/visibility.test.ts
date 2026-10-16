@@ -24,6 +24,7 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { ALIKE_LIMIT, GAMES_SLUG, galaxySlug, gamePageSlug, gamesPages, trialOfGame, type GamesPage } from '../build/games.ts';
 import { countedWords, loadDictionaries, renderGamesPage, renderPage } from '../build/pages.ts';
+import { PRICING_SLUG } from '../build/pricing.ts';
 import { AI_CRAWLERS, llmsTxt, robotsTxt, sitemapXml } from '../build/seo.ts';
 import { DEFAULT_LANG, SITE_LANGS, sitePath, type SiteLang } from '../src/languages.ts';
 import { legalPath } from '../src/legal.ts';
@@ -245,6 +246,7 @@ test('5 · sitemap.xml and llms.txt lead only to pages that are built, and the p
   for (const lang of SITE_LANGS) {
     built.add(address(lang, ''));
     for (const doc of LEGAL_DOCS) built.add(`${URLS.site}/${legalPath(lang, doc)}`);
+    built.add(address(lang, PRICING_SLUG));
     for (const page of PAGES[lang]) built.add(address(lang, page.slug));
   }
 

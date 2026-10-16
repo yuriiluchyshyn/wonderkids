@@ -6,6 +6,8 @@ import { DEFAULT_LANG, LANGUAGES, SITE_LANGS, sitePath, type SiteLang } from '..
 import { LEGAL_DOCS, LEGAL_UPDATED, legalPath, type LegalDoc } from '../src/legal.ts';
 import { catalogNumbers, gamesPages, type GamesPage } from './games.ts';
 import { legalText } from './legal.ts';
+import { PRICING_SLUG, fetchCatalog, pricingPage } from './pricing.ts';
+import type { Catalog } from '../src/plans.ts';
 
 /**
  * The public page in every language of the site.
@@ -24,7 +26,9 @@ import { legalText } from './legal.ts';
  * texts are `src/legal/<lang>/<doc>.md`, see `legal.ts`) and puts the text
  * beside it as Markdown (`index.md`). `games.html` is the third: the page of
  * a game, of a galaxy, and of all the games (`games.ts` — made from the game's
- * own catalogue: `/games/`, `/games/math/`, `/games/math/add/`…).
+ * own catalogue: `/games/`, `/games/math/`, `/games/math/add/`…). `pricing.html`
+ * is the fourth: the page of prices (`pricing.ts` — `/pricing/`, `/en/pricing/`…),
+ * which the owner shows or hides from the admin panel.
  *
  * What the template may say:
  *   {{section.key}}        a text, escaped for where it stands (HTML, or a JSON-LD string)
@@ -40,7 +44,8 @@ import { legalText } from './legal.ts';
  * fills them from the game's own catalogue — so adding a game to the game
  * changes what the site says about it (`build/games.ts`, `catalogNumbers`).
  *   {{@docTitle}} {{@docDescription}} {{@docBody}} {{@docUpdatedIso}}   `legal.html` only: the text it holds
- *   {{@pageTitle}} {{@pageDescription}} {{@pageBody}} {{@ld}}           `games.html` only: the page of games it holds
+ *   {{@pageTitle}} {{@pageDescription}} {{@pageBody}} {{@ld}}           `games.html` and `pricing.html` only: the page it holds
+ *   {{@pricingWords}}                                           `pricing.html` only: the words its script draws the plans with
  *   {{@updated}} {{@updatedIso}}                                when the page was built, for a reader and for a machine
  *   {{@langList}}                                               every language of the site, as the items of a JSON list
  *   {{@alternates}} {{@ogAlternates}} {{@langLinks}}            links to its other languages
@@ -197,6 +202,16 @@ export function renderGamesPage(template: string, lang: SiteLang, page: GamesPag
   });
 }
 
+/** The page of prices in `lang`, from `pricing.html`, with the plans the API had (`null` — without prices; the browser fills them in). */
+export function renderPricingPage(template: string, lang: SiteLang, urls: PublicUrls, catalog: Catalog | null, dictionaries: Dictionaries = loadDictionaries()): string {
+  const page = pricingPage(lang, urls, dictionaries, catalog);
+  return renderPage(template, lang, urls.site, dictionaries, {
+    slug: PRICING_SLUG,
+    facts: { pageBody: page.body, ld: page.ld, pricingWords: page.words },
+    texts: { pageTitle: page.title, pageDescription: page.description },
+  });
+}
+
 const isLegalDoc = (name: string | undefined): name is LegalDoc => LEGAL_DOCS.some((doc) => doc === name);
 
 const isSiteLang = (code: string | undefined): code is SiteLang => SITE_LANGS.some((lang) => lang === code);
@@ -227,6 +242,9 @@ export function pages(urls: PublicUrls): Plugin {
         // `/privacy/`, `/pl/terms/` are a legal text in its page.
         const legal = /^\/(?:(\w{2})\/)?(\w+)\/?(?:\?.*)?$/.exec(req.url ?? '');
         if (legal && isLegalDoc(legal[2]) && (legal[1] === undefined || isSiteLang(legal[1]))) req.url = `/legal.html?lang=${legal[1] ?? DEFAULT_LANG}&doc=${legal[2]}`;
+        // `/pricing/`, `/pl/pricing/` are the page of prices.
+        const pricing = /^\/(?:(\w{2})\/)?pricing\/?(?:\?.*)?$/.exec(req.url ?? '');
+        if (pricing && (pricing[1] === undefined || isSiteLang(pricing[1]))) req.url = `/pricing.html?lang=${pricing[1] ?? DEFAULT_LANG}`;
         // `/games/`, `/pl/games/math/add/` are a page of games.
         const games = /^\/(?:(\w{2})\/)?games(?:\/[\w-]+){0,2}\/?(?:\?.*)?$/.exec(req.url ?? '');
         if (games && (games[1] === undefined || isSiteLang(games[1]))) req.url = '/games.html';
@@ -239,6 +257,8 @@ export function pages(urls: PublicUrls): Plugin {
       if (!ctx.server) return source;
       const asked = ctx.originalUrl ?? ctx.path;
       if (ctx.path.endsWith('/legal.html')) return renderLegalPage(source, langOfUrl(asked), docOfUrl(asked), urls);
+      // In dev the page is drawn by the browser from the API beside it (`src/scripts/pricing.ts`).
+      if (ctx.path.endsWith('/pricing.html')) return renderPricingPage(source, langOfUrl(asked), urls, null);
       if (ctx.path.endsWith('/games.html')) {
         const lang = langOfUrl(asked);
         const all = gamesPages(lang, urls, loadDictionaries());
@@ -248,7 +268,7 @@ export function pages(urls: PublicUrls): Plugin {
       return renderPage(source, langOfUrl(asked), site);
     },
 
-    generateBundle(_options, bundle) {
+    async generateBundle(_options, bundle) {
       const page = bundle['index.html'];
       if (!page || page.type !== 'asset') return;
       const template = String(page.source);
@@ -269,6 +289,14 @@ export function pages(urls: PublicUrls): Plugin {
         }
       }
       delete bundle['legal.html'];
+      }
+
+      // The page of prices, in every language. The template itself is not a page.
+      const pricing = bundle['pricing.html'];
+      if (pricing && pricing.type === 'asset') {
+        const catalog = await fetchCatalog(urls);
+        for (const lang of SITE_LANGS) this.emitFile({ type: 'asset', fileName: `${sitePath(lang)}${PRICING_SLUG}index.html`, source: renderPricingPage(String(pricing.source), lang, urls, catalog, dictionaries) });
+        delete bundle['pricing.html'];
       }
 
       // The pages of games: each in its page, and beside it as Markdown.

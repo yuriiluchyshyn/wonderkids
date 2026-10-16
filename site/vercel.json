@@ -152,6 +152,16 @@
       "permanent": true
     },
     {
+      "source": "/pricing",
+      "destination": "/pricing/",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|pl)/pricing",
+      "destination": "/:lang/pricing/",
+      "permanent": true
+    },
+    {
       "source": "/privacy",
       "destination": "/privacy/",
       "permanent": true

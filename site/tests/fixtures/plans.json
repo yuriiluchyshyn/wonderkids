@@ -1,0 +1,298 @@
+{
+  "country": null,
+  "region": "US",
+  "regions": [
+    {
+      "id": "CA",
+      "currency": "CAD",
+      "countries": [
+        "CA"
+      ],
+      "fallback": false,
+      "langs": []
+    },
+    {
+      "id": "EU",
+      "currency": "EUR",
+      "countries": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CY",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "MT",
+        "NL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "ES",
+        "SE"
+      ],
+      "fallback": false,
+      "langs": []
+    },
+    {
+      "id": "PL",
+      "currency": "PLN",
+      "countries": [
+        "PL"
+      ],
+      "fallback": false,
+      "langs": [
+        "pl"
+      ]
+    },
+    {
+      "id": "UA",
+      "currency": "UAH",
+      "countries": [
+        "UA"
+      ],
+      "fallback": false,
+      "langs": [
+        "uk"
+      ]
+    },
+    {
+      "id": "US",
+      "currency": "USD",
+      "countries": [
+        "US"
+      ],
+      "fallback": true,
+      "langs": [
+        "en"
+      ]
+    }
+  ],
+  "plans": [
+    {
+      "id": "pulsar_basic",
+      "kind": "free",
+      "name": {
+        "uk": "Базовий",
+        "en": "Basic",
+        "pl": "Podstawowy"
+      },
+      "tagline": {
+        "uk": "Щоб познайомитися з грою і грати потроху щодня.",
+        "en": "To get to know the game and play a little every day.",
+        "pl": "Żeby poznać grę i grać po trochu każdego dnia."
+      },
+      "badge": {
+        "uk": null,
+        "en": null,
+        "pl": null
+      },
+      "features": {
+        "uk": [
+          "До 15 хвилин гри на день — спільні для всієї сім’ї",
+          "Усі ігри та всі сходинки шляху",
+          "Контроль часу: сеанс, перерва й денний ліміт у межах 15 хвилин",
+          "Прогрес, планета й нагороди зберігаються"
+        ],
+        "en": [
+          "Up to 15 minutes of play a day, shared by the whole family",
+          "Every game and every step of the path",
+          "Time controls: session, break and daily limit within the 15 minutes",
+          "Progress, the planet and rewards are kept"
+        ],
+        "pl": [
+          "Do 15 minut gry dziennie — wspólnie dla całej rodziny",
+          "Wszystkie gry i wszystkie stopnie ścieżki",
+          "Kontrola czasu: sesja, przerwa i dzienny limit w ramach 15 minut",
+          "Postępy, planeta i nagrody są zachowane"
+        ]
+      },
+      "facts": {
+        "dailyMinutes": 15
+      },
+      "prices": [],
+      "extraChild": []
+    },
+    {
+      "id": "pulsar_family_pro",
+      "kind": "paid",
+      "name": {
+        "uk": "Family Pro",
+        "en": "Family Pro",
+        "pl": "Family Pro"
+      },
+      "tagline": {
+        "uk": "Для сімей, у яких гра стала щоденною звичкою.",
+        "en": "For families where the game has become a daily habit.",
+        "pl": "Dla rodzin, w których gra stała się codziennym nawykiem."
+      },
+      "badge": {
+        "uk": "Для всієї сім’ї",
+        "en": "For the whole family",
+        "pl": "Dla całej rodziny"
+      },
+      "features": {
+        "uk": [
+          "Без межі у 15 хвилин: скільки грати, вирішуєте ви",
+          "2 дитини в пакеті, кожну наступну можна додати",
+          "Усі ігри та всі сходинки шляху",
+          "Усі власні теми: «Весела ферма», «Кубики», «Крижана казка», «Блоковий світ»",
+          "Складність під вік дитини в кабінеті батьків"
+        ],
+        "en": [
+          "No 15-minute cap: you decide how long they play",
+          "2 kids included; add more any time",
+          "Every game and every step of the path",
+          "All original themes: Happy Farm, Bricks, Icy Fairy Tale, Block World",
+          "Difficulty matched to your child’s age in the parents’ area"
+        ],
+        "pl": [
+          "Bez limitu 15 minut: ile grać, decydujesz Ty",
+          "Pakiet obejmuje 2 dzieci, kolejne można dodać",
+          "Wszystkie gry i wszystkie stopnie ścieżki",
+          "Wszystkie własne motywy: „Wesoła farma”, „Klocki”, „Lodowa baśń”, „Świat bloków”",
+          "Poziom trudności dopasowany do wieku dziecka w panelu rodzica"
+        ]
+      },
+      "facts": {
+        "trialDays": 14,
+        "childrenIncluded": 2
+      },
+      "prices": [
+        {
+          "region": "EU",
+          "period": "month",
+          "amount": 699,
+          "currency": "EUR"
+        },
+        {
+          "region": "EU",
+          "period": "year",
+          "amount": 5999,
+          "currency": "EUR"
+        },
+        {
+          "region": "CA",
+          "period": "month",
+          "amount": 899,
+          "currency": "CAD"
+        },
+        {
+          "region": "CA",
+          "period": "year",
+          "amount": 7999,
+          "currency": "CAD"
+        },
+        {
+          "region": "US",
+          "period": "month",
+          "amount": 699,
+          "currency": "USD"
+        },
+        {
+          "region": "US",
+          "period": "year",
+          "amount": 5999,
+          "currency": "USD"
+        },
+        {
+          "region": "PL",
+          "period": "month",
+          "amount": 1499,
+          "currency": "PLN"
+        },
+        {
+          "region": "PL",
+          "period": "year",
+          "amount": 12999,
+          "currency": "PLN"
+        },
+        {
+          "region": "UA",
+          "period": "month",
+          "amount": 7900,
+          "currency": "UAH"
+        },
+        {
+          "region": "UA",
+          "period": "year",
+          "amount": 59900,
+          "currency": "UAH"
+        }
+      ],
+      "extraChild": [
+        {
+          "region": "EU",
+          "period": "month",
+          "amount": 149,
+          "currency": "EUR"
+        },
+        {
+          "region": "EU",
+          "period": "year",
+          "amount": 1499,
+          "currency": "EUR"
+        },
+        {
+          "region": "CA",
+          "period": "month",
+          "amount": 199,
+          "currency": "CAD"
+        },
+        {
+          "region": "CA",
+          "period": "year",
+          "amount": 1999,
+          "currency": "CAD"
+        },
+        {
+          "region": "US",
+          "period": "month",
+          "amount": 149,
+          "currency": "USD"
+        },
+        {
+          "region": "US",
+          "period": "year",
+          "amount": 1499,
+          "currency": "USD"
+        },
+        {
+          "region": "PL",
+          "period": "month",
+          "amount": 399,
+          "currency": "PLN"
+        },
+        {
+          "region": "PL",
+          "period": "year",
+          "amount": 3499,
+          "currency": "PLN"
+        },
+        {
+          "region": "UA",
+          "period": "month",
+          "amount": 1900,
+          "currency": "UAH"
+        },
+        {
+          "region": "UA",
+          "period": "year",
+          "amount": 13900,
+          "currency": "UAH"
+        }
+      ]
+    }
+  ]
+}

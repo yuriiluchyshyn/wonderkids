@@ -6,11 +6,13 @@ import { test } from 'node:test';
 import { ALIKE_LIMIT, GAMES_SLUG, alikeness, catalogNumbers, gamesPages, trialOfGame } from '../build/games.ts';
 import { legalText } from '../build/legal.ts';
 import { markdownToHtml } from '../build/markdown.ts';
-import { countedWords, loadDictionaries, renderGamesPage, renderLegalPage, renderPage } from '../build/pages.ts';
+import { countedWords, loadDictionaries, renderGamesPage, renderLegalPage, renderPage, renderPricingPage } from '../build/pages.ts';
+import { PRICING_SLUG } from '../build/pricing.ts';
 import { AI_CRAWLERS, llmsTxt, robotsTxt } from '../build/seo.ts';
 import { DEFAULT_LANG, SITE_LANGS, sitePath, type SiteLang } from '../src/languages.ts';
 import { LEGAL_DOCS, LEGAL_UPDATED, legalPath } from '../src/legal.ts';
 import { OPERATOR, operatorGaps } from '../src/operator.ts';
+import { formatPrice, regionOfLang, renderPricing, type Catalog, type Words } from '../src/plans.ts';
 
 const read = (file: string): string => readFileSync(new URL(file, import.meta.url), 'utf8');
 const URLS = publicUrls();
@@ -18,6 +20,9 @@ const dictionaries = loadDictionaries();
 const template = read('../index.html');
 const legalTemplate = read('../legal.html');
 const gamesTemplate = read('../games.html');
+const pricingTemplate = read('../pricing.html');
+/** The plans as the API answered them from the Stripe sandbox — the site holds none of its own. */
+const PLANS = JSON.parse(read('./fixtures/plans.json')) as Catalog;
 
 /** A text of the dictionary as the page shows it: `{games}`, `{levels}` and `{galaxies}` filled from the catalogue. */
 const counts = Object.fromEntries(SITE_LANGS.map((lang) => [lang, countedWords(lang, dictionaries).params])) as Record<SiteLang, Record<string, string | number>>;
@@ -106,10 +111,22 @@ test('robots.txt lets the assistants in by name, and vercel.json points each pag
 });
 
 test('every text of the dictionary is used — by the page, or by the form’s script', () => {
-  const inPage = new Set([...(template + legalTemplate + gamesTemplate).matchAll(/\{\{\{?([\w.]+)\}\}\}?/g)].map((m) => m[1]));
+  const inPage = new Set([...(template + legalTemplate + gamesTemplate + pricingTemplate).matchAll(/\{\{\{?([\w.]+)\}\}\}?/g)].map((m) => m[1]));
   const scripts = readdirSync(new URL('../src/scripts/letter/', import.meta.url)).map((file) => read(`../src/scripts/letter/${file}`)).join('\n');
   // The words of the pages of games are asked for by their build (`t('step')`); the names of boards and languages by what a game has.
   const games = read('../build/games.ts');
+  // The words of the page of prices are asked for by its build, by their whole key — a region's name and a question by their id.
+  const pricing = read('../src/plans.ts') + read('../build/pricing.ts');
+  const askedByPricing = (key: string): boolean => {
+    if (key.startsWith('pricingMeta.')) return pricing.includes(`.${key.slice('pricingMeta.'.length)}`);
+    const path = key.slice('pricing.'.length).replace(PLURAL, '');
+    const question = /^faq\.(\w+)\.(title|text)$/.exec(path);
+    if (question) return pricing.includes(`'${question[1]}'`);
+    // A unit is asked for by its name: `counted(words, 'minutes', …)`.
+    const unit = /^unit\.(\w+)$/.exec(path);
+    if (unit) return pricing.includes(`'${unit[1]}'`);
+    return pricing.includes(`'${path}'`);
+  };
   const PLURAL = /\.(zero|one|two|few|many|other)$/;
   const unused: string[] = [];
   const walk = (dict: Dict, prefix = ''): void => {
@@ -121,6 +138,8 @@ test('every text of the dictionary is used — by the page, or by the form’s s
         // A paragraph about a game is asked for by the game's id — and there must be such a game.
         if (asked.startsWith('about.')) assert.ok(gamesPages(DEFAULT_LANG, URLS, dictionaries).some((page) => page.slug === `${GAMES_SLUG}${asked.slice('about.'.length).replace('.', '/').replaceAll('_', '-')}/`), `catalog.${asked}: no such game`);
         else if (!/^(mechanics|langNames)\./.test(asked) && !games.includes(`'${asked}'`) && !inPage.has(`catalog.${asked}`)) unused.push(`catalog.${asked}`);
+      } else if (prefix.startsWith('pricing.') || prefix === 'pricingMeta.') {
+        if (!askedByPricing(`${prefix}${key}`) && !inPage.has(`${prefix}${key}`)) unused.push(`${prefix}${key}`);
       } else if (prefix === 'legalMeta.') assert.ok(LEGAL_DOCS.some((doc) => doc === key), `legalMeta.${key} is a legal text`);
       else if (prefix === 'js.' ? !scripts.includes(`words.${key}`) : !inPage.has(`${prefix}${key}`)) unused.push(`${prefix}${key}`);
     }
@@ -217,6 +236,60 @@ test('every game has a page of its own, with real tasks from it and a way straig
   }
 });
 
+test('the page of prices draws Stripe’s plans — every price, in every language — and is reached only while the owner shows it', () => {
+  for (const lang of SITE_LANGS) {
+    const page = renderPricingPage(pricingTemplate, lang, URLS, PLANS, dictionaries);
+    // (The words handed to the page's script keep their holes: it fills them from Stripe in the browser.)
+    const drawn = page.replace(/<script type="application\/json" id="pricing-words">[\s\S]*?<\/script>/, '');
+    assert.ok(!drawn.includes('{{') && !/undefined|NaN|\[object|\{\w+\}/.test(drawn), `${lang}: every key and hole is filled`);
+    assert.ok(page.includes(`<html lang="${lang}">`) && page.includes(`rel="canonical" href="__SITE_URL__/${sitePath(lang)}${PRICING_SLUG}"`));
+    for (const other of SITE_LANGS) assert.ok(page.includes(`hreflang="${other}" href="${URLS.site}/${sitePath(other)}${PRICING_SLUG}"`), `${lang}: names its ${other} page`);
+    assert.equal(page.match(/<h1[\s>]/g)?.length, 1, `${lang}: one main heading`);
+    const description = /<meta name="description" content="([^"]*)"/.exec(page)?.[1] ?? '';
+    assert.ok(description.length >= 120 && description.length <= 160, `${lang}: the description is ${description.length} characters`);
+    // Every price Stripe has is in the page as text — and as an offer of the structured data.
+    const graph = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(page)?.[1] ?? '')['@graph'] as { '@type': string; offers?: { price: string; priceCurrency: string }[] }[];
+    assert.deepEqual(graph.map((node) => node['@type']), ['WebPage', 'Product', 'Product', 'FAQPage']);
+    const paid = PLANS.plans.find((plan) => plan.kind === 'paid')!;
+    for (const price of [...paid.prices, ...paid.extraChild]) {
+      if (price.period === 'month' || paid.extraChild.includes(price)) assert.ok(page.includes(formatPrice(price.amount, price.currency, lang)), `${lang}: ${price.region} ${price.period} ${price.amount} is in the table`);
+    }
+    for (const price of paid.prices) assert.ok(graph[2].offers?.some((offer) => offer.price === (price.amount / 100).toFixed(2) && offer.priceCurrency === price.currency), `${lang}: an offer for ${price.region} ${price.period}`);
+    // The plans' names and «what is included» are Stripe's, in the page's language.
+    for (const plan of PLANS.plans) for (const line of [plan.name[lang], ...plan.features[lang]]) assert.ok(page.includes(line.replace(/&/g, '&amp;').replace(/"/g, '&quot;')), `${lang}: «${line}» from Stripe`);
+    // The page shows its language's region first.
+    const region = regionOfLang(PLANS, lang);
+    assert.ok(page.includes(`<option value="${region}" selected>`), `${lang}: ${region} is chosen`);
+    // Copy rules: never «unlimited».
+    assert.ok(!/безліміт|unlimited|bez ograniczeń|nielimit/i.test(page), `${lang}: no «unlimited»`);
+    // The links to it are hidden until the owner shows it.
+    for (const [name, html] of [['main', renderPage(template, lang, URLS.site, dictionaries)], ['legal', renderLegalPage(legalTemplate, lang, 'privacy', URLS, dictionaries)]] as const)
+      for (const link of html.match(/<[^>]*data-pricing-link[^>]*>/g) ?? []) assert.ok(/\shidden[\s>]/.test(link), `${lang}/${name}: ${link} is hidden until shown`);
+
+    // Without the plans (the API out of reach at build time) the page is built all the same and says it is loading.
+    const bare = renderPricingPage(pricingTemplate, lang, URLS, null, dictionaries);
+    assert.ok(!bare.includes('{{') && bare.includes('data-plans-state'), `${lang}: built without prices`);
+  }
+  // The site types no number of the plans: the page's words have holes, Stripe fills them.
+  for (const lang of SITE_LANGS) assert.ok(!/\b(15|14|79|599|6\.99)\b/.test(JSON.stringify(dictionaries[lang].pricing)), `${lang}: a number of a plan is typed into pricing.*`);
+  // A plan changed in Stripe changes the page: another trial, another price.
+  const words = dictionaries.uk.pricing as Words;
+  const edited = structuredClone(PLANS);
+  const paid = edited.plans.find((plan) => plan.kind === 'paid')!;
+  paid.facts.trialDays = 21;
+  paid.prices.find((price) => price.region === 'UA' && price.period === 'year')!.amount = 49900;
+  const html = renderPricing(edited, { region: 'UA', period: 'year' }, 'uk', words, { parents: URLS.parents, trial: URLS.play });
+  assert.ok(html.includes('21 день') && html.includes('499 ₴'), 'the trial and the price follow Stripe');
+
+  assert.equal(formatPrice(7900, 'UAH', 'uk'), '79 ₴');
+  assert.equal(formatPrice(1499, 'PLN', 'pl'), '14,99 zł');
+  assert.equal(formatPrice(699, 'USD', 'en'), '$6.99');
+  assert.equal(formatPrice(899, 'CAD', 'en'), 'CA$8.99');
+  // The page has one address, with the slash.
+  const { redirects } = JSON.parse(read('../vercel.json')) as { redirects: { source: string; destination: string }[] };
+  assert.equal(redirects.find((rule) => rule.source === '/pricing')?.destination, `/${PRICING_SLUG}`);
+});
+
 test('the operator is named before the legal pages go out', () => {
   // GDPR art. 13 and the Polish act on electronic services: a policy and terms must say who stands behind the service.
   assert.deepEqual(operatorGaps(), [], 'fill in src/operator.ts — the registered name, address and NIP of whoever runs Pulsar Kids');
@@ -225,7 +298,7 @@ test('the operator is named before the legal pages go out', () => {
 
 test('nothing is fetched from another company’s servers when the page opens', () => {
   // Fonts are our own files (`@pulsar/brand/fonts.css`): a request to Google Fonts hands over the visitor's IP address unasked.
-  for (const page of [template, legalTemplate, gamesTemplate]) {
+  for (const page of [template, legalTemplate, gamesTemplate, pricingTemplate]) {
     const foreign = [...page.matchAll(/<(?:link|script|img)\b[^>]*\b(?:href|src)="(https?:[^"]+)"/g)].map((m) => m[1]);
     assert.deepEqual(foreign, []);
   }

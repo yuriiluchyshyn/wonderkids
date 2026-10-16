@@ -1,0 +1,203 @@
+/* The page of prices (`build/pricing.ts`): two plans side by side, every region's prices in a table below. */
+
+/* Hidden by the owner, a page that runs scripts stays out of sight until the API has answered (`pricing.html`). */
+:root[data-gate] main.pricing {
+  visibility: hidden;
+}
+[data-pricing-link][hidden],
+.price-box[hidden] {
+  display: none;
+}
+
+.pricing-hero {
+  padding: 44px 0 10px;
+}
+.pricing-hero h1 {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  max-width: 20em;
+}
+
+/* Yearly / monthly, and the region whose prices are shown. */
+.pricing-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+  margin-top: 26px;
+}
+.seg {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.seg button {
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--soft);
+  font: 700 1rem 'Fredoka', system-ui, sans-serif;
+  cursor: pointer;
+}
+.seg button[aria-pressed='true'] {
+  background: linear-gradient(135deg, var(--brand-light), var(--accent));
+  color: var(--bg-1);
+}
+.seg .save {
+  margin-left: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(253, 224, 71, 0.2);
+  color: var(--sun);
+  font-size: 0.85rem;
+}
+.seg button[aria-pressed='true'] .save {
+  background: rgba(30, 10, 69, 0.18);
+  color: var(--bg-1);
+}
+.region-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--soft);
+  font-weight: 600;
+}
+.region-pick select {
+  min-height: 48px;
+  max-width: 100%;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 1rem 'Fredoka', system-ui, sans-serif;
+}
+
+/* The two plans. */
+.plans {
+  padding-top: 24px;
+}
+.plans-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: stretch;
+}
+.plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.plan h2 {
+  font-size: 1.7rem;
+}
+.plan-for {
+  color: var(--soft);
+  margin: 0;
+}
+.plan .btn {
+  margin-top: auto;
+}
+.plan-pro {
+  border: 2px solid rgba(53, 214, 232, 0.6);
+  background: linear-gradient(135deg, rgba(124, 108, 255, 0.28), rgba(53, 214, 232, 0.12)), var(--surface);
+}
+.plan-badge {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--sun), #ffb347);
+  color: var(--bg-1);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.price {
+  margin: 4px 0 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.price b {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(2.4rem, 7vw, 3rem);
+  line-height: 1;
+  color: var(--ink);
+}
+.price span,
+.price-note,
+.price-extra {
+  color: var(--soft);
+}
+.price-note,
+.price-extra {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+}
+.price-extra {
+  color: #7fe7f3;
+}
+.plan-features {
+  margin: 8px 0 12px;
+  padding-left: 1.2em;
+}
+.plan-features li {
+  margin: 6px 0;
+  color: var(--soft);
+}
+.plan-features li::marker {
+  content: '✓  ';
+  color: var(--accent);
+}
+.plan-trial {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  color: var(--sun);
+}
+
+/* Every region's prices: what a crawler and an assistant read, and a reader abroad compares. */
+.pricing-table .table {
+  overflow-x: auto;
+  margin-top: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.pricing-table table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+.pricing-table th,
+.pricing-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  color: var(--soft);
+  white-space: nowrap;
+}
+.pricing-table thead th {
+  color: var(--ink);
+  font-size: 0.9rem;
+  white-space: normal;
+}
+.pricing-table tbody th {
+  color: var(--ink);
+}
+.pricing-table tr:last-child > * {
+  border-bottom: 0;
+}
+.pricing-table tr.here > * {
+  background: rgba(53, 214, 232, 0.1);
+  color: var(--ink);
+}
+.pricing-table small {
+  color: var(--sun);
+}
+.pricing-faq h3 {
+  margin-top: 0;
+}

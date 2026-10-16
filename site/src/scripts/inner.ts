@@ -1,10 +1,12 @@
 /** What an inner page — a legal text, a page of a game — does once it is read: its links into the game and its language menu, nothing else of the main page. */
 import { rememberLangChoice } from '@pulsar/platform/browser';
+import { showPricingLinks } from './health.ts';
 import { wireLanguageMenu } from './language.ts';
 import { wirePortalLinks } from './portals.ts';
 
 wirePortalLinks();
 wireLanguageMenu();
+void showPricingLinks();
 
 // Going back to the main page, the reader stays in the language of the page: without
 // this «/» would send them by their country (`vercel.json`) — from a Ukrainian page to the Polish one.

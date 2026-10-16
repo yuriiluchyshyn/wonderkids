@@ -4,15 +4,7 @@
  * to their language (`vercel.json`).
  */
 import { rememberLangChoice } from '@pulsar/platform/browser';
-import { localGameOrigin } from './portals.ts';
-
-/** Where the API answers what is offered in the visitor's country: built into the page, or the dev server beside this one. */
-function availabilityEndpoint(): string | null {
-  const built = document.body.dataset.visitsApi;
-  if (!built) return null;
-  const local = localGameOrigin();
-  return local ? local + new URL(built, window.location.href).pathname : built;
-}
+import { health } from './health.ts';
 
 /**
  * The owner may offer only some languages in a country (the admin panel's
@@ -22,11 +14,8 @@ function availabilityEndpoint(): string | null {
  * With one language left there is nothing to choose, and the menu goes too.
  */
 async function offerOnlyWhatIsHere(): Promise<void> {
-  const api = availabilityEndpoint();
-  if (!api) return;
   try {
-    const { availability } = (await (await fetch(api, { cache: 'no-store' })).json()) as { availability?: { langs?: { site?: string[] | null } } };
-    const offered = availability?.langs?.site;
+    const offered = (await health())?.availability?.langs?.site;
     const links = [...document.querySelectorAll<HTMLAnchorElement>('a[data-lang]')];
     // A rule that names none of this site's languages says nothing here.
     if (!Array.isArray(offered) || !links.some((link) => offered.includes(link.dataset.lang ?? ''))) return;

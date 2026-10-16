@@ -134,6 +134,8 @@
           <a href="#games">{{nav.games}}</a>
           <a href="#world">{{nav.world}}</a>
           <a href="#parents">{{nav.parents}}</a>
+          <!-- Shown only while the owner offers the page of prices (`src/scripts/health.ts`). -->
+          <a href="/{{@home}}pricing/" data-pricing-link hidden>{{nav.pricing}}</a>
         </nav>
         <!-- The two ways in, top right; the language last of all. -->
         <!-- «Play» is the child's door: their login (a child already signed in goes straight on to the hub). The game's bare address would send a visitor without a session to the parents' login. -->
@@ -556,7 +558,7 @@
         <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}} · {{footer.updated}}: <time datetime="{{@updatedIso}}">{{@updated}}</time></p>
         <!-- What the law asks to be said, and where to write. -->
         <p>
-          <a href="/{{@home}}privacy/">{{footer.privacy}}</a>·<a href="/{{@home}}terms/">{{footer.terms}}</a>·<a href="mailto:{{@email}}">{{@email}}</a>
+          <span data-pricing-link hidden><a href="/{{@home}}pricing/">{{nav.pricing}}</a>·</span><a href="/{{@home}}privacy/">{{footer.privacy}}</a>·<a href="/{{@home}}terms/">{{footer.terms}}</a>·<a href="mailto:{{@email}}">{{@email}}</a>
         </p>
       </div>
     </footer>
