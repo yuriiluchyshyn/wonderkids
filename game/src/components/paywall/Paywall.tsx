@@ -34,6 +34,8 @@ export function Paywall() {
   const view: View | null = paywall?.view ?? (catalog ? firstView(catalog, lang) : null);
   const paid = catalog ? paidPlan(catalog) : undefined;
   const free = catalog ? freePlan(catalog) : undefined;
+  const freeName = free ? planName(free, lang) : '';
+  const freeMinutes = free?.facts.dailyMinutes ?? 15;
   const upsell = paywall?.reason === 'upsell' && paywall.step === 'plans';
 
   const chooseFree = async () => {
@@ -96,6 +98,12 @@ export function Paywall() {
                 (catalog && view && catalog.plans.length ? (
                   <>
                     {mandatory && <p className={styles.hint}>{t('billing.paywall.chooseHint')}</p>}
+                    {/* The offer: which plan the parent has now, and what the plan they reached for would give. */}
+                    {paywall.perk && !mandatory && (
+                      <p className={styles.offer}>
+                        <b>{t('billing.offer.current', { name: freeName })}</b> {t(`billing.offer.${paywall.perk}` as const, { paid: paid ? planName(paid, lang) : '', minutes: t('parent.time.minutes', { n: freeMinutes }) })}
+                      </p>
+                    )}
                     {upsell && <p className={styles.hint}>{t('billing.paywall.upsellHint', { free: free ? planName(free, lang) : '', name: paid ? planName(paid, lang) : '' })}</p>}
                     <PlanCards
                       catalog={catalog}

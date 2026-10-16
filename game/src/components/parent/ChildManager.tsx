@@ -1,6 +1,5 @@
 import { useLang, useT } from '@/core/translator';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   useGameStore,
   selectNicknameTaken,
@@ -11,10 +10,8 @@ import { api, ApiError } from '@/core/account/api/client';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { Modal } from '@/components/ui/Modal';
-import { Dialog } from '@/components/paywall/Dialog';
-import payStyles from '@/components/paywall/Paywall.module.css';
-import { usePlan } from '@/core/account/billing/usePlan';
-import { freePlan, paidPlan, planName } from '@pulsar/plans';
+import { AddChildrenDialog } from '@/components/paywall/AddChildrenDialog';
+import { usePlan, useAllowance } from '@/core/account/billing/usePlan';
 import styles from './Parent.module.css';
 
 const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };
@@ -61,25 +58,31 @@ export function ChildManager() {
   const [draft, setDraft] = useState<NewChild>(BLANK);
   const [nickStatus, setNickStatus] = useState<NickStatus>('idle');
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
-  const [limited, setLimited] = useState(false);
+  /** The places the plan had when the window for more of them was opened; null — it is not open. */
+  const [toppingUp, setToppingUp] = useState<number | null>(null);
   const checkSeq = useRef(0);
 
-  // With the paid mode on, the Basic plan — or none chosen yet — has room for one child only.
-  // (The server holds the same limit: a save that adds a child beyond it is refused.) Family has as many as the plan has places.
-  const { state: plan, catalog, open: openPaywall } = usePlan();
-  const navigate = useNavigate();
-  const room = !plan?.paidMode ? null : plan.access === 'none' || plan.access === 'free' ? 1 : plan.access === 'family' ? (plan.plan?.children ?? null) : null;
-  const basic = catalog ? freePlan(catalog) : undefined;
-  const family = catalog ? paidPlan(catalog) : undefined;
+  // With the paid mode on, a child beyond the plan is the plan's to give (the server holds the same limit: a save that adds
+  // one is refused). No plan and the free plan are the same: one child — the offer shows the plans. Family has as many
+  // as it has places — when they are full the parent chooses how many to add, and pays the difference.
+  const { state: plan, catalog, open: openPaywall, setState: setPlanState } = usePlan();
+  const { restricted } = useAllowance();
+  const room = !plan?.paidMode ? null : restricted ? 1 : plan.access === 'family' ? (plan.plan?.children ?? null) : null;
 
-  const openAdd = () => {
-    if (room !== null && children.length >= room) {
-      setLimited(true);
-      return;
-    }
+  /** The form of a new child. */
+  const startAdd = () => {
     setDraft(BLANK);
     setNickStatus('idle');
     setAdding(true);
+  };
+
+  const openAdd = () => {
+    if (room !== null && children.length >= room) {
+      if (restricted) openPaywall({ reason: 'upgrade', step: 'plans', view: null, perk: 'children' });
+      else if (plan?.plan) setToppingUp(plan.plan.children ?? room);
+      return;
+    }
+    startAdd();
   };
 
   // Live nickname validation: charset → within-account → backend uniqueness.
@@ -189,33 +192,22 @@ export function ChildManager() {
         {t('cm.add')}
       </Button>
 
-      {/* ---- One child only on this plan ---- */}
-      {limited && (
-        <Dialog title={t('cm.add')} onClose={() => setLimited(false)}>
-          <p className={payStyles.dialogText}>
-            {plan?.access === 'family'
-              ? t('billing.limit.family', { places: t('billing.kids', { count: room ?? 0 }) })
-              : plan?.access === 'free'
-                ? t('billing.limit.free', { name: basic ? planName(basic, lang) : t('billing.limit.basic') })
-                : t('billing.limit.none')}
-          </p>
-          <div className={payStyles.dialogActions}>
-            <button type="button" className={payStyles.secondary} onClick={() => setLimited(false)}>
-              {t('billing.add.close')}
-            </button>
-            <button
-              type="button"
-              className={payStyles.primary}
-              onClick={() => {
-                setLimited(false);
-                if (plan?.access === 'family') navigate('/parent/subscription');
-                else openPaywall({ reason: 'upgrade', step: 'plans', view: null });
-              }}
-            >
-              {plan?.access === 'family' ? t('billing.section.manage') : plan?.access === 'free' ? t('billing.section.upgrade', { name: family ? planName(family, lang) : '' }) : t('billing.section.choose')}
-            </button>
-          </div>
-        </Dialog>
+      {/* ---- Family, every place taken: how many more children? (then the amount due, then the payment) ---- */}
+      {toppingUp !== null && token && plan?.plan && (
+        <AddChildrenDialog
+          token={token}
+          current={plan.plan.children ?? toppingUp}
+          period={plan.plan.period ?? 'year'}
+          region={plan.plan.region}
+          catalog={catalog}
+          onClose={() => {
+            const before = toppingUp;
+            setToppingUp(null);
+            // The places grew: on to the new child's form.
+            if ((usePlan.getState().state?.plan?.children ?? 0) > before) startAdd();
+          }}
+          onDone={(next) => setPlanState(next)}
+        />
       )}
 
       {/* ---- Add child ---- */}

@@ -1092,11 +1092,16 @@
       "cancel": "Anuluj",
       "ok": "Potwierdź"
     },
-    "limit": {
-      "basic": "Podstawowy",
-      "free": "Wybrany plan: {name}. W tym planie można mieć tylko jedno dziecko.",
-      "none": "Plan nie został jeszcze wybrany. Dopóki go nie ma, można mieć tylko jedno dziecko.",
-      "family": "W planie: {places}, a wszystkie miejsca są zajęte. Aby dodać kolejne dziecko, najpierw dodaj miejsce w planie."
+    "offer": {
+      "current": "Twój obecny plan: {name}.",
+      "goals": "Rodzinne cele — nagrody za zebrane dla każdego dziecka — są w planie {paid}.",
+      "time": "Czas ekranowy w Twoim planie jest ustalony: {minutes} dziennie. Sesję, przerwę i dzienny limit można ustawić w planie {paid}.",
+      "children": "W Twoim planie jest miejsce tylko dla jednego dziecka. W planie {paid} dzieci może być więcej."
+    },
+    "lock": {
+      "goals": "Rodzinne cele — nagrody za zebrane dla każdego dziecka — są w planie {paid}.",
+      "time": "Czas ekranowy w Twoim planie jest ustalony: {minutes} dziennie. Można go zmienić w planie {paid}.",
+      "see": "Zobacz plany"
     },
     "manage": {
       "title": "Zarządzanie subskrypcją",

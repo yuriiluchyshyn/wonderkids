@@ -1042,11 +1042,16 @@
       "cancel": "Cancel",
       "ok": "Confirm"
     },
-    "limit": {
-      "basic": "Basic",
-      "free": "Your plan: {name}. This plan allows only one child.",
-      "none": "No plan is chosen yet. Until there is one, only one child is allowed.",
-      "family": "The plan has {places}, and every place is taken. To add another child, first add a place to the plan."
+    "offer": {
+      "current": "Your current plan: {name}.",
+      "goals": "Family goals — a reward for what each child collects — come with the {paid} plan.",
+      "time": "Screen time on your plan is set: {minutes} a day. Session, break and daily limit can be set on the {paid} plan.",
+      "children": "Your plan has room for one child only. The {paid} plan has room for more."
+    },
+    "lock": {
+      "goals": "Family goals — a reward for what each child collects — come with the {paid} plan.",
+      "time": "Screen time on your plan is set: {minutes} a day. It can be changed on the {paid} plan.",
+      "see": "See the plans"
     },
     "manage": {
       "title": "Manage subscription",

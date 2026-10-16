@@ -31,6 +31,8 @@ import { Button } from '@/components/ui/Button';
 import { ThemeGrid } from '@/components/settings/ThemeGrid';
 import { useActiveTheme } from '@/core/theme/useActiveTheme';
 import { BillingSection } from '@/components/paywall/BillingSection';
+import { PlanLock } from '@/components/paywall/PlanLock';
+import { useAllowance } from '@/core/account/billing/usePlan';
 import { ChildManager } from './ChildManager';
 import { FamilyData } from './FamilyData';
 import { GoalRow } from './GoalRow';
@@ -125,6 +127,8 @@ export function ParentDashboard() {
   const email = useAuthStore((s) => s.user?.email);
   const token = useAuthStore((s) => s.token);
   const logout = useAuthStore((s) => s.logout);
+  // No plan and the free plan are the same: the family's goals and the screen time are the plan's to give (the server holds them too).
+  const { restricted } = useAllowance();
 
   // Explicit-save mode: pause the live server-sync while editing here; snapshot
   // the saved state so leaving without "Save" discards unsaved edits.
@@ -454,6 +458,10 @@ export function ParentDashboard() {
           {t('parent.time.hint')}
         </p>
 
+        {restricted ? (
+          <PlanLock perk="time" />
+        ) : (
+        <>
         <label className={styles.fieldLabel}>{t('parent.time.session')}</label>
         <select
           className={styles.textInput}
@@ -509,6 +517,8 @@ export function ParentDashboard() {
         <Button block icon={timeReset ? '✅' : '⛽'} onClick={resetTimeNow}>
           {timeReset ? t('parent.time.refilled') : t('parent.time.refillButton')}
         </Button>
+        </>
+        )}
       </section>
 
       {/* ---- Milestone goals on the path ---- */}
@@ -517,6 +527,10 @@ export function ParentDashboard() {
         <p className={styles.hint}>
           {t('parent.goals.hint')}
         </p>
+        {restricted ? (
+          <PlanLock perk="goals" />
+        ) : (
+          <>
         <div className="stack">
           {milestones.map((m) => (
             <GoalRow
@@ -533,6 +547,8 @@ export function ParentDashboard() {
             {t('parent.goals.add')}
           </Button>
         </div>
+          </>
+        )}
       </section>
 
       {/* ---- Per-task step control ---- */}

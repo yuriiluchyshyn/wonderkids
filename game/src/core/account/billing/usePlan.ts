@@ -21,6 +21,20 @@ export interface Paywall {
   view: View | null;
   /** A promotion code the link brought. */
   promo?: string;
+  /** What the parent reached for that their plan does not give — the offer says so above the plans. */
+  perk?: Perk;
+}
+
+/** What the free plan (and no plan) does not give: the family's goals, setting the screen time, more than one child. */
+export type Perk = 'goals' | 'time' | 'children';
+
+/**
+ * What the plan lets the parents do, as the server holds it (`SubscriptionService.allowanceOf`) — the cabinet
+ * asks the same to offer the plans in place of a control. No plan chosen and the free plan are the same.
+ */
+export function useAllowance(): { restricted: boolean } {
+  const state = usePlan((s) => s.state);
+  return { restricted: state?.paidMode === true && (state.access === 'none' || state.access === 'free') };
 }
 
 interface PlanStore {

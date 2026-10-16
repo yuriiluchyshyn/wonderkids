@@ -57,7 +57,8 @@ export function PlanCards({ catalog, view, access, mustChoose, busy, onView, onF
 
       <div className={styles.cards}>
         {free && (
-          <PlanCard plan={free} current={access === 'free'}>
+          // No plan chosen and the free plan are the same: either way this is the plan the parent has now.
+          <PlanCard plan={free} current={access === 'free' || (access === 'none' && !mustChoose)}>
             <p className={styles.price}>
               <b>{formatPrice(0, catalog.regions.find((r) => r.id === view.region)?.currency ?? 'USD', lang)}</b> <span>{t('billing.paywall.forever')}</span>
             </p>
