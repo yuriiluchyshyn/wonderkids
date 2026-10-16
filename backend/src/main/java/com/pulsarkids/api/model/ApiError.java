@@ -59,6 +59,7 @@ public enum ApiError {
   PRICE_CHANGED(409, "price_changed"),
   PAYMENT_FAILED(402, "payment_failed"),
   CHILDREN_IN_USE(409, "children_in_use"),
+  CHILD_LIMIT(403, "child_limit"),
   INVALID_PARENT_ID(400, "invalid_parent_id"),
   INVALID_SPEECH_ENABLED(400, "invalid_speech_enabled"),
   INVALID_ENABLED(400, "invalid_enabled"),

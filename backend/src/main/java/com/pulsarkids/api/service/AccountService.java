@@ -41,6 +41,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +67,7 @@ public class AccountService {
   private final MilestoneRepository milestoneRepo;
   private final ScreenTimeRepository screenRepo;
   private final Messages messages;
+  private final SubscriptionService subscriptions;
 
   // ---------------------------------------------------------------------------
   // Accounts
@@ -326,6 +328,14 @@ public class AccountService {
     }
 
     if (!childIds.isEmpty() && children.existsByIdInAndParentIdNot(childIds, userId)) throw new HttpError(ApiError.CHILD_ID_TAKEN);
+
+    // The plan's room for children: a save that ADDS a child beyond it is refused whole. A save that only edits or
+    // removes (an account that had more before the limit, or before a plan went down) is never refused for it.
+    Integer limit = subscriptions.childLimit(userId);
+    if (limit != null && childIds.size() > limit) {
+      Set<String> kept = children.findByParentIdOrderBySortIndexAscCreatedAtAsc(userId).stream().map(Child::getId).collect(Collectors.toSet());
+      if (!kept.containsAll(childIds)) throw new HttpError(ApiError.CHILD_LIMIT, Map.of(Fields.LIMIT, limit));
+    }
 
     // The children the save no longer lists are gone — before anything is loaded.
     if (childIds.isEmpty()) children.deleteAllOf(userId);

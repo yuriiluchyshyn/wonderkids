@@ -434,6 +434,13 @@ class ApiTest {
     for (JsonNode account : listed) if (account.get("id").asLong() == parentId) assertEquals("gift", account.at("/billing/access").asText());
     asAdmin("PUT", "/api/admin/users", Map.of("parentId", parentId, "gift", false));
     assertEquals("free", asParent("GET", "/api/billing/me", null).body().get("access").asText(), "back to what was chosen");
+    // The free plan has room for one child: a save that adds a second is refused whole and changes nothing.
+    int before = asParent("GET", "/api/state", null).body().at("/state/children").size();
+    Answer crowded = asParent("PUT", "/api/state", json("{'state':{'children':[{'id':'kid-1','profile':{'name':'Марко'}},{'id':'kid-new-1','profile':{'name':'Нова'}},{'id':'kid-new-2','profile':{'name':'Ще'}}]}}"));
+    assertEquals(403, crowded.status());
+    assertEquals("child_limit", crowded.text("error"));
+    assertEquals(1, crowded.body().get("limit").asInt());
+    assertEquals(before, asParent("GET", "/api/state", null).body().at("/state/children").size(), "nothing of the refused save was kept");
     asAdmin("PUT", "/api/admin/users?part=settings", Map.of("paidMode", false));
     // The paid mode off: every part of paying is off — even for an account that chose a plan.
     assertEquals(json("{'paidMode':false,'access':'none','mustChoose':false,'plan':null,'gift':null}"), asParent("GET", "/api/billing/me", null).body());

@@ -116,6 +116,32 @@ public class SubscriptionService {
   }
 
   /**
+   * How many child profiles the account may have, or null for no limit. With the
+   * paid mode off there is none, and a gift has none ("no limits"); with no plan
+   * chosen, or the free plan, it is one; with Family it is the places in the plan
+   * (the children its package includes plus those paid for). If Stripe cannot say
+   * what a package includes, Family is not held to a number it cannot be told.
+   */
+  public Integer childLimit(int parentId) {
+    if (!marketing.paidModeOn()) return null;
+    BillingAccount account = load(parentId);
+    dropTakenBackGift(account);
+    return switch (Plans.accessOf(account.getPlan(), account.getStatus(), account.getGift())) {
+      case NONE, FREE -> 1;
+      case GIFT -> null;
+      case FAMILY -> {
+        if (account.getChildren() != null) yield account.getChildren();
+        try {
+          yield account.getPlanId() == null ? null : Catalog.childrenIncluded(billing.catalog(), account.getPlanId());
+        } catch (StripeException err) {
+          log.error("[billing] places of the plan not read for account {}: {}", parentId, err.getMessage());
+          yield null;
+        }
+      }
+    };
+  }
+
+  /**
    * What the parent's game and cabinet are told: whether the paid mode is on,
    * what the account has, whether it must choose a plan now, and its plan.
    */
