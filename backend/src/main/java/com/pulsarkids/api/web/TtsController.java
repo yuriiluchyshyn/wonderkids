@@ -8,6 +8,7 @@ import com.pulsarkids.api.core.Tts;
 import com.pulsarkids.api.model.ApiError;
 import com.pulsarkids.api.model.Fields;
 import com.pulsarkids.api.model.Lang;
+import com.pulsarkids.api.model.SpeechAudience;
 import com.pulsarkids.api.model.Wire;
 import com.pulsarkids.api.service.SchemaService;
 import com.pulsarkids.api.service.SpeechService;
@@ -31,7 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
  *   POST /api/tts/trial  { text, lang? }  →  { audio }                 the trial game (no account)
  *
  * `lang` (`uk` — the default —, `en`, `pl`) names the language of the phrase,
- * and with it the voice that reads it. The text may carry stress marks
+ * and with it the voice that reads it: the one the owner chose for that language
+ * in the settings (for accounts, or for the trial game), else as `Tts.voiceFor` finds it. The text may carry stress marks
  * (U+0301, `game/src/core/language/stress.ts`); they are not counted in its length.
  *
  * An account speaks with the Google Cloud key the admin configured for it; the
@@ -65,7 +67,8 @@ public class TtsController extends ApiController {
     String apiKey = config.enabled() ? Secrets.decrypt(config.encryptedKey()) : null;
     if (apiKey == null || apiKey.isEmpty()) throw new HttpError(ApiError.TTS_DISABLED);
 
-    String voice = Tts.voiceFor(Wire.of(Lang.class, Json.at(body, Fields.LANG), Lang.DEFAULT), config.voice());
+    Lang lang = Wire.of(Lang.class, Json.at(body, Fields.LANG), Lang.DEFAULT);
+    String voice = Tts.voiceFor(lang, speech.chosenVoice(SpeechAudience.ACCOUNTS, lang), config.voice());
     return ok(Fields.AUDIO, speechOf(apiKey, voice, text, null));
   }
 
@@ -83,7 +86,8 @@ public class TtsController extends ApiController {
     String apiKey = trial.live() ? Secrets.decrypt(trial.encryptedKey()) : null;
     if (apiKey == null || apiKey.isEmpty()) throw new HttpError(ApiError.TTS_DISABLED);
 
-    String voice = Wire.of(Lang.class, Json.at(body, Fields.LANG), Lang.DEFAULT).getCloudVoice();
+    Lang lang = Wire.of(Lang.class, Json.at(body, Fields.LANG), Lang.DEFAULT);
+    String voice = Tts.voiceFor(lang, speech.chosenVoice(SpeechAudience.TRIAL, lang), null);
     return ok(Fields.AUDIO, speechOf(apiKey, voice, text, Requests.clientIp(request)));
   }
 

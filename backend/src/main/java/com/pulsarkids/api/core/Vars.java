@@ -22,6 +22,8 @@ public final class Vars {
   public static final String FEEDBACK_TO = "FEEDBACK_TO";
   /** Another address for Google Speech (tests). */
   public static final String GOOGLE_TTS_ENDPOINT = "GOOGLE_TTS_ENDPOINT";
+  /** Another address for Google's list of voices (tests). */
+  public static final String GOOGLE_VOICES_ENDPOINT = "GOOGLE_VOICES_ENDPOINT";
   /** How long a session lasts: 30d (the default), 12h, 3600. */
   public static final String JWT_EXPIRES_IN = "JWT_EXPIRES_IN";
   /** Signs sessions and the tickets of letters and visits; by default also the key stored secrets are encrypted with. */

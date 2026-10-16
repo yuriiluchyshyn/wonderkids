@@ -9,6 +9,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Pattern;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,6 +25,11 @@ import lombok.NoArgsConstructor;
 public final class Tts {
   /** Google Cloud Text-to-Speech: its address and the fields of a request and an answer. */
   private static final String GOOGLE_URL = "https://texttospeech.googleapis.com/v1/text:synthesize";
+  private static final String VOICES_URL = "https://texttospeech.googleapis.com/v1/voices";
+  private static final String VOICES = "voices";
+  private static final String LANGUAGE_CODES = "languageCodes";
+  private static final String SSML_GENDER = "ssmlGender";
+  private static final String LANGUAGE_CODE_PARAM = "?languageCode=";
   private static final String INPUT = "input";
   private static final String TEXT = "text";
   private static final String VOICE = "voice";
@@ -66,6 +74,10 @@ public final class Tts {
     return Env.get(Vars.GOOGLE_TTS_ENDPOINT, GOOGLE_URL);
   }
 
+  private static String voicesEndpoint() {
+    return Env.get(Vars.GOOGLE_VOICES_ENDPOINT, VOICES_URL);
+  }
+
   /** The length of a phrase as it is read: the stress marks are not letters. */
   public static int lengthOf(String text) {
     return text.replace(STRESS, "").length();
@@ -84,6 +96,64 @@ public final class Tts {
   public static String voiceFor(Lang lang, String configured) {
     String voice = normaliseVoice(configured);
     return voice.toLowerCase().startsWith(lang.getCode() + "-") ? voice : lang.getCloudVoice();
+  }
+
+  /** Whether `voice` is a well-formed voice name of `lang` (`pl-PL-Wavenet-A` is Polish). */
+  public static boolean speaks(Lang lang, String voice) {
+    return voice != null && VOICE_RE.matcher(voice).matches() && voice.toLowerCase().startsWith(lang.getCode() + "-");
+  }
+
+  /**
+   * The voice that reads `lang`: the one the owner chose for this language in
+   * the settings wins; then the voice stored with the key, when it is of this
+   * language; then the language's own.
+   */
+  public static String voiceFor(Lang lang, String chosen, String configured) {
+    return speaks(lang, chosen) ? chosen : voiceFor(lang, configured);
+  }
+
+  /** A voice Google offers: its name and whether it sounds as a woman or a man (`FEMALE`, `MALE`). */
+  public record Voice(String name, String gender) {}
+
+  /** The voices Google offers for `lang` (only those of its `cloudLocales`), sorted by name. */
+  public static List<Voice> voicesOf(String apiKey, Lang lang) throws Failed {
+    List<Voice> out = new ArrayList<>();
+    for (String locale : lang.getCloudLocales()) {
+      JsonNode data = get(apiKey, voicesEndpoint() + LANGUAGE_CODE_PARAM + locale);
+      for (JsonNode voice : Json.at(data, VOICES)) {
+        String name = Json.text(Json.at(voice, NAME));
+        boolean ofLocale = false;
+        for (JsonNode code : Json.at(voice, LANGUAGE_CODES)) ofLocale |= locale.equals(code.asText());
+        if (ofLocale && speaks(lang, name)) out.add(new Voice(name, Json.text(Json.at(voice, SSML_GENDER))));
+      }
+    }
+    out.sort(Comparator.comparing(Voice::name));
+    return out;
+  }
+
+  /** A GET to Google with the key: its answer, or why there is none. */
+  private static JsonNode get(String apiKey, String url) throws Failed {
+    HttpResponse<String> res;
+    try {
+      HttpRequest request = HttpRequest.newBuilder(URI.create(url)).timeout(Duration.ofSeconds(10)).header(API_KEY_HEADER, apiKey).GET().build();
+      res = HTTP.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+    } catch (InterruptedException err) {
+      Thread.currentThread().interrupt();
+      throw new Failed(ApiError.TTS_UNREACHABLE, String.valueOf(err.getMessage()));
+    } catch (Exception err) {
+      throw new Failed(ApiError.TTS_UNREACHABLE, String.valueOf(err.getMessage()));
+    }
+    JsonNode data;
+    try {
+      data = Json.MAPPER.readTree(res.body());
+    } catch (Exception err) {
+      data = Json.object();
+    }
+    if (res.statusCode() / 100 != 2) {
+      String reason = Json.text(Json.at(Json.at(data, ERROR), REASON));
+      throw new Failed(res.statusCode() == 400 || res.statusCode() == 403 ? ApiError.TTS_KEY_REJECTED : ApiError.TTS_FAILED, reason == null ? "HTTP " + res.statusCode() : reason);
+    }
+    return data;
   }
 
   /** The language a voice reads (`pl-PL-Wavenet-A` → Polish); the default one for a voice of a language we do not speak. */

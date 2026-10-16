@@ -68,6 +68,14 @@ class ApiTest {
       exchange.getResponseBody().write(answer);
       exchange.close();
     });
+    outside.createContext("/voices", (exchange) -> {
+      String locale = exchange.getRequestURI().getQuery().replace("languageCode=", "");
+      byte[] answer = ("{\"voices\":[{\"languageCodes\":[\"" + locale + "\"],\"name\":\"" + locale + "-Wavenet-B\",\"ssmlGender\":\"MALE\"},"
+          + "{\"languageCodes\":[\"" + locale + "\"],\"name\":\"" + locale + "-Chirp3-HD-Kore\",\"ssmlGender\":\"FEMALE\"}]}").getBytes(StandardCharsets.UTF_8);
+      exchange.sendResponseHeaders(200, answer.length);
+      exchange.getResponseBody().write(answer);
+      exchange.close();
+    });
     outside.createContext("/mail", (exchange) -> {
       mailed.add(Json.MAPPER.readTree(exchange.getRequestBody()));
       byte[] answer = "{\"id\":\"1\"}".getBytes(StandardCharsets.UTF_8);
@@ -84,6 +92,7 @@ class ApiTest {
     Env.set("VITE_AUTH0_DOMAIN", "");
     Env.set("VITE_AUTH0_CLIENT_ID", "");
     Env.set("GOOGLE_TTS_ENDPOINT", there + "/tts");
+    Env.set("GOOGLE_VOICES_ENDPOINT", there + "/voices");
     Env.set("RESEND_ENDPOINT", there + "/mail");
     Env.set("RESEND_API_KEY", "re_test");
     Env.set("FEEDBACK_TO", "owner@example.com");
@@ -480,6 +489,28 @@ class ApiTest {
     assertTrue(asAdmin("POST", "/api/admin/speech?test=1", Map.of("keyId", keyId)).body().get("ok").asBoolean());
     assertTrue(spoken.get(2).at("/input/text").asText().startsWith("Привіт!"), "a voice is tried with a phrase of its own language");
     assertEquals("no_key", asAdmin("POST", "/api/admin/speech?test=1", Map.of("keyId", 9999)).text("error"));
+
+    // The owner chooses the voice of each language, for every account and for the trial game.
+    JsonNode offered = asAdmin("GET", "/api/admin/speech?voices=1", null).body();
+    assertTrue(offered.get("ok").asBoolean(), offered.toString());
+    assertEquals(json("[{'name':'uk-UA-Chirp3-HD-Kore','gender':'FEMALE'},{'name':'uk-UA-Wavenet-B','gender':'MALE'}]"), offered.at("/voices/uk"));
+    assertEquals(4, offered.at("/voices/en").size(), "English is offered in American and British voices");
+    JsonNode before = asAdmin("GET", "/api/admin/users?part=settings", null).body().get("settings");
+    assertEquals(json("{'accounts':{'uk':'','en':'','pl':''},'trial':{'uk':'','en':'','pl':''}}"), before.get("voices"));
+    assertEquals("pl-PL-Wavenet-A", before.at("/defaultVoices/pl").asText());
+    assertEquals("invalid_voice", asAdmin("PUT", "/api/admin/users?part=settings", json("{'voices':{'accounts':{'uk':'pl-PL-Wavenet-A'}}}")).text("error"));
+    Answer chosen = asAdmin("PUT", "/api/admin/users?part=settings", json("{'voices':{'accounts':{'uk':'uk-UA-Wavenet-A'},'trial':{'pl':'pl-PL-Wavenet-B'}}}"));
+    assertEquals(200, chosen.status(), chosen.body().toString());
+    assertEquals(json("{'accounts':{'uk':'uk-UA-Wavenet-A','en':'','pl':''},'trial':{'uk':'','en':'','pl':'pl-PL-Wavenet-B'}}"), chosen.body().at("/settings/voices"));
+    asParent("POST", "/api/tts", Map.of("text", "Обраний голос"));
+    assertEquals("uk-UA-Wavenet-A", spoken.get(spoken.size() - 1).at("/voice/name").asText(), "the voice chosen in the settings wins over the key's");
+    assertTrue(asAdmin("POST", "/api/admin/speech?test=1", Map.of("audience", "trial", "lang", "pl")).body().get("ok").asBoolean());
+    assertEquals("pl-PL-Wavenet-B", spoken.get(spoken.size() - 1).at("/voice/name").asText());
+    asAdmin("POST", "/api/admin/speech?test=1", Map.of("audience", "accounts", "lang", "en", "voice", "en-GB-Wavenet-B"));
+    assertEquals("en-GB-Wavenet-B", spoken.get(spoken.size() - 1).at("/voice/name").asText(), "a voice is heard before it is chosen");
+    asAdmin("PUT", "/api/admin/users?part=settings", json("{'voices':{'accounts':{'uk':''},'trial':{'pl':''}}}"));
+    asParent("POST", "/api/tts", Map.of("text", "Знову свій голос"));
+    assertEquals("uk-UA-Wavenet-B", spoken.get(spoken.size() - 1).at("/voice/name").asText(), "back to the key's own voice");
 
     // Switched off for one account; then the key is given to that account alone.
     assertTrue(asAdmin("PUT", "/api/admin/users", Map.of("parentId", parentId, "speechEnabled", false)).body().get("speechOff").asBoolean());

@@ -18,6 +18,7 @@ public final class Fields {
   public static final String ACTIVE_CHILD_ID = "activeChildId";
   public static final String AMOUNT = "amount";
   public static final String ARTIFACTS = "artifacts";
+  public static final String AUDIENCE = "audience";
   public static final String AUDIO = "audio";
   public static final String AVAILABILITY = "availability";
   public static final String AVAILABLE = "available";
@@ -54,6 +55,7 @@ public final class Fields {
   public static final String DAYS = "days";
   public static final String DAY_KEY = "dayKey";
   public static final String DEFAULT_VOICE = "defaultVoice";
+  public static final String DEFAULT_VOICES = "defaultVoices";
   public static final String DEMOS = "demos";
   public static final String DEMO_MINUTES = "demoMinutes";
   public static final String DEMO_MINUTES_DEFAULT = "demoMinutesDefault";
@@ -206,6 +208,7 @@ public final class Fields {
   public static final String VISITORS = "visitors";
   public static final String VISITS = "visits";
   public static final String VOICE = "voice";
+  public static final String VOICES = "voices";
   public static final String VOICE_LANG = "voiceLang";
   public static final String VOICE_ON = "voiceOn";
   public static final String WHERE = "where";

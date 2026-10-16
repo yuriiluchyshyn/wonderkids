@@ -1,8 +1,8 @@
 package com.pulsarkids.api.model;
 
+import java.util.List;
 import java.util.Locale;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * The languages the product speaks. A new language is a new constant here —
@@ -10,11 +10,10 @@ import lombok.RequiredArgsConstructor;
  * its own list (`game/src/core/language`), and the two must name the same codes.
  */
 @Getter
-@RequiredArgsConstructor
 public enum Lang implements Wire {
-  UK("uk", "uk-UA-Chirp3-HD-Kore"),
-  EN("en", "en-US-Wavenet-F"),
-  PL("pl", "pl-PL-Wavenet-A");
+  UK("uk", "uk-UA-Chirp3-HD-Kore", "uk-UA"),
+  EN("en", "en-US-Wavenet-F", "en-US", "en-GB"),
+  PL("pl", "pl-PL-Wavenet-A", "pl-PL");
 
   /** The language the product was written in: what a phrase is in when nothing says otherwise. */
   public static final Lang DEFAULT = UK;
@@ -25,6 +24,14 @@ public enum Lang implements Wire {
   private final String code;
   /** The Google Cloud voice that reads this language — the only place a cloud voice is named. */
   private final String cloudVoice;
+  /** The Google locales whose voices the owner may choose for this language (`en-US`, `en-GB`). */
+  private final List<String> cloudLocales;
+
+  Lang(String code, String cloudVoice, String... cloudLocales) {
+    this.code = code;
+    this.cloudVoice = cloudVoice;
+    this.cloudLocales = List.of(cloudLocales);
+  }
 
   @Override
   public String wire() {

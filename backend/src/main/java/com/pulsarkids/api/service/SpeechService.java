@@ -11,10 +11,14 @@ import com.pulsarkids.api.data.repo.ParentRepository;
 import com.pulsarkids.api.data.repo.SettingRepository;
 import com.pulsarkids.api.data.repo.TtsCacheRepository;
 import com.pulsarkids.api.data.repo.TtsKeyRepository;
+import com.pulsarkids.api.core.Tts;
 import com.pulsarkids.api.model.Fields;
+import com.pulsarkids.api.model.Lang;
+import com.pulsarkids.api.model.SpeechAudience;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +36,11 @@ import org.springframework.transaction.annotation.Transactional;
  * The trial game (no account) has a key of its own, kept with the product's
  * settings (`wk_settings`, `trial_speech`): `{ enabled, key }`, the key
  * encrypted like the others.
+ *
+ * The voice each language is read in is the owner's choice too, once for every
+ * account and once for the trial game (`wk_settings`, `speech_voices`:
+ * `{ accounts: { uk: "uk-UA-…" }, trial: { … } }`); a language with no choice
+ * is read as before — by the key's own voice, or the language's.
  */
 @Service
 @RequiredArgsConstructor
@@ -46,8 +55,13 @@ public class SpeechService {
   /** One running instance reads the trial's voice at most this often; a change shows within it. */
   private static final long TRIAL_TTL_MS = 30_000;
 
+  /** The setting the voices chosen per language are kept in. */
+  public static final String VOICES_KEY = "speech_voices";
+
   private volatile TrialSpeech trial;
   private volatile long trialAt;
+  private volatile JsonNode voices;
+  private volatile long voicesAt;
 
   /** The cloud voice an account actually gets. The key is still encrypted here. */
   public record Config(boolean enabled, String encryptedKey, String voice) {}
@@ -102,6 +116,77 @@ public class SpeechService {
     trial = new TrialSpeech(enabled, key);
     trialAt = System.currentTimeMillis();
     return trial;
+  }
+
+  /** The voices chosen per language, as stored (read anew at most every 30 s, like the trial's voice). */
+  private JsonNode voices() {
+    JsonNode kept = voices;
+    if (kept != null && System.currentTimeMillis() - voicesAt < TRIAL_TTL_MS) return kept;
+    JsonNode read = settings.findById(VOICES_KEY).map((row) -> row.getValue()).orElse(null);
+    voices = read == null ? Json.object() : read;
+    voicesAt = System.currentTimeMillis();
+    return voices;
+  }
+
+  /** The voice the owner chose for `lang` for `who`; null — no choice, the voice is found as before. */
+  @Transactional(readOnly = true)
+  public String chosenVoice(SpeechAudience who, Lang lang) {
+    String voice = Json.text(Json.at(Json.at(voices(), who.wire()), lang.wire()));
+    return Tts.speaks(lang, voice) ? voice : null;
+  }
+
+  /** Every choice: `{ accounts: { uk: "…", en: "", pl: "" }, trial: { … } }` — empty where there is none. */
+  @Transactional(readOnly = true)
+  public Map<String, Object> chosenVoices() {
+    Map<String, Object> out = new LinkedHashMap<>();
+    for (SpeechAudience who : SpeechAudience.values()) {
+      Map<String, Object> byLang = new LinkedHashMap<>();
+      for (Lang lang : Lang.values()) {
+        String voice = chosenVoice(who, lang);
+        byLang.put(lang.wire(), voice == null ? "" : voice);
+      }
+      out.put(who.wire(), byLang);
+    }
+    return out;
+  }
+
+  /** Change some choices: a voice of that language, or null to go back to the default. The rest stay. */
+  @Transactional
+  public void saveVoices(Map<SpeechAudience, Map<Lang, String>> changes) {
+    voices = null;
+    ObjectNode value = voices().deepCopy();
+    for (Map.Entry<SpeechAudience, Map<Lang, String>> audience : changes.entrySet()) {
+      JsonNode before = value.get(audience.getKey().wire());
+      ObjectNode byLang = before instanceof ObjectNode kept ? kept : Json.object();
+      for (Map.Entry<Lang, String> choice : audience.getValue().entrySet()) {
+        if (choice.getValue() == null) byLang.remove(choice.getKey().wire());
+        else byLang.put(choice.getKey().wire(), choice.getValue());
+      }
+      value.set(audience.getKey().wire(), byLang);
+    }
+    Setting row = settings.findById(VOICES_KEY).orElseGet(() -> {
+      Setting made = new Setting();
+      made.setKey(VOICES_KEY);
+      return made;
+    });
+    row.setValue(value);
+    row.setUpdatedAt(Instant.now());
+    settings.save(row);
+    voices = value;
+    voicesAt = System.currentTimeMillis();
+  }
+
+  /**
+   * Some key to ask Google with when no account is speaking (the list of voices,
+   * a voice tried in the settings): the global key, else the first one stored,
+   * else the trial game's. Encrypted; null when there is none.
+   */
+  @Transactional(readOnly = true)
+  public String anyKey(SpeechAudience who) {
+    String trialKey = trialSpeech().encryptedKey();
+    if (who == SpeechAudience.TRIAL && trialKey != null) return trialKey;
+    TtsKey key = keys.findFirstByGlobalTrueOrderByIdAsc().orElseGet(() -> keys.findAllByOrderByIdAsc().stream().findFirst().orElse(null));
+    return key != null ? key.getEncryptedKey() : trialKey;
   }
 
   /** One stored key by id (encrypted), for the admin's "test" button; null when there is none. */

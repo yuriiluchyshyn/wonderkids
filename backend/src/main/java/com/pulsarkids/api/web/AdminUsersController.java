@@ -6,9 +6,12 @@ import com.pulsarkids.api.core.Availability;
 import com.pulsarkids.api.core.Json;
 import com.pulsarkids.api.core.Marketing;
 import com.pulsarkids.api.core.Secrets;
+import com.pulsarkids.api.core.Tts;
 import com.pulsarkids.api.model.AdminPart;
 import com.pulsarkids.api.model.ApiError;
 import com.pulsarkids.api.model.Fields;
+import com.pulsarkids.api.model.Lang;
+import com.pulsarkids.api.model.SpeechAudience;
 import com.pulsarkids.api.model.Wire;
 import com.pulsarkids.api.service.AccountService;
 import com.pulsarkids.api.service.MarketingService;
@@ -16,6 +19,8 @@ import com.pulsarkids.api.service.SchemaService;
 import com.pulsarkids.api.service.SpeechService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +44,10 @@ import org.springframework.web.bind.annotation.RestController;
  * With `?part=…` the same address serves the owner's side of the product:
  *
  *   GET    ?part=settings                        → { settings }
- *   PUT    ?part=settings  { demoMinutes?, trialSpeech?: { enabled, key? } }  → { settings }
- *          (`trialSpeech` — the trial game's own Google key and its switch; an empty `key` keeps the stored one)
+ *   PUT    ?part=settings  { demoMinutes?, trialSpeech?: { enabled, key? }, voices? }  → { settings }
+ *          (`trialSpeech` — the trial game's own Google key and its switch; an empty `key` keeps the stored one;
+ *          `voices` — `{ accounts?: { uk?: "uk-UA-…" | "" }, trial?: { … } }`, the voice each language is read in
+ *          for every account and for the trial game, "" back to the default; languages not named stay as they are)
  *   GET    ?part=links[&days=30]                 → { links, visits }   (days=0 — all time)
  *   POST   ?part=links     { name, mode, code?, note? }   a new link
  *   PUT    ?part=links     { id, name, note? }             rename one
@@ -126,7 +133,37 @@ public class AdminUsersController extends ApiController {
         Fields.DEMO_MINUTES_DEFAULT, Marketing.DEMO_MINUTES_DEFAULT,
         Fields.DEMO_MINUTES_MIN, Marketing.DEMO_MINUTES_MIN,
         Fields.DEMO_MINUTES_MAX, Marketing.DEMO_MINUTES_MAX,
-        Fields.TRIAL_SPEECH, trialSpeechView(speech.trialSpeech()));
+        Fields.TRIAL_SPEECH, trialSpeechView(speech.trialSpeech()),
+        Fields.VOICES, speech.chosenVoices(),
+        Fields.DEFAULT_VOICES, defaultVoices());
+  }
+
+  /** The voice each language is read in when the owner chose none. */
+  private static Map<String, Object> defaultVoices() {
+    Map<String, Object> out = new LinkedHashMap<>();
+    for (Lang lang : Lang.values()) out.put(lang.wire(), lang.getCloudVoice());
+    return out;
+  }
+
+  /** The changes of `voices` in a PUT, or null when one of them is not a voice of its language. */
+  private static Map<SpeechAudience, Map<Lang, String>> voiceChanges(JsonNode voices) {
+    Map<SpeechAudience, Map<Lang, String>> changes = new EnumMap<>(SpeechAudience.class);
+    for (SpeechAudience who : SpeechAudience.values()) {
+      JsonNode byLang = Json.at(voices, who.wire());
+      if (!Json.present(byLang)) continue;
+      Map<Lang, String> choices = new EnumMap<>(Lang.class);
+      for (Lang lang : Lang.values()) {
+        JsonNode raw = Json.at(byLang, lang.wire());
+        if (!Json.present(raw)) continue;
+        String voice = Json.text(raw);
+        if (voice == null) return null;
+        voice = voice.strip();
+        if (!voice.isEmpty() && !Tts.speaks(lang, voice)) return null;
+        choices.put(lang, voice.isEmpty() ? null : voice);
+      }
+      changes.put(who, choices);
+    }
+    return changes;
   }
 
   /** The trial game's voice as the admin panel sees it — never the key, only its last 4 characters. */
@@ -145,9 +182,12 @@ public class AdminUsersController extends ApiController {
     if (method == RequestMethod.PUT) {
       JsonNode rawMinutes = Json.at(body, Fields.DEMO_MINUTES);
       JsonNode trial = Json.at(body, Fields.TRIAL_SPEECH);
+      JsonNode voices = Json.at(body, Fields.VOICES);
       boolean hasMinutes = Json.present(rawMinutes);
       Integer minutes = hasMinutes ? Marketing.cleanDemoMinutes(rawMinutes) : null;
-      if ((hasMinutes || !Json.present(trial)) && minutes == null) return refuse(ApiError.INVALID_DEMO_MINUTES);
+      if ((hasMinutes || !(Json.present(trial) || Json.present(voices))) && minutes == null) return refuse(ApiError.INVALID_DEMO_MINUTES);
+      Map<SpeechAudience, Map<Lang, String>> voiceChanges = Json.present(voices) ? voiceChanges(voices) : Map.of();
+      if (voiceChanges == null) return refuse(ApiError.INVALID_VOICE);
       if (Json.present(trial)) {
         JsonNode enabled = Json.at(trial, Fields.ENABLED);
         if (!enabled.isBoolean()) return refuse(ApiError.INVALID_ENABLED);
@@ -158,6 +198,7 @@ public class AdminUsersController extends ApiController {
         if (enabled.booleanValue() && secret.isEmpty() && Secrets.decrypt(speech.trialSpeech().encryptedKey()) == null) return refuse(ApiError.INVALID_KEY);
         speech.saveTrialSpeech(enabled.booleanValue(), secret.isEmpty() ? null : Secrets.encrypt(secret));
       }
+      if (!voiceChanges.isEmpty()) speech.saveVoices(voiceChanges);
       if (minutes != null) marketing.setSetting(MarketingService.DEMO_MINUTES_KEY, IntNode.valueOf(minutes));
       return ok(Fields.SETTINGS, settingsView());
     }
