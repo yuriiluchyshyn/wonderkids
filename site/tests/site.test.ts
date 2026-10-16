@@ -287,7 +287,9 @@ test('the page of prices draws Stripe’s plans in the visitor’s region, and i
   assert.ok(renderPlans(PLANS, { ...view, children: 3 }, 'uk', words).includes(formatPrice(59900 + 13900, 'UAH', 'uk')), 'the total follows the children');
   // A year is shown against twelve months of the same: the twelve crossed out, the year's price, what it saves; the trial said big.
   const yearCard = renderPlans(PLANS, view, 'uk', words);
-  assert.ok(yearCard.includes(`<s>${formatPrice(7900 * 12, 'UAH', 'uk')}</s>`) && yearCard.includes('Річний план') && yearCard.includes('−37%'), 'the yearly price against twelve months');
+  // Three prices: the month on the monthly plan (crossed out), the month the year comes to, and the year's real price, small.
+  assert.ok(yearCard.includes(`<s>${formatPrice(7900, 'UAH', 'uk')}</s>`) && yearCard.includes(`<b>${formatPrice(Math.round(59900 / 12), 'UAH', 'uk')}</b>`) && yearCard.includes(`${formatPrice(59900, 'UAH', 'uk')} на рік`), 'the yearly price against the monthly plan');
+  assert.ok(yearCard.includes('Річний план') && yearCard.includes('−37%'), 'what the year saves');
   assert.ok(yearCard.includes('class="trial-banner">7 днів безкоштовно<'), 'the trial, big');
   assert.ok(!renderPlans(PLANS, { ...view, period: 'month' }, 'uk', words).includes('<s>'), 'nothing crossed out monthly');
   // No lead and no «prices for» line any more.

@@ -363,9 +363,8 @@
     "forever": "forever",
     "perYear": "per year",
     "perMonth": "per month",
-    "monthly": "that is {price} a month",
-    "extraYear": "{children} included; each additional kid +{price} per year",
-    "extraMonth": "{children} included; each additional kid +{price} per month",
+    "extraIncluded": "{children} included.",
+    "extraEach": "Each additional kid:",
     "trial": "The trial lasts {days}. The first charge comes right after it; cancel any time before then.",
     "unit": {
       "minutes": {

@@ -369,9 +369,8 @@
     "forever": "na zawsze",
     "perYear": "rocznie",
     "perMonth": "miesięcznie",
-    "monthly": "to {price} miesięcznie",
-    "extraYear": "W pakiecie: {children}; każde kolejne dziecko +{price} rocznie",
-    "extraMonth": "W pakiecie: {children}; każde kolejne dziecko +{price} miesięcznie",
+    "extraIncluded": "W pakiecie: {children}.",
+    "extraEach": "Każde kolejne dziecko:",
     "trial": "Okres próbny trwa {days}. Pierwsza płatność jest zaraz po nim; anulować można w dowolnym momencie przed nią.",
     "unit": {
       "minutes": {

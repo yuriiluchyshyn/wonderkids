@@ -72,13 +72,14 @@ function planCard(plan: CatalogPlan, catalog: Catalog, view: View, lang: string,
     if (total) {
       const block: string[] = [`<div class="price-block${swap(animate)}">`];
       if (view.period === 'year') {
-        // A year against twelve months of the same: the twelve crossed out, the year's price and what it saves.
+        // Three prices, in the middle: the month as the monthly plan would charge it (crossed out), the month the year comes to
+        // (the big one), and — small, under them — what is really paid, once a year.
         const monthly = totalOf(catalog, { ...view, period: 'month' });
         const full = monthly ? monthly.amount * 12 : 0;
         const saving = full > total.amount ? Math.round((1 - total.amount / full) * 100) : 0;
         block.push(`<p class="price-plan">${esc(say(words, 'yearPlan'))}${saving ? ` <span class="save-pill">${esc(say(words, 'save', { percent: saving }))}</span>` : ''}</p>`);
-        block.push(`<p class="price">${saving ? `<s>${esc(formatPrice(full, total.currency, lang))}</s> ` : ''}<b>${esc(formatPrice(total.amount, total.currency, lang))}</b> <span>${esc(say(words, 'perYear'))}</span></p>`);
-        block.push(`<p class="price-note">${esc(say(words, 'monthly', { price: formatPrice(Math.round(total.amount / 12), total.currency, lang) }))}</p>`);
+        block.push(`<p class="price">${saving && monthly ? `<s>${esc(formatPrice(monthly.amount, total.currency, lang))}</s> ` : ''}<b>${esc(formatPrice(Math.round(total.amount / 12), total.currency, lang))}</b> <span>${esc(say(words, 'perMonth'))}</span></p>`);
+        block.push(`<p class="price-note price-real">${esc(formatPrice(total.amount, total.currency, lang))} ${esc(say(words, 'perYear'))}</p>`);
       } else {
         block.push(`<p class="price-plan">${esc(say(words, 'monthPlan'))}</p>`);
         block.push(`<p class="price"><b>${esc(formatPrice(total.amount, total.currency, lang))}</b> <span>${esc(say(words, 'perMonth'))}</span></p>`);
@@ -89,12 +90,24 @@ function planCard(plan: CatalogPlan, catalog: Catalog, view: View, lang: string,
       // How many children: from those the plan includes up; every one beyond is a slot of its own.
       if (total.extra) {
         const least = childrenIncluded(catalog);
+        // The same three prices for a child beyond those included: on a year, the month it would cost on the monthly plan
+        // (crossed out), the month the year comes to, and the real price of the year, small.
+        const extra = total.extra;
+        const included = esc(say(words, 'extraIncluded', { children: facts.children ?? String(least) }));
+        let each: string;
+        if (view.period === 'year') {
+          const monthlyExtra = totalOf(catalog, { ...view, period: 'month' })?.extra;
+          const crossed = monthlyExtra && monthlyExtra.amount * 12 > extra.amount ? `<s>${esc(formatPrice(monthlyExtra.amount, extra.currency, lang))}</s> ` : '';
+          each = `${esc(say(words, 'extraEach'))} ${crossed}<b>+${esc(formatPrice(Math.round(extra.amount / 12), extra.currency, lang))}</b> ${esc(say(words, 'perMonth'))}<small>${esc(formatPrice(extra.amount, extra.currency, lang))} ${esc(say(words, 'perYear'))}</small>`;
+        } else {
+          each = `${esc(say(words, 'extraEach'))} <b>+${esc(formatPrice(extra.amount, extra.currency, lang))}</b> ${esc(say(words, 'perMonth'))}`;
+        }
         lines.push(
           `<div class="children-pick"><span class="children-label">${esc(say(words, 'children'))}</span>`,
           `<div class="stepper"><button type="button" data-children="-1" aria-label="${esc(say(words, 'fewer'))}"${view.children <= least ? ' disabled' : ''}>−</button>`,
           `<output aria-live="polite">${view.children}</output>`,
           `<button type="button" data-children="1" aria-label="${esc(say(words, 'more'))}"${view.children >= MAX_CHILDREN ? ' disabled' : ''}>+</button></div></div>`,
-          `<p class="price-extra${swap(animate)}">${esc(say(words, view.period === 'year' ? 'extraYear' : 'extraMonth', { price: formatPrice(total.extra.amount, total.extra.currency, lang), children: facts.children ?? String(least) }))}</p>`,
+          `<p class="price-extra${swap(animate)}">${included}<span class="extra-each">${each}</span></p>`,
         );
       }
     }
@@ -133,7 +146,8 @@ export function renderPeriods(catalog: Catalog, view: View, words: Words): strin
  * API out of reach) — a line saying the prices could not be loaded.
  */
 export function renderPlans(catalog: Catalog | null, view: View | null, lang: string, words: Words): string {
-  if (!catalog || !view || catalog.plans.length === 0) return `<p class="lead" data-plans-state>${esc(say(words, catalog === null ? 'loading' : 'unavailable'))}</p>`;
+  // While the prices load, a small galaxy turns above the words (`.galaxy-loader` in pricing.css).
+  if (!catalog || !view || catalog.plans.length === 0) return `<p class="lead plans-state" data-plans-state>${catalog === null ? '<span class="galaxy-loader" aria-hidden="true"></span>' : ''}${esc(say(words, catalog === null ? 'loading' : 'unavailable'))}</p>`;
   return `${renderPeriods(catalog, view, words)}<div data-grid>${renderGrid(catalog, view, lang, words)}</div>`;
 }
 

@@ -216,9 +216,10 @@
 
 /* ---- the window of prices and of paying ---- */
 .pricing-modal {
-  width: min(100% - 24px, 1000px);
-  max-height: calc(100dvh - 24px);
+  width: min(100% - 16px, 1040px);
+  max-height: calc(100dvh - 16px);
   padding: 0;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: linear-gradient(160deg, #2a1464, var(--bg-1));
@@ -269,9 +270,13 @@
     animation: none;
   }
 }
+/* The window is a column the height of the screen at most: the head stays, the body takes the rest and is compact enough to fit it. */
+.pricing-modal[open] {
+  display: flex;
+  flex-direction: column;
+}
 .pricing-modal-head {
-  position: sticky;
-  top: 0;
+  flex: none;
   z-index: 1;
   display: flex;
   align-items: center;
@@ -285,7 +290,54 @@
   font-size: 1.5rem;
 }
 .pricing-modal-body {
-  padding: 20px 22px 26px;
+  flex: 1;
+  min-height: 0;
+  padding: clamp(8px, 2vh, 20px) 22px clamp(12px, 2.4vh, 26px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+/* Fit the screen: on a lower window every gap and line of the cards shrinks with its height (no scrolling where it can be helped). */
+.pricing-modal .pricing-controls {
+  margin-top: clamp(0px, 1vh, 10px);
+}
+.pricing-modal .seg button {
+  min-height: clamp(40px, 5.4vh, 48px);
+}
+.pricing-modal .plans-grid {
+  gap: clamp(10px, 1.8vh, 18px);
+}
+.pricing-modal .plan {
+  gap: clamp(4px, 1vh, 10px);
+  padding: clamp(12px, 2.2vh, 24px);
+}
+.pricing-modal .plan h2 {
+  font-size: clamp(1.3rem, 3vh, 1.7rem);
+}
+.pricing-modal .plan .trial-banner {
+  padding: clamp(4px, 1vh, 10px) 14px;
+  font-size: clamp(1.25rem, 3.4vh, 2rem);
+}
+.pricing-modal .price b {
+  font-size: clamp(2rem, 5.2vh, 3rem);
+}
+.pricing-modal .stepper button {
+  width: clamp(36px, 4.6vh, 44px);
+  height: clamp(36px, 4.6vh, 44px);
+}
+.pricing-modal .children-pick {
+  margin-top: 4px;
+  padding-block: 4px;
+}
+.pricing-modal .plan-features {
+  margin: 4px 0 clamp(4px, 1vh, 12px);
+  font-size: clamp(0.84rem, 1.9vh, 1rem);
+}
+.pricing-modal .plan-features li {
+  margin: clamp(2px, 0.6vh, 6px) 0;
+}
+.pricing-modal .plan-trial {
+  margin-bottom: clamp(4px, 1vh, 12px);
+  font-size: clamp(0.84rem, 1.8vh, 0.95rem);
 }
 .pricing-modal-body .lead {
   margin: 0 0 6px;
@@ -334,6 +386,85 @@
   color: var(--soft);
   font-size: 1.25rem;
   text-decoration-thickness: 2px;
+}
+/* The paid card's prices stand in the middle: the crossed-out month, the month it comes to, and the real price small beneath. */
+.plan-pro .price-block,
+.plan-pro .price-extra {
+  align-items: center;
+  text-align: center;
+}
+.plan-pro .price-block .price,
+.plan-pro .price-block .price-plan {
+  justify-content: center;
+}
+.plan .price-real {
+  margin: 2px 0 0;
+  font-size: 0.9rem;
+  color: var(--soft);
+}
+/* A child beyond those included: the same three prices, smaller. */
+.price-extra .extra-each {
+  display: block;
+  margin-top: 2px;
+}
+.price-extra b {
+  color: var(--ink);
+  font-size: 1.1rem;
+}
+.price-extra s {
+  color: var(--soft);
+  text-decoration-thickness: 2px;
+}
+.price-extra small {
+  display: block;
+  color: var(--soft);
+  font-size: 0.85rem;
+}
+
+/* The loading state: a small galaxy over the words (transform only — it turns on the compositor). */
+.plans-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 0;
+  text-align: center;
+}
+.galaxy-loader {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+.galaxy-loader::before,
+.galaxy-loader::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+/* Two spiral arms, turning. */
+.galaxy-loader::before {
+  background: conic-gradient(from 0deg, transparent 0 8%, rgba(53, 214, 232, 0.9) 24%, transparent 46%, transparent 58%, rgba(124, 108, 255, 0.95) 74%, transparent 96%);
+  -webkit-mask: radial-gradient(circle, transparent 14%, #000 22%, #000 62%, transparent 72%);
+  mask: radial-gradient(circle, transparent 14%, #000 22%, #000 62%, transparent 72%);
+  animation: galaxy-turn 1.6s linear infinite;
+}
+/* The bright core, with a glow. */
+.galaxy-loader::after {
+  inset: 38%;
+  background: radial-gradient(circle, #fff 0 30%, var(--sun) 60%, transparent 100%);
+  box-shadow: 0 0 12px 3px rgba(253, 224, 71, 0.55);
+}
+@keyframes galaxy-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .galaxy-loader::before {
+    animation-duration: 6s;
+  }
 }
 /* What a choice changed fades in where it stands (transform and opacity only — docs/browser-support.md). */
 .swap {

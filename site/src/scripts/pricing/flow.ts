@@ -119,7 +119,7 @@ class PricingFlow {
     const body = this.body();
     if (!body) return;
     body.innerHTML = renderPlans(this.catalog, this.view, this.lang, this.words);
-    body.closest('dialog')?.scrollTo?.({ top: 0 });
+    body.scrollTo?.({ top: 0 });
   }
 
   /**
