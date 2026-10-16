@@ -363,8 +363,6 @@
     "forever": "forever",
     "perYear": "per year",
     "perMonth": "per month",
-    "extraIncluded": "{children} included.",
-    "extraEach": "Each additional kid:",
     "extraSum": "Plus for {children}:",
     "unit": {
       "minutes": {

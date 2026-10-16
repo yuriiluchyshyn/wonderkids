@@ -131,17 +131,12 @@
   color: var(--ink);
 }
 .price span,
-.price-note,
-.price-extra {
+.price-note {
   color: var(--soft);
 }
-.price-note,
-.price-extra {
+.price-note {
   margin: 4px 0 0;
   font-size: 0.95rem;
-}
-.price-extra {
-  color: #7fe7f3;
 }
 .plan-features {
   margin: 8px 0 12px;
@@ -387,8 +382,7 @@
   text-decoration-thickness: 2px;
 }
 /* The paid card's prices stand in the middle: the crossed-out month, the month it comes to, and the real price small beneath. */
-.plan-pro .price-block,
-.plan-pro .price-extra {
+.plan-pro .price-block {
   align-items: center;
   text-align: center;
 }
@@ -416,23 +410,18 @@
   font-size: 0.9rem;
   color: var(--soft);
 }
-/* A child beyond those included: the same three prices, smaller. */
-.price-extra .extra-each {
-  display: block;
-  margin-top: 2px;
+/* The name of the plan and its badge on one line. */
+.plan-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
 }
-.price-extra b {
-  color: var(--ink);
-  font-size: 1.1rem;
+.plan-head h2 {
+  margin: 0;
 }
-.price-extra s {
-  color: var(--soft);
-  text-decoration-thickness: 2px;
-}
-.price-extra small {
-  display: block;
-  color: var(--soft);
-  font-size: 0.85rem;
+.plan-head .plan-badge {
+  align-self: center;
 }
 
 /* The loading state: a small galaxy over the words (transform only — it turns on the compositor). */

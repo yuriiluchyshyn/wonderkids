@@ -10,6 +10,10 @@ import { api, ApiError } from '@/core/account/api/client';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/paywall/Dialog';
+import payStyles from '@/components/paywall/Paywall.module.css';
+import { usePlan } from '@/core/account/billing/usePlan';
+import { freePlan, paidPlan, planName } from '@pulsar/plans';
 import styles from './Parent.module.css';
 
 const AVATAR: Record<string, string> = { girl: '👧', boy: '👦' };
@@ -56,9 +60,20 @@ export function ChildManager() {
   const [draft, setDraft] = useState<NewChild>(BLANK);
   const [nickStatus, setNickStatus] = useState<NickStatus>('idle');
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
+  const [limited, setLimited] = useState(false);
   const checkSeq = useRef(0);
 
+  // With the paid mode on, the Basic plan — or none chosen yet — has room for one child only.
+  const { state: plan, catalog, open: openPaywall } = usePlan();
+  const oneChildOnly = plan?.paidMode === true && (plan.access === 'none' || plan.access === 'free');
+  const basic = catalog ? freePlan(catalog) : undefined;
+  const family = catalog ? paidPlan(catalog) : undefined;
+
   const openAdd = () => {
+    if (oneChildOnly && children.length >= 1) {
+      setLimited(true);
+      return;
+    }
     setDraft(BLANK);
     setNickStatus('idle');
     setAdding(true);
@@ -170,6 +185,32 @@ export function ChildManager() {
       <Button block size="lg" icon="➕" onClick={openAdd}>
         {t('cm.add')}
       </Button>
+
+      {/* ---- One child only on this plan ---- */}
+      {limited && (
+        <Dialog title={t('cm.add')} onClose={() => setLimited(false)}>
+          <p className={payStyles.dialogText}>
+            {plan?.access === 'free'
+              ? t('billing.limit.free', { name: basic ? planName(basic, lang) : t('billing.limit.basic') })
+              : t('billing.limit.none')}
+          </p>
+          <div className={payStyles.dialogActions}>
+            <button type="button" className={payStyles.secondary} onClick={() => setLimited(false)}>
+              {t('billing.add.close')}
+            </button>
+            <button
+              type="button"
+              className={payStyles.primary}
+              onClick={() => {
+                setLimited(false);
+                openPaywall({ reason: 'upgrade', step: 'plans', view: null });
+              }}
+            >
+              {plan?.access === 'free' ? t('billing.section.upgrade', { name: family ? planName(family, lang) : '' }) : t('billing.section.choose')}
+            </button>
+          </div>
+        </Dialog>
+      )}
 
       {/* ---- Add child ---- */}
       <Modal open={adding} onClose={() => setAdding(false)} title={t('cm.new')} icon="🧒">

@@ -362,8 +362,21 @@
   background: rgba(127, 127, 127, 0.18);
 }
 
+.planHead {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
 .planName {
+  margin: 0;
   font-size: clamp(1.25rem, 3vh, 1.5rem);
+}
+
+.planHead .badge,
+.planHead .currentTag {
+  align-self: center;
 }
 
 .tagline,
@@ -433,8 +446,7 @@
 }
 
 /* The paid card's prices stand in the middle: the crossed-out month, the month it comes to, and the real price small beneath. */
-.cardPro .priceBlock,
-.cardPro .extra {
+.cardPro .priceBlock {
   align-items: center;
   text-align: center;
 }
@@ -468,31 +480,6 @@
   font-size: 0.9rem;
 }
 
-/* A child beyond those included: the same three prices, smaller. */
-.extra {
-  margin: 0;
-  color: var(--text-soft);
-  font-size: 0.93rem;
-}
-
-.extraEach {
-  display: block;
-  margin-top: 2px;
-}
-
-.extra b {
-  color: var(--text);
-  font-size: 1.1rem;
-}
-
-.extra s {
-  text-decoration-thickness: 2px;
-}
-
-.extra small {
-  display: block;
-  font-size: 0.85rem;
-}
 
 .childrenPick {
   display: flex;

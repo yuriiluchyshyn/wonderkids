@@ -369,8 +369,6 @@
     "forever": "назавжди",
     "perYear": "на рік",
     "perMonth": "на місяць",
-    "extraIncluded": "У пакеті — {children}.",
-    "extraEach": "Кожна наступна дитина:",
     "extraSum": "Ще за {children}:",
     "unit": {
       "minutes": {

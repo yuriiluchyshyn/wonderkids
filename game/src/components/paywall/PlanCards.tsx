@@ -6,6 +6,7 @@ import {
   extraOf,
   formatPrice,
   freePlan,
+  isChildrenLine,
   paidPlan,
   planName,
   totalOf,
@@ -77,7 +78,7 @@ export function PlanCards({ catalog, view, access, mustChoose, busy, onView, onF
               </motion.div>
             </AnimatePresence>
             <ChildrenPick catalog={catalog} view={view} onView={onView} />
-            <Features plan={paid} lang={lang} />
+            <Features plan={paid} lang={lang} childrenNote={childrenNoteOf(catalog, view, lang, t('billing.paywall.perMonth'), t('billing.paywall.perYear'))} included={childrenIncluded(catalog)} />
             <button type="button" className={styles.primary} disabled={busy} onClick={onPaid}>
               {t('billing.paywall.start')} <span className="emoji" aria-hidden>🚀</span>
             </button>
@@ -93,23 +94,37 @@ function PlanCard({ plan, current, pro, children }: { plan: CatalogPlan; current
   const lang = useLang();
   return (
     <article className={pro ? `${styles.card} ${styles.cardPro}` : styles.card}>
-      {current ? <span className={styles.currentTag}>{t('billing.paywall.current')}</span> : plan.badge[lang] ? <span className={styles.badge}>{plan.badge[lang]}</span> : null}
-      <h3 className={styles.planName}>{planName(plan, lang)}</h3>
+      {/* The name and the badge on one line. */}
+      <div className={styles.planHead}>
+        <h3 className={styles.planName}>{planName(plan, lang)}</h3>
+        {current ? <span className={styles.currentTag}>{t('billing.paywall.current')}</span> : plan.badge[lang] ? <span className={styles.badge}>{plan.badge[lang]}</span> : null}
+      </div>
       {plan.tagline[lang] && <p className={styles.tagline}>{plan.tagline[lang]}</p>}
       {children}
     </article>
   );
 }
 
-function Features({ plan, lang }: { plan: CatalogPlan; lang: string }) {
+/** `childrenNote` — what a child beyond those included costs; it is said in the line that speaks of the children the plan includes. */
+function Features({ plan, lang, childrenNote, included }: { plan: CatalogPlan; lang: string; childrenNote?: string; included?: number }) {
   const lines = plan.features[lang] ?? plan.features.en ?? [];
+  const noted = childrenNote && included ? lines.findIndex((line) => isChildrenLine(line, included)) : -1;
   return lines.length ? (
     <ul className={styles.features}>
-      {lines.map((line) => (
-        <li key={line}>{line}</li>
+      {lines.map((line, i) => (
+        <li key={line}>{i === noted ? `${line}${childrenNote}` : line}</li>
       ))}
     </ul>
   ) : null;
+}
+
+/** « — +1,25 € на місяць (14,99 € на рік)»: what each child beyond those included costs, for the period chosen. */
+function childrenNoteOf(catalog: Catalog, view: View, lang: string, month: string, year: string): string {
+  const extra = totalOf(catalog, view)?.extra;
+  if (!extra) return '';
+  return view.period === 'year'
+    ? ` — +${formatPrice(Math.round(extra.amount / 12), extra.currency, lang)} ${month} (${formatPrice(extra.amount, extra.currency, lang)} ${year})`
+    : ` — +${formatPrice(extra.amount, extra.currency, lang)} ${month}`;
 }
 
 function PaidPrice({ catalog, view }: { catalog: Catalog; view: View }) {
@@ -169,11 +184,9 @@ function PaidPrice({ catalog, view }: { catalog: Catalog; view: View }) {
 
 function ChildrenPick({ catalog, view, onView }: { catalog: Catalog; view: View; onView: (view: View) => void }) {
   const t = useT();
-  const lang = useLang();
   const total = totalOf(catalog, view);
   if (!total?.extra) return null;
   const least = childrenIncluded(catalog);
-  const monthlyExtra = view.period === 'year' ? totalOf(catalog, { ...view, period: 'month' })?.extra : undefined;
   return (
     <>
       <div className={styles.childrenPick}>
@@ -188,26 +201,6 @@ function ChildrenPick({ catalog, view, onView }: { catalog: Catalog; view: View;
           </button>
         </div>
       </div>
-      <p className={styles.extra}>
-        {t('billing.paywall.extraIncluded', { included: t('billing.kids', { count: least }) })}
-        <span className={styles.extraEach}>
-          {t('billing.paywall.extraEach')}{' '}
-          {view.period === 'year' ? (
-            <>
-              {/* The same three prices for a child beyond those included. */}
-              {monthlyExtra && monthlyExtra.amount * 12 > total.extra.amount ? <s>{formatPrice(monthlyExtra.amount, total.extra.currency, lang)}</s> : null}{' '}
-              <b>+{formatPrice(Math.round(total.extra.amount / 12), total.extra.currency, lang)}</b> {t('billing.paywall.perMonth')}
-              <small>
-                {formatPrice(total.extra.amount, total.extra.currency, lang)} {t('billing.paywall.perYear')}
-              </small>
-            </>
-          ) : (
-            <>
-              <b>+{formatPrice(total.extra.amount, total.extra.currency, lang)}</b> {t('billing.paywall.perMonth')}
-            </>
-          )}
-        </span>
-      </p>
     </>
   );
 }

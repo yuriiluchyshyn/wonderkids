@@ -369,8 +369,6 @@
     "forever": "na zawsze",
     "perYear": "rocznie",
     "perMonth": "miesięcznie",
-    "extraIncluded": "W pakiecie: {children}.",
-    "extraEach": "Każde kolejne dziecko:",
     "extraSum": "Dodatkowo za {children}:",
     "unit": {
       "minutes": {

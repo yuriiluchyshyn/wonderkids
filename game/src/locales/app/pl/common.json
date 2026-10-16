@@ -1011,8 +1011,6 @@
       "children": "Ile dzieci",
       "fewer": "Mniej dzieci",
       "more": "Więcej dzieci",
-      "extraIncluded": "W pakiecie: {included}.",
-      "extraEach": "Każde kolejne dziecko:",
       "extraSum": "Dodatkowo za {children}:",
       "loading": "Wczytuję plany…",
       "unavailable": "Nie udało się wczytać planów. Spróbuj ponownie za minutę.",
@@ -1093,6 +1091,11 @@
     "dialog": {
       "cancel": "Anuluj",
       "ok": "Potwierdź"
+    },
+    "limit": {
+      "basic": "Podstawowy",
+      "free": "Wybrany plan: {name}. W tym planie można mieć tylko jedno dziecko.",
+      "none": "Plan nie został jeszcze wybrany. Dopóki go nie ma, można mieć tylko jedno dziecko."
     },
     "manage": {
       "title": "Zarządzanie subskrypcją",

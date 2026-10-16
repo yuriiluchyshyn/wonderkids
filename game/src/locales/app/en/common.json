@@ -967,8 +967,6 @@
       "children": "How many kids",
       "fewer": "Fewer kids",
       "more": "More kids",
-      "extraIncluded": "{included} included.",
-      "extraEach": "Each additional kid:",
       "extraSum": "Plus for {children}:",
       "loading": "Loading plans…",
       "unavailable": "The plans did not load. Please try again in a minute.",
@@ -1043,6 +1041,11 @@
     "dialog": {
       "cancel": "Cancel",
       "ok": "Confirm"
+    },
+    "limit": {
+      "basic": "Basic",
+      "free": "Your plan: {name}. This plan allows only one child.",
+      "none": "No plan is chosen yet. Until there is one, only one child is allowed."
     },
     "manage": {
       "title": "Manage subscription",

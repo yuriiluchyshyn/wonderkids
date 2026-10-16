@@ -13,7 +13,7 @@
  */
 
 import { galaxySvg } from '@pulsar/brand/galaxy';
-import { MAX_CHILDREN, PERIODS, baseOf, childrenIncluded, extraOf, formatPrice, paidPlan, totalOf, yearSaving, type Catalog, type CatalogPlan, type View } from '@pulsar/plans';
+import { MAX_CHILDREN, PERIODS, baseOf, childrenIncluded, extraOf, formatPrice, isChildrenLine, paidPlan, yearSaving, type Catalog, type CatalogPlan, type View } from '@pulsar/plans';
 
 // The plans' data and sums are shared with the game's paywall (`@pulsar/plans`); here they are only drawn.
 export { MAX_CHILDREN, PERIODS, childrenIncluded, firstView, formatPrice, paidPlan, regionOfLang, totalOf } from '@pulsar/plans';
@@ -58,9 +58,11 @@ function planCard(plan: CatalogPlan, catalog: Catalog, view: View, lang: string,
   const paid = plan.kind === 'paid';
   const currency = catalog.regions.find((region) => region.id === view.region)?.currency ?? 'USD';
   const lines: string[] = [`<article class="card plan${paid ? ' plan-pro' : ''}" data-plan="${esc(plan.id)}">`];
+  // The name and the badge on one line.
   const badge = plan.badge[lang];
-  if (badge) lines.push(`<span class="plan-badge">${esc(badge)}</span>`);
-  lines.push(`<h2>${esc(plan.name[lang] ?? plan.name.en ?? plan.id)}</h2>`);
+  lines.push(`<div class="plan-head"><h2>${esc(plan.name[lang] ?? plan.name.en ?? plan.id)}</h2>${badge ? `<span class="plan-badge">${esc(badge)}</span>` : ''}</div>`);
+  // What a child beyond those included costs, said in the line of «what is included» that speaks of the children.
+  let childrenNote = '';
   const tagline = plan.tagline[lang];
   if (tagline) lines.push(`<p class="plan-for">${esc(tagline)}</p>`);
 
@@ -101,31 +103,25 @@ function planCard(plan: CatalogPlan, catalog: Catalog, view: View, lang: string,
       // How many children: from those the plan includes up; every one beyond is a slot of its own.
       if (total.extra) {
         const least = childrenIncluded(catalog);
-        // The same three prices for a child beyond those included: on a year, the month it would cost on the monthly plan
-        // (crossed out), the month the year comes to, and the real price of the year, small.
         const extra = total.extra;
-        const included = esc(say(words, 'extraIncluded', { children: facts.children ?? String(least) }));
-        let each: string;
-        if (view.period === 'year') {
-          const monthlyExtra = totalOf(catalog, { ...view, period: 'month' })?.extra;
-          const crossed = monthlyExtra && monthlyExtra.amount * 12 > extra.amount ? `<s>${esc(formatPrice(monthlyExtra.amount, extra.currency, lang))}</s> ` : '';
-          each = `${esc(say(words, 'extraEach'))} ${crossed}<b>+${esc(formatPrice(Math.round(extra.amount / 12), extra.currency, lang))}</b> ${esc(say(words, 'perMonth'))}<small>${esc(formatPrice(extra.amount, extra.currency, lang))} ${esc(say(words, 'perYear'))}</small>`;
-        } else {
-          each = `${esc(say(words, 'extraEach'))} <b>+${esc(formatPrice(extra.amount, extra.currency, lang))}</b> ${esc(say(words, 'perMonth'))}`;
-        }
+        childrenNote = view.period === 'year'
+          ? ` — +${formatPrice(Math.round(extra.amount / 12), extra.currency, lang)} ${say(words, 'perMonth')} (${formatPrice(extra.amount, extra.currency, lang)} ${say(words, 'perYear')})`
+          : ` — +${formatPrice(extra.amount, extra.currency, lang)} ${say(words, 'perMonth')}`;
         lines.push(
           `<div class="children-pick"><span class="children-label">${esc(say(words, 'children'))}</span>`,
           `<div class="stepper"><button type="button" data-children="-1" aria-label="${esc(say(words, 'fewer'))}"${view.children <= least ? ' disabled' : ''}>−</button>`,
           `<output aria-live="polite">${view.children}</output>`,
           `<button type="button" data-children="1" aria-label="${esc(say(words, 'more'))}"${view.children >= MAX_CHILDREN ? ' disabled' : ''}>+</button></div></div>`,
-          `<p class="price-extra${swap(animate)}">${included}<span class="extra-each">${each}</span></p>`,
         );
       }
     }
   }
 
   const features = plan.features[lang] ?? plan.features.en ?? [];
-  if (features.length > 0) lines.push(`<ul class="plan-features">${features.map((line) => `<li>${esc(line)}</li>`).join('')}</ul>`);
+  if (features.length > 0) {
+    const noted = childrenNote ? features.findIndex((line) => isChildrenLine(line, childrenIncluded(catalog))) : -1;
+    lines.push(`<ul class="plan-features">${features.map((line, i) => `<li>${esc(i === noted ? line + childrenNote : line)}</li>`).join('')}</ul>`);
+  }
   // The terms of the trial are said where the parent pays (the game's payment step), not on the card.
   if (paid) {
     lines.push(`<button type="button" class="btn btn-try" data-start>${esc(say(words, 'start'))} <span class="emoji" aria-hidden="true">🚀</span></button>`);

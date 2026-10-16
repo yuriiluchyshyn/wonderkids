@@ -134,6 +134,9 @@ export function extraOf(catalog: Catalog, view: View): { count: number; amount: 
   return total?.extra && count > 0 ? { count, amount: total.extra.amount * count, currency: total.extra.currency } : null;
 }
 
+/** The line of «what is included» that speaks of the children the plan includes («2 дитини в пакеті…»): the one with that number in it. */
+export const isChildrenLine = (line: string, included: number): boolean => new RegExp(`(^|\\D)${included}(\\D|$)`).test(line);
+
 /** A year against twelve months of the same choice: the twelve, and what the year saves in per cent (0 — nothing). */
 export function yearAgainstMonths(catalog: Catalog, view: View): { full: number; saving: number } | null {
   const year = totalOf(catalog, { ...view, period: 'year' });
