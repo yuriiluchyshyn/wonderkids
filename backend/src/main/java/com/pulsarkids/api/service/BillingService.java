@@ -6,13 +6,18 @@ import com.pulsarkids.api.core.Env;
 import com.pulsarkids.api.core.Json;
 import com.pulsarkids.api.core.Vars;
 import com.pulsarkids.api.model.Fields;
+import com.pulsarkids.api.model.Lang;
 import com.stripe.StripeClient;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
 import com.stripe.model.Price;
 import com.stripe.model.Product;
+import com.stripe.model.checkout.Session;
 import com.stripe.param.PriceListParams;
 import com.stripe.param.ProductListParams;
+import com.stripe.param.checkout.SessionCreateParams;
+import com.stripe.param.tax.RegistrationListParams;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +39,21 @@ public class BillingService {
   private static final long CATALOG_TTL_MS = 5 * 60_000;
   private static final long PAGE = 100;
 
+  /** Stripe's word for settings that are complete. */
+  private static final String ACTIVE = "active";
+  /** The label of this checkout in Stripe's Dashboard; 8 random letters follow (Stripe's advice). */
+  private static final String INTEGRATION = "pulsar_family_pro_";
+  private static final String APP = "pulsar-kids";
+  private static final String META_APP = "app";
+  private static final String META_PLAN = "plan";
+  private static final String META_REGION = "region";
+  private static final String META_CHILDREN = "children";
+  /** Checkout speaks Polish and English; it has no Ukrainian, so a Ukrainian page lets it follow the browser. */
+  private static final Map<Lang, SessionCreateParams.Locale> LOCALES = Map.of(Lang.PL, SessionCreateParams.Locale.PL, Lang.EN, SessionCreateParams.Locale.EN);
+  private static final SecureRandom RANDOM = new SecureRandom();
+
+  private volatile Boolean taxReady;
+  private volatile long taxReadyAt;
   private volatile StripeClient client;
   private volatile Catalog.View catalog;
   private volatile long catalogAt;
@@ -93,9 +113,93 @@ public class BillingService {
     List<Catalog.Price> prices = new ArrayList<>();
     for (Price price : client().v1().prices().list(PriceListParams.builder().setActive(true).setType(PriceListParams.Type.RECURRING).setLimit(PAGE).build()).autoPagingIterable()) {
       if (price.getUnitAmount() == null || price.getRecurring() == null) continue;
-      prices.add(new Catalog.Price(price.getProduct(), price.getCurrency(), price.getRecurring().getInterval(), price.getUnitAmount(), Boolean.TRUE.equals(price.getActive()), price.getMetadata()));
+      prices.add(new Catalog.Price(price.getId(), price.getProduct(), price.getCurrency(), price.getRecurring().getInterval(), price.getUnitAmount(), Boolean.TRUE.equals(price.getActive()), price.getMetadata()));
     }
     return Catalog.build(products, prices);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Checkout
+  // ---------------------------------------------------------------------------
+
+  /** A checkout begun: what the page mounts Stripe's embedded Checkout with. */
+  public record Started(String sessionId, String clientSecret) {}
+
+  /**
+   * Begins Stripe's embedded Checkout for an order (`Catalog.order`): the plan
+   * and the extra-child slots of its region, the plan's trial, the billing
+   * address always (it is the evidence of the buyer's country that VAT asks
+   * for), promotion codes, and Stripe Tax only once the account has a tax
+   * registration — before that Stripe would calculate nothing while seeming to.
+   * The page shows Checkout inside its own window, so Stripe never redirects:
+   * the page learns the end from Stripe.js and asks `checkoutStatus`.
+   */
+  public Started startCheckout(Catalog.Order order, Lang lang) throws StripeException {
+    SessionCreateParams.Builder params = SessionCreateParams.builder()
+        .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
+        .setUiMode(SessionCreateParams.UiMode.EMBEDDED_PAGE)
+        .setRedirectOnCompletion(SessionCreateParams.RedirectOnCompletion.NEVER)
+        .setBillingAddressCollection(SessionCreateParams.BillingAddressCollection.REQUIRED)
+        .setAllowPromotionCodes(true)
+        .setAutomaticTax(SessionCreateParams.AutomaticTax.builder().setEnabled(taxReady()).build())
+        .setLocale(LOCALES.getOrDefault(lang, SessionCreateParams.Locale.AUTO))
+        .setIntegrationIdentifier(INTEGRATION + randomLetters(8))
+        .addLineItem(SessionCreateParams.LineItem.builder().setPrice(order.planPriceId()).setQuantity(1L).build())
+        .putMetadata(META_APP, APP)
+        .putMetadata(META_PLAN, order.planId())
+        .putMetadata(META_REGION, order.region())
+        .putMetadata(META_CHILDREN, String.valueOf(order.children()));
+    if (order.extraChildren() > 0) {
+      params.addLineItem(SessionCreateParams.LineItem.builder().setPrice(order.extraPriceId()).setQuantity((long) order.extraChildren()).build());
+    }
+    SessionCreateParams.SubscriptionData.Builder subscription = SessionCreateParams.SubscriptionData.builder()
+        .putMetadata(META_APP, APP)
+        .putMetadata(META_PLAN, order.planId())
+        .putMetadata(META_CHILDREN, String.valueOf(order.children()));
+    if (order.trialDays() != null) subscription.setTrialPeriodDays((long) order.trialDays());
+    params.setSubscriptionData(subscription.build());
+    Session session = client().v1().checkout().sessions().create(params.build());
+    return new Started(session.getId(), session.getClientSecret());
+  }
+
+  /** How a checkout ended: Stripe's `status` (open, complete, expired) and the address the family gave. */
+  public Map<String, Object> checkoutStatus(String sessionId) throws StripeException {
+    Session session = client().v1().checkout().sessions().retrieve(sessionId);
+    String email = session.getCustomerDetails() == null ? null : session.getCustomerDetails().getEmail();
+    return Json.map(Fields.STATUS, session.getStatus(), Fields.EMAIL, email);
+  }
+
+  /** The publishable key the page initialises Stripe.js with — public by design. */
+  public String publishableKey() {
+    String key = Env.get(Vars.STRIPE_PUBLISHABLE_KEY);
+    if (key == null || key.isBlank()) key = Env.get(Vars.VITE_STRIPE_PUBLISHABLE_KEY);
+    return key == null ? null : key.strip();
+  }
+
+  /**
+   * Whether Stripe Tax may be switched on: its settings are complete and the
+   * account has at least one active registration. Read at most every five minutes.
+   */
+  public boolean taxReady() {
+    Boolean kept = taxReady;
+    if (kept != null && System.currentTimeMillis() - taxReadyAt < CATALOG_TTL_MS) return kept;
+    boolean ready;
+    try {
+      ready = ACTIVE.equals(client().v1().tax().settings().retrieve().getStatus())
+          && !client().v1().tax().registrations().list(RegistrationListParams.builder().setStatus(RegistrationListParams.Status.ACTIVE).setLimit(1L).build()).getData().isEmpty();
+    } catch (StripeException err) {
+      log.error("[billing] tax settings not read: {}", err.getMessage());
+      ready = false;
+    }
+    taxReady = ready;
+    taxReadyAt = System.currentTimeMillis();
+    return ready;
+  }
+
+  private static String randomLetters(int count) {
+    StringBuilder out = new StringBuilder(count);
+    for (int i = 0; i < count; i++) out.append((char) ('a' + RANDOM.nextInt(26)));
+    return out.toString();
   }
 
   /**

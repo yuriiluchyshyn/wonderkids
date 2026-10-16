@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pulsarkids.api.model.ApiError;
 import com.pulsarkids.api.model.BillingMode;
+import com.pulsarkids.api.model.BillingPeriod;
 import com.pulsarkids.api.model.Device;
 import com.pulsarkids.api.model.FeedbackKind;
 import com.pulsarkids.api.model.Lang;
@@ -46,12 +47,12 @@ class RulesTest {
     Catalog.Product extra = new Catalog.Product("pulsar_extra_child", "Extra child", true, Map.of("app", "pulsar-kids", "kind", "extra_child", "plan", "pulsar_family_pro"), List.of());
     Catalog.Product foreign = new Catalog.Product("other", "Not ours", true, Map.of("kind", "paid"), List.of());
     List<Catalog.Price> prices = List.of(
-        new Catalog.Price("pulsar_family_pro", "uah", "month", 7900, true, Map.of("region", "ua", "countries", "UA", "langs", "uk")),
-        new Catalog.Price("pulsar_family_pro", "usd", "year", 5999, true, Map.of("region", "US", "fallback", "true", "langs", "en")),
-        new Catalog.Price("pulsar_family_pro", "eur", "year", 5999, true, Map.of("region", "EU", "countries", "de, fr")),
-        new Catalog.Price("pulsar_family_pro", "usd", "month", 100, false, Map.of("region", "US")),
-        new Catalog.Price("pulsar_extra_child", "uah", "month", 1900, true, Map.of("region", "UA")),
-        new Catalog.Price("other", "usd", "month", 1, true, Map.of("region", "US")));
+        new Catalog.Price("price_ua_m", "pulsar_family_pro", "uah", "month", 7900, true, Map.of("region", "ua", "countries", "UA", "langs", "uk")),
+        new Catalog.Price("price_us_y", "pulsar_family_pro", "usd", "year", 5999, true, Map.of("region", "US", "fallback", "true", "langs", "en")),
+        new Catalog.Price("price_eu_y", "pulsar_family_pro", "eur", "year", 5999, true, Map.of("region", "EU", "countries", "de, fr")),
+        new Catalog.Price("price_us_m_old", "pulsar_family_pro", "usd", "month", 100, false, Map.of("region", "US")),
+        new Catalog.Price("price_extra_ua_m", "pulsar_extra_child", "uah", "month", 1900, true, Map.of("region", "UA")),
+        new Catalog.Price("price_other", "other", "usd", "month", 1, true, Map.of("region", "US")));
 
     Catalog.View view = Catalog.build(List.of(pro, extra, foreign, free), prices);
     // Ours only, in their order; an extra-child slot is not a plan of its own.
@@ -74,6 +75,20 @@ class RulesTest {
     assertEquals("US", Catalog.regionFor(view.regions(), "JP").id());
     assertNull(Catalog.regionFor(view.regions(), null), "an unknown country leaves it to the page's language");
     assertEquals(List.of("uk"), view.regions().get(1).langs());
+
+    // An order is made from Stripe's prices: the plan, plus a slot for every child beyond those included.
+    Catalog.Order three = Catalog.order(view, "pulsar_family_pro", "ua", BillingPeriod.MONTH, 3).order();
+    assertEquals("price_ua_m", three.planPriceId());
+    assertEquals("price_extra_ua_m", three.extraPriceId());
+    assertEquals(1, three.extraChildren());
+    assertEquals(14, three.trialDays());
+    assertNull(Catalog.order(view, "pulsar_family_pro", "UA", BillingPeriod.MONTH, 2).order().extraPriceId(), "two are included");
+    assertEquals(Catalog.Refusal.BAD_CHILDREN, Catalog.order(view, "pulsar_family_pro", "UA", BillingPeriod.MONTH, 1).refusal());
+    assertEquals(Catalog.Refusal.BAD_CHILDREN, Catalog.order(view, "pulsar_family_pro", "UA", BillingPeriod.MONTH, Catalog.MAX_CHILDREN + 1).refusal());
+    assertEquals(Catalog.Refusal.NO_PRICE, Catalog.order(view, "pulsar_family_pro", "UA", BillingPeriod.YEAR, 2).refusal(), "no yearly price in UA here");
+    assertEquals(Catalog.Refusal.NO_PRICE, Catalog.order(view, "pulsar_family_pro", "EU", BillingPeriod.YEAR, 3).refusal(), "no extra-child price in EU here");
+    assertEquals(Catalog.Refusal.NO_PLAN, Catalog.order(view, "pulsar_basic", "UA", BillingPeriod.MONTH, 2).refusal(), "the free plan is not bought");
+    assertEquals(Catalog.Refusal.NO_PLAN, Catalog.order(view, "other", "US", BillingPeriod.MONTH, 2).refusal(), "not ours");
   }
 
   // ---- who is here now ---------------------------------------------------------

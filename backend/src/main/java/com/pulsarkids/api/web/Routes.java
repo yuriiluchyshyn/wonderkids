@@ -11,6 +11,7 @@ public final class Routes {
   public static final String ADMIN_USERS = "/api/admin/users";
   public static final String AUTH_CHILD_LOGIN = "/api/auth/child-login";
   public static final String AUTH_LOGIN = "/api/auth/login";
+  public static final String BILLING_CHECKOUT = "/api/billing/checkout";
   public static final String BILLING_PLANS = "/api/billing/plans";
   public static final String FEEDBACK = "/api/feedback";
   public static final String HEALTH = "/api/health";

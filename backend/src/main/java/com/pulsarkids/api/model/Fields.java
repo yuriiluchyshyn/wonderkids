@@ -35,6 +35,7 @@ public final class Fields {
   public static final String CHILD_ID = "childId";
   public static final String CHILD_PROFILE_ID = "child_profile_id";
   public static final String CHOICES_GRID_SIZE = "choicesGridSize";
+  public static final String CLIENT_SECRET = "clientSecret";
   public static final String CLOSED = "closed";
   public static final String CLOUD_TTS = "cloudTts";
   public static final String CODE = "code";
@@ -159,6 +160,7 @@ public final class Fields {
   public static final String PASSWORD = "password";
   public static final String PERIOD = "period";
   public static final String PIN = "pin";
+  public static final String PLAN = "plan";
   public static final String PLANS = "plans";
   public static final String PLAYED_DAY = "playedDay";
   public static final String PLAYED_TODAY_MINUTES = "playedTodayMinutes";
@@ -166,6 +168,7 @@ public final class Fields {
   public static final String PRICES = "prices";
   public static final String PROFILE = "profile";
   public static final String PROGRESS = "progress";
+  public static final String PUBLISHABLE_KEY = "publishableKey";
   public static final String R = "r";
   public static final String READABLE = "readable";
   public static final String REFERRER = "referrer";
@@ -181,8 +184,10 @@ public final class Fields {
   public static final String SCREEN_TIME = "screenTime";
   public static final String SCREEN_TIME_REPORT = "screen_time";
   public static final String SERVER_TIME = "server_time";
+  public static final String SESSION = "session";
   public static final String SESSION_DURATION_MINUTES = "sessionDurationMinutes";
   public static final String SESSION_ELAPSED_MS = "sessionElapsedMs";
+  public static final String SESSION_ID = "sessionId";
   public static final String SESSION_REMAINING_SECONDS = "session_remaining_seconds";
   public static final String SESSION_STARTED_AT = "sessionStartedAt";
   public static final String SETTINGS = "settings";

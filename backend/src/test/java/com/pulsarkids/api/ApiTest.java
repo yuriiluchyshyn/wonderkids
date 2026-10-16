@@ -409,6 +409,7 @@ class ApiTest {
     assertFalse(asAdmin("GET", "/api/admin/billing", null).body().get("configured").asBoolean());
     assertEquals(401, call("GET", "/api/admin/billing", null).status());
     assertEquals("billing_off", call("GET", "/api/billing/plans", null).text("error"));
+    assertEquals("billing_off", call("POST", "/api/billing/checkout", Map.of("plan", "pulsar_family_pro", "period", "year", "children", 2)).text("error"));
     assertEquals("unknown_part", asAdmin("GET", "/api/admin/users?part=nonsense", null).text("error"));
   }
 

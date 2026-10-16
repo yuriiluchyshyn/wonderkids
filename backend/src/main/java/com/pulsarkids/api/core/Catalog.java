@@ -68,13 +68,59 @@ public final class Catalog {
   public record Product(String id, String name, boolean active, Map<String, String> metadata, List<String> marketingFeatures) {}
 
   /** A Stripe price of a recurring plan. */
-  public record Price(String productId, String currency, String interval, long amount, boolean active, Map<String, String> metadata) {}
+  public record Price(String id, String productId, String currency, String interval, long amount, boolean active, Map<String, String> metadata) {}
 
   /** A region whose prices a family pays. */
   public record Region(String id, String currency, List<String> countries, boolean fallback, List<String> langs) {}
 
-  /** What the clients are sent: every region and every plan, in their order. */
-  public record View(List<Region> regions, List<Map<String, Object>> plans) {}
+  /** What the clients are sent: every region and every plan, in their order — and what it was made of, for an order. */
+  public record View(List<Region> regions, List<Map<String, Object>> plans, List<Product> products, List<Price> prices) {}
+
+  /** The most children one order may name; a family with more writes to the owner. */
+  public static final int MAX_CHILDREN = 20;
+
+  /** What a checkout charges: the plan's price, and as many extra-child slots as there are children beyond those included. */
+  public record Order(String planId, String region, BillingPeriod period, int children, String planPriceId, String extraPriceId, int extraChildren, Integer trialDays) {}
+
+  /** Why an order cannot be made. */
+  public enum Refusal { NO_PLAN, NO_PRICE, BAD_CHILDREN }
+
+  /** An order, or why there is none. */
+  public record OrderResult(Order order, Refusal refusal) {}
+
+  /**
+   * The order for a paid plan in a region and period for `children` children —
+   * from the prices Stripe has, never from what the client says they cost.
+   */
+  public static OrderResult order(View view, String planId, String regionId, BillingPeriod period, int children) {
+    Product plan = view.products().stream().filter((p) -> p.id().equals(planId) && p.active() && isOurs(p) && kindOf(p) == PlanKind.PAID).findFirst().orElse(null);
+    if (plan == null || period == null || regionId == null) return new OrderResult(null, Refusal.NO_PLAN);
+    String region = regionId.toUpperCase(Locale.ROOT);
+    Price price = priceFor(view.prices(), plan.id(), region, period);
+    if (price == null) return new OrderResult(null, Refusal.NO_PRICE);
+    Map<String, Object> facts = facts(plan);
+    int included = facts.get(PlanFact.CHILDREN_INCLUDED.wire()) instanceof Integer n ? n : 1;
+    if (children < included || children > MAX_CHILDREN) return new OrderResult(null, Refusal.BAD_CHILDREN);
+    int extra = children - included;
+    String extraPriceId = null;
+    if (extra > 0) {
+      Product slot = view.products().stream().filter((p) -> p.active() && isOurs(p) && kindOf(p) == PlanKind.EXTRA_CHILD && plan.id().equals(meta(p, PLAN))).findFirst().orElse(null);
+      Price extraPrice = slot == null ? null : priceFor(view.prices(), slot.id(), region, period);
+      if (extraPrice == null) return new OrderResult(null, Refusal.NO_PRICE);
+      extraPriceId = extraPrice.id();
+    }
+    Integer trial = facts.get(PlanFact.TRIAL_DAYS.wire()) instanceof Integer days && days > 0 ? days : null;
+    return new OrderResult(new Order(plan.id(), region, period, children, price.id(), extraPriceId, extra, trial), null);
+  }
+
+  private static Price priceFor(List<Price> prices, String productId, String region, BillingPeriod period) {
+    for (Price price : prices) {
+      if (!price.active() || !productId.equals(price.productId()) || price.metadata() == null) continue;
+      String own = price.metadata().get(REGION);
+      if (own != null && own.strip().equalsIgnoreCase(region) && period == Wire.of(BillingPeriod.class, price.interval())) return price;
+    }
+    return null;
+  }
 
   public static View build(List<Product> products, List<Price> prices) {
     Map<String, Region> regions = new TreeMap<>();
@@ -100,7 +146,7 @@ public final class Catalog {
               .orElse(List.of()));
       plans.add(plan);
     }
-    return new View(List.copyOf(regions.values()), plans);
+    return new View(List.copyOf(regions.values()), plans, List.copyOf(products), List.copyOf(prices));
   }
 
   /**
