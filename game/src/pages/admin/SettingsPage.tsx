@@ -80,20 +80,24 @@ function TrialVoice({ adminKey, settings, onSaved }: { adminKey: string; setting
 }
 
 /**
- * The site's page of prices: shown or hidden. Hidden, its address sends a
- * visitor to the main page and no link leads to it; the site asks
- * `GET /api/health` (`features.pricing`), so a change shows within half a minute.
+ * The paid mode — one switch for everything about paying. Off (the default):
+ * Pulsar Kids is wholly free and nothing of paying is seen anywhere — the site
+ * has no page of prices and no link to it, the API serves no plans, the game
+ * shows no limit and no paywall. On: the page of prices and, as they are built,
+ * Checkout, the 15-minute limit of the free plan and the paywall. The site and
+ * the game learn it from `GET /api/health` (`features.paid`) within half a minute.
  */
-function PricingSwitch({ adminKey, settings, onSaved }: { adminKey: string; settings: ProductSettings; onSaved: (next: ProductSettings) => void }) {
+function PaidModeSwitch({ adminKey, settings, onSaved }: { adminKey: string; settings: ProductSettings; onSaved: (next: ProductSettings) => void }) {
   const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
   const flip = async (on: boolean) => {
+    if (on && !window.confirm('Увімкнути платний режим? На сайті з’явиться сторінка цін, а далі — оплата й ліміт безкоштовного плану.')) return;
     setBusy(true);
     setNote(null);
     try {
-      onSaved((await adminApi.saveSettings(adminKey, { pricingPage: on })).settings);
-      setNote({ ok: true, text: on ? '✓ Сторінку показано' : '✓ Сторінку сховано' });
+      onSaved((await adminApi.saveSettings(adminKey, { paidMode: on })).settings);
+      setNote({ ok: true, text: on ? '✓ Платний режим увімкнено' : '✓ Платний режим вимкнено — усе безкоштовно' });
     } catch (err) {
       setNote({ ok: false, text: errorText(err) });
     } finally {
@@ -103,19 +107,23 @@ function PricingSwitch({ adminKey, settings, onSaved }: { adminKey: string; sett
 
   return (
     <div className={styles.editor}>
-      <h2>💳 Сторінка цін на сайті</h2>
+      <h2>💳 Платний режим {settings.paidMode ? '— увімкнено' : '— вимкнено'}</h2>
       <p className={styles.meta}>
-        Тарифи (базовий план і Family Pro) з цінами для України, Польщі, США, Канади та ЄС за адресою{' '}
+        <b>Вимкнено</b> — Pulsar Kids повністю безкоштовний, і про оплату ніде нічого не видно: на сайті немає сторінки
+        цін і посилань на неї, API не віддає плани, у грі немає ліміту й пейволу.
+      </p>
+      <p className={styles.meta}>
+        <b>Увімкнено</b> — сторінка цін на сайті (
         <a href={`${siteOrigin()}/pricing/`} target="_blank" rel="noreferrer">
           <code>/pricing/</code>
-        </a>{' '}
-        (та <code>/en/pricing/</code>, <code>/pl/pricing/</code>). Вимкнено — посилання «Ціни» на сайті немає, а хто
-        відкриє адресу, потрапить на головну. Зміна діє на сайті протягом пів хвилини.
+        </a>
+        , <code>/en/pricing/</code>, <code>/pl/pricing/</code>) з планами зі Stripe, а коли їх буде зроблено, — оплата
+        через Stripe, ліміт безкоштовного плану й пейвол у грі. Зміна діє на сайті й у грі протягом пів хвилини.
       </p>
       <label className={styles.radio}>
-        <input type="checkbox" checked={settings.pricingPage} disabled={busy} onChange={(e) => void flip(e.target.checked)} />
+        <input type="checkbox" checked={settings.paidMode} disabled={busy} onChange={(e) => void flip(e.target.checked)} />
         <span>
-          <b>Показувати сторінку цін</b>
+          <b>Увімкнути платний режим</b>
         </span>
       </label>
       {note && <p className={note.ok ? styles.noteOk : styles.noteErr}>{note.text}</p>}
@@ -197,8 +205,8 @@ function StripeStatus({ adminKey }: { adminKey: string }) {
 
 /**
  * `/admin/settings` — the main settings, kept in the database (`wk_settings`):
- * the voice each language is read in, the trial game — how long it lasts and its voice —,
- * and whether the site shows its page of prices.
+ * the paid mode (one switch for everything about paying) and the connection to Stripe,
+ * the voice each language is read in, and the trial game — how long it lasts and its voice.
  */
 function MainSettings({ adminKey }: { adminKey: string }) {
   const [settings, setSettings] = useState<ProductSettings | null>(null);
@@ -255,7 +263,7 @@ function MainSettings({ adminKey }: { adminKey: string }) {
 
       {settings && (
         <section className={styles.gamesSection}>
-          <PricingSwitch adminKey={adminKey} settings={settings} onSaved={show} />
+          <PaidModeSwitch adminKey={adminKey} settings={settings} onSaved={show} />
         </section>
       )}
 

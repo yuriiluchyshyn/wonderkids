@@ -168,7 +168,7 @@ export const api = {
   /** Load the signed-in user's saved state (`state` is `null` when empty). */
   getState<T>(token: string) {
     // The device's time zone says which day it is for the child: a new day starts with a full tank.
-    return request<{ state: T | null; features?: { cloudTts?: boolean } }>(`/api/state?tz_offset_min=${new Date().getTimezoneOffset()}`, { token });
+    return request<{ state: T | null; features?: { cloudTts?: boolean; /** The paid mode (`/admin/settings`): off — the game shows nothing of paying. */ paid?: boolean } }>(`/api/state?tz_offset_min=${new Date().getTimezoneOffset()}`, { token });
   },
 
   /** One phrase from the natural cloud voice, as base64 MP3. */
@@ -388,8 +388,8 @@ export interface ProductSettings {
   voices: Record<SpeechAudience, Record<LangCode, string>>;
   /** The voice of each language when none is chosen. */
   defaultVoices: Record<LangCode, string>;
-  /** Whether the public site shows its page of prices (`/pricing/`). */
-  pricingPage: boolean;
+  /** The paid mode: off — Pulsar Kids is wholly free and nothing of paying is seen (no page of prices, no plans, no paywall). */
+  paidMode: boolean;
 }
 
 /** Who hears a voice chosen in the settings: every account, or whoever plays the trial game. */
@@ -420,7 +420,7 @@ export interface SettingsChange {
   trialSpeech?: { enabled: boolean; key?: string };
   /** Only the languages named change; '' goes back to the default voice. */
   voices?: Partial<Record<SpeechAudience, Partial<Record<LangCode, string>>>>;
-  pricingPage?: boolean;
+  paidMode?: boolean;
 }
 
 /** A place in a rule: a country (`US`) or a region (`@north-america`). */
