@@ -232,8 +232,8 @@
     "cookies": "Cookie settings"
   },
   "consent": {
-    "title": "Ads and cookies",
-    "text": "Pulsar Kids advertises to parents on Facebook and Instagram. The Meta pixel on this site shows which ads bring families. It works only on this site, never inside the game, and the choice can be changed any time at the bottom of the page.",
+    "title": "Cookies",
+    "text": "This site uses cookies to measure ads.",
     "more": "Privacy policy",
     "accept": "Accept",
     "decline": "Decline"

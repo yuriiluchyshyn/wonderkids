@@ -232,8 +232,8 @@
     "cookies": "Ustawienia cookie"
   },
   "consent": {
-    "title": "Reklamy i pliki cookie",
-    "text": "Pulsar Kids pokazuje rodzicom reklamy na Facebooku i Instagramie. Piksel Meta na tej stronie pokazuje, które reklamy przyprowadzają rodziny. Działa tylko na stronie, nigdy w samej grze, a wybór można zmienić w każdej chwili na dole strony.",
+    "title": "Pliki cookie",
+    "text": "Ta strona używa plików cookie do mierzenia reklam.",
     "more": "Polityka prywatności",
     "accept": "Zgadzam się",
     "decline": "Odmawiam"
