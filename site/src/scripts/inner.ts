@@ -1,5 +1,6 @@
 /** What an inner page — a legal text, a page of a game — does once it is read: its links into the game and its language menu, nothing else of the main page. */
 import { rememberLangChoice } from '@pulsar/platform/browser';
+import { wireConsent } from './consent.ts';
 import { showPricingLinks } from './health.ts';
 import { wireLanguageMenu } from './language.ts';
 import { wirePricingLinks } from './pricing-links.ts';
@@ -8,6 +9,7 @@ import { wirePortalLinks } from './portals.ts';
 wirePortalLinks();
 wireLanguageMenu();
 void showPricingLinks();
+void wireConsent();
 wirePricingLinks();
 
 // Going back to the main page, the reader stays in the language of the page: without

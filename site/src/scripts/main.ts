@@ -1,4 +1,5 @@
 /** Everything the public page does once it is read. Each part minds one thing and knows nothing of the others. */
+import { wireConsent } from './consent.ts';
 import { showPricingLinks } from './health.ts';
 import { wireLanguageMenu } from './language.ts';
 import { wirePricingLinks } from './pricing-links.ts';
@@ -11,6 +12,7 @@ wirePortalLinks();
 countArrival();
 wireLanguageMenu();
 void showPricingLinks();
+void wireConsent();
 wirePricingLinks();
 animateOnScroll();
 wireLetterForm();

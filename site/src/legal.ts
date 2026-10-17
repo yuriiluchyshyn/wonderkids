@@ -16,7 +16,7 @@ export { LEGAL_DOCS, type LegalDoc };
  * language at once.
  */
 export const LEGAL_UPDATED: Record<LegalDoc, string> = {
-  privacy: '2026-10-16',
+  privacy: '2026-10-17',
   terms: '2026-10-12',
 };
 

@@ -13,7 +13,7 @@ Pytania i żądania dotyczące danych osobowych: [{{operator.email}}](mailto:{{o
 ## 2. W skrócie
 
 - Konto zakłada osoba dorosła — rodzic lub opiekun prawny. Profil dziecka wypełnia rodzic; dziecko loguje się nickiem i kodem PIN.
-- Nie ma reklam, trackerów reklamowych ani analitycznych plików cookie. Dane nie są sprzedawane ani przekazywane reklamodawcom.
+- W grze nie ma reklam, trackerów reklamowych ani analitycznych plików cookie. Tylko publiczna strona dla rodziców używa piksela Meta, żeby mierzyć własne reklamy Pulsar Kids (punkt 3). Dane nie są sprzedawane.
 - Rodzic może w każdej chwili przejrzeć, poprawić, pobrać i usunąć dane rodziny w panelu rodzica.
 
 ## 3. Jakie dane, po co i jak długo
@@ -28,6 +28,7 @@ Pytania i żądania dotyczące danych osobowych: [{{operator.email}}](mailto:{{o
 | **Wiadomości z formularza na stronie**: treść, rodzaj, adres e-mail (jeśli podano), załączone zdjęcia lub filmy, skrót adresu IP utworzony z tajnym kluczem i rodzaj przeglądarki. | Odpowiedź, poprawianie gry, ochrona formularza przed nadużyciami. | Prawnie uzasadniony interes — art. 6 ust. 1 lit. f | 24 miesiące. Załączniki nie są przechowywane na serwerze: trafiają razem z wiadomością na skrzynkę Pulsar Kids. |
 | **Logi techniczne**: adres IP, czas, żądany adres, rodzaj przeglądarki. | Wyświetlanie stron i bezpieczeństwo usługi. | Prawnie uzasadniony interes — art. 6 ust. 1 lit. f | Do 30 dni, u dostawcy hostingu |
 | **Płatność za subskrypcję** (tylko gdy rodzic ją wykupuje): adres e-mail, imię i nazwisko, adres rozliczeniowy, wybrany plan i liczba dzieci. Dane karty wpisuje się w okno Stripe i nie trafiają do Pulsar Kids. | Założenie i odnawianie subskrypcji, wystawianie faktur i wysyłanie ich e-mailem i ustalenie kraju nabywcy na potrzeby podatków. | Umowa — art. 6 ust. 1 lit. b; obowiązek prawny (podatki) — art. 6 ust. 1 lit. c | Przez czas trwania subskrypcji, faktury — tak długo, jak wymaga prawo podatkowe (5 lat) |
+| **Piksel Meta** — tylko na stronie {{site}}, nigdy w grze; w UE, EOG, Wielkiej Brytanii i Szwajcarii tylko po wyrażeniu zgody: oglądane strony, kliknięcie przycisku gry próbnej, identyfikator przeglądarki w Meta (pliki cookie _fbp i, po kliknięciu reklamy, _fbc), adres IP i rodzaj przeglądarki — przekazywane do Meta. | Mierzenie, które reklamy na Facebooku i Instagramie przyprowadzają rodziny, i pokazywanie reklam Pulsar Kids rodzicom, których mogą zainteresować. | Zgoda — art. 6 ust. 1 lit. a; poza tymi krajami prawnie uzasadniony interes — art. 6 ust. 1 lit. f, z prawem sprzeciwu w każdej chwili w «Ustawieniach cookie» | Do 90 dni w plikach cookie; w Meta — zgodnie z jej własną polityką |
 | **Anonimowe statystyki stron** (Vercel Web Analytics): strona, strona odsyłająca, kraj, rodzaj urządzenia i przeglądarki. Bez plików cookie i bez identyfikatora, który trwałby dłużej niż dobę. | Żeby wiedzieć, które strony są czytane. | Prawnie uzasadniony interes — art. 6 ust. 1 lit. f | Tylko jako sumy |
 
 Wystarczy imię dziecka albo nick. Lepiej nie wpisywać nazwiska, adresu, szkoły ani zdjęcia — gra ich nie potrzebuje. Adres e-mail jest niezbędny, żeby mieć konto; reszta danych w profilu zależy od rodzica.
@@ -38,7 +39,7 @@ Teksty czytane na głos — zadania, podpowiedzi oraz rodzinne cele wpisane prze
 
 - Konto może założyć wyłącznie dorosły rodzic lub opiekun prawny. Wszystko, co wiadomo o dziecku, wpisuje ten dorosły albo powstaje podczas gry.
 - Dane dziecka są przetwarzane na podstawie umowy z rodzicem, a nie zgody dziecka.
-- Dzieciom nic się nie reklamuje, nie tworzy się profili reklamowych, nie ma czatu, publicznych profili ani kontaktu między graczami.
+- Dzieciom nic się nie reklamuje i nie tworzy się profili reklamowych dziecka: piksel Meta jest tylko na stronie dla rodziców, nigdy w grze ani w grze próbnej. Nie ma czatu, publicznych profili ani kontaktu między graczami.
 - Gra bierze pod uwagę odpowiedzi dziecka tylko po to, żeby dobrać kolejne zadania i podpowiedzi. Nie zapadają automatycznie żadne decyzje wywołujące skutki prawne lub podobnie istotne.
 - Gra próbna nie wymaga konta i nie pyta o imię. Zapisywane jest tylko wejście opisane w punkcie 3.
 - Rodzic może przejrzeć, pobrać lub usunąć dane dziecka w panelu rodzica, a dalsze zbieranie danych zatrzymać, usuwając profil — albo pisząc na adres [{{operator.email}}](mailto:{{operator.email}}). Dotyczy to także rodzin w Stanach Zjednoczonych (COPPA).
@@ -47,7 +48,7 @@ Jeśli uważasz, że dziecko przekazało Pulsar Kids dane osobowe bez udziału r
 
 ## 5. Pliki cookie i pamięć urządzenia
 
-Pulsar Kids nie używa reklamowych ani analitycznych plików cookie, dlatego nie ma tu baneru ze zgodami. Poniżej wszystko, co jest zapisywane na urządzeniu.
+Gra nie używa reklamowych ani analitycznych plików cookie. Publiczna strona ustawia reklamowe pliki cookie tylko dla piksela Meta: w UE, EOG, Wielkiej Brytanii i Szwajcarii najpierw pyta o zgodę; gdzie indziej piksel działa, dopóki odwiedzający nie wyłączy go w «Ustawieniach cookie» na dole każdej strony, a przeglądarka wysyłająca sygnał Global Privacy Control jest traktowana jako odmowa. Poniżej wszystko, co jest zapisywane na urządzeniu.
 
 | Nazwa | Rodzaj | Do czego służy | Jak długo |
 |---|---|---|---|
@@ -55,6 +56,8 @@ Pulsar Kids nie używa reklamowych ani analitycznych plików cookie, dlatego nie
 | wk-auth | Cookie, pulsarkids.com i subdomeny | Odnotowuje zalogowanie lub wylogowanie, żeby gra dziecka i panel rodzica razem kończyły starą sesję | 400 dni |
 | __stripe_mid, __stripe_sid | Cookie, pulsarkids.com | Stripe ustawia je tylko przy otwartym oknie płatności, aby wykrywać oszukańcze płatności | 1 rok i 30 minut |
 | Pliki cookie Auth0 | Cookie, auth.pulsarkids.com | Przeprowadzają rodzica przez logowanie | Sesja logowania |
+| _fbp, _fbc | Cookie, pulsarkids.com | Piksel Meta: identyfikator przeglądarki i kliknięcie reklamy, z którego przyszedł odwiedzający; ustawiane tylko, gdy piksel jest dozwolony, i usuwane po jego wyłączeniu | 90 dni |
+| pulsar-consent-v1 | Pamięć lokalna, strona | Odpowiedź na pytanie o piksel Meta | Do zmiany lub wyczyszczenia |
 | wonderkids-auth-v1 | Pamięć lokalna, gra | Utrzymuje zalogowanie rodzica lub dziecka | Do wylogowania, najdłużej 30 dni |
 | pulsar-lang-v1, pulsar-availability-v1, wk-last-theme-v1, wk-outro-v1 | Pamięć lokalna, gra i strona | Wybrany język, gry dostępne w danym kraju, ostatni motyw (na ekran ładowania), ostatnio opowiedziana ciekawostka | Do wyczyszczenia w przeglądarce; wszystko poza językiem także przy wylogowaniu |
 | pulsar-source-v1 | Pamięć lokalna, strona i gra | Oznaczenia linku lub reklamy, które przyprowadziły odwiedzającego; wysyłane raz, przy zakładaniu konta | Do wylogowania lub wyczyszczenia |
@@ -76,6 +79,7 @@ Pulsar Kids korzysta z dostawców usług, którzy przetwarzają dane w jego imie
 | Stripe Payments Europe, Ltd. | Przyjmuje płatności za subskrypcję, przechowuje dane karty, wystawia faktury | UE i USA |
 | Resend, Inc. | Wysyła wiadomości z formularza na skrzynkę, odpowiedzi do ich nadawców i faktury po każdej płatności | USA i UE |
 | ImprovMX | Przekazuje pocztę wysłaną na adresy w domenie pulsarkids.com | UE i USA |
+| Meta Platforms Ireland Ltd. | Piksel Meta na stronie (punkt 3). Pulsar Kids i Meta są współadministratorami zbierania danych i przekazywania ich do Meta (art. 26 RODO); dalsze przetwarzanie Meta prowadzi jako odrębny administrator, według swojej polityki (facebook.com/privacy/policy) | UE i USA |
 
 Część dostawców ma siedzibę w Stanach Zjednoczonych. Dane są tam przekazywane na podstawie decyzji Komisji Europejskiej stwierdzającej odpowiedni stopień ochrony w ramach EU–U.S. Data Privacy Framework, jeśli dostawca jest w nim certyfikowany, a w pozostałych przypadkach na podstawie standardowych klauzul umownych Komisji. O kopię zabezpieczeń można poprosić pod adresem z punktu 1.
 

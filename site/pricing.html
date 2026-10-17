@@ -63,11 +63,21 @@
     <!-- The words of the plans and of the window of paying (src/scripts/pricing/flow.ts). -->
     <script type="application/json" id="pricing-words">{{@pricingWords}}</script>
 
+    <!-- The question about the Meta pixel (src/scripts/consent.ts): shown only where it must be asked first, and again from the footer. -->
+    <section class="consent" id="consent" aria-labelledby="consent-title" hidden>
+      <p class="consent-title" id="consent-title">{{consent.title}}</p>
+      <p>{{consent.text}} <a href="/{{@home}}privacy/">{{consent.more}}</a></p>
+      <div class="consent-actions">
+        <button class="btn btn-parent btn-small" type="button" data-consent="denied">{{consent.decline}}</button>
+        <button class="btn btn-parent btn-small" type="button" data-consent="granted">{{consent.accept}}</button>
+      </div>
+    </section>
+
     <footer>
       <div class="wrap">
         <p>© <span id="year">2026</span> Pulsar Kids. {{footer.tagline}}</p>
         <p>
-          <a href="/{{@home}}" data-home>{{footer.home}}</a>·<a href="/{{@home}}games/">{{catalog.all}}</a>·<a href="/{{@home}}privacy/">{{footer.privacy}}</a>·<a href="/{{@home}}terms/">{{footer.terms}}</a>·<a href="mailto:{{@email}}">{{@email}}</a>
+          <a href="/{{@home}}" data-home>{{footer.home}}</a>·<a href="/{{@home}}games/">{{catalog.all}}</a>·<a href="/{{@home}}privacy/">{{footer.privacy}}</a>·<a href="/{{@home}}terms/">{{footer.terms}}</a>·<a href="mailto:{{@email}}">{{@email}}</a><span data-consent-open hidden>·<a href="#consent">{{footer.cookies}}</a></span>
         </p>
       </div>
     </footer>
